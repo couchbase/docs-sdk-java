@@ -1,0 +1,5 @@
+= Release notes
+:page-topic-type: concept
+
+[abstract]
+Release notes for the 2.1 version of the Java SDK.

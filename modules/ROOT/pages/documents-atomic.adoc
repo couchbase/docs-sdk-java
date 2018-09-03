@@ -1,0 +1,92 @@
+= Atomic operations
+:page-topic-type: concept
+
+[abstract]
+The `CouchbaseBucket` class provides atomic operations such as `counter()`, `append()`, and `prepend()`.
+
+== Counter
+
+The `counter()` method allows you to atomically increment or decrement a document with numerical content.
+The method only accepts and returns a `LongDocument`.
+The value stored in the document is incremented or decremented depending on the `delta` given.
+If the delta value is a positive number the value is incremented, and if it is a negative number the value is decremented.
+You can also pass in an initial value and an expiration time.
+
+[source,java]
+----
+// Increase the counter by 5 and set the initial value to 0 if it does not exist
+Observable<LongDocument> doc = bucket.counter("id", 5);
+----
+
+The resulting document contains the new counter value.
+A very common use case is to implement an increasing `AUTO_INCREMENT` like counter, where every new user just gets a new ID:
+
+[source,java]
+----
+bucket
+    .counter("user::id", 1, 1)
+    .map(new Func1<LongDocument, String>() {
+        @Override
+        public String call(LongDocument counter) {
+            return "user::" + counter.content();
+        }
+    })
+    .flatMap(new Func1<String, Observable<JsonDocument>>() {
+        @Override
+        public Observable<JsonDocument> call(String id) {
+            return bucket.insert(JsonDocument.create(id, JsonObject.empty()));
+        }
+    }).subscribe();
+----
+
+This code increases the counter by one, then maps the returned number onto a custom document ID (here the code prefixes `user::`).
+Afterward, the `insert` method is executed with the generated ID and an empty document content.
+Because a `counter` operation is atomic, the code is guaranteed to deliver different user IDs, even when called at the same time from multiple threads.
+
+If the initial value is omitted, `0` is used.
+The counter always needs to be greater than or equal to zero because negative values are not allowed.
+If you want to decrement a counter, make sure to set it to a value greater than zero initially.
+
+If the document does not exist, the value is always set to `0`.
+If you want to set the counter to the delta initially, set both values:
+
+[source,java]
+----
+// Increase the counter by 5 and set the initial value to 5 if it does not exist
+Observable<LongDocument> doc = bucket.counter("id", 5, 5);
+----
+
+If you want to set an expiration time, you need to provide both the initial value and the expiration time.
+This is a constraint imposed by the API, because just exposing the expiration time would be ambiguous with the initial value (`long` and `int`).
+
+[source,java]
+----
+// Increment by 5, initial 5 and 3 second expiration
+Observable<LongDocument> doc = bucket.counter("id", 5, 5, 3);
+----
+
+== Append & Prepend
+
+Appending and prepending values to existing documents is also possible.
+Both the `append` and `prepend` operation are atomic, so they can be used without further synchronization.
+
+NOTE: Both operations only work on binary documents, ideally strings or byte arrays.
+It does not work on JSON documents, because it doesn't do any further inspection.
+Applying one of those operations on a JSON document will render it invalid.
+
+A `Document` needs to be created before values can be appended or prepended.
+Here is an example that creates a document and then appends a string to it:
+
+[source,java]
+----
+bucket
+    .insert(LegacyDocument.create("doc", "Hello, "))
+    .flatMap(doc ->
+        bucket.append(LegacyDocument.create("doc", "World!"))
+    )
+    .flatMap(bucket::get)
+    .toBlocking()
+    .forEach(doc -> System.err.println(doc.content()));
+----
+
+When executed, this code prints `Hello, World!`.

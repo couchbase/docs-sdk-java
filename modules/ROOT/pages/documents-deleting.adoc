@@ -1,0 +1,67 @@
+= Deleting documents
+:page-topic-type: concept
+
+[abstract]
+Describes how to delete documents using the `remove()` method.
+
+== Removing
+
+You can remove a document by utilizing the `remove()` method.
+
+[source,java]
+----
+// Remove the document by its ID.
+Observable<JsonDocument> doc = bucket.remove("id");
+----
+
+If you pass in a document which also has the CAS value populated, the SDK will make sure to only delete the document if they match:
+
+[source,java]
+----
+// Create document with some content
+JsonDocument stored = bucket.upsert(JsonDocument.create("mydoc", JsonObject.create()));
+
+// Delete it with the CAS check included
+JsonDocument removed = bucket.remove(stored);
+----
+
+If successful, the returned `Document` has the `id` and `cas` fields populated, all other fields are set to their default values.
+
+If the document is not found, a `DocumentNotFoundException` is raised.
+When the document is found but the `cas` values do not match, a `CASMismatchException` is raised.
+
+== Durability Requirements
+
+If no durability requirements are set on the `remove` method, the operation will succeed when the server acknowledges the document delete in its managed cache layer.
+While this is a performant operation, there might be situations where you want to make sure that your document deletion has been persisted and/or replicated so that it survives power outages and other node failures.
+
+The remove method provides overloads to supply such requirements:
+
+[source,java]
+----
+Observable<D> remove(String id, PersistTo persistTo);
+Observable<D> remove(String id, ReplicateTo replicateTo);
+Observable<D> remove(String id, PersistTo persistTo, ReplicateTo replicateTo);
+
+Observable<D> remove(D document, PersistTo persistTo);
+Observable<D> remove(D document, ReplicateTo replicateTo);
+Observable<D> remove(D document, PersistTo persistTo, ReplicateTo replicateTo);
+----
+
+You can configure either just one or both of the requirements when removing.
+From an application point of view nothing needs to be changed when working with the response, although there is something that need to be kept in mind:
+
+The internal implementation first performs a regular `remove` operation and afterwards starts polling the specific affected cluster nodes for the state of the document.
+If something fails during this operation (and failing the `Observable`), the original operation might have succeeded nonetheless.
+
+[source,java]
+----
+// Remove the document and make sure the delete is persisted.
+Observable<JsonDocument> doc = bucket.remove("id", PersistTo.MASTER);
+
+// Remove the document and make sure the delete is replicated.
+Observable<JsonDocument> doc = bucket.remove("id", ReplicateTo.ONE);
+
+// Remove the document and make sure the delete is persisted and replicated.
+Observable<JsonDocument> doc = bucket.remove("id", PersistTo.MASTER, ReplicateTo.ONE);
+----

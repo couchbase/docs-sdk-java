@@ -1,0 +1,490 @@
+= Java SDK tutorial
+:page-topic-type: concept
+
+[abstract]
+The Java SDK tutorial introduces some advanced concepts by walking through a complete web application.
+
+The full source code for the tutorial is available https://github.com/couchbaselabs/beersample-java2[on GitHub^].
+The primary focus of the tutorial is to explain the function and theory connected to the Couchbase Java client and how it connects to Couchbase server.
+The code that generates the web application is provided with the source code but is not discussed in this tutorial.
+
+== Preview the application
+
+The complete working source is in the master branch https://github.com/couchbaselabs/beersample-java2[on GitHub^].
+To build from source and preview the application, clone the repository and run the following shell commands from the repository folder:
+
+[source,bash]
+----
+mvn clean package
+cd target
+java -jar beersample-java2.jar
+----
+
+You should see the Spring framework start up and begin logging the application.
+After it has finished initializing, you can navigate to http://localhost:8080/ and view the application or use a tool like `curl` or `postman` to use all REST endpoints described in https://github.com/couchbaselabs/beersample-java2#rest-api[the README^] file.
+
+== Preparation
+
+To get ready to build your first app, you need to install Couchbase Server, create a view, and set up your development environment (IDE).
+
+*Installing Couchbase Server*
+
+Download http://www.couchbase.com/download[Couchbase Server^] and install it.
+As you follow the download instructions and setup wizard, make sure you install the sample bucket named `beer-sample` because it contains the beer and brewery data used in this tutorial.
+
+If you already have Couchbase Server installed but did not install the `beer-sample` bucket, open the Couchbase Web Console and select menu:Settings[Sample Buckets].
+Select the `beer-sample` check box, and then click [.ui]*Create*.
+A notification box in the upper-right corner disappears when the bucket is ready to use.
+
+*Creating a view*
+
+Views enable you to index and query data from your database.
+The `beer-sample` bucket comes with a small set of predefined view functions, but to add further functionality to the application you need to add an additional view.
+Adding a view offers a very good chance for you to see how you can manage views inside the Couchbase Web Console.
+
+We want our users to be able to view a list of both beers and breweries.
+Therefore, we need to define one view function for each type of document that will respond with the relevant information for each query.
+As such we will be creating one view function for beers:
+
+. In Couchbase Web Console, click [.ui]*Views*.
+. From the drop-down list of bucket names, choose the [.ui]*beer-sample* bucket.
++
+You should see a design document named `_design/beer` that has some views already defined (`brewery_beers` and `by_location`).
+If you do not see the views, make sure that Production Views is selected.
+You can toggle between Development Views and Production Views by clicking the buttons at the top of the list.
+
+. Click [.ui]*Copy to Dev*, and then in the Copy Design Document window click [.ui]*Copy*.
++
+You are now looking at the Development Views version of the `_design/dev_beer` design document, where you can add new views or make changes to existing views in the design document.
+
+. Click [.ui]*Add View*.
+. In the Create Development View window, enter the following names for the design document and the view:
+ ** Design Document Name: `_design/dev_beer`
+ ** View Name: `by_name`
+. Click the btn:[Edit] button for the `by_name` view.
++
+You are now in the view editor, where you can see sample documents and edit map and reduce functions.
+
+. Under View Code, insert the following JavaScript map function and click [.ui]*Save*:
++
+[source,javascript]
+----
+function (doc, meta) {
+   if(doc.type && doc.type == "beer") {
+	 emit(doc.name, doc.brewery_id);
+   }
+}
+----
+
+Every `map` function takes the full document (`doc`) and its associated metadata (`meta`) as the arguments.
+Your map function can then inspect this data and `emit` the item to a result set to be added to an index.
+In this case, the name of the beer (`doc.name`) is emitted when the document has a type field, and the type is `beer`.
+We also want to use the brewery associated with the beer, so for our value we will emit the `doc.brewery_id`.
+
+In general, you should try to keep the index as small as possible.
+You should resist the urge to include the full document with `emit(meta.id, doc)` because that increases the size of your view indexes and potentially impacts application performance.
+If you need to access the full document or large parts of it, use the `.document()` method, which does a `get()` call with the document ID in the background.
+
+At this point, you could also add a reduce function to perform further computation on the index results.
+This example does not use `reduce` functions, but you can play around with `reduce` functions to see how they work.
+
+The final step is to push the design documents to production mode for Couchbase Server.
+While the design documents are in development mode, the index is applied only on the local node.
+For more information about design document modes, see http://docs.couchbase.com/admin/admin/Views/views-development.html[Development views^] and http://docs.couchbase.com/admin/admin/Views/views-production.html[Production views^].
+
+To have the index on the whole data set, you need to publish the design documents to move them into production mode:
+
+. In Couchbase Web Console, click [.ui]*Views*.
+. Click the btn:[Publish] button on the design document.
+. Accept any dialog that warns you about overriding the old view function (since you copied them).
+
+For more information about using views for indexing and querying from Couchbase Server, see the following resources:
+
+* General Information about views: http://docs.couchbase.com/admin/admin/Views/views-intro.html[Views and indexes^]
+* Examples and patterns you can use for views, including patterns for extracting information based on date or time: http://docs.couchbase.com/admin/admin/Views/views-querySample.html[View and query pattern samples^]
+
+*Setting up your IDE*
+
+This project makes heavy use of http://maven.apache.org/[Maven^] for dependency management, so you should familiarize yourself with using Maven for your chosen IDE or from the command line.
+Here is the [.path]_pom.xml_ that you can use for full dependency management (included in the example application):
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.couchbase</groupId>
+	<artifactId>beersample2</artifactId>
+	<version>1.0-SNAPSHOT</version>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.1.9.RELEASE</version>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.couchbase.client</groupId>
+			<artifactId>java-client</artifactId>
+			<version>2.1.6</version>
+
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>beersample-java2</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
+----
+
+For reference, here is the directory structure used for this example application:
+
+[source,java]
+----
+├── src
+│   └── main
+│  	 ├── java
+│  	 │   └── com
+│  	 │  	 └── couchbase
+│  	 │  		 └── beersample
+│  	 │  			 ├── beers
+│  	 │  			 ├── breweries
+│  	 │  			 └── config
+│  	 └── resources
+│  		 └── public
+└── target
+----
+
+*Download the framework*
+
+The framework/stub for the tutorial can be downloaded from https://github.com/couchbaselabs/beersample-java2/tree/tutorialStub[github^].
+It includes the http://projects.spring.io/spring-boot/#quick-start[Spring Boot^] application framework and the surrounding code that takes our Couchbase connections and forms a complete application.
+The next section of the tutorial explains the inner workings of the [.api]`CouchbaseService` class, currently blank, that deals with the applications connections with your Couchbase server and implements key data-related methods.
+
+The best way to go is to clone the repository and use the `tutorialStub` branch:
+
+[source,shell]
+----
+git clone https://github.com/couchbaselabs/beersample-java2.git
+cd beersample-java2
+git checkout tutorialStub
+----
+
+You can then import the project as a Maven project in your favorite IDE and start filling in the blanks in [.api]`CouchbaseService`.
+
+== Couchbase service
+
+The primary focus of this tutorial is the [.api]`CouchbaseService` class located in the [.path]_src/main/java/com/couchbase/beersample_ directory.
+The class is responsible for dealing with all interactions between the application and the Couchbase server.
+The constructor and [.api]`preDestroy()` method are the part of the class that deals with connecting to and disconnecting from Couchbase.
+
+The application is parameterized through the [.path]_src/main/resources/application.yml_ configuration file, which gets injected by Spring Boot into the [.api]`Database` class.
+You need to customize this to your cluster setup and use the configuration for connection.
+
+Try to implement them and compare with the code extract below:
+
+[source,java]
+----
+@Service
+public class CouchbaseService {
+
+	private final Database config;
+
+	private final Bucket bucket;
+	private final Cluster cluster;
+
+	@Autowired
+	public CouchbaseService(final Database config) {
+		this.config = config;
+
+		//connect to the cluster and open the configured bucket
+		this.cluster = CouchbaseCluster.create(config.getNodes());
+		this.bucket = cluster.openBucket(config.getBucket(), config.getPassword());
+	}
+
+	@PreDestroy
+	public void preDestroy() {
+		if (this.cluster != null) {
+			this.cluster.disconnect();
+		}
+	}
+}
+----
+
+It is important to reuse the Couchbase connections so that the underlying resources are not duplicated for each connection.
+Here the `@Service` annotation ensures that the Spring framework creates only one instance of the class.
+The important message is that you only create one connection to the Couchbase cluster and one connection to each bucket you are using, then statically reference those connections for each use.
+
+The line `this.cluster = CouchbaseCluster.create(config.getNodes());` creates a new Couchbase connection object and makes the initial connection to the cluster.
+In this example, we supply a list of IP addresses obtained from the [.api]`Database` configuration object, populated by Spring Boot with the contents of the `application.yml` file.
+You can supply a string, or several strings concatenated with commas so that it can fall back to another node should a connection to a single node fail.
+
+Next, connect to the bucket that is storing the data, in this case, the *beer-sample* bucket provided as part of your Couchbase installation.
+As with connecting to the cluster, it is important to create a single connection and reuse it multiple times throughout your code.
+The line `this.bucket = cluster.openBucket (config.getBucket(), config.getPassword());` creates a connection to the bucket defined in the configuration.
+The Couchbase Java SDK provides both synchronous and asynchronous APIs that allow you to harness easily the power of asynchronous computation while maintaining the simplicity of synchronous operations.
+In this case, we are choosing to connect to both the cluster and the bucket synchronously as most of our application will be required to be synchronous, loading data before a web page can be generated.
+However, the asynchronous API is explained later on for use in creating view queries.
+
+The disconnect method is included even though it is not explicitly called in this example.
+Spring framework will invoke the method annotated with `PreDestroy` when destroying the context and shutting down the application.
+
+Now that we have dealt with connecting to the cluster and the bucket we can move onto completing some useful operations, beginning with querying the database for a single document.
+We will be using the following code, which connects to the Couchbase server, searches for a given key identifier, and returns the associated `JsonDocument`.
+
+[source,java]
+----
+/**
+* READ the document from database
+*/
+public JsonDocument read(String id) {
+	return bucket.get(id);
+}
+----
+
+When data is stored in Couchbase as JSON, it will be converted by the Java SDK into a *JsonDocument* object.
+This allows you to use a very simple JSON library, built into the Couchbase SDK, to access, modify and re-save the data held in the document.
+This makes working with data with Couchbase very simple as you have direct access to the data as it is stored in the database, allowing for rapid operations from both the client and the server.
+
+Another important aspect is error management.
+When the document doesn't exist, the SDK simply returns null.
+But should another error condition arise, a specific exception will be thrown (like a `TimeOutException` wrapped in a [.api]`RuntimeException` if the server couldn't respond in time).
+So it is important to ensure that your application can handle the errors that the SDK will pass up to it.
+
+Next see if you can complete the very similar methods `create`, `delete` and `update`.
+Their corresponding SDK methods are `insert` (or `upsert`), `remove` and `update`.
+
+Some methods like the insert method can additionally specify a durability requirement as is covered in more detail in the document-updating section of the documentation.
+Briefly, it allows you to control the performance-persistence relationship.
+By default, the server will acknowledge the operation as soon as the document has reached its cache layer, this provides the best performance as the client can receive a response very quickly.
+However, in some situations you want or need greater assurances that an operation has completed, and so you can specify at what point during the persistence process the server will respond that the operation has completed.
+
+Also, it may be confusing that we are returning a [.api]`JsonDocument` value.
+This is because the operations update the document's metadata.
+So the returned document reflects this, for example by having the `cas` field updated.
+
+== Querying views
+
+The next section of the [.api]`CouchbaseService` class is going to handle making a view query to the Couchbase cluster to allow us to display a list of all the beers ( and potentially limiting that list).
+
+The first thing to consider when designing a view is the data requirement for the operation.
+Due to the increase in the amount of data being sent, a view query is slower than a basic get operation.
+Therefore, we need to consider what data we need from the view so that we only emit the values necessary.
+For our application, we have written a view function for beers that emits the name of the beer and the ID of its associated brewery.
+
+The `findAllBeers` method is the first example of querying a view.
+We need to prepare the query, optionally add parameters if a limit or a skip value have been provided then execute the query properly.
+The returned object, [.api]`ViewResult`, has a collection of rows, representing each key and value pair emitted by the view function.
+One can iterate over it by using the [.api]`rows()` method, which is what is used by the [.api]`BeerController` in the [.api]`listBeers()` method.
+Note that the controller transforms the result into a slightly different JSON object that better reflect what we want to expose in our REST API.
+
+Try to implement [.api]`findAllBeers` and compare with the solution below:
+
+[source,java]
+----
+public ViewResult findAllBeers(Integer offset, Integer limit) {
+	ViewQuery query = ViewQuery.from("beer", "by_name");
+	if (limit != null && limit > 0) {
+		query.limit(limit);
+	}
+	if (offset != null && offset > 0) {
+		query.skip(offset);
+	}
+	ViewResult result = bucket.query(query);
+	return result;
+}
+----
+
+As the view query is more complex than a get operation, it is advantageous to leverage the asynchronous API in the SDK.
+To achieve this, we can use the `async()` method on the bucket, this tells the SDK to use the underlying asynchronous operations and not to apply any blocking code to it.
+This allows us far greater control over the execution of the operation.
+Additionally, we will now be dealing with observables (as made more explicit in the API by having the return types being prefixed with `Async`).
+
+Try to implement the [.api]`findAllBeersAsync()` method and compare with the solution below:
+
+[source,java]
+----
+/**
+* Retrieves all the beers using a view query, returning the result asynchronously.
+*/
+public Observable<AsyncViewResult> findAllBeersAsync() {
+	ViewQuery allBeers = ViewQuery.from("beer", "by_name");
+	return bucket.async().query(allBeers);
+}
+----
+
+As you can see, going from sync to async is quite easy, by just calling [.api]`async()`.
+Methods that returned an `X` in the sync variant now return an `Observable<X>`.
+You can then apply Rx transformations to it if necessary, as we'll see in the next section.
+For now, try also to do the simple implementation of [.api]`asyncRead()`.
+
+There are two last view-related methods to implement before jumping into more advanced asynchronous data flows: [.api]`createQueryBeersForBrewery()` and [.api]`findBeersForBreweryAsync()`.
+The second one just executes the query produced by the first one in an asynchronous manner.
+The idea of the query is to use the `brewery_beers` view to retrieve all beers brewed in a particular brewery.
+This can be done by specifying a very narrow range of keys.
+
+In this view, note how the key is a JSON array of the brewery identifier and the beer identifier for beers.
+If we provide a `startKey` with just the brewery identifier BW and an `endKey` that would limit us to the last [BW, _beer Id_] pair (included), we would be good.
+The trick here is to use the UTF-8 character `\uefff`.
+This is a big enough char that we're sure no beer identifier will come after it, alphabetically speaking.
+So this results in the correct range we're seeking:
+
+Try to implement [.api]`createQueryBeersForBrewery` and [.api]`FindBeersForBreweryAsync` and compare with the solution below:
+
+[source,java]
+----
+public static ViewQuery createQueryBeersForBrewery(String breweryId) {
+	ViewQuery forBrewery = ViewQuery.from("beer", "brewery_beers");
+	forBrewery.startKey(JsonArray.from(breweryId));
+	//the trick here is that sorting is UTF8 based, uefff is the largest UTF8 char
+	forBrewery.endKey(JsonArray.from(breweryId, "\uefff"));
+	return forBrewery;
+}
+
+public Observable<AsyncViewResult> findBeersForBreweryAsync(String breweryId) {
+	return bucket.async().query(createQueryBeersForBrewery(breweryId));
+}
+----
+
+== More advanced asynchronous flow
+
+Let's have a look at a more advanced data flow coded in [.api]``BreweriesController``'s [.api]`getBrewery()` method.
+The idea of this method is to display a brewery's details (as obtained from the database), but with the addition of a `beers` field that contains an array of all the beers produced by this brewery.
+Prepare two asynchronous observables to retrieve the relevant data: : one to retrieve the brewery's document itself, the other to list this brewery's beers and assemble them into a `List` (using the `findBeersForBreweryAsync()` query we just did).
+
+So far, only [.api]`Observable` have been produced, and there's not been any consumption of data by calling [.api]`subscribe()` with an [.api]`Observer`.
+This means the flow hasn't been started, we are just describing what it will do.
+Next step needs to combine each item in these two streams to result in a stream of JSON as we want it presented to the user ( combine a brewery document with a list of beers documents and produce a JSON object similar to the brewery document with an additional _beers_ field).
+This is the role of the `concatBeerInfoToBrewery()` method, that we now need to implement.
+
+Notice that the controller uses the [.api]`singleOrDefault` Rx operator to specify a default JSON value to return to the user if the brewery document is not found (or no list of beers could be compiled).
+Notice as well that in the case of exceptions being detected, they are trapped and transformed into a JSON object emitted to the user by the [.api]`onErrorReturn` Rx operator.
+
+The resulting stream is subscribed to a few lines below by waiting for a single emission, getting the JSON content and returning it as the REST API call's result.
+Subscription and blocking is done by calling `fullBeers.toBlocking().single()`.
+
+Try to implement `concatBeerInfoToBrewery()` and compare with the solution below:
+
+[source,java]
+----
+public static Observable<JsonDocument> concatBeerInfoToBrewery(Observable<JsonDocument> brewery,
+	Observable<List<JsonDocument>> beers) {
+		return Observable.zip(brewery, beers,
+		new Func2<JsonDocument, List<JsonDocument>, JsonDocument>() {
+			@Override
+			public JsonDocument call(JsonDocument breweryDoc, List<JsonDocument> beersDoc) {
+				JsonArray beers = JsonArray.create();
+				for (JsonDocument beerDoc : beersDoc) {
+					JsonObject beer = JsonObject.create()
+					.put("id", beerDoc.id())
+					.put("beer", beerDoc.content());
+					beers.add(beer);
+				}
+				breweryDoc.content().put("beers", beers);
+				return breweryDoc;
+			}
+		});
+	}
+----
+
+Last data flow is the one used for searching beers by partial name.
+In `searchBeer` we'll try to start from the stream of all beers, rework the data to stick to the REST API return format and filter to find only beers that match the search token.
+
+The REST controller will then subscribe to the resulting flow and send the collected data to the user.
+The expected format is a JSON object with the beer's `id`, `name` and the full beer document content under the `detail` attribute.
+This must be done for every beer (and so the input of the method is a stream of every beer obtained by calling [.api]`findAllBeersAsync`).
+
+The first step is to transform each query result row in the stream into the expected JSON object format.
+One can use the [.api]`map` Rx operator to do that, but this is done on the row's [.api]`document()` method, which returns an `Observable`.
+So we have a nested Observable (the document one in the observable of rows) and need to flatten it.
+This can be achieved by wrapping the mapping in a [.api]`flatMap` Rx operator call.
+
+Try to code the first part of [.api]`searchBeer` and compare to the solution below:
+
+[source,java]
+----
+allBeers
+//extract the document from the row and carve a result object using its content and id
+.flatMap(new Func1<AsyncViewRow, Observable<JsonObject>>() {
+	@Override
+	public Observable<JsonObject> call(AsyncViewRow row) {
+		return row.document().map(new Func1<JsonDocument, JsonObject>() {
+			@Override
+			public JsonObject call(JsonDocument jsonDocument) {
+				return JsonObject.create()
+				.put("id", jsonDocument.id())
+				.put("name", jsonDocument.content().getString("name"))
+				.put("detail", jsonDocument.content());
+			}
+		});
+	}
+})
+----
+
+Then comes the filtering, only keeping beers which name contains the search token, ignoring case.
+This can be achieved using the [.api]`filter` Rx operator.
+Try to code this second part of [.api]`searchBeer` and compare to the solution below:
+
+[source,java]
+----
+//reject beers that don't match the partial name
+.filter(new Func1<JsonObject, Boolean>() {
+	@Override
+	public Boolean call(JsonObject jsonObject) {
+		String name = jsonObject.getString("name");
+		return name != null && name.toLowerCase().contains(token.toLowerCase());
+	}
+})
+----
+
+Finally, since what we want to output is a big JSON array of all the matching rows, we need to collect each transformed item that passed the filter into a single `JsonArray`.
+The [.api]`collect` Rx operator does just that.
+It needs a "factory function" to create the initial collecting structure (here an empty `JsonArray`) and a section function that populates the collecting structure, called for each emitted upstream item.
+
+Try to apply the `collect` operator to our case in the third part of [.api]`searchBeer` and compare with the solution below:
+
+[source,java]
+----
+//collect results into a JSON array (one could also just use toList() since a List would be
+// transcoded into a JSON array)
+.collect(new Func0<JsonArray>() { //this creates the array (once)
+	@Override
+	public JsonArray call() {
+		return JsonArray.empty();
+	}
+}, new Action2<JsonArray, JsonObject>() { //this populates the array (each item)
+	@Override
+	public void call(JsonArray objects, JsonObject jsonObject) {
+		objects.add(jsonObject);
+	}
+});
+----

@@ -1,0 +1,150 @@
+= Migrating from Java SDK 1.4.x to 2.x
+:page-topic-type: concept
+
+[abstract]
+Couchbase recommends that you migrate to the Java 2.x SDK to take advantage of enhancements to the SDK as well as new features available in Couchbase Server.
+The 2.x Java SDK is based on the reactive programming model and has a completely different architecture that uses a core I/O layer and a Java client layer.
+It's asynchronous by design and offers performance, scalability, and durability enhancements.
+
+This guide helps you migrate from the previous generation of the Java SDK (version `1.4.x`) to this new generation SDK (version `2.x`).
+
+If you plan on using the synchronous blocking API, you can follow the simple migration path.
+Or, you can follow the optional migration path to fully reactive and asynchronous code by using the asynchronous API, which provides the best performance.
+
+To get the full benefit of using the asynchronous code with this new generation SDK, you need to understand how to build asynchronous yet expressive code by leveraging the `Observable` paradigm.
+To learn more about using observables, see xref:observables.adoc[Mastering observables].
+
+== Getting Started
+
+The 2.x generation of the Java SDK is a complete rewrite of the 1.x SDK.
+It is layered into `core-io` and `java-client` pieces.
+The `java-client` layer is more abstract and closer to the client.
+The `core-io` layer is purely asynchronous and message-oriented.
+It makes use of a reactive architecture based on http://netty.io[Netty^], the https://github.com/LMAX-Exchange/disruptor/wiki[LMAX Disruptor^], and most importantly https://github.com/ReactiveX/RxJava[RxJava^].
+
+IMPORTANT: The `core-io` layer is not intended for broad consumption.
+In general, you should focus on using the `java-client` layer in your application.
+However, for advanced use cases (such as squeezing out the very last drop of performance by working with the raw byte stream or building a client layer in another language), you can use the `core-io` layer.
+
+The client exposes the server-side concepts of a `Cluster` and ``Bucket``s as first-class citizens that replace the previous `CouchbaseClient` class.
+Each class exposes a *synchronous* API by default, but an *asynchronous* API (based on RxJava `Observable` objects) can be accessed simply by calling `async()` on either one.
+
+This split also allows for much more efficient resource utilization.
+In the past, each `CouchbaseClient` (for each bucket) had its own resources, but now they are as shared as much as possible, and the `Cluster` and `Bucket` references can always be reused.
+
+To differentiate this rewrite from the previous generation, the `Maven` artifact has been renamed from `couchbase-client` to `java-client`.
+It has minimal transitive dependencies (by embedding a few internal dependencies like Netty), most essentially RxJava 1.x:
+
+[source,xml]
+----
+<dependencies>
+    <dependency>
+        <groupId>com.couchbase.client</groupId>
+        <artifactId>java-client</artifactId>
+        <version>2.1.6</version>
+    </dependency>
+</dependencies>
+----
+
+IMPORTANT: After you've fully migrated, make sure that old dependencies to `couchbase-client` or dependencies introduced in your POM because of the `couchbase-client` have been removed.
+
+You'll most probably want the SDK to perform some logging, which can easily be activated by adding a logging framework such as http://logging.apache.org/log4j/2.x/[log4j^] to your dependencies.
+For more information about configuring logging, see xref:logging.adoc[Setting up logging].
+
+== Initializing the connection
+
+The `CouchbaseClient` is replaced by the `Cluster` and `Bucket` classes, bringing real-world concepts of Couchbase into the SDK as first-class citizens.
+For more information about using these classes, see xref:managing-connections.adoc[Managing connections].
+
+Compared to the 1.4.x SDK, when providing a list of nodes from which to bootstrap, you only need host names or IP addresses in `String` form.
+No need for the URI anymore, and no need for the port and pools path either:
+
+[source,java]
+----
+Cluster cluster = CouchbaseCluster.create("192.168.0.1");
+----
+
+The SDK uses the factory method pattern to create the Cluster object.
+This pattern is heavily used throughout the SDK in place of constructors.
+
+The `Cluster` and each `Bucket` reference must be reused as much as possible.
+Make them singletons, which can be used by multiple threads safely.
+Here's an example that uses a naive helper approach:
+
+[source,java]
+----
+public class CouchbaseHelper {
+
+    //the IPs / hostnames would be obtained from configuration file
+    private static final List<String> SEED_IPS = Arrays.asList("192.168.0.1", "192.168.0.2");
+
+    public static final Cluster CLUSTER = CouchbaseCluster.create(SEED_IPS);
+
+    public static final Bucket EXAMPLEBUCKET = CLUSTER.openBucket("example", "p4ssW0rd");
+}
+----
+
+You can customize the connection to the `Cluster` via the `CouchbaseEnvironment` interface (see xref:env-config.adoc[Configuring the environment] for more details):
+
+[source,java]
+----
+public class CouchbaseHelper {
+
+    //the IPs / hostnames would be obtained from configuration file
+    private static final List<String> SEED_IPS = Arrays.asList("192.168.0.1", "192.168.0.2");
+
+    //the environment configuration
+    private static final CouchbaseEnvironment ENV = DefaultCouchbaseEnvironment.builder()
+        .connectTimeout(8000)
+        .keepAliveInterval(3600 * 1000)
+    .build();
+
+    public static final Cluster CLUSTER = CouchbaseCluster.create(ENV, SEED_IPS);
+
+    public static final Bucket EXAMPLEBUCKET = CLUSTER.openBucket("example", "p4ssW0rd");
+}
+----
+
+== Working With Data
+
+In the new SDK, a new model of data within Couchbase has been introduced: the `Document` class.
+It encapsulates both the content itself and the metadata ( `id`, `expiry` and `cas` information).
+See xref:documents.adoc[Working with documents] for additional information.
+
+The SDK has several implementations of `Document`.
+By default, most SDK methods assume the content is JSON and return a `JsonDocument`.
+This kind of document uses standardized storing flags that make it compatible with the other second generation SDKs in other languages.
+If you already deal with JSON transcoding to domain objects, use the `RawJsonDocument` instead, which exposes the JSON String as content instead of a superfluous `JsonObject`.
+
+NOTE: To interact with documents stored by an older Java SDK, use the `LegacyDocument` class, which provides 1:1 compatibility with the 1.4 SDK (but think about migrating to a new implementation after backward compatibility isn't required anymore).
+
+Concerning optimistic locking—because the CAS is now part of the `Document`, the SDK picks it up if it is non-zero during mutating operations.
+To learn more about mutating operations, see xref:documents-updating.adoc[Updating documents].
+
+== Working Asynchronously
+
+In the 2.x SDK, asynchronous processing is done via RxJava.
+The asynchronous API is not mixed with the synchronous API, but rather accessible via the `async()` method on `Cluster` and `Bucket`.
+
+The SDK is thread-safe and uses a pool of threads internally for operations (so they are effectively processed in a separate thread).
+Additionally, some Rx operators use one of the `Schedulers` provided by RxJava (meaning it could execute into another thread).
+
+The SDK doesn't use `Future` objects anymore.
+For progressive migration purposes, you can convert an `Observable` into a `Future` and vice-versa.
+Here's an example of how to do that:
+
+[source,java]
+----
+//converting these to/from Future
+Observable<String> myStringObservable;
+Future<String> myStringFuture;
+
+//this expects exactly one item emitted
+Future<String> f = myStringObservable.toBlocking().toFuture();
+
+//when several items expected, use a List
+Future<List<String>> f = myStringObservable.toList().toBlocking().toFuture();
+
+//convert back from a Future<String>
+Observable<String> o = Observable.from(myStringFuture);
+----

@@ -1,0 +1,5 @@
+= Working with documents
+:page-topic-type: concept
+
+[abstract]
+The Java SDK offers methods you can use to accomplish the basic CRUD operations of creating, retrieving, updating, and deleting documents.

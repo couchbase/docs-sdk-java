@@ -1,0 +1,7 @@
+name: java-sdk
+version: '2.1'
+title: Java SDK
+start_page: java-intro.adoc
+nav:
+- modules/ROOT/nav.adoc
+server_version: '4.1'

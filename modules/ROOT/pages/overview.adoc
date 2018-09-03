@@ -1,0 +1,65 @@
+= Overview
+:page-topic-type: concept
+
+[abstract]
+The Couchbase Java SDK enables you to interact with a Couchbase Server cluster from a Java or Java virtual machine (JVM) application.
+
+The Java SDK includes the following components:
+
+* The Java Client (source code)
+* Developer Guide & Reference Documentation
+* Sample applications
+
+== Compatibility
+
+Compatibility between Couchbase Server and Couchbase Java SDK releases.
+
+To take advantage of all features offered by Couchbase Server, you need to know what version of the Java SDK provides compatibility for the features you want to use.
+The following matrix shows which versions of the Couchbase Java SDK support the major features of each version of Couchbase Server.
+
+.Couchbase Server and SDK Supported Version Matrix
+|===
+| | Server 1.8 | Server 2.0 | Server 2.5 | Server 3.0
+
+5+| *Basic Features*
+
+| CRUD Operations
+4+| Since 1.0
+
+| View Querying APIs
+4+| Since 1.1
+
+| Geospatial Views
+| Not Supported
+2+| 1.1 - 1.4
+| Since 2.1
+
+5+| *Advanced Features*
+
+| Durability Requirements
+4+| Since 1.1
+
+| Carrier Publication Configuration
+2+| Not Supported
+2+| Since 1.4
+
+| SSL Connectivity
+3+| Not Supported
+| Since 2.0
+
+| Bulk Operations
+4+| Since 1.0
+
+| N1QL Querying
+4+| Since 2.0 (experimental)
+
+5+| *Administrative Features*
+
+| Administrative API
+4+| Since 1.0
+|===
+
+== Contributing
+
+Couchbase welcomes community contributions to the Java SDK.
+The https://github.com/couchbase/couchbase-java-client[Java SDK source code^] is available on GitHub.
