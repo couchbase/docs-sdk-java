@@ -138,6 +138,12 @@ See the "Connection Management" section for more information on how to use it pr
 | `mutationTokens \Enabled`
 | `false`
 | If mutation tokens should be enabled, adding more overhead to every mutation but providing enhanced durability requirements as well as advanced N1QL querying capabilities.
+
+| Client Certificate Auth Enabled
+| `certAuthEnabled \Enabled(boolean)`
+| `certAuthEnabled \Enabled`
+| `false`
+| If enabled, it will use the information in the key store for authentication (basically skip the Cluster#authenticate) instead of sending the username and password.
 |===
 
 == Timeout Options
@@ -174,6 +180,22 @@ Also, if there is a node failure during the request the internal cluster timeout
 | `queryTimeout`
 | `75000ms`
 | The Query timeout is used on all N1QL query operations if not overridden by a custom timeout.
+It does not affect asynchronous operations.
+Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
+
+| Search Timeout
+| `searchTimeout \(long)`
+| `searchTimeout`
+| `75000ms`
+| The Search timeout is used on all FTS operations if not overridden by a custom timeout.
+It does not affect asynchronous operations.
+Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
+
+| Analytics Timeout
+| `analyticsTimeout \(long)`
+| `analyticsTimeout`
+| `75000ms`
+| The Analytics timeout is used on all Analytics query operations if not overridden by a custom timeout.
 It does not affect asynchronous operations.
 Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
 
@@ -260,6 +282,24 @@ This is why the default value is set to 75 seconds, which is the highest default
 | To avoid nasty firewalls and other network equipment cutting off stale TCP connections, at the configured interval the client will send a heartbeat keepalive message to the remote node and port.
 This only happens if for the given amount of time no traffic has happened, so if a socket is busy sending data back and forth it will have no effect.
 If you set this value to 0, no keepalive will be sent over the sockets.
+
+| Socket Keepalive ErrorThreshold
+| `keepAlive \ErrorThreshold(long)`
+| `keepAlive \ErrorThreshold`
+| `4`
+| The error count on keepalive per socket can be set to a customized value, after which the connection will be recycled (proactively closed and reconnected).
+
+| Socket Keepalive Timeout
+| `keepAlive \Timeout(long)`
+| `keepAlive \Timeout`
+| `2500ms`
+| The timeout used for the keepalive operations per socket, in milliseconds.
+
+| Config Poll Interval
+| `configPoll \Interval(long)`
+| `configPoll \Interval`
+| `2500ms`
+| This interval helps to tune the timeframe when the SDK proactively grabs a new configuration from the server to detect cluster changes in a timely fashion.
 |===
 
 == Performance Options
@@ -279,7 +319,7 @@ The tradeoffs to consider here is how quickly the desired state is detected as w
 The default is an exponential delay, starting with very short intervals but very quickly approaching the 100 milliseconds if replication or persistence takes longer than expected.
 You should monitor the average persistence and replication latency and adjust the delay accordingly.
 
-| Key/Value Endpoints per Node
+| Key/Value Endpoints per Node [Static]
 | `kvEndpoints(int)`
 | `kvEndpoints`
 | `1`
@@ -290,7 +330,15 @@ If you suspect based on profiling and benchmarking that the socket is saturated 
 This might be especially helpful if you need to push large documents through it.
 The recommendation is keeping it at 1 unless there is other evidence.
 
-| View Endpoints per Node
+| Key/Value Endpoints per Node [Dynamic]
+| `kvServiceConfig(int, int)`
+| `kvServiceConfig`
+| Need to set minimum and maximum values
+| To allow dynamic pooling, as an alternative to the fixed values of kvEndPoints.
+Note that if both kvEndpoints and kvServiceConfig are set, kvEndpoints takes priority.
+This helps to ensure backwards compatibility.
+
+| View Endpoints per Node [Static]
 | `viewEndpoints(int)`
 | `viewEndpoints`
 | `1`
@@ -301,7 +349,15 @@ Keep in mind that these sockets will then be always open, even when no load is p
 We recommend that you tune this value based on evidence obtained during benchmarking with a real workload.
 If no view load is expected, setting this value explicitly to 0 can avoid one socket to 8092 per node.
 
-| Query Endpoints per Node
+| View Endpoints per Node [Dynamic]
+| `viewServiceConfig(int, int, boolean, int)`
+| `viewServiceConfig`
+| Need to set minimum and maximum number of Endpoints; whether or not the service is pipelined (more than one request at the same time on the same socket); and the minimum idle time, in seconds, after which the socket will be closed.
+| To allow dynamic pooling, as an alternative to the fixed values of viewEndPoints.
+Note that if both viewEndpoints and viewServiceConfig are set, viewEndpoints takes priority.
+This helps to ensure backwards compatibility.
+
+| Query Endpoints per Node [Static]
 | `query \ Endpoints(int)`
 | `query \ Endpoints`
 | `1`
@@ -312,7 +368,15 @@ Keep in mind that these sockets will then be always open, even when no load is p
 We are recommending to tune this value based on evidence during benchmarking with a real workload.
 If no query load is expected, setting this value explicitly to 0 can avoid one socket to 8093 per node.
 
-| Search Endpoints per Node
+| Query Endpoints per Node [Dynamic]
+| `query \ ServiceConfig(int, int, int)` or `query \ ServiceConfig(int, int)`
+| `query \ ServiceConfig`
+| Need to set minimum and maximum number of Endpoints; and optionally the minimum idle time, in seconds, after which the socket will be closed.
+| To allow dynamic pooling, as an alternative to the fixed values of queryEndPoints.
+Note that if both queryEndpoints and queryServiceConfig are set, queryEndpoints takes priority.
+This helps to ensure backwards compatibility.
+
+| Search Endpoints per Node [Static]
 | `search \Endpoints(int)`
 | `search \Endpoints`
 | `1`
@@ -323,13 +387,21 @@ Keep in mind that these sockets will then be always open, even when no load is p
 We are recommending to tune this value based on evidence during benchmarking with a real workload.
 If no query load is expected, setting this value explicitly to 0 can avoid one socket to 8094 per node.
 
+| Search Endpoints per Node [Dynamic]
+| `search \ServiceConfig(int, int, int)` or `search \ ServiceConfig(int, int)`
+| `search \ServiceConfig`
+| >Need to set minimum and maximum number of Endpoints; and optionally the minimum idle time, in seconds, after which the socket will be closed.
+| To allow dynamic pooling, as an alternative to the fixed values of searchEndPoints.
+Note that if both searchEndpoints and searchServiceConfig are set, queryEndpoints takes priority.
+This helps to ensure backwards compatibility.
+
 | I/O Thread Pool Size
 | `ioPoolSize(int)`
 | `ioPoolSize`
 | `Runtime# \available \Processors()`
 | The number of threads in the I/O thread pool.
 This defaults to the number of available processors that the runtime returns (which, as a well known fact, sometimes does not represent the actual number of processors).
-Every thread represents an internal event loop where all needed socket are multiplexed on.
+Every thread represents an internal event loop where all needed sockets are multiplexed on.
 The default value should be fine most of the time, it may only need to be tuned if you run a very large number of nodes in the cluster or the runtime value is incorrect.
 As a rule of thumb, it should roughly correlate with the number of cores available to the JVM.
 
@@ -422,34 +494,6 @@ There is no need to change it because it is dynamically generated based on prope
 | The event bus implementation used to transport system, performance and debug events from producers to subscribers.
 The default implementation is based on an internal RxJava Subject which does not cache the values and only pushes subsequent events to the subscribers.
 If you provide a custom implementation, double check that it fits with the contract of the event bus as documented.
-
-| DCP Enabled
-| `dcpEnabled \(boolean)`
-| `dcpEnabled`
-| `false`
-| DCP is not ready for prime time in clients, but this configuration switch is available because all parameters from the core-io module are inherited.
-If you have active need for DCP, get in touch with the Couchbase team.
-
-| DCP Connection Buffer Size
-| `dcpConnection \BufferSize(int)`
-| `dcpConnection \ BufferSize`
-| `20971520 (20MiB)`
-| Sets the size of the buffer to control speed of DCP producer.
-The server will stop emitting data if the current value of the buffer reach this limit.
-Set it to zero to disable DCP flow control.
-
-| DCP Connection Buffer Ack Threshold
-| `dcpConnection \BufferAck \Threshold(double)`
-| `dcpConnection \BufferAck \Threshold`
-| `0.2`
-| When a DCP connection read bytes reaches this percentage of the dcpConnectionBufferSize, a DCP Buffer Acknowledge message is sent to the server to signal producer how much data has been processed.
-
-| DCP Connection Name
-| `dcpConnection \Name(String)`
-| `dcpConnection \Name`
-| `dcp/core-io`
-| Sets default name for DCP connection.
-It is used to identify streams on the server.
 
 | Buffer Pooling Enabled
 | `bufferPooling \Enabled(boolean)`

@@ -4,7 +4,7 @@
 [abstract]
 The Java SDK tutorial bridges the gap between simple and advanced concepts by walking through a complete web application.
 
-The full source code for the tutorial is available https://github.com/couchbaselabs/try-cb-java/[on GitHub couchbaselabs/try-cb-Java^].
+The full source code for the tutorial is available https://github.com/couchbaselabs/try-cb-java/tree/5.0-updates[on GitHub couchbaselabs/try-cb-Java^].
 The primary focus of the tutorial is to explain the function and theory behind the Couchbase Java client and how it works together with Couchbase Server, and especially new features in versions 4.0/4.5 like `N1QL`, `FTS` and `sub-document`.
 It makes use of the `travel-sample` data set.
 The code that generates the web application is provided with the source code, but is not discussed in this tutorial.
@@ -42,8 +42,8 @@ There's currently no "fill-in-the-blanks" branch so you'll have to delete method
 This tutorial focuses on querying through N1QL and FTS rather than mapreduce views.
 If you want information about using views, see the following resources:
 
-* General Information about views: xref:4.6@server:architecture:incremental-map-reduce-views.adoc[Incremental MapReduce Views]
-* Querying views: xref:4.6@server:indexes:querying-using-map-reduce-views.adoc[Querying using MapReduce views]
+* General Information about views: xref:5.1@server:architecture:incremental-map-reduce-views.adoc[Incremental MapReduce Views]
+* Querying views: xref:5.1@server:indexes:querying-using-map-reduce-views.adoc[Querying using MapReduce views]
 ====
 
 == Walking Through the API
@@ -440,7 +440,7 @@ For this final step, try to obtain the equivalent of these statements via the DS
 
 == Indexing the Data: N1QL & GSI
 
-*Where*: https://github.com/couchbaselabs/try-cb-java/blob/master/src/main/java/trycb/utils/StartupPreparations.java[`src/main/java/trycb/utils/StartupPreparations.java`^]
+*Where*: https://github.com/couchbaselabs/try-cb-java/blob/master/src/main/java/trycb/util/StartupPreparations.java[`src/main/java/trycb/utils/StartupPreparations.java`^]
 
 *Goals*: Use the Index DSL to make sure data is indexed for N1QL to query it.
 
@@ -459,7 +459,7 @@ You can also create secondary indexes on specific fields of the JSON, for better
 
 [source,java]
 ----
-Index.createIndex(name).on(bucket.name(), x(name.replace("def_", "")))
+Index.createIndex("index_name").on(bucket.name(), "field_to_index")
 ----
 
 In this case, give a name to your index, specify the target bucket AND the field(s) in the JSON to index.
@@ -470,7 +470,7 @@ In this case, give a name to your index, specify the target bucket AND the field
 
 *Goals*: Use FTS to search for matching Hotels and use subdoc API to fetch the relevant data for each result.
 
-*Relevant Documentation Topics*: xref:full-text-searching-with-sdk.adoc[Full Text Search (FTS) Using the Java SDK with Couchbase Server], xref:subdocument-operations.adoc[Sub-Document Operations].
+*Relevant Documentation Topics*: xref:full-text-searching-with-sdk.adoc[Searching from the SDK], xref:subdocument-operations.adoc[Sub-Document Operations].
 
 In this service, hotels are searched for using more fuzzy criterias, like the content of the address or the description of an hotel.
 This is done using Full Text Search (FTS).

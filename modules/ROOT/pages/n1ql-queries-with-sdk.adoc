@@ -5,7 +5,7 @@
 [abstract]
 You can perform N1QL queries via the Java client.
 
-NOTE: See Couchbase Developer documentation for a quick intro to xref:4.6@server:architecture:querying-data-with-n1ql.adoc[N1QL].
+NOTE: See Couchbase Developer documentation for a quick intro to xref:5.1@server:architecture:querying-data-with-n1ql.adoc[N1QL].
 
 To issue N1QL queries, you should create a [.api]`N1qlQuery` object, and pass it to the [.api]`query(N1qlQuery q)` method in the [.api]`Bucket` class.
 A few variants of such a query exist:
@@ -35,7 +35,7 @@ The identifier can be useful for grouping several queries (for example, in a kin
 * `errors`: Returns a list of [.api]`JsonObject` describing errors or warnings (if any occurred during execution).
 
 Each [.api]`N1qlQueryRow` exposes the JSON representation of the `value()` as a [.api]`JsonObject`.
-It also gives the raw bytes for said value (`byteValue()`), in case you need them to apply your deserialization, or `SELECT RAW` is used, which cannot be turned into a `JsonObject`.
+It also gives the raw bytes for said value (`byteValue()`), in case you need them to apply your deserialization or `SELECT RAW` is used which cannot be turned into a `JsonObject`.
 
 You can use N1QL placeholders in the query.
 Placeholders allow you to specify variable constraints for an otherwise constant query.
@@ -75,7 +75,7 @@ N1qlParams params = N1qlParams.build().adhoc(false);
 N1qlQuery query = N1qlQuery.simple("select count(*) from `mybucket`", params);
 ----
 
-For more information on query parameters in N1QL, see xref:4.6@server:n1ql:n1ql-rest-api/index.adoc[N1QL REST API].
+For more information on query parameters in N1QL, see xref:5.1@server:n1ql:n1ql-rest-api/index.adoc[N1QL REST API].
 
 == Building Statements with the DSL
 
@@ -302,7 +302,7 @@ You can fix that with `ANY`, by rewriting the `WHERE` clause:
 ----
 #...FROM tutorial
 #replace "WHERE tutorial.children IS NOT NULL" with:
-WHERE ANY child IN tutorial.children SATISFIES child.age >= 12 END;
+WHERE ANY child IN tutorial.children SATISFIES child.age >= 12;
 ----
 
 [source,java]

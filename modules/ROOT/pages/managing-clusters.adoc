@@ -1,7 +1,7 @@
 = Managing clusters using the Java SDK with Couchbase Server
 :navtitle: Managing Clusters
 
-include::4.6@sdk:shared:partial$flush-info-pars.adoc[tag=management-intro]
+include::5.1@sdk:shared:partial$flush-info-pars.adoc[tag=management-intro]
 
 The Java SDK also comes with some convenience functionality for common Couchbase management requests.
 
@@ -36,7 +36,7 @@ To create a bucket, use the [.api]`ClusterManager#insertBucket(BucketSettings)` 
 The [.api]`BucketSettings` can be created via a builder, [.api]`DefaultBucketSettings.builder()`.
 This class is also used to expose information about an existing bucket ([.api]`ClusterManager#getBucket(string)`) or to update an existing bucket ([.api]`ClusterManager#updateBucket(BucketSettings)`).
 
-include::4.6@sdk:shared:partial$flush-info-pars.adoc[tag=update-bucket-warning]
+include::5.1@sdk:shared:partial$flush-info-pars.adoc[tag=update-bucket-warning]
 
 Only [.param]`name` and [.param]`type` parameters are mandatory for the [.api]`BucketSettings`.
 Here is the list of parameters available:
@@ -77,7 +77,7 @@ clusterManager.removeBucket("new_bucket");
 [#flushing]
 == Flushing Buckets
 
-include::4.6@sdk:shared:partial$flush-info-pars.adoc[tag=flush-intro]
+include::5.1@sdk:shared:partial$flush-info-pars.adoc[tag=flush-intro]
 
 You may flush a bucket in the Java SDK by using the [.api]`BucketManager#flush()` method:
 
@@ -96,7 +96,7 @@ com.couchbase.client.java.error.FlushDisabledException: Flush is disabled for th
 
 == N1QL Index Management
 
-include::4.6@sdk:shared:partial$flush-info-pars.adoc[tag=index-management]
+include::5.1@sdk:shared:partial$flush-info-pars.adoc[tag=index-management]
 
 You can manage indexes in the Java SDK using the [.api]`BucketManager` class, with its various N1QL related methods: [.api]`listN1qlIndexes()`, [.api]`+createN1qlIndex(...)+`, etc\...
 
@@ -113,7 +113,7 @@ testManager.createN1qlIndex("fooBar", ignoreIfExists, defer, "foo", "bar");
 
 == View Management
 
-include::4.6@sdk:shared:partial$flush-info-pars.adoc[tag=view-management]
+include::5.1@sdk:shared:partial$flush-info-pars.adoc[tag=view-management]
 
 In the Java SDK, design documents are represented by the `DesignDocument` class and `View` interface.
 All operations on design documents are performed on a `BucketManager` instance.
@@ -161,7 +161,7 @@ DesignDocument designDoc = DesignDocument.create(
 bucketManager.insertDesignDocument(designDoc);
 ----
 
-include::4.6@sdk:shared:partial$flush-info-pars.adoc[tag=one-view-update-warning]
+include::5.1@sdk:shared:partial$flush-info-pars.adoc[tag=one-view-update-warning]
 
 ----
 //(note: obtaining the bucketManager is omitted in this snippet)

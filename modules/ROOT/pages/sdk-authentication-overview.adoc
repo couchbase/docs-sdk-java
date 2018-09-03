@@ -1,0 +1,150 @@
+= Authentication
+
+[abstract]
+RBAC requires that users pass appropriate _credentials_ to Couchbase Server in order to access cluster-resources.
+The SDK provides enhanced support for the passing of credentials.
+
+include::5.1@sdk:shared:partial$sdk-authentication-overview.adoc[tag=RBAC_and_the_SDK]
+
+include::5.1@sdk:shared:partial$sdk-authentication-overview.adoc[tag=authenticating_with_legacy_sdk_versions]
+
+== Legacy Connection Code
+
+These code snippets will enable you to use older, non-RBAC SDK clients with Couchbase Server 5.0 (and beyond).
+
+Upgraded Couchbase Server 5.0 with passwordless buckets set up in an older version of Couchabse Server:::
+If a cluster with passwordless buckets is upgraded to Couchbase Server 5.0, the corresponding RBAC user entries are generated with username equal to the bucket name and with role set to "Full Bucket Access".
+This process enables older SDK versions to access the buckets without creating the "Authentication Object".
+The following snippet for a Java SDK with version < 2.4.4 will successfully return the bucket object as there is a user which has the username "beer-sample" (the same as the bucket name).
++
+----
+Cluster cluster = CouchbaseCluster.create(<hostname>);
+Bucket bucket = cluster.openBucket("beer-sample");
+----
+
+Connecting to buckets created in Couchbase Server 5.0 from pre-RBAC SDK Verison:::
+To connect to buckets created in Couchbase Server 5.0 itself, using older client versions, you need to manually create a user with username equal the bucket name, and with role set to "Bucket Full Access".
+The client can then connect to the bucket using the following sample snippet:
++
+----
+Cluster cluster = CouchbaseCluster.create(<hostname>);
+Bucket bucket = cluster.openBucket(<bucket-name>, <password for the newly created user>);
+----
+
+== Passing Credentials
+
+The most recent versions of the SDK are RBAC-enabled, and provide enhanced support for authentication.
+Code examples for Java can be found in xref:start-using-sdk.adoc[Getting Started with the SDK], and also as part of the xref:sdk-user-management-example.adoc[Sample Code] provided to demonstrate user management.
+
+[#java_upgrading_to_rbac_sdk_versions]
+== Upgrading to RBAC-Enabled SDK-Versions
+
+The last pre-RBAC version of the Java SDK was 2.4.3.
+The first RBAC-enabled version was 2.4.4.
+See the SDK link:/server/other-products/release-notes-archives/java-sdk[Release Notes] for more information.
+
+With the most recent versions of the SDK, the legacy authentication interface and the new, optimized authentication interface can both be used: each supports access to buckets on Couchbase Servers whose version is either 5.0 and beyond, or pre-5.0.
+
+== Further Information on RBAC
+
+All aspects of the Couchbase RBAC system are covered in the section xref:5.1@server:security:security-authorization.adoc[Authorization].
+Specifically, for information on:
+
+* Adding _Users_ and assigning _roles_, by means of the Couchbase Web Console, see xref:5.1@server:security:security-rbac-for-admins-and-apps.adoc[Creating and Managing Users with the UI].
+* _Roles_ required for resource-access, and the privileges they entail, see xref:5.1@server:security:concepts-rba-for-apps.adoc[RBAC for Applications].
+* _Resources_ controlled by Couchbase RBAC, see xref:5.1@server:security:security-resources-under-access-control.adoc[Resources Under Access Control].
+
+== Certificate-Based Authentication
+
+Couchbase Server supports the use of X.509 certificates to authenticate clients.
+This allows authenticated users to access specific resources by means of the data service (no other service is currently available to clients through this form of authentication).
+
+The process relies on a certificate authority, for the issuing of certificates that validate identities.
+A certificate includes information such as the name of the entity it identifies, an expiration date, the name of the authority that issued the certificate, and the digital signature of the authority.
+A client attempting to access Couchbase Server can present a certificate to the server, allowing the server to check the validity of the certificate.
+If the certificate is valid, the user under whose identity the client is running, and the roles assigned that user, are verified.
+If the assigned roles are appropriate for the level of access requested to the specified resource, access is granted.
+
+Note that this means that the explicit authentication process otherwise required by Couchbase _Role-Based Access Control_ — whereby, in Java, username and password are passed by means of the `authenticate` method on the `Cluster` object — is not needed.
+(See xref:start-using-sdk.adoc[Start Using the SDK] for an example of such standard authentication.)
+
+For a more detailed conceptual description of using certificates, see xref:5.1@server:security:security-certs-auth.adoc[Certificate-Based Authentication].
+
+For sample procedures whereby certificates can be generated and deployed, see xref:5.1@server:security:security-x509certsintro.adoc[X.509 for TLS].
+Note that this page includes the steps whereby a Java keystore is created, to enable certificate-based authentication by a Java client.
+
+== Authenticating a Java Client by Certificate
+
+To authenticate with Couchbase Server by means of a client certificate, a Java application must have access to an appropriate _keystore_.
+A procedure for the creation of such a keystore is provided in xref:5.1@server:security:security-x509certsintro.adoc[X.509 for TLS].
+The following Java code assumes that this procedure has been followed.
+The procedure's resulting keystore assigns the `travel-sample` user-identity to the client.
+The Couchbase Server-node that is accessed is expected to feature a user-definition where the username is indeed `travel-sample`, and where the *Bucket Full Access* role has been granted to that user for the _travel-sample_ bucket.
+
+[source,java]
+----
+package certificatetest.java;
+
+import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.CouchbaseCluster;
+import com.couchbase.client.java.document.JsonDocument;
+import com.couchbase.client.java.env.CouchbaseEnvironment;
+import com.couchbase.client.java.env.DefaultCouchbaseEnvironment;
+
+public class CertificateTest
+{
+    public static void main(String [] args)
+    {
+        CouchbaseEnvironment env = DefaultCouchbaseEnvironment
+            .builder()
+            .sslEnabled(true)
+            .sslKeystoreFile("/user/ubuntu/my.keystore")
+            .sslKeystorePassword("storepass")
+            .certAuthEnabled(true)
+            .build();
+
+        Cluster userCluster = CouchbaseCluster.create(env, "10.143.173.101");
+
+        Bucket travelSample = userCluster.openBucket("travel-sample");
+
+        JsonDocument returnedAirline10doc = travelSample.get("airline_10");
+        System.out.println("Found: " + returnedAirline10doc);
+    }
+}
+----
+
+As this example shows, certificate-based authentication is enabled by means of the `CouchbaseEnvironment` class.
+(See xref:client-settings.adoc[Client Settings] for details).
+The certificate-related options are as follows:
+
+* `.sslEnabled`: Enables use of Secure Sockets: the default value is true.
+* `.sslKeystoreFile`: Specifies the local pathname of the keystore to be used by the Java client in authentication: the default value is null.
+(Alternatively, the keystore can be specified as a Java object, in which case the default value is none.)
+* `.sslKeystorePassword`: Specifies the password of the keystore.
+The default value is null.
+* `.certAuthEnabled`: Enables the server's authentication of the client by means of the certificates within the client's keystore.
+Can only be used in combination with `.sslEnabled` and related methods.
+The default is false.
+
+The username `travel-sample` is specified within the keystore: therefore, neither the username or associated password need be explicitly passed in the Java code (only the bucket-name, `travel-sample` is specified, in order to open the bucket).
+
+A formatted version of the program-output is as follows:
+
+[source,json]
+----
+Found: JsonDocument
+{
+    id='airline_10',
+    cas=1506602602177888256,
+    expiry=0,
+    content={
+        "country":"United States",
+        "iata":"Q5",
+        "callsign":"MILE-AIR",
+        "name":"40-Mile Air","icao":"MLA",
+        "id":10,
+        "type":"airline"},
+    mutationToken=null
+}
+----

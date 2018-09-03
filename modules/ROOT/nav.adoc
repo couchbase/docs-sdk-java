@@ -4,6 +4,11 @@
  ** xref:sample-app-backend.adoc[Sample App Backend]
 * xref:webui-cli-access.adoc[Browser and CLI Access]
 
+.Users and Security
+* xref:sdk-authentication-overview.adoc[Authentication]
+* xref:sdk-user-management-overview.adoc[User Management]
+ ** xref:sdk-user-management-example.adoc[Sample Code]
+
 .Working with Data
 * xref:core-operations.adoc[Core Operations]
 * xref:document-operations.adoc[Document Operations]
@@ -11,6 +16,7 @@
 * xref:datastructures.adoc[Data Structures]
 * xref:n1ql-query.adoc[Querying with N1QL]
 * xref:n1ql-queries-with-sdk.adoc[N1QL from the SDK]
+ ** xref:scan-consistency-examples.adoc[Using Scan Consistency]
 * xref:full-text-search-overview.adoc[Full Text Search]
 * xref:full-text-searching-with-sdk.adoc[Searching from the SDK]
 * xref:view-queries-with-sdk.adoc[MapReduce Views]
@@ -18,6 +24,8 @@
 * xref:batching-operations.adoc[Batching Operations]
 * xref:durability.adoc[Durability]
 * xref:concurrent-mutations-cluster.adoc[Concurrent Document Mutations]
+* xref:sdk-xattr-overview.adoc[Extended Attributes]
+ ** xref:sdk-xattr-example.adoc[Sample Code]
 * xref:nonjson.adoc[Non-JSON Documents]
 
 .Deployment Environments

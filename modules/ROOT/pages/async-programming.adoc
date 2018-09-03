@@ -600,9 +600,10 @@ The following example uses a view to load all documents from the `beer-sample` b
 [source,java]
 ----
 bucket
+    .async()
     .query(ViewQuery.from("my_design_doc", "my_view"))
-    .flatMap(ViewResult::rows)
-    .flatMap(ViewRow::document)
+    .flatMap(AsyncViewResult::rows)
+    .flatMap(AsyncViewRow::document)
     .groupBy(document -> document.content().getString("type"))
     .subscribe(observable ->
         observable.count().subscribe(integer ->

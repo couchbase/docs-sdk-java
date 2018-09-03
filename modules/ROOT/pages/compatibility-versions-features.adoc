@@ -5,140 +5,113 @@
 == Couchbase Version/SDK Version Matrix
 
 Couchbase SDKs are tested against a variety of different environments to ensure both backward and forward compatibility with different versions of Couchbase Server.
-The matrix below denotes the version of Couchbase Server, the version of the Java SDK and whether the SDK is:
+The matrix below denotes the version of Couchbase Server, the version of the Java SDK, and whether the SDK is:
 
 * ✖ *Unsupported*: This combination is not tested, and is not within the scope of technical support if you have purchased a support agreement.
 * ◎ *Compatible*: This combination has been tested previously, and should be compatible.
-This combination is not supported or recommended by our technical support organization.
+This combination is not recommended by our technical support organization.
 It is best to upgrade either the SDK or the Couchbase version you are using.
 * ✔ *Supported*:This combination is subject to ongoing quality assurance, and is fully supported by our technical support organization.
 
 .Recommended SDK per Server Version Matrix
 [#table_sdk_versions]
 |===
-| | _Under 1.4_ | _SDK 1.4_ | _SDK 2.0, 2.1_ | *SDK 2.2, 2.3* | *SDK 2.4*
+| | _SDK 2.0_ | *SDK 2.1* | *SDK 2.2, 2.3, 2.4* | *SDK 2.5*
 
-| _SDK released for >_
-| _N/A (Archived)_
-| _Bug fixes only_
-| _N/A (Archived)_
-| _Bug fixes and minor features Back ports_
-| _New Features, Active Development_
-
-| *Server 1.8*
-| ◎
-| ◎
+| *Server 3.1*
 | ◎
 | ◎
 | *◎*
+| *✖*
 
-| *Server 2.0*
+| *Server 4.0-4.6*
 | ◎
 | ◎
-| ◎
-| ◎
-| *◎*
-
-| *Server 2.5*
-| ◎
-| ◎
-| ◎
-| ◎
-| *◎*
-
-| *Server 3.0*
-| ◎
-| ◎
-| ◎
-| ✔
+| *✔*
 | *✔*
 
-| *Server 4.0*
+| *Server 5.0-5.1*
 | ◎
 | ◎
-| ◎
-| ✔
 | *✔*
-
-| *Server 4.1*
-| ◎
-| ◎
-| ◎
-| ✔
-| *✔*
-
-| *Server 4.5*
-| ◎
-| ◎
-| ◎
-| ✔
-| *✔*
-
-| *Server 4.6*
-| ◎
-| ◎
-| ◎
-| ✔
 | *✔*
 |===
+
+Note the https://www.couchbase.com/support-policy[End of Life dates^] for Couchbase Server and SDK versions.
+See the notes there for Support details.
 
 To take advantage of all features offered by Couchbase Server, you need to know what version of the Java SDK provides compatibility for the features you want to use.
 The following matrix shows which versions of the Couchbase Java SDK support the major features of each version of Couchbase Server.
 
 .Couchbase Server and SDK Supported Version Matrix
 |===
-| | Server 1.8 | Server 2.0 | Server 2.5 | Server 3.0, 3.1 | Server 4.0, 4.1 | Server 4.5, 4.6
+| | Server 1.8 | Server 2.0 | Server 2.5 | Server 3.0, 3.1 | Server 4.0, 4.1 | Server 4.5, 4.6 | Server 5.0
 
-7+| *Basic Features*
+8+| *Basic Features*
 
 | CRUD Operations
-6+| Since 1.0
+7+| Since 1.0
 
 | View Querying APIs
-6+| Since 1.1
+7+| Since 1.1
 
 | Geospatial Views
 | Not Supported
 2+| 1.1 - 1.4
-3+| Since 2.1
+4+| Since 2.1
 
-7+| *Advanced Features*
+8+| *Advanced Features*
 
 | Durability Requirements
-6+| Since 1.1
+7+| Since 1.1
 
 | Carrier Publication Configuration
 2+| Not Supported
-4+| Since 1.4
+5+| Since 1.4
 
 | SSL Connectivity
 3+| Not Supported
-3+| Since 2.0
+4+| Since 2.0
 
 | Bulk Operations
-6+| Since 1.0
+7+| Since 1.0
 
 | N1QL Querying
 4+| Since 2.0 (experimental)
-2+| Since 2.2
+3+| Since 2.2
 
 | Multi-Dimensional Scaling
 4+| Not Supported
-2+| Since 2.2
+3+| Since 2.2
 
 | Sub-document API
 5+| Not Supported
-| Since 2.3
+2+| Since 2.3
 
-| Fulltext Search
+| Full Text Search
 5+| Not Supported
-| Since 2.3 (experimental)
+| Since 2.3 (Experimental)
+| Since 2.4
 
-7+| *Administrative Features*
+8+| *Administrative Features*
+
+| Datastructures
+5+| Not Supported
+2+| Since 2.3
+
+| Extended Attributes
+6+| Not Supported
+| Since 2.4
 
 | Administrative API
-6+| Since 1.0
+7+| Since 1.0
+
+| RBAC
+6+| Not Supported
+| Since 2.4
 |===
+
+IMPORTANT: With https://developer.couchbase.com/documentation/server/5.0/sdk/java/sdk-authentication-overview.html[RBAC^], in Couchbase Server 5.0, authentication will depend upon access privileges, and upgrading to 5.0 with existing buckets, or upgrading Server, will require taking these changes into account.
 
 [#jdk-compat]
 == JDK Version Compatibility
@@ -146,7 +119,7 @@ The following matrix shows which versions of the Couchbase Java SDK support the 
 The Java SDK is tested with the Oracle JDK which should be used for best experience and supportability.
 Other JDK implementations might work but are  not tested and are unsupported.
 
-The following Oracle JDKs are supported for *Java SDK 1.4 and 2.0 - 2.3*:
+The following Oracle JDKs are supported for *Java SDK 1.4 and 2.0 - 2.5*:
 
 * Oracle JDK 1.6
 * Oracle JDK 1.7
@@ -163,42 +136,22 @@ The following table provides an overview.
 .Recommended Spring Data Couchbase per Server Version Matrix
 [#table_spring_versions]
 |===
-| | _SDC 1.4.x_ | _SDC 2.1 & 2.2_
+| | _SDC 2.1.x_ | _SDC 2.2 & 3.0_
 
 | _Status >_
 | _Bug fixes only_
 | _New Features, Active Development_
 
-| *Server 1.8*
+| *Server 3.1*
 | Compatible
 | *Recommended*
 
-| *Server 2.0*
+| *Server 4.0-4.6*
 | Compatible
 | *Recommended*
 
-| *Server 2.5*
+| *Server 5.0*
 | Compatible
-| *Recommended*
-
-| *Server 3.0*
-| Compatible
-| *Recommended*
-
-| *Server 4.0*
-| Compatible (no N1QL)
-| *Recommended*
-
-| *Server 4.1*
-| Compatible (no N1QL)
-| *Recommended*
-
-| *Server 4.5*
-| Compatible (no N1QL)
-| *Recommended*
-
-| *Server 4.6*
-| Compatible (no N1QL)
 | *Recommended*
 |===
 
@@ -343,4 +296,4 @@ Future<List<String>> f = myStringObservable.toList().toBlocking().toFuture();
 Observable<String> o = Observable.from(myStringFuture)
 ----
 
-include::4.6@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]
+include::5.1@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]

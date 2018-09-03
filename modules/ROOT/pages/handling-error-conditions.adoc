@@ -21,7 +21,7 @@ The following sections discuss different strategies to mitigate errors that migh
 
 == Conceptual Error Types
 
-include::4.6@sdk:shared:partial$couchbase-errors.adoc[tag=group]
+include::5.1@sdk:shared:partial$couchbase-errors.adoc[tag=group]
 
 == Generic Error Types
 
@@ -681,6 +681,56 @@ while(true) {
 ----
 +
 You can then use the same approaches as with the asynchronous ones on the [.api]`Thread.sleep()` time to accommodate for a static, linear, exponential or random delay.
+
+[#retryexceptions]
+Retry for some exceptions::
+Using `RetryBuilder` allows a more nuanced approach, letting you mandate different responses to different exceptions, and leading to code which can be easier to reason about - like the two examples below.
+This first example configures the Retry Builder so that when an error happens during a document fetch, it retries up to 20 times and waits 100 ms in between attempts.
+But it only retries on the two exceptions given, everything else is propagated downstream.
+Note how the 100 * 20 ms = 2s aligns with the timeout provided; this doesn't have to be, but it makes sense to align it.
++
+----
+bucket.async()
+.get("document_id")
+.retryWhen(RetryBuilder
+    .anyOf(BackpressureException.class, RequestCancelledException.class)
+    .delay(Delay.fixed(100, TimeUnit.MILLISECONDS))
+    .max(20)
+    .build()
+)
+.timeout(2, TimeUnit.SECONDS)
+.toBlocking()
+.single();
+----
++
+This example can be modified to produce the variationbelow, where different retry strategies are used for different exception types.
+A request cancellation might be retried immediately (1ms), whereas backpressure signalling overload may need a more gradual back off, with an exponential strategy:
++
+----
+bucket.async()
+.get("document_id")
+.retryWhen(RetryBuilder
+    .anyOf(BackpressureException.class)
+    .delay(Delay.exponential(TimeUnit.MILLISECONDS, 1000, 1))
+    .max(Integer.MAX_VALUE)
+    .build()
+)
+.retryWhen(RetryBuilder
+    .anyOf(RequestCancelledException.class)
+    .delay(Delay.fixed(1, TimeUnit.MILLISECONDS))
+    .max(2)
+    .build()
+)
+.timeout(2, TimeUnit.SECONDS)
+.toBlocking()
+.single();
+----
++
+Note the following values (and their defaults), which we override above:
+
+* max attempts \=> 1
+* default retry delay \=> constant 1ms
+* anyOf errors \=> all errors are retried by default
 
 == Error Handling - Fallback
 
