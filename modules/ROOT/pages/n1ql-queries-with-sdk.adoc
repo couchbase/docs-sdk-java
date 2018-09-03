@@ -5,7 +5,7 @@
 [abstract]
 You can perform N1QL queries via the Java client.
 
-NOTE: See Couchbase Developer documentation for a quick intro to xref:5.1@server:architecture:querying-data-with-n1ql.adoc[N1QL].
+NOTE: See Couchbase Developer documentation for a quick intro to xref:6.0@server:architecture:querying-data-with-n1ql.adoc[N1QL].
 
 To issue N1QL queries, you should create a [.api]`N1qlQuery` object, and pass it to the [.api]`query(N1qlQuery q)` method in the [.api]`Bucket` class.
 A few variants of such a query exist:
@@ -75,7 +75,7 @@ N1qlParams params = N1qlParams.build().adhoc(false);
 N1qlQuery query = N1qlQuery.simple("select count(*) from `mybucket`", params);
 ----
 
-For more information on query parameters in N1QL, see xref:5.1@server:n1ql:n1ql-rest-api/index.adoc[N1QL REST API].
+For more information on query parameters in N1QL, see xref:6.0@server:n1ql:n1ql-rest-api/index.adoc[N1QL REST API].
 
 == Building Statements with the DSL
 

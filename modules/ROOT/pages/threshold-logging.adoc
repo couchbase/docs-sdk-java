@@ -1,0 +1,32 @@
+= Threshold Logging Tracing through the SDK
+:navtitle: Threshold Logging
+
+include::6.0@sdk:shared:partial$tracing.adoc[tag=why_tracing]
+
+include::6.0@sdk:shared:partial$tracing.adoc[tag=open_tracing]
+
+include::6.0@sdk:shared:partial$tracing.adoc[tag=threshold_configuration]
+
+[#tracing_dot_net]
+== Threshold Logging in Java
+
+Response Time Observability is implemented as Threshold Logging in Java SDK from release 2.6.0.
+
+[#customizing]
+== Customizing
+
+You can customise Tracer settings through the [.api]`CouchbaseEnvironment.Builder`.
+Here is an example on how to customize our default tracer to reduce the time interval when the information gets logged:
+
+[source,java]
+----
+Tracer tracer = ThresholdLogTracer.create(ThresholdLogReporter.builder()
+  .logInterval(10, TimeUnit.SECONDS) // log every 10 seconds
+  .build());
+
+CouchbaseEnvironment env = DefaultCouchbaseEnvironment.builder()
+  .tracer(tracer)
+  .build();
+----
+
+Follow along with our example of xref:tracing-from-the-sdk.adoc[Tracing from the Java SDK with Couchbase Server], to discover how to use tracing in the Java SDK for Response Time Observability.

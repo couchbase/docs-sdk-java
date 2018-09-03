@@ -360,7 +360,7 @@ This helps to ensure backwards compatibility.
 | Query Endpoints per Node [Static]
 | `query \ Endpoints(int)`
 | `query \ Endpoints`
-| `1`
+| The default is dynamic mode, please see next row.
 | The number of actual endpoints (sockets) to open per Node in the cluster against the Query (N1QL) service.
 By default only one socket is opened to avoid unnecessary wasting resources.
 If you plan to run a query heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
@@ -372,6 +372,7 @@ If no query load is expected, setting this value explicitly to 0 can avoid one s
 | `query \ ServiceConfig(int, int, int)` or `query \ ServiceConfig(int, int)`
 | `query \ ServiceConfig`
 | Need to set minimum and maximum number of Endpoints; and optionally the minimum idle time, in seconds, after which the socket will be closed.
+The default minimum and maximum are 1 and 12 respectively."
 | To allow dynamic pooling, as an alternative to the fixed values of queryEndPoints.
 Note that if both queryEndpoints and queryServiceConfig are set, queryEndpoints takes priority.
 This helps to ensure backwards compatibility.
@@ -390,7 +391,7 @@ If no query load is expected, setting this value explicitly to 0 can avoid one s
 | Search Endpoints per Node [Dynamic]
 | `search \ServiceConfig(int, int, int)` or `search \ ServiceConfig(int, int)`
 | `search \ServiceConfig`
-| >Need to set minimum and maximum number of Endpoints; and optionally the minimum idle time, in seconds, after which the socket will be closed.
+| Need to set minimum and maximum number of Endpoints; and optionally the minimum idle time, in seconds, after which the socket will be closed.
 | To allow dynamic pooling, as an alternative to the fixed values of searchEndPoints.
 Note that if both searchEndpoints and searchServiceConfig are set, queryEndpoints takes priority.
 This helps to ensure backwards compatibility.

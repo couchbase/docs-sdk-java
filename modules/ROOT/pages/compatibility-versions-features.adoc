@@ -7,6 +7,7 @@
 Couchbase SDKs are tested against a variety of different environments to ensure both backward and forward compatibility with different versions of Couchbase Server.
 The matrix below denotes the version of Couchbase Server, the version of the Java SDK, and whether the SDK is:
 
+[#supported]
 * ✖ *Unsupported*: This combination is not tested, and is not within the scope of technical support if you have purchased a support agreement.
 * ◎ *Compatible*: This combination has been tested previously, and should be compatible.
 This combination is not recommended by our technical support organization.
@@ -16,7 +17,7 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 .Recommended SDK per Server Version Matrix
 [#table_sdk_versions]
 |===
-| | _SDK 2.0_ | *SDK 2.1* | *SDK 2.2, 2.3, 2.4* | *SDK 2.5*
+| | *SDK 2.0* | *SDK 2.1* | *SDK 2.2, 2.3, 2.4* | *SDK 2.5*
 
 | *Server 3.1*
 | ◎
@@ -296,4 +297,4 @@ Future<List<String>> f = myStringObservable.toList().toBlocking().toFuture();
 Observable<String> o = Observable.from(myStringFuture)
 ----
 
-include::5.1@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]
+include::6.0@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]

@@ -5,7 +5,7 @@
 The Couchbase Java SDK allows Java applications to access a Couchbase cluster.
 It offers traditional synchronous APIs as well as scalable asynchronous APIs to maximize performance.
 
-include::5.1@sdk:shared:partial$install-couchbase.adoc[tag=section_gb4_psc_kv]
+include::6.0@sdk:shared:partial$install-couchbase.adoc[tag=section_gb4_psc_kv]
 
 [#java-installing-sdk]
 == Installing the SDK
@@ -99,7 +99,7 @@ Note that not all nodes of the cluster need to be passed it, just a few to allow
 We recommend more than one though since if one of the nodes happens to be not available during application startup it still has a chance to try another one and bootstrap properly.
 
 To connect to a Couchbase bucket, you must use Couchbase _Role-Based Access Control_ (RBAC).
-This is fully described in the section xref:5.1@server:security:security-authorization.adoc[Authorization].
+This is fully described in the section xref:6.0@server:security:security-authorization.adoc[Authorization].
 A username and password for the current user must be specified.
 Following successful authentication, the bucket can be opened.
 

@@ -4,9 +4,9 @@
 RBAC requires that users pass appropriate _credentials_ to Couchbase Server in order to access cluster-resources.
 The SDK provides enhanced support for the passing of credentials.
 
-include::5.1@sdk:shared:partial$sdk-authentication-overview.adoc[tag=RBAC_and_the_SDK]
+include::6.0@sdk:shared:partial$sdk-authentication-overview.adoc[tag=RBAC_and_the_SDK]
 
-include::5.1@sdk:shared:partial$sdk-authentication-overview.adoc[tag=authenticating_with_legacy_sdk_versions]
+include::6.0@sdk:shared:partial$sdk-authentication-overview.adoc[tag=authenticating_with_legacy_sdk_versions]
 
 == Legacy Connection Code
 
@@ -47,16 +47,16 @@ With the most recent versions of the SDK, the legacy authentication interface an
 
 == Further Information on RBAC
 
-All aspects of the Couchbase RBAC system are covered in the section xref:5.1@server:security:security-authorization.adoc[Authorization].
+All aspects of the Couchbase RBAC system are covered in the section xref:6.0@server:security:security-authorization.adoc[Authorization].
 Specifically, for information on:
 
-* Adding _Users_ and assigning _roles_, by means of the Couchbase Web Console, see xref:5.1@server:security:security-rbac-for-admins-and-apps.adoc[Creating and Managing Users with the UI].
-* _Roles_ required for resource-access, and the privileges they entail, see xref:5.1@server:security:concepts-rba-for-apps.adoc[RBAC for Applications].
-* _Resources_ controlled by Couchbase RBAC, see xref:5.1@server:security:security-resources-under-access-control.adoc[Resources Under Access Control].
+* Adding _Users_ and assigning _roles_, by means of the Couchbase Web Console, see xref:6.0@server:security:security-rbac-for-admins-and-apps.adoc[Creating and Managing Users with the UI].
+* _Roles_ required for resource-access, and the privileges they entail, see xref:6.0@server:security:security-roles.adoc[Roles].
+* _Resources_ controlled by Couchbase RBAC, see xref:6.0@server:security:security-resources-under-access-control.adoc[Resources Under Access Control].
 
 == Certificate-Based Authentication
 
-Couchbase Server supports the use of X.509 certificates to authenticate clients.
+Couchbase Server supports the use of X.509 certificates to authenticate clients (only available in the Enterprise Edition, not the Community Edition).
 This allows authenticated users to access specific resources by means of the data service (no other service is currently available to clients through this form of authentication).
 
 The process relies on a certificate authority, for the issuing of certificates that validate identities.
@@ -65,18 +65,19 @@ A client attempting to access Couchbase Server can present a certificate to the 
 If the certificate is valid, the user under whose identity the client is running, and the roles assigned that user, are verified.
 If the assigned roles are appropriate for the level of access requested to the specified resource, access is granted.
 
-Note that this means that the explicit authentication process otherwise required by Couchbase _Role-Based Access Control_ — whereby, in Java, username and password are passed by means of the `authenticate` method on the `Cluster` object — is not needed.
+Note that this means that the explicit authentication process otherwise required by Couchbase _Role-Based Access Control_ — whereby, in Java, username and password are passed by means of the `authenticate` method on the `Cluster` object — must not be used (instead the _CertAuthenticator_ is passed in).
 (See xref:start-using-sdk.adoc[Start Using the SDK] for an example of such standard authentication.)
 
-For a more detailed conceptual description of using certificates, see xref:5.1@server:security:security-certs-auth.adoc[Certificate-Based Authentication].
+For a more detailed conceptual description of using certificates, see xref:6.0@server:security:security-certs-auth.adoc[Certificate-Based Authentication].
 
-For sample procedures whereby certificates can be generated and deployed, see xref:5.1@server:security:security-x509certsintro.adoc[X.509 for TLS].
+For sample procedures whereby certificates can be generated and deployed, see xref:6.0@server:security:security-x509certsintro.adoc[X.509 for TLS].
 Note that this page includes the steps whereby a Java keystore is created, to enable certificate-based authentication by a Java client.
 
+[#authenticating-a-java-client-by-certificate]
 == Authenticating a Java Client by Certificate
 
-To authenticate with Couchbase Server by means of a client certificate, a Java application must have access to an appropriate _keystore_.
-A procedure for the creation of such a keystore is provided in xref:5.1@server:security:security-x509certsintro.adoc[X.509 for TLS].
+To authenticate with Couchbase Server by means of a client certificate, a Java application must have access to an appropriate _keystore_ or _truststore_.
+A procedure for the creation of such a keystore is provided in xref:6.0@server:security:security-x509certsintro.adoc[X.509 for TLS].
 The following Java code assumes that this procedure has been followed.
 The procedure's resulting keystore assigns the `travel-sample` user-identity to the client.
 The Couchbase Server-node that is accessed is expected to feature a user-definition where the username is indeed `travel-sample`, and where the *Bucket Full Access* role has been granted to that user for the _travel-sample_ bucket.
@@ -88,14 +89,15 @@ package certificatetest.java;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.CouchbaseCluster;
+import com.couchbase.client.java.auth.CertAuthenticator;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.env.CouchbaseEnvironment;
 import com.couchbase.client.java.env.DefaultCouchbaseEnvironment;
 
-public class CertificateTest
-{
-    public static void main(String [] args)
-    {
+public class CertificateTest {
+
+    public static void main(String... args) {
+
         CouchbaseEnvironment env = DefaultCouchbaseEnvironment
             .builder()
             .sslEnabled(true)
@@ -105,16 +107,17 @@ public class CertificateTest
             .build();
 
         Cluster userCluster = CouchbaseCluster.create(env, "10.143.173.101");
-
+        userCluster.authenticate(CertAuthenticator.INSTANCE);
         Bucket travelSample = userCluster.openBucket("travel-sample");
 
         JsonDocument returnedAirline10doc = travelSample.get("airline_10");
         System.out.println("Found: " + returnedAirline10doc);
     }
+
 }
 ----
 
-As this example shows, certificate-based authentication is enabled by means of the `CouchbaseEnvironment` class.
+As this example shows, certificate-based authentication is enabled by means of the `CouchbaseEnvironment` class as well as passing in the `CertAuthenticator`.
 (See xref:client-settings.adoc[Client Settings] for details).
 The certificate-related options are as follows:
 
