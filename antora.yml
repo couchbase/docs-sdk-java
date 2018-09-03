@@ -1,7 +1,7 @@
 name: java-sdk
-version: '2.3'
+version: '2.4'
 title: Java SDK
 start_page: start-using-sdk.adoc
 nav:
 - modules/ROOT/nav.adoc
-server_version: '4.5'
+server_version: '4.6'

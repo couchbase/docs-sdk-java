@@ -5,7 +5,7 @@
 [abstract]
 You can perform N1QL queries via the Java client.
 
-NOTE: See Couchbase Developer documentation for a quick intro to xref:4.5@server:architecture:querying-data-with-n1ql.adoc[N1QL].
+NOTE: See Couchbase Developer documentation for a quick intro to xref:4.6@server:architecture:querying-data-with-n1ql.adoc[N1QL].
 
 To issue N1QL queries, you should create a [.api]`N1qlQuery` object, and pass it to the [.api]`query(N1qlQuery q)` method in the [.api]`Bucket` class.
 A few variants of such a query exist:
@@ -35,11 +35,11 @@ The identifier can be useful for grouping several queries (for example, in a kin
 * `errors`: Returns a list of [.api]`JsonObject` describing errors or warnings (if any occurred during execution).
 
 Each [.api]`N1qlQueryRow` exposes the JSON representation of the `value()` as a [.api]`JsonObject`.
-It also gives the raw bytes for said value (`byteValue()`), in case you need them to apply your deserialization or `SELECT RAW` is used which cannot be turned into a `JsonObject`.
+It also gives the raw bytes for said value (`byteValue()`), in case you need them to apply your deserialization, or `SELECT RAW` is used, which cannot be turned into a `JsonObject`.
 
 You can use N1QL placeholders in the query.
 Placeholders allow you to specify variable constraints for an otherwise constant query.
-A named or poditional parameter is a placeholder for a value in the WHERE, LIMIT or OFFSET clause of a query.
+A named or positional parameter is a placeholder for a value in the WHERE, LIMIT or OFFSET clause of a query.
 To use placeholders, manually construct a `N1QLQuery` object with the base query string, and use a [.api]`JsonObject` of names \-> keyword or a [.api]`JsonArray` of positional arguments for named or positional placeholders, respectively:
 
 .N1QL Query with placeholders
@@ -75,7 +75,7 @@ N1qlParams params = N1qlParams.build().adhoc(false);
 N1qlQuery query = N1qlQuery.simple("select count(*) from `mybucket`", params);
 ----
 
-For more information on query parameters in N1QL, see xref:4.5@server:n1ql:n1ql-rest-api/index.adoc[N1QL REST API].
+For more information on query parameters in N1QL, see xref:4.6@server:n1ql:n1ql-rest-api/index.adoc[N1QL REST API].
 
 == Building Statements with the DSL
 
@@ -136,6 +136,49 @@ Eventually, trigger the whole process by subscribing to the [.api]`Observable` y
 When a row JSON is received, print it; when an error is propagated, print the stack trace.
 
 _Note: All this is done asynchronously so it's not suitable for a simple test (where the main thread would potentially exit before any result could have been displayed)._
+
+== Long running Streaming Query
+
+For a long-running N1QL query, you need a way of streaming the rows and correctly handling errors.
+Use this helper function:
+
+[source,java]
+----
+public static Observable<AsyncN1qlQueryRow> query(final Bucket bucket, final N1qlQuery query) {
+    return bucket.async()
+        .query(query).flatMap(new Func1<AsyncN1qlQueryResult, Observable<AsyncN1qlQueryRow>>() {
+        @Override
+        public Observable<AsyncN1qlQueryRow> call(AsyncN1qlQueryResult result) {
+            return Observable
+                .merge(result.rows(), result.errors())
+                .map(new Func1<Object, AsyncN1qlQueryRow>() {
+                    @Override
+                    public AsyncN1qlQueryRow call(Object o) {
+                        if (o instanceof AsyncN1qlQueryRow) {
+                            return (AsyncN1qlQueryRow) o;
+                        } else {
+                            // The actual exception type and format could be improved further
+                            throw new CouchbaseException(o.toString());
+                        }
+                    }
+                });
+        }
+    });
+}
+----
+
+To iterate over the rows, with blocking, call the helper function like this:
+
+[source,java]
+----
+Observable<AsyncN1qlQueryRow> rows = query(bucket, N1qlQuery.simple("select count(*) as cnt from `travel-sample`"));
+
+for (AsyncN1qlQueryRow row : rows.toBlocking().toIterable()) {
+    System.err.println(row);
+}
+----
+
+In this example, this will print `{"cnt":31591}` to the console.
 
 [#case]
 == Conditionals, Case Expressions Mini DSL
@@ -259,7 +302,7 @@ You can fix that with `ANY`, by rewriting the `WHERE` clause:
 ----
 #...FROM tutorial
 #replace "WHERE tutorial.children IS NOT NULL" with:
-WHERE ANY child IN tutorial.children SATISFIES child.age >= 12;
+WHERE ANY child IN tutorial.children SATISFIES child.age >= 12 END;
 ----
 
 [source,java]

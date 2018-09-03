@@ -780,7 +780,6 @@ You can use this approach to fall back:
 [source,java]
 ----
 bucket
-    .async()
     .get("id")
     .onErrorResumeNext(bucket.getFromReplica("id", ReplicaMode.ALL))
     .subscribe();
@@ -792,7 +791,6 @@ The following example will only go to the replica if a `TimeoutException` happen
 [source,java]
 ----
 bucket
-    .async()
     .get("id")
     .timeout(500, TimeUnit.MILLISECONDS)
     .onErrorResumeNext(new Func1<Throwable, Observable<? extends JsonDocument>>() {

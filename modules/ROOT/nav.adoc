@@ -1,12 +1,14 @@
 .Hello World!
 * xref:start-using-sdk.adoc[Start Using the SDK]
 * xref:sample-application.adoc[Sample Application]
+ ** xref:sample-app-backend.adoc[Sample App Backend]
 * xref:webui-cli-access.adoc[Browser and CLI Access]
 
 .Working with Data
 * xref:core-operations.adoc[Core Operations]
 * xref:document-operations.adoc[Document Operations]
 * xref:subdocument-operations.adoc[Sub-Document Operations]
+* xref:datastructures.adoc[Data Structures]
 * xref:n1ql-query.adoc[Querying with N1QL]
 * xref:n1ql-queries-with-sdk.adoc[N1QL from the SDK]
 * xref:full-text-search-overview.adoc[Full Text Search]

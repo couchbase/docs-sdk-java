@@ -16,7 +16,7 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 .Recommended SDK per Server Version Matrix
 [#table_sdk_versions]
 |===
-| | _Under 1.4_ | _SDK 1.4_ | _SDK 2.0, 2.1_ | *SDK 2.2* | *SDK 2.3*
+| | _Under 1.4_ | _SDK 1.4_ | _SDK 2.0, 2.1_ | *SDK 2.2, 2.3* | *SDK 2.4*
 
 | _SDK released for >_
 | _N/A (Archived)_
@@ -73,6 +73,13 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 | ◎
 | ✔
 | *✔*
+
+| *Server 4.6*
+| ◎
+| ◎
+| ◎
+| ✔
+| *✔*
 |===
 
 To take advantage of all features offered by Couchbase Server, you need to know what version of the Java SDK provides compatibility for the features you want to use.
@@ -80,7 +87,7 @@ The following matrix shows which versions of the Couchbase Java SDK support the 
 
 .Couchbase Server and SDK Supported Version Matrix
 |===
-| | Server 1.8 | Server 2.0 | Server 2.5 | Server 3.0, 3.1 | Server 4.0, 4.1 | Server 4.5
+| | Server 1.8 | Server 2.0 | Server 2.5 | Server 3.0, 3.1 | Server 4.0, 4.1 | Server 4.5, 4.6
 
 7+| *Basic Features*
 
@@ -189,6 +196,10 @@ The following table provides an overview.
 | *Server 4.5*
 | Compatible (no N1QL)
 | *Recommended*
+
+| *Server 4.6*
+| Compatible (no N1QL)
+| *Recommended*
 |===
 
 [#migrating]
@@ -234,7 +245,7 @@ It has minimal transitive dependencies (by embedding a few internal dependencies
   <dependency>
     <groupId>com.couchbase.client</groupId>
     <artifactId>java-client</artifactId>
-    <version>2.3.1</version>
+    <version>2.4.0</version>
   </dependency>
 </dependencies>
 ----
@@ -332,4 +343,4 @@ Future<List<String>> f = myStringObservable.toList().toBlocking().toFuture();
 Observable<String> o = Observable.from(myStringFuture)
 ----
 
-include::4.5@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]
+include::4.6@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]

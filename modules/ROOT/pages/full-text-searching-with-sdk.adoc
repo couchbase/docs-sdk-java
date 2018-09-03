@@ -7,7 +7,7 @@ You can use the Full Text Search service (FTS) to create queryable full-text ind
 Couchbase offers Full-text search support, allowing you to search for documents that contain certain words or phrases.
 In the Java SDK you can search full-text indexes by using the [.api]`Bucket.query(SearchQuery)` API.
 
-include::4.5@sdk:shared:partial$experimental-pars.adoc[tag=fts]
+include::4.6@sdk:shared:partial$experimental-pars.adoc[tag=fts]
 
 Querying a FTS index through the Java client is performed through the [.api]`Bucket.query(SearchQuery q)` method, providing a [.api]`SearchQuery`.
 Building a [.api]`SearchQuery` takes two parameters, the index name to query and the actual search query itself (kind of a statement).

@@ -1,0 +1,232 @@
+= Data Structures
+
+[abstract]
+You can use complex data structures such as dictionaries and lists in Couchbase.
+These data structures may be manipulated with basic operations without retrieving and storing the entire document.
+
+Data structures in Couchbase are similar in concept to data structures in the Java Collections Framework:
+
+* *Map* is like Java `Map<String, Object>` and is a key-value structure, where a value is accessed by using a key string.
+* *List* is like a Java `List<Object>` and is a sequential data structure.
+Values can be placed in the beginning or end of a list, and can be accessed using numeric indexes.
+* *Queue* is a wrapper over a _list_ which offers FIFO (first-in-first-out) semantics, allowing it to be used as a lightweight job queue.
+* *Set* is a wrapper over a _list_ which provides the ability to handle unique values.
+
+These data structures are stored as JSON documents in Couchbase, and can therefore be accessed using N1QL, Full Text Search, and normal key-value operations.
+Data structures can also be manipulated using the traditional sub-document and full-document KV APIs.
+
+Using the data structures API may help your application in two ways:
+
+* *Simplicity*: Data structures provide high level operations by which you can deal with documents as if they were container data structures.
+Adding an item to a dictionary is expressed as `mapAdd`, rather than retrieving the entire document, modifying it locally, and then saving it back to the server.
+* *Efficiency*: Data structure operations do not transfer the entire document across the network.
+Only the relevant data is exchanged between client and server, allowing for less network overhead and lower latency.
+
+== Creating a Data Structure
+
+Data structures are created implicitly if they do not exist.
+For example, to add an item to a map, specify the _document ID_ of the map itself (i.e.
+the ID which uniquely identifies the map in the server), the key _within_ the map, and the value to store under the key:
+
+[source,java]
+----
+bucket.mapAdd("map_id", "name", "Mark Nunberg");
+----
+
+Likewise, to create a list, specify the document ID and the value to add:
+
+[source,java]
+----
+bucket.listPush("list_id", "hello");
+----
+
+Note that if the document already exists it will not be overwritten, more elements will be pushed to the list.
+It is therefore always safe to use, unless your application creates data structures independently.
+
+Data structures can be explicitly created and reset using full-document methods, and initialized with its JSON equivalent.
+To create a new empty list, set, or queue, use `bucket.insert(JsonArrayDocument.create("list_id", JsonArray.empty()));`.
+To create an empty map, use `bucket.insert(JsonDocument.create("map_id", JsonObject.empty()));`.
+
+== Accessing Data Structures
+
+Data structures can be accessed using the appropriate methods.
+Most data access methods will return a generic type [.api]`V` which is provided as a generic parameter such as `Class<V>`.
+
+[source,java]
+----
+bucket.listGet("list_id", 0, String.class); // "hello"
+bucket.mapGet("map_id", "name", String.class);  // "mark nunberg"
+----
+
+The same subdocument exceptions are forwarded on the datastructures API, like if the map key or list index is not found within the document.
+If the document itself does not exist, a [.api]`com.couchbase.client.java.error.DocumentDoesNotExistException` will be raised instead.
+
+Here is a list of common operations:
+
+.Data Structure Operations
+[cols="25,94"]
+|===
+| |
+
+| [.api]`mapAdd`
+a|
+Add a key to the map.
+
+[source,java]
+----
+bucket.mapAdd("map_id", "some_key", "value")
+----
+
+| [.api]`mapRemove`
+a|
+Remove a key from a map.
+
+[source,java]
+----
+bucket.mapRemove("map_id", "some_key")
+----
+
+| [.api]`mapGet`
+a|
+Get an item from a map.
+
+[source,java]
+----
+bucket.mapGet("map_id", "some_key", String.class) #=> value
+----
+
+If the key is not found, an [.api]`PathNotFoundException` is raised.
+
+| [.api]`listAppend`
+a|
+Add an item to the _end_ of a list.
+
+[source,java]
+----
+bucket.listAppend("list_id", 1234)
+----
+
+| [.api]`listPrepend`
+a|
+Add an item to the _beginning_ of a list.
+
+[source,java]
+----
+bucket.listPrepend("list_id", "hello world")
+----
+
+| [.api]`listRemove`
+a|
+Remove a value from a list.
+
+[source,java]
+----
+bucket.listRemove("list_id", 2)
+----
+
+| [.api]`listSet`
+a|
+Set an element at a specific index in the list.
+
+[source,java]
+----
+bucket.listSet("list_id", 0, "first value")
+----
+
+| [.api]`listGet`
+a|
+Get an item from a list by its index.
+
+[source,java]
+----
+ bucket.listGet("list_id", 0, String.class)
+----
+
+If the index is out of range, an [.api]`PathNotFoundException` will be thrown.
+Note that you can get the _last_ array element by specifying `-1` as the index.
+
+| [.api]`setAdd`
+a|
+Add an item to a set, if the item does not yet exist in the set.
+
+[source,java]
+----
+bucket.setAdd("set_id", "some_value")
+----
+
+Note that a _set_ is just a list.
+You can retrieve the entire set by simply using a full-document [.api]`get` operation:
+
+[source,java]
+----
+set = bucket.get("set_id").content()
+----
+
+NOTE: Currently, you can only store primitive values in sets, such as strings, ints, and booleans.
+
+| [.api]`setContains`
+a|
+Check if a value exists in the set.
+
+[source,java]
+----
+bucket.setContains("set_id", "value")
+----
+
+| [.api]`setRemove`
+a|
+Remove an item from a set, if it exists.
+An exception is not thrown if the item does not exist.
+You can determine if an item existed or not by the return value.
+If the item did not exist beforehand, `null` is returned.
+
+[source,java]
+----
+bucket.setRemove("set_id", "some_value")
+----
+
+| [.api]`queuePush`
+a|
+Add an item to the beginning of the queue.
+
+[source,java]
+----
+bucket.queuePush("a_queue", "job123")
+----
+
+Note that a queue is just a list.
+You can retrieve items from the middle of the queue by using [.api]`listGet`
+
+| [.api]`queuePop`
+a|
+Remove an item from the end queue and return it.
+
+[source,java]
+----
+item = bucket.queuePop("a_queue") //=> "job123"
+----
+
+If the queue is empty, then [.api]`null` is returned.
+
+| [.api]`mapSize`, [.api]`listSize`, [.api]`setSize`, [.api]`queueSize`
+a|
+These methods get the length of the data structure.
+For maps, this is the number of key-value pairs inside the map.
+For lists, queues, and sets, this is the number of elements in the structure.
+
+[source,java]
+----
+len = bucket.listSize('a_list') #=> 42
+----
+|===
+
+Note that there are only *two* basic types: map and list.
+Types such as _queue_ and _set_ are merely derivatives of _list_.
+
+== Data Structures and Key-Value APIs
+
+Data structures can be accessed using key-value APIs as well.
+In fact, the data structure API is actually a client-side wrapper _around_ the key-value and sub-document API.
+Most of the data structure APIs wrap the sub-document API directly.
+
+NOTE: Because the data structure API is just a wrapper around the various key-value APIs, you are free to switch between them in your code.
