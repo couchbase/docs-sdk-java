@@ -1,0 +1,130 @@
+= Managing views
+:page-topic-type: concept
+
+[abstract]
+You can use the Java SDK to manage views programmatically.
+
+Views are stored in design documents.
+The SDK provides convenient methods to create, retrieve, and remove design documents.
+To set up views, you create design documents that contain one or more view definitions, and then insert the design documents into a bucket.
+
+In the Java SDK, design documents are represented by the `DesignDocument` class `View` interface.
+All operations on design documents are performed on a `BucketManager` instance.
+
+== Creating design documents
+
+Each view in a design document is represented by a name and a set of MapReduce functions.
+The mandatory map function describes how to select and transform the data from the bucket, and the optional reduce function describes how to aggregate the results.
+
+The following example inserts a design document with two regular views and one spatial view into a bucket named `travel-sample`:
+
+[source,java]
+----
+CouchbaseCluster cluster = CouchbaseCluster.create("127.0.0.1");
+Bucket bucket = cluster.openBucket("travel-sample");
+// Get bucket manager
+BucketManager bucketManager = bucket.bucketManager();
+
+// Initialize design document
+DesignDocument designDoc = DesignDocument.create(
+	"landmarks",
+	Arrays.asList(
+		DefaultView.create("by_country",
+			"function (doc, meta) { if (doc.type == 'landmark') { emit([doc.country, doc.city], null); } }"),
+		DefaultView.create("by_activity",
+			"function (doc, meta) { if (doc.type == 'landmark') { emit(doc.activity, null); } }",
+			"_count"),
+		SpatialView.create("by_coordinates",
+			"function (doc, meta) { if (doc.type == 'landmark') { emit([doc.geo.lon, doc.geo.lat], null); } }")
+	)
+);
+
+// Insert design document into the bucket
+bucketManager.insertDesignDocument(designDoc);
+----
+
+When you initialize the design document, you can also specify how often to trigger indexing on documents and replicas.
+The following table lists the available options:
+
+.`DesignDocument.create()` method `options` parameter
+|===
+| Option | Description
+
+| `UPDATE_MIN_CHANGES`
+| The minimum changes to perform on a design document before indexing is triggered.
+
+| `REPLICA_UPDATE_MIN_CHANGES`
+| The minimum changes to perform on a design document before replica indexing is triggered.
+|===
+
+By default, the `insertDesignDocument()` method publishes the design document into production mode, which means that all documents in the distributed bucket are indexed.
+Alternatively, you can create a lightweight development view by using `bucketManager.insertDesignDocument(designDoc, true)`, where the additional Boolean parameter specifies that you want the design document put into development mode.
+
+== Retrieving design documents
+
+To inspect design documents, you can either retrieve them by name or iterate through a list of documents.
+The following example shows both approaches:
+
+[source,java]
+----
+// Get design document by name
+DesignDocument designDoc = bucketManager.getDesignDocument("landmarks");
+System.out.println(designDoc.name() + " has " + designDoc.views().size() + " views");
+
+// Iterate over all production design documents
+List<DesignDocument> designDocs = bucketManager.getDesignDocuments();
+System.out.println("bucket 'travel-sample' has " + designDocs.size() + " design documents:");
+for (DesignDocument doc : designDocs) {
+	System.out.println(doc.name() + " has " + doc.views().size() + " views");
+}
+----
+
+The example outputs the following messages:
+
+----
+landmarks has 3 views
+bucket 'travel-sample' has 2 design documents:
+landmarks has 3 views
+spatial has 2 views
+----
+
+== Adding or replacing views in an existing design document
+
+When you want to update an existing document with a new view (or a modification of a view's definition), you can use the `upsertDesignDocument` method.
+The catch is that this method needs the list of views in the document to be exhaustive, meaning that if you just create the new `View` definition as previously and add it to a new `DesignDocument` that you upsert, all your other views will be erased!
+
+The solution is to perform a `getDesignDocument(ddoc)`, add your view definition to the DesignDocument's `views()` list, then upsert it.
+This also works with view modifications, provided the change is in the `map` or `reduce` functions (just reuse the same name for the modified `View`).
+
+[source,java]
+----
+// Get design document to be updated
+DesignDocument designDoc = bucketManager.getDesignDocument("landmarks");
+
+//update the "by_country" view, adding a reduce
+designDoc.views().add(
+	DefaultView.create("by_country", //reuse same name
+		"function (doc, meta) { if (doc.type == 'landmark') { emit([doc.country, doc.city], null); } }", //same map function
+		"_count" //added reduce function
+		)
+	);
+
+//resend to server
+bucketManager.upsertDesignDocument(designDoc);
+----
+
+== Deleting design documents
+
+To remove a design document from a bucket, pass its name to the `removeDesignDocument` method, which also takes an optional Boolean parameter that specifies whether to remove the document from development mode.
+When this optional parameter is set to `true`, the design document is removed from development mode.
+When the parameter is not included or is set to `false`, the design document is removed from production mode.
+This example shows how to remove a design document from production mode and from development mode:
+
+[source,java]
+----
+// remove design document from production mode
+bucketManager.removeDesignDocument("landmarks");
+
+// remove design document from development mode
+bucketManager.removeDesignDocument("landmarks",true);
+----

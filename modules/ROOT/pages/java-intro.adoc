@@ -1,8 +1,8 @@
-= Java SDK 2.1
+= Java SDK 2.2
 :page-topic-type: concept
 
 [abstract]
-The Couchbase Java SDK provides synchronous and asynchronous (reactive) interfaces that allow your applications to efficiently interact with a Couchbase Server cluster.
+The Couchbase Java SDK provides synchronous and asynchronous (reactive) interfaces that allow your applications to interact efficiently with a Couchbase Server cluster.
 It provides capabilities to store, update, and retrieve documents in the database and query the database by using N1QL.
 
 In general, every synchronous method has a corresponding asynchronous method.
@@ -12,7 +12,7 @@ Here are some samples of typical operations you can accomplish with the SDK:
 
 == Connecting
 
-You can connect to one or more buckets on your cluster in a very concise way, while at the same time making sure that the underlying resources like thread pools and sockets are reused as much as possible:
+You can connect to one or more buckets on your cluster in a very concise way while at the same time making sure that the underlying resources like thread pools and sockets are reused as much as possible:
 
 [source,java]
 ----
@@ -114,11 +114,12 @@ Here is how to run a N1QL query—notice how nicely the domain-specific language
 ----
 bucket
     .async()
-    .query(Query.simple(select("*").from("beer-sample").limit(10)))
-    .flatMap(AsyncQueryResult::rows)
+    .query(N1qlQuery.simple(select("*").from(i("beer-sample")).limit(10)))
+    .flatMap(AsyncN1qlQueryResult::rows)
     .toBlocking()
     .forEach(row -> System.out.println(row.value()));
 ----
 
-The query selects all documents from the `beer-sample` bucket and prints the content of each row.
-Of course, synchronous execution is also available.
+The query selects all documents from the `beer-sample` bucket (notice it is escaped using `i()` utility method) and prints the content of each row.
+This also shows it is easy to go back to blocking from an async query (chain in `toBlocking()`).
+There is of course also a fully synchronous API.

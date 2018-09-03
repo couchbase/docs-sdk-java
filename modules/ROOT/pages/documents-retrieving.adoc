@@ -6,13 +6,13 @@ Describes how to load documents using the various `get()` methods.
 
 == Regular reads
 
-Reading a document is done by using the `get()` method.
-This can be done by either passing in the `id` of the `Document` or a `Document` itself (where the `id` is taken from).
+To read a document use the `get()` method.
+Either pass in the `id` of the `Document` or the `Document` from which the `id` is taken from.
 
 [source,java]
 ----
-Observable<JsonDocument> loadedFromId = bucket.get("id");
-Observable<JsonDocument> loadedFromDoc = bucket.get(JsonDocument.create("id"));
+JsonDocument loadedFromId = bucket.get("id");
+JsonDocument loadedFromDoc = bucket.get(JsonDocument.create("id"));
 ----
 
 Both methods have the same effect.
@@ -23,24 +23,35 @@ If you want to override this, you can pass in a specific `Document` type like th
 
 [source,java]
 ----
-Observable<LegacyDocument> loaded = bucket.get("legacyId", LegacyDocument.class);
+LegacyDocument loaded = bucket.get("legacyId", LegacyDocument.class);
 ----
 
-If the document is not found, an empty `Observable` is returned.
-This aligns with how `Observable` objects are supposed to work by contract, but also makes it easier to deal with the implementation later.
-If no document is returned, the subsequent operations are just not executed, which avoids having null checks all over the place (if say, a `Document` would be returned but with the content set to `null`).
-
-If you are dealing with blocking code, use `singleOrDefault()` to avoid a `NoSuchElementException` to be thrown.
-You can either use a `Document` populated with default settings or just `null`, which can be checked later:
+If the document is not found, the blocking API returns null.:
 
 [source,java]
 ----
-JsonDocument found = bucket.get("notexisting").toBlocking().singleOrDefault(null);
+JsonDocument found = bucket.get("notexisting");
 if (found == null) {
-    // doc not found
+// doc not found
 } else {
-    // doc found
+// doc found
 }
+----
+
+If you are dealing with asynchronous code, an empty `observable` is returned instead.
+This aligns with how `Observable` objects are supposed to work by contract, but also makes it easier to deal with the implementation later.
+If no document is returned, the subsequent operations are just not executed, which avoids having null checks all over the place (if for example a Document would be returned but with the content set to `null`).
+
+[source,java]
+----
+Observable<JsonDocument> updateIfFound = bucket.async().get(potentialNonExistingKey)
+	.map(doc -> doc.content())
+	.filter(jsonObject -> jsonObject.containsKey("test"))
+	.subscribe(
+		//onNext only invoked if the key could be retrieved
+		data -> System.out.println("Data exists and has test key"),
+		error::printStackTrace,
+		() -> System.out.println("Completed"));
 ----
 
 == Reading from replica
@@ -70,13 +81,15 @@ bucket.getFromReplica("id", ReplicaMode.SECOND);
 bucket.getFromReplica("id", ReplicaMode.THIRD);
 ----
 
-Note that if `ReplicaMode.ALL` is used, requests are sent to the master node and all configured replicas.
+NOTE: If `ReplicaMode.ALL` is used, requests are sent to the master node and all configured replicas.
+
 The main goal is to get responses back as fast as possible, but because more requests are sent, more responses can arrive.
-You can use this to either compare all of the responding documents and draw conclusions from that, or just pick the first one arriving:
+You can use this to either compare all of the responding documents and draw conclusions, or just pick the first one arriving:
 
 [source,java]
 ----
 bucket
+	.async()
     .getFromReplica("id", ReplicaMode.ALL)
     .first()
     .subscribe();
@@ -88,6 +101,7 @@ Imagine you have a `version` field in your document and you want to only use the
 [source,java]
 ----
 bucket
+	.async()
     .getFromReplica("id", ReplicaMode.ALL)
     .filter(document -> document.content().getInt("version") > 5)
     .first()
@@ -102,7 +116,7 @@ Reading and locking works very similar to a regular read, but in addition the `D
 [source,java]
 ----
 // Get and lock for 10 seconds
-Observable<JsonDocument> doc = bucket.getAndLock("id", 10);
+JsonDocument doc = bucket.getAndLock("id", 10);
 ----
 
 NOTE: You can only write lock a document for a maximum of 30 seconds.
@@ -112,7 +126,29 @@ The `Document` is unlocked under the following conditions:
 
 * The `unlock()` command is used.
 * The `Document` is replaced with the correct CAS value.
-* 30 seconds are over and the server unlocks it for you.
+* 30 seconds are over, and the server unlocks it for you.
+
+The following example shows the case with optimistic locking, where the locked document is automatically released on error so it can be used by other clients.
+
+[source,java]
+----
+JsonDocument doc = JsonDocument.create(
+	"stats",
+	JsonObject.empty().put("sold", 0).put("bought", 0)
+);
+bucket.upsert(doc);
+
+doc = bucket.getAndLock("stats", 20);
+try {
+    doc.content().put("sold", doc.content().getInt("sold") + 1);
+    // Fake a processing error
+    if (new Random().nextInt(100) < 30) {
+        throw new RuntimeException("processing error");
+    }
+} catch (RuntimeException ex) {
+    bucket.unlock("stats", doc.cas());
+}
+----
 
 == Reading and touching
 
@@ -121,9 +157,9 @@ Reading and touching works very similar to a regular read, but it also refreshes
 [source,java]
 ----
 // Get and set the new expiration time to 4 seconds
-Observable<JsonDocument> doc = bucket.getAndTouch("id", 4);
+JsonDocument doc = bucket.getAndTouch("id", 4);
 ----
 
 You can also use the `touch()` command if you do not want to read the document and just refresh its expiration time.
 
-If you specify an expiration time greater than 30 days in seconds (60 seconds * 60 minutes * 24 hours * 30 days = 2,592,000 seconds) it is considered an absolute time stamp instead of a relative one.
+IMPORTANT: If you specify an expiration time greater than 30 days in seconds (60 seconds * 60 minutes * 24 hours * 30 days = 2,592,000 seconds), it is considered an absolute timestamp instead of a relative one.

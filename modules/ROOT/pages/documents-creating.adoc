@@ -6,79 +6,90 @@ Describes creating documents by using the `insert()` or `upsert()` methods.
 
 == Insert
 
-The `insert` method allows you to store a `Document`, if it does not already exist in the bucket.
-If it does exist, the `Observable` fails with a `DocumentAlreadyExistsException` (or it is thrown in the synchronous counterpart).
+The `insert` method allows you to store a `Document` if it does not already exist in the bucket.
+If it does exist, the synchronous API throws a `DocumentAlreadyExistsException` (or the `Observable` propagates it to `onErro` in the case of the asynchronous API).
 
 [source,java]
 ----
 JsonObject content = JsonObject.empty().put("name", "Michael");
 JsonDocument doc = JsonDocument.create("docId", content);
-JsonDocument inserted = bucket.insert(doc)
+//this will throw DocumentAlreadyExistException:
+JsonDocument inserted = bucket.insert(doc);
 ----
 
 [source,java]
 ----
 JsonObject content = JsonObject.empty().put("name", "Michael");
 JsonDocument doc = JsonDocument.create("docId", content);
-Observable<JsonDocument> inserted = asyncBucket.insert(doc)
+Observable<JsonDocument> inserted = bucket.async().insert(doc);
+inserted.subscribe(
+	System.out::println,
+	//this will be called with DocumentAlreadyExistException:
+	Throwable::printStackTrace
+);
 ----
 
 If the `Document` also has the `expiry` time set, it is respected and picked up by the server.
 
 It doesn't matter what type of `Document` is inserted because its type is inferred from the method argument and the corresponding `Transcoder` is used to encode it.
 
-The `Document` returned as a result is a different from the `Document` passed in.
-The returned document references some values like its `id` and `content`, but also has the `CAS` value set.
+The `Document` returned, as a result, is different from the `Document` passed in.
+The returned document references some values like its `id` and `content` but also has the `CAS` value set.
 
 == Upsert
 
-The `upsert` method works similar to `insert`, but it also overrides a already stored `Document` (so there is no `DocumentAlreadyExistsException` thrown.
+The `upsert` method works similar to `insert`, but it also overrides an already stored `Document` (so there is no `DocumentAlreadyExistsException` thrown by the synchronous API nor propagated by the asynchronous API).
 
 [source,java]
 ----
 JsonObject content = JsonObject.empty().put("name", "Michael");
 JsonDocument doc = JsonDocument.create("docId", content);
-JsonDocument inserted = bucket.upsert(doc)
+JsonDocument inserted = bucket.upsert(doc);
 ----
 
 [source,java]
 ----
 JsonObject content = JsonObject.empty().put("name", "Michael");
 JsonDocument doc = JsonDocument.create("docId", content);
-Observable<JsonDocument> inserted = asyncBucket.upsert(doc)
+Observable<JsonDocument> inserted = bucket.async().upsert(doc);
+inserted.subscribe(
+	System.out::println,
+	//this won't be called:
+	Throwable::printStackTrace
+);
 ----
 
 If the `Document` also has the `expiry` time set, it is respected and picked up by the server.
 
-It doesn't matter what type of `Document` is upserted, it's type is inferred from the method argument and the corresponding `Transcoder` is used to encode it.
+It doesn't matter what type of `Document` is upserted because its type is inferred from the method argument and the corresponding `Transcoder` is used to encode it.
 
-The `Document` returned as a result is a different one compare to the `Document` passed in.
-It references some values like its `id` and `content`, but also has the `CAS` value set.
+The `Document` returned, as a result, is a different one compared to the `Document` passed in.
+It references some values like its `id` and `content` but also has the `CAS` value set.
 
 == Durability Requirements
 
 If no durability requirements are set on the `insert` or `upsert` methods, the operation will succeed when the server acknowledges the document in its managed cache layer.
-While this is a performant operation, there might be situations where you want to make sure that your document has been persisted and/or replicated so that it survives power outages and other node failures.
+While this is a performant operation, there might be situations where you want to make sure that your document has been persisted or replicated so that it survives power outages and other node failures.
 
 Both methods provide overloads to supply such requirements:
 
 [source,java]
 ----
-Observable<D> insert(D document, PersistTo persistTo);
-Observable<D> insert(D document, ReplicateTo replicateTo);
-Observable<D> insert(D document, PersistTo persistTo, ReplicateTo replicateTo);
+D insert(D document, PersistTo persistTo);
+D insert(D document, ReplicateTo replicateTo);
+D insert(D document, PersistTo persistTo, ReplicateTo replicateTo);
 
-Observable<D> upsert(D document, PersistTo persistTo);
-Observable<D> upsert(D document, ReplicateTo replicateTo);
-Observable<D> upsert(D document, PersistTo persistTo, ReplicateTo replicateTo);
+D upsert(D document, PersistTo persistTo);
+D upsert(D document, ReplicateTo replicateTo);
+D upsert(D document, PersistTo persistTo, ReplicateTo replicateTo);
 ----
 
-In addition, the synchronous wrapper provides the same methods with custom timeouts.
+TIP: The synchronous API also provides the same methods with custom timeouts, whereas the asynchronous API in `AsyncBucket` would rely on RxJava's `timeout` operator.
 
 You can configure either just one or both of the requirements when inserting or upserting.
 From an application point of view nothing needs to be changed when working with the response, although there is something that need to be kept in mind:
 
-The internal implementation first performs a regular `insert` or `upsert` operation and afterward starts polling the specific affected cluster nodes for the state of the document.
+The internal implementation first performs a regular `insert` or `upsert` operation and afterward starts polling the specifically affected cluster nodes for the state of the document.
 If something fails during this operation (and failing the `Observable`), the original operation might have succeeded nonetheless.
 
 [source,java]
@@ -95,7 +106,7 @@ bucket.insert(document, PersistTo.ONE, ReplicateTo.TWO);
 
 == Batching
 
-Because everything is asynchronous by default, batching `inserts` or `upserts` can be achieved with `Observable` functionality.
+Because everything is asynchronous internally, batching `inserts` or `upserts` can be achieved with the  `Observable` functionality of the `AsyncBucket`.
 
 A combination of `just()` and `flatMap()` is used to store them without blocking:
 
@@ -110,11 +121,10 @@ Observable
     .flatMap(new Func1<JsonDocument, Observable<JsonDocument>>() {
         @Override
         public Observable<JsonDocument> call(JsonDocument document) {
-            return bucket.insert(document);
+            return bucket.async().insert(document);
         }
     }).subscribe();
 ----
 
 For the blocking API, batching is currently not supported.
-It is recommended to fall back on the asynchronous API for now.
-We are considering adding a bulk API soon.
+It is recommended to fall back on the asynchronous API for best performance.

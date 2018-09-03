@@ -24,15 +24,18 @@ A `Document` object contains the following properties:
 
 | `expiry`
 | The expiration time of the document.
+
+| `mutationToken`
+| The optional MutationToken after a mutation.
 |===
 
 There are a few different implementations of a `Document`, the most prominent one is the `JsonDocument`.
 
-Because Couchbase Server is able to not only store JSON but in fact anything, many document types exist to satisfy the general needs of an application.
-You can also write your own `Document` implementations, but this is not covered in this introduction.
+Because Couchbase Server can store anything and not just JSON, many document types exist to satisfy the general needs of an application.
+You can also write your own `Document` implementations, which is not covered in this introduction.
 
 NOTE: Every `Document` has an associated `Transcoder` that handles serialization and deserialization to and from the target wire format.
-This conversion is transparent, but needs to be taken into account when custom documents are implemented.
+This conversion is transparent but needs to be taken into account when custom documents are implemented.
 
 The following `Document` types are supported out of the box:
 
@@ -41,39 +44,44 @@ The following `Document` types are supported out of the box:
 |===
 | Document Name | Description | Compatible: 2.x SDKs | Compatible: 1.x Java SDK
 
-| `JsonDocument`
+| <<json,`JsonDocument`>>
 | The default, which has a `JsonObject` at the top level content.
 | Yes
 | Yes
 
-| `JsonArrayDocument`
+| <<jsonarray,`JsonArrayDocument`>>
 | Similar to `JsonDocument`, but has a `JsonArray` at the top level content.
 | Yes
 | Yes
 
-| `JsonBooleanDocument`
+| <<jsonvalue,`JsonBooleanDocument`>>
 | Stores JSON-compatible Boolean values.
 | Yes
 | Partially
 
-| `JsonLongDocument`
+| <<jsonvalue,`JsonLongDocument`>>
 | Stores JSON compatible long (number) values.
 | Yes
 | Partially
 
-| `JsonDoubleDocument`
+| <<jsonvalue,`JsonDoubleDocument`>>
 | Stores JSON compatible double (number) values.
 | Yes
 | Partially
 
-| `JsonStringDocument`
+| <<jsonvalue,`JsonStringDocument`>>
 | Stores JSON compatible String values.
 Input is automatically wrapped with `+"..."+`.
 | Yes
 | Partially
 
-| `RawJsonDocument`
+| <<jsonraw,`RawJsonDocument`>>
 | Stores any JSON value and should be used if custom JSON serializers such as Jackson or GSON are already in use.
+| Yes
+| Yes
+
+| `EntityDocument`
+| Used with the Repository implementation to write and read POJOs into JSON and back.
 | Yes
 | Yes
 |===
@@ -83,22 +91,22 @@ Input is automatically wrapped with `+"..."+`.
 |===
 | Document Name | Description | Compatible: 2.x SDKs | Compatible: 1.x Java SDK
 
-| `BinaryDocument`
+| <<binary,`BinaryDocument`>>
 | Can be used to store arbitrary binary data.
 | Yes
 | Yes
 
-| `SerializableDocument`
+| <<serializable,`SerializableDocument`>>
 | Stores objects that implement `Serializable` through default Java object serialization.
 | No
 | Yes
 
-| `LegacyDocument`
+| <<legacy,`LegacyDocument`>>
 | Uses the `Transcoder` from the 1.x SDKs and can be used for full cross-compatibility between the old and new versions.
 | No
 | Yes
 
-| `StringDocument`
+| <<string,`StringDocument`>>
 | Can be used to store arbitrary strings.
 They will not be quoted, but stored as-is and flagged as "String".
 | Yes
@@ -136,6 +144,7 @@ The `CAS` value can either be set by you directly or is populated by the SDK whe
 
 For detailed information about how to utilize CAS for optimistic concurrency control, see xref:documents-updating.adoc[Updating documents].
 
+[#json]
 == JsonDocument
 
 Couchbase Server uses the JSON format as a first-class citizen.
@@ -150,7 +159,7 @@ JsonDocument doc = JsonDocument.create("id", content);
 ----
 
 The content needs to be of type `JsonObject`, which ships with the Java SDK.
-It works very much like a `Map` object, but makes sure only data types understood by JSON are used.
+It works very much like a `Map` object but makes sure only data types understood by JSON are used.
 
 An empty JSON document can be created like this:
 
@@ -164,15 +173,15 @@ After it is created, you can use the various `put()` methods to insert data:
 [source,java]
 ----
 JsonArray friends = JsonArray.empty()
-    .add(JsonObject.empty().put("name", "Mike Ehrmantraut"))
-    .add(JsonObject.empty().put("name", "Jesse Pinkman"));
+	.add(JsonObject.empty().put("name", "Mike Ehrmantraut"))
+	.add(JsonObject.empty().put("name", "Jesse Pinkman"));
 
 JsonObject content = JsonObject.empty()
-    .put("firstname", "Walter")
-    .put("lastname", "White")
-    .put("age", 52)
-    .put("aliases", JsonArray.from("Walt Jackson", "Mr. Mayhew", "David Lynn"))
-    .put("friends", friends);
+	.put("firstname", "Walter")
+	.put("lastname", "White")
+	.put("age", 52)
+	.put("aliases", JsonArray.from("Walt Jackson", "Mr. Mayhew", "David Lynn"))
+	.put("friends", friends);
 ----
 
 This generates a JSON document like this (unordered, because the actual content is stored in a `Map`):
@@ -182,18 +191,18 @@ This generates a JSON document like this (unordered, because the actual content 
 {
    "firstname":"Walter",
    "aliases":[
-      "Walt Jackson",
-      "Mr. Mayhew",
-      "David Lynn"
+	  "Walt Jackson",
+	  "Mr. Mayhew",
+	  "David Lynn"
    ],
    "age":52,
    "friends":[
-      {
-         "name":"Mike Ehrmantraut"
-      },
-      {
-         "name":"Jesse Pinkman"
-      }
+	  {
+		 "name":"Mike Ehrmantraut"
+	  },
+	  {
+		 "name":"Jesse Pinkman"
+	  }
    ],
    "lastname":"White"
 }
@@ -223,6 +232,7 @@ String name = content.getString("firstname") + content.getString("lastname");
 NOTE: If you are accessing values that potentially do not exist, you need to use boxed values (`Integer`, `Long`, `Boolean`) instead of their unboxed variants (`int`, `long`, `boolean`) to avoid getting `NullPointerException` exceptions.
 If you use unboxed variants, make sure to catch them properly.
 
+[#jsonarray]
 == JsonArrayDocument
 
 The `JsonArrayDocument` class works exactly like the `JsonDocument` class, with the main difference that you can have a JSON array at the top level content (instead of an object).
@@ -240,21 +250,22 @@ It will look like this on the server:
 [#image_json-array]
 image::document-jsonarray.png[,650px]
 
-If you want to read the `JsonArrayDocument` back, you need to tell the SDK you explicitly want to deviate from the default.
-This needs to be done for every document type other than `JsonDocument`:
+If you want to read the `JsonArrayDocument` back, you need to tell the SDK that you explicitly want to deviate from the default.
+Do it for every document type other than `JsonDocument`:
 
 [source,java]
 ----
 bucket.get("docWithArray", JsonArrayDocument.class);
 ----
 
+[#jsonraw]
 == RawJsonDocument
 
 The `JsonObject` and `JsonArray` types have been added for developer convenience.
-In a lot of places though, custom JSON handling is already in place through libraries like Jackson or Google GSON.
+In a lot of places, custom JSON handling is already in place through libraries like Jackson or Google GSON.
 
-Of course we want to provide the best of both worlds, and this is where the `RawJsonDocument` comes into play.
-You can store and read the already stringified JSON, but the SDK properly marks it as JSON so it is cross-compatible with all other documents.
+Of course, we want to provide the best of both worlds, and this is where the `RawJsonDocument` comes into play.
+You can store and read the already stringified JSON, but the SDK properly marks it as JSON, so it is cross-compatible with all other documents.
 
 Here is how you can read and write raw JSON data.
 For clarity, a plain string is used but it is up to you to wire this up with Jackson or a similar JSON processor:
@@ -276,17 +287,18 @@ System.out.println(bucket.get("rawJsonDoc").content().getBoolean("active"));
 
 image::document-rawjson.png[,650px]
 
-NOTE: If you use the `RawJsonDocument` type, the SDK does not perform any validation because the expectation is that a JSON-compatible library is used and additional overhead will be avoided.
+NOTE: If you use the `RawJsonDocument` type, the SDK does not perform any validation because the expectation is that a JSON-compatible library is used, and additional overhead will be avoided.
 
+[#jsonvalue]
 == JSON value documents
 
-The JSON specification also allows you to store different values as content and it also specifies how these values need to be encoded.
+The JSON specification also allows you to store different values as content, and it also specifies how these values need to be encoded.
 Because the type system of Java is not as rich as it could be, different document types are provided to represent different values that can be stored.
 Because the encoding is clearly defined, these JSON values are also compatible with other 2.0 SDKs.
 
 A word on compatibility with the 1.X Java SDK: in a best-effort way the SDK tries to read properly flagged data from the old SDKs, but it stores it under the new format, which is not readable by the old SDKs anymore.
 So if you care about back-and-forth compatibility only read those values from the new SDK or use the `LegacyDocument` right away.
-Another option is to use strings only on the old SDK, then working with it back and forth should be safe.
+Another option is to use strings only on the old SDK, and then working with it back and forth should be safe.
 
 Backward compatibility for JSON value documents works only if the actual content is not compressed.
 
@@ -299,15 +311,17 @@ The following documents exist, which all work similarly except the content type 
 
 They are all encoded and decoded based on their http://json.org[JSON specification^].
 
+[#binary]
 == BinaryDocument
 
 The `BinaryDocument` can be used to store and read arbitrary bytes.
 It is the only default codec that directly exposes the underlying low-level Netty `ByteBuf` objects.
 
 IMPORTANT: Because the raw data is exposed, it is important to free it after it has been properly used.
-Not freeing it will result in increased garbage collection and should be avoided by all means.
+Not freeing it will result in increased garbage collection and memory leaks and should be avoided by all means.
+See <<binary-memory>>.
 
-Because binary data is arbitrary anyway, it is backward compatible with the old SDK in terms of flags, so it can be read and written back and forth.
+Because binary data is arbitrary anyway, it is backward compatible with the old SDK regarding flags so that it can be read and written back and forth.
 Make sure it is not compressed in the old SDK and that the same encoding and decoding process is used on the application side to avoid data corruption.
 
 Here is some demo code that shows how to write and read raw data.
@@ -331,6 +345,78 @@ System.out.println(read.content().toString(CharsetUtil.UTF_8));
 ReferenceCountUtil.release(read.content());
 ----
 
+[#binary-memory]
+== Correctly managing buffers
+
+`BinaryDocument` allows users to get the rawest form of data out of Couchbase.
+It  exposes Netty's `ByteBuf`, byte buffers that can have various characteristics (on- or off-heap, pooled or unpooled).
+In general, buffers created by the SDK are pooled and off heap.
+You can disable the pooling in the `CouchbaseEnvironment` if you absolutely need that.
+
+As a consequence, the memory associated with the ByteBuf must be a little bit more managed by the developer than usual in Java.
+
+Most notably, these byte buffers are reference counted, and you need to know three main methods associated to buffer management:
+
+* `refCnt()` gives you the current reference count.
+When it hits 0, the buffer is released back to its original pool, and it cannot be used anymore.
+* `release()` will decrease the reference count by 1 (by default).
+* `retain()` is the inverse of release, allowing you to prepare for multiple consumptions by external methods that you know will each release the buffer.
+
+You can also use `ReferenceCountUtil.release(something)` if you don't want to check if `something` is actually a `ByteBuf` (will do nothing if it's not something that is [.api]`ReferenceCounted`).
+
+IMPORTANT: The SDK bundles the Netty dependency into a different package so that it doesn't clash with a dependency to another version of Netty you may have.
+As such, you need to use the classes and packages provided by the SDK (`com.couchbase.client.deps.io.netty`) when interacting with the API.
+For example, the `ByteBuf` for the content of a `BinaryDocument` is a `com.couchbase.client.deps.io.netty.buffer.ByteBuf`.
+
+*What happens if I don't release?*
+
+Basically, you leak memory\...
+
+Netty will by default inspect a small percentage of `ByteBuf` creations and usage to try and detect leaks (in which case it will output a log, look for the "LEAK" keyword).
+
+You can tune that to be more eagerly monitoring all buffers by calling `ResourceLeakDetector.setLevel(PARANOID)`.
+
+IMPORTANT: Note that this incurs quite an overhead and should only be activated in tests.
+In production (prod), setting it to `ADVANCED` is not as heavy as paranoid and can be a good middle ground.
+
+*What happens if I release twice (or the SDK releases once more after I do)?*
+
+Netty will throw an `IllegalReferenceCountException`.
+The buffer that has RefCnt = 0 cannot be interacted with anymore since it means it has been freed back into the pool.
+
+*When must I release?*
+
+When the SDK creates a `BinaryDocument` for you, basically GET-type operations.
+
+Mutative operations, on the other hand, will take care of the buffer you pass in for you, at the time the buffer is written on the wire.
+
+*When must I usually retain?*
+
+When you do a write, the buffer will usually be released by the SDK calling `release()`.
+But if you implement a kind of fallback behavior (for instance attempt to `insert()` a doc, catch `DocumentAlreadyExistException` and then fallback to an `update()` instead), that means the SDK would attempt to release twice, which won't work.
+
+In this case you can `retain()` the buffer before the first attempt, let the catch block do the extra release if something goes wrong.
+You have to manage the extra release if the first write succeeds, and think about catching other possible exceptions (here also an extra release is needed):
+
+[source,java]
+----
+byteBuffer.retain(); //prepare for potential multi usage (+1 refCnt, refCnt = 2)
+try {
+   bucket.append(document);
+   // refCnt = 2 on success
+   byteBuffer.release(); //refCnt = 1
+} catch (DocumentDoesNotExistException dneException) {
+   // buffer is released on errors, refCnt = 1
+   //second usage will also release, but we want to be at refCnt = 1 for the finally block
+   byteBuffer.retain(); //refCnt = 2
+   bucket.insert(document); //refCnt = 1
+} // other uncaught errors will still cause refCnt to be released down to 1
+finally {
+   //we made sure that at this point refCnt = 1 in any case (success, caught exception, uncaught exception)
+   byteBuffer.release(); //refCnt = 0, returned to the pool
+}
+----
+
 == SerializableDocument
 
 Any object that implements `Serializable` can be safely encoded and decoded using the built-in Java serialization mechanism.
@@ -345,15 +431,15 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    private final String username;
+	private final String username;
 
-    public User(String username) {
-        this.username = username;
-    }
+	public User(String username) {
+		this.username = username;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public String getUsername() {
+		return username;
+	}
 
 }
 ----
@@ -370,10 +456,11 @@ SerializableDocument found = bucket.get("user::michael", SerializableDocument.cl
 System.out.println(((User) found.content()).getUsername());
 ----
 
+[#legacy]
 == LegacyDocument
 
 The `LegacyDocument` is intended to be 1:1 compatible (including compression) with the 1.x Java SDK.
-For better compatibility with the other 2.0 SDKs we recommend to move to JSON type documents (and other compatible ones), but the `LegacyDocument` is very helpful during data migration and side-by-side usage.
+For better compatibility with the other 2.0 SDKs, we recommend to move to JSON type documents (and other compatible ones), but the `LegacyDocument` is very helpful during data migration and side-by-side usage.
 
 Because the old and new SDKs don't share artifacts or namespaces, they can be used at the same time.
 If you're using Maven, you can add both a 1.x SDK and a 2.x SDK as dependencies in the [.path]_pom.xml_ file.
@@ -382,16 +469,16 @@ For example:
 [source,xml]
 ----
 <dependencies>
-    <dependency>
-        <groupId>com.couchbase.client</groupId>
-        <artifactId>java-client</artifactId>
-        <version>2.0.3</version>
-    </dependency>
-    <dependency>
-        <groupId>com.couchbase.client</groupId>
-        <artifactId>couchbase-client</artifactId>
-        <version>1.4.5</version>
-    </dependency>
+	<dependency>
+		<groupId>com.couchbase.client</groupId>
+		<artifactId>java-client</artifactId>
+		<version>2.2.8</version>
+	</dependency>
+	<dependency>
+		<groupId>com.couchbase.client</groupId>
+		<artifactId>couchbase-client</artifactId>
+		<version>1.4.11</version>
+	</dependency>
 </dependencies>
 ----
 
@@ -405,9 +492,9 @@ Bucket bucket = cluster.openBucket();
 
 // Open bucket on the old SDK
 CouchbaseClient client = new CouchbaseClient(
-    Arrays.asList(URI.create("http://127.0.0.1:8091/pools")),
-    "default",
-    ""
+	Arrays.asList(URI.create("http://127.0.0.1:8091/pools")),
+	"default",
+	""
 );
 
 // Create document on old SDK
@@ -436,10 +523,11 @@ LegacyDocument{id='fromOld', cas=1097880624822, expiry=0, content=Hello from Old
 Hello from New!
 ----
 
+[#string]
 == StringDocument
 
 This document type provides an SDK 2.0 cross-compatible way to exchange strings.
-It should not be mistaken with the `JsonStringDocument` which automatically quotes it and also flags it as JSON.
+It should not be mistaken with the `JsonStringDocument` that automatically quotes it and also flags it as JSON.
 It is also backward compatible unless compression was used previously.
 
 If a `String` is stored through it, it is explicitly flagged as a non-JSON string.

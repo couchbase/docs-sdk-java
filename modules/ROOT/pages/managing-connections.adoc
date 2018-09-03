@@ -178,6 +178,9 @@ F4+FjEqAEIr1mQepDaNM0gEfVcgd2SzGhC3yhYFBAH//8W4DUot5ciEhoBs=
 
 Now, use the [.cmd]`keytool` command to import it into your JVM keystore.
 
+NOTE: Use the `-keystore` option to specify where to create the keystore.
+If you don't use this option, the default location is the `.keystore` file in user's home directory.
+
 [source,bash]
 ----
 $ keytool -importcert -file cluster.cert
@@ -224,7 +227,7 @@ CouchbaseEnvironment env = DefaultCouchbaseEnvironment
     .build();
 ----
 
-Depending on the OS used there are different default passwords and paths, so consult the JDK manual if you need further information on keytool and the JVM keystore.
+Depending on the OS used there are different default passwords and paths, so consult the JDK manual if you need further information on keytool (Java 7 for http://docs.oracle.com/javase/7/docs/technotes/tools/windows/keytool.html#OptionsInAll[Windows^] and http://docs.oracle.com/javase/7/docs/technotes/tools/solaris/keytool.html#OptionsInAll[Unix^]) and the JVM keystore.
 
 There are no other application changes needed.
 If you want to verify it's actually working ,you can use a tool like [.cmd]`tcpdump`.

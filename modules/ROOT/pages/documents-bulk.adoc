@@ -15,7 +15,7 @@ If you understand the general approach to batching, you can apply it to any oper
 
 Implicit batching is performed by utilizing a few operators:
 
-* `Observable.just()` or `Observable.from()` to generate an `Observable` that contains the data you want to batch on.
+* `Observable.just()` or `Observable.from()` to generate an `observable` that contains the data you want to batch on.
 * `flatMap()` to send those events against the Couchbase Java SDK and merge the results asynchronously.
 * `last()` if you want to wait until the last element of the batch is received.
 * `toList()` if you care about the responses and want to aggregate them easily.
@@ -155,7 +155,7 @@ In general, the following questions come up:
 * What are `BackpressureExceptions` and how can I handle them?
 * How can I retry individual operations in the batch when they fail?
 
-When handling these situations, an important fact to remember is that as soon as an error happens inside an `Observable`, the whole thing is terminated.
+When handling these situations, an important fact to remember is that as soon as an error happens inside an `observable`, the whole thing is terminated.
 If you want the whole stream to complete, error handling needs to be as close as possible to the original source.
 Let's take the bulk loading of documents as an example which we are going to modify to be more resilient:
 
@@ -199,11 +199,11 @@ For a full list of errors that can happen and their implications, see the Javado
 Since the `BackpressureException` has been frequently referenced in the past, we are going to use that one as an example.
 The same logic of course applies to all other types as well.
 
-The `BackpressureException` is used to shed load on the request side and fails your observable quickly if the underlying system is in an overload condition.
+The `BackpressureException` is used to shed load on the request side and fails your Observable quickly if the underlying system is in an overload condition.
 The reason for this is that somehow requests are produced more quickly than responses can be generated (because that includes the actual network round trip).
 This is common in bulk scenarios since it could be that you are requesting a very large set of documents at the same time which puts temporary pressure on the client.
 
-To solve that, we can apply a delayed retry algorithm onto the observable so it is retried at a later point.
+To solve that, we can apply a delayed retry algorithm onto the Observable so it is retried at a later point.
 We are making use of the `Delay` construct shipped with the 2.1 SDK which provides a very convenient way to generated increasing delays.
 You also want to stop retrying at some point so the operation is not retried forever.
 

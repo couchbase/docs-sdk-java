@@ -2,12 +2,12 @@
 :page-topic-type: concept
 
 [abstract]
-This section describes how to query views in a design document.
+You can query views using a design document.
 
 == Anatomy of a view query
 
-When you query a view you need to provide both the name of the Design Document and the name of the View.
-If you do not provide any further options, the SDK assumes you want to query a published view (so it is not in development mode) and also will not set any query options.
+When you query a view, you need to provide both the name of the Design Document and the name of the View.
+If you do not supply any further options, the SDK assumes you want to query a published view (so it is not in development mode) and also will not set any query options.
 
 This example queries a view with the name `myview`, which lives in the Design Document `designdoc`.
 If no further arguments are provided, it is assumed that the design document is published.
@@ -32,11 +32,7 @@ For example, you can limit the returned rows to a maximum of 10 and also query a
 bucket.query(ViewQuery.from("designdoc", "myview").development(false).limit(10));
 ----
 
-If you want to query a geospatial view, you just need to use a different query builder:
-
-NOTE: Geospatial queries are supported only against Couchbase Server 3.0.1 or later and are currently experimental.
-If going as planned, the next major release will provide stable support.
-It is not expected that the client API will change, because it is very similar to what is provided against regular views.
+If you want to query a geospatial view, you just need to use a different query builder (which you can also use to provide more parameters):
 
 [source,java]
 ----
@@ -49,7 +45,9 @@ for (SpatialViewRow row : result) {
 }
 ----
 
-For all types of views, a `*ViewResult` is always returned, which contains zero to many `*ViewRows`.
+NOTE: Geospatial queries are supported only against Couchbase Server 4.0 or later (although there was experimental support starting from 3.0.1).
+
+For all types of views, a `ViewResult` is always returned, which contains zero to many `ViewRows`.
 In addition to iterative row access, more methods are available on the result:
 
 |===
@@ -62,14 +60,14 @@ In addition to iterative row access, more methods are available on the result:
 | Provides iterative access to rows as they arrive.
 
 | `int totalRows()`
-| The total number of rows in the index, can be greater than the number of `rows()` returned.
+| The total number of rows in the index can be greater than the number of `rows()` returned.
 
 | `boolean success()`
 | True if the query was successful, false otherwise.
 Check `error()` if so.
 
 | `JsonObject error()`
-| Contains the error if the query was not successfull, null otherwise.
+| Contains the error if the query was not successful or null otherwise.
 
 | `JsonObject debug()`
 | Contains debug information if `debug()` was enabled on the query, null otherwise.
@@ -80,7 +78,7 @@ The only difference between regular and spatial view results is the fact that sp
 == Regular View Options
 
 All options shown here are available on the `ViewQuery` in a fluent API manner.
-All of them are optional, so only when they are explicitly provided they will alter the behavior of the query.
+All of them are optional, so only when they are explicitly provided, they will alter the behavior of the query.
 
 As a general note, all arguments that accept JSON are provided with a higher number of method overloads to accommodate all combinations in a type-safe manner.
 
@@ -118,7 +116,7 @@ If not provided and the view has a reduce function, it will be used.
 
 | `stale`
 | `Stale.TRUE, Stale.FALSE, Stale.UPDATE_AFTER (default)`
-| Defines how stale the view results are allowed to be on query.
+| Defines how stale the view results are allowed to be in the query.
 
 | `debug`
 | `boolean`
@@ -130,7 +128,7 @@ If not provided and the view has a reduce function, it will be used.
 
 | `descending`
 | `boolean`
-| Returns the documents in descending by key order if true, default is false.
+| Returns the documents in descending order by key if `true`, default is `false`.
 
 | `key`
 | `JSON`
@@ -156,15 +154,35 @@ Can be used for efficient pagination.
 | `endKey`
 | `JSON`
 | The key where the row return range should end.
+
+| `includeDocs`
+| `boolean`, optional `Class<? extends Document>`
+| Wether or not to automatically fetch the document corresponding to each row.
+The second parameter is the target class for the document, `JsonDocument` if omitted.
+
+This method is needed only when using the blocking API since on the async API there is no benefit over just calling [.api]`.document()` in the stream.
+
+See note on `includeDocs` below.
 |===
 
 NOTE: *Important when using Grouping:*`group(boolean)` and `groupLevel(int)` should not be used together in the same view query.
-It is sufficient to only set the grouping level only and use this setter in cases where you always want the highest group level implicitly.
+It is sufficient only to set the grouping level only and use this setter in cases where you always want the highest group level implicitly.
+
+[IMPORTANT]
+====
+*includeDocs*: This parameter allows for eager retrieval of the document associated with each row.
+It is only beneficial in the synchronous API (in the async API you could just call `get(row.id())` on the async bucket).
+It impacts the row's `+document(...)+` method by preloading the return value of said method.
+
+However, since the simple signature of `row.document()` assumes a `JsonDocument`, if you want a different document type you have to call both `includeDocs()` and `document()` with the desired target class: `query.includeDocs(SomeDocumentClass.class)` *and* `row.document(SomeDocumentClass.class)`.
+
+Note that the `ViewQuery` has a getter for the target class: `includeDocsTarget()`.
+====
 
 == Geospatial View Options
 
 All options shown here are available on the `SpatialViewQuery` in a fluent API manner.
-All of them are optional, so only when they are explicitly provided they will alter the behaviour of the query.
+All of them are optional, so only when they are explicitly provided, they will alter the behaviour of the query.
 
 |===
 | Method | Accepted Types | Description
@@ -196,14 +214,109 @@ All of them are optional, so only when they are explicitly provided they will al
 | `startRange`
 | `JsonArray`
 | Where the spatial range should start.
-Can be multidimensial.
+Can be multidimensional.
 
 | `endRange`
 | `JsonArray`
 | Where the spatial range should end.
-Can be multidimensial.
+Can be multidimensional.
 
 | `range`
 | `JsonArray, JsonArray`
 | Convenience method to combine start and endrange in one argument.
+
+| `includeDocs`
+| `boolean`, optional `Class<? extends Document>>`
+| Wether or not to automatically fetch the document corresponding to each row.
+The second parameter is the target class for the document, `JsonDocument` if omitted.
+
+This method is needed only when using the blocking API since on the async API there is no benefit over just calling [.api]`.document()` in the stream.
+
+See note on `includeDocs` below.
 |===
+
+[IMPORTANT]
+====
+*includeDocs*: This parameter allows for eager retrieval of the document associated with each row.
+It is only beneficial in the synchronous API (in the async API you could just call `get(row.id())` on the async bucket).
+It impacts the row's `+document(...)+` method by preloading the return value of said method.
+
+However, since the simple signature of `row.document()` assumes a `JsonDocument`, if you want a different document type you have to call both `includeDocs()` and `document()` with the desired target class: `query.includeDocs(SomeDocumentClass.class)` *and* `row.document(SomeDocumentClass.class)`.
+
+Note that the `SpatialViewQuery` has getter for the target class: `includeDocsTarget()`.
+====
+
+Here is how to use the `range` parameter to find documents with a location within a bounding box.
+We have stored cities Paris, Vienna, Berlin and New York.
+Each city's coordinates is represented as two attributes, `lon` and `lat`.
+The spatial view's map function is:
+
+[source,javascript]
+----
+function (doc) { if (doc.type == "city") { emit([doc.lon, doc.lat], null); } }
+----
+
+To query the view and find cities within Europe, we use Europe's bouding box.
+The startRange is the most south-western point of the bounding box, the endRange is its most north-eastern point:
+
+[source,java]
+----
+JsonArray EUROPE_SOUTH_WEST = JsonArray.from(-10.8, 36.59);
+JsonArray EUROPE_NORTH_EAST = JsonArray.from(31.6, 70.67);
+
+SpatialViewResult result = bucket.query(SpatialViewQuery.from("cities", "by_location")
+            .stale(Stale.FALSE)
+            .range(EUROPE_SOUTH_WEST, EUROPE_NORTH_EAST));
+List<SpatialViewRow> allRows = result.allRows();
+
+for (SpatialViewRow row : allRows) {
+    System.out.println(row.id());
+}
+
+//prints:
+//city::Vienna
+//city::Berlin
+//city::Paris
+----
+
+== Retrying on errors
+
+SDK retries view requests automatically on certain known conditions, which represented in the following table:
+
+|===
+| HTTP status code | Behavior
+
+| 200
+| Do not retry request.
+
+| 300, 301, 302, 303, 307, 401, 408, 409, 412, 416, 417, 501, 502, 503, 504
+| Retry request.
+
+| 404
+| In case the library detects yet unprovisioned node, it will retry.
+Otherwise, it will report `ViewDoesNotExistException`.
+
+| 500
+| If the error payload reports missing view document or badly formed query, it will not retry.
+Otherwise, it will retry request.
+|===
+
+All codes not listed in the table will not be retried by default.
+But the client code still can use retrying framework or write a custom handler.
+In the example below, it will retry 10 times if the view does not exist:
+
+[source,java]
+----
+bucket.query(SpatialViewQuery.from("spatial", "test"))
+      .retryWhen(
+           RetryBuilder.anyOf(ViewDoesNotExistException.class)
+                       .delay(Delay.exponential(TimeUnit.SECONDS, 1))
+                       .max(10)
+                       .build())
+      .subscribe(new Action1<AsyncSpatialViewResult>() {
+          @Override
+          public void call(AsyncSpatialViewResult result) {
+              // handle result
+          }
+      });
+----

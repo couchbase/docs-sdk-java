@@ -2,71 +2,63 @@
 :page-topic-type: concept
 
 [abstract]
-You can query a bucket using the N1QL query language.
+The Java SDK offers advanced support for querying JSON documents using N1QL (aka "SQL for Documents").
+N1QL is a superset of SQL.
 
-NOTE: N1QL is currently experimental and may change in subsequent versions.
+To learn more about N1QL itself and Query support in Couchbase Server, see http://query.couchbase.com/[the Query Documentation^].
 
-To query via N1QL, you need to make sure to have the query engine downloaded, started and pointed to your cluster.
-For more information about using N1QL, see http://query.couchbase.com[^].
+== Statements: the DSL vs. ad-hoc querying
 
-Next, you need to enable N1QL either through a system property or through the environment builder.
-This step will go away once N1QL is fully integrated into the server:
+The N1QL domain-specific language (DSL) is a powerful way to guide you in building your statements: you get type safety and autocompletion of relevant methods / N1QL clauses.
 
-To enable N1QL by using a system property:
+As of the `2.2` version of the SDK, the DSL supports the following features:
 
-[source,java]
-----
-// Through a system property
-System.setProperty("com.couchbase.queryEnabled", "true");
+* Data selection with `+Select.select(...)+` as an entry point (including index hinting)
+* All N1QL functions, organized by topic in the helper classes in the `com.couchbase.client.java.query.dsl.functions` package (eg.
+`AggregateFunctions`)
+* A <<case,mini DSL for building CASE constructs>> via factory methods on the `Case` class
+* A <<collections,mini DSL for building collection constructs>> (ANY, EVERY, ARRAY\...) via factory methods on the  `Collections` class
+* <<index,Index management>> (index and primary index creation/deletion/deferred building) with `Index` factory methods as an entry point
 
-Cluster cluster = CouchbaseCluster.create();
-Bucket bucket = cluster.openBucket("beer-sample");
-----
+To construct statements, you can use the [.api]`Expression` class that comes in with a variety of factory methods to construct both tokens and literals programmatically.
+Expressions can be combined and chained with operators (like `gte` for "greater than or equal to" comparison\...).
 
-To enable N1QL by using  the builder:
+Use [.api]`x` to construct a token, [.api]`s` to construct a string literal, [.api]`i` to construct a token escaped with backticks (for instance the bucket name `beer-sample` must be escaped because it contains a dash).
 
-[source,java]
-----
-// Through the builder
-Cluster cluster = CouchbaseCluster.create(DefaultCouchbaseEnvironment
-    .builder()
-    .queryEnabled(true)
-    .build());
+Additionally, if you find the DSL doesn't support a particular statement, clause or keyword, *you can always revert to providing your statement in plain String form*.
+This ensures that even if the DSL somehow lags behind the evolutions of the language, users will always have a mean of using new language features.
 
-Bucket bucket = cluster.openBucket("beer-sample");
-----
+== Querying
 
-Finally, you are ready to run the various kinds of queries.
 All queries are composed at a minimum of a statement and optionally of N1QL additional parameters.
-The simplest form of query is just a raw string statement, or a domain-specific language (DSL) statement:
+The simplest form of query is just a raw string statement, or a DSL statement:
 
 [source,java]
 ----
 // raw string query
-QueryResult queryResult =
-   bucket.query(Query.simple("SELECT * FROM beer-sample LIMIT 10"));
+N1qlQueryResult queryResult =
+   bucket.query(N1qlQuery.simple("SELECT * FROM beer-sample LIMIT 10"));
 
 // using the DSL
-QueryResult query = bucket.query(select("*").from("beer-sample").limit(10));
+N1qlQueryResult query = bucket.query(select("*").from("beer-sample").limit(10));
 ----
 
 The DSL provides a type-safe and intuitive way to perform queries.
 The [.api]`select()` method is a static import that kicks off a  BNF-aware DSL for N1QL.
 (BNF stands for Backus-Naur Form.)
 
-The query always returns a [.api]`QueryResult`, which aside from the actual [.api]``QueryRow``s also contains debug or error information if supplied.
+The query always returns a [.api]`N1qlQueryResult`, which aside from the actual [.api]``N1qlQueryRow``s also contains debug or error information if supplied.
 
-* *parseSuccess*: Returns true if the query could correctly be parsed.
+* `parseSuccess`: Returns true if the query could correctly be parsed.
 This information is available immediately even if the actual list of results takes more time to be computed and streamed to the client.
-* *finalSuccess*: Returns true if the whole query could be executed successfully, including retrieving all the results and streaming them to the client.
-* *allRows*: Contains all rows returned by the query, can be an empty list.
-* *rows*: Same as allRows but in an iterator form (the [.api]`QueryResult` itself is iterable).
-* *requestId*: The server-generated unique ID for this query (useful to find associated logs on the N1QL server).
-* *clientContextId*: User-provided identifier reflected in the server's response.
-This can be useful to group several queries (eg.
-in a kind of in-house transaction) and find all associated queries.
-* *info*: Returns a [.api]`JsonObject` containing metrics for the query (like number of results, processing time, etc\...).
-* *errors*: Returns a list of [.api]`JsonObject` describing errors or warnings (if any occurred during execution).
+* `finalSuccess`: Returns true if the whole query could be executed successfully, including retrieving all the results and streaming them to the client.
+* `allRows`: Contains all rows returned by the query, can be an empty list.
+* `rows`: Same as `allRows` but in an iterator form (the [.api]`N1qlQueryResult` itself is iterable).
+* `requestId`: The server-generated unique ID for this query (useful to find associated logs on the N1QL server).
+* `clientContextId`: User-provided identifier reflected in the server's response.
+This can be useful to group several queries (for example, in a kind of in-house transaction) and find all associated queries.
+* `info`: Returns a [.api]`N1qlMetrics` object containing metrics for the query (like number of results or processing time).
+* `errors`: Returns a list of [.api]`JsonObject` describing errors or warnings (if any occurred during execution).
 
 == Querying Asynchronously
 
@@ -82,36 +74,36 @@ The following Java 8 code prints the found documents or errors as they come:
 bucket.async()
 .query(select("*").from("beer-sample").limit(10))
 .subscribe(result -> {
-    result.errors()
-        .subscribe(
-            e -> System.err.println("N1QL Error/Warning: " + e),
-            runtimeError -> runtimeError.printStackTrace()
-        );
-    result.rows()
-        .map(row -> row.value())
-        .subscribe(
-            rowContent -> System.out.println(rowContent),
-            runtimeError -> runtimeError.printStackTrace()
-        )
-    }
+	result.errors()
+		.subscribe(
+			e -> System.err.println("N1QL Error/Warning: " + e),
+			runtimeError -> runtimeError.printStackTrace()
+		);
+	result.rows()
+		.map(row -> row.value())
+		.subscribe(
+			rowContent -> System.out.println(rowContent),
+			runtimeError -> runtimeError.printStackTrace()
+		)
+	}
 );
 ----
 
-First, we see that we work on asynchronous mode.
+First, you can see that asynchronous mode is used.
 Second line issues a [.api]`Statement` using the DSL.
-Then we subscribe a first time to trigger the query and obtain the result.
+Then a first subscription is made to trigger the query and obtain the result.
 
-On receiving the result (there will be only one), we subscribe to its components to be notified respectively of n1ql errors and n1ql results.
+On receiving the result (there will be only one), you have to subscribe to its components to be notified respectively of n1ql errors and n1ql results.
 Results (as rows) are first mapped into their JSON values.
 
-Notice we also define an [.api]`onError` behavior for both n1ql errors stream and results stream, that just prints the stack trace.
+Notice this example also define an [.api]`onError` behavior for both n1ql errors stream and results stream, that just prints the stack trace.
 
 _Note: All this is done asynchronously so it's not suitable for a simple test (where the main thread would exit potentially before any result could have been displayed)_
 
 == Different Kinds of Queries
 
-Queries are represented by the [.api]`Query` interface, which also provides factory methods to create all variants of queries.
-Each variant can be constructed from a [.api]`Statement`, even in `String` form, but also additionally can define a [.api]`QueryParams`.
+Queries are represented by the [.api]`N1qlQuery` interface, which also provides factory methods to create all variants of queries.
+Each variant can be constructed from a [.api]`Statement`, even in `String` form, but also additionally can define a [.api]`N1qlParams`.
 This represents additional N1QL parameters, like setting a `clientContextId`.
 
 Variants of queries are:
@@ -119,17 +111,13 @@ Variants of queries are:
 * *simple*: The basic query used so far in this tutorial.
 * *parameterized*: A variant to use with statements containing placeholders (like [.api]`$1` or [.api]`$placeholder`).
 The user must provide the values for the placeholders as well, either as a [.api]`JsonArray` (for positional parameters) or [.api]`JsonObject` (for named parameters).
-* *prepared*: This is very much like the idea of an SQL prepared statement.
-First the `bucket.prepare(statement)` method must be called to obtain a [.api]`QueryPlan`.
-This plan can then be cached and replayed using `Query.prepared(plan)`, skipping the query parsing and preparation on the server side.
-Prepared statements can also use placeholders.
 
-== Reading Your Own Writes (RYOW)
+== Read Your Own Writes (RYOW)
 
 Often you will want to insert or update some data into Couchbase and immediately read this data back using a N1QL query.
-This is referred to as RYOW (Read Your Own Write).
+This is referred to as read your own write (RYOW).
 
-This can be achieved by using the `QueryParams`, and more precisely the `consistency` parameter:
+This can be achieved by using the `N1qlParams`, and more precisely the `consistency` parameter:
 
 [source,java]
 ----
@@ -137,23 +125,217 @@ JsonDocument doc = JsonDocument.create("test", JsonObject.create().put("test", t
 bucket.insert(doc);
 
 Statement select = select("*").from("beer-sample")
-    .where(x("test").eq(true));
-QueryParams ryow = QueryParams.build().consistency(ScanConsistency.REQUEST_PLUS);
+	.where(x("test").eq(true));
+N1qlParams ryow = N1qlParams.build().consistency(ScanConsistency.REQUEST_PLUS);
 
 bucket.async()
-    .query(Query.simple(select, ryow))
-    .subscribe(result -> {
-    result.errors()
-        .subscribe(
-            e -> System.err.println("N1QL Error/Warning: " + e),
-            runtimeError -> runtimeError.printStackTrace()
-        );
-    result.rows()
-        .map(row -> row.value())
-        .subscribe(
-            rowContent -> System.out.println(rowContent),
-            runtimeError -> runtimeError.printStackTrace()
-        )
-    }
+	.query(N1qlQuery.simple(select, ryow))
+	.subscribe(result -> {
+	result.errors()
+		.subscribe(
+			e -> System.err.println("N1QL Error/Warning: " + e),
+			runtimeError -> runtimeError.printStackTrace()
+		);
+	result.rows()
+		.map(row -> row.value())
+		.subscribe(
+			rowContent -> System.out.println(rowContent),
+			runtimeError -> runtimeError.printStackTrace()
+		);
+	}
 );
 ----
+
+== Adhoc Queries vs Frequent Queries
+
+When you often execute a `N1qlQuery` it can be interesting to let the SDK and the query engine attempt additional optimizations.
+
+By default, a `N1qlQuery` will be considered "ad hoc" (no additional optimization is done).
+By calling `.adhoc(false)` on your query you can mark it for further optimization by the SDK and the query engine.
+It will be prepared on the server and all subsequent invocations of this query will benefit from the prepared execution plan.
+
+TIP: Other `N1qlQuery` instances with the *same statement* (but different placeholder values for example) will also benefit from the optimization, as long as they are marked as `adhoc(false)`.
+
+The SDK will retry to prepare a plan once if the server is unable to execute the cached plan.
+It will cache plans for up to 5000 statements locally.
+
+[#case]
+== Conditionals, Case Expressions Mini DSL
+
+The `com.couchbase.client.java.query.dsl.functions.Case` class contains a mini-DSL to deal with Conditional operators in N1QL of the `CASE` family.
+
+The `Simple CASE` expression is defined as:
+
+[source,sql]
+----
+CASE expression  ( WHEN expression THEN expression)
+[ ( WHEN expression THEN expression) ]*
+[  ELSE expression ]  END
+----
+
+The `Searched CASE` expression is defined as:
+
+[source,sql]
+----
+CASE  ( WHEN  condition THEN expression)
+[( WHEN  condition THEN expression ) ]*
+[ ELSE  expression ] END
+----
+
+The corresponding mini-DSL are `Case.caseSimple` and `Case.caseSearch`.
+Simple Case will compare the initial expression with each WHEN clause for equality, returning the corresponding THEN expression if a match is found.
+Search Case allows to have a different condition for each WHEN clause.
+Let's see two examples.
+First one could be used to map match results to a score:
+
+[source,sql]
+----
+CASE hist.result WHEN "won" THEN 1 ELSE 0 END
+----
+
+[source,java]
+----
+//import static com.couchbase.client.java.query.dsl.Expression.*;
+//import static com.couchbase.client.java.query.dsl.functions.Case.*;
+
+caseSimple(x("hist.result"))
+	.when(s("won")).then(x(1))
+	.elseReturn(x(0))
+----
+
+Second example implements more complex scoring rule using a Search Case (first match of the day counts as 5 points if won):
+
+[source,sql]
+----
+CASE WHEN hist.result = "won" AND hist.matchNumber = 1 THEN 5
+WHEN hist.result = "won" THEN 1
+WHEN hist.result = "lost" THEN 0
+END
+----
+
+[source,java]
+----
+//import static com.couchbase.client.java.query.dsl.Expression.*;
+//import static com.couchbase.client.java.query.dsl.functions.Case.*;
+
+caseSearch()
+	.when(x("hist.result").eq(s("won")).and(x("hist.matchNumber").eq(1))).then(x(5))
+	.when(x("hist.result").eq(s("won"))).then(x(1))
+	.when(x("hist.result").eq(s("lost"))).then(x(0))
+	.end(); //no ELSE clause means other values will return NULL, have to explicitly close the CASE
+----
+
+[#collections]
+== Collection Operators Mini DSL
+
+The `com.couchbase.client.java.query.dsl.functions.Collections` class contains a mini-DSL to deal with Collections operators in N1QL, such as `ANY`, `EVERY`, `ARRAY` and `FIRST`.
+
+For example, the `ARRAY` construct is defined as:
+
+[source,sql]
+----
+ARRAY expression FOR variable ( IN |  WITHIN ) expression
+[ ,  variable ( IN | WITHIN ) expression ]* [ ( WHEN  condition) ] END
+----
+
+The corresponding mini-DSL is `Collections.arrayIn` (or `Collections.arrayWithin` if you want to start with a WITHIN clause).
+Let's see two examples from the following statement, which extracts children and also lists the ones that are teenagers:
+
+[source,sql]
+----
+SELECT tutorial.fname || ' ' || tutorial.lname AS adult,
+	ARRAY child FOR child IN tutorial.children END AS children,
+	ARRAY child.fname FOR child IN tutorial.children WHEN child.age >= 12 END AS teenagers
+FROM tutorial WHERE tutorial.children IS NOT NULL;
+----
+
+Here is how to write the second and third lines using the DSL:
+
+[source,java]
+----
+//import static com.couchbase.client.java.query.dsl.Expression.*;
+//import static com.couchbase.client.java.query.dsl.functions.Collections.*;
+
+//ARRAY child FOR child IN tutorial.children END AS children
+arrayIn(x("child"), "child", path("tutorial", "children")).end().as("children");
+
+//ARRAY child.fname FOR child IN tutorial.children WHEN child.age >= 12 END AS teenagers
+arrayIn(path("child", "fname"), "child", path("tutorial", "children")).when(path("child", "age").gte(12)).as("teenagers"));
+----
+
+Similarly, `ANY` allows to test for a condition that applies to at least one member of a nested array (you can also match on `EVERY` member of the array).
+Any is defined as:
+
+[source,sql]
+----
+ANY variable ( IN  | WITHIN ) expression
+[  ,  variable ( IN | WITHIN ) expression  ]*
+SATISFIES condition  END
+----
+
+In the previous example, you would see an entry for a parent that doesn't have teenagers (its "teenagers" field would be empty), because the statement didn't specify that the children should contain a teenager.
+You can fix that with ANY, by rewriting the WHERE clause:
+
+[source,sql]
+----
+#...FROM tutorial
+#replace "WHERE tutorial.children IS NOT NULL" with:
+WHERE ANY child IN tutorial.children SATISFIES child.age >= 12;
+----
+
+[source,java]
+----
+//import static com.couchbase.client.java.query.dsl.Expression.*;
+//import static com.couchbase.client.java.query.dsl.functions.Collections.*;
+
+anyIn("child", x("tutorial.children")).satisfies(x("child.age").gte(12))
+----
+
+[#index]
+== Managing Indexes
+
+For N1QL to work, you must first ensure that at least a `Primary Index` has been created.
+For that you can use the DSL from the `Index` class:
+
+[source,java]
+----
+Index.createPrimaryIndex().on(bucket.name())
+----
+
+[IMPORTANT,caption=Remember]
+====
+All these DSL produce a N1QL `Statement` that you must then execute using the `bucket.query(statement)` API:
+
+[source,java]
+----
+bucket.query(N1qlQuery.simple(
+	Index.createPrimaryIndex().on(bucket.name())
+));
+----
+====
+
+The fluent API will guide you with the available options, you just have to declare that you want to `createPrimaryIndex()` and specify `+on(...)+` which Bucket.
+
+You can also create secondary indexes on specific fields of the JSON, for better performance:
+
+[source,java]
+----
+Index.createIndex(name).on(bucket.name(), x("field1"), x("field2")))
+----
+
+In this case, give a name to your index, specify the target bucket AND the field(s) in the JSON to index.
+
+TIP: The SDK will escape bucket name and index name.
+
+With the DSL you can also indicate that you want to declare multiple indexes before building them.
+Use the `withDefer()` option for that.
+Once all your indexes have been declared, trigger the build by using the `Index.buildIndex` DSL:
+
+[source,java]
+----
+Index.buildIndex().on("default").indexes("secondaryA", "secondaryB");
+----
+
+Finally, if you want to remove indexes you can use the `+Index.dropIndex(...)+` or `+Index.dropPrimaryIndex(...)+` DSLs.
+
+TIP: You can do a static import of the methods on `Index` to use them in an even more fluent manner.

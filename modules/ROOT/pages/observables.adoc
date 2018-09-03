@@ -1,44 +1,44 @@
-= Mastering observables
+= Mastering Observables
 :page-topic-type: concept
 
 [abstract]
-This guide helps you getting up to speed with asynchronous programming and `Observable` objects in particular.
-This guide is not tied to the Java SDK exclusively and aims to give you a general understanding of how to build full-stack, asynchronous applications.
+This section helps you to get up to speed with asynchronous programming and `Observable` objects in particular.
 
 == Motivation
 
-Asynchronous and reactive methodologies allow you to better utilize system resources.
+Asynchronous and reactive methodologies allow you to utilize system resources better.
 Instead of wasting a thread waiting for network or disk I/O, it can be fully utilized to perform other work instead.
 
-A broad range of technologies exists to facilitate this style of programming, ranging from the very limited and not really usable `java.util.concurrent.Future` to complete libraries and runtimes like http://akka.io[Akka^].
-For a database driver, the following requirements must be met:
+A broad range of technologies is available to facilitate this style of programming, ranging from the very limited and not really usable `java.util.concurrent.Future` to complete libraries and runtimes like http://akka.io[Akka^].
+A database driver must meet the following requirements:
 
 * Rich functionality
 * Interoperable and not opinionated
 * Performant
-* Small dependency and run time footprint
+* Small dependency and runtime footprint
 
 After evaluating the requirements and solutions closely, one library stood out: http://reactivex.io/[RxJava^].
 It has a very rich set to compose asynchronous workflows, has no dependencies on its own and is used at high-profile companies like Netflix.
 The Rx model is mature and well thought out, and the community is vibrant.
 
-We hope that after you read through the introduction and get more familiar with the concept, you never want to go back.
-We certainly don't.
-That said, we fully support blocking operations as well, so you can still use a traditional blocking-based model if you absolutely want to.
+Couchbase hopes that after you read through the introduction and get more familiar with the concept, you will never want to go back.
+Couchbase fully supports blocking operations as well, so you can still use a traditional blocking-based model if you indeed want to.
 
-The next section gradually introduces you to the world of observables, the first step to masterhood.
+The next section gradually introduces you to the world of [.term]_Observables_, the first step to masterhood.
 If you want to learn more about the motivation, read on here.
 
 == Java 8, lambdas and anonymous classes
 
-Before jumping into the details, one thing warrants clarification: RxJava, and therefore the Java SDK, fully supports Java 8.
-This brings some great improvements, most prominently support for lambdas and method references.
+Before jumping into the details, one thing warrants clarification: RxJava and, therefore, the Java SDK, fully supports Java 8.
+This support brings some great improvements, most prominently support for [.term]_lambdas_ and [.term]_method references_.
 
 Because the Java SDK has support for Java 6 and 7, most of the examples shown in the documentation use anonymous classes instead of lambdas.
-You are free and even encouraged to use them if you are able to, but Java 8 on production servers is still a few months or even years away at most companies.
-That said, we expect the SDK to be around for a long time and want to pave the way for the future right now.
+You are free and even encouraged to use them if you can, but Java 8 on production servers is still a few months or even years away at most companies.
+That said, Couchbase expects the SDK to be around for a long time and want to pave the way for the future right now.
 
-To whet your appetite, compare some Java 6 code to Java 8 code (same code).Here's an example with Java 6 code:
+To whet your appetite, compare some Java 6 code to Java 8 code (same code).
+
+Here's an example with the Java 6 code:
 
 [source,java]
 ----
@@ -69,16 +69,16 @@ Observable
     .subscribe(document -> System.out.println("Got: " + document));
 ----
 
-RxJava has support for other languages like Scala, Groovy or Clojure.
+RxJava has support for other languages such as Scala, Groovy or Clojure.
 If you are using one of those languages, refer to the RxJava documentation on how to use the adapters.
 
-== Understanding observables
+== Understanding Observables
 
-You can think of an `Observable` as the push-based, asynchronous cousin ("dual") of the pull-based, synchronous `Iterable`.
+You can think of an [.term]_Observable_ as the push-based, asynchronous cousin ("dual") of the pull-based, synchronous [.term]_iterable_.
 The contract of an `Observable` is that zero to N data events can happen, followed by a complete event.
-In addition, an error event can happen at any time, also completing the `Observable`.
+An error event can also happen at any time and complete the `Observable`.
 
-.The duality of iterable and observable
+.The duality of Iterable and Observable
 [cols="438,429,440"]
 |===
 | Event | Iterable (Pull) | Observable (Push)
@@ -98,11 +98,11 @@ In addition, an error event can happen at any time, also completing the `Observa
 
 An `Observable` can also be converted into a `BlockingObservable`, which then, unsurprisingly, behaves very much like an `Iterable`.
 
-The key element to take away is that an `Observable<T>` can emit 0 to N events, which is very different than a `Future<T>`, which only contains one value.
+The key element to take away is that an `Observable<T>` can emit 0 to N events, which is very different than a `Future<T>` that only contains one value.
 After you start to work on streams instead of single values, you will very much appreciate this fact.
 
-Also, important to understand is that by definition, an `Observable` does not imply that the underlying code is executed asynchronously.
-As a consumer of an `Observable`, you leave the actual implementation to the supplier, who is able to change it later on without you having to adapt your code.
+By definition, an `Observable` does not imply that the underlying code is executed asynchronously.
+As a consumer of an `Observable`, you leave the actual implementation to the supplier, who can change it later on without you having to adapt your code.
 Imagine, you are consuming this API:
 
 [source,java]
@@ -114,12 +114,12 @@ public interface FooService {
 
 It could be that when `load()` is called, the `String` value is fetched right out of a `Map` in memory (or even a hard-coded value).
 In this case, there is no need to move the execution away from the caller thread, because the value will be returned instantaneously.
-If at a later point the implementation needs to be changed so that the `String` is loaded through a web service, which introduces latency and other semantics, the API doesn't need to be changed because the underlying implementation is free to move it to a `Scheduler`.
+If later the implementation needs to be changed so that the `String` is loaded through a web service (introducing latency and other semantics), the API doesn't need to be changed because the underlying implementation is free to move it to a `Scheduler`.
 
-== Consuming observables
+== Consuming Observables
 
-The first thing you want to do when working with observables is to consume them.
-Consuming an observable means subscribing to it.
+The first thing you want to do when working with `Observables` is to consume them.
+Consuming an `Observable` means subscribing to it.
 Here is an example that subscribes and prints out all the items emitted:
 
 [source,java]
@@ -155,7 +155,7 @@ Completed Observable.
 
 You can see that our `Observer` gets notified of every event and also receives the completed event.
 
-NOTE: A well-formed observable invokes its subscriber’s `onNext` method zero or more times, and then invokes either the `onCompleted` or `onError` method exactly once.
+NOTE: A well-formed `Observable` invokes its subscriber’s `onNext` method zero or more times and then invokes either the `onCompleted` or `onError` method exactly once.
 
 You can also test the error case by throwing an artificial exception when the value 2 is emitted:
 
@@ -196,9 +196,10 @@ Got: 1
 Whoops: I don't like 2
 ----
 
-The first value gets through without problems, the second value throws an exception and therefore terminates the observable (and no subsequent values are allowed to be emitted after an error event).
+The first value gets through without problems, the second value throws an exception and, therefore, terminates the `Observable`.
+No subsequent values are allowed to be emitted after an error event.
 
-NOTE: The `subscribe` method also returns a `Subscription` that you can use to `unsubscribe` and therefore do not receive further events.
+NOTE: The `subscribe` method also returns a `Subscription` that you can use to `unsubscribe` and not receive further events.
 
 Even if you don't unsubscribe explicitly, operations like `take` do that for you implicitly.
 The following code only takes the first five values and then unsubscribes:
@@ -269,24 +270,22 @@ Exception in thread "main" rx.exceptions.OnErrorNotImplementedException
 	...
 ----
 
-It is recommended to always implement an error handler right from the beginning, since things can and will go wrong at some point.
+It is recommended always to implement an error handler right from the beginning since things can and will go wrong at some point.
 It can come in handy though if you just want to try things out quickly or for illustrative purposes.
 
 == From asynchronous to synchronous
 
 As long as your `Observable` works on the same thread all the time, there is no need for communication between threads since only one is executing.
-When your `Observable` flow gets executed on a different thread though, you need to take some extra care to make sure you are not missing values.
-This is not specific to `Observables` though, every time you need to deal with parallel threads you need to think about synchronization and communication.
+When your `Observable` flow gets executed on a different thread, you need to take some extra care to make sure you are not missing values.
+This is not specific to `Observables`: every time you need to deal with parallel threads you need to think about synchronization and communication.
 
 NOTE: Most of the snippets in this documentation only call `subscribe`.
-You should ensure that your program doesn't terminate before `onCompleted()` is called (eg.
-via `toBlocking()` or a [.api]`CountDownLatch`).
-This is most often to watch for when trying to replicate a snippet in its own Main class.
+You should ensure that your program doesn't terminate before `onCompleted()` is called (e.g., via `toBlocking()` or a [.api]`CountDownLatch`) and be aware of that when trying to replicate a snippet in its Main class.
 
 NOTE: You should never perform long-running blocking operations inside of an asynchronous stream (eg.
 inside of ``map``s or ``flatMap``s).
 
-The following code emits a increasing value every second, and this is done on a different thread:
+The following code emits an increasing value every second, which is done on a different thread:
 
 [source,java]
 ----
@@ -302,11 +301,11 @@ public static void main(String... args) {
 }
 ----
 
-It works perfectly fine, the only problem is though chances are you won't see anything printed out.
-This is because your main thread exits before the background thread had a chance to run and emit values.
+It works perfectly fine; the only problem is though chances are you won't see anything printed out.
+Your main thread exits before the background thread had a chance to run and emit values.
 
 A common way to deal with such a situation is to add a `CountDownLatch`, which allows you to synchronize between different threads.
-One thread counts down the latch, the other one waits until it is counted down:
+One thread counts down the latch; the other one waits until it is counted down:
 
 [source,java]
 ----
@@ -334,14 +333,18 @@ Got: 3
 Got: 4
 ----
 
-NOTE: One common mistake is to use `Thread.sleep()` instead of a latch to synchronize the execution between threads.
-This is a bad idea because it not really synchronizes anything, but just keeps one thread alive for a specific amount of time.
+[NOTE]
+====
+One common mistake is to use `Thread.sleep()` instead of a latch to synchronize the execution between threads.
+This is a bad idea because it synchronizes nothing and just keeps one thread alive for a specific amount of time.
 If the actual calls take less time you are wasting time, and if it takes longer you won't get the desired effect.
 If you do this in unit tests, be prepared for a good amount of non-determinism and randomly failing tests.
-*Always use a CountDownLatch.*
 
-A technique unique to observables is to convert it into a `BlockingObservable` to achieve the same effect.
-In simple terms, it converts a observable into an iterable and making it execute on the caller thread, blocking it until one or more values arrive.
+*Always use a CountDownLatch!*
+====
+
+A technique unique to `Observables` is to convert it into a `BlockingObservable` to achieve the same effect.
+In simple terms, it converts an `Observable` into an `iterable` and makes it execute on the caller thread, blocking it until one or more values arrive.
 This technique is used extensively in the documentation to show concepts, while not having to deal with count-down latches all the time.
 It can also be used if you for some reason are not able to use asynchronous computations.
 
@@ -429,7 +432,7 @@ if (doc == null) {
 }
 ----
 
-If you check out the API documentation of the BlockingObservable, you will discover many more possibilities, including iterators or grabbing the first and/or last values.
+If you check out the API documentation of the [.api]`BlockingObservable`, you will discover many more possibilities, including iterators or grabbing the first and last values.
 
 One last thing that comes in handy with blocking calls: sometimes you want to collect all emitted values into a list.
 You can combine the blocking calls with the toList() operator to achieve something like this:
@@ -446,10 +449,10 @@ List<Integer> list = Observable
 System.out.println(list);
 ----
 
-== Creating observables
+== Creating Observables
 
-There are many ways to create observables, and you've already seen [.api]`just()` and [.api]`interval()`.
-There are many more of those convenience methods available on the `Observable` class, but they all boil down to the [.api]`create()` method.
+There are many ways to create `Observables`, and you've already seen [.api]`just()` and [.api]`interval()`.
+There are much more such  convenience methods available on the `Observable` class, but they all boil down to the [.api]`create()` method.
 You can simulate the example from before with this:
 
 [source,java]
@@ -479,17 +482,17 @@ Observable.create(new Observable.OnSubscribe<Integer>() {
 Every time a Subscriber subscribes, the [.api]`call()` method is executed.
 You can then call `onNext`, `onComplete` and `onError` as you wish, but keep in mind that both `onComplete` and `onError` should only be called once, and afterward no subsequent [.api]`onNext` is allowed to follow so that the contract is met.
 
-You can see that no blocking call is needed, because the observable is completely handled on the current thread.
+You can see that no blocking call is needed because the `Observable` is completely handled on the current thread.
 In the section on schedulers, you learn more about that.
 
-NOTE: This example shows why it is crucial to call [.api]`subscribe()` on the observable, because only such a call triggers the actual execution of the pipeline.
+NOTE: This example shows why it is crucial to call [.api]`subscribe()` on the `Observable`, because only such a call triggers the actual execution of the pipeline.
 This is a little different with subjects, which are covered later in this guide.
 Nevertheless, always call [.api]`subscribe()` on your observables.
 
-Refer to the RxJava documentation for many more methods that you can use to create observables.
-If you are dealing with the Java SDK, in most places this is done for you, but there are situation where it comes in handy.
+Refer to the RxJava documentation for many more methods that you can use to create `Observables`.
+If you are dealing with the Java SDK, in most places this is done for you, but there are situations where it comes in handy.
 
-The Java SDK does not expose bulk methods anymore on the API, because you can do this already with the help of observables.
+The Java SDK does not expose bulk methods anymore on the API, because you can do this already with the help of `Observables`.
 Compare these two examples, one only loads one document, the other loads a few (you'll learn about [.api]`flatMap()` in the next section):
 
 [source,java]
@@ -571,7 +574,7 @@ bucket
 
 A variation of [.api]`map()` is called [.api]`flatMap()`, which allows you to do those transformations with asynchronous calls.
 Taking the example from above, we want to map from String (the document ID) to a `JsonDocument` (the loaded document).
-With a normal [.api]`map()`, call you would either need to block on the observable or at some point deal with an `Observable<Observable<JsonDocument>>`.
+With a normal [.api]`map()`, call you would either need to block on the `Observable` or at some point deal with an `Observable<Observable<JsonDocument>>`.
 
 Thankfully, [.api]`flatMap()` flattens the resulting values for us and return them into the original flow:
 
@@ -597,7 +600,7 @@ You can see that [.api]`flatMap()` returns an Observable<T> whereas the normal m
 You will use [.api]`flatMap()` a lot when dealing with flows like this, so keep it in mind.
 
 Another helpful transformation is [.api]`scan()`.
-It applies a function to each value emitted by an observable, sequentially, and emits each successive value.
+It applies a function to each value emitted by an `Observable`, sequentially, and emits each successive value.
 We can use it to aggregate values like this:
 
 [source,java]
@@ -627,8 +630,8 @@ Sum: 10
 Sum: 15
 ----
 
-Finally, [.api]`groupBy()` comes in handy, which emits one observable by each group, defined by a function.
-The following example emits two observables, one for even and one for odd values:
+Finally, [.api]`groupBy()` comes in handy, which emits one `Observable` by each group, defined by a function.
+The following example emits two `Observables`, one for even and one for odd values:
 
 [source,java]
 ----
@@ -676,7 +679,7 @@ bucket
     );
 ----
 
-This code queries the view, extracts all rows, loads the full document for each row, groups it by the `type` property in the JSON document and then uses the [.api]`count()` operator to count the number of rows emitted by each observable.
+This code queries the view, extracts all rows, loads the full document for each row, groups it by the `type` property in the JSON document and then uses the [.api]`count()` operator to count the number of rows emitted by each `Observable`.
 This prints something like the following:
 
 ----
@@ -751,11 +754,11 @@ You can use this, for example, to separate out duplicate `JsonDocument` objects.
 
 == Combining observables
 
-Multiple observables can also be merged to form a combined one.
+Multiple `Observables` can also be merged to form a combined one.
 Depending on how you want those to be merged, there are different operators available.
 Two of the most used ones are [.api]`merge()` and [.api]`zip()` which are covered here.
 
-Merge really just merges all emitted values by the source observables in the order they arrive:
+[.api]`Merge` only merges all emitted values by the source `Observables` in the order they arrive:
 
 [source,java]
 ----
@@ -809,18 +812,18 @@ This zips the pairs together in order and prints:
 == Error handling
 
 Error handling is a vital component of every real world application and needs to be considered from the start.
-RxJava provides sophisticated mechanisms to deal with errors that happen inevitably in your observable flows.
+RxJava provides sophisticated mechanisms to deal with errors that happen inevitably in your `Observable` flows.
 
 In general, you want to react in the following ways:
 
-* Return a default value instead
-* Flip over to a backup observable
-* Retry the observable (immediately or with backoff)
+* Return a default value instead.
+* Flip over to a backup `Observable`.
+* Retry the `Observable` (immediately or with backoff).
 
-Returning a default value is a good idea if you cannot afford to retry or you just don't care (maybe because the flow is not absolutely crucial to your data flow).
+Returning a default value is a good idea if you cannot afford to retry or you just don't care (maybe because the flow is not crucial to your data flow).
 The following code throws an exception at the first emitted item, but falls back to a default value:
 
-Note that you can pass in a function which also takes the exception, so you can return different values for different exception types or use it for logging purposes.
+Note that you can pass in a function that also takes the exception, so you can return different values for different exception types or use it for logging purposes.
 
 [source,java]
 ----
@@ -838,8 +841,8 @@ Observable
     }).subscribe(System.out::println);
 ----
 
-You can also flip to a backup observable which will be called if the first one fails.
-The Java SDK has a [.api]`getFromReplica()` command which allows you to read stale data from its replicas and treat availability for consistency on reads.
+You can also flip to a backup `Observable` that will be called if the first one fails.
+The Java SDK has a [.api]`getFromReplica()` command that  allows you to read stale data from its replicas and treat availability for consistency on reads.
 You can use this approach to fall back:
 
 [source,java]
@@ -850,7 +853,7 @@ bucket
     .subscribe();
 ----
 
-Normally you want to have more control on which observable should be run next depending on the type of error.
+Normally you want to have more control on which `Observable` should be run next depending on the type of error.
 The following example will only go to the replica if a `TimeoutException` happened (if not the error is passed down):
 
 [source,java]
@@ -869,7 +872,7 @@ bucket
     });
 ----
 
-Finally, it is possible to retry the observable by resubscribing.
+Finally, it is possible to retry the `Observable` by resubscribing.
 This can be done as quickly as possible, or with a backoff interval, which is preferred when external resources are involved.
 
 The following program desperately tries to read the numbers from 1 to 10, but a (not so hidden) flaw makes it randomly throw an exception.
@@ -932,8 +935,27 @@ delay retry by 2 second(s)
 10
 ----
 
-Note that since Java SDK 2.1.2 advanced `retryWhen` are easier to write by use of the `RetryBuilder` helper class.
-These can be used to specify a filter on which kind of `Exception` to retry, for how many attempts, with any kind of `Delay`.
+Since Java SDK 2.1.2 the advanced `retryWhen` is easier to write using the `RetryBuilder` helper class.
+These can be used to specify a filter on which kind of `Exception` to retry, for how many attempts, with any `Delay`.
+
+[source,java]
+----
+Observable
+    .range(1, 10)
+    .doOnNext(integer -> {
+         if (new Random().nextInt(10) + 1 == 5) {
+             throw new RuntimeException("Boo!");
+         }
+    })
+    .retryWhen(
+         RetryBuilder
+             .anyOf(RuntimeException.class)
+             .delay(Delay.exponential(TimeUnit.MILLISECONDS, 100))
+             .max(5)
+             .build())
+    .distinct()
+    .subscribe(System.out::println);
+----
 
 == Schedulers and threads
 
@@ -944,29 +966,29 @@ RxJava ships with a bunch of preconfigured Schedulers by default, which are all 
 
 * [.api]`Schedulers.computation()`: Event-loop style scheduler for purely computational work.
 * [.api]`Schedulers.immediate()`: Executes the work immediately on the current thread.
-* [.api]`Schedulers.io()`: Executes work on a Executor-backed pool which grows as needed.
+* [.api]`Schedulers.io()`: Executes work on an Executor-backed pool that grows as needed.
 * [.api]`Schedulers.newThread()`: Creates a new thread for each unit of work.
 * [.api]`Schedulers.trampoline()`: Queues the work on the current thread and gets executed after the current work completes.
-* [.api]`Schedulers.test()`: Test scheduler used for testing and debugging, which allows manual advancing of the clock.
+* [.api]`Schedulers.test()`: Test the `scheduler` used for testing and debugging, which allows manual advancing of the clock.
 
-As a rule of thumb, the computation scheduler should always be used for in-memory processing, while the I/O scheduler should only be used for blocking-style I/O operations (so do not use it together with the Java SDK because it is asynchronous anyway).
+As a rule of thumb, the computation `scheduler` should always be used for in-memory processing, while the I/O scheduler should only be used for blocking-style I/O operations (so do not use it together with the Java SDK because it is asynchronous anyway).
 
-You can instruct an observable to be executed on such a scheduler in the following different ways:
+You can instruct an `observable` to be executed on such a `scheduler` in the following ways:
 
 * Implicitly by using an operator that makes use of one
 * Explicitly by passing the Scheduler to such an operator
 * By using [.api]`subscribeOn(Scheduler)`
 * By using [.api]`observeOn(Scheduler)`
 
-Operators like buffer, replay, skip, delay, parallel and so forth use a Scheduler by default if not instructed otherwise.
-A list of default schedulers can be found here: \https://github.com/ReactiveX/RxJava/wiki/Scheduler#default-schedulers-for-rxjava-observable-operators
+Operators like `buffer`, `replay`, `skip`, `delay`, `parallel` and so on use a `scheduler` by default if not instructed otherwise.
+A list of default `schedulers` can be found https://github.com/ReactiveX/RxJava/wiki/Scheduler#default-schedulers-for-rxjava-observable-operators[here^].
 
-As a rule of thumb, all of those operators allow you to pass in a custom scheduler if needed, but most of the time sticking with the defaults is a good idea.
+As a rule of thumb, all of those operators allow you to pass in a custom `scheduler` if needed, but most of the time sticking with the defaults is a good idea.
 
-NOTE: The Java SDK uses an internal scheduler similar to the computation scheduler to proper isolate the inner mechanisms from user-land.
-It is possible to change that Scheduler through the environment, but not recommended.
+NOTE: The Java SDK uses an [.term]_internal scheduler_ similar to the [.term]_computation scheduler_ to proper isolate the inner mechanisms from user-land.
+It is possible to change that `scheduler` through the environment, but it is not recommended.
 
-If you want the whole subscribe chain to be executed on a specific scheduler, you use the [.api]`subscribeOn()` operator.
+If you want the whole subscribe chain to be executed on a specific `scheduler`, you use the [.api]`subscribeOn()` operator.
 Without a scheduler set, the following code executes on the main thread:
 
 [source,java]
@@ -1060,38 +1082,38 @@ Got: 6 (RxComputationThreadPool-6)
 Got: 7 (RxComputationThreadPool-6)
 ----
 
-There is also a way to use schedulers directly to schedule operations.
-For more information about schedulers, refer to the RxJava documentation about schedulers.
-\https://github.com/ReactiveX/RxJava/wiki/Scheduler#using-schedulers
+There is also a way to use `schedulers` directly to schedule operations.
+For more information about `schedulers`, refer to the RxJava documentation about https://github.com/ReactiveX/RxJava/wiki/Scheduler#default-schedulers-for-rxjava-observable-operators[schedulers^].
 
 == Subjects
 
-A subject is a hybrid between an observable and a subscriber.
+A [.term]_subject_ is a hybrid between an `Observable` and a `subscriber`.
 It can both receive and emit events.
-Most of the time you don't need subjects and can handle everything fine through observables alone, but there are certain cases when they come in handy.
+Most of the time you don't need `subjects` and can handle everything fine through `Observables` alone, but there are certain cases when they come in handy.
 
-There is a distinction between different observables that have not been covered yet:
+There is a distinction between different `Observables` that have not been covered yet:
 
-* A *cold* Observable waits for a subscription until it emits values and does this freshly for every subscriber.
-* A *hot* Observable begins emitting values upfront and presents them to every subscriber subsequently.
-Subjects are hot observables.
+* A [.term]_cold Observable_ waits for a subscription until it emits values and does this freshly for every subscriber.
+* A [.term]_hot bservable_ begins emitting values upfront and presents them to every subscriber subsequently.
+`Subjects` are `hot Observables`.
 
 NOTE: Because of the network layer in between, the Java SDK needs to use subjects for its request and response cycles.
-This also makes sense because if you subscribe twice to a [.api]`bucket.get()` call, you actually only want one network call instead of two.
+This also makes sense because if you subscribe twice to a [.api]`bucket.get()` call, you only want one network call instead of two.
 
 Currently, these subjects are supported by RxJava, slightly differing in their functionality:
 
-* `AsyncSubject`: emits the last value (and only the last value) emitted by the source observable, and only after that source observable completes.
-(If the source observable does not emit any values, the AsyncSubject also completes without emitting any values.)
-* `BehaviorSubject`: When an subscriber subscribes to a `BehaviorSubject`, it begins by emitting the item most recently emitted by the source observable (or an optional seed or default value if none has yet been emitted) and then continues to emit any other items emitted later by the source observables.
-* `PublishSubject:``PublishSubject` emits to a subscriber only those items that are emitted by the source observables subsequent to the time of the subscription.
-* `ReplaySubject`: `ReplaySubject` emits to any subscriber all of the items that were emitted by the source observables, regardless of when the subscriber subscribes.
+* `AsyncSubject`: Emits the last value (and only the last value) emitted by the source `Observable`, and only after that source `Observable` completes.
+If the source `Observable` does not emit any values, the AsyncSubject also completes without emitting any values.
+* `BehaviorSubject`: When a `subscriber` subscribes to a `BehaviorSubject`, it begins by emitting the item most recently emitted by the source `Observable` or an optional seed or default value if none has yet been emitted.
+Then it continues to emit any other items emitted later by the source `Observables`.
+* `PublishSubject:``PublishSubject` emits to a subscriber only those items that are emitted by the source ``Observables``s subsequent to the time of the subscription.
+* `ReplaySubject`: `ReplaySubject` emits to any subscriber all of the items that were emitted by the source `Observables`, regardless of when the `subscriber` subscribes.
 
 As an example: if you call [.api]`bucket.get()`, an `AsyncSubject` is created under the covers and returned to you immediately.
 In addition, it is passed down the I/O layer and stored.
 When a response arrives from the server, the subject is fed with the response and you get notified appropriately.
 
-If you need to use a subject, choose wisely which one to use in order to keep resource usage low (some of them cache data for subscribers) especially if you push lots of data through them.
+If you need to use a subject, choose which one to use wisely in order to keep resource usage low (some of them cache data for subscribers) especially if you push lots of data through them.
 You can read more about them here: \https://github.com/ReactiveX/RxJava/wiki/Subject
 
 There is one last thing you need to know when dealing with subjects: because you are not getting new values when resubscribing (because it's cached), the following won't work (doing a get call every second):
@@ -1106,7 +1128,7 @@ bucket
 ----
 
 This will only execute one get call, because subsequent attempts only load the cached value.
-For this reason [.api]`Observable.defer()` was added, which creates a new observable for every subscriber that comes along:
+For this reason [.api]`Observable.defer()` was added, which creates a new `Observable` for every subscriber that comes along:
 
 [source,java]
 ----

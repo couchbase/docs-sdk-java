@@ -2,9 +2,10 @@
 :page-topic-type: concept
 
 [abstract]
-This guide provides a foundational introduction to the Couchbase Java SDK.
+This guide provides an introduction to the Couchbase Java SDK.
 It shows you how to install the SDK and write a basic sample application that highlights important aspects.
-After you install the SDK, you can start exploring it on your own or proceed with a tutorial to build a complete, production-grade application.
+
+After you install the SDK, you can start exploring it on your own or proceed with a tutorial where you will build a complete, production-grade application.
 
 == Installing the Couchbase Java SDK
 
@@ -19,13 +20,12 @@ Here is a typical [.path]_pom.xml_ that you can copy and paste into your Java pr
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>2.1.6</version>
+        <version>2.2.8</version>
     </dependency>
 </dependencies>
 ----
 
-You can also download an archive that has all JARs and dependencies included.
-In general, using a package manager is strongly recommended.
+You can also download an archive that has all JARs and dependencies included but, in general, using a package manager is strongly recommended.
 See the "Download and API Reference" section for more details.
 
 If you import the dependency, the following transitive dependencies are also added:
@@ -33,4 +33,4 @@ If you import the dependency, the following transitive dependencies are also add
 * https://github.com/couchbase/couchbase-jvm-core[core-io^]: our internal core library, which abstracts lots of Couchbase-specific behavior in a message-oriented way.
 * https://github.com/ReactiveX/RxJava[RxJava^]: a foundational library to build powerful reactive and asynchronous applications.
 
-The SDK itself depends on more packages (like Netty, the Disruptor RingBuffer and Jackson), but they are repackaged into the distributed JAR to reduce the risk of dependency clashes in your environment.
+The SDK itself depends on more packages (like Netty, the Disruptor RingBuffer, and Jackson), but they are repackaged into the distributed JAR to reduce the risk of dependency clashes in your environment.

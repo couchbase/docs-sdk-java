@@ -14,49 +14,99 @@ The Java SDK includes the following components:
 
 Compatibility between Couchbase Server and Couchbase Java SDK releases.
 
+The SDKs aim at being as backward and forward compatible with versions of Couchbase Server as possible.
+The matrix below indicates which version of the SDK is recommended with each version of Couchbase.
+Order of preference is `Recommended > Preferred > Compatible`.
+
+.Recommended SDK per Server Version Matrix
+[#table_sdk_versions]
+|===
+| | _Under 1.4_ | _SDK 1.4_ | _SDK 2.0_ | *SDK 2.1* | *SDK 2.2*
+
+| _SDK released for >_
+| _N/A (Archived)_
+| _Bugfixes only_
+| _N/A (Archived)_
+| _Bugfixes and minor features Backports_
+| _New Features, Active Development_
+
+| *Server 1.8*
+3+| Compatible
+| Preferred
+| *Recommended*
+
+| *Server 2.0*
+3+| Compatible
+| Preferred
+| *Recommended*
+
+| *Server 2.5*
+3+| Compatible
+| Preferred
+| *Recommended*
+
+| *Server 3.0*
+3+| Compatible
+| Preferred
+| *Recommended*
+
+| *Server 4.0*
+4+| Compatible
+| *Recommended*
+
+| *Server 4.1*
+4+| Compatible
+| *Recommended*
+|===
+
 To take advantage of all features offered by Couchbase Server, you need to know what version of the Java SDK provides compatibility for the features you want to use.
 The following matrix shows which versions of the Couchbase Java SDK support the major features of each version of Couchbase Server.
 
 .Couchbase Server and SDK Supported Version Matrix
 |===
-| | Server 1.8 | Server 2.0 | Server 2.5 | Server 3.0
+| | Server 1.8 | Server 2.0 | Server 2.5 | Server 3.0 | Server 4.0
 
-5+| *Basic Features*
+6+| *Basic Features*
 
 | CRUD Operations
-4+| Since 1.0
+5+| Since 1.0
 
 | View Querying APIs
-4+| Since 1.1
+5+| Since 1.1
 
 | Geospatial Views
 | Not Supported
 2+| 1.1 - 1.4
-| Since 2.1
+2+| Since 2.1
 
-5+| *Advanced Features*
+6+| *Advanced Features*
 
 | Durability Requirements
-4+| Since 1.1
+5+| Since 1.1
 
 | Carrier Publication Configuration
 2+| Not Supported
-2+| Since 1.4
+3+| Since 1.4
 
 | SSL Connectivity
 3+| Not Supported
-| Since 2.0
+2+| Since 2.0
 
 | Bulk Operations
-4+| Since 1.0
+5+| Since 1.0
 
 | N1QL Querying
 4+| Since 2.0 (experimental)
+| Since 2.2
 
-5+| *Administrative Features*
+| Multi-Dimensional Scaling
+4+| Not Supported
+| Since 2.2
+
+6+| *Administrative Features*
 
 | Administrative API
-4+| Since 1.0
+5+| Since 1.0
 |===
 
 == Contributing

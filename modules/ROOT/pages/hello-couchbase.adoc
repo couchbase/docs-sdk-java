@@ -1,7 +1,9 @@
 = Hello Couchbase Example
 :page-topic-type: concept
 
+[abstract]
 Now that you added the SDK dependency to your project, you can proceed and implement the classic "Hello World" example.
+
 Some important aspects are also covered along the way that will help you later.
 
 The first thing you need to do is connect to the cluster:
@@ -11,15 +13,15 @@ The first thing you need to do is connect to the cluster:
 Cluster cluster = CouchbaseCluster.create();
 ----
 
-With no other arguments provided, this will logically bind it to a cluster where the cluster is reachable on `localhost`.
-This is a reasonable default to get started during development, but in production you should pass in more seed nodes like this:
+With no other arguments provided, this connection will logically bind to a cluster where the cluster is reachable on `localhost`.
+This type of connection is a reasonable default to get started during development, but in production you should pass in more seed nodes like this:
 
 [source,java]
 ----
 Cluster cluster = CouchbaseCluster.create("192.168.56.101", "192.168.56.102");
 ----
 
-You do not need to pass in all nodes of the cluster, just a few seed nodes so that the client is able to establish initial contact.
+You do not need to pass in all nodes of the cluster, just a few seed nodes so that the client can establish the initial contact.
 The actual process of connecting to a bucket (that is, opening sockets and everything related) happens when you call the `openBucket` method:
 
 [source,java]
@@ -36,7 +38,7 @@ If you want to connect to a different bucket (also with a password), you can do 
 Bucket bucket = cluster.openBucket("bucket", "password");
 ----
 
-When your application shuts down, you need to make sure to properly disconnect from the cluster to free all resources (sockets, threads, and so on).
+When your application shuts down, you need to make sure to disconnect properly from the cluster to free all resources (sockets, threads, and so on).
 The following code shuts down the client:
 
 [source,java]
@@ -44,7 +46,7 @@ The following code shuts down the client:
 cluster.disconnect();
 ----
 
-This disconnects all buckets and frees associated resources.
+This disconnects all buckets and makes the associated resources available.
 
 You now have a reference to the `Bucket`, so you can begin working with it.
 The SDK comes with built-in handling for JSON documents, which you can use right away.
@@ -144,11 +146,10 @@ You can think of `replace` as the opposite of `insert`—if the document does no
 
 The code shown above is completely synchronous, which means that your main thread will wait all the time until a response comes back from the server.
 It waits for network IO to happen while instead it could perform valuable work.
-This is where the whole idea of asynchronous and parallel computation gets interesting.
 Instead of waiting and "pulling" the data out of the SDK, you can just keep going forward in your application flow and let the SDK notify you once it's done with work.
 
 ``Observable``s provide a large range of methods and functionality to create, combine and transform asynchronous workflows and make them look synchronous (while they aren't).
-This is important, because other approaches quickly get you into "callback hell" and are complicated dealing with futures, especially if you want to chain more than one asynchronous operation together, let alone proper error handling.
+Other approaches quickly get you into "callback hell" and are complicated dealing with futures, especially if you want to chain more than one asynchronous operation together, let alone proper error handling.
 
 Here is the very same example, but completely non-blocking (note that you want to keep your main thread alive with a `Thread.sleep()` for now or use `CountDownLatch`):
 
@@ -175,9 +176,9 @@ bucket
 Note how you can get access to the underlying asynchronous interfaces by using the `async()` method on the bucket.
 
 Without going too much in-depth about how `Observables` work just yet, it is not too hard to guess what is happening.
-The document is loaded through the `get` method and after it is done, the `flatMap` method is executed.
+The document is loaded through the `get` method, and after it is done, the `flatMap` method is executed.
 This method changes the content and calls the `replace` method.
-After the replace is done, the `Subscriber` is called and the line is printed.
+After the replace is done, the `Subscriber` is called, and the line is printed.
 You do not need to check for `null` here because the whole chain is just not executed if the document is not found in the first place.
 
 The style shown above is Java6/7 with anonymous classes.
@@ -214,7 +215,7 @@ bucket
 Thread.sleep(1000);
 ----
 
-Usually it takes a shorter amount of time, so you are just wasting time.
+Usually, it takes a shorter amount of time, so you are just wasting time.
 And in the unlikely case that it takes longer, it doesn't work properly.
 So a better way is the use of a `CountDownLatch`, which ships with the JDK.
 One thread counts it down and the other waits until its counted down:
@@ -241,9 +242,10 @@ bucket
 latch.await();
 ----
 
-Much better, but not perfect, and here is why: because your subscriber (the callbacks) are called from a different thread, without more changes on your side, you do not have access to either the computed values or the error that is thrown.
+The example shows a better, if not a perfect solution.
+Because your subscriber (the callbacks) is called from a different thread, without more changes on your side, you do not have access to either the computed values or the error that is thrown.
 You can work around that by using atomic variables from the concurrent package, but thankfully RxJava has you covered as well.
-You can use the `toBlocking` methods which will return you the result(s) in a blocking fashion, as well as propagate any errors of the flow as exceptions to your calling thread:
+You can use the `toBlocking` methods, which will return you the result(s) in a blocking fashion, as well as propagate any errors of the flow as exceptions to your calling thread:
 
 [source,java]
 ----
@@ -259,7 +261,34 @@ JsonDocument result = bucket
 ----
 
 So remember that instead of using latches, always use `toBlocking` and its different ways to extract the data.
-You can learn more about that in xref:observables.adoc[Mastering observables].
+You can learn more about that in xref:observables.adoc[Mastering Observables].
+
+In `Couchbase 4.0`, a new query language has been introduced: N1QL.
+Since it is a superset of SQL, we can write a Hello World example using N1QL.
+Make sure to have the query service activated in your cluster and a primary index created on your bucket.
+See xref:4.1@server:developer-guide:querying.adoc[Querying with N1QL]):
+
+[source,java]
+----
+String statement = "SELECT firstname FROM `default` WHERE age BETWEEN 49 AND 59";
+N1qlQuery query = N1qlQuery.simple(statement);
+N1qlQueryResult result = bucket.query(query);
+System.out.println("Hello, users in their fifties: ");
+for (N1qlQueryRow row : result)
+{ String firstName = row.value().getString("firstname"); System.out.println(firstName + "!"); }
+//prints:
+// "Hello, users in their fifties:
+// Walter!"
+----
+
+For the statement, you can alternatively use the DSL:
+
+[source,java]
+----
+Statement statement = Select.select(x("firstname")).from(i("default"))
+	.where(x("age").between(49).and(59));
+N1qlQuery query = N1qlQuery.simple(statement);
+----
 
 Congratulations, you've completed your first steps towards Couchbase mastery!
 At this point, you can either proceed with the complete tutorial application or browse through the rest of the documentation as you see fit.
