@@ -1,55 +1,103 @@
-= Working with views
-:page-topic-type: concept
+= MapReduce Views Using the Java SDK with Couchbase Server
+:navtitle: MapReduce Views
 
 [abstract]
-You can query views using a design document.
+You can use MapReduce views to create queryable indexes in Couchbase Server.
 
-== Anatomy of a view query
+include::4.5@sdk:shared:partial$views.adoc[tag=views-intro]
 
-When you query a view, you need to provide both the name of the Design Document and the name of the View.
-If you do not supply any further options, the SDK assumes you want to query a published view (so it is not in development mode) and also will not set any query options.
+include::4.5@sdk:shared:partial$views.adoc[tag=example-beer]
 
-This example queries a view with the name `myview`, which lives in the Design Document `designdoc`.
-If no further arguments are provided, it is assumed that the design document is published.
+include::4.5@sdk:shared:partial$views.adoc[tag=example-geo-travel]
+
+== Querying Views through the Java SDK
+
+Query a view through the Java client through the `query(ViewQuery q)` method on the [.api]`Bucket` class.
+This method returns a [.api]`ViewResult` whose iterator yields the results of the query (in the form of [.api]`ViewRow` objects).
+The [.api]`ViewResult` also exposes the list of rows (`allRows()`), the `success()` status and potential `error()`.
+The [.api]`ViewRow` object contains the `key` and `value` properties (which are the first and second arguments to the view's `emit()` function, respectively) as well as the `id` property, which may be passed to the [.api]`get()` method to return the actual document.
+Alternatively, directly call the [.api]`document()` method on the view row.
 
 [source,java]
 ----
-// Perform the ViewQuery
-ViewResult result = bucket.query(ViewQuery.from("designdoc", "myview"));
+Bucket bkt = CouchbaseCluster.create("192.168.33.101").openBucket("beer-sample");
+ViewResult result = bkt.query(ViewQuery.from("beer", "by_name");
+for (ViewRow row : result) {
+    System.out.println(row); //prints the row
+    System.out.println(row.document().content()); //retrieves the doc and prints content
+}
+----
 
-// Iterate through the returned ViewRows
+You can also set various properties on the query:
+
+[source,java]
+----
+Bucket bkt = CouchbaseCluster.create("192.168.33.101").openBucket("beer-sample");
+ViewQuery q = ViewQuery.from("beer", "by_name")
+    .limit(5) // Limit to 5 results
+    .startKey("A")
+    .endKey("A\u0fff");
+
+ViewResult result = bkt.query(q);
 for (ViewRow row : result) {
     System.out.println(row);
 }
 ----
 
-You can provide optional parameters at query time that alter the returned row set.
-For example, you can limit the returned rows to a maximum of 10 and also query a view that is not published yet (still in development mode):
+Here's some sample output for the previous query:
 
+----
+DefaultViewRow{id=harvey_son_lewes-a_lecoq_imperial_extra_double_stout_1999, key=A. LeCoq Imperial Extra Double Stout 1999, value=null}
+DefaultViewRow{id=harvey_son_lewes-a_lecoq_imperial_extra_double_stout_2000, key=A. LeCoq Imperial Extra Double Stout 2000, value=null}
+DefaultViewRow{id=mickey_finn_s_brewery-abana_amber_ale, key=Abana Amber Ale, value=null}
+DefaultViewRow{id=brasserie_lefebvre-abbaye_de_floreffe_double, key=Abbaye de Floreffe Double, value=null}
+DefaultViewRow{id=brasserie_de_brunehaut-abbaye_de_saint_martin_blonde, key=Abbaye de Saint-Martin Blonde, value=null}
+----
+
+[TIP]
+====
+[.param]`includeDocs`: This parameter allows for eager retrieval of the document associated with each row.
+
+It is only beneficial in the synchronous API (in the async API you could just call `get(row.id())` on the async bucket with the same effects).
+It impacts the row's `+document(...)+` method by preloading the return value of said method.
+
+However, since the simple signature of `row.document()` assumes a `JsonDocument`, if you want a different document type you have to call both `includeDocs()` and `document()` with the desired target class: `query.includeDocs(SomeDocumentClass.class)` *and* `row.document(SomeDocumentClass.class)`.
+
+Note that the `ViewQuery` has a getter for the target class: `includeDocsTarget()`.
+====
+
+== Querying Geospatial Views
+
+To query a geospatial view, you will need to construct a [.api]`SpatialViewQuery` object ([.api]`com.couchbase.client.java.view.SpatialViewQuery`).
+Spatial queries accept a [.param]`startRange` and an [.param]`endRange` parameter which allow you to limit the enclosing bounding boxes of the result.
+The arguments to these parameters are [.api]`JsonArray` with each element corresponding to a component emitted by the key (the first two components implicitly being the longitude and latitude of the result itself).
+
+On output, spatial queries yield instances of [.api]`SpatialViewRow` classes.
+A [.api]`SpatialViewRow` is similar to a [.api]`ViewRow`, with an added `geometry` property.
+
+.Querying a spatial view
 [source,java]
 ----
-// Perform the Query with more options
-bucket.query(ViewQuery.from("designdoc", "myview").development(false).limit(10));
-----
+SpatialViewQuery q = SpatialViewQuery.from("spatial", "by_location")
+    .startRange(JsonArray.from(0, -90, null))
+    .endRange(JsonArray.from(180, 90, null));
+SpatialViewResult result = bkt.query(q);
 
-If you want to query a geospatial view, you just need to use a different query builder (which you can also use to provide more parameters):
-
-[source,java]
-----
-// Perform the SpatialViewQuery
-SpatialViewResult result = bucket.query(SpatialViewQuery.from("designdoc", "myview"));
-
-// Iterate through the returned SpatialViewRows
 for (SpatialViewRow row : result) {
-    System.out.println(row);
+    System.out.println("Key:" + row.key());
+    System.out.println("Value:" + row.value());
+    System.out.println("Geometry:" + row.geometry());
 }
 ----
 
-NOTE: Geospatial queries are supported only against Couchbase Server 4.0 or later (although there was experimental support starting from 3.0.1).
+[.api]`SpatialView` also has the [.api]`includeDocs()` parameter to preload the document for the [.api]``SpatialViewRow``'s [.api]`document()` method.
+
+== View results details
 
 For all types of views, a `ViewResult` is always returned, which contains zero to many `ViewRows`.
 In addition to iterative row access, more methods are available on the result:
 
+[cols="50,97"]
 |===
 | Method | Description
 
@@ -75,13 +123,14 @@ Check `error()` if so.
 
 The only difference between regular and spatial view results is the fact that spatial ones do not expose the number of `totalRows`.
 
-== Regular View Options
+== ViewQuery API details
 
 All options shown here are available on the `ViewQuery` in a fluent API manner.
 All of them are optional, so only when they are explicitly provided, they will alter the behavior of the query.
 
 As a general note, all arguments that accept JSON are provided with a higher number of method overloads to accommodate all combinations in a type-safe manner.
 
+[cols="100,139,261"]
 |===
 | Method | Accepted Types | Description
 
@@ -168,22 +217,12 @@ See note on `includeDocs` below.
 NOTE: *Important when using Grouping:*`group(boolean)` and `groupLevel(int)` should not be used together in the same view query.
 It is sufficient only to set the grouping level only and use this setter in cases where you always want the highest group level implicitly.
 
-[IMPORTANT]
-====
-*includeDocs*: This parameter allows for eager retrieval of the document associated with each row.
-It is only beneficial in the synchronous API (in the async API you could just call `get(row.id())` on the async bucket).
-It impacts the row's `+document(...)+` method by preloading the return value of said method.
-
-However, since the simple signature of `row.document()` assumes a `JsonDocument`, if you want a different document type you have to call both `includeDocs()` and `document()` with the desired target class: `query.includeDocs(SomeDocumentClass.class)` *and* `row.document(SomeDocumentClass.class)`.
-
-Note that the `ViewQuery` has a getter for the target class: `includeDocsTarget()`.
-====
-
-== Geospatial View Options
+== SpatialViewQuery API details
 
 All options shown here are available on the `SpatialViewQuery` in a fluent API manner.
 All of them are optional, so only when they are explicitly provided, they will alter the behaviour of the query.
 
+[cols="100,147,245"]
 |===
 | Method | Accepted Types | Description
 
@@ -227,24 +266,13 @@ Can be multidimensional.
 
 | `includeDocs`
 | `boolean`, optional `Class<? extends Document>>`
-| Wether or not to automatically fetch the document corresponding to each row.
+| Weather or not to automatically fetch the document corresponding to each row.
 The second parameter is the target class for the document, `JsonDocument` if omitted.
 
 This method is needed only when using the blocking API since on the async API there is no benefit over just calling [.api]`.document()` in the stream.
 
 See note on `includeDocs` below.
 |===
-
-[IMPORTANT]
-====
-*includeDocs*: This parameter allows for eager retrieval of the document associated with each row.
-It is only beneficial in the synchronous API (in the async API you could just call `get(row.id())` on the async bucket).
-It impacts the row's `+document(...)+` method by preloading the return value of said method.
-
-However, since the simple signature of `row.document()` assumes a `JsonDocument`, if you want a different document type you have to call both `includeDocs()` and `document()` with the desired target class: `query.includeDocs(SomeDocumentClass.class)` *and* `row.document(SomeDocumentClass.class)`.
-
-Note that the `SpatialViewQuery` has getter for the target class: `includeDocsTarget()`.
-====
 
 Here is how to use the `range` parameter to find documents with a location within a bounding box.
 We have stored cities Paris, Vienna, Berlin and New York.
@@ -279,10 +307,12 @@ for (SpatialViewRow row : allRows) {
 //city::Paris
 ----
 
-== Retrying on errors
+[#retry]
+== Retry Conditions
 
 SDK retries view requests automatically on certain known conditions, which represented in the following table:
 
+[cols="25,39"]
 |===
 | HTTP status code | Behavior
 

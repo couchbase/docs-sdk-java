@@ -1,10 +1,12 @@
-= Managing connections
+= Managing Connections using the Java SDK with Couchbase Server
+:navtitle: Managing Connections
 :page-topic-type: concept
 
 [abstract]
-This section covers the different approaches to connecting and disconnecting, as well as how to configure encryption.
+This section describes how to connect the Java SDK to a Couchbase cluster and bucket.
+It contains best practices as well as information on SSL and other advanced connection options.
 
-== Connecting
+== Connecting to a Bucket
 
 Connecting to a bucket is a two-step process: first, a `CouchbaseCluster` object needs to be initialized, followed by one or more calls to openBucket():
 
@@ -31,6 +33,17 @@ List<String> nodes = Arrays.asList("192.168.56.101", "192.168.56.102");
 Cluster cluster = CouchbaseCluster.create(nodes);
 ----
 
+The Java SDK also offers limited support for creating a cluster from a Couchbase connection string:
+
+[source,java]
+----
+String connectionString = "couchbase://192.168.56.101,192.168.56.102";
+CouchbaseCluster cluster = CouchbaseCluster.fromConnectionString(connectionString);
+----
+
+WARNING: When creating a cluster from a connection string, the Java SDK ignores the scheme component; if a secure connection is desired, the Couchbase environment must be configured as described in <<ssl>>.
+The Java SDK also ignores any options in the connection string, and will not work with a connection string that specifies a bucket name.
+
 It is very important in a production setup to pass in at least two or three nodes of the cluster because if the first one in the list fails the other ones can be tried.
 After initial contact is made, the bootstrap list provided by the user is thrown away and replaced with a list provided by the server (which contains all nodes of the cluster).
 
@@ -42,13 +55,13 @@ Bucket bucket1 = cluster.openBucket("bucket1", "password");
 Bucket bucket2 = cluster.openBucket("bucket2", "password");
 ----
 
-If more than one bucket is open at a time, the underlying `core-io` module makes sure to utilize the resources as best as possible, that is sharing sockets, thread pools and so on.
+If more than one bucket is open at a time, the underlying `core-io` library makes sure to utilize the resources as best as possible, that is sharing sockets, thread pools and so on.
 
 Here are some very important things to keep in mind:
 
 * Always create only one instance of a `CouchbaseCluster` and share it across threads (same with buckets).
 * The SDK is thread-safe, so no additional synchronization is needed when interacting with the SDK.
-* If different clusters need to be accessed, reuse the `ClusterEnvironment`.
+* If different clusters need to be accessed, reuse the `CouchbaseEnvironment` (See <<concurrency>>).
 
 If the underlying environment is not shared the application will continue to work, but a warning is raised in the logs:
 
@@ -58,6 +71,34 @@ impact on performance and stability. Reuse environments!
 ----
 
 In general, this is an indication of misconfiguration, the only exception being unit and integration tests where multiple paths are executed at once and cannot share the `ClusterEnvironment` for whatever reason.
+
+== Disconnecting from a Bucket
+
+The most common case is to disconnect the whole `CouchbaseCluster` from the server, which has the same effect as closing all buckets manually and in addition close all underlying resources like thread pools.
+This also means that once disconnect has happened, you can't reopen buckets from the same `Cluster` instance.
+
+[source,java]
+----
+Boolean disconnected = cluster.disconnect();
+----
+
+If the `ClusterEnvironment` is shared it needs to be closed manually, but if not (which is the regular case) it gets also shut down.
+
+After a disconnect, it is not possible to open buckets again, so only use it when you are sure that you do not need access to a `CouchbaseCluster` again.
+If you only want to close a bucket, you can do that without shutting down everything:
+
+[source,java]
+----
+Boolean closed = bucket.close();
+----
+
+This will release only the resources allocated for this bucket and it is possible to reopen it at a later point.
+
+All threads used by the SDK are daemon threads, so even if you do not `disconnect()` manually, your JVM will exit.
+It is very important that you properly shut down the SDK so that remaining operations are finished and nothing is left behind.
+
+If no timeout is used for the synchronous `disconnect()` method, the environment `disconnect timeout` is used, which defaults to 25 seconds.
+This holds also true if you call `close()` on a bucket.
 
 == Connecting Asynchronously
 
@@ -86,37 +127,8 @@ AsyncCluster cluster = CouchbaseAsyncCluster.create();
 Observable<AsyncBucket> bucketObservable = cluster.openBucket();
 ----
 
-== Disconnecting
-
-The most common case is to disconnect the whole `CouchbaseCluster` from the server, which has the same effect as closing all buckets manually and in addition close all underlying resources like thread pools.
-This also means that once disconnect has happened, you can't reopen buckets from the same `Cluster` instance.
-
-[source,java]
-----
-Boolean disconnected = cluster.disconnect();
-----
-
-If the `ClusterEnvironment` is shared it needs to be closed manually, but if not (which is the regular case) it gets also shut down.
-
-After a disconnect, it is not possible to open buckets again, so only use it when you are sure that you do not need access to a `CouchbaseCluster` again.
-If you only want to close a bucket, you can do that without shutting down everything:
-
-[source,java]
-----
-Boolean closed = bucket.close();
-----
-
-This will release only the resources allocated for this bucket and it is possible to reopen it at a later point.
-
-Especially with `disconnect`, make sure you wait until it is finished (so everything is shut down cleanly), either by using the `toBlocking` methods or by using other mechanisms in the subscriber (like a `CountDownLatch` to orchestrate behavior).
-
-All threads used by the SDK are daemon threads, so even if you do not `disconnect()` manually, your JVM will exit.
-It is very important that you properly shut down the SDK so that remaining operations are finished and nothing is left behind.
-
-If no timeout is used for the synchronous `disconnect()` method, the environment `disconnect timeout` is used, which defaults to 25 seconds.
-This holds also true if you call `close()` on a bucket.
-
-== Sharing resources
+[#concurrency]
+== Scalability and Concurrency
 
 As mentioned previously, you should create only one instance of a CouchbaseCluster and open buckets from there.
 If you need to connect to multiple clusters though, this is not going to work.
@@ -144,7 +156,8 @@ Observable
     .single();
 ----
 
-== Encryption
+[#ssl]
+== Connecting with SSL
 
 Couchbase Server EE 3.0 and later supports full encryption of client-side traffic.
 That includes key-value type operations, queries, and configuration communication.
@@ -227,6 +240,18 @@ CouchbaseEnvironment env = DefaultCouchbaseEnvironment
     .build();
 ----
 
+Alternatively, since 2.3.0 it is possible to point it directly to a keystore that has been previously initialized so it can be created from different sources:
+
+[source,java]
+----
+KeyStore myKeystore = loadKeystore();
+
+CouchbaseEnvironment env = DefaultCouchbaseEnvironment.builder()
+    .sslEnabled(true)
+    .sslKeystore(myKeystore)
+    .build();
+----
+
 Depending on the OS used there are different default passwords and paths, so consult the JDK manual if you need further information on keytool (Java 7 for http://docs.oracle.com/javase/7/docs/technotes/tools/windows/keytool.html#OptionsInAll[Windows^] and http://docs.oracle.com/javase/7/docs/technotes/tools/solaris/keytool.html#OptionsInAll[Unix^]) and the JVM keystore.
 
 There are no other application changes needed.
@@ -262,7 +287,8 @@ _couchbase._tcp.example.com.  3600  IN  SRV  0  0  0  node2.example.com.
 _couchbase._tcp.example.com.  3600  IN  SRV  0  0  0  node3.example.com.
 ----
 
-Note that ordering and priorities are completely ignored and should not be set on the records to avoid ambiguities.
+NOTE: The ordering, priorities, ports and weighting are completely ignored and should not be set on the records to avoid ambiguities.
+
 If you plan to use secure connections, you use `_couchbases` instead:
 
 ----

@@ -1,0 +1,754 @@
+= Handling Exceptions and Other Errors with the Java SDK in Couchbase
+:navtitle: Handling Errors
+
+[abstract]
+This topic provides information on error handling when using the Couchbase Java SDK.
+It describes the general approach to Java exception handling with the SDK and the kinds of error handling you will want to consider during normal operations and in the case that the network or some part of your system infrastructure unexpectedly fails.
+
+== General Approach to Java Exceptions
+
+All Couchbase specific exceptions are derived from [.api]`CouchbaseException`.
+All the other Exception types used are part of the JDK, including [.api]`IllegalArgumentException`, [.api]`TimeoutException` and others.
+
+The following sections explain the exception types used by the SDK as well as how to perform proper error handling when they come up.
+
+NOTE: The Javadocs contain a list of possible exceptions for each method called, which allows you to crossreference back and forth between the method called and the possible errors with explanation.
+
+Note that the `transient` column in the reference tables refers to a short time interval where a retry with backoff makes sense from an application perspective and without the application interfering of some sort.
+If you extend the time horizon long enough all errors can be considered transient (like creating a bucket that does not exist or fix a password), but it won't be practical to wait in the application for it.
+
+The following sections discuss different strategies to mitigate errors that might come up during operations.
+
+== Conceptual Error Types
+
+include::4.5@sdk:shared:partial$couchbase-errors.adoc[tag=group]
+
+== Generic Error Types
+
+All couchbase specific exceptions inherit from the [.api]`CouchbaseException`.
+
+One exception that you want to plan for is the [.api]`RequestCancelledException`.
+It comes up if a request is in-flight but the socket gets closed or the SDK can't schedule the request for longer than the maximum configurable lifetime.
+In any event, if the operation is idempotent it makes sense to retry with backoff, but if a mutation operation has been canceled extra care needs to be taken to make sure state is not lost.
+For example, if a [.api]`replace` operation got canceled it makes sense to check again with a [.api]`get` to see if it took place or not and then react based on the result.
+This exception is transient since the underlying socket might be reopened at some point.
+
+Finally the [.api]`BackpressureException` raised by the SDK when the sender of requests (your application threads) are overwhelming the consumer (the SDK).
+It mostly happens in purely asynchronous environments but can also happen in blocking scenarios.
+If you receive such an exception it is always a wise idea to slow down the request rate or bubble up the error in a fail fast manner to the caller.
+This exception is almost always transient since once the pressure is reduced the SDK will go back into a stable state where the request completion rate equals or is higher than the incoming request rate.
+
+.Generic Errors Reference
+[#java-errors-generic-ref,cols="1,1,4"]
+|===
+| Name | Transient | Description
+
+| `CouchbaseException`
+| depends
+| Top level Couchbase exception type
+
+| `RequestCancelledException`
+| yes
+| Request canceled while in-flight on the socket or couldn't be scheduled for longer than the max lifetime period.
+
+| `BackpressureException`
+| yes
+| If the SDK is overwhelmed with the incoming request rate from the application for some reason.
+|===
+
+== Connection Management Errors
+
+If you are trying to open a [.api]`Bucket` and it does not exist you get a [.api]`BucketDoesNotExistException`.
+If it has a different password compared to the supplied one you get a [.api]`InvalidPasswordException` instead.
+
+If you are performing operations on a [.api]`Cluster` which does not support it, for example you don't have the query service enabled and you perform a N1QL operation, you get a [.api]`ServiceNotAvailableException`.
+
+When running into errors during bootstrap when SSL is enabled, you see a [.api]`SSLException` wrapped in a [.api]`ConfigurationExeption`.
+The [.api]`ConfigurationException` is a more generic error that reports that something has gone wrong during bootstrap with the configuration.
+
+Finally if you are performing an operation on a closed Bucket you get a [.api]`BucketClosedException`.
+
+.Connection Management Errors Reference
+[#java-errors-connman-ref,cols="1,1,4"]
+|===
+| Name | Transient | Description
+
+| `BucketDoesNotExistException`
+| no
+| If the bucket does not exist when trying to remove/open it.
+Note that with Server 4.5 and later, the server will also trigger a `InvalidPasswordException`.
+
+| `InvalidPasswordException`
+| no
+| If the bucket password is different than the one provided.
+
+| `ServiceNotAvailableException`
+| no
+| If a service is not enabled on at least one of the cluster nodes when trying to use it.
+
+| `SSLException`
+| no
+| Issues with SSL/Encryption during bootstrap.
+
+| `ConfigurationExeption`
+| no
+| All kinds of configuration errors during bootstrap.
+
+| `BucketClosedException`
+| no
+| If the bucket is already closed when trying to use it.
+|===
+
+== Bucket Operation Errors
+
+When a Document is mutated through the key value API a couple exceptions could be raised depending on the state of that Document on the cluster:
+
+.Bucket Operation Mutation Errors Reference
+[#java-errors-bucket-mut-ref,cols="1,1,4"]
+|===
+| Name | Transient | Description
+
+| `DocumentAlreadyExistsException`
+| no
+| If the document with the given ID already exists (i.e.
+during an insert).
+
+| `DocumentDoesNotExistException`
+| no
+| If the document with the given ID does not exist (i.e.
+during a replace).
+
+| `CASMismatchException`
+| no
+| The provided CAS on replace does not match with the server (someone else updated it in the meantime).
+
+| `RequestTooBigException`
+| no
+| The payload is larger than the maximum size (20MB).
+|===
+
+If durability requirements (`ReplicateTo`, `PersistTo`) are used, in addition the following exceptions can happen:
+
+.Bucket Operation Durability Errors Reference
+[#java-errors-bucket-dur-ref,cols="1,1,4"]
+|===
+| Name | Transient | Description
+
+| `DurabilityException`
+| depends
+| The durability requirement for this operation can't be met temporarily or persistently.
+
+| `DocumentMutationLostException`
+| no
+| When MutationTokens enabled, signifies a lost mutation during hard fail over.
+
+| `DocumentConcurrentlyModifiedException`
+| no
+| When MutationTokens disabled, signifies concurrent updates on the observed document.
+|===
+
+When a `getFromReplica` is issued you need to watch out for the following :
+
+.Bucket Operation Replica Read Errors Reference
+[#java-errors-bucket-replr-ref,cols="1,1,4"]
+|===
+| Name | Transient | Description
+
+| `ReplicaNotAvailableException`
+| yes
+| The replica is currently not available (i.e.
+after a fail over before rebalance).
+
+| `ReplicaNotConfiguredException`
+| no
+| The replica is not configured on the bucket itself.
+|===
+
+When you are trying to lock a document you may get the following:
+
+.Bucket Operation Lock Errors Reference
+[#java-errors-bucket-lock-ref,cols="1,1,4"]
+|===
+| Name | Transient | Description
+
+| `TemporaryLockFailureException`
+| yes
+| The server reports a temporary failure and it is very likely to be lock-related (like an already locked key or a bad CAS used for unlock).
+|===
+
+During a View request the following exception can happen:
+
+.Bucket Operation View Errors Reference
+[#java-errors-bucket-view-ref,cols="1,1,4"]
+|===
+| Name | Transient | Description
+
+| `ViewDoesNotExistException`
+| no
+| The view does not exist on the server (or the design document where it should belong) or is not published.
+|===
+
+Note that for Views it is also important to check the `isSuccess()` method as well as to check the `error()` method since it is possible that errors during streaming may come up.
+See the section on xref:view-queries-with-sdk.adoc[View Queries] for detailed information.
+
+Similarly, when a N1QL request is issued watch out for the following:
+
+.Bucket Operation N1QL Errors Reference
+[#java-errors-bucket-n1ql-ref,cols="1,1,4"]
+|===
+| Name | Transient | Description
+
+| `QueryExecutionException`
+| depends
+| Encloses various specific errors during N1QL query execution.
+
+| `NamedPreparedStatementException`
+| no
+| Error with execution or preparation of a named prepared statement.
+|===
+
+Note that for N1QL it is also important to check the `finalSuccess()` method as well as to check the `errors()` method since it is possible that errors during streaming may come up.
+See the section on xref:n1ql-queries-with-sdk.adoc[N1QL Queries] for detailed information.
+
+Finally, the following generic exceptions can happen in general when performing data related operations:
+
+.Bucket Operation Generic Errors Reference
+[#java-errors-bucket-genr-ref,cols="1,1,4"]
+|===
+| Name | Transient | Description
+
+| `TranscodingException`
+| no
+| Error while encoding or decoding Document content.
+
+| `CouchbaseOutOfMemoryException`
+| yes
+| Couchbase Server is currently out of memory.
+
+| `TemporaryFailureException`
+| yes
+| Couchbase Server reports a temporary failure of some kind.
+|===
+
+== Sub-Document Operation Errors
+
+When performing Sub-Document operations there is a different set of exceptions to look out for compared to regular key value based operations.
+Most of them affect how the paths inside the Document is used.
+
+.Sub-Document Errors Reference
+[#java-errors-subdoc-ref,cols="1,1,4"]
+|===
+| Name | Transient | Description
+
+| `MultiMutationException`
+| no
+| Exception denoting that at least one error occurred when applying multiple mutations.
+
+| `PathTooDeepException`
+| no
+| The path is too deep to parse.
+Depth of a path is determined by how many levels it contains.
+
+| `NumberTooBigException`
+| no
+| A number value inside the document is too big.
+
+| `DocumentNotJsonException`
+| no
+| The part of the document to store is not valid JSON.
+
+| `CannotInsertValueException`
+| no
+| The provided value cannot be inserted at the given path.
+
+| `PathInvalidException`
+| no
+| The provided path is invalid.
+
+| `ValueTooDeepException`
+| no
+| The proposed value would make the document too deep to parse.
+
+| `PathNotFoundException`
+| no
+| The path does not exist in the document.
+
+| `PathExistsException`
+| no
+| When a path exists but it shouldn't, like in the insert case.
+
+| `DocumentTooDeepException`
+| no
+| The document is too deep to parse.
+
+| `BadDeltaException`
+| no
+| The delta on counter operations is invalid.
+
+| `PathMismatchException`
+| no
+| The path structure conflicts with the document structure.
+|===
+
+== Bucket and Index Management Errors
+
+When you are manipulating buckets (that is, inserting or removing them) you can run into both [.api]`BucketAlreadyExistsException` and [.api]`BucketDoesNotExistException`.
+If you perform a flush operation on a bucket but it is disabled on the server side, the SDK raises a [.api]`FlushDisabledException`.
+
+While performing operations on N1QL indexes (GSI), similar to bucket management either a [.api]`IndexDoesNotExistException` or a [.api]`IndexAlreadyExistsException` can be raised during manipulation.
+In addition if you are waiting on an index a [.api]`IndexesNotReadyException` is raised if the index is not ready yet.
+
+During design document manipulation a [.api]`DesignDocumentAlreadyExistsException` is thrown if the design document already exists and one with the same name is inserted.
+
+.Bucket and Index Management Errors Reference
+[#java-errors-idxman-ref,cols="1,1,4"]
+|===
+| Name | Transient | Description
+
+| `BucketAlreadyExistsException`
+| no
+| The bucket already exists when trying to create it.
+
+| `BucketDoesNotExistException`
+| no
+| The bucket does not exist when trying to remove/open it.
+
+| `FlushDisabledException`
+| no
+| Bucket has flush disabled on the server side, but triggered on the SDK.
+
+| `IndexDoesNotExistException`
+| no
+| The N1QL GSI Index does not exist.
+
+| `IndexAlreadyExistsException`
+| no
+| The N1QL GSI Index already exists when trying to create it.
+
+| `IndexesNotReadyException`
+| yes
+| N1QL GSI indexes are watched but take longer to become ready than after the amount of attempts retried.
+
+| `DesignDocumentAlreadyExistsException`
+| no
+| The design document already exists when trying to insert it.
+|===
+
+== Error Handling - Logging
+
+It is always important to log errors, but even more so in the case of reactive applications.
+Because of the event driven nature, stack traces get harder to look at, and caller context is sometimes lost.
+
+It is also recommended to configure your logger to include absolute timestamps.
+While this is always a good idea, if combined with good logging throughout the application it makes it easier to debug error cases and see later what was going on inside your reactive application.
+
+RxJava provides operators for side effects (additional behavior that doesn't change the items flowing through the Observable stream), which should be used to log errors.
+Of course, you can also put logging into the error handlers, but readability is increased if the logging is put explicitly as a side effect.
+
+[source,java]
+----
+Observable
+    .error(new Exception("I'm failing"))
+    .doOnError(new Action1<Throwable>() {
+        @Override
+        public void call(Throwable throwable) {
+            // I'm an explicit side effect
+            // use a proper logger of your choice here
+            LOGGER.warn("Error while doing XYZ", throwable);
+        }
+})
+.subscribe();
+----
+
+You can also utilize the various other side-effect operators for general logging (`doOnNext`, `doOnCompleted`).
+If you don't want to have different side effects for the same logging operation, you can use `doOnEach`.
+It will be called for both errors and next events with a Notification object that denotes what kind of event is being processed.
+
+== Error Handling - Failing
+
+Failing is the easiest way to handle errors - because you don't.
+While most of the time you want more sophisticated error handling strategies (as discussed later), sometimes you just need to fail.
+It makes no sense for some errors to be retried, either because they are not transient or because you already tried everything to make it work and it still keeps failing.
+
+In error-resilient architectures, you want to do everything to keep the error contained.
+However, if the containment is not able to handle the error it needs to propagate it to a parent component that (possibly) can.
+
+In the asynchronous case, errors are events like every other for your subscribers.
+Once an error happens, your `Subscriber` is notified in the method [.api]`onError(Throwable)`, and you can handle it the way you want to.
+Note that by `Observable` contract, after the [.api]`onError` event, no more [.api]`onNext` events will happen.
+
+[source,java]
+----
+Observable
+    .error(new Exception("I'm failing"))
+    .subscribe(new Subscriber<Object>() {
+        @Override
+        public void onCompleted() {
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            System.err.println("Got Error: " + e);
+        }
+
+        @Override
+        public void onNext(Object o) {
+        }
+    });
+----
+
+It is always a good idea to implement error handling.
+
+In the synchronous case, every error is converted into an Exception and thrown so that you can use regular [.api]`try`/[.api]`catch` semantics.
+
+[source,java]
+----
+try {
+    Object data = Observable.error(new Exception("I'm failing"))
+        .toBlocking()
+        .single();
+} catch(Exception ex) {
+    System.err.println("Got Exception: " + ex);
+}
+----
+
+If you do not catch the Exception, it will bubble up:
+
+[source,java]
+----
+Exception in thread "main" java.lang.RuntimeException: java.lang.Exception: I'm failing
+ at rx.observables.BlockingObservable.blockForSingle(BlockingObservable.java:482)
+ at rx.observables.BlockingObservable.single(BlockingObservable.java:349)
+----
+
+== Error Handling - Retry
+
+Retrying operations is a common technique to ride over transient errors.
+It should not be used for non-transient errors because it will only put a load onto the system without the chance to resolve the error.
+
+In practice, the following retry strategies can be applied when a transient error is discovered:
+
+* Retry immediately.
+* Retry with a fixed delay.
+* Retry with a linearly increasing delay.
+* Retry with an exponentially increasing delay.
+* Retry with a random delay.
+
+Unless you have a very good reason not to, _always_ apply a maximum number of attempts and then escalate the error.
+Systems stuck in infinite retry loops can cause issues that are very hard to debug.
+It's better to fail and propagate at some point.
+
+Also, we recommend that you use asynchronous retry even if you are blocking at the very end.
+Retrying in the asynchronous `Observables` is way more resource efficient and also the only sane way to handle multiple operation steps (and bulk operations) under a single timeout.
+
+The Java SDK comes with a [.api]`RetryBuilder`, a utility class to describe retries with a fluent API.
+
+Retry without delay::
+Let's get one thing straight right away: immediately retrying is almost never a good idea.
+Instead of resolving the error more quickly, it will put more pressure onto the retried system, and there is a good chance it will make resolving errors harder.
++
+One good reason to do so is if you have a specific operation with a very short timeout that you want to keep retrying for a small, fixed amount of times and if it still does not work, fail fast.
++
+If you have the feeling you need to retry very quickly, you can also apply a very slight increasing delay to, at least, release some pressure from the target system.
++
+RxJava provides the [.api]`retry` operator to resubscribe to the source `Observable` immediately once it fails (an error event happens).
+Three flavors are available:
+
+* [.api]`retry()`: Instantly retry as long as the source `Observable` emits an error.
+It is strongly recommend not to use this operator.
+* [.api]`retry(long count)`: Instantly retry as long as the source `Observable` emits an error or the max count is reached.
+If the count is reached, the Observable will not be resubscribed, but the error is propagated down the stream.
+This operator is recommended for use.
+* [.api]`retry(Func2<Integer, Throwable, Boolean> predicate)`: Instantly retry as long as the predicate returns true.
+Arguments to the predicate are the number of tries, as well as the exception type.
+
++
+Since the `predicate` method provides the most flexibility, it is recommended to use it.
+If you only want to handle a specific exception and retry a maximum of `MAX_TRIES` times, you can do it like this:
++
+[source,java]
+----
+Observable.error(new CASMismatchException())
+    .retry(new Func2<Integer, Throwable, Boolean>() {
+        @Override public Boolean call(Integer tries, Throwable throwable) {
+            return (throwable instanceof CASMismatchException) && tries < MAX_TRIES;
+        }
+    })
+    .subscribe();
+----
++
+Try replacing `CASMismatchException` with something else and you will see that it does not try to retry, but rather propagates the error downstream.
+You can use this technique to handle specific errors differently by adding more retry operators in the pipeline.
++
+Using the `retry` with `predicate` also allows you to log the number of retries for a specific error.
+If you use the [.api]`doOnError` for logging, it's harder to log the number of retries.
++
+The synchronous equivalent to the latest code looks like this:
++
+[source,java]
+----
+int tries = 0;
+while(true) {
+    tries++;
+    try {
+        pretendWorkThatMaybeThrows(); // does some work and maybe throws break;
+    } catch(Throwable throwable) {
+        if (!(throwable instanceof CASMismatchException) || tries >= MAX_TRIES) {
+            throw throwable; // rethrow exceptions
+        }
+    }
+}
+----
+
+[#retrydelay]
+Retry with delay::
+When applying a [.term]_Retry with delay_, the main question you need to ask yourself is: how often and how long is it feasible to retry before giving up (and escalate the error).
+Using this retry option depends on the type of operation, use case, and SLA that the application requires, but the techniques are the same.
++
+RxJava provides the [.api]`retryWhen` operator, which allows you more flexibility with the actions performed as well as when the resubscription is happening.
+This section covers the different delay approaches based on this operator.
++
+Here is the contract for [.api]`retryWhen` that you should always keep in mind:
+
+* It is called when an error on the source `Observable` happens.
+* The function provided will be called with an `Observable` containing this error.
+* If you make this `Observable` error, it is propagated downstream (without retrying).
+* If you make this `Observable` complete, it is propagated downstream (without retrying).
+* If you make this `Observable` call [.api]`onNext`, a retry will happen.
+
++
+Since the version 2.1.0 the Java SDK comes with the [.api]`RetryBuilder`, a helper to describe when and how to retry: only on certain classes of exceptions, max 5 attempts, the exponential delay between attempts, and so on.
+The result of this builder ([.api]`calling build()`) can be used with RxJava's [.api]`retryWhen` operator directly:
++
+[source,java]
+----
+Observable.error(new IllegalStateException())
+    .retryWhen(
+        RetryBuilder.anyOf(IllegalStateException.class).max(6).delay(Delay.linear(TimeUnit.SECONDS)).build()
+    );
+----
++
+This code will ultimately fail after 6 additional attempts.
+It would fail fast if the source returns an error with something other than an [.api]`IllegalStateException` during retries.
+Each attempt will be made with an increasing delay, which grows linearly (1 second, then 2, 3, 4).
+If an exception occurs that is not managed by the handler, it is propagated as is, allowing you to chain such handlers.
++
+If the maximum number of attempts is reached, the last exception that occurred is propagated, wrapped in a [.api]`CannotRetryException`.
+This helper allows to write retry semantics more easily, but in this section it is explained how to write them from scratch.
++
+The easiest approach is the [.term]_fixed delay_.
+The source `Observable` will be resubscribed after a specified amount of time and for a fixed maximum number of times.
++
+Because the nested logic is a bit harder to understand in the first place, let's talk through it step by step and then put it together.
++
+Our [.api]`retryWhen` function is called every time an error happens on the source `Observable`.
+If we wanted to try forever every second, it could look like this:
++
+[source,java]
+----
+.retryWhen(new Func1<Observable<? extends Throwable>, Observable<?>>() {
+    @Override public Observable<?> call(Observable<?extends Throwable> errorNotification) {
+        return errorNotification.flatMap(new Func1<Throwable, Observable<?>>() {
+            @Override public Observable<?> call(Throwable throwable) {
+                return Observable.timer(1, TimeUnit.SECONDS);
+            }
+        });
+    }
+})
+----
++
+We [.api]`flatMap` our notification `Observable` and utilize the [.api]`Observable#timer` to defer emitting a new event for a second.
+Since we need to stop at some point, after a given number of tries, we can utilize the [.api]`Observable#zipWith` operator to zip our error stream together with a range where we specify the number of tries we want to allow.
+Zipping has the nice side-effect that once one of the `Observable` is completed, the resulting `Observable` will also be complete, which triggers our Rule 4 from above.
++
+The modified version looks like this:
++
+[source,java]
+----
+.retryWhen(new Func1<Observable<? extends Throwable>, Observable<?>>() {
+    @Override
+    public Observable<?> call(Observable<? extends Throwable> errorNotification) {
+        return errorNotification.zipWith(Observable.range(1, 4), new Func2<Throwable, Integer, Integer>() {
+            @Override
+            public Integer call(Throwable throwable, Integer attempts) {
+                return attempts;
+            }
+    })
+        .flatMap(new Func1<Integer, Observable<?>>() {
+            @Override
+            public Observable<?> call(Integer attempts) {
+                return Observable.timer(1, TimeUnit.SECONDS);
+            }
+        });
+    }
+}
+----
++
+Technically, we don't need the zip function here because we ignore it later on, but it is required for the `zipWith` operator to work.
+We use the [.api]`Observable#range` operator to create an `Observable` that emits three events and then completes, so we will never end up with more retries.
++
+There is one more enhancement needed: the code as it stands there will swallow the originating exception when moving on, which is not good because it should be propagated if it can't be handled in this code block.
++
+The following code is modified so that the function of `zipWith` returns not only the attempted count but also the throwable, so that Couchbase Server has access to it in the [.api]`flatMap` method.
+For this, the Java client has a generic [.api]`Tuple` the server can utilize.
+In the [.api]`flatMap`, Couchbase Server checks for the number of attempts, and if it is over the threshold, it re-throws the exception.
+Keep in mind that you need to change [.api]`Observable#range` call to `MAX_ATTEMPTS+1`, to give your code a chance to be called again one final time.
++
+[source,java]
+----
+.retryWhen(new Func1<Observable<? extends Throwable>, Observable<?>>() {
+  @Override public Observable<?> call(Observable<? extends Throwable> errorNotification) {
+    return errorNotification.zipWith(Observable.range(1, 5), new Func2<Throwable, Integer, Tuple2>Throwable, Integer>>() {
+      @Override public Tuple2<Throwable, Integer> call(Throwable throwable, Integer attempts) {
+        return Tuple.create(throwable, attempts);
+      }
+    }).flatMap(new Func1<Tuple2<Throwable, Integer>, Observable<?>>() {
+      @Override
+      public Observable<?> call(Tuple2<Throwable, Integer> attempt) {
+        if (attempt.value2() == 3) {
+          return Observable.error(attempt.value1());
+        }
+        return Observable.timer(1, TimeUnit.SECONDS);
+      }
+    });
+  }
+})
+----
++
+If you want to enhance it even further, you can add one more [.api]``if()``clause in the [.api]`flatMap` to see if the throwable that is passed down is actually the one we want to retry.
++
+Functionality like this is a great candidate to be generic and encapsulated, so that's what we did with [.api]`RetryBuilder`.
+If you are already using Java 8, the code becomes more condensed as well:
++
+[source,java]
+----
+.retryWhen(notification -> notification.zipWith(Observable.range(1, 5), Tuple::create)
+  .flatMap(att -> att.value2() == 3 ? Observable.error(att.value1()) : Observable.timer(1, TimeUnit.SECONDS)))
+----
++
+Here are the variations for linear, exponential and random delays:
++
+*Linear:*
++
+[source,java]
+----
+// Utilizes the number of attempts for the number of seconds to wait
+    .retryWhen(notification -> notification
+    .zipWith(Observable.range(1, 5), Tuple::create)
+    .flatMap(att -> att.value2() == 3 ? Observable.error(att.value1()) : Observable.timer(att.value2(), TimeUnit.SECONDS))
+)
+----
++
+*Exponential:*
++
+[source,java]
+----
+// Uses the timer with 2^attempts to generate exponential delays
+    .retryWhen(notification -> notification
+    .zipWith(Observable.range(1, 5), Tuple::create)
+    .flatMap(att -> att.value2() == 3 ? Observable.error(att.value1()) : Observable.timer(1 << att.value2(), TimeUnit.SECONDS))
+)
+----
++
+*Random:*
++
+[source,java]
+----
+// Random between 0 and 5 seconds to retry per attempt
+    .retryWhen(notification -> notification
+    .zipWith(Observable.range(1, 5), Tuple::create)
+    .flatMap(att -> att.value2() == 3 ? Observable.error(att.value1()) : Observable.timer(new Random().nextInt(5), TimeUnit.SECONDS))
+)
+----
++
+With the synchronous code, there are not many options other than using [.api]`Thread.sleep()` to keep the current thread waiting until the loop is allowed to proceed:
++
+[source,java]
+----
+// Linear Backoff
+int tries = 0;
+while(true) {
+    tries++;
+    try {
+        pretendWorkThatMaybeThrows(); // does some work and maybe throws
+        break;
+    } catch(Throwable throwable) {
+        if (!(throwable instanceof CASMismatchException) || tries >= MAX_TRIES) {
+        throw throwable; // rethrow exceptions
+    }
+    Thread.sleep(TimeUnit.SECONDS.toMillis(tries));
+}
+----
++
+You can then use the same approaches as with the asynchronous ones on the [.api]`Thread.sleep()` time to accommodate for a static, linear, exponential or random delay.
+
+== Error Handling - Fallback
+
+Instead of (or in addition to) retrying, another valid option is falling back to either a different `Observable` or a default value.
+
+RxJava provides you with different operators, prefixed with [.api]`onError*()`:
+
+* [.api]`onErrorReturn(Func1<Throwable, T>)`: It is called when the source `Observable` errors and allows to return custom data instead.
+* [.api]`onErrorResumeNext(Observable<?>)`: It is called when the source `Observable` errors and allows to resume transparently with a different Observable.
+* [.api]`onErrorResumeNext(Func1<Throwable, Observable<?>)`: It is called when the source `Observable` errors and allows to transparently resume with an `Observable` (based on a specific `Throwable`).
+
+You should use the [.api]`onErrorReturn` if you want to fallback to static data quickly.
+For example:
+
+[source,java]
+----
+Observable.<String>error(new Exception("I failed"))
+    .onErrorReturn(new Func1<Throwable, String>() {
+        @Override
+        public String call(Throwable throwable) {
+            // You could return data based on the throwable as well
+            return "Default";
+        }
+    })
+    .subscribe();
+----
+
+If you only want to return default values based on a specific exception or even call another `Observable` as fallback, [.api]`onErrorResumeNext` is what you're looking for.
+
+[source,java]
+----
+Observable.<String>error(new TimeoutException("I failed"))
+    .onErrorResumeNext(new Func1<Throwable, Observable<? extends String>>() {
+        @Override
+        public Observable<? extends String> call(Throwable throwable) {
+            if (throwable instanceof TimeoutException) {
+                return Observable.just("Default");
+            }
+            // Forward anything other than the TimeoutException
+            return Observable.error(throwable);
+        }
+    })
+    .subscribe();
+----
+
+If you just want to fallback onto another `Observable` that you have in scope without caring about the Exception, you can use the other [.api]`onErrorResumeNext()` overload.
+For example, this loads data from all replicas if the [.api]`get()` call did not succeed with the Java SDK:
+
+[source,java]
+----
+bucket.async()
+    .get("id")
+    .onErrorResumeNext(bucket.async().getFromReplica("id", ReplicaMode.ALL))
+    .subscribe();
+----
+
+Synchronous fallbacks can be implemented by conditionally setting the default in the [.api]`catch` clause:
+
+[source,java]
+----
+String value;
+try {
+    value = pretendWorkThatMaybeThrows();
+} catch(Exception ex) {
+    value = "Default";
+}
+----
+
+Here is the gotcha: this synchronous example only works great if the fallback is static.
+If you need to fallback into another database call, for example, you quickly get into nested error handling and timeouts are a pain to handle (since they start to accumulate for every synchronous call).
+It is recommended to use asynchronous fallbacks and then block at the very end through [.api]`toBlocking().single()` or equivalents.

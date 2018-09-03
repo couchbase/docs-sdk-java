@@ -1,0 +1,498 @@
+= Client Settings for the Java SDK with Couchbase Server
+:navtitle: Client Settings
+
+[abstract]
+The `CouchbaseEnvironment` class enables you to configure Java SDK options for bootstrapping, timeouts, reliability, and performance.
+
+== The Environment Builder
+
+Because `CouchbaseEnvironment` is an immutable class, you need to configure it by using its embedded `Builder` class.
+It is designed to apply the builder arguments in a fluent fashion and then create the `CouchbaseEnvironment` at the very end:
+
+[source,java]
+----
+CouchbaseEnvironment env = DefaultCouchbaseEnvironment
+    .builder()
+    .mutationTokensEnabled(true)
+    .computationPoolSize(5)
+    .build();
+Cluster cluster = CouchbaseCluster.create(env, "localhost");
+----
+
+Alternatively, most options are tunable through system properties as well.
+If a system property is set, it always takes precedence over the builder setting:
+
+[source,java]
+----
+System.setProperty("com.couchbase.kvEndpoints", "3");
+CouchbaseEnvironment environment = DefaultCouchbaseEnvironment
+    .builder()
+    .kvEndpoints(2)
+    .build();
+CouchbaseCluster cluster = CouchbaseCluster.create(environment);
+----
+
+All system properties start with the `com.couchbase` prefix.
+
+== Configuration Options
+
+The following tables cover all possible configuration options and explain their usage and default values.
+The tables categorize the options into groups for bootstrapping, timeout, reliability, performance, and advanced options.
+
+== Bootstrap Options
+
+.Bootstrap Options Reference
+[#java-bootstrap-options-ref,cols="2,3,3,3,8"]
+|===
+| Name | Builder | Property | Default | Description
+
+| Enabling Encryption
+| `sslEnabled \(boolean)`
+| `sslEnabled`
+| `false`
+| If encrypted communication should be enabled.
+This feature is only available against a Couchbase Server 3.0 EE cluster or later, and setting it to true implies you also set a value for `sslKeystoreFile` and `sslKeystorePassword`.
+Please see the xref:managing-connections.adoc[Managing Connections] section for more details on how to set it up properly.
+
+| SSL Keystore Location
+| `sslKeystoreFile \(String)`
+| `sslKeystore \File`
+| `[empty]`
+| The location to the JVM keystore where the certificates are stored.
+This feature is only available against a Couchbase Server 3.0 EE cluster or later.
+See the "Connection Management" section for more details on how to set it up properly.
+
+| Custom SSL Keystore
+| `sslKeystore \(KeyStore)`
+| `-`
+| `[empty]`
+| A custom KeyStore instance instead of creating one through the filepath.
+Allows for heavily customized and differently loaded keystores.
+
+| SSL Keystore Password
+| `sslKeystore \Password(String)`
+| `sslKeystore \Password`
+| `[empty]`
+| The password of the JVM keystore where the certificates are stored.
+This feature is only available against a Couchbase Server 3.0 EE cluster or later.
+Please see the "Connection Management" section for more details on how to set it up properly.
+
+| Config Loading through HTTP
+| `bootstrapHttp \Enabled(boolean)`
+| `bootstrapHttp \Enabled`
+| `true`
+| If it should be possible for the client to bootstrap and grab configurations over the HTTP port 8091 (and also attach a streaming connection).
+If you are running Couchbase Server 2.2 or earlier, this setting must be set to true.
+Against newer clusters it can be disabled, but it doesn't hurt to keep it enabled as a last-resort fallback option.
+Also, if configuration loading through carrier publication is manually disabled, this option is used as a fallback.
+If both option are disabled, the client is not able to function properly.
+If you don't have a good reason to disable it (for example as instructed by Couchbase Support), keep it enabled.
+
+| Config HTTP Non-Encrypted Port
+| `bootstrapHttp \DirectPort(int)`
+| `bootstrapHttp \DirectPort`
+| `8091`
+| The port which is used if encryption is not enabled and the client needs to bootstrap through HTTP.
+In general, there is no need to change this value (unless you run a custom Couchbase Server build during development or testing that runs on different ports).
+
+| Config HTTP Encrypted Port
+| `bootstrapHttp \SslPort(int)`
+| `bootstrapHttp \SslPort`
+| `18091`
+| The port which is used if encryption is enabled and the client needs to bootstrap through HTTP.
+In general, there is no need to change this value (unless you run a custom Couchbase Server build during development or testing that runs on different ports).
+
+| Config Loading through Carrier Publication
+| `bootstrapCarrier \Enabled(boolean)`
+| `bootstrapCarrier \Enabled`
+| `true`
+| If you are running Couchbase Server 2.5 or later, this is the preferred way to bootstrap and grab configurations.
+It is not done over HTTP, but through the key-value connections automatically.
+If this setting is manually disabled, the client will fallback to HTTP (if enabled).
+If both option are disabled, the client is not able to function properly.
+If you don't have a good reason to disable it (for example as instructed by Couchbase Support), keep it enabled.
+
+| Config Carrier Non-Encrypted Port
+| `bootstrapCarrier \DirectPort(int)`
+| `bootstrapCarrier \DirectPort`
+| `11210`
+| The port which is used if encryption is not enabled and the client needs to bootstrap through carrier publication.
+In general, there is no need to change this value (unless you run a custom Couchbase Server build during development or testing that runs on different ports).
+
+| Config Carrier Encrypted Port
+| `bootstrapCarrier \SslPort(int)`
+| `bootstrapCarrier \SslPort`
+| `11207`
+| The port which is used if encryption is enabled and the client needs to bootstrap through carrier publication.
+In general, there is no need to change this value (unless you run a custom Couchbase Server build during development or testing that runs on different ports).
+
+| DNS SRV Enabled
+| `dnsSrvEnabled \(boolean)`
+| `dnsSrvEnabled`
+| `false`
+| Enable manually if you explicitly want to grab a bootstrap node list through a DNS SRV record.
+See the "Connection Management" section for more information on how to use it properly.
+
+| Mutation Tokens Enabled
+| `mutationTokens \Enabled(boolean)`
+| `mutationTokens \Enabled`
+| `false`
+| If mutation tokens should be enabled, adding more overhead to every mutation but providing enhanced durability requirements as well as advanced N1QL querying capabilities.
+|===
+
+== Timeout Options
+
+Timeouts apply only for blocking operations.
+All asynchronous operations must chain in their own `timeout()` operators in order to apply a timeout.
+All default values can be overridden through the overloaded methods that accept both a time and time unit.
+All timeouts are reasonable defaults and should be adjusted to the environments after profiling the expected latencies.
+
+.Timeout Options Reference
+[#java-timeout-options-ref,cols="1,1,1,1,3"]
+|===
+| Name | Builder | Property | Default | Description
+
+| Key-Value Timeout
+| `kvTimeout \ (long)`
+| `kvTimeout`
+| `2500ms`
+| The Key/Value default timeout is used on all blocking operations which are performed on a specific key if not overridden by a custom timeout.
+It does not affect asynchronous operations.
+This includes all commands like get(), getFromReplica() and all mutation commands.
+
+| View Timeout
+| `viewTimeout \ (long)`
+| `viewTimeout`
+| `75000ms`
+| The View timeout is used on both regular and geospatial view operations if not overridden by a custom timeout.
+It does not affect asynchronous operations.
+Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
+Also, if there is a node failure during the request the internal cluster timeout is set to 60 seconds.
+
+| Query Timeout
+| `queryTimeout \(long)`
+| `queryTimeout`
+| `75000ms`
+| The Query timeout is used on all N1QL query operations if not overridden by a custom timeout.
+It does not affect asynchronous operations.
+Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
+
+| Connect Timeout
+| `connectTimeout \(long)`
+| `connect \Timeout`
+| `5000ms`
+| The connect timeout is used when a Bucket is opened and if not overridden by a custom timeout.
+It does not affect asynchronous operations.
+If you feel the urge to change this value to something higher, there is a good chance that your network is not properly set up.
+Opening a bucket should in practice not take longer than a second on a reasonably fast network.
+
+| Disconnect Timeout
+| `disconnect \Timeout(long)`
+| `disconnect \Timeout`
+| `25000ms`
+| The disconnect timeout is used when a Cluster is disconnected or a Bucket is closed synchronously and if not overridden by a custom timeout.
+It does not affect asynchronous operations.
+A timeout is applied here always to make sure that your code does not get stuck at shutdown.
+25 seconds should provide enough room to drain all outstanding operations properly, but make sure to adapt this timeout to fit your application requirements.
+
+| Management Timeout
+| `management \Timeout(long)`
+| `management \Timeout`
+| `75000ms`
+| The management timeout is used on all synchronous BucketManager and ClusterManager operations and if not overridden by a custom timeout.
+It set to a quite high timeout because some operations might take a longer time to complete (for example flush).
+
+| Socket Connect Timeout
+| `socketConnect \Timeout(int)`
+| `socketConnect \Timeout`
+| `1000ms`
+| The amount of time the SDK will wait on the socket connect until an error is raised and handled.
+|===
+
+== Reliability Options
+
+.Reliability Options Reference
+[#java-reliability-options-ref,cols="1,1,1,1,3"]
+|===
+| Name | Builder | Property | Default | Description
+
+| Reconnect Delay
+| `reconnectDelay \(Delay)`
+| `-`
+| `Exponential between 32ms and 4096ms`
+| The reconnect delay defines the time intervals between a socket getting closed on the SDK side and trying to reopen (reconnect) to it.
+The default is to retry relatively quickly (32ms) and then gradually approach 4 second intervals, so that in case a server is longer down than usual the clients do not flood the server with socket requests.
+Feel free to tune this interval based on your application requirements.
+Applying a very large ceiling may lead to longer down times than needed, while very short delays may flood the target node and spam the network unnecessarily.
+
+| Retry Delay
+| `retryDelay \(Delay)`
+| `-`
+| `Exponential between 100µs and 100ms`
+| When a request needs to be retried for some reason (for example if the retry strategy is best effort and the target node is not reachable), this delay configures the boundaries.
+An internal counter tracks the number of retries for a given request and it gradually increases by default from a very quick 100 microseconds up to a 100 millisecond delay.
+The operation will be retried until it succeeds or the maximum request lifetime is reached.
+If you find yourself wanting to tweak this value to a very low setting, you might want to consider a different retry strategy like "fail fast" to get tighter control on the retry handling yourself.
+
+| Retry Strategy
+| `retryStrategy \(RetryStrategy)`
+| `-`
+| `Best Effort`
+| The retry strategy decides if an operation should be retried or canceled.
+While implementing a custom strategy is fairly advanced, the SDK ships with two out of the box: BestEffortRetryStrategy and FailFastRetryStrategy.
+The first one will retry the operation until it either succeeds or the maximum request lifetime is reached.
+The fail fast strategy will cancel it right away and therefore the client needs to be prepared to retry on its own, but gets much tighter control on when and how to retry.
+See the advanced section in the documentation on more specific information on retry strategies and failure management.
+
+| Maximum Request Lifetime
+| `maxRequest \Lifetime(long)`
+| `maxRequest \Lifetime`
+| `75000ms`
+| The maximum request lifetime is used by the best effort retry strategy to decide if its time to cancel the request instead of retrying it again.
+This is needed in order to prevent requests from circling around forever and occupying precious slots in the request ring buffer.
+Make sure to set this higher than the largest timeout in your application, otherwise you risk requests being canceled prematurely.
+This is why the default value is set to 75 seconds, which is the highest default timeout on the environment.
+
+| Socket Keepalive Interval
+| `keepAlive \Interval(long)`
+| `keepAlive \Interval`
+| `30000ms`
+| To avoid nasty firewalls and other network equipment cutting off stale TCP connections, at the configured interval the client will send a heartbeat keepalive message to the remote node and port.
+This only happens if for the given amount of time no traffic has happened, so if a socket is busy sending data back and forth it will have no effect.
+If you set this value to 0, no keepalive will be sent over the sockets.
+|===
+
+== Performance Options
+
+.Performance Options Reference
+[#java-performance-options-ref,cols="1,1,1,1,3"]
+|===
+| Name | Builder | Property | Default | Description
+
+| Observe Interval
+| `observeInterval \Delay(Delay)`
+| `-`
+| `Exponential between 10µs and 100ms`
+| The way PersistTo and ReplicateTo work is that once the regular mutation operation succeeds, the key state on the target nodes is polled until the desired state is reached.
+Since replication and persistence latency differs greatly on servers (fast or slow networks and disks), this value can be tuned for maximum efficiency.
+The tradeoffs to consider here is how quickly the desired state is detected as well as how much the SDK will spam the network.
+The default is an exponential delay, starting with very short intervals but very quickly approaching the 100 milliseconds if replication or persistence takes longer than expected.
+You should monitor the average persistence and replication latency and adjust the delay accordingly.
+
+| Key/Value Endpoints per Node
+| `kvEndpoints(int)`
+| `kvEndpoints`
+| `1`
+| The number of actual endpoints (sockets) to open per Node in the cluster against the Key/value service.
+By default, for every node in the cluster one socket is opened where all traffic is pushed through.
+That way the SDK implicitly benefits from network batching characteristics when the workload increases.
+If you suspect based on profiling and benchmarking that the socket is saturated you can think about slightly increasing it to have more "parallel pipelines".
+This might be especially helpful if you need to push large documents through it.
+The recommendation is keeping it at 1 unless there is other evidence.
+
+| View Endpoints per Node
+| `viewEndpoints(int)`
+| `viewEndpoints`
+| `1`
+| The number of actual endpoints (sockets) to open per node in the cluster against the view service.
+By default only one socket is opened to avoid unnecessary wasting resources.
+If you plan to run a view heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
+Keep in mind that these sockets will then be always open, even when no load is passed through.
+We recommend that you tune this value based on evidence obtained during benchmarking with a real workload.
+If no view load is expected, setting this value explicitly to 0 can avoid one socket to 8092 per node.
+
+| Query Endpoints per Node
+| `query \ Endpoints(int)`
+| `query \ Endpoints`
+| `1`
+| The number of actual endpoints (sockets) to open per Node in the cluster against the Query (N1QL) service.
+By default only one socket is opened to avoid unnecessary wasting resources.
+If you plan to run a query heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
+Keep in mind that these sockets will then be always open, even when no load is passed through.
+We are recommending to tune this value based on evidence during benchmarking with a real workload.
+If no query load is expected, setting this value explicitly to 0 can avoid one socket to 8093 per node.
+
+| Search Endpoints per Node
+| `search \Endpoints(int)`
+| `search \Endpoints`
+| `1`
+| The number of actual endpoints (sockets) to open per Node in the cluster against the Search (FTS) service.
+By default only one socket is opened to avoid unnecessary wasting resources.
+If you plan to run a query heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
+Keep in mind that these sockets will then be always open, even when no load is passed through.
+We are recommending to tune this value based on evidence during benchmarking with a real workload.
+If no query load is expected, setting this value explicitly to 0 can avoid one socket to 8094 per node.
+
+| I/O Thread Pool Size
+| `ioPoolSize(int)`
+| `ioPoolSize`
+| `Runtime# \available \Processors()`
+| The number of threads in the I/O thread pool.
+This defaults to the number of available processors that the runtime returns (which, as a well known fact, sometimes does not represent the actual number of processors).
+Every thread represents an internal event loop where all needed socket are multiplexed on.
+The default value should be fine most of the time, it may only need to be tuned if you run a very large number of nodes in the cluster or the runtime value is incorrect.
+As a rule of thumb, it should roughly correlate with the number of cores available to the JVM.
+
+| Computation Thread Pool Size
+| `computation \PoolSize(int)`
+| `computation \PoolSize`
+| `Runtime# \available \Processors()`
+| The number of threads in the computation thread pool.
+This defaults to the number of available processors that the runtime returns (which, as a well known fact, sometimes does not represent the actual number of processors).
+Every thread represents an internal event loop where all needed computation tasks are run.
+The default value should be fine most of the time, it might only need to be tuned if you run more than usual CPU-intensive tasks and profiling the application indicates fully saturated threads in the pool.
+As a rule of thumb, it should roughly correlate with the number of cores available to the JVM.
+
+| I/O Pool Group
+| `ioPool \(EventLoopGroup)`
+| `-`
+| `NioEvent \ LoopGroup`
+| For those who want the last drop of performance, on Linux Netty provides a way to use edge triggered epoll instead of going through JVM NIO.
+This provides better throughput, lower latency and less garbage.
+Note that this mode has not been tested by Couchbase and therefore is not supported officially.
+If you like to take a walk on the wild side, you can find out more here: http://netty.io/wiki/native-transports.html[Netty Native-transports.^]
+
+| TCP Nodelay
+| `tcpNodelay \Enabled(boolean)`
+| `tcpNodelay \ Enabled`
+| `true`
+| By default, TCP Nodelay is turned on (which in effect turns off "nagleing"), and if possible negotiated with the server as well.
+If this is set to false, "nagleing" is turned on.
+Make sure to only turn off TCP nodelay if you know what you are doing, because it can lead to decreased performance.
+
+| Run Callbacks on the I/O Pool
+| `callbacks \OnIoPool \(boolean)`
+| `callbacks \OnIoPool`
+| `false`
+| If set to true, all callbacks will not be moved onto the scheduler but rather executed on the IO threads.
+This can aid performance under high throughput scenarios but extra care must be taken to not block in a callback since this has direct impact on the performance of the I/O loops!
+|===
+
+== Advanced Options
+
+Values for the advanced options listed in the following table should not be changed unless there is a very good reason to do so.
+
+.Advanced Options Reference
+[#java-advanced-options-ref,cols="1,1,1,1,3"]
+|===
+| Name | Builder | Property | Default | Description
+
+| Request Ring Buffer Size
+| `requestBuffer \Size(int)`
+| `requestBuffer \Size`
+| `16384`
+| The size of the request ring buffer where all request initially are stored and then picked up to be pushed onto the I/O threads.
+Tuning this to a lower value will more quickly lead to BackpressureExceptions during overload or failure scenarios.
+Setting it to a higher value means backpressure will take longer to occur, but more requests will potentially be queued up and more heap space is used.
+
+| Response Ring Buffer Size
+| `responseBuffer \Size(int)`
+| `responseBuffer \Size`
+| `16384`
+| The size of the response ring buffer where all responses are passed through from the I/O threads before the target Observable is completed.
+Since the I/O threads are pushing data in this ring buffer, setting it to a lower value is likely to have a negative effect on I/O performance.
+In general it should be kept in line with the request ring buffer size.
+
+| Computation Scheduler
+| `scheduler \(Scheduler)`
+| `-`
+| `CoreScheduler`
+| The scheduler used for all CPU-intensive, non-blocking computations in the core, client and in user space.
+This is a slightly modified version of the ComputationScheduler that ships with RxJava, mainly for the reason to manually name threads as needed.
+Changing the scheduler should be used with extra care, especially since lots of internal components also depend on it.
+
+| User Agent String
+| `userAgent \(String)`
+| `-`
+| `Based on OS, Runtime and SDK Version`
+| The user agent string that is used to identify the SDK against the Couchbase Server cluster on different occasions, for example when doing a view or query request.
+There is no need to tune that because it is dynamically generated based on properties set during build time (based on the package name and version, OS and runtime).
+
+| Package Name and Version Identifier
+| `packageNameAnd \Version(String)`
+| `-`
+| `Based on SDK Version`
+| The package name and identifier is used as part of the user agent string and in the environment info output to see which version of the SDK the application is running.
+There is no need to change it because it is dynamically generated based on properties set during build time.
+
+| Event Bus
+| `eventBus \(EventBus)`
+| `-`
+| `DefaultEventBus`
+| The event bus implementation used to transport system, performance and debug events from producers to subscribers.
+The default implementation is based on an internal RxJava Subject which does not cache the values and only pushes subsequent events to the subscribers.
+If you provide a custom implementation, double check that it fits with the contract of the event bus as documented.
+
+| DCP Enabled
+| `dcpEnabled \(boolean)`
+| `dcpEnabled`
+| `false`
+| DCP is not ready for prime time in clients, but this configuration switch is available because all parameters from the core-io module are inherited.
+If you have active need for DCP, get in touch with the Couchbase team.
+
+| DCP Connection Buffer Size
+| `dcpConnection \BufferSize(int)`
+| `dcpConnection \ BufferSize`
+| `20971520 (20MiB)`
+| Sets the size of the buffer to control speed of DCP producer.
+The server will stop emitting data if the current value of the buffer reach this limit.
+Set it to zero to disable DCP flow control.
+
+| DCP Connection Buffer Ack Threshold
+| `dcpConnection \BufferAck \Threshold(double)`
+| `dcpConnection \BufferAck \Threshold`
+| `0.2`
+| When a DCP connection read bytes reaches this percentage of the dcpConnectionBufferSize, a DCP Buffer Acknowledge message is sent to the server to signal producer how much data has been processed.
+
+| DCP Connection Name
+| `dcpConnection \Name(String)`
+| `dcpConnection \Name`
+| `dcp/core-io`
+| Sets default name for DCP connection.
+It is used to identify streams on the server.
+
+| Buffer Pooling Enabled
+| `bufferPooling \Enabled(boolean)`
+| `bufferPooling \Enabled`
+| `true`
+| If the SDK is suspected to leak buffers (it pools buffers in its IO layer for performance) you can set this field to false.
+This will make sure buffers are not pooled, but remember the tradeoff here is higher GC pressure on the system.
+Only turn off to prevent a memory leak from happening (in production).
+If you suspect a memory leak, please open a bug ticket.
+
+| Runtime Metrics Collector
+| `runtimeMetrics \CollectorConfig \(Metrics \CollectorConfig)`
+| `-`
+| `DefaultMetrics \CollectorConfig`
+| The configuration of the runtime metrics collector can be modified (or completely disabled).
+By default, it will emit an event every hour.
+
+| Network Latency Metrics Collector
+| `networkLatency \MetricsCollector \Config(Latency \MetricsCollector \Config)`
+| `-`
+| `DefaultLatency \Metrics Collector \Config`
+| The configuration of the network latency metrics collector can be modified (or completely disabled).
+By default, it will emit an event every hour, but collect the stats all the time.
+
+| Default Metrics Consumer
+| `defaultMetrics \LoggingConsumer \ (boolean, CouchbaseLogLevel, OutputFormat)`
+| `-`
+| `enabled, INFO, JSON`
+| The default metric consumer which will log all metric events.
+You can configure if it should be enabled, as well as the log level and the target output format.
+
+| Request Buffer Wait Strategy
+| `requestBuffer \ WaitStrategy \ (WaitStrategy)`
+| `-`
+| `BlockingWait \ Strategy`
+| The underlying request buffer can use a different wait strategy which can be used to get better performance under high throughput/low latency circumstances, trading CPU time for it.
+This is an export option, only use it if you are comfortable with the LMAX Disruptor and know the impact of plugging in a different strategy!
+
+| Automatic Observable Resource Release Time Period
+| `autorelease\ After(int)`
+| `-`
+| `2000`
+| The time period in milliseconds that a subscriber needs to subscribe to the observable.
+After this period, the resources involved in the observable are released and can't be subscribed to anymore.
+This is required to avoid leaking data, it also needs to be a short time bound to avoid having the observable move into older GC generations unnecessarily, which harms performance.
+|===

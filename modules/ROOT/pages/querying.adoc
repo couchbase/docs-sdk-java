@@ -1,5 +1,0 @@
-= Querying buckets
-:page-topic-type: concept
-
-[abstract]
-The Java SDK supports a wide range of querying features, including views and the N1QL query language.

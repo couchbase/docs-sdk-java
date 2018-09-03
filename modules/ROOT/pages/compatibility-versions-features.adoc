@@ -1,7 +1,199 @@
-= Migrating from Java SDK 1.4.x to 2.x
-:page-topic-type: concept
+= Compatibility of Couchbase Features, Couchbase Versions and the Couchbase Java SDK
+:navtitle: Compatibility
 
-[abstract]
+[#feature-matrix]
+== Couchbase Version/SDK Version Matrix
+
+Couchbase SDKs are tested against a variety of different environments to ensure both backward and forward compatibility with different versions of Couchbase Server.
+The matrix below denotes the version of Couchbase Server, the version of the Java SDK and whether the SDK is:
+
+* ✖ *Unsupported*: This combination is not tested, and is not within the scope of technical support if you have purchased a support agreement.
+* ◎ *Compatible*: This combination has been tested previously, and should be compatible.
+This combination is not supported or recommended by our technical support organization.
+It is best to upgrade either the SDK or the Couchbase version you are using.
+* ✔ *Supported*:This combination is subject to ongoing quality assurance, and is fully supported by our technical support organization.
+
+.Recommended SDK per Server Version Matrix
+[#table_sdk_versions]
+|===
+| | _Under 1.4_ | _SDK 1.4_ | _SDK 2.0, 2.1_ | *SDK 2.2* | *SDK 2.3*
+
+| _SDK released for >_
+| _N/A (Archived)_
+| _Bug fixes only_
+| _N/A (Archived)_
+| _Bug fixes and minor features Back ports_
+| _New Features, Active Development_
+
+| *Server 1.8*
+| ◎
+| ◎
+| ◎
+| ◎
+| *◎*
+
+| *Server 2.0*
+| ◎
+| ◎
+| ◎
+| ◎
+| *◎*
+
+| *Server 2.5*
+| ◎
+| ◎
+| ◎
+| ◎
+| *◎*
+
+| *Server 3.0*
+| ◎
+| ◎
+| ◎
+| ✔
+| *✔*
+
+| *Server 4.0*
+| ◎
+| ◎
+| ◎
+| ✔
+| *✔*
+
+| *Server 4.1*
+| ◎
+| ◎
+| ◎
+| ✔
+| *✔*
+
+| *Server 4.5*
+| ◎
+| ◎
+| ◎
+| ✔
+| *✔*
+|===
+
+To take advantage of all features offered by Couchbase Server, you need to know what version of the Java SDK provides compatibility for the features you want to use.
+The following matrix shows which versions of the Couchbase Java SDK support the major features of each version of Couchbase Server.
+
+.Couchbase Server and SDK Supported Version Matrix
+|===
+| | Server 1.8 | Server 2.0 | Server 2.5 | Server 3.0, 3.1 | Server 4.0, 4.1 | Server 4.5
+
+7+| *Basic Features*
+
+| CRUD Operations
+6+| Since 1.0
+
+| View Querying APIs
+6+| Since 1.1
+
+| Geospatial Views
+| Not Supported
+2+| 1.1 - 1.4
+3+| Since 2.1
+
+7+| *Advanced Features*
+
+| Durability Requirements
+6+| Since 1.1
+
+| Carrier Publication Configuration
+2+| Not Supported
+4+| Since 1.4
+
+| SSL Connectivity
+3+| Not Supported
+3+| Since 2.0
+
+| Bulk Operations
+6+| Since 1.0
+
+| N1QL Querying
+4+| Since 2.0 (experimental)
+2+| Since 2.2
+
+| Multi-Dimensional Scaling
+4+| Not Supported
+2+| Since 2.2
+
+| Sub-document API
+5+| Not Supported
+| Since 2.3
+
+| Fulltext Search
+5+| Not Supported
+| Since 2.3 (experimental)
+
+7+| *Administrative Features*
+
+| Administrative API
+6+| Since 1.0
+|===
+
+[#jdk-compat]
+== JDK Version Compatibility
+
+The Java SDK is tested with the Oracle JDK which should be used for best experience and supportability.
+Other JDK implementations might work but are  not tested and are unsupported.
+
+The following Oracle JDKs are supported for *Java SDK 1.4 and 2.0 - 2.3*:
+
+* Oracle JDK 1.6
+* Oracle JDK 1.7
+* Oracle JDK 1.8 (recommended)
+
+Please make sure you run on one of the latest patch releases, since they provide stability improvements and security fixes in general.
+
+[#spring-compat]
+== Spring Data Couchbase Compatibility
+
+http://projects.spring.io/spring-data-couchbase/[Spring Data Couchbase^] uses the Java SDK underneath and as a result is also provides different compatibilities with Couchbase Server.
+The following table provides an overview.
+
+.Recommended Spring Data Couchbase per Server Version Matrix
+[#table_spring_versions]
+|===
+| | _SDC 1.4.x_ | _SDC 2.1 & 2.2_
+
+| _Status >_
+| _Bug fixes only_
+| _New Features, Active Development_
+
+| *Server 1.8*
+| Compatible
+| *Recommended*
+
+| *Server 2.0*
+| Compatible
+| *Recommended*
+
+| *Server 2.5*
+| Compatible
+| *Recommended*
+
+| *Server 3.0*
+| Compatible
+| *Recommended*
+
+| *Server 4.0*
+| Compatible (no N1QL)
+| *Recommended*
+
+| *Server 4.1*
+| Compatible (no N1QL)
+| *Recommended*
+
+| *Server 4.5*
+| Compatible (no N1QL)
+| *Recommended*
+|===
+
+[#migrating]
+== Migrating from Java SDK 1.4.x to 2.x
+
 Couchbase recommends that you migrate to the Java 2.x SDK to take advantage of enhancements to the SDK as well as new features available in Couchbase Server.
 
 The 2.x Java SDK is based on the reactive programming model and has a different architecture that uses a core I/O layer and a Java client layer.
@@ -13,9 +205,9 @@ If you plan on using the synchronous blocking API, you can follow the simple mig
 Or, you can follow the optional migration path to fully reactive and asynchronous code by using the asynchronous API, which provides the best performance.
 
 To get the full benefit of using the asynchronous code with this new generation SDK, you need to understand how to build asynchronous yet expressive code by leveraging the `Observable` paradigm.
-To learn more about using `Observables`, see xref:observables.adoc[Mastering Observables].
+The xref:async-programming.adoc[Asynchronous Progamming Using the Java SDK with Couchbase Server] has more information on reactive programming with the Java SDK.
 
-== Getting Started
+== 1.x-2.x Migration: Getting Started
 
 The 2.x generation of the Java SDK is a complete rewrite of the 1.x SDK.
 It is layered into `core-io` and `java-client` pieces.
@@ -39,23 +231,23 @@ It has minimal transitive dependencies (by embedding a few internal dependencies
 [source,xml]
 ----
 <dependencies>
-    <dependency>
-        <groupId>com.couchbase.client</groupId>
-        <artifactId>java-client</artifactId>
-        <version>2.2.8</version>
-    </dependency>
+  <dependency>
+    <groupId>com.couchbase.client</groupId>
+    <artifactId>java-client</artifactId>
+    <version>2.3.1</version>
+  </dependency>
 </dependencies>
 ----
 
 IMPORTANT: After you've fully migrated, make sure that old dependencies to `couchbase-client` or dependencies introduced in your POM because of the `couchbase-client` have been removed.
 
 You'll most probably want the SDK to perform some logging, which can easily be activated by adding a logging framework such as http://logging.apache.org/log4j/2.x/[log4j^] to your dependencies.
-For more information about configuring logging, see xref:logging.adoc[Setting up logging].
+For more information about configuring logging, see xref:collecting-information-and-logging.adoc[Collecting Information and Logging in the Java SDK with Couchbase Server].
 
-== Initializing the connection
+== 1.x-2.x Migration: Cluster Connections
 
 `CouchbaseClient` is replaced by the `Cluster` and `Bucket` classes, bringing real-world concepts of Couchbase into the SDK as first-class citizens.
-For more information about using these classes, see xref:managing-connections.adoc[Managing connections].
+For more information about using these classes, see xref:managing-connections.adoc[Managing Connections using the Java SDK with Couchbase Server].
 
 Compared to the 1.4.x SDK, when providing a list of nodes for bootstrapping, you only need hostnames or IP addresses in `String` form.
 No need for the URI anymore, and no need for the port and pools path either:
@@ -75,42 +267,35 @@ Here's an example that uses a naive helper approach:
 [source,java]
 ----
 public class CouchbaseHelper {
-
     //the IPs / hostnames would be obtained from configuration file
     private static final List<String> SEED_IPS = Arrays.asList("192.168.0.1", "192.168.0.2");
-
     public static final Cluster CLUSTER = CouchbaseCluster.create(SEED_IPS);
-
     public static final Bucket EXAMPLEBUCKET = CLUSTER.openBucket("example", "p4ssW0rd");
 }
 ----
 
-You can customize the connection to the `Cluster` via the `CouchbaseEnvironment` interface (see xref:env-config.adoc[Configuring the environment] for more details):
+You can xref:client-settings.adoc[customize] the connection to the `Cluster` via the `CouchbaseEnvironment` interface.
 
 [source,java]
 ----
 public class CouchbaseHelper {
-
     //the IPs / hostnames would be obtained from configuration file
     private static final List<String> SEED_IPS = Arrays.asList("192.168.0.1", "192.168.0.2");
-
     //the environment configuration
     private static final CouchbaseEnvironment ENV = DefaultCouchbaseEnvironment.builder()
         .connectTimeout(8 * 1000) // 8 Seconds in milliseconds
         .keepAliveInterval(3600 * 1000) // 3600 Seconds in milliseconds
-    .build();
-
+        .build();
     public static final Cluster CLUSTER = CouchbaseCluster.create(ENV, SEED_IPS);
-
     public static final Bucket EXAMPLEBUCKET = CLUSTER.openBucket("example", "p4ssW0rd");
 }
 ----
 
-== Working With Data
+== 1.x-2.x Migration: Document Operations
 
 In the new SDK, a new model of data within Couchbase was introduced: the `Document` class.
 It encapsulates both the content itself and the metadata ( `id`, `expiry` and `cas` information).
-See xref:documents.adoc[Working with documents] for additional information.
+The xref:document-operations.adoc[CRUD Document Operations Using the Java SDK with Couchbase Server]  page shows more specifics regarding document operations with the 2.x version of the SDK.
 
 The SDK has several implementations of `Document`.
 By default, most SDK methods assume the content is JSON and return a `JsonDocument`.
@@ -121,9 +306,8 @@ NOTE: To interact with documents stored by an older Java SDK, use the `LegacyDoc
 This class provides 1:1 compatibility with the 1.4 SDK, but consider to migrate to a new implementation after backward compatibility isn't required anymore.
 
 Concerning optimistic locking—because the CAS is now part of the `Document`, the SDK picks it up if it is non-zero during mutating operations.
-To learn more about mutating operations, see xref:documents-updating.adoc[Updating documents].
 
-== Working Asynchronously
+== 1.x-2.x Migrations: Reactive and Batched Programming
 
 In the 2.x SDK, asynchronous processing is done via RxJava.
 The asynchronous API is not mixed with the synchronous API, but rather accessible via the `async()` method on `Cluster` and `Bucket`.
@@ -132,7 +316,7 @@ The SDK is thread-safe and uses a pool of threads internally for operations (so 
 Additionally, some Rx operators use one of the `Schedulers` provided by RxJava (meaning it could execute in another thread).
 
 The SDK doesn't use `Future` objects anymore.
-For progressive migration purposes, you can convert an `Observable` into a `Future` and vice-versa.
+For progressive migration purposes, you can convert an `Observable` into a `Future` and vice versa.
 Here's an example of how to do that:
 
 [source,java]
@@ -140,13 +324,12 @@ Here's an example of how to do that:
 //converting these to/from Future
 Observable<String> myStringObservable;
 Future<String> myStringFuture;
-
 //this expects exactly one item emitted
 Future<String> f = myStringObservable.toBlocking().toFuture();
-
 //when several items expected, use a List
 Future<List<String>> f = myStringObservable.toList().toBlocking().toFuture();
-
 //convert back from a Future<String>
-Observable<String> o = Observable.from(myStringFuture);
+Observable<String> o = Observable.from(myStringFuture)
 ----
+
+include::4.5@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]
