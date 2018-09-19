@@ -43,3 +43,12 @@
 * xref:collecting-information-and-logging.adoc[Collecting Information]
 * xref:threshold-logging.adoc[Threshold Logging]
 * xref:tracing-from-the-sdk.adoc[Tracing from the SDK]
+
+.Project Docs
+* xref:relnotes-java-sdk.adoc[Release Notes]
+///
+* xref:compatibility-versions-features.adoc[Compatibility]
+* xref:sdk-licenses.adoc[Licenses]
+* xref:[Get involved]
+ ** xref[Improve the Docs]
+///
