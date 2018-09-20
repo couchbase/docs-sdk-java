@@ -13,7 +13,7 @@ Maven. As a result the dependency can be included easily using your
 favourite package manager. For Maven itself, the current GA release's
 coordinates are:
 
-[source,java]
+[source,xml]
 ----
  <dependencies>
    <dependency>
