@@ -46,9 +46,7 @@
 
 .Project Docs
 * xref:relnotes-java-sdk.adoc[Release Notes]
-///
 * xref:compatibility-versions-features.adoc[Compatibility]
 * xref:sdk-licenses.adoc[Licenses]
-* xref:[Get involved]
- ** xref[Improve the Docs]
-///
+* xref:get-involved.adoc[Get involved]
+ ** xref:/contribute/index.adoc[Improve the Docs]

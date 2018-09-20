@@ -146,9 +146,7 @@ http://issues.couchbase.com/browse/JCBC-1160[JCBC-1160]: A new
 feature called "per operation tracing" has been introduced in
 pre-releases and is now a stable and supported feature. Please see
 the corresponding documentation and blog posts for more information
-and usage.\
-\
-To provide a flexible and extensible implementation we are now also
+and usage. To provide a flexible and extensible implementation we are now also
 depending on the opentracing-api dependency for this. This allows
 you to plug in your own tracer (like jaegertracing or commerical
 products) as well.
@@ -166,7 +164,8 @@ settings (compressionMinSize and compressionMinRatio). If the server
 also supports this feature (5.5 and newer), the SDK will
 automatically negotiate and use it. Please see the corresponding
 documentation and blog posts for more information and usage.
-* http://issues.couchbase.com/browse/JCBC-1203[JCBC-1203],http://issues.couchbase.com/browse/JVMCBC-537[JVMCBC-537]:
+* http://issues.couchbase.com/browse/JCBC-1203[JCBC-1203],
+http://issues.couchbase.com/browse/JVMCBC-537[JVMCBC-537]:
 Support for client certificate authentication has been expanded from
 pure KV only to all supported services. A new "CertAuthenticator"
 has been introduced and it needs to be explicitly enabled on the
@@ -903,8 +902,8 @@ changes have been made to the reconnection logic so there are no
 concurrent reconnect attempts. This fixes a problem where upgrading
 from < 5.0 Server releases to > 5.0 Server releases wasn't
 possible without restarting the application server.
-* https://issues.couchbase.com/browse/JVMCBC-460[JVMCBC-460]
-:Discover FTS SSL through config
+* https://issues.couchbase.com/browse/JVMCBC-460[JVMCBC-460]:
+Discover FTS SSL through config
 * https://issues.couchbase.com/browse/JVMCBC-445[JVMCBC-445]:
 ArrayOutOfBoundException in PooledService#sendFlush (concurrent
 access on list)
@@ -1173,7 +1172,8 @@ The supported and tested dependencies for this release are:
 
 This release fixes the following issues:
 
-* http://issues.couchbase.com/browse/JVMCBC-380[JVMCBC-38]https://issues.couchbase.com/browse/JVMCBC-385[5]: To
+* http://issues.couchbase.com/browse/JVMCBC-380[JVMCBC-380]
+https://issues.couchbase.com/browse/JVMCBC-385[JVMCBC-385]: To
 address a potential performance regression introduced in 2.4.1 with
 N1QL (due to disabling the pipelining for ensuring correctness) the
 Service pooling has been overhauled completely, leading to better
@@ -1214,8 +1214,8 @@ Views) because it is not properly supported on the server side and
 can lead to inconsistent responses that are hard to identify and
 track down. Everyone who has had problems with N1QL queries
 returning successfully, but only partial results are recommended to
-upgrade.\
-*If you are experiencing slowdown of your queries, you need to
+upgrade.
+ *If you are experiencing slowdown of your queries, you need to
 increase the number of queryEndpoints to a higher setting in order
 to allow for concurrent requests. In the future we are planning on a
 more flexible pool implementation, but setting the queryEndpoints to
@@ -1257,8 +1257,8 @@ Views) because it is not properly supported on the server side and
 can lead to inconsistent responses that are hard to identify and
 track down. Everyone who has had problems with N1QL queries
 returning successfully, but only partial results are recommended to
-upgrade.\
-*If you are experiencing slowdown of your queries, you need to
+upgrade.
+ *If you are experiencing slowdown of your queries, you need to
 increase the number of queryEndpoints to a higher setting in order
 to allow for concurrent requests. In the future we are planning on a
 more flexible pool implementation, but setting the queryEndpoints to
@@ -1352,7 +1352,7 @@ FTS integration tests if search service not found
 * https://issues.couchbase.com/browse/JVMCBC-376[JVMCBC-376]: Add
 support for legacy memcached node hashing as it is different in 2.x
 series compared to 1.x. Legacy hashing can be turned on by
-using LegacyMemcachedHashingStrategy in the environment builder. \
+using LegacyMemcachedHashingStrategy in the environment builder. 
 *Important:* _If you need interoperability between Java and other
 SDKs when writing and/or reading to memcached buckets, you must pick
 the LegacyMemcachedHashingStrategy since the Default one is not
@@ -1477,9 +1477,7 @@ Version 2.3.3 is the fourth release of the 2.3 series, bringing small
 enhancements and bugfixes over the last stable release.
 
 http://packages.couchbase.com/clients/java/2.3.3/Couchbase-Java-Client-2.3.3.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-2.3.3/[API
-Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-1.3.3/index.html[Core
-API
-Reference]
+Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-1.3.3/index.html[Core API Reference]
 
 === New Features and Behavioral Changes
 
