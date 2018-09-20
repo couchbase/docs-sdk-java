@@ -57,7 +57,7 @@ for the analytics _priority_ param has been added.
 * http://issues.couchbase.com/browse/JCBC-1233[JCBC-1233],
 http://issues.couchbase.com/browse/JCBC-1234[JCBC-1234],
 http://issues.couchbase.com/browse/JCBC-1235[JCBC-1235]: various
-smaller enhacements overall to improve the analytics experience. 
+smaller enhancements overall to improve the analytics experience. 
 
 === Fixed Issues
 
