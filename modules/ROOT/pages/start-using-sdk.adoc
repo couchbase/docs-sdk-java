@@ -32,7 +32,7 @@ The `java-client` dependency will pull in two more transitive dependencies.
 One is called `com.couchbase.client.core-io` and is a internal dependency which performs all the underlying tasks like IO and cluster management.
 The other dependency is `RxJava` which is both used internally and exposed as a first-class API to the user in order to perform scalable and performant asynchronous, reactive operations.
 
-Information on new features, fixes, known issues as well as information on how to install older release versions is xref:https://developer.couchbase.com/server/other-products/release-notes-archives/java-sdk[in the release notes].
+Information on new features, fixes, known issues as well as information on how to install older release versions is link:https://developer.couchbase.com/server/other-products/release-notes-archives/java-sdk[in the release notes].
 You will also find other install options there, including a zip file which includes all transitive dependencies and Javadocs.
 
 [#java-using-sdk]
