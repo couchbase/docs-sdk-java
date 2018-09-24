@@ -49,4 +49,4 @@
 * xref:compatibility-versions-features.adoc[Compatibility]
 * xref:sdk-licenses.adoc[Licenses]
 * xref:get-involved.adoc[Get involved]
- ** xref:/contribute/index.adoc[Improve the Docs]
+ ** https://docs.couchbase.com/home/contribute/index.html[Improve the Docs]
