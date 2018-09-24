@@ -381,6 +381,7 @@ The supported and tested dependencies for this release are:
 
 It can be loaded from our prerelease maven repository:
 
+[source,xml]
 ....
 <dependencies>
     <dependency>
