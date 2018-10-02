@@ -1,1 +1,1 @@
-2.7@java-sdk::page$relnotes-java-sdk.adoc#version-2-5-9-7-june-2018[]
+include::java-sdk::page$relnotes-java-sdk.adoc[]
