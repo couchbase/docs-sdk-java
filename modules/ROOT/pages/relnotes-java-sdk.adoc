@@ -19,7 +19,7 @@ coordinates are:
    <dependency>
      <groupId>com.couchbase.client</groupId>
      <artifactId>java-client</artifactId>
-     <version>2.6.2</version>
+     <version>2.7.0</version>
    </dependency>
  </dependencies>
 ----
@@ -30,6 +30,61 @@ internal dependency which performs all the underlying tasks like IO and
 cluster management. The other dependency is RxJava which is both used
 internally and exposed as a first-class API to the user in order to
 perform scalable and performant asynchronous, reactive operations.
+
+== Version 2.7.0 (2 October 2018)
+
+Version 2.7.0 is the first stable release of the 2.7 series, bringing new
+features, enhancements and bugfixes over the last stable release.
+
+http://packages.couchbase.com/clients/java/2.7.0/Couchbase-Java-Client-2.6.2.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.0/[API
+Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-1.7.0/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:2.7.0**
+* com.couchbase.client:**core-io:1.7.0**
+* io.reactivex:**rxjava:1.3.8**
+* io.opentracing:**opentracing-api:0.31.0**
+
+=== Enhancements & New Features
+
+* http://issues.couchbase.com/browse/JVMCBC-571[JVMCBC-571]: Switched to the official 
+endpoint for querying (from /query/service to /analytics/service).
+* http://issues.couchbase.com/browse/JVMCBC-575[JVMCBC-575]: Expose HTTP Status code 
+as part of Search response for java-client to act on it.
+* http://issues.couchbase.com/browse/JVMCBC-576[JVMCBC-576]: Allow to override the TLS 
+protocol version used, for example TLS 1.2 must be forced in Java 7.
+* http://issues.couchbase.com/browse/JVMCBC-570[JVMCBC-570]: Switched to the new 
+performant endpoint for Analytics service keep alive requests (from /analytics/version 
+to /admin/ping).
+* http://issues.couchbase.com/browse/JVMCBC-572[JVMCBC-572]: Add the document key to 
+the span as tag if log redaction is not enabled.
+* http://issues.couchbase.com/browse/JCBC-1244[JCBC-1244]: Expose the count of processed 
+objects returned in the query metrics.
+* http://issues.couchbase.com/browse/JCBC-916[JCBC-916]: Allow to configure 
+ejection/eviction policy on bucket settings.
+* http://issues.couchbase.com/browse/JCBC-1245[JCBC-1245]: Add better defaults in 
+BucketSettings for RAM Quota and not requiring bucket password (for use with RBAC).
+* http://issues.couchbase.com/browse/JCBC-1195[JCBC-1195]: Allow to configure different 
+compression modes (off/active/passive) on bucket settings.
+* http://issues.couchbase.com/browse/JCBC-1232[JCBC-1232]: FTS now honors the memory quota 
+specified and responds with status code 429 if the quota is full. Add exponential 
+backoff and retry the query in such a failure.
+* http://issues.couchbase.com/browse/JCBC-1248[JCBC-1248]: Transparently retry certain 
+retryable error codes as identified by sdk-rfc for Analytics queries.
+
+=== Fixed Issues
+
+* http://issues.couchbase.com/browse/JVMCBC-566[JVMCBC-566]: Signals on refresh 
+intervals would be sent to both carrier and http refresher, which is a Noop in http 
+refresher. Limit the refresh signals only to the carrier refresher.
+* http://issues.couchbase.com/browse/JVMCBC-567[JVMCBC-567]: OnDemand service connections 
+can still be in connected state when the service is removed. Fix the disconnect logic to 
+be similar to pooled service.
+* http://issues.couchbase.com/browse/JVMCBC-565[JVMCBC-565]: Half open http config stream 
+can go undetected. Update to proactively fetching config from http configuration provider 
+similar to carrier refresher on refresh signals. This handles the half open connection state 
+in a less penalizing way than recreating a connection on idle timeout.
 
 == Version 2.6.2 (4 September 2018)
 
