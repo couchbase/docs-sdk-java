@@ -33,7 +33,7 @@ perform scalable and performant asynchronous, reactive operations.
 
 == Version 2.7.0 (2 October 2018)
 
-Version 2.7.0 is the first stable release of the 2.7 series, bringing new
+Version 2.7.0 is the first release of the 2.7 series, bringing new
 features, enhancements and bugfixes over the last stable release.
 
 http://packages.couchbase.com/clients/java/2.7.0/Couchbase-Java-Client-2.7.0.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.0/[API
@@ -48,8 +48,13 @@ The supported and tested dependencies for this release are:
 
 === Enhancements & New Features
 
+The major enhancements are
+ * Committed Analytics query interface using official endpoint for querying and direct
+   endpoint for keep alives rather than the proxying, which is more performant.
+ * Additional configuration capabilties in Bucket Settings builder with better defaults. 
+
 * http://issues.couchbase.com/browse/JVMCBC-571[JVMCBC-571]: Switched to the official 
-endpoint for querying (from /query/service to /analytics/service).
+endpoint for querying Analytics service (from /query/service to /analytics/service).
 * http://issues.couchbase.com/browse/JVMCBC-575[JVMCBC-575]: Expose HTTP Status code 
 as part of Search response for java-client to act on it.
 * http://issues.couchbase.com/browse/JVMCBC-576[JVMCBC-576]: Allow to override the TLS 
@@ -60,7 +65,7 @@ to /admin/ping).
 * http://issues.couchbase.com/browse/JVMCBC-572[JVMCBC-572]: Add the document key to 
 the span as tag if log redaction is not enabled.
 * http://issues.couchbase.com/browse/JCBC-1244[JCBC-1244]: Expose the count of processed 
-objects returned in the query metrics.
+objects returned in the Analytics query metrics.
 * http://issues.couchbase.com/browse/JCBC-916[JCBC-916]: Allow to configure 
 ejection/eviction policy on bucket settings.
 * http://issues.couchbase.com/browse/JCBC-1245[JCBC-1245]: Add better defaults in 
