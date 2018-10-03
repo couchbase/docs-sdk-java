@@ -40,7 +40,7 @@
 * xref:collecting-information-and-logging.adoc[Collecting Information]
 
 .Project Docs
-* xref:relnotes-java-sdk.adoc[Release Notes]
+* xref:relnotes-java-sdk.adoc#version-2-5-9-7-june-2018[Release Notes]
 * xref:compatibility-versions-features.adoc[Compatibility]
 * xref:sdk-licenses.adoc[Licenses]
 * xref:get-involved.adoc[Get involved]
