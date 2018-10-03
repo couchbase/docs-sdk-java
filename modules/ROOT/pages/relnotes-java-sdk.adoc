@@ -1,0 +1,1 @@
+include::java-sdk::page$relnotes-java-sdk.adoc[]
