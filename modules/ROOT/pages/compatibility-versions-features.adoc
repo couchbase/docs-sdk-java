@@ -16,9 +16,9 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 
 .Recommended SDK per Server Version Matrix
 [#table_sdk_versions]
-[cols="3,2,2,2,2"]
+[cols="40,25,25,20,20"]
 |===
-| | *SDK 2.2, 2.3* | *SDK 2.4, 2.5* | *SDK 2.6* | *SDK 2.7*
+| | SDK 2.2, 2.3 | SDK 2.4, 2.5 | SDK 2.6 | SDK 2.7
 
 | *Server 4.0-4.5*
 | ◎
@@ -52,20 +52,20 @@ To take advantage of all features offered by Couchbase Server, you need to know 
 The following matrix shows which versions of the Couchbase Java SDK support the major features of each version of Couchbase Server.
 
 .Couchbase Server and SDK Supported Version Matrix
-[cols="5,2,2,2,2"]
+[cols="<25,.^23,.^24,.^18,.^19"]
 |===
 | | Server 4.0, 4.1 | Server 4.5, 4.6 | Server 5.x | Server 6.0
 
 5+| *Basic Features*
 
 | CRUD Operations
-5+| All Versions
+4+| All Versions
 
 | View Querying APIs
-5+| All Versions
+4+| All Versions
 
 | Geospatial Views
-5+| All Versions
+4+| All Versions
 
 5+| *Advanced Features*
 
@@ -128,7 +128,7 @@ The following matrix shows which versions of the Couchbase Java SDK support the 
 4+| All Versions
 |===
 
-IMPORTANT: With sdk-authentication-overview.adoc[RBAC^], in Couchbase Server 5.0, authentication will depend upon access privileges, and upgrading to 5.0 with existing buckets, or upgrading Server, will require taking these changes into account.
+IMPORTANT: With xref:sdk-authentication-overview.adoc[RBAC], in Couchbase Server 5.0, authentication will depend upon access privileges, and upgrading to 5.0 with existing buckets, or upgrading Server, will require taking these changes into account.
 
 [#jdk-compat]
 == JDK Version Compatibility
