@@ -121,6 +121,10 @@ The following matrix shows which versions of the Couchbase Java SDK support the 
 2+| Not Supported
 2+| Since 2.4
 
+| Analytics
+2+| Not supported
+| DP in 5.5 with 2.6
+| Since 2.7
 
 5+| *Administrative Features*
 
