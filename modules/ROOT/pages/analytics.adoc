@@ -8,7 +8,7 @@
 == Availability
 
 Available as a preview in previous releases, Analytics becomes generally available in Couchbase Data Platform 6.0, and the stable interface is available from recent versions of the SDK. 
-See the xref:relnotes.adoc[Release Notes], and xref:analytics-using-the-sdk.adoc for details of which release.
+See the xref:relnotes-java-sdk.adoc[Release Notes], and xref:analytics-using-sdk.adoc for details of which release.
 
 
 
@@ -123,7 +123,7 @@ bucket.query(AnalyticsQuery query)
 
 The query structure itself is composed of the following (optional in brackets):
 
-[source,json]
+[source]
 ----
 struct AnalyticsQuery {
     statement: String,
