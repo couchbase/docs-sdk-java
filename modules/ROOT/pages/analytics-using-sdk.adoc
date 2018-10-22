@@ -1,0 +1,121 @@
+= Analytics using the Java SDK
+:page-topic-type: howto
+:page-edition: Enterprise Edition:
+
+[abstract]
+
+
+== Availability
+
+Analytics is available in Couchbase Data Platform 6.0 (Developer Preview in 5.5), from Java SDK version 2.6.0 - with committed Analytics query interface using official endpoint from Java SDK version 2.7.0.
+
+
+
+== Bucket-Level API
+
+This code snippet illustrates using the async mode of execution for long running queries - 
+a handle will be returned immediately that can be used both to check the status of the computation, and to retrieve the results once finished.
+
+
+[source,java]
+''''
+Observable<AsyncAnalyticsQueryResult> query(AnalyticsQuery query);
+Observable<AsyncAnalyticsQueryResult> query(AnalyticsQuery query, long timeout, TimeUnit timeUnit);
+''''
+
+The non-async equivalent is:
+
+[source,java]
+''''
+AnalyticsQueryResult query(AnalyticsQuery query);
+AnalyticsQueryResult query(AnalyticsQuery query, long timeout, TimeUnit timeUnit);
+AnalyticsQuery struct/object
+''''
+
+=== Struct/Object
+
+For `AnalyticsQuery`:
+
+[source,java]
+''''
+class AnalyticsQuery {
+
+
+    SimpleAnalyticsQuery simple(final String statement);
+    SimpleAnalyticsQuery simple(final String statement, final AnalyticsParams params);
+
+    ParameterizedAnalyticsQuery parameterized(final String statement,
+        final JsonArray positionalParams);
+    ParameterizedAnalyticsQuery parameterized(final String statement,
+        final JsonArray positionalParams, final AnalyticsParams params);
+    static ParameterizedAnalyticsQuery parameterized(final String statement,
+        final JsonObject namedParams);
+    ParameterizedAnalyticsQuery parameterized(final String statement,
+        final JsonObject namedParams, final AnalyticsParams params);
+
+}
+''''
+
+And for `AnalyticsParams`:
+
+[source,java]
+''''
+class AnalyticsParams {
+    AnalyticsParams withContextId(String clientContextId);
+    AnalyticsParams serverSideTimeout(long timeout, TimeUnit unit);
+    AnalyticsParams rawParam(String name, Object value);
+    AnalyticsParams pretty(boolean pretty);
+    AnalyticsParams priority(boolean priority);    
+}
+''''
+
+
+=== Getting Results
+
+Using `AnalyticsQueryResult` and  rows:
+
+[source,java]
+''''
+interface AnalyticsQueryResult {
+    List<AnalyticsQueryRow> allRows();
+    Iterator<AnalyticsQueryRow> rows();
+    Object signature();
+    AnalyticsMetrics info();
+    boolean parseSuccess();
+    boolean finalSuccess();
+    String status();
+
+    // Note: right now warnings are folded into the errors
+    // object because of limitations in the streaming parser
+    // which we can lift in the future.
+    List<JsonObject> errors();
+
+    String requestId();
+    String clientContextId();
+}
+
+interface AnalyticsQueryRow {
+    byte[] byteValue();
+    JsonObject value();
+}
+''''
+
+
+=== Metrics with `AnalyticsMetrics`
+
+[source,java]
+''''
+class AnalyticsMetrics {
+    String elapsedTime();
+    String executionTime();
+    int sortCount();
+    int resultCount();
+    long resultSize();
+    int mutationCount();
+    int errorCount();
+    int warningCount();
+    long processedObjects();
+}
+''''
+
+

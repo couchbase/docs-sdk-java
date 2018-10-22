@@ -1,0 +1,209 @@
+= Analytics from the SDK
+:page-topic-type: concept
+:page-edition: Enterprise Edition:
+
+[abstract]
+
+
+== Availability
+
+Available as a preview in previous releases, Analytics becomes generally available in Couchbase Data Platform 6.0, and the stable interface is available from recent versions of the SDK. 
+See the relnotes.adoc[Release Notes], and xref:analytics-using-the-sdk.adoc for details of which release.
+
+
+
+
+
+== N1QL for Analytics: Querying Your Analytics Data
+
+
+
+https://docs.couchbase.com/server/6.0/analytics/1_intro.html [N1QL for Analytics]  
+is a Couchbase implementation of emerging SQL-for-JSON query language specification called SQL++.
+It is designed for the nested, schemaless, or schema-optional world of NoSQL systems, and the JSON data model.
+It offers many features above and beyond xref:6.0@analytics:6_n1ql.html[N1QL for Query].
+
+Take a look at xref:6.0@analytics:primer-beer.adoc#Querying_your_analytics_data[our Analytics primer page] for an introduction to running ad hoc queries with N1QL for Analytics.
+
+
+
+
+
+== Under the Hood
+
+The SDKs distribute analytics queries across the MDS-enabled analytics nodes, using the round robin strategy.
+The SDK sends analytics queries to nodes where the service identifier is exposed. 
+The default ports are 8095 (``cbas``), and for TLS 18095 (``cbasSSL``).
+
+=== Request Format
+The SDK sends the following headers at query time:
+
+[source,json]
+''''
+Content-Type: application/json
+User-Agent: SDK identifier, similar to other services like N1QL.
+''''
+
+And optionally, if the priority flag is present:
+
+[source]
+''''
+Analytics-Priority: -1
+''''
+This will return the payload as a JSON body with the following fields:
+
+|===
+[cols=".^2,.^1,.^1,6"]
+|Field Name | Required | Type | Description
+
+| statement | yes | string | Contains the actual query
+| timeout | yes | string | not required by the server, but the SDK must always set it to the client side timeout. Uses the "go notation" exactly like N1QL
+| client | context_id | yes | string	not required by the server, but SDK must always set it so it can be properly used for tracing (a UUID)
+| pretty | no | boolean | if set to true, output will be nicely formatted
+| args | no | array of json values | present if positional parameters are used
+| $ | no | any json type | present if named parameters are used
+|===
+
+Optional (non-required) fields are only present in the JSON body if explicitly provided/set by the user.
+
+=== Examples
+
+Here is an example request payload (formatted here for clarity):
+
+[source,json]
+''''
+{
+  "statement": "select 1=1",
+  "timeout":"75000ms",
+  "client_context_id": "bfebf0ad-e022-43b5-95b3-ff345ef6adb6",
+  "pretty": true
+}  
+''''
+
+And the response format (all fields may not be present at all time):
+
+[source,json]
+''''
+{
+	"requestID": "a1c4115c-792b-491e-8604-00ab9c12aea6",
+    "clientContextID": "...",
+	"signature": "*",
+	"results": [ ],
+      "errors": [ ],
+      "warnings": [ ],
+	"status": "...",
+     "handle": "...",
+	"metrics": {
+		"elapsedTime": "22.998514ms",
+		"executionTime": "16.47064ms",
+		"resultCount": 1,
+		"resultSize": 18,
+		"processedObjects": 0,
+           "mutationCount": 0,
+           "sortCount": 0,
+           "errorCount": 0,
+           "warningCount": 0
+	}
+}
+''''
+
+==== Exceptions
+
+Fields in the metrics might or might not be present, so make sure the code always has a sensible default value ready (`optional`, `0`, `null`, ...).
+
+== Request API
+
+The API closely mirrors what the SDK already exposes for N1QL. 
+Familiarity there will enable you to get up and running very quickly.
+
+If the language supports overloads, an analytics overload for the query should be provided. i.e here in Java:
+
+[source,java]
+''''
+bucket.query(AnalyticsQuery query)
+// bucket.query(N1qlQuery query)
+''''
+
+The query structure itself is composed of the following (optional in brackets):
+
+[source,json]
+''''
+struct AnalyticsQuery {
+    statement: String,
+    params: AnalyticsParams,
+    [named_params: Map[String, String]],
+    [positional_params: List[String]],
+}
+''''
+
+=== Parameterized Queries
+
+For parameterized queries, named and positional params must be mutually exclusive.
+
+Because named params must have the $-sign set on the wire, the SDK must check the param and append a $-sign if not already present. This increases developer productivity.
+
+The `AnalyticsParams` should reflect the properties available to configure. Follow the builder/construction pattern that is already used for N1QL queries as well.
+
+[source,json]
+''''
+struct AnalyticsParams {
+    serverSideTimeout: Duration,
+    withContextId: String,
+    rawParam: (String, Object),
+    pretty: boolean,
+    priority: boolean
+}
+''''
+
+These params are all optional and can be used to override the defaults. Note that the naming of these fields should match the N1QL ones (even if for example `withContextId` translates to `client_context_id` on the wire).
+
+Note that `rawParam` is used as an escape hatch to future-proof the API. This allows the user to pass in properties which are currently intentionally not exposed but accepted by the server (or will be in the future).
+
+== Response API
+
+The response API should follow the N1QL API closely, exposing a `AnalyticsQueryResult` which contains the results as well as any metadata associated:
+
+[source,json]
+''''
+struct AnalyticsQueryResult {
+    rows: Iterable[AnalyticsQueryRow],
+    errors: Iterable[JsonObject],
+    warnings: Iterable[JsonObject],
+    signature: Object,
+    requestId: String,
+    clientContextId: String,
+    status: String,
+    info: AnalyticsMetrics,
+}
+''''
+
+Since errors and warnings might contain free-form data it makes sense to expose them as a generic "json object".
+
+The `AnalyticsQueryRow` contains the actual JSON data, so in languages where JSON is a first-class construct it can be exposed directly.
+
+[source,json]
+''''
+struct AnalyticsQueryRow {
+    value: JsonObject
+}
+''''
+
+Finally, `AnalyticsMetrics` should provide typed access to the fields:
+
+[source,json]
+''''
+struct AnalyticsMetrics {
+    elapsedTime: string,
+    executionTime: string,
+    resultCount: uint,
+    resultSize: uint,
+    processedObjects: uint,
+    mutationCount: uint,
+    sortCount: uint,
+    errorCount": uint,
+    warningCount: uint
+}
+''''
+
+The following fields are optional: `mutationCount`, `sortCount`, `errorCount`, `warningCount`.
+
