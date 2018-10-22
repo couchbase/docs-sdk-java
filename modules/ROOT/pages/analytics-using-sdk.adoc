@@ -18,26 +18,26 @@ a handle will be returned immediately that can be used both to check the status 
 
 
 [source,java]
-''''
+----
 Observable<AsyncAnalyticsQueryResult> query(AnalyticsQuery query);
 Observable<AsyncAnalyticsQueryResult> query(AnalyticsQuery query, long timeout, TimeUnit timeUnit);
-''''
+----
 
 The non-async equivalent is:
 
 [source,java]
-''''
+----
 AnalyticsQueryResult query(AnalyticsQuery query);
 AnalyticsQueryResult query(AnalyticsQuery query, long timeout, TimeUnit timeUnit);
 AnalyticsQuery struct/object
-''''
+----
 
 === Struct/Object
 
 For `AnalyticsQuery`:
 
 [source,java]
-''''
+----
 class AnalyticsQuery {
 
 
@@ -54,12 +54,12 @@ class AnalyticsQuery {
         final JsonObject namedParams, final AnalyticsParams params);
 
 }
-''''
+----
 
 And for `AnalyticsParams`:
 
 [source,java]
-''''
+----
 class AnalyticsParams {
     AnalyticsParams withContextId(String clientContextId);
     AnalyticsParams serverSideTimeout(long timeout, TimeUnit unit);
@@ -67,7 +67,7 @@ class AnalyticsParams {
     AnalyticsParams pretty(boolean pretty);
     AnalyticsParams priority(boolean priority);    
 }
-''''
+----
 
 
 === Getting Results
@@ -75,7 +75,7 @@ class AnalyticsParams {
 Using `AnalyticsQueryResult` and  rows:
 
 [source,java]
-''''
+----
 interface AnalyticsQueryResult {
     List<AnalyticsQueryRow> allRows();
     Iterator<AnalyticsQueryRow> rows();
@@ -98,13 +98,13 @@ interface AnalyticsQueryRow {
     byte[] byteValue();
     JsonObject value();
 }
-''''
+----
 
 
 === Metrics with `AnalyticsMetrics`
 
 [source,java]
-''''
+----
 class AnalyticsMetrics {
     String elapsedTime();
     String executionTime();
@@ -116,6 +116,6 @@ class AnalyticsMetrics {
     int warningCount();
     long processedObjects();
 }
-''''
+----
 
 

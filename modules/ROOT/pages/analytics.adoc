@@ -8,7 +8,7 @@
 == Availability
 
 Available as a preview in previous releases, Analytics becomes generally available in Couchbase Data Platform 6.0, and the stable interface is available from recent versions of the SDK. 
-See the relnotes.adoc[Release Notes], and xref:analytics-using-the-sdk.adoc for details of which release.
+See the xref:relnotes.adoc[Release Notes], and xref:analytics-using-the-sdk.adoc for details of which release.
 
 
 
@@ -18,14 +18,11 @@ See the relnotes.adoc[Release Notes], and xref:analytics-using-the-sdk.adoc for 
 
 
 
-https://docs.couchbase.com/server/6.0/analytics/1_intro.html [N1QL for Analytics]  
-is a Couchbase implementation of emerging SQL-for-JSON query language specification called SQL++.
+xref:6.0@analytics::1_intro.html[N1QL for Analytics] is a Couchbase implementation of emerging SQL-for-JSON query language specification called SQL++.
 It is designed for the nested, schemaless, or schema-optional world of NoSQL systems, and the JSON data model.
-It offers many features above and beyond xref:6.0@analytics:6_n1ql.html[N1QL for Query].
+It offers many features above and beyond xref:6.0@analytics::6_n1ql.html[N1QL for Query].
 
-Take a look at xref:6.0@analytics:primer-beer.adoc#Querying_your_analytics_data[our Analytics primer page] for an introduction to running ad hoc queries with N1QL for Analytics.
-
-
+Take a look at xref:6.0@analytics::primer-beer.adoc#Querying_your_analytics_data[our Analytics primer page] for an introduction to running ad hoc queries with N1QL for Analytics.
 
 
 
@@ -39,21 +36,21 @@ The default ports are 8095 (``cbas``), and for TLS 18095 (``cbasSSL``).
 The SDK sends the following headers at query time:
 
 [source,json]
-''''
+----
 Content-Type: application/json
 User-Agent: SDK identifier, similar to other services like N1QL.
-''''
+----
 
 And optionally, if the priority flag is present:
 
 [source]
-''''
+----
 Analytics-Priority: -1
-''''
+----
 This will return the payload as a JSON body with the following fields:
 
-|===
 [cols=".^2,.^1,.^1,6"]
+|===
 |Field Name | Required | Type | Description
 
 | statement | yes | string | Contains the actual query
@@ -71,19 +68,19 @@ Optional (non-required) fields are only present in the JSON body if explicitly p
 Here is an example request payload (formatted here for clarity):
 
 [source,json]
-''''
+----
 {
   "statement": "select 1=1",
   "timeout":"75000ms",
   "client_context_id": "bfebf0ad-e022-43b5-95b3-ff345ef6adb6",
   "pretty": true
 }  
-''''
+----
 
 And the response format (all fields may not be present at all time):
 
 [source,json]
-''''
+----
 {
 	"requestID": "a1c4115c-792b-491e-8604-00ab9c12aea6",
     "clientContextID": "...",
@@ -105,7 +102,7 @@ And the response format (all fields may not be present at all time):
            "warningCount": 0
 	}
 }
-''''
+----
 
 ==== Exceptions
 
@@ -119,22 +116,22 @@ Familiarity there will enable you to get up and running very quickly.
 If the language supports overloads, an analytics overload for the query should be provided. i.e here in Java:
 
 [source,java]
-''''
+----
 bucket.query(AnalyticsQuery query)
 // bucket.query(N1qlQuery query)
-''''
+----
 
 The query structure itself is composed of the following (optional in brackets):
 
 [source,json]
-''''
+----
 struct AnalyticsQuery {
     statement: String,
     params: AnalyticsParams,
     [named_params: Map[String, String]],
     [positional_params: List[String]],
 }
-''''
+----
 
 === Parameterized Queries
 
@@ -145,7 +142,7 @@ Because named params must have the $-sign set on the wire, the SDK must check th
 The `AnalyticsParams` should reflect the properties available to configure. Follow the builder/construction pattern that is already used for N1QL queries as well.
 
 [source,json]
-''''
+----
 struct AnalyticsParams {
     serverSideTimeout: Duration,
     withContextId: String,
@@ -153,7 +150,7 @@ struct AnalyticsParams {
     pretty: boolean,
     priority: boolean
 }
-''''
+----
 
 These params are all optional and can be used to override the defaults. Note that the naming of these fields should match the N1QL ones (even if for example `withContextId` translates to `client_context_id` on the wire).
 
@@ -164,7 +161,7 @@ Note that `rawParam` is used as an escape hatch to future-proof the API. This al
 The response API should follow the N1QL API closely, exposing a `AnalyticsQueryResult` which contains the results as well as any metadata associated:
 
 [source,json]
-''''
+----
 struct AnalyticsQueryResult {
     rows: Iterable[AnalyticsQueryRow],
     errors: Iterable[JsonObject],
@@ -175,23 +172,23 @@ struct AnalyticsQueryResult {
     status: String,
     info: AnalyticsMetrics,
 }
-''''
+----
 
 Since errors and warnings might contain free-form data it makes sense to expose them as a generic "json object".
 
 The `AnalyticsQueryRow` contains the actual JSON data, so in languages where JSON is a first-class construct it can be exposed directly.
 
 [source,json]
-''''
+----
 struct AnalyticsQueryRow {
     value: JsonObject
 }
-''''
+----
 
 Finally, `AnalyticsMetrics` should provide typed access to the fields:
 
 [source,json]
-''''
+----
 struct AnalyticsMetrics {
     elapsedTime: string,
     executionTime: string,
@@ -203,7 +200,7 @@ struct AnalyticsMetrics {
     errorCount": uint,
     warningCount: uint
 }
-''''
+----
 
 The following fields are optional: `mutationCount`, `sortCount`, `errorCount`, `warningCount`.
 
