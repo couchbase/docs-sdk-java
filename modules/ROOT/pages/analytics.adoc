@@ -141,7 +141,7 @@ Because named params must have the $-sign set on the wire, the SDK must check th
 
 The `AnalyticsParams` should reflect the properties available to configure. Follow the builder/construction pattern that is already used for N1QL queries as well.
 
-[source,json]
+[source]
 ----
 struct AnalyticsParams {
     serverSideTimeout: Duration,
@@ -160,7 +160,7 @@ Note that `rawParam` is used as an escape hatch to future-proof the API. This al
 
 The response API should follow the N1QL API closely, exposing a `AnalyticsQueryResult` which contains the results as well as any metadata associated:
 
-[source,json]
+[source]
 ----
 struct AnalyticsQueryResult {
     rows: Iterable[AnalyticsQueryRow],
@@ -178,7 +178,7 @@ Since errors and warnings might contain free-form data it makes sense to expose 
 
 The `AnalyticsQueryRow` contains the actual JSON data, so in languages where JSON is a first-class construct it can be exposed directly.
 
-[source,json]
+[source]
 ----
 struct AnalyticsQueryRow {
     value: JsonObject
@@ -187,7 +187,7 @@ struct AnalyticsQueryRow {
 
 Finally, `AnalyticsMetrics` should provide typed access to the fields:
 
-[source,json]
+[source]
 ----
 struct AnalyticsMetrics {
     elapsedTime: string,
