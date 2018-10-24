@@ -1,1 +1,1 @@
-include::6.0@sdk:pages:partial$webui-cli-access.adoc[]
+include::5.5@sdk:pages:partial$webui-cli-access.adoc[]
