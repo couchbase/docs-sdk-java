@@ -204,3 +204,8 @@ struct AnalyticsMetrics {
 
 The following fields are optional: `mutationCount`, `sortCount`, `errorCount`, `warningCount`.
 
+== Restrictions
+
+In Couchbase Data Platform 6.0, Analytics only support index creation when a shadow dataset has no open connections. 
+
+
