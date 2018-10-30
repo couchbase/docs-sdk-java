@@ -7,115 +7,115 @@
 
 == Availability
 
-Analytics is available in Couchbase Data Platform 6.0 (Developer Preview in 5.5), from Java SDK version 2.6.0 - with committed Analytics query interface using official endpoint from Java SDK version 2.7.0.
+Available as a preview in previous releases, Analytics becomes generally available in Couchbase Data Platform 6.0, and the stable interface is available from recent versions of the SDK. 
 
+The analytics service is available in Couchbase DAta Platform 6.0 and later (developer preview in 5.5). While earlier Java SDK versions provide some support, we strongly recommend to use at least version 2.7.0, which provides a committed and stable interface for it.
 
+== Usage: Performing a Request
 
-== Bucket-Level API
-
-This code snippet illustrates using the async mode of execution for long running queries - 
-a handle will be returned immediately that can be used both to check the status of the computation, and to retrieve the results once finished.
-
+Intentionally, the API for analytics is very similar to the query service one. Right now it is only available on the `Bucket` (and `AsyncBucket`):
 
 [source,java]
 ----
-Observable<AsyncAnalyticsQueryResult> query(AnalyticsQuery query);
-Observable<AsyncAnalyticsQueryResult> query(AnalyticsQuery query, long timeout, TimeUnit timeUnit);
-----
-
-The non-async equivalent is:
-
-[source,java]
-----
+/**
+ * Query with the default timeout.
+ */
 AnalyticsQueryResult query(AnalyticsQuery query);
+
+/**
+ * Query with a custom timeout.
+ */
 AnalyticsQueryResult query(AnalyticsQuery query, long timeout, TimeUnit timeUnit);
-AnalyticsQuery struct/object
 ----
 
-=== Struct/Object
+The timeout is always propagated to the server, so when a timeout happens on the client side the server can also stop processing the request and save resources.
 
-For `AnalyticsQuery`:
+To perform a query, you need to create an `AnalyticsQuery` -- which can either be `simple` or be `parameterized`. If parameters are used, they can either be `positional` or `named`. Here is one example of each:
 
 [source,java]
 ----
-class AnalyticsQuery {
+AnalyticsQuery simple = AnalyticsQuery.simple(
+    "select airportname, country from airports where country = 'France'"
+);
 
+AnalyticsQuery positional = AnalyticsQuery.parameterized(
+    "select airportname, country from airports where country = ?",
+    JsonArray.from("France")
+);
 
-    SimpleAnalyticsQuery simple(final String statement);
-    SimpleAnalyticsQuery simple(final String statement, final AnalyticsParams params);
-
-    ParameterizedAnalyticsQuery parameterized(final String statement,
-        final JsonArray positionalParams);
-    ParameterizedAnalyticsQuery parameterized(final String statement,
-        final JsonArray positionalParams, final AnalyticsParams params);
-    static ParameterizedAnalyticsQuery parameterized(final String statement,
-        final JsonObject namedParams);
-    ParameterizedAnalyticsQuery parameterized(final String statement,
-        final JsonObject namedParams, final AnalyticsParams params);
-
-}
+AnalyticsQuery named = AnalyticsQuery.parameterized(
+    "select airportname, country from airports where country = $country",
+    JsonObject.create().put("country", "France")
+);
 ----
 
-And for `AnalyticsParams`:
+Additional options are available at query time which can be passed in through the `AnalyticsParams` object:
+
+.Analytics Params Reference
+[#java-analytics-params-ref]
+|===
+| Name | Builder | Default | Description
+
+| Client Context ID
+| `withContextId(String)`
+| Random UUID
+| Sets a context ID that is returned back as part of the result.
+
+| Server Side Timeout
+| `serverSideTimeout(long, TimeUnit)`
+| Analytics timeout set on the client (75s)
+| Customizes the timeout sent to the server. Usually does not have to be set because the client sets it based on the timeout on the operation.
+
+| Pretty
+| `pretty(boolean)`
+| false
+| If the returned result should be prettified JSON.
+
+| Priority
+| `priority(boolean)`
+| false
+| If this request should have priority over others.
+
+| Raw Param
+| `rawParam(String, Object)`
+| none
+| Allows to send arbitrary params to the analytics service which are not part of the builder API.
+
+|===
+
+These params must be sent as part of the query:
 
 [source,java]
 ----
-class AnalyticsParams {
-    AnalyticsParams withContextId(String clientContextId);
-    AnalyticsParams serverSideTimeout(long timeout, TimeUnit unit);
-    AnalyticsParams rawParam(String name, Object value);
-    AnalyticsParams pretty(boolean pretty);
-    AnalyticsParams priority(boolean priority);    
-}
+AnalyticsQuery q = AnalyticsQuery.simple(
+    "select airportname, country from airports where country = 'France'",
+    AnalyticsParams.build().priority(true)
+);
 ----
 
+== Usage: Handling the Response
 
-=== Getting Results
-
-Using `AnalyticsQueryResult` and  rows:
+Once the request has been executed, results are sent back to the client and it will return an `AnalyticsQueryResult` (or its asynchronous counterpart on the `AsyncBucket`):
 
 [source,java]
 ----
-interface AnalyticsQueryResult {
-    List<AnalyticsQueryRow> allRows();
-    Iterator<AnalyticsQueryRow> rows();
-    Object signature();
-    AnalyticsMetrics info();
-    boolean parseSuccess();
-    boolean finalSuccess();
-    String status();
-
-    // Note: right now warnings are folded into the errors
-    // object because of limitations in the streaming parser
-    // which we can lift in the future.
-    List<JsonObject> errors();
-
-    String requestId();
-    String clientContextId();
-}
-
-interface AnalyticsQueryRow {
-    byte[] byteValue();
-    JsonObject value();
-}
+AnalyticsQueryResult result = bucket.query(query);
 ----
 
-
-=== Metrics with `AnalyticsMetrics`
+The result contains all kinds of actual data and metadata which might or might not be set, depending on the query response.  Before attempting to iterate the rows, it is usually a good idea to check with `finalSuccess()` if the result was successful. Here is an example:
 
 [source,java]
 ----
-class AnalyticsMetrics {
-    String elapsedTime();
-    String executionTime();
-    int sortCount();
-    int resultCount();
-    long resultSize();
-    int mutationCount();
-    int errorCount();
-    int warningCount();
-    long processedObjects();
+AnalyticsQueryResult result = bucket.query(AnalyticsQuery.simple(
+    "SELECT airportname, country FROM airports WHERE country = 'France' LIMIT 5"
+));
+if (result.finalSuccess()) {
+    for (AnalyticsQueryRow row : result) {
+        System.out.println(row.value());
+    }
 }
 ----
 
+Instead of iterating the result directly, you can consume either `rows()` through an `Iterator`, or `allRows()` which returns them as a `List`.
 
+Should `finalSuccess()` return `false`, the specific error can be found in the `errors()` result. Since there might be more than one error it returns a `List<JsonObject>`. Additional metrics can be accessed through the `info()` method, such as `elapsedTime` or the `resultCount`.
