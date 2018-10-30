@@ -16,24 +16,31 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 
 .Recommended SDK per Server Version Matrix
 [#table_sdk_versions]
+[cols="40,25,25,20,20"]
 |===
-| | *SDK 2.0* | *SDK 2.1* | *SDK 2.2, 2.3, 2.4* | *SDK 2.5*
+| | SDK 2.2, 2.3 | SDK 2.4, 2.5 | SDK 2.6 | SDK 2.7
 
-| *Server 3.1*
+| *Server 4.0-4.5*
 | ◎
+| *✔*
+| *✔*
+| *✔*
+
+| *Server 4.6*
 | ◎
-| *◎*
+| *✔*
+| *✔*
+| *✔*
+
+| *Server 5.0-5.5*
+| ◎
+| *✔*
+| *✔*
+| *✔*
+
+| *Server 6.0*
 | *✖*
-
-| *Server 4.0-4.6*
-| ◎
-| ◎
 | *✔*
-| *✔*
-
-| *Server 5.0-5.1*
-| ◎
-| ◎
 | *✔*
 | *✔*
 |===
@@ -45,74 +52,87 @@ To take advantage of all features offered by Couchbase Server, you need to know 
 The following matrix shows which versions of the Couchbase Java SDK support the major features of each version of Couchbase Server.
 
 .Couchbase Server and SDK Supported Version Matrix
+[cols="<25,.^23,.^24,.^18,.^19"]
 |===
-| | Server 1.8 | Server 2.0 | Server 2.5 | Server 3.0, 3.1 | Server 4.0, 4.1 | Server 4.5, 4.6 | Server 5.0
+| | Server 4.0, 4.1 | Server 4.5, 4.6 | Server 5.x | Server 6.0
 
-8+| *Basic Features*
+5+| *Basic Features*
 
 | CRUD Operations
-7+| Since 1.0
+4+| All Versions
 
 | View Querying APIs
-7+| Since 1.1
+4+| All Versions
 
 | Geospatial Views
-| Not Supported
-2+| 1.1 - 1.4
-4+| Since 2.1
+4+| All Versions
 
-8+| *Advanced Features*
+5+| *Advanced Features*
 
 | Durability Requirements
-7+| Since 1.1
+4+| Since 1.1
 
 | Carrier Publication Configuration
-2+| Not Supported
-5+| Since 1.4
+4+| All Versions
 
 | SSL Connectivity
-3+| Not Supported
-4+| Since 2.0
+4+| All Versions
 
 | Bulk Operations
-7+| Since 1.0
+4+| All Versions
 
 | N1QL Querying
-4+| Since 2.0 (experimental)
-3+| Since 2.2
+4+| All Versions
 
 | Multi-Dimensional Scaling
-4+| Not Supported
-3+| Since 2.2
+4+| All Versions
 
 | Sub-document API
-5+| Not Supported
-2+| Since 2.3
+4+| Since 2.3
 
 | Full Text Search
-5+| Not Supported
 | Since 2.3 (Experimental)
-| Since 2.4
+3+| Since 2.4
 
-8+| *Administrative Features*
+| Global Secondary Indexes (GSI)
+4+| All Versions
 
-| Datastructures
-5+| Not Supported
+| Memory Optimized Indexes (MOI)
+| Not Supported
+3+| All SDK versions
+
+| Plasma Storage for Indexes
+2+| Not Supported
+2+| All SDK versions
+
+| FTS Index Management from the SDK
+2+| Not Supported
 2+| Since 2.3
 
-| Extended Attributes
-6+| Not Supported
-| Since 2.4
+| Data Structures
+| Not Supported
+3+| Since 2.3
 
-| Administrative API
-7+| Since 1.0
+| Extended Attributes
+2+| Not Supported
+2+| Since 2.4
 
 | RBAC
-6+| Not Supported
-| Since 2.4
+2+| Not Supported
+2+| Since 2.4
+
+| Analytics
+2+| Not supported
+| DP in 5.5 with 2.6
+| Since 2.7
+
+5+| *Administrative Features*
+
+| Administrative API
+4+| All Versions
 |===
 
-IMPORTANT: With https://developer.couchbase.com/documentation/server/5.0/sdk/java/sdk-authentication-overview.html[RBAC^], in Couchbase Server 5.0, authentication will depend upon access privileges, and upgrading to 5.0 with existing buckets, or upgrading Server, will require taking these changes into account.
+IMPORTANT: With xref:sdk-authentication-overview.adoc[RBAC], in Couchbase Server 5.0, authentication will depend upon access privileges, and upgrading to 5.0 with existing buckets, or upgrading Server, will require taking these changes into account.
 
 [#jdk-compat]
 == JDK Version Compatibility
@@ -120,7 +140,7 @@ IMPORTANT: With https://developer.couchbase.com/documentation/server/5.0/sdk/jav
 The Java SDK is tested with the Oracle JDK which should be used for best experience and supportability.
 Other JDK implementations might work but are  not tested and are unsupported.
 
-The following Oracle JDKs are supported for *Java SDK 1.4 and 2.0 - 2.5*:
+The following Oracle JDKs are supported for *Java SDK 1.4 and 2.0 - 2.7*:
 
 * Oracle JDK 1.6
 * Oracle JDK 1.7
@@ -137,21 +157,21 @@ The following table provides an overview.
 .Recommended Spring Data Couchbase per Server Version Matrix
 [#table_spring_versions]
 |===
-| | _SDC 2.1.x_ | _SDC 2.2 & 3.0_
+| | SDC 2.2.x | SDC 3.0 & 3.1
 
 | _Status >_
 | _Bug fixes only_
 | _New Features, Active Development_
 
-| *Server 3.1*
+| *Server 4.x*
 | Compatible
 | *Recommended*
 
-| *Server 4.0-4.6*
+| *Server 5.x*
 | Compatible
 | *Recommended*
 
-| *Server 5.0*
+| *Server 6.0*
 | Compatible
 | *Recommended*
 |===
@@ -199,7 +219,7 @@ It has minimal transitive dependencies (by embedding a few internal dependencies
   <dependency>
     <groupId>com.couchbase.client</groupId>
     <artifactId>java-client</artifactId>
-    <version>2.4.0</version>
+    <version>2.7.0</version>
   </dependency>
 </dependencies>
 ----
