@@ -3,13 +3,15 @@
 :page-edition: Enterprise Edition:
 
 [abstract]
+Parallel data management for complex queries over many records, using a familiar N1QL-like syntax.
 
+
+For complex and long-running queries, involving large ad hoc join, set, aggregation, and grouping operations, Couchbase Data Platform introduces the xref:6.0@server:analytics:introduction.adoc[Couchbase Analytics Service (CBAS)]. 
+After familiarising yourself with our xref:6.0@server:analytics:primer-beer.adoc[introductory primer], try CBAS using the Java SDK.
 
 == Availability
 
-Available as a preview in previous releases, Analytics becomes generally available in Couchbase Data Platform 6.0, and the stable interface is available from recent versions of the SDK. 
-
-The analytics service is available in Couchbase DAta Platform 6.0 and later (developer preview in 5.5). While earlier Java SDK versions provide some support, we strongly recommend to use at least version 2.7.0, which provides a committed and stable interface for it.
+The analytics service is available in Couchbase Data Platform 6.0 and later (developer preview in 5.5). While earlier Java SDK versions provide some support, we strongly recommend to use at least version 2.7.0, which provides a committed and stable interface for it.
 
 == Usage: Performing a Request
 
