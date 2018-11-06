@@ -3,14 +3,17 @@
 
 == Installation
 
-*Important*: At least Java 6 is required, all newer Java versions are
-supported (and encouraged). Especially Java 8 is recommended since it
-brings performance enhancements and lambda expressions which are very
-convenient when used in an asynchronous context.
+At least Java 7 is required for current releases; all newer, vendor supported Java versions are
+supported (and encouraged).  See the xref:compatibility-versions-features.adoc[Compatibility] section for details.
+Java 8 or later is recommended since it brings performance enhancements and lambda expressions which are very
+convenient when using the asynchronous API.
+
+Version 2.6 and earlier support Java 6, though some transitive dependencies are no longer supported by those projects
+and have known security issues.
 
 All stable releases of the Java SDK are primarily distributed through
 Maven. As a result the dependency can be included easily using your
-favourite package manager. For Maven itself, the current GA release's
+favorite package manager. For Maven itself, the current GA release's
 coordinates are:
 
 [source,xml]
@@ -19,7 +22,7 @@ coordinates are:
    <dependency>
      <groupId>com.couchbase.client</groupId>
      <artifactId>java-client</artifactId>
-     <version>2.7.0</version>
+     <version>2.7.1</version>
    </dependency>
  </dependencies>
 ----
@@ -30,6 +33,39 @@ internal dependency which performs all the underlying tasks like IO and
 cluster management. The other dependency is RxJava which is both used
 internally and exposed as a first-class API to the user in order to
 perform scalable and performant asynchronous, reactive operations.
+
+
+== Version 2.7.1 (6 November 2018)
+
+Version 2.7.1 is the second release of the 2.7 series, bringing new features, enhancements and bugfixes over the last stable release.
+
+http://packages.couchbase.com/clients/java/2.7.1/Couchbase-Java-Client-2.7.1.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.1/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-1.7.1/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:2.7.1**
+* com.couchbase.client:**core-io:1.7.1**
+* io.reactivex:**rxjava:1.3.8**
+* io.opentracing:**opentracing-api:0.31.0**
+
+A special note for this release, the Jackson databind dependency has been upgraded to version to 2.9.7 for security
+updates. As the newer Jackson dependency uses Java 7 language features and older Java 6 compatible versions are no
+longer maintained, the SDK is no longer compatible with Java 6. Couchbase prefers to make such platform changes in
+minor releases, but is applying the change here given the nature of the issue and that the
+https://semver.org/#what-should-i-do-if-i-update-my-own-dependencies-without-changing-the-public-api[semantic versioning standard does allow for a dependency update].
+
+=== Enhancements & New Features
+
+* http://issues.couchbase.com/browse/JCBC-1253[JCBC-1253]: 
+Adds support for Sub-Document operation expansion of macro in extended attributes. This is intended for internal use for other dependent Couchbase libraries.
+* http://issues.couchbase.com/browse/JCBC-1259[JCBC-1259]: Exposes async cluster interface from cluster similar to the bucket interface behavior.
+* http://issues.couchbase.com/browse/JVMCBC-581[JVMCBC-581]: Updates Jackson dependency to 2.9.7.
+* http://issues.couchbase.com/browse/JCBC-1251[JCBC-1251]: Allows to select "DISTINCT RAW" in N1ql dsl.
+
+=== Fixed Issues
+
+* http://issues.couchbase.com/browse/JVMCBC-579[JVMCBC-579]: Fixes the Response Time Observability threshold logging to use descending order instead of ascending as mandated in the sdk-rfc.
+* http://issues.couchbase.com/browse/JCBC-1255[JCBC-1255]: Allows crypto transcoder to also transcode docs with no encryption requirements.
 
 == Version 2.7.0 (2 October 2018)
 
