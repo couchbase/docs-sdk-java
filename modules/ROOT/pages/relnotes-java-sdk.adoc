@@ -3,18 +3,14 @@
 
 == Installation
 
-At least Java 7 is required for current releases; all newer, vendor supported Java versions are
-supported (and encouraged).  See the xref:compatibility-versions-features.adoc[Compatibility] section for details.
-Java 8 or later is recommended since it brings performance enhancements and lambda expressions which are very
-convenient when using the asynchronous API.
+At least Java 7 is required for current releases; all newer, vendor supported Java versions are supported (and encouraged). 
+See the xref:compatibility-versions-features.adoc[Compatibility] section for details.
+Java 8 or later is recommended since it brings performance enhancements and lambda expressions which are very convenient when using the asynchronous API.
 
-Version 2.6 and earlier support Java 6, though some transitive dependencies are no longer supported by those projects
-and have known security issues.
+Version 2.6 and earlier support Java 6, though some transitive dependencies are no longer supported by those projects and have known security issues.
 
-All stable releases of the Java SDK are primarily distributed through
-Maven. As a result the dependency can be included easily using your
-favorite package manager. For Maven itself, the current GA release's
-coordinates are:
+All stable releases of the Java SDK are primarily distributed through Maven. 
+As a result the dependency can be included easily using your favorite package manager. For Maven itself, the current GA release's coordinates are:
 
 [source,xml]
 ----
@@ -27,12 +23,8 @@ coordinates are:
  </dependencies>
 ----
 
-The java-client dependency will pull in two more transitive
-dependencies. One is called com.couchbase.client.core-io and is a
-internal dependency which performs all the underlying tasks like IO and
-cluster management. The other dependency is RxJava which is both used
-internally and exposed as a first-class API to the user in order to
-perform scalable and performant asynchronous, reactive operations.
+The java-client dependency will pull in two more transitive dependencies. One is called com.couchbase.client.core-io and is an internal dependency which performs all the underlying tasks like IO and cluster management. 
+The other dependency is RxJava which is both used internally and exposed as a first-class API to the user in order to perform scalable and performant asynchronous, reactive operations.
 
 
 == Version 2.7.1 (6 November 2018)
@@ -48,11 +40,9 @@ The supported and tested dependencies for this release are:
 * io.reactivex:**rxjava:1.3.8**
 * io.opentracing:**opentracing-api:0.31.0**
 
-A special note for this release, the Jackson databind dependency has been upgraded to version to 2.9.7 for security
-updates. As the newer Jackson dependency uses Java 7 language features and older Java 6 compatible versions are no
-longer maintained, the SDK is no longer compatible with Java 6. Couchbase prefers to make such platform changes in
-minor releases, but is applying the change here given the nature of the issue and that the
-https://semver.org/#what-should-i-do-if-i-update-my-own-dependencies-without-changing-the-public-api[semantic versioning standard does allow for a dependency update].
+A special note for this release, the Jackson databind dependency has been upgraded to version to 2.9.7 for security updates. 
+As the newer Jackson dependency uses Java 7 language features and older Java 6 compatible versions are no longer maintained, the SDK is no longer compatible with Java 6. 
+Couchbase prefers to make such platform changes in minor releases, but is applying the change here given the nature of the issue and that the https://semver.org/#what-should-i-do-if-i-update-my-own-dependencies-without-changing-the-public-api[semantic versioning standard does allow for a dependency update].
 
 === Enhancements & New Features
 
