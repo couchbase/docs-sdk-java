@@ -341,19 +341,16 @@ This helps to ensure backwards compatibility.
 | View Endpoints per Node [Static]
 | `viewEndpoints(int)`
 | `viewEndpoints`
-| `1`
+| `The default is dynamic mode, please see next row.`
 | The number of actual endpoints (sockets) to open per node in the cluster against the view service.
-By default only one socket is opened to avoid unnecessary wasting resources.
 If you plan to run a view heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
-Keep in mind that these sockets will then be always open, even when no load is passed through.
 We recommend that you tune this value based on evidence obtained during benchmarking with a real workload.
-If no view load is expected, setting this value explicitly to 0 can avoid one socket to 8092 per node.
 
 | View Endpoints per Node [Dynamic]
-| `viewServiceConfig(int, int, boolean, int)`
+| `viewServiceConfig(int, int, int)`
 | `viewServiceConfig`
-| Need to set minimum and maximum number of Endpoints; whether or not the service is pipelined (more than one request at the same time on the same socket); and the minimum idle time, in seconds, after which the socket will be closed.
-| To allow dynamic pooling, as an alternative to the fixed values of viewEndPoints.
+| `(0, 12, 300)`
+| To allow dynamic pooling, as an alternative to the fixed values of viewEndPoints. Need to set minimum and maximum number of Endpoints; whether or not the service is pipelined (more than one request at the same time on the same socket); and the minimum idle time, in seconds, after which the socket will be closed.
 Note that if both viewEndpoints and viewServiceConfig are set, viewEndpoints takes priority.
 This helps to ensure backwards compatibility.
 
@@ -361,38 +358,32 @@ This helps to ensure backwards compatibility.
 | `query \ Endpoints(int)`
 | `query \ Endpoints`
 | The default is dynamic mode, please see next row.
-| The number of actual endpoints (sockets) to open per Node in the cluster against the Query (N1QL) service.
-By default only one socket is opened to avoid unnecessary wasting resources.
-If you plan to run a query heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
-Keep in mind that these sockets will then be always open, even when no load is passed through.
-We are recommending to tune this value based on evidence during benchmarking with a real workload.
-If no query load is expected, setting this value explicitly to 0 can avoid one socket to 8093 per node.
+| The number of actual endpoints (sockets) to open per node in the cluster against the query service.
+If you plan to run a view heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
+We recommend that you tune this value based on evidence obtained during benchmarking with a real workload.
 
 | Query Endpoints per Node [Dynamic]
 | `query \ ServiceConfig(int, int, int)` or `query \ ServiceConfig(int, int)`
 | `query \ ServiceConfig`
-| Need to set minimum and maximum number of Endpoints; and optionally the minimum idle time, in seconds, after which the socket will be closed.
-The default minimum and maximum are 1 and 12 respectively."
-| To allow dynamic pooling, as an alternative to the fixed values of queryEndPoints.
+| `(0, 12, 300)`
+| To allow dynamic pooling, as an alternative to the fixed values of queryEndPoints. Need to set minimum and maximum number of Endpoints; whether or not the service is pipelined (more than one request at the same time on the same socket); and the minimum idle time, in seconds, after which the socket will be closed.
 Note that if both queryEndpoints and queryServiceConfig are set, queryEndpoints takes priority.
 This helps to ensure backwards compatibility.
 
 | Search Endpoints per Node [Static]
 | `search \Endpoints(int)`
 | `search \Endpoints`
-| `1`
+| `The default is dynamic mode, please see next row.`
 | The number of actual endpoints (sockets) to open per Node in the cluster against the Search (FTS) service.
-By default only one socket is opened to avoid unnecessary wasting resources.
 If you plan to run a query heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
-Keep in mind that these sockets will then be always open, even when no load is passed through.
-We are recommending to tune this value based on evidence during benchmarking with a real workload.
-If no query load is expected, setting this value explicitly to 0 can avoid one socket to 8094 per node.
+We recommend that you tune this value based on evidence obtained during benchmarking with a real workload.
+
 
 | Search Endpoints per Node [Dynamic]
 | `search \ServiceConfig(int, int, int)` or `search \ ServiceConfig(int, int)`
 | `search \ServiceConfig`
-| Need to set minimum and maximum number of Endpoints; and optionally the minimum idle time, in seconds, after which the socket will be closed.
-| To allow dynamic pooling, as an alternative to the fixed values of searchEndPoints.
+| `(0, 12, 300)`
+| To allow dynamic pooling, as an alternative to the fixed values of searchEndPoints. Need to set minimum and maximum number of Endpoints; whether or not the service is pipelined (more than one request at the same time on the same socket); and the minimum idle time, in seconds, after which the socket will be closed.
 Note that if both searchEndpoints and searchServiceConfig are set, queryEndpoints takes priority.
 This helps to ensure backwards compatibility.
 
