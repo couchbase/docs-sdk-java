@@ -341,7 +341,7 @@ This helps to ensure backwards compatibility.
 | View Endpoints per Node [Static]
 | `viewEndpoints(int)`
 | `viewEndpoints`
-| `The default is dynamic mode, please see next row.`
+| The default is dynamic mode, please see next row.
 | The number of actual endpoints (sockets) to open per node in the cluster against the view service.
 If you plan to run a view heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
 We recommend that you tune this value based on evidence obtained during benchmarking with a real workload.
