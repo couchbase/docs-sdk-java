@@ -44,6 +44,15 @@ CouchbaseCluster cluster = CouchbaseCluster.fromConnectionString(connectionStrin
 WARNING: When creating a cluster from a connection string, the Java SDK ignores the scheme component; if a secure connection is desired, the Couchbase environment must be configured as described in <<ssl>>.
 The Java SDK also ignores any options in the connection string, and will not work with a connection string that specifies a bucket name.
 
+[NOTE]
+====
+From Couchbase Java SDK 2.6.0, [.api]`AlternateAddress` is implemented, for connecting to nodes in a NATed environment, such as Docker containers. It is on by default: an xref:client-settings.adoc[environmental setting] can be made, or the SDK will simply compare the bootstrap list, and make the right choice for addressing the alternate address in a multi-network configuration.
+
+Note that any SSL/TLS certificates must be set up at the point where the connections are being made.  The Couchbase SDKs will honor any valid SSL/TLS certificates.
+
+====
+
+
 It is very important in a production setup to pass in at least two or three nodes of the cluster because if the first one in the list fails the other ones can be tried.
 After initial contact is made, the bootstrap list provided by the user is thrown away and replaced with a list provided by the server (which contains all nodes of the cluster).
 

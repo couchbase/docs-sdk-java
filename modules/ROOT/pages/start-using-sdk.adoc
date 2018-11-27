@@ -117,6 +117,8 @@ Cluster cluster = CouchbaseCluster.create();
 Cluster cluster = CouchbaseCluster.create("10.0.0.1", "10.0.0.2");
 ----
 
+NOTE: By default, from Couchbase Java SDK 2.6.0, [.a[i]`AlternateAddress` is implemented, for connecting to nodes in a NATed environment, such as Docker containers. An xref:client-settings.adoc[environmental setting] can be made, or the SDK will simply compare the bootstrap list, and make the right choice for addressing the alternate address in a multi-network configuration.
+
 Once a [.api]`Cluster` reference is available, you can open [.api]`Bucket` instances and then perform operations on them:
 
 [source,java]
