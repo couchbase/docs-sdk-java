@@ -46,11 +46,14 @@ The Java SDK also ignores any options in the connection string, and will not wor
 
 [NOTE]
 ====
-From Couchbase Java SDK 2.6.0, [.api]`AlternateAddress` is implemented, for connecting to nodes in a NATed environment, such as Docker containers using portmapping. It is on by default, if the server provides a topology that includes a multi-network configuration. Whichever network is selected at bootstrap will be logged.
+From Couchbase Java SDK 2.6.0, [.api]`AlternateAddress` is implemented, for connecting to nodes in a NATed environment, such as Docker containers using portmapping.
+It is on by default, if the server provides a topology that includes a multi-network configuration.
+Whichever network is selected at bootstrap will be logged.
 
-If using __Docker Swarm__, or otherwise running the SDK inside the NAT, then you will want to disable with `network = internal` in the connection string, or an xref:client-settings.adoc[environmental setting] can be made.
+If using __Docker Swarm__, or otherwise running the SDK inside the NAT, then you will want to disable with `?network=default` in the connection string, or an xref:client-settings.adoc[environmental setting] can be made.
 
-Note that any SSL/TLS certificates must be set up at the point where the connections are being made.  The Couchbase SDKs will honor any valid SSL/TLS certificates.
+Note that any SSL/TLS certificates must be set up at the point where the connections are being made.
+The Couchbase SDKs will honor any valid SSL/TLS certificates.
 
 ====
 
