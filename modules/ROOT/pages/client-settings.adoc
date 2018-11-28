@@ -144,6 +144,12 @@ See the "Connection Management" section for more information on how to use it pr
 | `certAuthEnabled \Enabled`
 | `false`
 | If enabled, it will use the information in the key store for authentication (basically skip the Cluster#authenticate) instead of sending the username and password.
+
+| Network Resolution
+| `(NetworkResolution resolution)`
+| `NetworkResolution`
+| `auto`
+| For providing `AlternateAddress` in multi-network configurations - such as NATed or portmapped virtualized or containerized environments. Based on heuristics discovers if internal or external resolution will be used. Set to `external` to pin to resolving external network, and to `default` (backwards compatible mode) to work with whatever the server returns in the config.
 |===
 
 == Timeout Options
