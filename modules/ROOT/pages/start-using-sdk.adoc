@@ -117,7 +117,7 @@ Cluster cluster = CouchbaseCluster.create();
 Cluster cluster = CouchbaseCluster.create("10.0.0.1", "10.0.0.2");
 ----
 
-If you have an environment with port mapping, such as Couchbase Server and the SDK in separate containers under Kubernetes, see the multi-network configuration _note_ under #xref:managing-connections.adoc#connecting-to-a-bucket[Managing Connections]
+If you have an environment with port mapping, such as Couchbase Server and the SDK in separate containers under Kubernetes, see the multi-network configuration _note_ under xref:managing-connections.adoc#connecting-to-a-bucket[Managing Connections]
 
 Once a [.api]`Cluster` reference is available, you can open [.api]`Bucket` instances and then perform operations on them:
 
