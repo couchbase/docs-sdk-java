@@ -9,6 +9,8 @@ Field Level Encryption is available in Couchbase Data Platform 5.5, from Java SD
 
 The Couchbase Java SDK uses the https://github.com/couchbase/java-couchbase-encryption[java-couchbase-encryption^] library to provide support for encryption and decryption of JSON fields.
 
+NOTE: This separation of the encryption library ensures that the SDK does not have a dependency upon an encryption library in general use -- but it does mean you have to  explicitly include this external dependency in your project configuration. See the xref:#_example[example project].
+
 The Couchbase Java Field Level Encryption (FLE) uses entity annotations/`JsonObject` methods to specify which field(s) to apply encryption and which algorithm to use.
 Here’s an example POJO entity definition:
 
@@ -76,3 +78,7 @@ To decrypt use fields in `JsonObject`, use `getAndDecrypt` methods.
 JsonDocument stored = bucket.get("mydoc");
 stored.content().getAndDecrypt("foo", "AES")
 ----
+
+== Example
+
+There is a complete example in our https://github.com/couchbaselabs/devguide-examples/blob/master/java/src/main/java/com/couchbase/devguide/FieldEncryptionAES.java[devguide examples collection].
