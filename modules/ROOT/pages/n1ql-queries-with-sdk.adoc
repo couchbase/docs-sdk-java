@@ -5,7 +5,7 @@
 [abstract]
 You can perform N1QL queries via the Java client.
 
-NOTE: See Couchbase Developer documentation for a quick intro to xref:6.0@server:architecture:querying-data-with-n1ql.adoc[N1QL].
+NOTE: See Couchbase Developer documentation for a quick intro to xref:n1ql-query.adoc[N1QL].
 
 To issue N1QL queries, you should create a [.api]`N1qlQuery` object, and pass it to the [.api]`query(N1qlQuery q)` method in the [.api]`Bucket` class.
 A few variants of such a query exist:
