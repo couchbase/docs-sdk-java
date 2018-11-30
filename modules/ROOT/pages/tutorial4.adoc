@@ -9,7 +9,7 @@ The primary focus of the tutorial is to explain the function and theory behind t
 It makes use of the `travel-sample` data set.
 The code that generates the web application is provided with the source code but is not discussed in this tutorial.
 
-NOTE: For reference, you can find the previous tutorial that focuses more on key/value operations and views (since N1QL was introduced in CB 4.0): xref:tutorial3.adoc[Java SDK tutorial for CB 3.x].
+NOTE: For reference, you can find the previous tutorial that focuses more on key/value operations and views (since N1QL was introduced in CB 4.0): xref:2.1@jave-sdk::tutorial3.adoc[Java SDK tutorial for CB 3.x].
 
 == Prerequisites and set up
 
