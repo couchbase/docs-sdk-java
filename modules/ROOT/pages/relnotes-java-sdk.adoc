@@ -28,7 +28,7 @@ The other dependency is RxJava which is both used internally and exposed as a fi
 
 == Version 2.7.2 (5 December 2018)
 
-Version 2.7.2 is the second release of the 2.7 series, bringing new features, enhancements and bugfixes over the last stable release.
+Version 2.7.2 is the third release of the 2.7 series, bringing new features, enhancements and bugfixes over the last stable release.
 
 http://packages.couchbase.com/clients/java/2.7.2/Couchbase-Java-Client-2.7.2.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.2/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-1.7.2/[Core API Reference]
 
@@ -41,14 +41,20 @@ The supported and tested dependencies for this release are:
 
 === Enhancements & New Features
 
-* http://issues.couchbase.com/browse/JCBC-1254[JCBC-1254]: Adds experimental utility API to ingest Analytics query results back to KV layer.
-* http://issues.couchbase.com/browse/JCBC-1258[JCBC-1258]: Adds experimental support for deferred Analytics query execution. This is useful for long running queries where the results can be fetched later.
-* http://issues.couchbase.com/browse/JCBC-1171[JCBC-1171]: Allows to add hints for hash and nested loop joins in N1QL query DSL.
-* http://issues.couchbase.com/browse/JCBC-1266[JCBC-1266]: Allows to compile with Java 11, which contained minor javadoc fixes. 
+* http://issues.couchbase.com/browse/JCBC-1254[JCBC-1254]: 
+Adds experimental utility API to ingest Analytics query results back to KV layer.
+* http://issues.couchbase.com/browse/JCBC-1258[JCBC-1258]: 
+Adds experimental support for deferred Analytics query execution. 
+This is useful for long running queries where the results can be fetched later.
+* http://issues.couchbase.com/browse/JCBC-1171[JCBC-1171]: 
+Allows to add hints for hash and nested loop joins in N1QL query DSL.
+* http://issues.couchbase.com/browse/JCBC-1266[JCBC-1266]: 
+You can now compile with Java 11, which contains minor javadoc fixes. 
 
 === Fixed Issues
 
-* http://issues.couchbase.com/browse/JVMCBC-579[JVMCBC-579]: Fixes the Response Time Observability threshold logging to use descending order instead of ascending as mandated in the sdk-rfc.
+* http://issues.couchbase.com/browse/JVMCBC-579[JVMCBC-579]: 
+Fixes the Response Time Observability threshold logging to use descending order instead of ascending as mandated in the sdk-rfc.
 
 == Version 2.7.1 (6 November 2018)
 
