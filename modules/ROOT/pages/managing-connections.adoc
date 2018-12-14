@@ -86,6 +86,9 @@ impact on performance and stability. Reuse environments!
 
 In general, this is an indication of misconfiguration, the only exception being unit and integration tests where multiple paths are executed at once and cannot share the `ClusterEnvironment` for whatever reason.
 
+WARNING: You are strongly recommended against using Round Robin DNS, which can return a different address at each connection, as Java uses $host from the Cluster Map -- which can cause connection issues. 
+Use of a xref:managing-connections.adoc#using-dns-srv-records[Service record (SRV record)], to provide real hostnames (A records) in the bootstrap list, will ensure consistent connections.
+
 == Disconnecting from a Bucket
 
 The most common case is to disconnect the whole `CouchbaseCluster` from the server, which has the same effect as closing all buckets manually and in addition close all underlying resources like thread pools.
