@@ -6,7 +6,7 @@ The Java SDK supports creation and handling of _extended attributes_.
 == Subdocument Operations and Extended Attributes
 
 A high-level summary of extended attributes can be found in xref:sdk-xattr-overview.adoc[Extended Attributes].
-Extended attributes are handled by means of extensions to the _Subdocument API_.
+Extended attributes (XATTR) are handled by means of extensions to the _Subdocument API_.
 
 == Java Extended Attributes Example
 
@@ -183,6 +183,65 @@ public class CouchbaseExtendedAttributesDemo
         // Disconnect user from the cluster.
         //
         userCluster.disconnect();
+    }
+}
+----
+
+== Virtual Extended Attributes Example
+
+Using the subdocument API, xref:sdk-xattr-overview.adoc#_virtual_extended_attributes[Virtual XATTR] can be used to fetch metadata about a document, via the `$document` virtual XATTR.
+A common use case is discovering documentation expiry data, or TTL:
+
+[source,java]
+----
+import java.text.SimpleDateFormat;
+import java.util.Date;
+ 
+import com.couchbase.client.core.message.kv.subdoc.multi.Lookup;
+import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.CouchbaseCluster;
+import com.couchbase.client.java.subdoc.*;
+ 
+public class GetTTL
+{
+    public static void main(String [] args)
+    {
+        // Access the cluster that is running on the local host, authenticating with
+        // the username and password of the Full Administrator. This
+        // provides all privileges.
+        //
+        Cluster cluster = CouchbaseCluster.create("localhost");
+        cluster.authenticate("test", "password");
+        Bucket test = cluster.openBucket("test");
+ 
+        String key = "Perry";
+ 
+        DocumentFragment<Lookup> click = test.lookupIn(key).get("click").execute();
+        System.out.println("Click: " + click.content("click"));
+ 
+        DocumentFragment<Lookup> ttl = test.lookupIn(key).get("$document.exptime", new SubdocOptionsBuilder().xattr(true)).execute();
+        System.out.println("ttl: " + ttl.content("$document.exptime"));
+ 
+        test.touch(key, 300);
+ 
+        ttl = test.lookupIn(key).get("$document.exptime", new SubdocOptionsBuilder().xattr(true)).execute();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm.ss");
+        System.out.println("ttl: " + sdf.format(new Date(ttl.content("$document.exptime", int.class))));
+ 
+        test.touch(key, 0);
+ 
+        //Multiple paths can be access at once via subdoc. It's limited to 16 paths and xattrs have to be frist
+        DocumentFragment<Lookup> mutlisubpath = test.lookupIn(key).get("$document.exptime", new SubdocOptionsBuilder().xattr(true))
+                                                                  .get("$document.value_bytes", new SubdocOptionsBuilder().xattr(true))
+                                                                  .get("click")
+                                                                  .execute();
+ 
+        System.out.print("\n\n");
+        System.out.println("Click: " + mutlisubpath.content("click"));
+        System.out.println("ttl  : " + mutlisubpath.content("$document.exptime"));
+        System.out.println("Size : " + mutlisubpath.content("$document.value_bytes"));
+ 
     }
 }
 ----
