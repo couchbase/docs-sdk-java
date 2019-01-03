@@ -5,7 +5,7 @@
 
 At least Java 7 is required for current releases; all newer, vendor supported Java versions are supported (and encouraged). 
 See the xref:compatibility-versions-features.adoc[Compatibility] section for details.
-Java 8 or later is recommended since it brings performance enhancements and lambda expressions which are very convenient when using the asynchronous API.
+Java 11 is recommended which has various enhancements like lambda local variable type inference, profiling tools and updated security features, starting from the release 2.7.2. For older releases, Java 8 is recommended. 
 
 Version 2.6 and earlier support Java 6, though some transitive dependencies are no longer supported by those projects and have known security issues.
 
@@ -28,7 +28,7 @@ The other dependency is RxJava which is both used internally and exposed as a fi
 
 == Version 2.7.2 (5 December 2018)
 
-Version 2.7.2 is the third release of the 2.7 series, bringing new features, enhancements, and bugfixes over the last stable release.
+Version 2.7.2 is the third release of the 2.7 series, bringing new features, enhancements, and bugfixes over the last stable release. As of this release, OpenJDK 11 and Oracle JDK 11 with HotSpot JVM is supported. See the xref:compatibility-versions-features.adoc[Compatibility] section for details.
 
 http://packages.couchbase.com/clients/java/2.7.2/Couchbase-Java-Client-2.7.2.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.2/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-1.7.2/[Core API Reference]
 
