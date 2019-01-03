@@ -137,14 +137,28 @@ IMPORTANT: With xref:sdk-authentication-overview.adoc[RBAC], in Couchbase Server
 [#jdk-compat]
 == JDK Version Compatibility
 
-The Java SDK is tested with the Oracle JDK which should be used for best experience and supportability.
-Other JDK implementations might work but are  not tested and are unsupported.
+The Java SDK is tested with Oracle JDK and OpenJDK.
+Other JDK implementations might work but are not tested and are unsupported.
 
-The following Oracle JDKs are supported for *Java SDK 1.4 and 2.0 - 2.7*:
+Starting with Java SDK release 2.7.2, the following JDK releases are supported:
 
-* Oracle JDK 1.6
+* OpenJDK 11 with HotSpot JVM (recommended)
+* Oracle JDK 11 (recommended)
+* OpenJDK 1.8 with HotSpot JVM
+* Oracle JDK 1.8
 * Oracle JDK 1.7
-* Oracle JDK 1.8 (recommended)
+
+The following Oracle JDK releases are supported for Java SDK 2.7.1:
+
+* Oracle JDK 1.8
+* Oracle JDK 1.7
+
+The following Oracle JDK releases are supported for Java SDK 1.4 and 2.0 through 2.7.0 inclusive:
+
+* Oracle JDK 1.8
+* Oracle JDK 1.7
+* Oracle JDK 1.6 (Extended Support from Oracle https://www.oracle.com/technetwork/java/java-se-support-roadmap.html[ended December 2018])
+
 
 Please make sure you run on one of the latest patch releases, since they provide stability improvements and security fixes in general.
 
