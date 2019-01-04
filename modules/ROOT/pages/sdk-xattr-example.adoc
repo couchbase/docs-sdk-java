@@ -3,10 +3,10 @@
 [abstract]
 The Java SDK supports creation and handling of _extended attributes_.
 
-== Subdocument Operations and Extended Attributes
+== Sub-Document Operations and Extended Attributes
 
 A high-level summary of extended attributes can be found in xref:sdk-xattr-overview.adoc[Extended Attributes].
-Extended attributes (XATTR) are handled by means of extensions to the _Subdocument API_.
+Extended attributes (XATTRs) are accessed by means of extensions to the _Subdocument API_.
 
 == Java Extended Attributes Example
 
@@ -189,8 +189,8 @@ public class CouchbaseExtendedAttributesDemo
 
 == Virtual Extended Attributes Example
 
-Using the subdocument API, xref:sdk-xattr-overview.adoc#_virtual_extended_attributes[Virtual XATTR] can be used to fetch metadata about a document, via the `$document` virtual XATTR.
-A common use case is discovering documentation expiry data, or TTL:
+Using the Sub-Document API, xref:sdk-xattr-overview.adoc#_virtual_extended_attributes[Virtual XATTR] can be used to fetch metadata about a document, via the `$document` virtual XATTR.
+A common use case is discovering documentation expiration metadata, or TTL:
 
 [source,java]
 ----
@@ -231,13 +231,12 @@ public class GetTTL
  
         test.touch(key, 0);
  
-        //Multiple paths can be access at once via subdoc. It's limited to 16 paths and xattrs have to be frist
+        //Multiple paths can be access at once via subdoc. It's limited to 16 paths and xattrs have to be first
         DocumentFragment<Lookup> mutlisubpath = test.lookupIn(key).get("$document.exptime", new SubdocOptionsBuilder().xattr(true))
                                                                   .get("$document.value_bytes", new SubdocOptionsBuilder().xattr(true))
                                                                   .get("click")
                                                                   .execute();
  
-        System.out.print("\n\n");
         System.out.println("Click: " + mutlisubpath.content("click"));
         System.out.println("ttl  : " + mutlisubpath.content("$document.exptime"));
         System.out.println("Size : " + mutlisubpath.content("$document.value_bytes"));
