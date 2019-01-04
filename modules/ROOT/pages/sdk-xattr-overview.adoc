@@ -22,5 +22,5 @@ For TTL using Virtual XATTR, use the following:
 bucket.lookupIn(key).get("$document.exptime", new SubdocOptionsBuilder().xattr(true)).execute()
 ----
 
-See the xref:sdk-xattr-example.adoc#_virtual_extended_attributes_example[example page] for a complete code sample.
+See the xref:sdk-xattr-example.adoc#virtual-extended-attributes-example[example page] for a complete code sample.
 
