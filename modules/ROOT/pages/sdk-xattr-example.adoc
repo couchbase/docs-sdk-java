@@ -232,14 +232,14 @@ public class GetTTL
         test.touch(key, 0);
  
         //Multiple paths can be access at once via subdoc. It's limited to 16 paths and xattrs have to be first
-        DocumentFragment<Lookup> mutlisubpath = test.lookupIn(key).get("$document.exptime", new SubdocOptionsBuilder().xattr(true))
+        DocumentFragment<Lookup> multiSubPath = test.lookupIn(key).get("$document.exptime", new SubdocOptionsBuilder().xattr(true))
                                                                   .get("$document.value_bytes", new SubdocOptionsBuilder().xattr(true))
                                                                   .get("click")
                                                                   .execute();
  
-        System.out.println("Click: " + mutlisubpath.content("click"));
-        System.out.println("ttl  : " + mutlisubpath.content("$document.exptime"));
-        System.out.println("Size : " + mutlisubpath.content("$document.value_bytes"));
+        System.out.println("Click: " + multiSubPath.content("click"));
+        System.out.println("ttl  : " + multiSubPath.content("$document.exptime"));
+        System.out.println("Size : " + multiSubPath.content("$document.value_bytes"));
  
     }
 }
