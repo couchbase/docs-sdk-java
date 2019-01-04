@@ -6,7 +6,7 @@ The Java SDK supports creation and handling of _extended attributes_.
 == Sub-Document Operations and Extended Attributes
 
 A high-level summary of extended attributes can be found in xref:sdk-xattr-overview.adoc[Extended Attributes].
-Extended attributes (XATTRs) are accessed by means of extensions to the _Subdocument API_.
+Extended attributes (XATTRs) are accessed by means of extensions to the _Sub-Document API_.
 
 == Java Extended Attributes Example
 
