@@ -42,16 +42,22 @@ The supported and tested dependencies for this release are:
 === Enhancements & New Features
 
 * http://issues.couchbase.com/browse/JCBC-1287[JCBC-1287], http://issues.couchbase.com/browse/JVMCBC-621[JVMCBC-621]: 
-Adds the query statement information tag on the tracing span’s which could be useful while debugging.
+Added query statement information tag on the tracing spans, which could be useful while debugging.
 * http://issues.couchbase.com/browse/JCBC-1239[JCBC-1239]: 
-Optimizes queue pop operation to use subdocument operation instead of full document operation. 
-* http://issues.couchbase.com/browse/JCBC-1288[JCBC-1288]:  Adds a workaround for missing proxyPort parameter that has been might removed in next server version. This change may be a temporary one for internal use.
-* http://issues.couchbase.com/browse/JCBC-1276[JCBC-1276]: Core changes to redo dns lookups on every new connection call if enabled through a system property “com.couchbase.forceDnsLookupOnReconnect”. This is useful in containerized environments.
+Optimized queue pop operation to use subdocument operation instead of full document operation. 
+* http://issues.couchbase.com/browse/JCBC-1288[JCBC-1288]:  
+Added a workaround for missing proxyPort parameter that may be removed in next server version. 
+__This change may be a temporary one for internal use__.
+* http://issues.couchbase.com/browse/JCBC-1276[JCBC-1276]: 
+Core changes to redo DNS lookups on every new connection call -- if enabled through system property `com.couchbase.forceDnsLookupOnReconnect`. 
+This is useful in containerized environments.
 
 
 == Version 2.7.2 (5 December 2018)
 
-Version 2.7.2 is the third release of the 2.7 series, bringing new features, enhancements, and bugfixes over the last stable release. As of this release, OpenJDK 11 and Oracle JDK 11 with HotSpot JVM is supported. See the xref:compatibility-versions-features.adoc[Compatibility] section for details.
+Version 2.7.2 is the third release of the 2.7 series, bringing new features, enhancements, and bugfixes over the last stable release. 
+As of this release, OpenJDK 11 and Oracle JDK 11 with HotSpot JVM is supported. 
+See the xref:compatibility-versions-features.adoc[Compatibility] section for details.
 
 http://packages.couchbase.com/clients/java/2.7.2/Couchbase-Java-Client-2.7.2.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.2/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-1.7.2/[Core API Reference]
 
