@@ -41,7 +41,7 @@ The supported and tested dependencies for this release are:
 
 === Bug Fixes
 
-* http://issues.couchbase.com/browse/JCBC-1292[JCBC-1292]: Export only the Java-client packages for OSGi specific manifest generation, as the wildcard com.client.java.* caused to included core packages in the java-client's jar. This lead to class path failures for the technologies which inspect classes (for example Spring-boot) and a bloated jar.
+* http://issues.couchbase.com/browse/JCBC-1292[JCBC-1292]: Export only the Java-client packages for OSGi specific manifest generation, as the wildcard com.client.couchbase.* caused to included core packages in the java-client's jar. This lead to class path failures for the technologies which inspect classes (for example Spring-boot) and a bloated jar.
 * http://issues.couchbase.com/browse/JVMCBC-632[JVMCBC-632]: 
 Export only core-io's package for the OSGi specific manifest generation.
 
