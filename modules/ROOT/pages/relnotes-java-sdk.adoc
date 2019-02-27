@@ -43,7 +43,7 @@ The supported and tested dependencies for this release are:
 
 * http://issues.couchbase.com/browse/JCBC-1292[JCBC-1292]: 
 A previous OSGi bundle change pulled core packages into the Java Client's jar.
-This lead to class path failures for the technologies which inspect classes (for example Spring Boot) and a bloated jar.
+This led to class path failures for the technologies which inspect classes (for example Spring Boot) and a bloated jar.
 Now, only the Java Client packages for OSGi specific manifest generation are exported, and behaviour and jar size are back to expected.
 * http://issues.couchbase.com/browse/JVMCBC-632[JVMCBC-632]: 
 Export only core-io's package for the OSGi specific manifest generation.
