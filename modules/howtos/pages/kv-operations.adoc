@@ -217,6 +217,8 @@ NOTE: Increment & Decrement are considered part of the ‘binary’ API and as s
 Working on just a specific path within a JSON document will reduce network bandwidth requirements - see the xref:subdocument-operations.adoc[Sub-Document] pages.
 For working with metadata on a document, reference our xref:sdk-xattr-example.adoc[Extended Attributes] pages.
 
+For a significant performance speed up with large volumes of data, reference our xref:async-programming.adoc[asynchronous programmaing options].
+
 Another way of increasing network performance is to _pipeline_ operations with xref:batching-operations.adoc[Batching Operations].
 
 As well as various xref:concept-docs:data-model.adoc[Formats] of JSON, Couchbase can work directly with xref:non-json.adoc[arbitary bytes, or binary format].
