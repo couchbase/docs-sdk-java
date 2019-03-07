@@ -3,99 +3,43 @@
 :page-topic-type: howto
 :page-aliases: document-operations.adoc
 
-WARNING: These pages cover the first _Developer Preview_ of the Couchbase .NET SDK 3.0 (DP1).
+WARNING: These pages cover the first _Developer Preview_ of the Couchbase Java SDK 3.0 (DP1).
 As such they are likely to change without notice.
 The DP1 code _should not_ be used in production.
 
 
-The complete code sample used on this page can be downloaded from
-///  xref::example$document.cs[here]
-- from which you can see in context how to authenticate and connect to a Couchbase Cluster, then perform these Bucket operations.
+The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/tree/3.0dp1/modules/howtos/examples/KvOperations.java[here].
 
-
-== Documents
+At its heart Couchbase Server is a high-performance key-value store, and the key-value interface outlined below is the fastest and best method to perform operations involving single documents.
 
 A _document_ refers to an entry in the database (other databases may refer to the same concept as a _row_).
 A document has an ID (_primary key_ in other databases), which is unique to the document and by which it can be located.
 The document also has a value which contains the actual application data.
 See xref::concept-docs:documents.adoc[the concept guide to _Documents_] for a deeper dive into documents in the Couchbase Data Platform.
-Or read on, for a hands-on introduction to working with documents from the .NET SDK.
 
-== CRUD Operations
+Before proceeding, make sure you're familiar with the basics of authorization and connecting to a Cluster from the xref::hello-world:start-using-sdk.adoc[Start Using the SDK] section.
 
-The core interface to Couchbase Server is simple KV operations on full documents.
-Make sure you're familiar with the basics of authorization and connecting to a Cluster from the xref::hello-world:start-using-sdk.adoc[Start Using the SDK section].
-We're going to expand on the short _Upsert_ example we used there, adding options as we move through the various CRUD operations.
-Here is the _Insert_ operation at its simplest:
+The code samples below will use these imports:
 
-[source,csharp]
+[source,java]
 ----
-Insert
-var document = new {foo = "bar", bar = "foo"};
-var result = await collection.Insert("document-key", document);
+include::example$KvOperations.java[tag=imports]
 ----
 
-Options may be added to operations:
+[TIP]
+.N1QL vs. Key-Value
+====
+N1QL can also be used to perform many single-document operations but we very strongly recommend using the key-value API for this instead, as it can be much more efficient. The request can go directly to the correct node, there's no query parsing overhead, and it's over the highly optimized memcached binary protocol.
+====
 
-[source,csharp]
-----
-Insert (with options)
-var document = new {foo = "bar", bar = "foo"};
-var result = await collection.Insert("document-key", document,
-    new InsertOptions
-    {
-        Cas = 12345,
-        Timeout = TimeSpan.FromSeconds(5)
-    }
-);
-----
+== JSON
+The Couchbase Server is a key-value store that's agnostic to what's stored, but it's very common to store JSON so most of the examples below will focus on that use-case.
 
-Setting a Compare and Swap (CAS) value is a form of optimistic locking - dealt with in depth in the xref:concurrent-document-mutations.adoc[CAS page].
-Here we just note that the CAS is a value representing the current state of an item; each time the item is modified, its CAS changes.
-The CAS value is returned as part of a document’s metadata whenever a document is accessed.
-Without explicitly setting it, a newly-created document would have a CAS value of _0_.
+The Java SDK provides you with several options for working with JSON.
 
-_Timeout_ is an optional parameter which in the .NET SDK has a type value of `TimeSpan`.
-Timeout sets the timeout value for the underlying network connection.
-We will add to these options for the _Replace_ example:
+If you pass any object (like the provided `JsonObject` and `JsonArray`), including `Map<String, Object>` or `List<Object>` into the APIs provided, the SDK will use its internal JSON codec (utilizing https://github.com/FasterXML/jackson[Jackson]) to encode/decode those objects transparently. Note that custom POJOs are not yet supported, but will be in one of the next developer previews. If you use the `EncodedJsonContent` wrapper type, you can use any JSON serializer you like and pass in the encoded JSON string/byte array directly.
 
-[source,csharp]
-----
-var document = new {foo = "bar", bar = "foo"};
-var result = await collection.Replace("document-key", document,
-    new ReplaceOptions
-    {
-        Cas = 12345,
-        Expiration = TimeSpan.FromMinutes(1),
-        Timeout = TimeSpan.FromSeconds(5)
-    }
-);
-----
-
-Expiration sets an explicit time to live (TTL) for a document, for which you can also xref:sdk-xattr-example.adoc[see a more detailed example of TTL discovery] later in the docs.
-We'll discuss modifying `Expiration` in more details xref:#net-modifying-expiration[below].
-For a discussion of item (Document) _vs_ Bucket expiration, see the 
-xref:6.5@server:learn:buckets-memory-and-storage/expiration.adoc#expiration-bucket-versus-item[Expiration Overview page].
-
-[source,csharp]
-----
-var document = new {foo = "bar", bar = "foo"};
-var result = await collection.Upsert("document-key", document,
-    new UpsertOptions
-    {
-        Cas = 12345,
-        Expiration = TimeSpan.FromMinutes(1),
-        PersistTo = PersistTo.One,
-        ReplicateTo = ReplicateTo.One,
-        Timeout = TimeSpan.FromSeconds(5)
-    }
-);
-----
-
-Here, we have add _Durability_ options, namely `PersistTo` and `ReplicateTo`.
-In Couchbase Server releases before 6.5, Durability was set with these two options -- see the xref:https://docs.couchbase.com/dotnet-sdk/2.7/durability.html[6.0 Durability documentation] -- covering  how many replicas the operation must be propagated to and how many persisted copies of the modified record must exist. 
-Couchbase Data Platform 6.5 refines these two options, with xref:synchronous-replication.adoc[Synchronous Replication] -- although they remain essentially the same in use -- as well as adding the option of xref:transactions.adoc[atomic document transactions].
-
+== Upsert
 
 [TIP]
 .Sub-Document Operations
@@ -104,124 +48,165 @@ All of these operations involve fetching the complete document from the Cluster.
 Where the number of operations or other circumstances make bandwidth a significant issue, the SDK can work on just a specific _path_ of the document with xref:subdocument-operations.adoc[Sub-Docunent Operations].
 ====
 
-== Retrieving full documents
+Here is a simple upsert operation, which will insert the document if it does not exist, or replace it if it does.
 
-Using the `Get()` method with the document key can be done in a similar fashion to the other operations:
+We'll use the built-in JSON types for simplicity, but you can use different types if you want.
 
-[source,csharp]
+[source,java]
 ----
-var result = await collection.Get(“document-key”);
-var content = result.ContentAs<string>();
-----
-
-Timeout can also be set - as in the earlier `Insert` example:
-
-[source,csharp]
-----
-Get (with options)
-var result = await collection.Get(“document-key”,
-    new GetOptions
-    {
-        Timeout = TimeSpan.FromSeconds(5)
-    }
-);
-var content = result.ContentAs<string>();
+include::example$KvOperations.java[tag=upsert]
 ----
 
+[NOTE]
+=====
+All the examples here use the Java SDK's simplest API, which blocks until the operation is performed. There's also an asynchronous API that is based around Java's `CompletableFuture`, and a
+reactive API built around https://projectreactor.io/[Project Reactor]. They can be accessed like this:
+
+[source,java]
+----
+include::example$KvOperations.java[tag=apis]
+----
+=====
+
+== Insert
+Insert works very similarly to upsert, but will fail if the document already exists with a `DocumentAlreadyExistsException`:
+
+[source,java]
+----
+include::example$KvOperations.java[tag=insert]
+----
+
+== Retrieving documents
+
+We've tried upserting and inserting documents into Couchbase Server, let's get them back:
+
+[source,java]
+----
+include::example$KvOperations.java[tag=get-simple]
+----
+
+Of course if we're getting a document we probably want to do something with the content:
+
+[source,java]
+----
+include::example$KvOperations.java[tag=get]
+----
+
+We utilize Java 8's closures and `Optional` type to only execute a given code when the document exists,
+giving us protection against a potential `NullPointerException` and making it clear that the document must exist.
+
+Once we have a `GetResult`, we can use `contentAsObject()` to turn the content back into a `JsonObject` like we inserted it in the examples before, or use the more generic `contentAs(T.class)` equivalent to turn it back into other entity structures. In fact, the `contentAsObject()` method is just a convenience method for `contentAs(JsonObject.class)`.
+
+== Replace
+A very common sequence of operations is to `get` a document, modify its contents, and `replace` it.
+
+[source,java]
+----
+include::example$KvOperations.java[tag=replace]
+----
+
+We `upsert` an initial version of the document. We don't care about the exact details of the result, just whether it succeeded or not, so do not assign a return value. Then we `get` it back into `doc` and pull out the document's content as a `JsonObject` using `contentAs`. Afterwards, we update a field in the `JsonObject` with `put`.  `JsonObject` is mutable, we don't need to store the result of the `put`. Finally, we `replace` the document with the updated content, and a CAS value, storing the final result as `result`.
+
+There's a couple of things to cover with the `replace`.
+
+First, most of the methods in the Java SDK take optional parameters that have sensible defaults. One of them, `cas`, is provided here.  We'll see more throughout this document.
+
+So, what is CAS?
+
+CAS, or Compare And Swap, is a form of optimistic locking. Every document in Couchbase has a CAS value, and it's changed on every mutation.  When you `get` a document you also get the document's CAS, and then when it's time to write the document, you send the same CAS back.  If another agent has modified that document, the Couchbase Server can detect you've provided a now-outdated CAS, and return an error.  This provides cheap, safe concurrency.  See xref:concurrent-document-mutations.adoc[this detailed description of CAS] for further details.
+
+In general, you'll want to provide a CAS value whenever you `replace` a document, to prevent overwriting another agent's mutations.
+
+== Retrying on CAS failures
+But if we get a CAS mismatch, we usually just want to retry the operation. Let's see a more advanced `replace` example that shows one way to handle this:
+
+[source,java]
+----
+include::example$KvOperations.java[tag=replace-retry]
+----
+
+Note that this code is simplistic to show how CAS retry works in general. In later chapters we cover more sophisticated approaches to this, including asynchronous retry, retry with backoff and bailing out after a maximum amount of tries. All these should be in place for robust, production ready code.
 
 == Removing
+Removing a document is straightforward:
 
-When removing a document, you will have the same concern for durability as with any additive modification to the Bucket:
-
-Remove (with options)
-[source,csharp]
+[source,java]
 ----
-var result = await collection.Remove("document-key",
-    new RemoveOptions
-    {
-        Cas = 12345,
-        PersistTo = PersistTo.One,
-        ReplicateTo = ReplicateTo.One,
-        Timeout = TimeSpan.FromSeconds(5)
-    }
-);
+include::example$KvOperations.java[tag=remove]
 ----
 
-== Expiration / TTL
+Like `replace`, `remove` also optionally takes the CAS value if you want to make sure you are only removing the document if it hasn't changed since you last fetched it.
 
-By default, Couchbase documents do not expire, but transient or temporary data may be needed for user sessions, caches, or other temporary documents. 
-Using `Touch()`, you can set expiration values on documents to handle transient data:
+== Durability
+Writes in Couchbase are written to a single node, and from there the Couchbase Server will take care of sending that mutation to any configured replicas.
 
-[source,csharp]
+The optional `durabilityLevel` parameter, which all mutating operations accept, allows the application to wait until this replication (or persistence) is successful before proceeding.
+
+It can be used like this:
+
+[source,java]
 ----
-var result = await collection.Touch("document-key", TimeSpan.FromSeconds(10));
-----
-
-A network timeout can be set with the optional `TouchOptions()`, in the same fashion as earlier examples on this page:
-
-[source,csharp]
-----
-var result = await collection.Touch("document-key", TimeSpan.FromSeconds(30),
-    new TouchOptions
-    {
-        Timeout = TimeSpan.FromSeconds(5)
-    }
-);
+include::example$KvOperations.java[tag=durability]
 ----
 
-== Atomic document modifications
+If no argument is provided the application will report success back as soon as the primary node has acknowledged the mutation in its memory. However, we recognize that there are times when the application needs that extra certainty that especially vital mutations have been successfully replicated, and the other durability options provide the means to achieve this.
 
-The value of a document can be increased or decreased atomically using `Binary.Increment()` and `.Binary.Decrement()`.
+The options differ depend on what Couchbase Server version is in use.  If 6.5 or above is being used, you can take advantage of the `synchronous replication` feature, in which Couchbase Server will only return success to the SDK after the requested replication level has been achieved.  The three replication levels are:
 
-.Increment
-[source,csharp]
+ - `Majority` - The server will ensure that the change is available in memory on the majority of configured replicas.
+ - `MajorityAndPersistOnMaster` - Majority level, plus persisted to disk on the master node.
+ - `PersistToMajority` - Majority level, plus persisted to disk on the majority of configured replicas.
+
+The options are in increasing levels of safety.  Note that nothing comes for free - for a given node, waiting for writes to storage is considerably slower than waiting for it to be available in-memory.
+
+In a version of Couchbase Server lower than 6.5 is being used then the application can fall-back to 'client verified' durability.  Here the SDK will do a simple poll of the replicas and only return once the requested durability level is achieved.  This can be achieved like this:
+
+[source,java]
 ----
-// increment binary value by 1, if document doesn’t exist, seed it at 1000
-await collection.Binary.Increment("document-key", 1, 1000);
-----
-
-[source,csharp]
-----
-.Increment (with options)
-// increment binary value by 1, if document doesn’t exist, seed it at 1000
-// optional arguments:
-// - Timeout (TimeSpan)
-// - Expiration (TimeSpan)
-// - CAS (ulong)
-
-await collection.Binary.Increment("document-key", 1, 1000, TimeSpan.FromSeconds(5), TimeSpan.FromDays(1), cas);
+include::example$KvOperations.java[tag=durability-observed]
 ----
 
-.Decrement
-[source,csharp]
+To stress, durability is a useful feature but should not be the default for most applications, as there is a performance consideration, and the default level of safety provided by Couchbase will be reasonable for the majority of situations.
+
+== Expiration/TTL
+Couchbase Server includes an option to have particular documents automatically expire after a set time.  This can be useful for some use-cases, such as user sessions, caches, or other temporary documents.
+
+You can set an expiration value when creating a document:
+
+[source,java]
 ----
-// decrement binary value by 1, if document doesn’t exist, seed it at 1000
-await collection.Binary.Decrement("document-key", 1, 1000);
+include::example$KvOperations.java[tag=expiry-insert]
 ----
 
-.Increment (with options)
-[source,csharp]
+When getting a document, the expiry is not provided automatically by Couchbase Server but it can be requested:
+
+[source,java]
 ----
-// decrement binary value by 1, if document doesn’t exist, seed it at 1000
-// optional arguments:
-// - Timeout (TimeSpan)
-// - Expiration (TimeSpan)
-// - CAS (ulong)
-await collection.Binary.Decrement("document-key", 1, 1000, TimeSpan.FromSeconds(5), TimeSpan.FromDays(1), cas);
+include::example$KvOperations.java[tag=expiry-get]
 ----
 
-NOTE: Increment & Decrement are considered part of the ‘binary’ API and as such may still be subject to change
+Note that when updating the document, special care must be taken to avoid resetting the expiry to zero.  Here's how:
 
-== Additional Resources
+[source,java]
+----
+include::example$KvOperations.java[tag=expiry-replace]
+----
+
+Some applications may find `getAndTouch` useful, which fetches a document while updating its expiry field.  It can be used like this:
+
+[source,java]
+----
+include::example$KvOperations.java[tag=expiry-touch]
+----
+
+== Additional resources
 
 Working on just a specific path within a JSON document will reduce network bandwidth requirements - see the xref:subdocument-operations.adoc[Sub-Document] pages.
-For working with metadata on a document, reference our xref:sdk-xattr-example.adoc[Extended Attributes] pages.
 
-For a significant performance speed up with large volumes of data, reference our xref:async-programming.adoc[asynchronous programmaing options].
+For working with metadata on a document, reference our xref:sdk-xattr-example.adoc[Extended Attributes] pages.
 
 Another way of increasing network performance is to _pipeline_ operations with xref:batching-operations.adoc[Batching Operations].
 
-As well as various xref:concept-docs:data-model.adoc[Formats] of JSON, Couchbase can work directly with xref:non-json.adoc[arbitary bytes, or binary format].
+As well as various xref:concept-docs:data-model.adoc[Formats] of JSON, Couchbase can work directly with xref:non-json.adoc[arbitrary bytes, or binary format].
 
 Our xref:n1ql-queries-with-sdk.adoc[Query Engine] enables retrieval of information using the SQL-like syntax of N1QL.
-
