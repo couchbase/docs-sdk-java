@@ -1,7 +1,8 @@
 name: java-sdk
-version: '3.0dp1'
+version: '3.0alpha'
+prerelease: DRAFT
 title: Java SDK
-start_page: hello-world:start-using-sdk.adoc
+start_page: 3.0alpha@hello-world:start-using-sdk.adoc
 nav:
 - modules/ROOT/nav.adoc
 server_version: '6.5'
