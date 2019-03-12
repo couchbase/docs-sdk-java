@@ -1,2 +1,10 @@
 = Sub-Document Operations
+:navtitle: Sub-Doc Operations
+:page-topic-type: howto
+:page-aliases: 
+
+[abstract]
+Rich interface to paths within a document, allowing considerable cumulative saving of network bandwidth.
+
+
 
