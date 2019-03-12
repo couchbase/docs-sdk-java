@@ -1,2 +1,35 @@
 = N1QL Queries from the SDK
+:navtitle: N1QL from the SDK
+:page-topic-type: howto
+:page-aliases: n1ql-query
+
+[abstract]
+You can query for documents in Couchbase using the N1QL query language, a language based on SQL, but designed for structured and flexible JSON documents. 
+Querying can solve typical programming tasks such as finding a user profile by email address, facebook login, or user ID.
+
+WARNING: These pages cover the first _Developer Preview_ of the Couchbase Java SDK -- 3.0 _alpha_.
+As such they are likely to change without notice.
+The _alpha_ code _should not_ be used in production.
+
+Our query service uses N1QL, which will be fairly familiar to anyone who's used any dialect of SQL.
+xref:#_additional_resources[Further resources] for learning about N1QL are listed at the bottom of the page.
+Before you get started you may wish to checkout the xref:6.0@server:n1ql:n1ql-language-reference/index.adoc[N1QL intro page], or just dive in with a query against our travel sample data set.
+In this case, the one thing that you need to know is that in order to make a Bucket queryable, it must have at least one index defined.
+You can define a _primary_ index on a bucket. 
+When a primary index is defined you can issue non-covered queries on the bucket as well.
+
+Use
+xref:6.0@server::tools/cbq-shell.html[cbq], our interactive Query shell.
+Open it, and enter the following:
+
+[source,n1ql]
+----
+CREATE PRIMARY INDEX ON `travel-sample`
+----
+
+or replace _travel-sample_ with a different Bucket name to build an index on a different dataset.
+
+NOTE: The default installation places cbq in `/opt/couchbase/bin/` on Linux, `/Applications/Couchbase Server.app/Contents/Resources/couchbase-core/bin/cbq` on OS X, and `C:\Program Files\Couchbase\Server\bin\cbq.exe` on Microsoft Windows.
+
+
 
