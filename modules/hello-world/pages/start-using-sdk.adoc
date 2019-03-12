@@ -70,8 +70,9 @@ MutationResult upsertResult = collection.upsert(
 Optional<GetResult> getResult = collection.get("my-document");
 ----
 
-KV Operations are described in detail on the xref:net-sdk:howtos:kv-operations.adoc[KV Operations page].
-Now that you know the basics, you may wish to go straight to that page -- or first see a complete worked example of using the Couchbase Java client, our xref:3.0dp1@sample-application.adoc[Travel Sample Application].
+KV Operations are described in detail on the xref:howtos:kv-operations.adoc[KV Operations page].
+Now that you know the basics, you may wish to go straight to that page.
+// -- or first see a complete worked example of using the Couchbase Java client, our xref:3.0dp1@sample-application.adoc[Travel Sample Application].
 
 == Additional Resources
 

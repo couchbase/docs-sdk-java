@@ -3,10 +3,9 @@
 :page-topic-type: howto
 :page-aliases: document-operations.adoc
 
-WARNING: These pages cover the first _Developer Preview_ of the Couchbase Java SDK 3.0 (DP1).
+WARNING: These pages cover the first _Developer Preview_ of the Couchbase Java SDK -- 3.0 _alpha_.
 As such they are likely to change without notice.
-The DP1 code _should not_ be used in production.
-
+The _alpha_ code _should not_ be used in production.
 
 The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/tree/3.0dp1/modules/howtos/examples/KvOperations.java[here].
 
@@ -15,9 +14,9 @@ At its heart Couchbase Server is a high-performance key-value store, and the key
 A _document_ refers to an entry in the database (other databases may refer to the same concept as a _row_).
 A document has an ID (_primary key_ in other databases), which is unique to the document and by which it can be located.
 The document also has a value which contains the actual application data.
-See xref::concept-docs:documents.adoc[the concept guide to _Documents_] for a deeper dive into documents in the Couchbase Data Platform.
+See xref:concept-docs:documents.adoc[the concept guide to _Documents_] for a deeper dive into documents in the Couchbase Data Platform.
 
-Before proceeding, make sure you're familiar with the basics of authorization and connecting to a Cluster from the xref::hello-world:start-using-sdk.adoc[Start Using the SDK] section.
+Before proceeding, make sure you're familiar with the basics of authorization and connecting to a Cluster from the xref:hello-world:start-using-sdk.adoc[Start Using the SDK] section.
 
 The code samples below will use these imports:
 
@@ -118,6 +117,7 @@ CAS, or Compare And Swap, is a form of optimistic locking. Every document in Cou
 In general, you'll want to provide a CAS value whenever you `replace` a document, to prevent overwriting another agent's mutations.
 
 == Retrying on CAS failures
+
 But if we get a CAS mismatch, we usually just want to retry the operation. Let's see a more advanced `replace` example that shows one way to handle this:
 
 [source,java]
