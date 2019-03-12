@@ -26,14 +26,14 @@ You can use your favorite dependency management tool to install the SDK. The fol
 
 == Hello Couchbase
 
-Once you have the Java client installed, grab the code from link:href://devguideexamples or add a new file to your project and try out the following:
+Once you have the Java client installed, open your IDE, and try out the following:
 
 [source,java]
 ----
 Cluster cluster = Cluster.connect("localhost", "username", "password");
 ----
 
-Couchbase uses xref:6.5@server:learn/security:roles.adoc[Role Based Access Control (RBAC) to control access to resources.
+Couchbase uses xref:server:learn/security:roles.adoc[Role Based Access Control (RBAC) to control access to resources.
 Here we will use the _Full Admin_ role created during installation of the Couchbase Data Platform.
 For production client code, you will want to use xref:3.0dp1@net-sdk:howtos:managing-connections.adoc#rbac[more appropriate, restrictive settings], but here we want to get you up and running quickly.
 If you're developing client code on the same VM or machine as the Couchbase Server, your URI can be _localhost_.
@@ -54,7 +54,7 @@ If you installed the travel sample data bucket, substitute _travel-sample_ for _
 Collection collection = bucket.defaultCollection();
 ----
 
-The 3.0 SDK is ready for the introduction of xref:#[Collections] in Cheshire Cat, the next release of the Couchbase Data Platform.
+The 3.0 SDK is ready for the introduction of xref:#[Collections] in an upcoming release of the Couchbase Data Platform.
 The latest release, Mad Hatter, brings a limited _Developer Preview_ of Collections, allowing Documents to be grouped by purpose or theme, according to specified _Scope_.
 Here we will use the `DefaultCollection`, which covers the whole Bucket.
 
@@ -75,9 +75,9 @@ Now that you know the basics, you may wish to go straight to that page -- or fir
 
 == Additional Resources
 
-The API reference is generated for each release and can be found xref:http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0dp1/[here].
+The API reference is generated for each release and can be found xref:http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0/[here].
 
-xref:migrating-sdk-code-to-3.n.adoc[The Migrating from SDK2 to 3 page] highlights the main differences to be aware of when migrating your code.
+// xref:migrating-sdk-code-to-3.n.adoc[The Migrating from SDK2 to 3 page] highlights the main differences to be aware of when migrating your code.
 
 Couchbase welcomes community contributions to the Java SDK.
 The Java SDK source code is available on xref:https://github.com/couchbase/couchbase-java-client[GitHub].
