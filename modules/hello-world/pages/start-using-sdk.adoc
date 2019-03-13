@@ -35,7 +35,7 @@ Cluster cluster = Cluster.connect("localhost", "username", "password");
 
 Couchbase uses xref:6.0@server:learn:security/roles.adoc[Role Based Access Control (RBAC)] to control access to resources.
 Here we will use the _Full Admin_ role created during installation of the Couchbase Data Platform.
-For production client code, you will want to use xref:2.7@sdk-user-management-overview.adoc#further-information-on-rbac[more appropriate, restrictive settings], but here we want to get you up and running quickly.
+For production client code, you will want to use more appropriate, restrictive settings -- but here we want to get you up and running quickly.
 If you're developing client code on the same VM or machine as the Couchbase Server, your URI can be _localhost_.
 
 Connection to the cluster is initialized by
