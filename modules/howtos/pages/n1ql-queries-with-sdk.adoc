@@ -2,34 +2,61 @@
 :navtitle: N1QL from the SDK
 :page-topic-type: howto
 :page-aliases: n1ql-query
+:lang: Java
+:version: 3.0.0 alpha
+:example-source: 3.0@java-sdk:howtos:example$Queries.java
+:example-source-lang: java
 
-[abstract]
-You can query for documents in Couchbase using the N1QL query language, a language based on SQL, but designed for structured and flexible JSON documents. 
-Querying can solve typical programming tasks such as finding a user profile by email address, facebook login, or user ID.
+include::1.0@scala-sdk:howtos:partial$n1ql-intro.adoc[]
+include::1.0@scala-sdk:howtos:partial$n1ql-getting-started.adoc[]
 
-WARNING: These pages cover the first _Developer Preview_ of the Couchbase Java SDK -- 3.0 _alpha_.
-As such they are likely to change without notice.
-The _alpha_ code _should not_ be used in production.
+== A Simple Query
+Here's the basics of how to run a simple query to fetch 10 random rows from travel-sample and print the results:
 
-Our query service uses N1QL, which will be fairly familiar to anyone who's used any dialect of SQL.
-xref:#_additional_resources[Further resources] for learning about N1QL are listed at the bottom of the page.
-Before you get started you may wish to checkout the xref:6.0@server:n1ql:n1ql-language-reference/index.adoc[N1QL intro page], or just dive in with a query against our travel sample data set.
-In this case, the one thing that you need to know is that in order to make a Bucket queryable, it must have at least one index defined.
-You can define a _primary_ index on a bucket. 
-When a primary index is defined you can issue non-covered queries on the bucket as well.
-
-Use
-xref:6.0@server::tools/cbq-shell.html[cbq], our interactive Query shell.
-Open it, and enter the following:
-
-[source,n1ql]
+[source,java]
 ----
-CREATE PRIMARY INDEX ON `travel-sample`
+include::example$Queries.java[tag=simple]
 ----
 
-or replace _travel-sample_ with a different Bucket name to build an index on a different dataset.
+(Note that we won't be covering the N1QL language itself in any detail here, but if you're familiar with SQL you'll see it's very similar.)
 
-NOTE: The default installation places cbq in `/opt/couchbase/bin/` on Linux, `/Applications/Couchbase Server.app/Contents/Resources/couchbase-core/bin/cbq` on OS X, and `C:\Program Files\Couchbase\Server\bin\cbq.exe` on Microsoft Windows.
+Error handling: the Java SDK will throw an exception derived from `CouchbaseException` if there are any errors.
 
+[NOTE]
+=====
+Most of the examples here use the simplest of the three APIs provided by the Java SDK, which blocks until the operation is performed.  There's also an asynchronous API that is based around `CompletableFuture`, and a
+streaming reactive API, for which we'll see an example later.
+=====
 
+include::1.0@scala-sdk:howtos:partial$n1ql-placeholders.adoc[]
+include::1.0@scala-sdk:howtos:partial$n1ql-scan-consistency.adoc[]
+
+== Streaming Large Result Sets
+As mentioned earlier, the Java SDK provides three SDKs:
+
+* The blocking API you've seen so far, that returns a `QueryResult` containing all rows.
+
+* An async API that returns a `CompletableFuture[QueryResult]`.  This in turn contains a `CompletableFuture<List<JsonObject>> rows()`.  It can be accessed like this:
+
+[source,java]
+----
+include::example$Queries.java[tag=async]
+----
+
+* A reactive API, that can be used to stream rows.
+
+The former two APIs buffer all rows in-memory until they can be returned to you.  With smaller queries this is likely to be fine, but for large data sets this could lead to Java `OutOfMemoryError` exceptions.
+
+The recommended solution is to use the reactive API.  Reactive programming is a sophisticated paradigm that is rapidly gaining popularity for its ability to handle, amongst other things, streaming large amounts of data over fallible networks, while allowing error handling and backpressure.
+
+The Java SDK exposes primitives from the https://projectreactor.io/[Project Reactor] library, most notably `Mono` and `Flux`.  We strongly recommend https://projectreactor.io/learn[learning] a little of this library first, and the following examples will assume basic familiarity with Reactor.
+
+Here's how to perform a query and stream the results using the reactive API:
+
+[source,java]
+----
+include::example$Queries.java[tag=reactive]
+----
+
+include::1.0@scala-sdk:howtos:partial$n1ql-additional-resources.adoc[]
 
