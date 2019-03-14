@@ -7,7 +7,7 @@ WARNING: These pages cover the first _Developer Preview_ of the Couchbase Java S
 As such they are likely to change without notice.
 The _alpha_ code _should not_ be used in production.
 
-The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/tree/3.0dp1/modules/howtos/examples/KvOperations.java[here].
+The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/blob/release/3.0alpha/modules/howtos/examples/KvOperations.java[here].
 
 At its heart Couchbase Server is a high-performance key-value store, and the key-value interface outlined below is the fastest and best method to perform operations involving single documents.
 

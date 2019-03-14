@@ -5,9 +5,9 @@
 
 The Couchbase Java SDK allows Java applications to access a Couchbase cluster. It offers traditional synchronous APIs as well as reactive and asynchronous APIs to maximize flexibility and performance.
 
-WARNING: These pages cover the first _Developer Preview_ of the Couchbase Java SDK 3.0 (DP1).
+WARNING: These pages cover the first _Alpha_ of the Couchbase Java SDK 3.0 (Alpha 1).
 As such they are likely to change without notice.
-The DP1 code _should not_ be used in production.
+The Alpha1 code _should not_ be used in production.
 
 == Installing the SDK
 
@@ -17,11 +17,21 @@ You can use your favorite dependency management tool to install the SDK. The fol
 
 [source,xml]
 ----
-<dependency>
-    <groupId>com.couchbase.client</groupId>
-    <artifactId>java-client</artifactId>
-    <version>3.0.0-dp1</version>
-</dependency>
+<repositories>
+    <repository>
+      <id>couchbase</id>
+      <name>Couchbase Preview Repository</name>
+      <url>http://files.couchbase.com/maven2</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>com.couchbase.client</groupId>
+        <artifactId>java-client</artifactId>
+        <version>3.0.0-alpha.1</version>
+    </dependency>
+</dependencies>
 ----
 
 == Hello Couchbase
@@ -30,7 +40,7 @@ Once you have the Java client installed, open your IDE, and try out the followin
 
 [source,java]
 ----
-Cluster cluster = Cluster.connect("localhost", "username", "password");
+include::example$StartUsing.java[tag=connect]
 ----
 
 Couchbase uses xref:6.0@server:learn:security/roles.adoc[Role Based Access Control (RBAC)] to control access to resources.
@@ -42,16 +52,14 @@ Connection to the cluster is initialized by
 
 [source,java]
 ----
-// get a bucket reference
-Bucket bucket = cluster.bucket("bucket-name");
+include::example$StartUsing.java[tag=bucket]
 ----
 
 If you installed the travel sample data bucket, substitute _travel-sample_ for _bucket-name_.
 
 [source,java]
 ----
-// get a collection reference
-Collection collection = bucket.defaultCollection();
+include::example$StartUsing.java[tag=collection]
 ----
 
 The 3.0 SDK is ready for the introduction of xref:#[Collections] in an upcoming release of the Couchbase Data Platform.
@@ -60,14 +68,7 @@ Here we will use the `DefaultCollection`, which covers the whole Bucket.
 
 [source,java]
 ----
-// Upsert Document
-MutationResult upsertResult = collection.upsert(
-    "my-document", 
-    JsonObject.create().put("name", "mike")
-);
-
-// Get Document
-Optional<GetResult> getResult = collection.get("my-document");
+include::example$StartUsing.java[tag=upsert-get]
 ----
 
 KV Operations are described in detail on the xref:howtos:kv-operations.adoc[KV Operations page].
@@ -76,9 +77,9 @@ Now that you know the basics, you may wish to go straight to that page.
 
 == Additional Resources
 
-The API reference is generated for each release and can be found xref:http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0/[here].
+The API reference is generated for each release and can be found http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0/[here].
 
 // xref:migrating-sdk-code-to-3.n.adoc[The Migrating from SDK2 to 3 page] highlights the main differences to be aware of when migrating your code.
 
 Couchbase welcomes community contributions to the Java SDK.
-The Java SDK source code is available on xref:https://github.com/couchbase/couchbase-java-client[GitHub].
+The Java SDK source code is available on https://github.com/couchbaselabs/couchbase-jvm-clients[GitHub].
