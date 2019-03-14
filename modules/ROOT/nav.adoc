@@ -26,7 +26,7 @@
 
 .Concepts
 * xref:concept-docs:concepts.adoc[Concepts]
- ** xref:concept-docs:document-operations.adoc[Documents & Doc Ops]
+ ** xref:concept-docs:documents.adoc[Documents & Doc Ops]
 // ** xref:concept-docs:collections.adoc[Collections]
 
 .Project Docs
