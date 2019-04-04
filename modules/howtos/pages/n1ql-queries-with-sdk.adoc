@@ -36,7 +36,7 @@ As mentioned earlier, the Java SDK provides three SDKs:
 
 * The blocking API you've seen so far, that returns a `QueryResult` containing all rows.
 
-* An async API that returns a `CompletableFuture[QueryResult]`.  This in turn contains a `CompletableFuture<List<JsonObject>> rows()`.  It can be accessed like this:
+* An async API that returns a `CompletableFuture<QueryResult>`.  This in turn contains a `List<JsonObject> rowsAs(T)`.  It can be accessed like this:
 
 [source,java]
 ----

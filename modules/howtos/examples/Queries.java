@@ -2,7 +2,7 @@
 import com.couchbase.client.java.*;
 import com.couchbase.client.java.json.*;
 import com.couchbase.client.java.query.*;
-import com.couchbase.client.java.query.options.ScanConsistency;
+import com.couchbase.client.java.query.ScanConsistency;
 import reactor.core.publisher.*;
 
 import java.util.List;
@@ -38,7 +38,7 @@ void simple() {
 String statement = "select * from `travel-sample` limit 10;";
 QueryResult result = cluster.query(statement);
 
-List<JsonObject> rows = result.rows();
+List<JsonObject> rows = result.allRowsAsObject();
 
 for (JsonObject json: rows) {
   System.out.println("Row: " + json);
@@ -76,12 +76,12 @@ void async() {
 // #tag::async[]
 AsyncCluster async = cluster.async();
 String stmt = "select * from `travel-sample` limit 10;";
-CompletableFuture<AsyncQueryResult> future = async.query(stmt);
+CompletableFuture<QueryResult> future = async.query(stmt);
 
 // Just for demo purposes, block on the CompletableFutures.
 try {
   List<JsonObject> rows = future
-                  .thenCompose(result -> result.rows())
+                  .thenApply(QueryResult::allRowsAsObject)
                   .get();
 } catch (InterruptedException | ExecutionException e) {
   e.printStackTrace();
@@ -96,7 +96,7 @@ String stmt = "select * from `travel-sample`;";
 Mono<ReactiveQueryResult> mono = reactive.query(stmt);
 
 Flux<JsonObject> rows = mono
-  .flatMapMany(result -> result.rows());
+  .flatMapMany(result -> result.rowsAsObject());
 
 // Just for example, block on the rows.  This is not best practice and apps
 // should generally not block.
