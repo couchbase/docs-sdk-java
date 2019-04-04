@@ -5,9 +5,9 @@
 
 The Couchbase Java SDK allows Java applications to access a Couchbase cluster. It offers traditional synchronous APIs as well as reactive and asynchronous APIs to maximize flexibility and performance.
 
-WARNING: These pages cover the first _Alpha_ of the Couchbase Java SDK 3.0 (Alpha 2).
+WARNING: These pages cover the second _Alpha_ of the Couchbase Java SDK 3.0 (Alpha 2).
 As such they are likely to change without notice.
-The Alpha1 code _should not_ be used in production.
+The Alpha2 code _should not_ be used in production.
 
 == Installing the SDK
 
