@@ -13,7 +13,8 @@ Java 11 is recommended which has various enhancements like lambda local variable
 
 This is the second pre-release of the third generation Java SDK.
 
-http://packages.couchbase.com/clients/java/3.0.0-alpha.2/Couchbase-Java-Client-3.0.0-alpha.2.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-alpha.2/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.0-alpha.2/[Core API Reference]
+// http://packages.couchbase.com/clients/java/3.0.0-alpha.2/Couchbase-Java-Client-3.0.0-alpha.2.zip[Download] | 
+http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-alpha.2/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.0-alpha.2/[Core API Reference]
 
 The supported and tested dependencies for this release are:
 
