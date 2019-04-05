@@ -6,7 +6,7 @@
 == Installation
 
 At least Java 8 is required for current releases; all newer, vendor supported Java versions are supported (and encouraged). 
-See the xref:compatibility-versions-features.adoc[Compatibility] section for details.
+See the xref:2.7@java-sdk::compatibility-versions-features.adoc[Compatibility] section for details.
 Java 11 is recommended which has various enhancements like lambda local variable type inference, profiling tools and updated security features.
 
 == Version 3.0.0-alpha.2 (04 April 2019)
