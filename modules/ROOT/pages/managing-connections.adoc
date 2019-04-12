@@ -173,6 +173,8 @@ Observable
     .single();
 ----
 
+include::6.0@sdk:pages:partial$max-connections.adoc[tag=limits]
+
 [#ssl]
 == Connecting with SSL
 
