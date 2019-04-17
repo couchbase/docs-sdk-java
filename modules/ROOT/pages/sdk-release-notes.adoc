@@ -1,5 +1,6 @@
 = Couchbase Java SDK Release Notes and Archives
 :navtitle: Release Notes
+:page-aliases: relnotes-java-sdk
 
 == Installation
 
