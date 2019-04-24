@@ -1,0 +1,265 @@
+// #tag::imports[]
+
+import com.couchbase.client.core.error.subdoc.PathExistsException;
+import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.Scope;
+import com.couchbase.client.java.json.JsonArray;
+import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.kv.LookupInResult;
+import com.couchbase.client.java.kv.MutateInOptions;
+import com.couchbase.client.java.kv.MutateInResult;
+import reactor.core.publisher.Mono;
+
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+import static com.couchbase.client.java.kv.LookupInSpec.get;
+import static com.couchbase.client.java.kv.LookupInSpec.exists;
+import static com.couchbase.client.java.kv.MutateInSpec.upsert;
+import static com.couchbase.client.java.kv.MutateInSpec.remove;
+import static com.couchbase.client.java.kv.MutateInSpec.replace;
+import static com.couchbase.client.java.kv.MutateInSpec.insert;
+import static com.couchbase.client.java.kv.MutateInSpec.arrayAddUnique;
+import static com.couchbase.client.java.kv.MutateInSpec.arrayAppend;
+import static com.couchbase.client.java.kv.MutateInSpec.arrayPrepend;
+import static com.couchbase.client.java.kv.MutateInSpec.arrayInsert;
+import static com.couchbase.client.java.kv.MutateInSpec.increment;
+import static com.couchbase.client.java.kv.MutateInSpec.decrement;
+// #end::imports[]
+
+class SubDocument {
+    static Collection collection;
+
+    public static void main(String... args) {
+
+        Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");
+
+        Bucket bucket = cluster.bucket("bucket-name");
+        Scope scope = bucket.scope("scope-name");
+        collection = scope.collection("collection-name");
+    }
+
+    static void getFunc() {
+// #tag::get[]
+        Optional<LookupInResult> result = collection.lookupIn("customer123",
+                Arrays.asList(get("addresses.delivery.country")));
+
+        result.ifPresent(doc -> {
+            String str = doc.contentAs(0, String.class);
+            System.out.println("Country = " + str);
+        });
+// #end::get[]
+    }
+
+    static void existsFunc() {
+// #tag::exists[]
+        Optional<LookupInResult> result = collection.lookupIn("customer123",
+                Arrays.asList(exists("addresses.delivery.does_not_exist")));
+
+        result.ifPresent(doc -> {
+            Boolean exists = doc.contentAs(0, Boolean.class);
+        });
+// #end::exists[]
+    }
+
+    static void combine() {
+// #tag::combine[]
+        Optional<LookupInResult> result = collection.lookupIn("customer123",
+                Arrays.asList(
+                        get("addresses.delivery.country"),
+                        exists("addresses.delivery.does_not_exist")
+                ));
+
+        result.ifPresent(doc -> {
+            String country = doc.contentAs(0, String.class);
+            Boolean exists = doc.contentAs(1, Boolean.class);
+        });
+// #end::combine[]
+    }
+
+    static void future() throws ExecutionException, InterruptedException {
+// #tag::get-future[]
+        CompletableFuture<Optional<LookupInResult>> future =
+                collection.async().lookupIn("customer123", Arrays.asList(
+                        get("addresses.delivery.country")
+                ));
+
+        // Just for example, block on the result - this is not best practice
+        Optional<LookupInResult> result = future.get();
+// #end::get-future[]
+    }
+
+    static void reactive() {
+// #tag::get-reactive[]
+        Mono<Optional<LookupInResult>> mono =
+                collection.reactive().lookupIn("customer123",
+                        Arrays.asList(
+                                get("addresses.delivery.country")
+                        ));
+
+        // Just for example, block on the result - this is not best practice
+        Optional<LookupInResult> result = mono.block();
+// #end::get-reactive[]
+    }
+
+
+    static void upsertFunc() {
+// #tag::upsert[]
+        collection.mutateIn("customer123", Arrays.asList(
+                upsert("email", "dougr96@hotmail.com")
+        ));
+
+// #end::upsert[]
+    }
+
+    static void insertFunc() {
+// #tag::insert[]
+        try {
+            collection.mutateIn("customer123", Arrays.asList(
+                    insert("email", "dougr96@hotmail.com")
+            ));
+        } catch (PathExistsException err) {
+            System.out.println("Error, path already exists");
+        }
+// #end::insert[]
+    }
+
+    static void multiFunc() {
+// #tag::multi[]
+        collection.mutateIn("customer123", Arrays.asList(
+                remove("addresses.billing"),
+                replace("email", "dougr96@hotmail.com")
+        ));
+// #end::multi[]
+    }
+
+
+    static void arrayAppendFunc() {
+// #tag::array-append[]
+        collection.mutateIn("customer123", Arrays.asList(
+                arrayAppend("purchases.complete", 777)
+        ));
+
+        // purchases.complete is now [339, 976, 442, 666, 777]
+// #end::array-append[]
+    }
+
+    static void arrayPrependFunc() {
+// #tag::array-prepend[]
+        collection.mutateIn("customer123", Arrays.asList(
+                arrayPrepend("purchases.abandoned", 18)
+        ));
+
+        // purchases.abandoned is now [18, 157, 49, 999]
+// #end::array-prepend[]
+    }
+
+    static void createAndPopulateArrays() {
+// #tag::array-create[]
+        collection.upsert("my_array", JsonArray.create());
+
+        collection.mutateIn("my_array", Arrays.asList(
+                arrayAppend("", "some element")
+        ));
+        // the document my_array is now ["some element"]
+// #end::array-create[]
+    }
+
+    static void arrayCreate() {
+// #tag::array-upsert[]
+        collection.mutateIn("some_doc", Arrays.asList(
+                arrayAppend("some.array", "hello world").createPath()
+        ));
+// #end::array-upsert[]
+    }
+
+    static void arrayUnique() {
+// #tag::array-unique[]
+        collection.mutateIn("customer123", Arrays.asList(
+                arrayAddUnique("purchases.complete", 95)
+        ));
+
+        try {
+            collection.mutateIn("customer123", Arrays.asList(
+                    arrayAddUnique("purchases.complete", 95)
+            ));
+        } catch (PathExistsException err) {
+            System.out.println("Error, path already exists");
+        }
+
+// #end::array-unique[]
+    }
+
+    static void arrayInsertFunc() {
+// #tag::array-insert[]
+        collection.mutateIn("some_doc", Arrays.asList(
+                arrayInsert("foo.bar[1]", "cruel")
+        ));
+// #end::array-insert[]
+    }
+
+    static void counterInc() {
+// #tag::counter-inc[]
+        MutateInResult result = collection.mutateIn("customer123", Arrays.asList(
+                increment("logins", 1)
+        ));
+
+        // Counter operations return the updated count
+        Long count = result.contentAs(0, Long.class);
+// #end::counter-inc[]
+    }
+
+    static void counterDec() {
+// #tag::counter-dec[]
+        collection.upsert("player432", JsonObject.create().put("gold", 1000));
+
+        collection.mutateIn("player432", Arrays.asList(
+                decrement("gold", 150)
+        ));
+// #end::counter-dec[]
+    }
+
+    static void createPath() {
+// #tag::create-path[]
+        collection.mutateIn("customer123", Arrays.asList(
+                upsert("level_0.level_1.foo.bar.phone",
+                        JsonObject.create()
+                                .put("num", "311-555-0101")
+                                .put("ext", 16))
+                        .createPath()
+        ));
+// #end::create-path[]
+    }
+
+    static void concurrent() {
+// #tag::concurrent[]
+        // Thread 1
+        collection.mutateIn("customer123", Arrays.asList(
+                arrayAppend("purchases.complete", 99)
+        ));
+
+        // Thread 2
+        collection.mutateIn("customer123", Arrays.asList(
+                arrayAppend("purchases.abandoned", 101)
+        ));
+// #end::concurrent[]
+
+
+    }
+
+    static void cas() {
+// #tag::cas[]
+        collection.get("player432")
+                .ifPresent(doc ->
+                        collection.mutateIn("player432",
+                                Arrays.asList(decrement("gold", 150)),
+                                MutateInOptions.mutateInOptions().cas(doc.cas()))
+                );
+        // #end::cas[]
+    }
+
+}
