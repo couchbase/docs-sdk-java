@@ -1,15 +1,9 @@
 // #tag::imports[]
-
 import com.couchbase.client.core.error.subdoc.PathExistsException;
-import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.Scope;
+import com.couchbase.client.java.*;
 import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.json.JsonObject;
-import com.couchbase.client.java.kv.LookupInResult;
-import com.couchbase.client.java.kv.MutateInOptions;
-import com.couchbase.client.java.kv.MutateInResult;
+import com.couchbase.client.java.kv.*;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
@@ -17,18 +11,8 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static com.couchbase.client.java.kv.LookupInSpec.get;
-import static com.couchbase.client.java.kv.LookupInSpec.exists;
-import static com.couchbase.client.java.kv.MutateInSpec.upsert;
-import static com.couchbase.client.java.kv.MutateInSpec.remove;
-import static com.couchbase.client.java.kv.MutateInSpec.replace;
-import static com.couchbase.client.java.kv.MutateInSpec.insert;
-import static com.couchbase.client.java.kv.MutateInSpec.arrayAddUnique;
-import static com.couchbase.client.java.kv.MutateInSpec.arrayAppend;
-import static com.couchbase.client.java.kv.MutateInSpec.arrayPrepend;
-import static com.couchbase.client.java.kv.MutateInSpec.arrayInsert;
-import static com.couchbase.client.java.kv.MutateInSpec.increment;
-import static com.couchbase.client.java.kv.MutateInSpec.decrement;
+import static com.couchbase.client.java.kv.LookupInSpec.*;
+import static com.couchbase.client.java.kv.MutateInSpec.*;
 // #end::imports[]
 
 class SubDocument {
