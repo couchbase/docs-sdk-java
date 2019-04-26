@@ -154,7 +154,7 @@ More information on managing connections including error handling can be found x
 == API Reference
 
 Each stable Java SDK version has the Javadocs API reference published.
-The reference for the latest version can be found http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.1/[here^].
+The reference for the latest version can be found http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.4/[here^].
 
 [#java-contributing]
 == Contributing
