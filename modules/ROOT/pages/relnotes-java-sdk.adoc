@@ -1,1 +1,1 @@
-include::java-sdk::page$relnotes-java-sdk.adoc[]
+include::java-sdk::page$sdk-release-notes.adoc[tag=latest]
