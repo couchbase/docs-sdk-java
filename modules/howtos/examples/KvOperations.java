@@ -136,7 +136,7 @@ try {
 collection.upsert(
   "my-document",
   JsonObject.create().put("doc", true),
-  upsertOptions().withDurabilityLevel(DurabilityLevel.MAJORITY)
+  upsertOptions().durabilityLevel(DurabilityLevel.MAJORITY)
 );
 // #end::durability[]
 
@@ -144,7 +144,7 @@ collection.upsert(
 collection.upsert(
   "my-document",
   JsonObject.create().put("doc", true),
-  upsertOptions().withDurability(PersistTo.NONE, ReplicateTo.TWO)
+  upsertOptions().durability(PersistTo.NONE, ReplicateTo.TWO)
 );
 // #end::durability-observed[]
 

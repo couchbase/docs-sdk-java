@@ -9,6 +9,42 @@ At least Java 8 is required for current releases; all newer, vendor supported Ja
 See the xref:2.7@java-sdk::compatibility-versions-features.adoc[Compatibility] section for details.
 Java 11 is recommended which has various enhancements like lambda local variable type inference, profiling tools and updated security features.
 
+== Version 3.0.0-alpha.3 (13 May 2019)
+
+This is the third pre-release of the third generation Java SDK.
+
+http://packages.couchbase.com/clients/java/3.0.0-alpha.3/Couchbase-Java-Client-3.0.0-alpha.3.zip[Download] | 
+http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-alpha.3/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.0-alpha.3/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.0-alpha.3**
+* com.couchbase.client:**core-io:2.0.0-alpha.3**
+* io.projectreactor:**reactor-core:3.2.8.RELEASE**
+* io.opentracing:**opentracing-api:0.31.0**
+* org.reactivestreams:**reactive-streams:1.0.2**
+
+Note that since this release depends on core-io, it also includes transitive fixes and enhancements that may not all be reflected in the following list.
+
+=== New Features
+
+* http://issues.couchbase.com/browse/JCBC-1319[JCBC-1319]: Initial support for search index management capabilities.
+* http://issues.couchbase.com/browse/JVMCBC-651[JVMCBC-651]: JSON query streaming parsers reworked completely on top of Jackson so they are more efficient, faster and produce less garbage.
+* http://issues.couchbase.com/browse/JVMCBC-617[JVMCBC-617]: It is now possible to populate the environment from system properties.
+
+=== Enhancements
+
+* http://issues.couchbase.com/browse/JCBC-1322[JCBC-1322]: Add `consistentWith` to `QueryOptions`.
+* http://issues.couchbase.com/browse/JVMCBC-650[JVMCBC-650]: Traffic capturing can now be enabled on the environment.
+* http://issues.couchbase.com/browse/JVMCBC-659[JVMCBC-659]: Native transports can be disabled with a switch on the environment.
+* http://issues.couchbase.com/browse/JVMCBC-664[JVMCBC-664]: The SDK now passes the timeout down to the sync durability KV infrastructure.
+
+=== Bug Fixes
+
+* http://issues.couchbase.com/browse/JVMCBC-658[JVMCBC-658]: Improved config fetching and support for clusters deployed with `cluster_run`.
+* http://issues.couchbase.com/browse/JVMCBC-669[JVMCBC-669]: Fixed a bug which prevent a node removal being picked up during rebalance out.
+* http://issues.couchbase.com/browse/JVMCBC-655[JVMCBC-655]: Collection ID improvements (UnsignedLEB128 outputs bytes in reversed order).
+
 == Version 3.0.0-alpha.2 (04 April 2019)
 
 This is the second pre-release of the third generation Java SDK.
@@ -22,7 +58,7 @@ The supported and tested dependencies for this release are:
 * com.couchbase.client:**core-io:2.0.0-alpha.2**
 * io.projectreactor:**reactor-core:3.2.8.RELEASE**
 * io.opentracing:**opentracing-api:0.31.0**
-* io.opentracing:**opentracing-api:0.31.0**
+* org.reactivestreams:**reactive-streams:1.0.2**
 
 Note that since this release depends on core-io, it also includes transitive fixes and enhancements that may not all be reflected in the following list.
 

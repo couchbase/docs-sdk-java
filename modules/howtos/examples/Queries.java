@@ -50,7 +50,7 @@ void positional() {
 // #tag::positional[]
 String stmt = "select * from `travel-sample` where type=$1 and country=$2 limit 10;";
 QueryResult result = cluster.query(stmt,
-  queryOptions().withParameters(JsonArray.from("airline", "United States")));
+  queryOptions().parameters(JsonArray.from("airline", "United States")));
 // #end::positional[]
 }
 
@@ -58,7 +58,7 @@ void named() {
 // #tag::named[]
 String stmt = "select * from `travel-sample` where type=$type and country=$country limit 10;";
 QueryResult result = cluster.query(stmt,
-  queryOptions().withParameters(JsonObject.create()
+  queryOptions().parameters(JsonObject.create()
           .put("type", "airline")
           .put("country", "United States")));
 // #end::named[]
@@ -68,7 +68,7 @@ void requestPlus() {
 // #tag::request-plus[]
 String stmt = "select * from `travel-sample` limit 10;";
 QueryResult result = cluster.query(stmt,
-  queryOptions().withScanConsistency(ScanConsistency.REQUEST_PLUS));
+  queryOptions().scanConsistency(ScanConsistency.REQUEST_PLUS));
 // #end::request-plus[]
 }
 
