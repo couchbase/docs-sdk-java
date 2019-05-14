@@ -28,22 +28,32 @@ Note that since this release depends on core-io, it also includes transitive fix
 
 === New Features
 
-* http://issues.couchbase.com/browse/JCBC-1319[JCBC-1319]: Initial support for search index management capabilities.
-* http://issues.couchbase.com/browse/JVMCBC-651[JVMCBC-651]: JSON query streaming parsers reworked completely on top of Jackson so they are more efficient, faster and produce less garbage.
-* http://issues.couchbase.com/browse/JVMCBC-617[JVMCBC-617]: It is now possible to populate the environment from system properties.
+* http://issues.couchbase.com/browse/JCBC-1319[JCBC-1319]: 
+Initial support for search index management capabilities.
+* http://issues.couchbase.com/browse/JVMCBC-651[JVMCBC-651]: 
+JSON query streaming parsers reworked completely on top of Jackson so they are more efficient, faster, and produce less garbage.
+* http://issues.couchbase.com/browse/JVMCBC-617[JVMCBC-617]: 
+It is now possible to populate the environment from system properties.
 
 === Enhancements
 
-* http://issues.couchbase.com/browse/JCBC-1322[JCBC-1322]: Add `consistentWith` to `QueryOptions`.
-* http://issues.couchbase.com/browse/JVMCBC-650[JVMCBC-650]: Traffic capturing can now be enabled on the environment.
-* http://issues.couchbase.com/browse/JVMCBC-659[JVMCBC-659]: Native transports can be disabled with a switch on the environment.
-* http://issues.couchbase.com/browse/JVMCBC-664[JVMCBC-664]: The SDK now passes the timeout down to the sync durability KV infrastructure.
+* http://issues.couchbase.com/browse/JCBC-1322[JCBC-1322]: 
+Add `consistentWith` to `QueryOptions`.
+* http://issues.couchbase.com/browse/JVMCBC-650[JVMCBC-650]: 
+Traffic capturing can now be enabled on the environment.
+* http://issues.couchbase.com/browse/JVMCBC-659[JVMCBC-659]: 
+Native transports can be disabled with a switch on the environment.
+* http://issues.couchbase.com/browse/JVMCBC-664[JVMCBC-664]: 
+The SDK now passes the timeout down to the sync durability KV infrastructure.
 
 === Bug Fixes
 
-* http://issues.couchbase.com/browse/JVMCBC-658[JVMCBC-658]: Improved config fetching and support for clusters deployed with `cluster_run`.
-* http://issues.couchbase.com/browse/JVMCBC-669[JVMCBC-669]: Fixed a bug which prevent a node removal being picked up during rebalance out.
-* http://issues.couchbase.com/browse/JVMCBC-655[JVMCBC-655]: Collection ID improvements (UnsignedLEB128 outputs bytes in reversed order).
+* http://issues.couchbase.com/browse/JVMCBC-658[JVMCBC-658]: 
+Improved config fetching and support for clusters deployed with `cluster_run`.
+* http://issues.couchbase.com/browse/JVMCBC-669[JVMCBC-669]: 
+Fixed a bug which prevent a node removal being picked up during rebalance out.
+* http://issues.couchbase.com/browse/JVMCBC-655[JVMCBC-655]: 
+Collection ID improvements (UnsignedLEB128 outputs bytes in reversed order).
 
 == Version 3.0.0-alpha.2 (04 April 2019)
 
@@ -64,20 +74,28 @@ Note that since this release depends on core-io, it also includes transitive fix
 
 === New Features
 
-* http://issues.couchbase.com/browse/JCBC-1313[JCBC-1313]: Initial query support for the Analytics service.
-* http://issues.couchbase.com/browse/JCBC-1314[JCBC-1314]: Initial query support for the View service.
-* http://issues.couchbase.com/browse/JCBC-1315[JCBC-1315]: Initial query support for the Search service.
+* http://issues.couchbase.com/browse/JCBC-1313[JCBC-1313]: 
+Initial query support for the Analytics service.
+* http://issues.couchbase.com/browse/JCBC-1314[JCBC-1314]: 
+Initial query support for the View service.
+* http://issues.couchbase.com/browse/JCBC-1315[JCBC-1315]: 
+Initial query support for the Search service.
 
 === Enhancements
 
-* http://issues.couchbase.com/browse/JCBC-1310[JCBC-1310]: Get signatures change to include explicit Optionals on Monos which make it easier to handle non-existing documents.
-* http://issues.couchbase.com/browse/JCBC-1316[JCBC-1316]: Reworked the API for N1QL queries.
+* http://issues.couchbase.com/browse/JCBC-1310[JCBC-1310]: 
+Get signatures change to include explicit Optionals on Monos which make it easier to handle non-existing documents.
+* http://issues.couchbase.com/browse/JCBC-1316[JCBC-1316]: 
+Reworked the API for N1QL queries.
 
 === Bug Fixes
 
-* http://issues.couchbase.com/browse/JCBC-1311[JCBC-1311]: Shutdown is now correctly propagated into core-io.
-* http://issues.couchbase.com/browse/JCBC-1305[JCBC-1305]: Removes unused expiry from RemoveOptions
-* http://issues.couchbase.com/browse/JVMCBC-639[JVMCBC-639]: IO threads are now daemon threads to not prevent the JVM from shutting down even when the SDK was not properly shutdown in the first place.
+* http://issues.couchbase.com/browse/JCBC-1311[JCBC-1311]: 
+Shutdown is now correctly propagated into core-io.
+* http://issues.couchbase.com/browse/JCBC-1305[JCBC-1305]: 
+Removes unused expiry from RemoveOptions
+* http://issues.couchbase.com/browse/JVMCBC-639[JVMCBC-639]: 
+IO threads are now daemon threads to not prevent the JVM from shutting down even when the SDK was not properly shutdown in the first place.
 
 
 == Version 3.0.0-alpha.1 (12 March 2019)
