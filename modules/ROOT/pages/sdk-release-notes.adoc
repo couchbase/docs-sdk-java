@@ -43,11 +43,19 @@ The supported and tested dependencies for this release are:
 
 === Bug Fixes
 
-* http://issues.couchbase.com/browse/JVMCBC-657[JVMCBC-657]: Even when booted through HTTP, if a couchbase bucket is used the client now switches to the more efficient carrier publication mechanisms for config updates. This fixes a couple of issues associated with HTTP streaming connections when bootstrapping from non-kv nodes.
-* http://issues.couchbase.com/browse/JVMCBC-656[JVMCBC-656]: When HTTP streaming must be used, it only falls back to the verbose config if the terse one returned with a 404, not on any error as before.
-* http://issues.couchbase.com/browse/JCBC-1333[JCBC-1333]: Reflection triggered NoClassDefFoundError for CryptoManager. This has been resolved by inverting the dependencies. If you are using field level encryption, please upgrade to the 2.0 version there as well.
-* http://issues.couchbase.com/browse/JCBC-1323[JCBC-1323]: A bug has been fixed where the Search engine returned an empty error block and as a result parsing would fail. The SDK is now more reslient to such a situation.
-* http://issues.couchbase.com/browse/JVMCBC-656[JVMCBC-662]: As a precautionary defensive mechanism, internal KV ErrorMap parsing now is more resilient to unknown enum values.
+* http://issues.couchbase.com/browse/JVMCBC-657[JVMCBC-657]: 
+Even when booted through HTTP, if a couchbase bucket is used the client now switches to the more efficient carrier publication mechanisms for config updates. 
+This fixes a couple of issues associated with HTTP streaming connections when bootstrapping from non-kv nodes.
+* http://issues.couchbase.com/browse/JVMCBC-656[JVMCBC-656]: 
+When HTTP streaming must be used, it only falls back to the verbose config if the terse one returned with a 404, not on any error as before.
+* http://issues.couchbase.com/browse/JCBC-1333[JCBC-1333]: 
+Reflection triggered NoClassDefFoundError for CryptoManager. This has been resolved by inverting the dependencies. 
+If you are using field level encryption, please upgrade to the 2.0 version there as well.
+* http://issues.couchbase.com/browse/JCBC-1323[JCBC-1323]: 
+A bug has been fixed where the Search engine returned an empty error block and as a result parsing would fail. 
+The SDK is now more reslient to such a situation.
+* http://issues.couchbase.com/browse/JVMCBC-656[JVMCBC-662]: 
+As a precautionary defensive mechanism, internal KV ErrorMap parsing now is more resilient to unknown enum values.
 
 == Version 2.7.4 (26 February 2019)
 
