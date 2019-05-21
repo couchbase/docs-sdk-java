@@ -23,7 +23,7 @@ For Maven itself, it typically looks like this:
   <dependency>
     <groupId>com.couchbase.client</groupId>
     <artifactId>java-client</artifactId>
-    <version>2.7.5</version>
+    <version>2.7.6</version>
   </dependency>
 </dependencies>
 ----
@@ -154,7 +154,7 @@ More information on managing connections including error handling can be found x
 == API Reference
 
 Each stable Java SDK version has the Javadocs API reference published.
-The reference for the latest version can be found http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.5/[here^].
+The reference for the latest version can be found http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.6/[here^].
 
 [#java-contributing]
 == Contributing
