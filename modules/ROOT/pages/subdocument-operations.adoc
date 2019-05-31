@@ -207,8 +207,7 @@ it must not point to an element which is out of bounds).
 == Counters and numeric fields
 
 Counter operations allow the manipulation of a _numeric_ value inside a document.
-These operations are logically similar to the _counter_ operation on an entire document:
-
+These operations are logically similar to the xref:core-operations.adoc#devguide_kvcore_counter_generic[_counter_ operation on a full document], with similar atomic guarantees:
 [source,java]
 ----
 DocumentFragment<Mutation> result = bucket.mutateIn("customer123")
