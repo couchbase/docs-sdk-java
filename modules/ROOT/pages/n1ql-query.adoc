@@ -7,7 +7,7 @@ Querying can solve typical programming tasks such as finding a user profile by e
 
 == Query Execution
 
-You can issue N1QL queries using either a Couchbase SDK, the _cbq_ shell, the _cbc_ command line tool, the REST API, or the xref:6.o@server:tools:query-workbench.adoc[Query workbench].
+You can issue N1QL queries using either a Couchbase SDK, the _cbq_ shell, the _cbc_ command line tool, the REST API, or the xref:6.0@server:tools:query-workbench.adoc[Query workbench].
 
 A N1QL query is a string parsed by the query service.
 The result for each query is JSON and as a result queries will function the same regardless whether they are executed using the [.cmd]`cbq` shell, an SDK, or using the REST API directly.
