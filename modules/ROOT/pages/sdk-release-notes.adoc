@@ -44,7 +44,11 @@ The supported and tested dependencies for this release are:
 === Bug Fixes
 
 * http://issues.couchbase.com/browse/JVMCBC-654[JVMCBC-654]: 
-Do not eagerly resolve network addresses when parsing the cluster configuration. This makes sure that a setup works where the client SDK runs outside of kubernetes and the cluster inside (utilizing the "alternate address" feature of the cluster)* http://issues.couchbase.com/browse/JVMCBC-677[JVMCBC-677]: Fixed a "division by 0" error in the core layer which only happened during shutdown and is perceived not to have an impact to actual operations.
+The Java SDK no longer eagerly resolves network addresses when parsing the cluster configuration. 
+This makes sure that a setup works where the client SDK runs outside of Kubernetes, and the cluster inside (utilizing the "alternate address" feature of the cluster).
+* http://issues.couchbase.com/browse/JVMCBC-677[JVMCBC-677]: 
+Fixed a "division by 0" error in the core layer. 
+Note, this only happened during shutdown, and was not perceived to have an impact on actual operations.
 
 == Version 2.7.6 (21 May 2019)
 
