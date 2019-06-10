@@ -1,6 +1,4 @@
 // Required attributes:
-// :lang: Java
-// :version: 3.0.0 alpha
 [WARNING]
 ====
 These pages cover the _Alpha_ of the Couchbase Java SDK.
