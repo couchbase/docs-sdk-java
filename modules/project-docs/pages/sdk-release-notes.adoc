@@ -51,9 +51,9 @@ Collection IDs are now refreshed automatically if they change.
 === Bug Fixes
 
 * http://issues.couchbase.com/browse/JVMCBC-671[JVMCBC-671]: 
-Accidential pipelining for streaming results has been fixed (which led timed out requests).
+Accidential pipelining for streaming results (which led to timed out requests) has been fixed.
 * http://issues.couchbase.com/browse/JVMCBC-681[JVMCBC-681]: 
-The SDK now avoids resolving network addresses early, laying the groundwork for kubernetes support.
+The SDK now avoids resolving network addresses early, laying the groundwork for Kubernetes support.
 
 == Version 3.0.0-alpha.3 (13 May 2019)
 
