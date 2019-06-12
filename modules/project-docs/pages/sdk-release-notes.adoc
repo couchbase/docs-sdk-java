@@ -9,6 +9,52 @@ At least Java 8 is required for current releases; all newer, vendor supported Ja
 See the xref:2.7@java-sdk::compatibility-versions-features.adoc[Compatibility] section for details.
 Java 11 is recommended which has various enhancements like lambda local variable type inference, profiling tools and updated security features.
 
+== Version 3.0.0-alpha.4 (12 June 2019)
+
+This is the fourth pre-release of the third generation Java SDK.
+
+http://packages.couchbase.com/clients/java/3.0.0-alpha.4/Couchbase-Java-Client-3.0.0-alpha.4.zip[Download] | 
+http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-alpha.4/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.0-alpha.4/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.0-alpha.4**
+* com.couchbase.client:**core-io:2.0.0-alpha.4**
+* io.projectreactor:**reactor-core:3.2.10.RELEASE**
+* io.opentracing:**opentracing-api:0.31.0**
+* org.reactivestreams:**reactive-streams:1.0.2**
+
+Note that since this release depends on core-io, it also includes transitive fixes and enhancements that may not all be reflected in the following list.
+
+=== New Features
+
+* http://issues.couchbase.com/browse/JCBC-1345[JCBC-1345]: 
+Prepared statement support is now available again for N1Ql queries.
+* http://issues.couchbase.com/browse/JVMCBC-626[JVMCBC-626]: 
+The connection string can now be used to load properties and seed nodes with custom ports.
+* http://issues.couchbase.com/browse/JVMCBC-676[JVMCBC-676]: 
+Multiple sockets/endpoints for the KV service has been brought back (from 2.x functionality).
+
+=== Enhancements
+
+* http://issues.couchbase.com/browse/JCBC-1347[JCBC-1347]: 
+The `pretty` N1Ql query option has been removed since it is not needed.
+* http://issues.couchbase.com/browse/JCBC-1355[JCBC-1355]: 
+Spatial view API support has been removed since it is deprecated on the server.
+* http://issues.couchbase.com/browse/JCBC-1282[JCBC-1282]: 
+The exception hierachy for error handling has been overhauled.
+* http://issues.couchbase.com/browse/JVMCBC-684[JVMCBC-684]: 
+Event bus event categories are now extendable by other components.
+* http://issues.couchbase.com/browse/JVMCBC-668[JVMCBC-668]: 
+Collection IDs are now refreshed automatically if they change.
+
+=== Bug Fixes
+
+* http://issues.couchbase.com/browse/JVMCBC-671[JVMCBC-671]: 
+Accidential pipelining for streaming results has been fixed (which led timed out requests).
+* http://issues.couchbase.com/browse/JVMCBC-681[JVMCBC-681]: 
+The SDK now avoids resolving network addresses early, laying the groundwork for kubernetes support.
+
 == Version 3.0.0-alpha.3 (13 May 2019)
 
 This is the third pre-release of the third generation Java SDK.

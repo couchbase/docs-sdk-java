@@ -5,9 +5,9 @@
 
 The Couchbase Java SDK allows Java applications to access a Couchbase cluster. It offers traditional synchronous APIs as well as reactive and asynchronous APIs to maximize flexibility and performance.
 
-WARNING: These pages cover the third _Alpha_ of the Couchbase Java SDK 3.0 (Alpha 3).
+WARNING: These pages cover the third _Alpha_ of the Couchbase Java SDK 3.0 (Alpha 4).
 As such they are likely to change without notice.
-The Alpha2 code _should not_ be used in production.
+The Alpha code _should not_ be used in production.
 
 == Installing the SDK
 
@@ -29,7 +29,7 @@ You can use your favorite dependency management tool to install the SDK. The fol
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.0-alpha.3</version>
+        <version>3.0.0-alpha.4</version>
     </dependency>
 </dependencies>
 ----
@@ -77,7 +77,7 @@ Now that you know the basics, you may wish to go straight to that page.
 
 == Additional Resources
 
-The API reference is generated for each release and can be found http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-alpha.3/[here].
+The API reference is generated for each release and can be found http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-alpha.4/[here].
 
 // xref:migrating-sdk-code-to-3.n.adoc[The Migrating from SDK2 to 3 page] highlights the main differences to be aware of when migrating your code.
 
