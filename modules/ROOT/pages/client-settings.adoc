@@ -1,5 +1,6 @@
 = Client Settings for the Java SDK with Couchbase Server
 :navtitle: Client Settings
+:page-aliases: env-config
 
 [abstract]
 The `CouchbaseEnvironment` class enables you to configure Java SDK options for bootstrapping, timeouts, reliability, and performance.
