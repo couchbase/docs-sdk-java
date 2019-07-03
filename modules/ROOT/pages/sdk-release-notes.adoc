@@ -1,6 +1,6 @@
 = Couchbase Java SDK Release Notes and Archives
 :navtitle: Release Notes
-:page-aliases: relnotes-java-sdk,release-notes
+:page-aliases: relnotes-java-sdk,release-notes,download-links
 
 // tag::latest[]
 == Installation
