@@ -1,6 +1,6 @@
 = Compatibility of Couchbase Features, Couchbase Versions and the Couchbase Java SDK
 :navtitle: Compatibility
-:page-aliases: overview
+:page-aliases: overview,migrate
 
 [#feature-matrix]
 == Couchbase Version/SDK Version Matrix
