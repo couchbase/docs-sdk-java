@@ -1,6 +1,7 @@
 = CRUD Document Operations Using the Java SDK with Couchbase Server
 :navtitle: Document Operations
 :page-topic-type: concept
+:page-aliases: documents-creating,documents-updating,documents-retrieving,documents-deleting,
 
 [abstract]
 You can access documents in Couchbase using methods of the [.api]`couchbase.couchbase.client.java.Bucket` object.
