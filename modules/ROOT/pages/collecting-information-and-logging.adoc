@@ -1,6 +1,7 @@
 = Collecting Information and Logging in the Java SDK with Couchbase Server
 :navtitle: Collecting Information
 :page-topic-type: concept
+:page-aliases: event-bus-metrics,logging
 
 [abstract]
 The Java SDK logs events and also provides an event bus that transmits information about the behavior of your database system, including system and metric events.
