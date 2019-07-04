@@ -29,20 +29,20 @@ Note that since this release depends on core-io, it also includes transitive fix
 === Enhancements
 
 * http://issues.couchbase.com/browse/JCBC-1363[JCBC-1363], http://issues.couchbase.com/browse/JCBC-1282[JCBC-1282]: 
-The exception hierarchy has been modified to align closer with the other SDKs.
+The exception hierarchy has been modified to align more closely with the other SDKs.
 * http://issues.couchbase.com/browse/JVMCBC-700[JVMCBC-700]: 
 On client initialization, diagnostics information with versions and config settings is printed at INFO level.
 
 === Bug Fixes
 
 * http://issues.couchbase.com/browse/JVMCBC-686[JVMCBC-686]: 
-Fix default collection support when collections enabled.
+Fixed default collection support when collections enabled.
 * http://issues.couchbase.com/browse/JVMCBC-689[JVMCBC-689]: 
-Getting `DecodingFailedException` while performing sub_doc operations.
+Now no longer get `DecodingFailedException` while performing sub_doc operations.
 * http://issues.couchbase.com/browse/JVMCBC-1234[JVMCBC-1234]: 
 Double check event loop before connecting.
 * http://issues.couchbase.com/browse/JVMCBC-688[JVMCBC-688]: 
-Make sure cas-based observe fails for concurrent modifications.
+Always fetch cas-based observe fails for concurrent modifications.
 
 == Version 3.0.0-alpha.4 (12 June 2019)
 
