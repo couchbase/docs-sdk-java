@@ -1,7 +1,7 @@
 // #tag::imports[]
 import com.couchbase.client.core.error.CASMismatchException;
-import com.couchbase.client.core.error.DocumentAlreadyExistsException;
-import com.couchbase.client.core.error.DocumentDoesNotExistException;
+import com.couchbase.client.core.error.KeyExistsException;
+import com.couchbase.client.core.error.KeyNotFoundException;
 import com.couchbase.client.core.msg.kv.DurabilityLevel;
 import com.couchbase.client.java.AsyncCollection;
 import com.couchbase.client.java.Bucket;
@@ -20,6 +20,8 @@ import com.couchbase.client.java.kv.UpsertOptions;
 
 import java.time.Duration;
 import java.util.Optional;
+
+import javax.management.openmbean.KeyAlreadyExistsException;
 
 import static com.couchbase.client.java.kv.GetOptions.getOptions;
 import static com.couchbase.client.java.kv.InsertOptions.insertOptions;
@@ -61,7 +63,7 @@ MutationResult result = collection.upsert("document-key", content);
 try {
   JsonObject content = JsonObject.create().put("foo", "bar");
   MutationResult insertResult = collection.insert("document-key", content);
-} catch (DocumentAlreadyExistsException ex) {
+} catch (KeyExistsException ex) {
   System.err.println("The document already exists!");
 } catch (Exception ex) {
   System.err.println("Something else happened: " + ex);
@@ -127,7 +129,7 @@ result.ifPresent(found -> {
 // #tag::remove[]
 try {
   collection.remove("my-document");
-} catch (DocumentDoesNotExistException ex) {
+} catch (KeyNotFoundException ex) {
   System.out.println("Document did not exist when trying to remove");
 }
 // #end::remove[]

@@ -68,7 +68,7 @@ include::example$KvOperations.java[tag=apis]
 =====
 
 == Insert
-Insert works very similarly to upsert, but will fail if the document already exists with a `DocumentAlreadyExistsException`:
+Insert works very similarly to upsert, but will fail if the document already exists with a `KeyExistsException`:
 
 [source,java]
 ----
