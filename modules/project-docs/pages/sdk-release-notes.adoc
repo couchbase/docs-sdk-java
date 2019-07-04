@@ -9,6 +9,41 @@ At least Java 8 is required for current releases; all newer, vendor supported Ja
 See the xref:2.7@java-sdk::compatibility-versions-features.adoc[Compatibility] section for details.
 Java 11 is recommended which has various enhancements like lambda local variable type inference, profiling tools and updated security features.
 
+== Version 3.0.0-alpha.5 (4 July 2019)
+
+This is the fifth pre-release of the third generation Java SDK.
+
+http://packages.couchbase.com/clients/java/3.0.0-alpha.5/Couchbase-Java-Client-3.0.0-alpha.5.zip[Download] | 
+http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-alpha.5/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.0-alpha.5/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.0-alpha.5**
+* com.couchbase.client:**core-io:2.0.0-alpha.5**
+* io.projectreactor:**reactor-core:3.2.10.RELEASE**
+* io.opentracing:**opentracing-api:0.31.0**
+* org.reactivestreams:**reactive-streams:1.0.2**
+
+Note that since this release depends on core-io, it also includes transitive fixes and enhancements that may not all be reflected in the following list.
+
+=== Enhancements
+
+* http://issues.couchbase.com/browse/JCBC-1363[JCBC-1363], http://issues.couchbase.com/browse/JCBC-1282[JCBC-1282]: 
+The exception hierarchy has been modified to align more closely with the other SDKs.
+* http://issues.couchbase.com/browse/JVMCBC-700[JVMCBC-700]: 
+On client initialization, diagnostics information with versions and config settings is printed at INFO level.
+
+=== Bug Fixes
+
+* http://issues.couchbase.com/browse/JVMCBC-686[JVMCBC-686]: 
+Fixed default collection support when collections enabled.
+* http://issues.couchbase.com/browse/JVMCBC-689[JVMCBC-689]: 
+Now no longer get `DecodingFailedException` while performing sub_doc operations.
+* http://issues.couchbase.com/browse/JVMCBC-1234[JVMCBC-1234]: 
+Double check event loop before connecting.
+* http://issues.couchbase.com/browse/JVMCBC-688[JVMCBC-688]: 
+Always fetch cas-based observe fails for concurrent modifications.
+
 == Version 3.0.0-alpha.4 (12 June 2019)
 
 This is the fourth pre-release of the third generation Java SDK.
