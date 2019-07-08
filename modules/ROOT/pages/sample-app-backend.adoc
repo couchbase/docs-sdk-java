@@ -389,7 +389,7 @@ If the query is successful, it will offer a list of `N1qlQueryRow` through `allR
 Otherwise it will have `JsonObject` errors in `errors()`.
 That's what the application inspects to respectively build a list of results or throw a `DataRetrievalFailureException` containing all the errors.
 
-After is has extracted the rows, it once again packages them into a `Result`, augmented with the exact statement the application executed as a narration:
+After it has extracted the rows, it once again packages them into a `Result`, augmented with the exact statement the application executed as a narration:
 
 [source,java]
 ----
