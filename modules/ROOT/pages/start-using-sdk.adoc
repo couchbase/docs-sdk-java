@@ -96,7 +96,7 @@ A [.api]`Bucket` reference can be obtained through a [.api]`Cluster` reference w
 
 To obtain a [.api]`Cluster` the [.api]`CouchbaseCluster#create` method needs to be called.
 If no arguments are provided it will connect to a cluster listening on `localhost`.
-Note that not all nodes of the cluster need to be passed it, just a few to allow it to bootstrap itself are enough.
+Note that not all nodes of the cluster need to be passed to the method, just a few to allow it to bootstrap itself are enough.
 We recommend more than one though since if one of the nodes happens to be not available during application startup it still has a chance to try another one and bootstrap properly.
 
 To connect to a Couchbase bucket, you must use Couchbase _Role-Based Access Control_ (RBAC).
