@@ -63,7 +63,7 @@ The supported and tested dependencies for this release are:
 * io.reactivex:**rxjava:1.3.8**
 * io.opentracing:**opentracing-api:0.31.0**
 
-Note that this release is identical with 2.7.6, but there had been a glitch with maven central publishing, so 2.7.5 is not downloadable. 
+Note that 2.7.6 release is identical with 2.7.5, but there had been a glitch with maven central publishing, so 2.7.5 is not downloadable through maven. 
 As a result, if you are using the jars from 2.7.5 directly it's fine, but if you want to grab it through maven you need to point the dependency to 2.7.6.
 
 == Version 2.7.5 (17 May 2019)
