@@ -30,7 +30,7 @@ The other dependency is RxJava which is both used internally and exposed as a fi
 
 == Version 2.7.7 (6th June 2019)
 
-Version 2.7.7 is the eigth release of the 2.7 series, bringing bugfixes over the last stable release. 
+Version 2.7.7 is the eighth release of the 2.7 series, bringing bugfixes over the last stable release. 
 
 http://packages.couchbase.com/clients/java/2.7.7/Couchbase-Java-Client-2.7.7.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.7/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-1.7.7/[Core API Reference]
 
@@ -99,7 +99,7 @@ As a precautionary defensive mechanism, internal KV ErrorMap parsing now is more
 
 == Version 2.7.4 (26 February 2019)
 
-Version 2.7.4 is the fifth release of the 2.7 series, bringing new features, enhancements, and bugfixes over the last stable release. 
+Version 2.7.4 is the fifth release of the 2.7 series, bringing new features, enhancements and bugfixes over the last stable release. 
 
 http://packages.couchbase.com/clients/java/2.7.4/Couchbase-Java-Client-2.7.4.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.4/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-1.7.4/[Core API Reference]
 
@@ -121,7 +121,7 @@ Export only core-io's package for the OSGi specific manifest generation.
 
 == Version 2.7.3 (6 February 2019)
 
-Version 2.7.3 is the fourth release of the 2.7 series, bringing new features, enhancements, and bugfixes over the last stable release. 
+Version 2.7.3 is the fourth release of the 2.7 series, bringing new features, enhancements and bugfixes over the last stable release. 
 
 http://packages.couchbase.com/clients/java/2.7.3/Couchbase-Java-Client-2.7.3.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.3/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-1.7.3/[Core API Reference]
 
@@ -148,7 +148,7 @@ This is useful in containerized environments.
 
 == Version 2.7.2 (5 December 2018)
 
-Version 2.7.2 is the third release of the 2.7 series, bringing new features, enhancements, and bugfixes over the last stable release. 
+Version 2.7.2 is the third release of the 2.7 series, bringing new features, enhancements and bugfixes over the last stable release. 
 As of this release, OpenJDK 11 and Oracle JDK 11 with HotSpot JVM is supported. 
 See the xref:compatibility-versions-features.adoc[Compatibility] section for details.
 
@@ -180,7 +180,7 @@ Fixes the Response Time Observability threshold logging to use descending order 
 
 == Version 2.7.1 (6 November 2018)
 
-Version 2.7.1 is the second release of the 2.7 series, bringing new features, enhancements, and bugfixes over the last stable release.
+Version 2.7.1 is the second release of the 2.7 series, bringing new features, enhancements and bugfixes over the last stable release.
 
 http://packages.couchbase.com/clients/java/2.7.1/Couchbase-Java-Client-2.7.1.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.1/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-1.7.1/[Core API Reference]
 
@@ -210,7 +210,7 @@ Adds support for Sub-Document operation expansion of macro in extended attribute
 
 == Version 2.7.0 (2 October 2018)
 
-Version 2.7.0 is the first release of the 2.7 series, bringing new features, enhancements, and bugfixes over the last stable release.
+Version 2.7.0 is the first release of the 2.7 series, bringing new features, enhancements and bugfixes over the last stable release.
 
 http://packages.couchbase.com/clients/java/2.7.0/Couchbase-Java-Client-2.7.0.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.0/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-1.7.0/[Core API Reference]
 
