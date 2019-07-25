@@ -1,0 +1,36 @@
+= Choosing an API
+:navtitle: Choosing an API
+:page-topic-type: howto
+:page-aliases: ROOT:async-programming,ROOT:batching-operations
+
+[abstract]
+Java's new Reactive Streams standard for asynchronous stream processing with non-blocking back pressure will deal with data where the blocking API won't keep up.
+
+
+// intro on blocking API & example with `iterable`
+
+
+== Reactive Streams
+
+Reactive Streams is a new standard for asynchronous stream processing with non-blocking back pressure, which Couchbase Java SDK 3.0 implements fully.
+
+// more on this
+//  & 
+// Java 9: `java.util.concurrent.Flow`
+
+
+
+
+== Asynchronous Programming
+
+// There's a *lot* in the 2.7 doc
+// how do we want to approach this?
+
+
+
+== Batching
+
+// file from sdk-common
+// something with Observable?
+
+
