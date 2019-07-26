@@ -350,7 +350,7 @@ bucket.upsert(doc, PersistTo.MASTER, ReplicateTo.ONE);
 ----
 
 * https://www.couchbase.com/issues/browse/JCBC-744[JCBC-744^]: Experimental support for POJO mapping capabilities have been added in the form of a repository API.
-See this http://blog.couchbase.com/javasdk-2.2-dp[blog post^] for more details.
+See this https://blog.couchbase.com/javasdk-2.2-dp[blog post^] for more details.
 Here is a quick example.
 Right now you need a no-args constructor to recreate the object again, we'll make it more flexible with explicit constructors in the future so you can use final fields.
 +
