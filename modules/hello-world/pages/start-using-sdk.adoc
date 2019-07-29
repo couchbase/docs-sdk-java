@@ -11,7 +11,10 @@ The Alpha code _should not_ be used in production.
 
 == Installing the SDK
 
-The SDK requires Java 8 or later to be installed, earlier versions will not work. Most of the flavors available will do, although we might only provide support for OpenJDK and Oracle JDK going forward.
+The SDK requires Java 8 or later to be installed, earlier versions will not work.
+Java 11 is recommended, which has various enhancements like lambda local variable type inference, profiling tools, and updated security features.
+Most of the flavors available will do, although we might only provide support for OpenJDK and Oracle JDK going forward.
+It has not been tested (and is not supported on) Java 12.
 
 You can use your favorite dependency management tool to install the SDK. The following snippet shows how to do it with maven.
 
