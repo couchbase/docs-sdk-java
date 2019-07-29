@@ -1,6 +1,6 @@
 = Core Operations
 include::partial$attributes.adoc[]
-:page-aliases: documents,documents-basics,documents-atomic
+:page-aliases: documents,documents-basics,documents-atomic,concept-docs:concepts,concept-docs:documents
 
 [abstract]
 At the core of a database is its ability to store and retrieve data.

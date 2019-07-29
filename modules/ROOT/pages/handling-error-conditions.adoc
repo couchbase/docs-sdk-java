@@ -1,5 +1,6 @@
 = Handling Exceptions and Other Errors with the Java SDK in Couchbase
 :navtitle: Handling Errors
+:page-aliases: howtos:handling-errors,concept-docs:errors,ref:errors
 
 [abstract]
 This topic provides information on error handling when using the Couchbase Java SDK.

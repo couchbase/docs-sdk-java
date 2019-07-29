@@ -1,5 +1,6 @@
 = Searching from the SDK
 :navtitle: Searching from the SDK
+:page-aliases: full-text-searching-with-sdk
 
 [abstract]
 The Java SDK provides an API that supports _Full Text Search_.

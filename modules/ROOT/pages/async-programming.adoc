@@ -1,6 +1,6 @@
 = Asynchronous Progamming Using the Java SDK with Couchbase Server
 :navtitle: Asynchronous Programming
-:page-aliases: reactive-apps,observables,rxjava,
+:page-aliases: reactive-apps,observables,rxjava,howtos:concurrent-async-apis
 
 [abstract]
 The Couchbase Java SDK has a complete asynchronous API based in part on RxJava.

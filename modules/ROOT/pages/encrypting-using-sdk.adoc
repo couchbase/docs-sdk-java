@@ -1,5 +1,6 @@
 = Field Level Encryption from the Java SDK
-:page-topic-type: concept
+:page-topic-type: howto
+:page-aliases: howtos:encrypting-using-sdk
 
 [abstract]
 Field Level Encryption is available in Couchbase Data Platform 5.5, from Java SDK version 2.6.0
