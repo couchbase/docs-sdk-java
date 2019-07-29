@@ -33,4 +33,4 @@ Reactive Streams is a new standard for asynchronous stream processing with non-b
 // file from sdk-common
 // something with Observable?
 
-
+// code sample with error handling -- with @daschl
