@@ -11,7 +11,7 @@ include::6.0@sdk:shared:partial$install-couchbase.adoc[tag=section_gb4_psc_kv]
 [#java-installing-sdk]
 == Installing the SDK
 
-IMPORTANT: At least Java 6 is required, all newer Java versions are supported (and encouraged).
+IMPORTANT: At least Java 6 is required, all newer Java versions are supported (and encouraged), up to and including Java 11.
 Especially Java 8 is recommended since it brings performance enhancements and lambda expressions which are very convenient when used in an asynchronous context.
 
 All stable releases of the Java SDK are primarily distributed through Maven.
