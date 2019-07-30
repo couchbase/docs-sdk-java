@@ -5,7 +5,7 @@
 // tag::latest[]
 == Installation
 
-At least Java 7 is required for current releases; all newer, vendor supported Java versions are supported (and encouraged). 
+At least Java 7 is required for current releases; all newer, vendor supported Java versions are supported (and encouraged), up to and including java 11. 
 See the xref:compatibility-versions-features.adoc[Compatibility] section for details.
 Java 11 is recommended which has various enhancements like lambda local variable type inference, profiling tools and updated security features, starting from the release 2.7.2. For older releases, Java 8 is recommended. 
 
