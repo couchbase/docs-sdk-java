@@ -52,7 +52,7 @@ remove(docid)
 ----
 
 In Couchbase documents are stored using one of the operations: _upsert_, _insert_, and _replace_.
-Eacj of these operations will write a JSON document with a given document ID (key) to the database.
+Each of these operations will write a JSON document with a given document ID (key) to the database.
 The update methods differ in behavior in respect to the existing state of the document:
 
 * _insert_ will only create the document if the given ID is not found within the database.
