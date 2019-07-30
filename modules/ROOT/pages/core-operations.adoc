@@ -143,7 +143,7 @@ update `default` SET sale_price = msrp * 0.75 WHERE msrp < 19.95;
 == Retrieving Documents
 
 FASTPATH: This section discusses retrieving documents using their IDs, or primary keys.
-Documents can also be accessed using secondary lookups via xref:n1ql-query.adoc[N1QL queries] and MapReduce.
+Documents can also be accessed using secondary lookups via xref:n1ql-query.adoc[N1QL queries] and xref:view-queries-with-sdk.adoc[MapReduce].
 Primary key lookups are performed using the key-value API, which simplifies use and increases performance (as applications may interact with the KV store directly, rather than a secondary index or query processor).
 
 In Couchbase, documents are stored with their IDs.
