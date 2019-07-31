@@ -1,7 +1,7 @@
 = Choosing an API
 :navtitle: Choosing an API
 :page-topic-type: howto
-:page-aliases: ROOT:async-programming,ROOT:batching-operations
+:page-aliases: ROOT:async-programming,ROOT:batching-operations,multiple-apis
 
 [abstract]
 Java's new Reactive Streams standard for asynchronous stream processing with non-blocking back pressure will deal with data where the blocking API won't keep up.
