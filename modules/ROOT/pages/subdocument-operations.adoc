@@ -154,7 +154,7 @@ bucket.mutateIn("customer123")
 ----
 
 
-If you wish to create an array if it does not exist and also push elements to it within the same operation you may use the _createPath_ option:
+If you wish to create an array which does not exist and also push elements to it within the same operation you may use the _createPath_ option:
 
 [source,java]
 ----
