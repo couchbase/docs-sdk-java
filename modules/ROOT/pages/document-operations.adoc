@@ -301,7 +301,7 @@ bucket.touch("expires", 2);
 [#java-atomic-modifications]
 == Atomic Document Modifications
 
-Additional atomic document modifications can be performing using the Java SDK.
+Additional atomic document modifications can be performed using the Java SDK.
 You can modify a xref:core-operations.adoc#devguide_kvcore_counter_generic[counter document] using the [.api]`Bucket.counter()` method.
 You can also use the [.api]`Bucket.append()` and [.api]`Bucket.prepend()` methods to perform xref:core-operations.adoc#devguide_kvcore_append_prepend_generic[raw byte concatenation].
 
