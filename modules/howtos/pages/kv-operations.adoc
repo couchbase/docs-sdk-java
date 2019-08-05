@@ -91,9 +91,6 @@ Of course if we're getting a document we probably want to do something with the 
 include::example$KvOperations.java[tag=get]
 ----
 
-We utilize Java 8's closures and `Optional` type to only execute a given code when the document exists,
-giving us protection against a potential `NullPointerException` and making it clear that the document must exist.
-
 Once we have a `GetResult`, we can use `contentAsObject()` to turn the content back into a `JsonObject` like we inserted it in the examples before, or use the more generic `contentAs(T.class)` equivalent to turn it back into other entity structures. In fact, the `contentAsObject()` method is just a convenience method for `contentAs(JsonObject.class)`.
 
 == Replace
