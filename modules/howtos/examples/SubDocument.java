@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.Collections;
 
 import static com.couchbase.client.java.kv.LookupInSpec.*;
 import static com.couchbase.client.java.kv.MutateInSpec.*;
@@ -29,64 +30,60 @@ class SubDocument {
 
     static void getFunc() {
 // #tag::get[]
-        Optional<LookupInResult> result = collection.lookupIn("customer123",
-                Arrays.asList(get("addresses.delivery.country")));
+LookupInResult result = collection.lookupIn(
+  "customer123",
+  Collections.singletonList(get("addresses.delivery.country"))
+);
 
-        result.ifPresent(doc -> {
-            String str = doc.contentAs(0, String.class);
-            System.out.println("Country = " + str);
-        });
+String str = result.contentAs(0, String.class);
+System.out.println("Country = " + str);
 // #end::get[]
     }
 
     static void existsFunc() {
 // #tag::exists[]
-        Optional<LookupInResult> result = collection.lookupIn("customer123",
+        LookupInResult result = collection.lookupIn("customer123",
                 Arrays.asList(exists("addresses.delivery.does_not_exist")));
 
-        result.ifPresent(doc -> {
-            Boolean exists = doc.contentAs(0, Boolean.class);
-        });
+        boolean exists = result.contentAs(0, Boolean.class);
 // #end::exists[]
     }
 
     static void combine() {
 // #tag::combine[]
-        Optional<LookupInResult> result = collection.lookupIn("customer123",
+        LookupInResult result = collection.lookupIn("customer123",
                 Arrays.asList(
                         get("addresses.delivery.country"),
                         exists("addresses.delivery.does_not_exist")
                 ));
 
-        result.ifPresent(doc -> {
-            String country = doc.contentAs(0, String.class);
-            Boolean exists = doc.contentAs(1, Boolean.class);
-        });
+        String country = result.contentAs(0, String.class);
+        boolean exists = result.contentAs(1, Boolean.class);
 // #end::combine[]
     }
 
     static void future() throws ExecutionException, InterruptedException {
 // #tag::get-future[]
-        CompletableFuture<Optional<LookupInResult>> future =
+        CompletableFuture<LookupInResult> future =
                 collection.async().lookupIn("customer123", Arrays.asList(
                         get("addresses.delivery.country")
                 ));
 
         // Just for example, block on the result - this is not best practice
-        Optional<LookupInResult> result = future.get();
+        LookupInResult result = future.get();
 // #end::get-future[]
     }
 
     static void reactive() {
 // #tag::get-reactive[]
-        Mono<Optional<LookupInResult>> mono =
+        Mono<LookupInResult> mono =
                 collection.reactive().lookupIn("customer123",
                         Arrays.asList(
                                 get("addresses.delivery.country")
                         ));
 
         // Just for example, block on the result - this is not best practice
-        Optional<LookupInResult> result = mono.block();
+        LookupInResult result = mono.block();
 // #end::get-reactive[]
     }
 
@@ -237,12 +234,12 @@ class SubDocument {
 
     static void cas() {
 // #tag::cas[]
-        collection.get("player432")
-                .ifPresent(doc ->
-                        collection.mutateIn("player432",
-                                Arrays.asList(decrement("gold", 150)),
-                                MutateInOptions.mutateInOptions().cas(doc.cas()))
-                );
+GetResult doc = collection.get("player432");
+collection.mutateIn(
+  "player432",
+  Arrays.asList(decrement("gold", 150)),
+  MutateInOptions.mutateInOptions().cas(doc.cas())
+);
         // #end::cas[]
     }
 

@@ -9,6 +9,64 @@ At least Java 8 is required for current releases; all newer, vendor supported Ja
 See the xref:2.7@java-sdk::compatibility-versions-features.adoc[Compatibility] section for details.
 Java 11 is recommended, which has various enhancements like lambda local variable type inference, profiling tools, and updated security features.
 
+== Version 3.0.0-alpha.6 (2 August 2019)
+
+This is the sixth pre-release of the third generation Java SDK.
+
+http://packages.couchbase.com/clients/java/3.0.0-alpha.6/Couchbase-Java-Client-3.0.0-alpha.6.zip[Download] | 
+http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-alpha.6/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.0-alpha.6/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.0-alpha.6**
+* com.couchbase.client:**core-io:2.0.0-alpha.6**
+* io.projectreactor:**reactor-core:3.2.10.RELEASE**
+* org.reactivestreams:**reactive-streams:1.0.2**
+
+Note that since this release depends on core-io, it also includes transitive fixes and enhancements that may not all be reflected in the following list.
+
+=== Enhancements
+
+* http://issues.couchbase.com/browse/JCBC-1386[JCBC-1386]:
+AsyncCluster and ReadtiveCluster create methods have been made asynchronous.
+* http://issues.couchbase.com/browse/JCBC-1386[JCBC-1386]:
+Group and user management API has been added.
+* http://issues.couchbase.com/browse/JCBC-1386[JCBC-1386]:
+A major rework of the get-based API has removed the Optional return type for consistency reasons.
+* http://issues.couchbase.com/browse/JCBC-1386[JCBC-1386]:
+Support for collection management has been added.
+* http://issues.couchbase.com/browse/JCBC-1385[JCBC-1385]:
+The default scope is now exposed on the bucket API directly.
+* http://issues.couchbase.com/browse/JCBC-1377[JCBC-1377]:
+Support for bucket management has been added. 
+* http://issues.couchbase.com/browse/JCBC-1376[JCBC-1376]:
+OpenTracing has been removed from the API for now until the implementation has been reworked.
+* http://issues.couchbase.com/browse/JVMCBC-667[JVMCBC-667]:
+Added support for DNS SRV bootstrapping.
+* http://issues.couchbase.com/browse/JVMCBC-694[JVMCBC-694]:
+When using Couchbase Server 6.5 and later, cluster-level queries can now be performed without opening a bucket.
+* http://issues.couchbase.com/browse/JVMCBC-706[JVMCBC-706]:
+The IO handlers now consolidate internal flush syscalls to reduce them as much as possible, leading to measurable performance improvements in highly concurrent workloads.
+* http://issues.couchbase.com/browse/JVMCBC-711[JVMCBC-711]:
+Unknown/Unsupported KeyValue error status codes are now logged so they can be better debugged.
+* http://issues.couchbase.com/browse/JVMCBC-717[JVMCBC-717]:
+Explicit support for the new KeyValue status DurableWriteReCommitInProgress has been added and mapped to an exception.
+* http://issues.couchbase.com/browse/JVMCBC-673[JVMCBC-673]:
+KeyValue error map response codes are now handled like in core-io 1.x (aside from transparent retry logic).
+* http://issues.couchbase.com/browse/JVMCBC-703[JVMCBC-703]:
+Durable writes are now short circuited early on when they are not available on the server side.
+
+=== Bug Fixes
+
+* http://issues.couchbase.com/browse/JVMCBC-704[JVMCBC-704]:
+The initial seed nodes are now kept fresh which each subsequent config update.
+* http://issues.couchbase.com/browse/JVMCBC-705[JVMCBC-705]:
+If the underlying socket is closed upon an endpoint (channel), the endpoint now triggers a proactive reconnect.
+* http://issues.couchbase.com/browse/JVMCBC-707[JVMCBC-707]: 
+Shutting down the core (and the core environment) is properly synchronized with its internal state, preventing early shutdown reports while the inner shutdown is still happening.
+* http://issues.couchbase.com/browse/JVMCBC-710[JVMCBC-710]: 
+A race condition has been fixed which made concurrent requests possible against non-pipelined HTTP sockets which lead to queries not being executed properly.
+
 == Version 3.0.0-alpha.5 (4 July 2019)
 
 This is the fifth pre-release of the third generation Java SDK.
