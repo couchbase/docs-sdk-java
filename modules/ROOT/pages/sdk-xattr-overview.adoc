@@ -1,5 +1,5 @@
 = Extended Attributes
-:page-aliases: concept-docs:xattr
+:page-aliases: concept-docs:sdk-xattr-overview
 
 [abstract]
 Extended Attributes (XATTR) are metadata that can be provided on a per-application basis.
