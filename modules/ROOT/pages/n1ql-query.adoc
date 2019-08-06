@@ -345,7 +345,7 @@ mgr.watch_n1ql_indexes(('ix_name', 'ix_email', '#primary'), timeout=120)
 Because indexes are by design outside the data service, they are eventually consistent with respect to changes to documents and, depending on how you issue the query, may at times not contain the most up-to-date information.
 This may especially be the case when deployed in a write-heavy environment: changes may take some time to propagate over to the index nodes.
 
-The asynchronous updating nature of global secondary indexes means that they can be very quick to query and do not require the additional overhead of index recaclculations at the time documents are modified.
+The asynchronous updating nature of global secondary indexes means that they can be very quick to query and do not require the additional overhead of index recalculations at the time documents are modified.
 N1QL queries are forwarded to the relevant indexes and the queries are done based on indexed information, rather than the documents as they exist in the data service.
 
 With default query options, the query service will rely on the current index state: the most up-to-date document versions are not retrieved, and only the indexed versions are queried.
