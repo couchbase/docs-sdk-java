@@ -77,7 +77,7 @@ The client now properly closes the trace span of a `subdoc_mutate` op which will
 
 == Version 2.7.7 (6th June 2019)
 
-*PLEASE NOTE*: 2.7.7 has known issues which have been addressed in 2.7.8. We recommend upgrading straight to 2.7.8 or later.
+*PLEASE NOTE*: 2.7.7 has known issues which have been addressed in 2.7.9. We recommend upgrading straight to 2.7.9 or later.
 
 Version 2.7.7 is the eighth release of the 2.7 series, bringing bugfixes over the last stable release. 
 
