@@ -1,7 +1,7 @@
 = Managing clusters using the Java SDK with Couchbase Server
 :navtitle: Managing Clusters
 :page-aliases: concept-docs:buckets-and-clusters,concept-docs:collections,howtos:provisioning-cluster-resources
-
+	       
 include::6.0@sdk:shared:partial$flush-info-pars.adoc[tag=management-intro]
 
 The Java SDK also comes with some convenience functionality for common Couchbase management requests.
