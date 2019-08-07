@@ -1234,7 +1234,7 @@ It is easily done by chaining the retry operators inside the [.api]`flatMap` ins
 One thing to keep in mind with [.api]`flatMap` is that the order of emissions isn't guaranteed to be the same as the source emissions.
 This can be especially visible in this case since individual streams are retried on their own: retried keys could come back with a value much later than other keys, more often changing the order in which they appear.
 
-Bulk Pattern, [.api]`BackpressureException` and Reactive Pull Backpressure::
+Bulk Pattern, BackpressureException and Reactive Pull Backpressure::
 The bulk pattern is powerful, but if you try it with a very large collection, it is especially susceptible to a [.api]`BackpressureException`.
 This exception is a way for the SDK to tell you that you're asking for too much in a short amount of time, and requests have piled up too much while waiting for a server response to free up a spot.
 +
