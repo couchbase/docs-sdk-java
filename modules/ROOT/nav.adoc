@@ -14,8 +14,7 @@
 * xref:howtos:view-queries-with-sdk.adoc[MapReduce Views]
 
 .Advanced Data Operations
-* xref:howtos:durability.adoc[Durability]
- ** * xref:howtos:transactions.adoc[ACID Transactions]
+* xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed ACID Transactions]
 
 .Managing Couchbase
 * User Management
@@ -38,11 +37,10 @@
 https://docs.couchbase.com/sdk-api/couchbase-java
 
 .Project Docs
-* xref:project-docs:sdk-release-notes.adoc[Release Notes]
-////
-* xref:project-docs:compatibility-versions-features.adoc[Compatibility]
- ** xref:project-docs:migrating-sdk-code-to-3.n.adoc[Migrating to SDK 3 API]
-////
+* xref:project-docs:sdk-release-notes.adoc[SDK Release Notes]
+* xref:project-docs:distributed-transactions-java-release-notes.adoc[Transactions Release Notes]
+// * xref:project-docs:compatibility-versions-features.adoc[Compatibility]
+// ** xref:project-docs:migrating-sdk-code-to-3.n.adoc[Migrating to SDK 3 API]
 * xref:project-docs:sdk-licenses.adoc[Licenses]
 * xref:project-docs:get-involved.adoc[Get involved]
  ** https://docs.couchbase.com/home/contribute/index.html[Improve the Docs]

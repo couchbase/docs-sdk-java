@@ -1,13 +1,18 @@
+// placeholder to archive the 3.0αλφα sdk release notes.
+
 = Couchbase Java SDK Release Notes and Archives
 :navtitle: Release Notes
 :page-topic-type: project-doc
 :page-aliases: relnotes-java-sdk
 
-These pages cover the 3.0 versions of the Couchbase Java SDK. 
-For release notes, download links, and installation methods for 2.7 and earlier releases of the Couchbase Java Client, which will not work with Distributed Transactions, please see the xref:2.7@java-sdk::sdk-release-notes[2.x Java Release Notes & Download Archive].
+These pages cover the 3.0 alpha versions of the Couchbase Java SDK, the archive is maintained purely to preserve this snapshot of SDK development.
 
-Transactions is available as a separate library for the Java SDK.
-Please see the xref:transaction-release-notes.adoc[Transaction Release Notes page].
+For release notes, download links, and installation methods for the latest 3.n SDK releases, see xref:sdk-release-notes.adoc[the current Release Notes page].
+For release notes, download links, and installation methods for 2.7 and earlier releases of the Couchbase Java Client (which will not work with Distributed Transactions), please see the xref:2.7@java-sdk::sdk-release-notes[2.x Java Release Notes & Download Archive].
+
+Note, Distributed ACID Transactions is available as a separate library for the 3.0 Java SDK.
+Please see the xref:distributed-transactions-java-release-notes.adoc[Transaction Release Notes page].
+
 
 == Installation
 
@@ -15,8 +20,6 @@ At least Java 8 is required for current releases; all newer, vendor supported Ja
 See the xref:compatibility-versions-features.adoc[Compatibility] section for details.
 Java 11 is recommended, which has various enhancements like lambda local variable type inference, profiling tools, and updated security features.
 
-// note below is for after the αλφα release, when 3.0α relnotes are tidied away to a separate page (so will be below all of the relnotes left on this page):
-// Note, should you need them, release notes for the alpha versions of the Java SDK are xref:3.0αλφα-sdk-release-notes.adoc[archived here].
 
 == Version 3.0.0-alpha.6 (2 August 2019)
 
