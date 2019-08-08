@@ -4,7 +4,7 @@
 :page-aliases: transactions-release-notes
 
 Couchbase Distributed ACID Transactions is distributed as a separate library for the Java SDK.
-This page features the release notes for that library -- for release notes, download links, and installation methods for the latest 3.n Java SDK releases, see xref:sdk-release-notes.adoc[the current Release Notes page].
+This page features the release notes for that library -- for release notes, download links, and installation methods for the latest 3.x Java SDK releases, see xref:sdk-release-notes.adoc[the current Release Notes page].
 
 == Using Distributed Transactions
 
@@ -17,7 +17,7 @@ The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Tran
 This is the first _Beta_ release of Distributed ACID Transactions 1.0.0 for Couchbase Server 6.5 and the Java 3.0.0 client.
 
 Built on Couchbase java-client version 3.0.0-alpha.6.
-Requires Couchbase Server 6.5 or above.
+Requires Couchbase Server 6.5 beta or above.
 
 === New features
 
