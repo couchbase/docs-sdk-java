@@ -506,7 +506,7 @@ The library will keep trying to commit (or rollback), until the transaction expi
 If the transaction expires, then a `TransactionFailed` exception will be thrown.  
 There is a background cleanup process run by each client whose responsibility is to find any 'lost' half-completed transactions, 
 and continue trying to push forwards the commit or rollback stage until they succeed.
-If the background cleanup job fails to run, cleanup will still occur when the item is visited.
+If the background cleanup job fails in process, another cleanup job will identify this and complete the commit or rollback.
 
 The transaction will expire at the end of the configured expiration period.  
 The default is 15 seconds, and it can be set with:
