@@ -280,7 +280,7 @@ transactions.run((ctx) -> {
 ----
 
 Other transactions will not see the inserted document until this transaction commits.  
-Non-transactional reads will see a document does not exist.
+Non-transactional reads will see an empty document, where they would have otherwise seen a document not existing.
 
 === Replacing Documents
 
@@ -438,7 +438,8 @@ public void playerHitsMonster(int damage, String playerId, String monsterId) {
 
 This release of transactions for Couchbase requires a degree of co-operation from the application.
 Specifically, the application should ensure that transactional and non-transactional writes (such as the SDK API using the data service or issuing N1QL UPDATES) are never done concurrently with documents involved in a transaction.
-It is recommended that if your app is using transactions, all document access for mutation is through the transactions API.
+It is recommended that if your app is using transactions, all transacted upon document access for mutation is through the transactions API.
+In many applications, this means you will have a mix of use of the traditional API for documents not involved in transactions and the transactions API for documents used from transactions, even if some sections of that logic do not require multi-document atomicity.
 Queries and read access from other APIs are perfectly fine and are at a Read Committed isolation level.
 We may change this in a future release.
 
