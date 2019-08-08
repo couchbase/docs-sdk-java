@@ -12,3 +12,49 @@ See the xref:6.5@server:learn:data/distributed-acid-transactions.adoc[Distribute
 The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Transactions HOWTO doc] walks you through all aspects of working with Distributed Transactions.
 
 
+== Distributed Transactions Java 1.0.0-beta.1
+
+This is the first _Beta_ release of Distributed ACID Transactions 1.0.0 for Couchbase Server 6.5 and the Java 3.0.0 client.
+
+Built on Couchbase java-client version 3.0.0-alpha.6.
+Requires Couchbase Server 6.5 or above.
+
+=== New features
+
+* https://issues.couchbase.com/browse/TXNJ-41[TXNJ-41]:
+Add fields required for backup
+* https://issues.couchbase.com/browse/TXNJ-52[TXNJ-52],
+https://issues.couchbase.com/browse/TXNJ-53[TXNJ-53],
+https://issues.couchbase.com/browse/TXNJ-56[TXNJ-56],
+https://issues.couchbase.com/browse/TXNJ-71[TXNJ-71],
+https://issues.couchbase.com/browse/TXNJ-72[TXNJ-72],
+https://issues.couchbase.com/browse/TXNJ-75[TXNJ-75],
+https://issues.couchbase.com/browse/TXNJ-76[TXNJ-76],
+https://issues.couchbase.com/browse/TXNJ-83[TXNJ-83]:
+More readable and useful logging
+
+=== Bug-fixes and stability
+
+* https://issues.couchbase.com/browse/TXNJ-47[TXNJ-47]:
+Improved handling for expiry -- the transaction will now try to enter Aborted state
+* https://issues.couchbase.com/browse/TXNJ-50[TXNJ-50]:
+Intermittent reactive asserts about blocking on a thread from the "parallel" scheduler
+* https://issues.couchbase.com/browse/TXNJ-55[TXNJ-55]:
+Retry transient errors while rolling back ATR entry, rather than retrying transaction
+* https://issues.couchbase.com/browse/TXNJ-57[TXNJ-57]:
+Add log redaction for document keys
+* https://issues.couchbase.com/browse/TXNJ-59[TXNJ-59]:
+Fix an issue with the lost cleanup thread aborting early
+* https://issues.couchbase.com/browse/TXNJ-64[TXNJ-64]:
+Commit documents in the order they were staged
+* https://issues.couchbase.com/browse/TXNJ-79[TXNJ-79], https://issues.couchbase.com/browse/TXNJ-81[TXNJ-81]:
+Improved handling of transient server errors while trying to create ATR entries
+* https://issues.couchbase.com/browse/TXNJ-90[TXNJ-90]:
+Improved handling of conflicts when multiple applications start at once and try to create the client record
+* https://issues.couchbase.com/browse/TXNJ-96[TXNJ-96]:
+Improved handling of transient errors removing entries from the client record
+
+=== Deprecations and removals
+
+* https://issues.couchbase.com/browse/TXNJ-92[TXNJ-92]:
+OpenTracing removed from API -- will be re-added when _OpenTelemetry_ is ready
