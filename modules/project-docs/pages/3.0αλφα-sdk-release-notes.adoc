@@ -3,7 +3,6 @@
 = Couchbase Java SDK Release Notes and Archives
 :navtitle: Release Notes
 :page-topic-type: project-doc
-:page-aliases: relnotes-java-sdk
 
 These pages cover the 3.0 alpha versions of the Couchbase Java SDK, the archive is maintained purely to preserve this snapshot of SDK development.
 
