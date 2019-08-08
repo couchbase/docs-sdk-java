@@ -23,12 +23,15 @@ Please see xref:6.5@server:learn:data/distributed-acid-transactions.adoc[our int
 
 * Couchbase Server 6.5 or above. 
 * Couchbase Java client 3.x.  It is recommended to follow the transitive dependency from maven.
-* NTP should be configured so nodes of the Couchbase cluster are in sync with time.  The time being out of sync will not cause incorrect behavior, but can impact metadata cleanup.
-* The application, if it is using xref:<<RICHARD TO FILL THIS IN>>extended attributes (XATTRs), must avoid using the XATTR field `txn`, which is now reserved for Couchbase use.
+* NTP should be configured so nodes of the Couchbase cluster are in sync with time. The time being out of sync will not cause incorrect behavior, but can impact metadata cleanup.
+* The application, if it is using xref:concept-docs:xattr.adoc[extended attributes (XATTRs)], must avoid using the XATTR field `txn`, which is now reserved for Couchbase use.
 
 
 == Getting started
-Couchbase transactions require no additional components or services to be configured.  Simply add the transactions library into your project.  With gradle this can be accomplished by modifying these sections of your build.gradle file like so along with adding a separate repository where the beta is published:
+
+Couchbase transactions require no additional components or services to be configured. 
+Simply add the transactions library into your project. 
+With gradle this can be accomplished by modifying these sections of your build.gradle file like so -- along with adding a separate repository where the beta is published:
 
 [source,gradle]
 ----
@@ -42,11 +45,8 @@ repositories {
 
 ----
 
-Use of this maven repository from other tools is similar.  Use the same group, artifact and version in your maven-compatible tool of choice.
-
-
-
-
+Use of this maven repository from other tools is similar. 
+Use the same group, artifact, and version in your maven-compatible tool of choice.
 
 == Initializing Transactions
 
@@ -426,9 +426,6 @@ public void playerHitsMonster(int damage, String playerId, String monsterId) {
         // or player not existing (as getOrError is used), or a persistent
         // failure to be able to commit the transaction, for example on
         // prolonged node failure.
-
-
-
     }
 }
 ----
@@ -438,9 +435,9 @@ public void playerHitsMonster(int damage, String playerId, String monsterId) {
 
 This release of transactions for Couchbase requires a degree of co-operation from the application.
 Specifically, the application should ensure that transactional and non-transactional writes (such as the SDK API using the data service or issuing N1QL UPDATES) are never done concurrently with documents involved in a transaction.
-It is recommended that if your app is using transactions, all transacted upon document access for mutation is through the transactions API.
-In many applications, this means you will have a mix of use of the traditional API for documents not involved in transactions and the transactions API for documents used from transactions, even if some sections of that logic do not require multi-document atomicity.
-Queries and read access from other APIs are perfectly fine and are at a Read Committed isolation level.
+It is recommended that if your app is using transactions, all transacted-upon document access for mutation is through the transactions API.
+In many applications, this means you will have a mix of use of the traditional API for documents not involved in transactions, and the transactions API for documents used from transactions, even if some sections of that logic do not require multi-document atomicity.
+Queries and read access from other APIs are perfectly fine, and are at a Read Committed isolation level.
 We may change this in a future release.
 
 To help detect that this requirement is fulfilled, the application can subscribe to the client's event logger and check for any `TransactionIllegalDocumentStateEvent` events, like so:
@@ -495,7 +492,9 @@ Error handling differs depending on whether a transaction is pre or post the poi
 === Before the Commit (or Rollback) Point:
  
 In the advent of transient errors, your transaction logic will be retried multiple times if necessary until the transaction expires, commits, or rollbacks.
-Each retry is called an attempt, and each failed attempt will be automatically rolled back before a new attempt is started.  This is expected behavior in the situation that multiple concurrent actors are trying to perform a transaction on the same document.  In general, it should just cause higher latency.
+Each retry is called an attempt, and each failed attempt will be automatically rolled back before a new attempt is started.  
+This is expected behavior in the situation that multiple concurrent actors are trying to perform a transaction on the same document. 
+In general, it should just cause higher latency.
 
 === After the Commit (or Rollback) Point:
 
