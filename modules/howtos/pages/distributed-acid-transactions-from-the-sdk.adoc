@@ -22,24 +22,31 @@ Please see xref:6.5@server:learn:data/distributed-acid-transactions.adoc[our int
 == Requirements
 
 * Couchbase Server 6.5 or above. 
-* Couchbase Java client 3.x 
-* NTP should be configured on the Couchbase cluster.
-* The application, if it is using extended attributes (XATTRs), must avoid using the XATTR field `txn`, which is now reserved for Couchbase use.
+* Couchbase Java client 3.x.  It is recommended to follow the transitive dependency from maven.
+* NTP should be configured so nodes of the Couchbase cluster are in sync with time. The time being out of sync will not cause incorrect behavior, but can impact metadata cleanup.
+* The application, if it is using xref:concept-docs:xattr.adoc[extended attributes (XATTRs)], must avoid using the XATTR field `txn`, which is now reserved for Couchbase use.
 
 
 == Getting started
-Couchbase transactions require no additional hardware or services to be configured.  Simply add the transactions library into your project.  With gradle this can be accomplished by modifying your gradle.build file like so:
+
+Couchbase transactions require no additional components or services to be configured. 
+Simply add the transactions library into your project. 
+With gradle this can be accomplished by modifying these sections of your build.gradle file like so -- along with adding a separate repository where the beta is published:
 
 [source,gradle]
 ----
 dependencies {
-    compile name: 'couchbase-transactions-1.0.0-beta.1
+    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.0.0-beta.1'
 }
+
+repositories {
+    maven { url 'http://files.couchbase.com/maven2/' }
+}
+
 ----
 
-
-
-
+Use of this maven repository from other tools is similar. 
+Use the same group, artifact, and version in your maven-compatible tool of choice.
 
 == Initializing Transactions
 
@@ -79,12 +86,14 @@ Transactions transactions = Transactions.create(cluster);
 
 try {
     transactions.run((ctx) -> {
-        // 'ctx' is an AttemptContext, which permits getting, inserting, removing and replacing documents, along with
-        // committing and rolling back the transaction.
+        // 'ctx' is an AttemptContext, which permits getting, inserting,
+        // removing and replacing documents, along with committing and
+        // rolling back the transaction.
 
         // ... Your transaction logic here ...
 
-        // This call is optional - if you leave it off, the transaction will be committed anyway.
+        // This call is optional - if you leave it off, the transaction
+        // will be committed anyway.
         ctx.commit();
     });
 } catch (TransactionFailed e) {
@@ -110,7 +119,8 @@ Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
             ctx.getOrError(collection.reactive(), "document-id")
                     .flatMap(doc -> ctx.remove(doc))
 
-                    // The commit call is optional - if you leave it off, the transaction will be committed anyway.
+                    // The commit call is optional - if you leave it off,
+                    // the transaction will be committed anyway.
                     .then(ctx.commit());
 
 }).doOnError(err -> {
@@ -125,15 +135,14 @@ Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
 TransactionResult finalResult = result.block();
 ----
 
-The blocking mode is the easiest to write and understand, but it does require you to manage your own threads.  
-Using the asynchronous API allows you to build your application in a reactive style, 
-without huge thread pools, which can help you scale with excellent performance.  
+The blocking mode is the easiest to write and understand and expects that you are running within a framework, such as a servlet container, that manages concurrency for you.
+The asynchronous API allows you to build your application in a reactive style, without large thread pools, which can help you scale with excellent efficiency.
 Those new to reactive programming may want to check out https://projectreactor.io/[the Project Reactor site] for more details on this powerful paradigm.
 
 NOTE: Some `AttemptContextReactive` methods, notably `remove`, return `Mono<Void>`.  
 Be careful to use `then` rather than `flatMap` or similar on these, 
 as `Mono<Void>` will only trigger a completion event, and not the next event, 
-so many methods including flatMap will not work with them. 
+so many methods including flatMap will not work as expected.
 
 
 == Examples
@@ -213,7 +222,8 @@ Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
     }
 });
 
-// Normally you will chain this result further and ultimately subscribe.  For simplicity, here we just block on the result.
+// Normally you will chain this result further and ultimately subscribe.
+// For simplicity, here we just block on the result.
 result.block();
 ----
 
@@ -270,7 +280,7 @@ transactions.run((ctx) -> {
 ----
 
 Other transactions will not see the inserted document until this transaction commits.  
-Non-transactional reads will see an empty document.
+Non-transactional reads will see an empty document, where they would have otherwise seen a document not existing.
 
 === Replacing Documents
 
@@ -329,7 +339,7 @@ both other transactions, and regular gets, will see the unremoved doc.
 
 === Committing
 
-Committing is automatic: if there is no explicit call to `ctx.commit()` at the end of the transaction logic callback, and no exception is thrown, it will be committed anyway.
+Committing is automatic: if there is no explicit call to `ctx.commit()` at the end of the transaction logic callback, and no exception is thrown, it will be committed.
 
 With the asynchronous API, if you leave off the explicit call to `commit` then you may need to call `.then()` on the result of the chain to convert it to the required `Mono<Void>` return type:
 
@@ -412,10 +422,10 @@ public void playerHitsMonster(int damage, String playerId, String monsterId) {
     } catch (TransactionFailed e) {
         // The operation failed.   Both the monster and the player will be untouched.
 
-        // Situations that can cause this would include either the monster or player not existing (as getOrError is used), or a persistent failure to be able to commit the transaction, for example on prolonged node failure.
-
-
-
+        // Situations that can cause this would include either the monster
+        // or player not existing (as getOrError is used), or a persistent
+        // failure to be able to commit the transaction, for example on
+        // prolonged node failure.
     }
 }
 ----
@@ -423,9 +433,12 @@ public void playerHitsMonster(int damage, String playerId, String monsterId) {
 
 == Concurrency with Non-Transactional Writes
 
-This initial release of transactions for Couchbase requires a degree of co-operation from the application.  
-Specifically, the application should ensure that transactional and non-transactional writes (such as from KV or N1QL UPDATES) are never done at the same time on the same document.  
-We plan to lift this requirement in a future release.
+This release of transactions for Couchbase requires a degree of co-operation from the application.
+Specifically, the application should ensure that transactional and non-transactional writes (such as the SDK API using the data service or issuing N1QL UPDATES) are never done concurrently with documents involved in a transaction.
+It is recommended that if your app is using transactions, all transacted-upon document access for mutation is through the transactions API.
+In many applications, this means you will have a mix of use of the traditional API for documents not involved in transactions, and the transactions API for documents used from transactions, even if some sections of that logic do not require multi-document atomicity.
+Queries and read access from other APIs are perfectly fine, and are at a Read Committed isolation level.
+We may change this in a future release.
 
 To help detect that this requirement is fulfilled, the application can subscribe to the client's event logger and check for any `TransactionIllegalDocumentStateEvent` events, like so:
 
@@ -469,7 +482,7 @@ transactions.run((ctx) -> {
 In this case, the transaction will be regarded as successful, e.g. no TransactionFailed is thrown.
 
 After a transaction is rolled back, it cannot be committed, 
-and the library will not try to automatically commit it at the end of the lambda.
+and the library will not try to automatically commit it at the end of the code block.
 
 
 == Error Handling
@@ -479,7 +492,9 @@ Error handling differs depending on whether a transaction is pre or post the poi
 === Before the Commit (or Rollback) Point:
  
 In the advent of transient errors, your transaction logic will be retried multiple times if necessary until the transaction expires, commits, or rollbacks.
-Each retry is called an attempt, and each failed attempt will be automatically rolled back before a new attempt is started.
+Each retry is called an attempt, and each failed attempt will be automatically rolled back before a new attempt is started.  
+This is expected behavior in the situation that multiple concurrent actors are trying to perform a transaction on the same document. 
+In general, it should just cause higher latency.
 
 === After the Commit (or Rollback) Point:
 
@@ -490,6 +505,7 @@ The library will keep trying to commit (or rollback), until the transaction expi
 If the transaction expires, then a `TransactionFailed` exception will be thrown.  
 There is a background cleanup process run by each client whose responsibility is to find any 'lost' half-completed transactions, 
 and continue trying to push forwards the commit or rollback stage until they succeed.
+If the background cleanup job fails in process, another cleanup job will identify this and complete the commit or rollback.
 
 The transaction will expire at the end of the configured expiration period.  
 The default is 15 seconds, and it can be set with:
@@ -524,7 +540,7 @@ See xref:#logging[Logging] for how to also log useful information related to the
 
 == Logging
 
-To aid debugging, each transaction maintains a list of log entries, which can be logged on failure like this:
+To aid troubleshooting, each transaction maintains a list of log entries, which can be logged on failure like this:
 
 [source,java]
 ----
@@ -551,7 +567,7 @@ or for the asynchronous API:
 });
 ----
 
-For convenience there is also a config option that will automatically write this programmatic log to the standard Couchbase Java logging event-bus if a transaction fails.  
+For convenience there is also a config option that will automatically write this programmatic log to the standard Couchbase Java logging configuration inherited from the SDK if a transaction fails.
 This will log all lines of any failed transactions, to `WARN` level:
 [source,java]
 ----
