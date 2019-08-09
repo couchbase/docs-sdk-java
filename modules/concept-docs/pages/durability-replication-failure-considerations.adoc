@@ -19,7 +19,7 @@ include::6.5@sdk:shared:partial$durability-replication-failure-considerations.ad
 
 include::6.5@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=performance]
 
-// include::6.5@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=txns]
+include::6.5@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=txns]
 
 // include::6.5@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=failover]
 
