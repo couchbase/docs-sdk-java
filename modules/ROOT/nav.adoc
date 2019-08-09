@@ -15,7 +15,7 @@
 ////
 
 .Advanced Data Operations
-// * xref:howtos:concurrent-async-apis.adoc[Async & React APIs]
+* xref:howtos:concurrent-async-apis.adoc[Async & React APIs]
 * xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed ACID Transactions]
 
 .Managing Couchbase
