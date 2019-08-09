@@ -41,7 +41,7 @@
 * xref:concept-docs:errors.adoc[Errors and Diagnostics]
 ** xref:concept-docs:health-check.adoc[Health Check]
 ** xref:concept-docs:response-time-observability.adoc[Tracing]
-* xref:concept-docs:durability.adoc[Failure Considerations]
+* xref:concept-docs:durability-replication-failure-considerations.adoc[Failure Considerations]
 * xref:concept-docs:encryption.adoc[Field Level Encryption]
 * xref:concept-docs:http-services.adoc[Service Selection]
 ** xref:concept-docs:analytics-for-sdk-users.adoc[Analytics]
