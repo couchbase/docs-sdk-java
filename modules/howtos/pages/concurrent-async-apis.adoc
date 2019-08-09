@@ -46,7 +46,7 @@ include::example$AsyncOperations.java[tag=verbose-query]
 The `QueryResult` itself is wrapped in a `Mono`, but the class itself carries a `Flux<T>` of rows where `T` is a type of choice you can convert it to (in this example we simply convert it into `JsonObject`). The `flatMap` operator allows to map the stream or rows into the previous stream of the original result. If you have more question on how this works, check out the documentation https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html#flatMap-java.util.function.Function-[here].
 
 == Low Level Asynchronous API with CompletableFutures
-Both the blocking API and th reactive one are built on a lower level foundation using the https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html[CompletableFuture] type. It is built into the JDK starting from version 1.8 and while it is not as powerful as its reactive counterpart it does provide even better performance. In simplified terms, the `core-io` layer is responsible for mapping a `Request` to a `CompletableFuture<Response>`. The blocking API waits until the future completes on the caller thread while the reactive API wraps it into a `Mono`.
+Both the blocking API and the reactive one are built on a lower level foundation using the https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html[CompletableFuture] type. It is built into the JDK starting from version 1.8 and while it is not as powerful as its reactive counterpart it does provide even better performance. In simplified terms, the `core-io` layer is responsible for mapping a `Request` to a `CompletableFuture<Response>`. The blocking API waits until the future completes on the caller thread while the reactive API wraps it into a `Mono`.
 
 You can access this API by using the `async()` accessor methods both on the blocking and reactive counterparts:
 
@@ -58,7 +58,7 @@ include::example$AsyncOperations.java[tag=access-async]
 We recommend using this API only if you are either writing integration code for higher level concurrency mechanisms or you really ned the last drop of performance. In all other cases, the blocking API (for simplicity) or the reactive API (for richness in operators) is likely the better choice.
 
 == Batching
-The SDK itself does not provide explicit APIs for batching, because using the reactive mechanisms it allows you to build batchin code applied to your use case much better than a generic implementation could in the first place.
+The SDK itself does not provide explicit APIs for batching, because using the reactive mechanisms it allows you to build batching code applied to your use case much better than a generic implementation could in the first place.
 
 While it can be done with the async API as well, we recommend using the reactive API so you can use async retry and fallback mechanisms that are supplied out of the box. The most simplistic bulk fetch (without error handling or anything) looks like this:
 
