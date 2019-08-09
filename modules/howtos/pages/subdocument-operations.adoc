@@ -309,6 +309,22 @@ If CAS is required then it can be provided like this:
 include::example$SubDocument.java[tag=cas,indent=0]
 ----
 
+== Durability
+
+Couchbase’s traditional durability, using `PersistTo` and `ReplicateTo`, is still available, particuarly for talking to Couchbase Server 6.0 and earlier:
+
+[source,java]
+----
+include::example$SubDocument.java[tag=old-durability,indent=0]
+----
+
+In Couchbase Server 6.5 and up, this is built upon with Synchronous Replication, which uses the concept of majority to indicate the number of configured Data Service nodes to which commitment is required:
+
+[source,java]
+----
+include::example$SubDocument.java[tag=new-durability,indent=0]
+----
+
 == Error Handling
 
 Sub-Document operations have their own set of errors.
