@@ -1,5 +1,6 @@
 // #tag::imports[]
 import com.couchbase.client.core.error.subdoc.PathExistsException;
+import com.couchbase.client.core.msg.kv.DurabilityLevel;
 import com.couchbase.client.java.*;
 import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.json.JsonObject;
@@ -13,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.Collections;
 
 import static com.couchbase.client.java.kv.LookupInSpec.*;
+import static com.couchbase.client.java.kv.MutateInOptions.mutateInOptions;
 import static com.couchbase.client.java.kv.MutateInSpec.*;
 // #end::imports[]
 
@@ -238,9 +240,30 @@ GetResult doc = collection.get("player432");
 collection.mutateIn(
   "player432",
   Arrays.asList(decrement("gold", 150)),
-  MutateInOptions.mutateInOptions().cas(doc.cas())
+  mutateInOptions().cas(doc.cas())
 );
         // #end::cas[]
+    }
+
+
+    static void oldDurability() {
+// #tag::old-durability[]
+collection.mutateIn(
+  "key",
+  Collections.singletonList(MutateInSpec.insert("foo", "bar")),
+  mutateInOptions().durability(PersistTo.ACTIVE, ReplicateTo.ONE)
+);
+// #end::old-durability[]
+    }
+
+    static void newDurability() {
+// #tag::new-durability[]
+collection.mutateIn(
+  "key",
+  Collections.singletonList(MutateInSpec.insert("foo", "bar")),
+  mutateInOptions().durabilityLevel(DurabilityLevel.MAJORITY)
+);
+// #end::new-durability[]
     }
 
 }
