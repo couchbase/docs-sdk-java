@@ -61,7 +61,7 @@ Please see the xref:managing-connections.adoc[Managing Connections] section for 
 | `[empty]`
 | The location to the JVM keystore where the certificates are stored.
 This feature is only available against a Couchbase Server 3.0 EE cluster or later.
-See the "Connection Management" section for more details on how to set it up properly.
+See the xref:managing-connections.html#ssl["Connection Management"] section for more details on how to set it up properly.
 
 | Custom SSL Keystore
 | `sslKeystore \(KeyStore)`
