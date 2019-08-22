@@ -379,7 +379,7 @@ Right now these metric events are emitted:
 *The RuntimeMetricsEvent*
 
 Run-time metrics are designed to capture the run-time state at the time of emission.
-The metric contains information about GC, Memory and Threads which it collects through the systems MBeans.
+The metric contains information about GC, Memory and Threads which it collects through the system's MBeans.
 It makes use of the internal `Diagnostics` class which collects the information in a transparent way and then creates the `RuntimeMetricsEvent` for you to consume.
 
 Note that if the collection is disabled on the environment, there is no run-time overhead whatsoever (since the collection is triggered on emission every interval).
