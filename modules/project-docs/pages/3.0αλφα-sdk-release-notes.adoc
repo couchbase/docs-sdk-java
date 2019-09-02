@@ -19,6 +19,81 @@ At least Java 8 is required for current releases; all newer, vendor supported Ja
 See the xref:compatibility-versions-features.adoc[Compatibility] section for details.
 Java 11 is recommended, which has various enhancements like lambda local variable type inference, profiling tools, and updated security features.
 
+== Version 3.0.0-alpha.7 (2 September 2019)
+
+This is the seventh pre-release of the third generation Java SDK.
+
+http://packages.couchbase.com/clients/java/3.0.0-alpha.7/Couchbase-Java-Client-3.0.0-alpha.7.zip[Download] | 
+http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-alpha.7/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.0-alpha.7/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.0-alpha.7**
+* com.couchbase.client:**core-io:2.0.0-alpha.7**
+* io.projectreactor:**reactor-core:3.2.10.RELEASE**
+* org.reactivestreams:**reactive-streams:1.0.2**
+
+Note that since this release depends on core-io, it also includes transitive fixes and enhancements that may not all be reflected in the following list.
+
+=== Enhancements
+
+* http://issues.couchbase.com/browse/JCBC-1388[JCBC-1388]:
+Support for managing View Indexes has been added.
+* http://issues.couchbase.com/browse/JCBC-1424[JCBC-1424]:
+Support for managing Analytics Indexes has been added.
+* http://issues.couchbase.com/browse/JCBC-1421[JCBC-1421]:
+Support for managing buckets has been added.
+* http://issues.couchbase.com/browse/JCBC-1420[JCBC-1420]:
+The Search Index management API has been greatly expanded and modified.
+* http://issues.couchbase.com/browse/JCBC-1375[JCBC-1375]:
+User and Group management APIs have been added.
+* http://issues.couchbase.com/browse/JVMCBC-615[JVMCBC-615]:
+Support for alternate addresses has been brought back to SDK 3 (including kubernetes support)
+* http://issues.couchbase.com/browse/JVMCBC-723[JVMCBC-723]:
+It is now possible to disable DNS SRV bootstrapping if needed.
+* http://issues.couchbase.com/browse/JVMCBC-722[JVMCBC-722]:
+X509 certificates can now be loaded from Strings directly as additional convenience overloads.
+* http://issues.couchbase.com/browse/JCBC-1391[JCBC-1391]:
+The error handling and retry story has been greatly improved throughout the full SDK.
+* http://issues.couchbase.com/browse/JCBC-1411[JCBC-1411]:
+In HTTP-based services the `meta` has been renamed to `metaData`.
+* http://issues.couchbase.com/browse/JCBC-1390[JCBC-1390]:
+The `durabilityLevel` has been removed in favor of another `durability` overload.
+* http://issues.couchbase.com/browse/JCBC-1396[JCBC-1396]:
+Timeout names and default values in the configuration has been aligned with other SDKs.
+* http://issues.couchbase.com/browse/JVMCBC-729[JVMCBC-729]:
+A new query prepare mechanism is support when a cluster version 6.5 and later is used.
+* http://issues.couchbase.com/browse/JVMCBC-600[JVMCBC-600]:
+Support for Mapped Diagnostic Context in Logging has been introduced (and `clientContext` from java options).
+* http://issues.couchbase.com/browse/JVMCBC-731[JVMCBC-731]:
+Mutation tokens are enabled by default and the CAS-based observe has been removed.
+
+=== Bug Fixes
+
+* http://issues.couchbase.com/browse/JCBC-1414[JCBC-1414]:
+`geometry` has been removed from the `ViewRow` since spatial queries have also been removed earlier.
+* http://issues.couchbase.com/browse/JCBC-1428[JCBC-1428]:
+NonChunkedHttpMessageHandler fails the second time it is enabled.
+* http://issues.couchbase.com/browse/JCBC-1406[JCBC-1406]:
+The `expiration` option has been added to LookupIn.
+* http://issues.couchbase.com/browse/JCBC-1407[JCBC-1407]:
+LookupIn GetFull shouldn't expose xattr option.
+* http://issues.couchbase.com/browse/JVMCBC-725[JVMCBC-725]:
+Chunked handler should not close channel when being removed.
+* http://issues.couchbase.com/browse/JVMCBC-724[JVMCBC-724]:
+Non-Chunked HTTP Hander must report when request complete.
+* http://issues.couchbase.com/browse/JVMCBC-727[JVMCBC-727]:
+Fail cluster-level queries quickly if not serviceable.
+* http://issues.couchbase.com/browse/JVMCBC-733[JVMCBC-733]:
+Only dispatch view requests to nodes with primary partitions.
+* http://issues.couchbase.com/browse/JVMCBC-734[JVMCBC-734]:
+Close channel on unknown KV opaque.
+* http://issues.couchbase.com/browse/JVMCBC-735[JVMCBC-735]:
+Close KV connection on certain response status codes.
+* http://issues.couchbase.com/browse/JVMCBC-737[JVMCBC-737]:
+Harden HTTP handlers for write race conditions.
+* http://issues.couchbase.com/browse/JVMCBC-728[JVMCBC-728]:
+Subdoc MutateInOptions with CAS value provided is not cosidered during mutation.
 
 == Version 3.0.0-alpha.6 (2 August 2019)
 

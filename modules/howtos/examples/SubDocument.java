@@ -261,7 +261,7 @@ collection.mutateIn(
 collection.mutateIn(
   "key",
   Collections.singletonList(MutateInSpec.insert("foo", "bar")),
-  mutateInOptions().durabilityLevel(DurabilityLevel.MAJORITY)
+  mutateInOptions().durability(DurabilityLevel.MAJORITY)
 );
 // #end::new-durability[]
     }

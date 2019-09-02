@@ -32,7 +32,7 @@ You can use your favorite dependency management tool to install the SDK. The fol
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.0-alpha.6</version>
+        <version>3.0.0-alpha.7</version>
     </dependency>
 </dependencies>
 ----
@@ -80,7 +80,7 @@ Now that you know the basics, you may wish to go straight to that page.
 
 == Additional Resources
 
-The API reference is generated for each release and can be found http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-alpha.6/[here].
+The API reference is generated for each release and can be found http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-alpha.7/[here].
 
 // xref:migrating-sdk-code-to-3.n.adoc[The Migrating from SDK2 to 3 page] highlights the main differences to be aware of when migrating your code.
 
