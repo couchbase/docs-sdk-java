@@ -140,7 +140,7 @@ try {
 collection.upsert(
   "my-document",
   JsonObject.create().put("doc", true),
-  upsertOptions().durabilityLevel(DurabilityLevel.MAJORITY)
+  upsertOptions().durability(DurabilityLevel.MAJORITY)
 );
 // #end::durability[]
 }

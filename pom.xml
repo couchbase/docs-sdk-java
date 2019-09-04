@@ -6,13 +6,13 @@
 
     <groupId>com.couchbase.client</groupId>
     <artifactId>docs-code</artifactId>
-    <version>1.0.0-alpha.6</version>
+    <version>1.0.0-alpha.7</version>
 
     <dependencies>
         <dependency>
             <groupId>com.couchbase.client</groupId>
             <artifactId>java-client</artifactId>
-            <version>3.0.0-alpha.6</version>
+            <version>3.0.0-alpha.7</version>
         </dependency>
     </dependencies>
 
@@ -56,6 +56,7 @@
                         <configuration>
                             <sources>
                                 <source>modules/howtos/examples/</source>
+                                <source>modules/hello-world/examples/</source>
                             </sources>
                         </configuration>
                     </execution>
