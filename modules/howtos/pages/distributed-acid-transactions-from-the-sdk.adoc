@@ -50,20 +50,19 @@ Use the same group, artifact, and version in your maven-compatible tool of choic
 
 == Initializing Transactions
 
+Here are all imports used by the following examples:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=imports,indent=0]
+----
+
 The starting point is the `Transactions` object.  
 It is very important that the application ensures that only one of these is created, as it performs automated background processes that should not be duplicated.
 
 [source,java]
 ----
-// Initialize the Couchbase cluster
-Cluster cluster = Cluster.connect("localhost", "transactor", "mypass");
-bucket = cluster.bucket("transact");
-collection = bucket.defaultCollection();
-
-// Create the single Transactions object
-Transactions transactions = Transactions.create(cluster, TransactionConfigBuilder.create()
-        // The configuration can be altered here, but in most cares the defaults are fine.
-        .build());
+include::example$TransactionsExample.java[tag=init,indent=0]
 ----
 
 The default configuration will perform all writes with the durability setting Majority, ensuring that each write is available in-memory on the majority of replicas before the transaction continues.  The application is free to adjust this to the level of None for performance at the cost of some data safety and possible loss of atomicity in the advent of node failures, or to a higher durability level for even greater safety (of course, at some loss in performance).  Majority has been selected as the best default durability for most use-cases. 
@@ -82,57 +81,15 @@ As with the Couchbase Java Client, you can use the library in either synchronous
 
 [source,java]
 ----
-Transactions transactions = Transactions.create(cluster);
-
-try {
-    transactions.run((ctx) -> {
-        // 'ctx' is an AttemptContext, which permits getting, inserting,
-        // removing and replacing documents, along with committing and
-        // rolling back the transaction.
-
-        // ... Your transaction logic here ...
-
-        // This call is optional - if you leave it off, the transaction
-        // will be committed anyway.
-        ctx.commit();
-    });
-} catch (TransactionFailed e) {
-    for (LogDefer err : e.result().log().logs()) {
-        // Optionally, log failures to your own logger
-    }
-}
-----  
+include::example$TransactionsExample.java[tag=create,indent=0]
+----
 
 or asynchronous modes, using the Project Reactor reactive library:
 
 
 [source,java]
 ----
-Transactions transactions = Transactions.create(cluster);
-
-Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
-    // 'ctx' is an AttemptContextReactive, providing asynchronous versions of the AttemptContext methods
-
-    return
-
-            // Your transaction logic here: as an example, get and remove a doc
-            ctx.getOrError(collection.reactive(), "document-id")
-                    .flatMap(doc -> ctx.remove(doc))
-
-                    // The commit call is optional - if you leave it off,
-                    // the transaction will be committed anyway.
-                    .then(ctx.commit());
-
-}).doOnError(err -> {
-    if (err instanceof TransactionFailed) {
-        for (LogDefer e : ((TransactionFailed) err).result().log().logs()) {
-            // Optionally, log failures to your own logger
-        }
-    }
-});
-
-// Normally you will chain this result further and ultimately subscribe.  For simplicity, here we just block on the result.
-TransactionResult finalResult = result.block();
+include::example$TransactionsExample.java[tag=createReactive,indent=0]
 ----
 
 The blocking mode is the easiest to write and understand and expects that you are running within a framework, such as a servlet container, that manages concurrency for you.
@@ -153,78 +110,14 @@ They are described in more detail below.
 .With the synchronous API
 [source,java]
 ----
-Transactions transactions = Transactions.create(cluster);
-
-try {
-    transactions.run((ctx) -> {
-        // Inserting a doc:
-        String docId = "aDocument";
-        ctx.insert(collection, docId, JsonObject.create());
-
-        // Getting documents:
-        // Use ctx.get if the document may or may not exist
-        Optional<TransactionJsonDocument> docOpt = ctx.get(collection, docId);
-
-        // Use ctx.getOrError if the document should exist, and the transaction will fail if not
-        TransactionJsonDocument doc = ctx.getOrError(collection, docId);
-
-        // Replacing a doc:
-        TransactionJsonDocument anotherDoc = ctx.getOrError(collection, "anotherDoc");
-        // TransactionJsonDocument is immutable, so get its content as a mutable JsonObject
-        JsonObject content = anotherDoc.contentAs(JsonObject.class);
-        content.put("transactions", "are awesome");
-        ctx.replace(anotherDoc, content);
-
-        // Removing a doc:
-        TransactionJsonDocument yetAnotherDoc = ctx.getOrError(collection, "yetAnotherDoc");
-        ctx.remove(yetAnotherDoc);
-
-        ctx.commit();
-    });
-} catch (TransactionFailed e) {
-    for (LogDefer err : e.result().log().logs()) {
-        // Optionally, log failures to your own logger
-    }
-}
+include::example$TransactionsExample.java[tag=examples,indent=0]
 ----
 
 
 .With the asynchronous API
 [source,java]
 ----
-Transactions transactions = Transactions.create(cluster);
-
-Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
-    return
-            // Inserting a doc:
-            ctx.insert(collection.reactive(), "aDoc", JsonObject.create())
-
-                    // Getting and replacing a doc:
-                    .then(ctx.getOrError(collection.reactive(), "anotherDoc"))
-                    .flatMap(doc -> {
-                        JsonObject content = doc.contentAs(JsonObject.class);
-                        content.put("transactions", "are awesome");
-                        return ctx.replace(doc, content);
-                    })
-
-                    // Getting and removing a doc:
-                    .then(ctx.getOrError(collection.reactive(), "yetAnotherDoc"))
-                    .flatMap(doc -> ctx.remove(doc))
-
-                    // Committing:
-                    .then(ctx.commit());
-
-}).doOnError(err -> {
-    if (err instanceof TransactionFailed) {
-        for (LogDefer e : ((TransactionFailed) err).result().log().logs()) {
-            // Optionally, log failures to your own logger
-        }
-    }
-});
-
-// Normally you will chain this result further and ultimately subscribe.
-// For simplicity, here we just block on the result.
-result.block();
+include::example$TransactionsExample.java[tag=examplesReactive,indent=0]
 ----
 
 === Inserting documents
@@ -232,25 +125,13 @@ result.block();
 .With the asynchronous API:
 [source,java]
 ----
-Transactions transactions = Transactions.create(cluster);
-
-transactions.reactive().run((ctx) -> {
-    return ctx.insert(collection.reactive(), "docId", JsonObject.create()).then();
-}).block();
-```
+include::example$TransactionsExample.java[tag=insert,indent=0]
+----
 
 And the synchronous API:
-```
-Transactions transactions = Transactions.create(cluster);
-
-transactions.run((ctx) -> {
-    String docId = "docId";
-
-    ctx.insert(collection, docId, JsonObject.create());
-
-});
 ----
-        
+include::example$TransactionsExample.java[tag=insertReactive,indent=0]
+----
 
 == Getting Documents
 
@@ -258,8 +139,7 @@ There are two ways to get a document, `get` and `getOrError`:
 
 [source,java]
 ----
-Optional<TransactionJsonDocument> docOpt = ctx.get(collection, docId);
-TransactionJsonDocument doc = ctx.getOrError(collection, docId);
+include::example$TransactionsExample.java[tag=get,indent=0]
 ----
 
 `getOrError` will throw `KeyNotFoundException` if the document doesn't exist, fast failing the transaction,  and is provided as a convenience method so the developer does not have to check the `Optional` if the document must exist for the transaction to succeed. 
@@ -268,15 +148,7 @@ Gets will 'read your own writes', e.g. this will succeed:
 
 [source,java]
 ----
-transactions.run((ctx) -> {
-    String docId = "docId";
-
-    ctx.insert(collection, docId, JsonObject.create());
-
-    Optional<TransactionJsonDocument> doc = ctx.get(collection, docId);
-    
-    assert(doc.isPresent());
-});
+include::example$TransactionsExample.java[tag=getReactive,indent=0]
 ----
 
 Other transactions will not see the inserted document until this transaction commits.  
@@ -287,26 +159,13 @@ Non-transactional reads will see an empty document, where they would have otherw
 .With the asynchronous API:
 [source,java]
 ----
-transactions.reactive().run((ctx) -> {
-    return ctx.getOrError(collection.reactive(), "anotherDoc")
-            .flatMap(doc -> {
-                JsonObject content = doc.contentAs(JsonObject.class);
-                content.put("transactions", "are awesome");
-                return ctx.replace(doc, content);
-            })
-            .then(ctx.commit());
-});
+include::example$TransactionsExample.java[tag=replace,indent=0]
 ----
 
 .Synchronous API:
 [source,java]
 ----
-transactions.run((ctx) -> {
-    TransactionJsonDocument anotherDoc = ctx.getOrError(collection, "anotherDoc");
-    JsonObject content = anotherDoc.contentAs(JsonObject.class);
-    content.put("transactions", "are awesome");
-    ctx.replace(anotherDoc, content);
-});
+include::example$TransactionsExample.java[tag=replaceReactive,indent=0]
 ----
 
 These changes are staged until commit: 
@@ -318,19 +177,13 @@ other transactions, and regular gets, will see the original unmodified doc.
 .With the asynchronous API:
 [source,java]
 ----
-transactions.reactive().run((ctx) -> {
-    return ctx.getOrError(collection.reactive(), "anotherDoc")
-            .flatMap(doc -> ctx.remove(doc));
-});
+include::example$TransactionsExample.java[tag=removeReactive,indent=0]
 ----
 
 .Synchronous API:
 [source,java]
 ----
-transactions.run((ctx) -> {
-    TransactionJsonDocument anotherDoc = ctx.getOrError(collection, "anotherDoc");
-    ctx.remove(anotherDoc);
-});
+include::example$TransactionsExample.java[tag=remove,indent=0]
 ----
 
 As with inserted and replaced docs, these changes are staged until commit: 
@@ -345,15 +198,7 @@ With the asynchronous API, if you leave off the explicit call to `commit` then y
 
 [source,java]
 ----
-Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
-    return ctx.getOrError(collection.reactive(), "anotherDoc")
-                    .flatMap(doc -> {
-                        JsonObject content = doc.contentAs(JsonObject.class);
-                        content.put("transactions", "are awesome");
-                        return ctx.replace(doc, content);
-                    })
-                    .then();
-});
+include::example$TransactionsExample.java[tag=commit,indent=0]
 ----
 
 As soon as the transaction is committed, the changes will be atomically visible to other transactions.  
@@ -382,52 +227,7 @@ as we don’t want a situation where the monster is killed, but we fail to updat
 
 [source,java]
 ----
-public void playerHitsMonster(int damage, String playerId, String monsterId) {
-    Transactions transactions = getTransactions();
-
-    try {
-        transactions.run((ctx) -> {
-            TransactionJsonDocument monsterDoc = ctx.getOrError(collection, monsterId);
-            TransactionJsonDocument playerDoc = ctx.getOrError(collection, playerId);
-
-            int monsterHitpoints = monsterDoc.contentAs(JsonObject.class).getInt("hitpoints");
-            int monsterNewHitpoints = monsterHitpoints - damage;
-
-            if (monsterNewHitpoints <= 0) {
-                // Monster is killed.  The remove is just for demoing, and a more realistic example would set a
-                // "dead" flag or similar.
-                ctx.remove(monsterDoc);
-
-                // The player earns experience for killing the monster
-                int experienceForKillingMonster = monsterDoc.contentAs(JsonObject.class).getInt("experienceWhenKilled");
-                int playerExperience = playerDoc.contentAs(JsonObject.class).getInt("experience");
-                int playerNewExperience = playerExperience + experienceForKillingMonster;
-                int playerNewLevel = calculateLevelForExperience(playerNewExperience);
-
-                JsonObject playerContent = playerDoc.contentAs(JsonObject.class);
-
-                playerContent.put("experience", playerNewExperience);
-                playerContent.put("level", playerNewLevel);
-
-                ctx.replace(playerDoc, playerContent);
-            }
-            else {
-                // Monster is damaged but still alive
-                JsonObject monsterContent = monsterDoc.contentAs(JsonObject.class);
-                monsterContent.put("hitpoints", monsterNewHitpoints);
-
-                ctx.replace(monsterDoc, monsterContent);
-            }
-        });
-    } catch (TransactionFailed e) {
-        // The operation failed.   Both the monster and the player will be untouched.
-
-        // Situations that can cause this would include either the monster
-        // or player not existing (as getOrError is used), or a persistent
-        // failure to be able to commit the transaction, for example on
-        // prolonged node failure.
-    }
-}
+include::example$TransactionsExample.java[tag=full,indent=0]
 ----
 
 
@@ -440,15 +240,11 @@ In many applications, this means you will have a mix of use of the traditional A
 Queries and read access from other APIs are perfectly fine, and are at a Read Committed isolation level.
 We may change this in a future release.
 
-To help detect that this requirement is fulfilled, the application can subscribe to the client's event logger and check for any `TransactionIllegalDocumentStateEvent` events, like so:
+To help detect that this requirement is fulfilled, the application can subscribe to the client's event logger and check for any `IllegalDocumentState` events, like so:
 
 [source,java]
 ----
-cluster.environment().eventBus().subscribe(event -> {
-    if (event instanceof TransactionIllegalDocumentStateEvent) {
-        // log this event for review
-    }
-});
+include::example$TransactionsExample.java[tag=concurrency,indent=0]
 ----
 
 
@@ -465,18 +261,7 @@ The transaction can also be explicitly rolled back:
 
 [source,java]
 ----
-transactions.run((ctx) -> {
-    ctx.insert(collection, "docId", JsonObject.create());
-
-    Optional<TransactionJsonDocument> docOpt = ctx.get(collection, "requiredDoc");
-    if (docOpt.isPresent()) {
-        ctx.remove(docOpt.get());
-        ctx.commit();
-    }
-    else {
-        ctx.rollback();
-    }
-});
+include::example$TransactionsExample.java[tag=rollback,indent=0]
 ----
 
 In this case, the transaction will be regarded as successful, e.g. no TransactionFailed is thrown.
