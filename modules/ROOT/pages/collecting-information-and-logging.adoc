@@ -50,7 +50,7 @@ By default, the log level for logback is set to DEBUG, but with the addition of 
 </configuration>
 ----
 
-Consult the SLF4J documentation for advanced configuration.
+Consult the https://www.slf4j.org/docs.html[SLF4J documentation^] for advanced configuration.
 
 *Configuring Log4J*
 
