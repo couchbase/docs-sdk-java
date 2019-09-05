@@ -366,7 +366,7 @@ Right now, the following events can be emitted, depending on the current state o
 |===
 
 Since the bucket events are most of the time triggered by the application itself, they are mainly used for debugging.
-Especially the``NodeDisconnectedEvent`` can be helpful to send over to a monitoring system, but keep in mind that even during a planned rebalance out at some point this event will be raised once the node is gone.
+Especially the ``NodeDisconnectedEvent`` can be helpful to send over to a monitoring system, but keep in mind that even during a planned rebalance out at some point this event will be raised once the node is gone.
 
 == Metric events
 
