@@ -199,7 +199,7 @@ Couchbase recommends that you migrate to the Java 2.x SDK to take advantage of e
 The 2.x Java SDK is based on the reactive programming model and has a different architecture that uses a core I/O layer and a Java client layer.
 It's asynchronous by design and offers performance, scalability, and durability enhancements.
 
-This guide helps you migrate from the previous generation of the Java SDK (version `1.4.x`) to this new generation SDK (version `2.x`).
+This xref:compatibility-versions-features.adoc#1-x-2-x-migration-getting-started[guide] helps you migrate from the previous generation of the Java SDK (version `1.4.x`) to this new generation SDK (version `2.x`).
 
 If you plan on using the synchronous blocking API, you can follow the simple migration path.
 Or, you can follow the optional migration path to fully reactive and asynchronous code by using the asynchronous API, which provides the best performance.
