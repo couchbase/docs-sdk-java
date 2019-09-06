@@ -100,7 +100,7 @@ This also means that once disconnect has happened, you can't reopen buckets from
 Boolean disconnected = cluster.disconnect();
 ----
 
-If the `ClusterEnvironment` is shared it needs to be closed manually, but if not (which is the regular case) it gets also shut down.
+If the `ClusterEnvironment` is shared it needs to be closed manually, but if not (which is the regular case) it gets auto shut down.
 
 After a disconnect, it is not possible to open buckets again, so only use it when you are sure that you do not need access to a `CouchbaseCluster` again.
 If you only want to close a bucket, you can do that without shutting down everything:
