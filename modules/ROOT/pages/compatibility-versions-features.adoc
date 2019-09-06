@@ -309,7 +309,7 @@ Concerning optimistic locking—because the CAS is now part of the `Document`, t
 
 == 1.x-2.x Migrations: Reactive and Batched Programming
 
-In the 2.x SDK, asynchronous processing is done via RxJava.
+In the 2.x SDK, asynchronous processing is done via https://github.com/ReactiveX/RxJava[RxJava^].
 The asynchronous API is not mixed with the synchronous API, but rather accessible via the `async()` method on `Cluster` and `Bucket`.
 
 The SDK is thread-safe and uses a pool of threads internally for operations (so they are effectively processed in a separate thread).
