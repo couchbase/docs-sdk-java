@@ -148,7 +148,7 @@ Gets will 'read your own writes', e.g. this will succeed:
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=getReactive,indent=0]
+include::example$TransactionsExample.java[tag=getReadOwnWrites,indent=0]
 ----
 
 Other transactions will not see the inserted document until this transaction commits.  
@@ -363,6 +363,43 @@ TransactionConfigBuilder.create().logOnFailure(true, Event.Severity.WARN).build(
 By default the Couchbase Java logging event-bus is setup to look for and use SLF4J/logback, log4j1, and log4j2 on the classpath, and to fallback to java.util.Logging.  
 
 Please see the xref:howtos:collecting-information-and-logging[Java SDK logging documentation] for details.
+
+== Deferred Commits
+NOTE: The deferred commit feature is currently in alpha, and the API may change.
+
+Introduced in transactions 1.0.0-beta.2, deferred commits allow a transaction to be paused just before the commit point.
+Optionally, everything required to finish the transaction can then be bundled up into a context that may be serialized into a String or byte array, and deserialized elsewhere.
+The transaction can then be committed, or rolled back.
+
+The intention behind this feature is to allow multiple transactions to be brought to just before the commit point, and then all committed together.
+
+Here's an example of deferring the initial commit and serializing the transaction:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=defer1,indent=0]
+----
+
+And then committing the transaction later:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=defer2,indent=0]
+----
+
+Alternatively the transaction can be rolled back:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=defer3,indent=0]
+----
+
+As usual, once committed, the transactions library will make every effort to commit the transaction.
+Even if it expires (which throws `TransactionExpired` as usual), a background cleanup process will continue trying to commit.
+The same applies for rollback.
+
+
+The transaction expiry timer (which is configurable) will begin ticking once the transaction starts, and is not paused while the transaction is in a deferred state.
 
 
 == Further Reading

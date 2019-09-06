@@ -37,6 +37,18 @@
         <name>Couchbase Preview Repository</name>
         <url>http://files.couchbase.com/maven2</url>
         </repository>
+
+        <repository>
+            <id>sonatypeSnapshots</id>
+            <name>Sonatype Snapshots</name>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
     </repositories>
 
     <properties>

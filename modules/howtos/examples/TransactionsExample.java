@@ -4,10 +4,11 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonObject;
-import com.couchbase.transactions.TransactionJsonDocument;
+import com.couchbase.transactions.TransactionGetResult;
 import com.couchbase.transactions.TransactionResult;
 import com.couchbase.transactions.Transactions;
 import com.couchbase.transactions.config.TransactionConfigBuilder;
+import com.couchbase.transactions.deferred.TransactionSerializedContext;
 import com.couchbase.transactions.error.TransactionFailed;
 import com.couchbase.transactions.log.IllegalDocumentState;
 import com.couchbase.transactions.log.LogDefer;
@@ -54,8 +55,11 @@ public class TransactionsExample {
                 ctx.commit();
             });
         } catch (TransactionFailed e) {
+            // System.err is used for example, log failures to your own logging system
+            System.err.println("Transaction " + e.result().transactionId() + " failed");
+
             for (LogDefer err : e.result().log().logs()) {
-                // Optionally, log failures to your own logger
+                System.err.println(err.toString());
             }
         }
         // #end::create[]
@@ -69,7 +73,7 @@ public class TransactionsExample {
             return
 
                     // Your transaction logic here: as an example, get and remove a doc
-                    ctx.getOrError(collection.reactive(), "document-id")
+                    ctx.get(collection.reactive(), "document-id")
                             .flatMap(doc -> ctx.remove(doc))
 
                             // The commit call is optional - if you leave it off,
@@ -79,7 +83,8 @@ public class TransactionsExample {
         }).doOnError(err -> {
             if (err instanceof TransactionFailed) {
                 for (LogDefer e : ((TransactionFailed) err).result().log().logs()) {
-                    // Optionally, log failures to your own logger
+                    // System.err is used for example, log failures to your own logging system
+                    System.err.println(err.toString());
                 }
             }
         });
@@ -99,28 +104,31 @@ public class TransactionsExample {
                 ctx.insert(collection, docId, JsonObject.create());
 
                 // Getting documents:
-                // Use ctx.get if the document may or may not exist
-                Optional<TransactionJsonDocument> docOpt = ctx.get(collection, docId);
+                // Use ctx.getOptional if the document may or may not exist
+                Optional<TransactionGetResult> docOpt = ctx.getOptional(collection, docId);
 
-                // Use ctx.getOrError if the document should exist, and the transaction will fail if not
-                TransactionJsonDocument doc = ctx.getOrError(collection, docId);
+                // Use ctx.get if the document should exist, and the transaction will fail if not
+                TransactionGetResult doc = ctx.get(collection, docId);
 
                 // Replacing a doc:
-                TransactionJsonDocument anotherDoc = ctx.getOrError(collection, "anotherDoc");
-                // TransactionJsonDocument is immutable, so get its content as a mutable JsonObject
+                TransactionGetResult anotherDoc = ctx.get(collection, "anotherDoc");
+                // TransactionGetResult is immutable, so get its content as a mutable JsonObject
                 JsonObject content = anotherDoc.contentAs(JsonObject.class);
                 content.put("transactions", "are awesome");
                 ctx.replace(anotherDoc, content);
 
                 // Removing a doc:
-                TransactionJsonDocument yetAnotherDoc = ctx.getOrError(collection, "yetAnotherDoc");
+                TransactionGetResult yetAnotherDoc = ctx.get(collection, "yetAnotherDoc");
                 ctx.remove(yetAnotherDoc);
 
                 ctx.commit();
             });
         } catch (TransactionFailed e) {
+            // System.err is used for example, log failures to your own logging system
+            System.err.println("Transaction " + e.result().transactionId() + " failed");
+
             for (LogDefer err : e.result().log().logs()) {
-                // Optionally, log failures to your own logger
+                System.err.println(err.toString());
             }
         }
         // #end::examples[]
@@ -134,7 +142,7 @@ public class TransactionsExample {
                     ctx.insert(collection.reactive(), "aDoc", JsonObject.create())
 
                             // Getting and replacing a doc:
-                            .then(ctx.getOrError(collection.reactive(), "anotherDoc"))
+                            .then(ctx.get(collection.reactive(), "anotherDoc"))
                             .flatMap(doc -> {
                                 JsonObject content = doc.contentAs(JsonObject.class);
                                 content.put("transactions", "are awesome");
@@ -142,7 +150,7 @@ public class TransactionsExample {
                             })
 
                             // Getting and removing a doc:
-                            .then(ctx.getOrError(collection.reactive(), "yetAnotherDoc"))
+                            .then(ctx.get(collection.reactive(), "yetAnotherDoc"))
                             .flatMap(doc -> ctx.remove(doc))
 
                             // Committing:
@@ -151,7 +159,8 @@ public class TransactionsExample {
         }).doOnError(err -> {
             if (err instanceof TransactionFailed) {
                 for (LogDefer e : ((TransactionFailed) err).result().log().logs()) {
-                    // Optionally, log failures to your own logger
+                    // System.err is used for example, log failures to your own logging system
+                    System.err.println(err.toString());
                 }
             }
         });
@@ -187,30 +196,30 @@ public class TransactionsExample {
         transactions.run((ctx) -> {
             String docId = "a-doc";
 
-            Optional<TransactionJsonDocument> docOpt = ctx.get(collection, docId);
-            TransactionJsonDocument doc = ctx.getOrError(collection, docId);
+            Optional<TransactionGetResult> docOpt = ctx.getOptional(collection, docId);
+            TransactionGetResult doc = ctx.get(collection, docId);
         });
         // #end::get[]
     }
 
-    static void getReactive() {
-        // #tag::getReactive[]
+    static void getReadOwnWrites() {
+        // #tag::getReadOwnWrites[]
         transactions.run((ctx) -> {
             String docId = "docId";
 
             ctx.insert(collection, docId, JsonObject.create());
 
-            Optional<TransactionJsonDocument> doc = ctx.get(collection, docId);
+            Optional<TransactionGetResult> doc = ctx.getOptional(collection, docId);
 
             assert (doc.isPresent());
         });
-        // #end::getReactive[]
+        // #end::getReadOwnWrites[]
     }
 
     static void replace() {
         // #tag::replace[]
         transactions.run((ctx) -> {
-            TransactionJsonDocument anotherDoc = ctx.getOrError(collection, "anotherDoc");
+            TransactionGetResult anotherDoc = ctx.get(collection, "anotherDoc");
             JsonObject content = anotherDoc.contentAs(JsonObject.class);
             content.put("transactions", "are awesome");
             ctx.replace(anotherDoc, content);
@@ -221,7 +230,7 @@ public class TransactionsExample {
     static void replaceReactive() {
         // #tag::replaceReactive[]
         transactions.reactive().run((ctx) -> {
-            return ctx.getOrError(collection.reactive(), "anotherDoc")
+            return ctx.get(collection.reactive(), "anotherDoc")
                     .flatMap(doc -> {
                         JsonObject content = doc.contentAs(JsonObject.class);
                         content.put("transactions", "are awesome");
@@ -235,7 +244,7 @@ public class TransactionsExample {
     static void remove() {
         // #tag::remove[]
         transactions.run((ctx) -> {
-            TransactionJsonDocument anotherDoc = ctx.getOrError(collection, "anotherDoc");
+            TransactionGetResult anotherDoc = ctx.get(collection, "anotherDoc");
             ctx.remove(anotherDoc);
         });
         // #end::remove[]
@@ -244,7 +253,7 @@ public class TransactionsExample {
     static void removeReactive() {
         // #tag::removeReactive[]
         transactions.reactive().run((ctx) -> {
-            return ctx.getOrError(collection.reactive(), "anotherDoc")
+            return ctx.get(collection.reactive(), "anotherDoc")
                     .flatMap(doc -> ctx.remove(doc));
         });
         // #end::removeReactive[]
@@ -253,7 +262,7 @@ public class TransactionsExample {
     static void commit() {
         // #tag::commit[]
         Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
-            return ctx.getOrError(collection.reactive(), "anotherDoc")
+            return ctx.get(collection.reactive(), "anotherDoc")
                     .flatMap(doc -> {
                         JsonObject content = doc.contentAs(JsonObject.class);
                         content.put("transactions", "are awesome");
@@ -278,8 +287,8 @@ public class TransactionsExample {
 
         try {
             transactions.run((ctx) -> {
-                TransactionJsonDocument monsterDoc = ctx.getOrError(collection, monsterId);
-                TransactionJsonDocument playerDoc = ctx.getOrError(collection, playerId);
+                TransactionGetResult monsterDoc = ctx.get(collection, monsterId);
+                TransactionGetResult playerDoc = ctx.get(collection, playerId);
 
                 int monsterHitpoints = monsterDoc.contentAs(JsonObject.class).getInt("hitpoints");
                 int monsterNewHitpoints = monsterHitpoints - damage;
@@ -314,7 +323,7 @@ public class TransactionsExample {
             // The operation failed.   Both the monster and the player will be untouched.
 
             // Situations that can cause this would include either the monster
-            // or player not existing (as getOrError is used), or a persistent
+            // or player not existing (as get is used), or a persistent
             // failure to be able to commit the transaction, for example on
             // prolonged node failure.
         }
@@ -336,7 +345,7 @@ public class TransactionsExample {
         transactions.run((ctx) -> {
             ctx.insert(collection, "docId", JsonObject.create());
 
-            Optional<TransactionJsonDocument> docOpt = ctx.get(collection, "requiredDoc");
+            Optional<TransactionGetResult> docOpt = ctx.getOptional(collection, "requiredDoc");
             if (docOpt.isPresent()) {
                 ctx.remove(docOpt.get());
                 ctx.commit();
@@ -347,6 +356,72 @@ public class TransactionsExample {
         // #end::rollback[]
     }
 
+    static void deferredCommit1() {
+
+        // #tag::defer1[]
+        try {
+            TransactionResult result = transactions.run((ctx) -> {
+                JsonObject initial = JsonObject.create().put("val", 1);
+                ctx.insert(collection, "a-doc-id", initial);
+
+                // Defer means don't do a commit right now.  `serialized` in the result will be present.
+                ctx.defer();
+            });
+
+            // Available because ctx.defer() was called
+            assert (result.serialized().isPresent());
+
+            TransactionSerializedContext serialized = result.serialized().get();
+
+            // This is going to store a serialized form of the transaction to pass around
+            byte[] encoded = serialized.encodeAsBytes();
+
+        } catch (TransactionFailed e) {
+            // System.err is used for example, log failures to your own logging system
+            System.err.println("Transaction " + e.result().transactionId() + " failed");
+
+            for (LogDefer err : e.result().log().logs()) {
+                System.err.println(err.toString());
+            }
+        }
+        // #end::defer1[]
+    }
+
+    static void deferredCommit2(byte[] encoded) {
+        // #tag::defer2[]
+        TransactionSerializedContext serialized = TransactionSerializedContext.createFrom(encoded);
+
+        try {
+            TransactionResult result = transactions.commit(serialized);
+
+        } catch (TransactionFailed e) {
+            // System.err is used for example, log failures to your own logging system
+            System.err.println("Transaction " + e.result().transactionId() + " failed");
+
+            for (LogDefer err : e.result().log().logs()) {
+                System.err.println(err.toString());
+            }
+        }
+        // #end::defer2[]
+    }
+
+    static void deferredRollback(byte[] encoded) {
+        // #tag::defer3[]
+        TransactionSerializedContext serialized = TransactionSerializedContext.createFrom(encoded);
+
+        try {
+            TransactionResult result = transactions.rollback(serialized);
+
+        } catch (TransactionFailed e) {
+            // System.err is used for example, log failures to your own logging system
+            System.err.println("Transaction " + e.result().transactionId() + " failed");
+
+            for (LogDefer err : e.result().log().logs()) {
+                System.err.println(err.toString());
+            }
+        }
+        // #end::defer3[]
+    }
 }
 
 
