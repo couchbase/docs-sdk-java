@@ -33,7 +33,7 @@ This type code is stored in the flags field within the item’s metadata.
 
 Later, when retrieving the document from the server, the SDK checks the type code which informs it about the type of serialization used to encode the document, and thus how the SDK should de-serialize the document.
 
-By default, SDKs will only accept document types which can serialize to JSON and will only serialize them to JSON.
+By default, SDKs will only accept document types which it can serialize to JSON and will only serialize them to JSON.
 However applications can configure the SDK to use non-JSON serialization and accept other types of inputs as documents.
 Note that using non-JSON serialization will prevent the document from being accessible via Query and MapReduce.
 
