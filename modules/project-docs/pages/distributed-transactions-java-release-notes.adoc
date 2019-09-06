@@ -12,6 +12,34 @@ See the xref:6.5@server:learn:data/distributed-acid-transactions.adoc[Distribute
 The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Transactions HOWTO doc] walks you through all aspects of working with Distributed Transactions.
 
 
+
+== Distributed Transactions Java 1.0.0-beta.2
+
+This is the second _Beta_ release of Distributed ACID Transactions 1.0.0 for Couchbase Server 6.5 and the Java 3.0.0 client.
+
+Built on Couchbase java-client version 3.0.0-alpha.7.
+Requires Couchbase Server 6.5 beta or above.
+
+== Breaking changes
+As a rule, we do not make breaking API changes after GA release, and only consider them rarely during the beta period.
+This particular change aligns the transaction and Java libraries much better, makes for a more natural and usable API, and requires little porting work.
+
+* https://issues.couchbase.com/browse/TXNJ-121[TXNJ-121]: Align with the Couchbase Java client,
+by renaming the `get` method to `getOptional`, `getOrError` to `get`, and `TransactionJsonDocument` to `TransactionGetResult`.
+
+=== Performance
+
+* https://issues.couchbase.com/browse/TXNJ-40[TXNJ-40]:
+Retry operations on many transient errors, rather than retrying the full transaction.
+
+=== New features
+
+* https://issues.couchbase.com/browse/TXNJ-85[TXNJ-85]:
+Supported deferred commit for transactions.  Please see the documentation for details.
+* https://issues.couchbase.com/browse/TXNJ-112[TXNJ-112]:
+(Experimental) Allow the number of ATRs to be configured.
+This can potentially be used to improve transactions throughput, but is currently experimental and should be used only with Couchbase's guidance.
+
 == Distributed Transactions Java 1.0.0-beta.1
 
 This is the first _Beta_ release of Distributed ACID Transactions 1.0.0 for Couchbase Server 6.5 and the Java 3.0.0 client.
