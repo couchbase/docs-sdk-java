@@ -13,16 +13,20 @@ The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Tran
 
 
 
-== Distributed Transactions Java 1.0.0-beta.2
+== Distributed Transactions Java 1.0.0-beta.2 (9th September 2019)
 
 This is the second _Beta_ release of Distributed ACID Transactions 1.0.0 for Couchbase Server 6.5 and the Java 3.0.0 client.
 
 Built on Couchbase java-client version 3.0.0-alpha.7.
 Requires Couchbase Server 6.5 beta or above.
 
-== Breaking changes
+=== Bug-fixes and stability
+* https://issues.couchbase.com/browse/JVMCBC-728[JVMCBC-728]: This fix in the underlying Couchbase java-client prevented conflict detection from working correctly in all situations with durability enabled (which it is, by default).
+All users are strongly recommended to upgrade as soon as possible, for this fix.
+
+=== Breaking changes
 As a rule, we do not make breaking API changes after GA release, and only consider them rarely during the beta period.
-This particular change aligns the transaction and Java libraries much better, makes for a more natural and usable API, and requires little porting work.
+This particular breaking change aligns the transaction and Java libraries much better, makes for a more natural and usable API, and requires little porting work.
 
 * https://issues.couchbase.com/browse/TXNJ-121[TXNJ-121]: Align with the Couchbase Java client,
 by renaming the `get` method to `getOptional`, `getOrError` to `get`, and `TransactionJsonDocument` to `TransactionGetResult`.
@@ -35,7 +39,9 @@ Retry operations on many transient errors, rather than retrying the full transac
 === New features
 
 * https://issues.couchbase.com/browse/TXNJ-85[TXNJ-85]:
-Supported deferred commit for transactions.  Please see the documentation for details.
+(Experimental) Supported deferred commit for transactions.
+Please see the documentation for details.
+This feature should be regarded as alpha, as its API and functionality may change in the future; please feel free to try it out and provide feedback.
 * https://issues.couchbase.com/browse/TXNJ-112[TXNJ-112]:
 (Experimental) Allow the number of ATRs to be configured.
 This can potentially be used to improve transactions throughput, but is currently experimental and should be used only with Couchbase's guidance.
