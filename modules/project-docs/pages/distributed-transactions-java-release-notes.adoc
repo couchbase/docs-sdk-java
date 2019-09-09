@@ -45,6 +45,7 @@ This feature should be regarded as alpha, as its API and functionality may chang
 * https://issues.couchbase.com/browse/TXNJ-112[TXNJ-112]:
 (Experimental) Allow the number of ATRs to be configured.
 This can potentially be used to improve transactions throughput, but is currently experimental and should be used only with Couchbase's guidance.
+* https://issues.couchbase.com/browse/TXNJ-107[TXNJ-107]: Make txn metadata documents more consistently named by prefacing them with "_txn:"
 
 == Distributed Transactions Java 1.0.0-beta.1
 
