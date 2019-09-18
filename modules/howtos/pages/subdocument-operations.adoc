@@ -299,7 +299,7 @@ Even when modifying the _same_ part of the document, operations will not necessa
 For example, two concurrent _arrayAppend_ operations to the same array will both succeed, never overwriting the other.
 
 
-So in some cases the application will not need to supply a xref:concurrent-mutations-cluster.adoc[CAS] value to protect
+So in some cases the application will not need to supply a xref:concurrent-document-mutations.adoc[CAS] value to protect
 against concurrent modifications.
 
 If CAS is required then it can be provided like this:
