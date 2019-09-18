@@ -45,7 +45,7 @@ public class InsecureKeyProvider : IKeyProvider
 ----
 
 The keys are stored by name in a dictionary and retrieved using the same name.
-See the xref:encrypting-using-sdk.adoc[sample code page] for more secure code.
+See the xref:howtos:encrypting-using-sdk.adoc[sample code page] for more secure code.
 
 [#format]
 == Field Encryption Format
@@ -64,7 +64,7 @@ __[PREFIX]_[FIELDNAME]” : {
 ----
 
 This is how Couchbase stores the JSON internally, but it is exposed to the developer as a public API.
-For your preferred SDK, an API reference is available, linked from xref:start-using-sdk.adoc[Install and Start Using the Java SDK with Couchbase Server] as well as xref:encrypting-using-sdk.adoc[sample code].
+For your preferred SDK, an API reference is available, linked from xref:howtos:start-using-sdk.adoc[Install and Start Using the Java SDK with Couchbase Server] as well as xref:encrypting-using-sdk.adoc[sample code].
 
 [#field-types]
 == Field Types
