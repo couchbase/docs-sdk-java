@@ -5,4 +5,4 @@
 [abstract]
 Binary formats & Transcoders
 
-include::partial$alpha-warning.adoc[]
+include::ref:partial$beta-warning.adoc[]

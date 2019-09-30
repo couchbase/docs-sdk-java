@@ -5,4 +5,4 @@
 [abstract]
 The standardized error codes returned by the Couchbase Java SDK.
 
-include::partial$alpha-warning.adoc[]
+include::ref:partial$beta-warning.adoc[]

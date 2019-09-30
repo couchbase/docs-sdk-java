@@ -167,8 +167,8 @@ MutationResult insertResult = collection.insert(
 
 {
 // #tag::expiry-get[]
-GetResult found = collection.get("my-document", getOptions().withExpiration(true));
-System.out.println("Expiration of found doc: " + found.expiration());
+GetResult found = collection.get("my-document", getOptions().withExpiry(true));
+System.out.println("Expiry of found doc: " + found.expiry());
 // #end::expiry-get[]
 }
 
@@ -176,13 +176,13 @@ System.out.println("Expiration of found doc: " + found.expiration());
 // #tag::expiry-replace[]
 GetResult found = collection.get(
   "my-document",
-  getOptions().withExpiration(true)
+  getOptions().withExpiry(true)
 );
 
 collection.replace(
   "my-document",
   json,
-  replaceOptions().expiry(found.expiration().get())
+  replaceOptions().expiry(found.expiry().get())
 );
 // #end::expiry-replace[]
 }

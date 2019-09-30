@@ -6,5 +6,5 @@
 [abstract]
 Users, permissions, authentication.
 
-include::partial$alpha-warning.adoc[]
+include::ref:partial$beta-warning.adoc[]
 

@@ -3,7 +3,7 @@
 :page-aliases: ROOT:sample-application,ROOT:tutorial4,ROOT:sample-app-backend
 
 
-include::partial$alpha-warning.adoc[]
+include::ref:partial$beta-warning.adoc[]
 
 
 

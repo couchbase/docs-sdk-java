@@ -6,7 +6,7 @@
 [abstract]
 Extended attributes.
 
-include::partial$alpha-warning.adoc[]
+include::ref:partial$beta-warning.adoc[]
 
 Until all details of the API for SDK 3.0's implementation of Extended Attributes (XATTR) are finalised, 
 please see xref:2.7@java-sdk::sdk-xattr-overview.adoc[the previous version of this page] for general details.
