@@ -292,7 +292,7 @@ There is a background cleanup process run by each client whose responsibility is
 and continue trying to push forwards the commit or rollback stage until they succeed.
 If the background cleanup job fails in process, another cleanup job will identify this and complete the commit or rollback.
 
-The transaction will expire at the end of the configured expiration period.  
+The transaction will expire at the end of the configured expiry period.
 The default is 15 seconds, and it can be set with:
 
 [source,java]

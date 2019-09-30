@@ -3,9 +3,7 @@
 :page-topic-type: howto
 :page-aliases: document-operations.adoc
 
-WARNING: These pages cover the first _Developer Preview_ of the Couchbase Java SDK -- 3.0 _alpha_.
-As such they are likely to change without notice.
-The _alpha_ code _should not_ be used in production.
+include::ref:partial$beta-warning.adoc[]
 
 The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/blob/release/3.0alpha/modules/howtos/examples/KvOperations.java[here].
 
@@ -165,10 +163,10 @@ include::example$KvOperations.java[tag=durability-observed]
 
 To stress, durability is a useful feature but should not be the default for most applications, as there is a performance consideration, and the default level of safety provided by Couchbase will be reasonable for the majority of situations.
 
-== Expiration/TTL
+== Expiry/TTL
 Couchbase Server includes an option to have particular documents automatically expire after a set time.  This can be useful for some use-cases, such as user sessions, caches, or other temporary documents.
 
-You can set an expiration value when creating a document:
+You can set an expiry value when creating a document:
 
 [source,java]
 ----

@@ -33,7 +33,7 @@ MutationResult upsertResult = collection.upsert(
 );
 
 // Get Document
-Optional<GetResult> getResult = collection.get("my-document");
+GetResult getResult = collection.get("my-document");
 // #end::upsert-get[]
 
     }

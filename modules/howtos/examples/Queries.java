@@ -2,7 +2,6 @@
 import com.couchbase.client.java.*;
 import com.couchbase.client.java.json.*;
 import com.couchbase.client.java.query.*;
-import com.couchbase.client.java.query.ScanConsistency;
 import reactor.core.publisher.*;
 
 import java.util.List;
@@ -38,7 +37,7 @@ void simple() {
 String statement = "select * from `travel-sample` limit 10;";
 QueryResult result = cluster.query(statement);
 
-List<JsonObject> rows = result.allRowsAsObject();
+List<JsonObject> rows = result.rowsAsObject();
 
 for (JsonObject json: rows) {
   System.out.println("Row: " + json);
@@ -68,7 +67,7 @@ void requestPlus() {
 // #tag::request-plus[]
 String stmt = "select * from `travel-sample` limit 10;";
 QueryResult result = cluster.query(stmt,
-  queryOptions().scanConsistency(ScanConsistency.REQUEST_PLUS));
+  queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS));
 // #end::request-plus[]
 }
 
@@ -81,7 +80,7 @@ CompletableFuture<QueryResult> future = async.query(stmt);
 // Just for demo purposes, block on the CompletableFutures.
 try {
   List<JsonObject> rows = future
-                  .thenApply(QueryResult::allRowsAsObject)
+                  .thenApply(QueryResult::rowsAsObject)
                   .get();
 } catch (InterruptedException | ExecutionException e) {
   e.printStackTrace();

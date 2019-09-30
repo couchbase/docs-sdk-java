@@ -18,6 +18,102 @@ Java 11 is recommended, which has various enhancements like lambda local variabl
 // note below is for after the αλφα release, when 3.0α relnotes are tidied away to a separate page (so will be below all of the relnotes left on this page):
 // Note, should you need them, release notes for the alpha versions of the Java SDK are xref:3.0αλφα-sdk-release-notes.adoc[archived here].
 
+== Version 3.0.0-beta.1 (30 September 2019)
+
+This is the first beta release of the third generation Java SDK.
+While it is not yet suitable to be used in production, the surface area of the API is largely complete and not expected to change dramatically.
+
+http://packages.couchbase.com/clients/java/3.0.0-beta.1/Couchbase-Java-Client-3.0.0-beta.1.zip[Download] |
+http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-beta.1/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.0-beta.1/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.0-beta.1**
+* com.couchbase.client:**core-io:2.0.0-beta.**
+* io.projectreactor:**reactor-core:3.2.10.RELEASE**
+* org.reactivestreams:**reactive-streams:1.0.2**
+
+=== Enhancements
+
+* http://issues.couchbase.com/browse/JCBC-1358[JCBC-1358]:
+Add retry and error handling for prepared statements / query
+* http://issues.couchbase.com/browse/JCBC-1397[JCBC-1397]:
+Add support for query index manager
+* http://issues.couchbase.com/browse/JCBC-1399[JCBC-1399]:
+Add diagnostics functionality
+* http://issues.couchbase.com/browse/JCBC-1401[JCBC-1401]:
+Add ping functionality
+* http://issues.couchbase.com/browse/JCBC-1402[JCBC-1402]:
+Add getAllReplicas
+* http://issues.couchbase.com/browse/JCBC-1403[JCBC-1403]:
+Add getAnyReplica
+* http://issues.couchbase.com/browse/JCBC-1415[JCBC-1415]:
+Add ReactiveBucketManager
+* http://issues.couchbase.com/browse/JCBC-1417[JCBC-1417]:
+Add ReactiveCollectionManager
+* http://issues.couchbase.com/browse/JCBC-1422[JCBC-1422]:
+Add BucketManager timeout option
+* http://issues.couchbase.com/browse/JCBC-1423[JCBC-1423]:
+Add options blocks to UserManager functions
+* http://issues.couchbase.com/browse/JCBC-1439[JCBC-1439]:
+Add support for readonly on analytics queries
+* http://issues.couchbase.com/browse/JCBC-1441[JCBC-1441],
+http://issues.couchbase.com/browse/JCBC-1454[JCBC-1454]:
+Add support for DataStructures
+Add passthrough serializer to access raw json values
+* http://issues.couchbase.com/browse/JCBC-1452[JCBC-1452]:
+Expose ClusterOptions on connect
+* http://issues.couchbase.com/browse/JCBC-1374[JCBC-1374]:
+Add reactive versions of User/GroupManager
+
+=== Bug Fixes
+
+* http://issues.couchbase.com/browse/JCBC-1431[JCBC-1431]:
+Handle memcached being restarted during cluster connection
+* http://issues.couchbase.com/browse/JCBC-1432[JCBC-1432]:
+Fix theorectical overflow error comparing system times in LazyCircuitBreaker
+* http://issues.couchbase.com/browse/JCBC-1433[JCBC-1433]:
+Setting certain N1QL query options causes the request to fail
+* http://issues.couchbase.com/browse/JCBC-1440[JCBC-1440]:
+`exists` no longer throws if the document does not exist
+* http://issues.couchbase.com/browse/JVMCBC-749[JVMCBC-749]:
+NonChunked handler needs to reset currentRequest
+
+=== API Changes
+This release, transitioning as it does from alpha to beta, involved a focused effort to make sure all the SDK implementations align.
+The breaking API changes below were unavoidable, but we expect now to make few further changes going forwards in beta.
+
+* http://issues.couchbase.com/browse/JCBC-1282[JCBC-1282]:
+Error handling updated has been updated for consistency
+* http://issues.couchbase.com/browse/JCBC-1405[JCBC-1405]:
+Fix getAndLock signature
+* http://issues.couchbase.com/browse/JCBC-1409[JCBC-1409]:
+FullDocument MutateInSpec is deprecated, pending removal pre-GA.  Use `upsert("", ...)` instead.
+* http://issues.couchbase.com/browse/JCBC-1410[JCBC-1410]:
+getAnyReplica and getAllReplicas return new GetReplicaResult type
+* http://issues.couchbase.com/browse/JCBC-1413[JCBC-1413]:
+Update search metadata
+* http://issues.couchbase.com/browse/JCBC-1438[JCBC-1438],
+http://issues.couchbase.com/browse/JCBC-1442[JCBC-1442],
+http://issues.couchbase.com/browse/JCBC-1448[JCBC-1448],
+http://issues.couchbase.com/browse/JCBC-1463[JCBC-1463],
+http://issues.couchbase.com/browse/JCBC-1466[JCBC-1466],
+Encoding and decoding has been altered substantially, transitioning to a simpler model based around `Transcoders`
+* http://issues.couchbase.com/browse/JCBC-1455[JCBC-1455]:
+Rename expiration to expiry
+* http://issues.couchbase.com/browse/JCBC-1459[JCBC-1459]:
+LookupInSpec.getFullDocument is deprecated, pending removal pre-GA.  Use `get("")` instead.
+* http://issues.couchbase.com/browse/JCBC-1465[JCBC-1465]:
+Rename shutdown to disconnect on *Cluster
+* http://issues.couchbase.com/browse/JCBC-1469[JCBC-1469]:
+Rename isMaster to isReplica in GetReplicaResult
+* http://issues.couchbase.com/browse/JCBC-1470[JCBC-1470]:
+Add StoreSemantics to subdoc LookupIn
+* http://issues.couchbase.com/browse/JCBC-1471[JCBC-1471]:
+Remove withExpiry from lookupIn
+* http://issues.couchbase.com/browse/JCBC-1472[JCBC-1472]:
+Remove durability from touch
+
 
 == Version 3.0.0-alpha.7 (2 September 2019)
 
@@ -30,7 +126,7 @@ The supported and tested dependencies for this release are:
 
 * com.couchbase.client:**java-client:3.0.0-alpha.7**
 * com.couchbase.client:**core-io:2.0.0-alpha.7**
-* io.projectreactor:**reactor-core:3.2.10.RELEASE**
+* io.projectreactor:**reactor-core:3.2.12.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.2**
 
 Note that since this release depends on core-io, it also includes transitive fixes and enhancements that may not all be reflected in the following list.

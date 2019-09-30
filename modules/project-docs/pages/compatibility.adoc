@@ -5,7 +5,7 @@
 [abstract]
 Features available in different SDK versions, and compatibility between Server and SDK.
 
-include::partial$alpha-warning.adoc[]
+include::ref:partial$beta-warning.adoc[]
 
 == Couchbase Version/SDK Version Matrix
 
