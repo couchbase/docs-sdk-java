@@ -26,6 +26,8 @@ Please see xref:6.5@server:learn:data/distributed-acid-transactions.adoc[our int
 * NTP should be configured so nodes of the Couchbase cluster are in sync with time. The time being out of sync will not cause incorrect behavior, but can impact metadata cleanup.
 * The application, if it is using xref:concept-docs:xattr.adoc[extended attributes (XATTRs)], must avoid using the XATTR field `txn`, which is now reserved for Couchbase use.
 
+NOTE: If developing on a single node, set replicas to 0 for your bucket (see xref:6.5@server:manage:manage-buckets/create-bucket.adoc#couchbase-bucket-settings[GUI] or xref:6.5@server:cli:cbcli/couchbase-cli-bucket-create.adoc#options[command line] bucket options), as the default durability requirement of 1 cannot be accomplished on just one node.
+
 
 == Getting started
 
