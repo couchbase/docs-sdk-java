@@ -126,9 +126,11 @@ See xref:concurrent-mutations-cluster.adoc[CAS] for a description on how to use 
 ====
 If you wish to only modify certain parts of a document, you can use xref:subdocument-operations.adoc[sub-document] operations which operate on specific subsets of documents:
 
-[source,python]
+[source,java]
 ----
-cb.mutate_in('docid', subdoc.array_addunique('tags', 'fast'))
+bucket.mutateIn("docid")
+        .arrayAddUnique("tags", "fast")
+        .execute();
 ----
 
 or xref:{version-server}@server:n1ql:n1ql-language-reference/update.adoc[N1QL UPDATE] to update documents based on specific query criteria:
@@ -186,9 +188,15 @@ SELECT * FROM default WHERE META(default).id = "docid";
 
 You can also retrieve _parts_ of documents using xref:subdocument-operations.adoc[sub-document operations], by specifying one or more sections of the document to be retrieved
 
-[source,python]
+[source,java]
 ----
-name, email = cb.retrieve_in('user:kingarthur', 'contact.name', 'contact.email')
+DocumentFragment<Lookup> result = bucket.lookupIn("user:kingarthur")
+        .get("contact.name")
+        .get("contact.email")
+        .execute();
+String name = result.content(0).toString();
+String email = result.content(1).toString();
+        
 ----
 
 [#devguide_kvcore_counter_generic]
