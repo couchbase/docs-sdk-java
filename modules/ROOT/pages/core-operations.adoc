@@ -254,16 +254,16 @@ You can also use xref:subdocument-operations.adoc#ul_fp2_2yw_mv[sub-document cou
 You can use collection data structures such as lists, maps, sets and queues in Couchbase.
 These data structures may be manipulated with basic operations without retrieving and storing the entire document.
 
-See the data structures xref:python-sdk::datastructures.adoc[documentation for each SDK language] for details on implementation.
-Some Python examples are provided below for easy reference, but more advanced Collections frameworks are accessible in xref:java-sdk::datastructures.adoc[Java] and xref:dotnet-sdk::datastructures.adoc[.NET] as well.
+See the data structures xref:java-sdk::datastructures.adoc[documentation for each SDK language] for details on implementation.
+Some Java examples are provided below for easy reference, but more advanced Collections frameworks are accessible in xref:java-sdk::datastructures.adoc[Java] and xref:dotnet-sdk::datastructures.adoc[.NET] as well.
 
-Data structures in Couchbase are similar in concept to data structures in, for example, Python:
+Data structures in Couchbase are similar in concept to data structures in, for example, Java:
 
-* *Map* is like Python `dict`, and is a key-value structure, where a value is accessed by using a key string.
-* *List* is like a Python `list` and is a sequential data structure.
+* *Map* is like Java `Map<String, Object>` and is a key-value structure, where a value is accessed by using a key string.
+* *List* is like a Java `List<Object>` and is a sequential data structure.
 Values can be placed in the beginning or end of a list, and can be accessed using numeric indexes.
 * *Queue* is a wrapper over a _list_ which offers FIFO (first-in-first-out) semantics, allowing it to be used as a lightweight job queue.
-* *Set* is a wrapper over a _list_ which provides the ability to handle unique values.
+* *Set* is a wrapper over a _list_ which ensures each value in the list is unique.
 
 These data structures are stored as JSON documents in Couchbase, and can therefore be accessed using N1QL, Full Text Search, and normal key-value operations.
 Data structures can also be manipulated using the traditional sub-document and full-document key-value APIs.
@@ -271,18 +271,19 @@ Data structures can also be manipulated using the traditional sub-document and f
 To add an item to a map, specify the _document ID_ of the map itself (i.e.
 the ID which uniquely identifies the map in the server), the key _within_ the map, and the value to store under the key:
 
-[source,python]
+[source,java]
 ----
-bucket.map_add('map_id', 'name', 'Mark Nunberg', create=True)
+bucket.mapAdd("map_id", "name", "Mark Nunberg",
+        MutationOptionBuilder.builder().createDocument(true));
 ----
 
 Data structures can be accessed using their appropriate methods.
-Most data access methods will return an [.api]`ValueResult`-like object with the actual returned value under the [.var]`value` property.
+Most data access methods will return a generic type [.api]`V` which is provided as a generic parameter such as `Class<V>`.
 
-[source,python]
+[source,java]
 ----
-bucket.list_get(0).value  # 'hello'
-bucket.map_get('map_id', 'name').value  # 'mark nunberg'
+bucket.listGet("list_id", 0, String.class); // "hello"
+bucket.mapGet("map_id", "name", String.class);  // "mark nunberg"
 ----
 
 [#devguide_kvcore_append_prepend_generic]
