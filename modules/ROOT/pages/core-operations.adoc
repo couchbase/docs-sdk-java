@@ -210,19 +210,16 @@ The same is the case for `decr()`.
 
 A document may be used as a counter if its value is a simple ASCII number, like `42`.
 Couchbase allows you to increment and decrement these values atomically using a special [.api]`counter` operation.
-The example below (in Python) shows how to use counters:
+The example below (in Java) shows how to use counters:
 
-[source,python]
+[source,java]
 ----
->>> cb.counter('counter_id', delta=20, initial=100).value
-100L
->>> cb.counter('counter_id', delta=1).value
-101L
->>> cb.counter('counter_id', delta=-50).value
-51L
+bucket.counter("counter_id", 20, 100).content(); //100L
+bucket.counter("counter_id", 1).content(); //101L
+bucket.counter("counter_id", -51).content(); //51L
 ----
 
-In the above example, a counter is created by using the [.api]`counter` Python method with an [.param]`initial` value.
+In the above example, a counter is created by using the [.api]`counter` Java method with an [.param]`initial` value.
 The initial value is the value the counter uses if the counter ID does not yet exist.
 
 Once created, the counter can be incremented or decremented atomically by a given _amount_ or _delta_.
@@ -239,12 +236,14 @@ xref:concurrent-mutations-cluster.adoc[CAS] values are not used with counter ope
 The intent of the counter operation is to simply increment the current server-side value of the document.
 If you wish to only increment the document if it is at a certain value, then you may use a normal [.api]`upsert` function with CAS:
 
-[source,python]
+[source,java]
 ----
-rv = cb.get('counter_id')
-value, cas = rv.value, rv.cas
-if should_increment_value(value):
-  cb.upsert('counter_id', value + increment_amount, cas=cas)
+JsonDocument counter = bucket.get("counter_id");
+long cas = document.cas();
+long value = document.content();
+if(should_increment_value(value)){
+  bucket.upsert("counter_id", (value + increment_amount), cas).execute();
+}
 ----
 
 You can also use xref:subdocument-operations.adoc#ul_fp2_2yw_mv[sub-document counter operations] to increment numeric values _within_ a document containing other content.
