@@ -300,10 +300,10 @@ Using the append and prepend methods may invalidate an existing JSON document.
 You can use xref:subdocument-operations.adoc[sub-document operations] if you want to have true JSON-aware prepend and append operations which add values to JSON arrays.
 ====
 
-[source,python]
+[source,java]
 ----
-append(docid, fragment)
-prepend(docid, fragment)
+append(document);
+prepend(document);
 ----
 
 The _append_ and _prepend_ operations atomically add bytes to the end or beginning of a binary document.
@@ -311,40 +311,63 @@ They are an efficient alternative to retrieving a binary document in its entiret
 
 Because these methods do raw string manipulation, they are only suitable for non-JSON documents: Prepending or appending anything to a JSON document will invalidate the JSON and make it unparseable by standard JSON parsers.
 
-The semantics of the _append_ and _prepend_ operations are similar to those of the _upsert_ family of operations, except that they accept the fragment to append as their value, rather than the entire document.
+The semantics of the _append_ and _prepend_ operations are similar to those of the _upsert_ family of operations, except that they accept the document whose content can be appended to the existing one, rather than the entire document.
 These functions may be used to add efficiency for custom binary data structures (such as logs), as they avoid transferring the contents of the entire document for each operation.
 Consider the following versions (which are equivalent)
 
 .Append using get() and replace() (slow)
-[source,python]
+[source,java]
 ----
-# Store the document
-cb.upsert('binary_doc', '\x01', format=couchbase.FMT_BYTES)
+// Create buffer out of a string
+ByteBuf toWrite = Unpooled.copiedBuffer("Hello", CharsetUtil.UTF_8);
 
-while True:
-    # Retrieve the entire document
-    rv = cb.get('binary_doc')
-    value = rv.value + '\x02'
-    try:
-        # Upload the entire document
-        cb.replace('binary_doc', value, format=couchbase.FMT_BYTES)
-        break
-    except couchbase.exceptions.KeyExistsError:
-        continue
+// Store the document
+bucket.upsert(BinaryDocument.create("binaryDoc", toWrite));
 
-print repr(cb.get('binary_doc').value)
+// Get the document
+BinaryDocument read1 = bucket.get("binaryDoc", BinaryDocument.class);
+
+// Create a replacement document
+ByteBuf toAppend = Unpooled.copiedBuffer("World", CharsetUtil.UTF_8);
+byteBuf toReplace = read1.content().writeBytes(toAppend);
+
+// Replace the existing document
+bucket.replace("binaryDoc",BinaryDocument.create("binaryDoc", toReplace));
+
+// Read it back
+BinaryDocument read2 = bucket.get("binaryDoc", BinaryDocument.class);
+
+// Print it
+System.out.println(read2.content().toString(CharsetUtil.UTF_8)); //Hello World
+
+// Free the resources
+ReferenceCountUtil.release(read1.content());
+ReferenceCountUtil.release(read2.content());
 ----
 
 .Append using append() (fast)
-[source,python]
+[source,java]
 ----
-# Store the document
-cb.upsert('binary_doc', '\x01', format=couchbase.FMT_BYTES)
+// Create buffer out of a string
+ByteBuf toWrite = Unpooled.copiedBuffer("Hello", CharsetUtil.UTF_8);
 
-# Append a fragment
-cb.append('binary_doc', '\x02', format=couchbase.FMT_BYTES)
+// Store the document
+bucket.upsert(BinaryDocument.create("binaryDoc", toWrite));
 
-print repr(cb.get('binary_doc').value)
+// Create a buffer to be appended
+ByteBuf toAppend = Unpooled.copiedBuffer("World", CharsetUtil.UTF_8);
+
+// Append a document
+bucket.append(BinaryDocument.create("binaryDoc", toAppend))
+
+// Get the document
+BinaryDocument read = bucket.get("binaryDoc", BinaryDocument.class);
+
+// Print it
+System.out.println(read.content().toString(CharsetUtil.UTF_8)); //Hello World
+
+// Free the resources
+ReferenceCountUtil.release(read.content());
 ----
 
 Note that since the _append_ operation is done atomically, there is no need for a CAS check (though one can still be supplied if the document must be at a specific state).
