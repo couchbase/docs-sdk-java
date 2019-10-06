@@ -42,22 +42,22 @@ Because JSON is a structured format, it can be subsequently searched and queried
 [#crud-overview]
 == Primitive Key-Value Operations
 
-[source,python]
+[source,java]
 ----
-upsert(docid, document)
-insert(docid, document)
-replace(docid, document)
-get(docid)
-remove(docid)
+bucket.upsert(document);
+bucket.insert(document);
+bucket.replace(document);
+bucket.get(docid);
+bucket.remove(docid);
 ----
 
 In Couchbase documents are stored using one of the operations: _upsert_, _insert_, and _replace_.
 Each of these operations will write a JSON document with a given document ID (key) to the database.
 The update methods differ in behavior in respect to the existing state of the document:
 
-* _insert_ will only create the document if the given ID is not found within the database.
-* _replace_ will only replace the document if the given ID already exists within the database.
-* _upsert_ will always replace the document, ignoring whether the ID has already existed or not.
+* _insert_ will only create the document if the given document with ID is not found within the database.
+* _replace_ will only replace the document if the given document with ID already exists within the database.
+* _upsert_ will always replace the document, ignoring whether the document with ID exists or not.
 
 Documents can be retrieved using the _get_ operation, and finally removed using the _remove_ operations.
 
