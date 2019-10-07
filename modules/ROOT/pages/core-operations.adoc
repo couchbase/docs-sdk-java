@@ -331,16 +331,16 @@ BinaryDocument read1 = bucket.get("binaryDoc", BinaryDocument.class);
 
 // Create a replacement document
 ByteBuf toAppend = Unpooled.copiedBuffer("World", CharsetUtil.UTF_8);
-byteBuf toReplace = read1.content().writeBytes(toAppend);
+ByteBuf toReplace = read1.content().writeBytes(toAppend);
 
 // Replace the existing document
-bucket.replace("binaryDoc",BinaryDocument.create("binaryDoc", toReplace));
+bucket.replace(BinaryDocument.create("binaryDoc", toReplace));
 
 // Read it back
 BinaryDocument read2 = bucket.get("binaryDoc", BinaryDocument.class);
 
 // Print it
-System.out.println(read2.content().toString(CharsetUtil.UTF_8)); //Hello World
+System.out.println(read2.content().toString(CharsetUtil.UTF_8)); //HelloWorld
 
 // Free the resources
 ReferenceCountUtil.release(read1.content());
@@ -360,13 +360,13 @@ bucket.upsert(BinaryDocument.create("binaryDoc", toWrite));
 ByteBuf toAppend = Unpooled.copiedBuffer("World", CharsetUtil.UTF_8);
 
 // Append a document
-bucket.append(BinaryDocument.create("binaryDoc", toAppend))
+bucket.append(BinaryDocument.create("binaryDoc", toAppend));
 
 // Get the document
 BinaryDocument read = bucket.get("binaryDoc", BinaryDocument.class);
 
 // Print it
-System.out.println(read.content().toString(CharsetUtil.UTF_8)); //Hello World
+System.out.println(read.content().toString(CharsetUtil.UTF_8)); //HelloWorld
 
 // Free the resources
 ReferenceCountUtil.release(read.content());
