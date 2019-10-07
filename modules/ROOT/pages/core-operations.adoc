@@ -240,11 +240,11 @@ If you wish to only increment the document if it is at a certain value, then you
 
 [source,java]
 ----
-JsonDocument counter = bucket.get("counter_id");
-long cas = document.cas();
-long value = document.content();
+JsonLongDocument counter = bucket.get("counter_id", JsonLongDocument.class);
+long cas = counter.cas();
+long value = counter.content();
 if(should_increment_value(value)){
-  bucket.upsert("counter_id", (value + increment_amount), cas).execute();
+  bucket.upsert(JsonLongDocument.create("counter_id", (value+increment_amount), cas));
 }
 ----
 
