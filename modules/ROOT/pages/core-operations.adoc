@@ -55,11 +55,13 @@ In Couchbase documents are stored using one of the operations: _upsert_, _insert
 Each of these operations will write a JSON document with a given document ID (key) to the database.
 The update methods differ in behavior in respect to the existing state of the document:
 
-* _insert_ will only create the document if the given document with ID is not found within the database.
-* _replace_ will only replace the document if the given document with ID already exists within the database.
-* _upsert_ will always replace the document, ignoring whether the document with ID exists or not.
+* _insert_ will only create the document if the given document ID is not found within the database.
+* _replace_ will only replace the document if the given document ID already exists within the database.
+* _upsert_ will always replace the document, ignoring whether the document ID exists or not.
 
-Documents can be retrieved using the _get_ operation, and finally removed using the _remove_ operations.
+For detailed explanations, please refer xref:document-operations.adoc#java-creating-updating-full-docs[Creating and Updating Full Documents] section.
+
+Documents can be retrieved using the _get_ operation, and finally removed using the _remove_ operations. You can refer xref:document-operations.adoc#java-retrieving-full-docs[Retrieving full docs] and xref:document-operations.adoc#java-removing-full-docs[Removing full docs] section.
 
 Since Couchbase’s KV store may be thought of as a distributed hashmap or dictionary, the following code samples are explanatory of Couchbase’ update operations in pseudo-code:
 
@@ -216,7 +218,7 @@ The example below (in Java) shows how to use counters:
 ----
 bucket.counter("counter_id", 20, 100).content(); //100L
 bucket.counter("counter_id", 1).content(); //101L
-bucket.counter("counter_id", -51).content(); //51L
+bucket.counter("counter_id", -50).content(); //51L
 ----
 
 In the above example, a counter is created by using the [.api]`counter` Java method with an [.param]`initial` value.
