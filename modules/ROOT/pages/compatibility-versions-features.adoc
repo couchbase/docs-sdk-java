@@ -191,6 +191,11 @@ The following table provides an overview.
 | *Recommended*
 |===
 
+NOTE: Check the Spring Data Couchbase's compile dependencies -- older versions, such as 3.0, may link an out-of-date version of the Java SDK in their dependencies list, although a supported version should be in the `updates`.
+Please make sure that you are using a supported version of the Couchbase Java SDK, prefereably the latest version, which will contain any available bug fixes.
+Using the latest Spring Data Couchbase should ensure that this is so.
+
+
 [#migrating]
 == Migrating from Java SDK 1.4.x to 2.x
 
