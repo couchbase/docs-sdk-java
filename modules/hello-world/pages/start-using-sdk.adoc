@@ -7,6 +7,10 @@ The Couchbase Java SDK allows Java applications to access a Couchbase cluster. I
 
 include::partial$beta-warning.adoc[]
 
+The Couchbase Java SDK 3.0 is a complete rewrite of the API, reducing the number of overloads to present a simplified surface area, and adding support for future Couchbase Server features like Collections and Scopes (available in Couchbase Server 6.5 as a xref:concept-docs:collections.adoc[developer preview]).
+The 3.0 SDK also moves from `RxJava` to `Java Reactor`, along with other improvements to performance, logging, and timeout troubleshooting.
+
+
 == Installing the SDK
 
 The SDK requires Java 8 or later to be installed, earlier versions will not work.
