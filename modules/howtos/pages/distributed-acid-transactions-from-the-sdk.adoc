@@ -18,6 +18,11 @@ This is the beta release of Distributed Transactions for Couchbase, providing th
 
 Please see xref:6.5@server:learn:data/distributed-acid-transactions.adoc[our introduction to ACID Transactions] for a guide to the benefits and trade-offs of multi-document transactions.
 
+Below we show you how to create Transactions, step-by-step, and what happens when something goes wrong.
+You may also want to start with our https://github.com/couchbaselabs/couchbase-transactions-java-examples[GitHub transactions examples page], 
+which features two useful downloadable examples of using Distributed Transactions.
+
+
 
 == Requirements
 
