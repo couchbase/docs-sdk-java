@@ -50,7 +50,7 @@ By default, the log level for logback is set to DEBUG, but with the addition of 
 </configuration>
 ----
 
-Consult the SLF4J documentation for advanced configuration.
+Consult the https://www.slf4j.org/docs.html[SLF4J documentation^] for advanced configuration.
 
 *Configuring Log4J*
 
@@ -101,7 +101,7 @@ log4j.appender.CA.layout=org.apache.log4j.PatternLayout
 log4j.appender.CA.layout.ConversionPattern=%-4r [%t] %-5p %c %x - %m%n
 ----
 
-Consult the Log4J documentation for more information and advanced configuration options.
+Consult the https://logging.apache.org/log4j/2.x/javadoc.html[Log4J documentation^] for more information and advanced configuration options.
 
 == Configuring the JDK Logger
 
@@ -366,7 +366,7 @@ Right now, the following events can be emitted, depending on the current state o
 |===
 
 Since the bucket events are most of the time triggered by the application itself, they are mainly used for debugging.
-Especially the``NodeDisconnectedEvent`` can be helpful to send over to a monitoring system, but keep in mind that even during a planned rebalance out at some point this event will be raised once the node is gone.
+Especially the ``NodeDisconnectedEvent`` can be helpful to send over to a monitoring system, but keep in mind that even during a planned rebalance out at some point this event will be raised once the node is gone.
 
 == Metric events
 
@@ -379,7 +379,7 @@ Right now these metric events are emitted:
 *The RuntimeMetricsEvent*
 
 Run-time metrics are designed to capture the run-time state at the time of emission.
-The metric contains information about GC, Memory and Threads which it collects through the systems MBeans.
+The metric contains information about GC, Memory and Threads which it collects through the system's MBeans.
 It makes use of the internal `Diagnostics` class which collects the information in a transparent way and then creates the `RuntimeMetricsEvent` for you to consume.
 
 Note that if the collection is disabled on the environment, there is no run-time overhead whatsoever (since the collection is triggered on emission every interval).

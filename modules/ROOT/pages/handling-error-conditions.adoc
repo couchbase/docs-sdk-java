@@ -102,7 +102,7 @@ Note that with Server 4.5 and later, the server will also trigger a `InvalidPass
 
 == Bucket Operation Errors
 
-When a Document is mutated through the key value API a couple exceptions could be raised depending on the state of that Document on the cluster:
+When a Document is mutated through the key value API a couple of exceptions could be raised depending on the state of that Document on the cluster:
 
 .Bucket Operation Mutation Errors Reference
 [#java-errors-bucket-mut-ref,cols="1,1,4"]

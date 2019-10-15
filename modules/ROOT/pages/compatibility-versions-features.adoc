@@ -191,6 +191,11 @@ The following table provides an overview.
 | *Recommended*
 |===
 
+NOTE: Check the Spring Data Couchbase's compile dependencies -- older versions, such as 3.0, may link an out-of-date version of the Java SDK in their dependencies list, although a supported version should be in the `updates`.
+Please make sure that you are using a supported version of the Couchbase Java SDK, prefereably the latest version, which will contain any available bug fixes.
+Using the latest Spring Data Couchbase should ensure that this is so.
+
+
 [#migrating]
 == Migrating from Java SDK 1.4.x to 2.x
 
@@ -199,7 +204,7 @@ Couchbase recommends that you migrate to the Java 2.x SDK to take advantage of e
 The 2.x Java SDK is based on the reactive programming model and has a different architecture that uses a core I/O layer and a Java client layer.
 It's asynchronous by design and offers performance, scalability, and durability enhancements.
 
-This guide helps you migrate from the previous generation of the Java SDK (version `1.4.x`) to this new generation SDK (version `2.x`).
+This xref:compatibility-versions-features.adoc#1-x-2-x-migration-getting-started[guide] helps you migrate from the previous generation of the Java SDK (version `1.4.x`) to this new generation SDK (version `2.x`).
 
 If you plan on using the synchronous blocking API, you can follow the simple migration path.
 Or, you can follow the optional migration path to fully reactive and asynchronous code by using the asynchronous API, which provides the best performance.
@@ -309,7 +314,7 @@ Concerning optimistic locking—because the CAS is now part of the `Document`, t
 
 == 1.x-2.x Migrations: Reactive and Batched Programming
 
-In the 2.x SDK, asynchronous processing is done via RxJava.
+In the 2.x SDK, asynchronous processing is done via https://github.com/ReactiveX/RxJava[RxJava^].
 The asynchronous API is not mixed with the synchronous API, but rather accessible via the `async()` method on `Cluster` and `Bucket`.
 
 The SDK is thread-safe and uses a pool of threads internally for operations (so they are effectively processed in a separate thread).
