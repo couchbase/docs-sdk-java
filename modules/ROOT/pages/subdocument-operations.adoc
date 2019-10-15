@@ -16,7 +16,7 @@ You should use sub-document operations when you are modifying only portions of a
 
 [caption=Attention]
 IMPORTANT: The sub-document operations described on this page are for _Key-Value_ requests only: they are not related to sub-document N1QL queries.
-(Sub-document N1QL queries are explained in the section xref:sdk-common:n1ql-query.adoc[Querying with N1QL].)
+(Sub-document N1QL queries are explained in the _Querying Nested Documents_ section xref:n1ql-query.adoc#querying-nested-documents[N1QL pages].)
 
 In order to use sub-document operations you need to specify a _path_ indicating the location of the sub-document.
 The _path_ follows N1QL syntax (see <<Path syntax>>, and xref:server:n1ql:n1ql-intro/queriesandresults.adoc[N1QL Queries and Results]).
