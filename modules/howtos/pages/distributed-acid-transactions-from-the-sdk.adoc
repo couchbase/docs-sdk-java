@@ -47,7 +47,7 @@ With gradle this can be accomplished by modifying these sections of your build.g
 [source,gradle]
 ----
 dependencies {
-    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.0.0-beta.2'
+    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.0.0-beta.3'
 }
 
 repositories {
