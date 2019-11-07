@@ -3,6 +3,7 @@
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.ReactiveCollection;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.transactions.TransactionGetResult;
 import com.couchbase.transactions.TransactionResult;
@@ -12,9 +13,13 @@ import com.couchbase.transactions.deferred.TransactionSerializedContext;
 import com.couchbase.transactions.error.TransactionFailed;
 import com.couchbase.transactions.log.IllegalDocumentState;
 import com.couchbase.transactions.log.LogDefer;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 // #end::imports[]
 
 public class TransactionsExample {
@@ -421,6 +426,58 @@ public class TransactionsExample {
             }
         }
         // #end::defer3[]
+    }
+
+    static void concurrentOps() {
+        // #tag::concurrentOps[]
+        List<String> docIds = Arrays.asList("doc1", "doc2", "doc3", "doc4", "doc5");
+
+        ReactiveCollection coll = collection.reactive();
+
+        TransactionResult result = transactions.reactive((ctx) -> {
+
+            // Tracks whether all operations were successful
+            AtomicBoolean allOpsSucceeded = new AtomicBoolean(true);
+
+            // The first mutation must be done in serial, as it also creates a metadata entry
+            return ctx.get(coll, docIds.get(0))
+                    .flatMap(doc -> {
+                        JsonObject content = doc.contentAsObject();
+                        content.put("value", "updated");
+                        return ctx.replace(doc, content);
+                    })
+
+                    // Do all other docs in parallel
+                    .thenMany(Flux.fromIterable(docIds.subList(1, docIds.size()))
+                            .flatMap(docId -> ctx.get(coll, docId)
+                                            .flatMap(doc -> {
+                                                JsonObject content = doc.contentAsObject();
+                                                content.put("value", "updated");
+                                                return ctx.replace(doc, content);
+                                            })
+                                            .onErrorResume(err -> {
+                                                allOpsSucceeded.set(false);
+                                                // App should replace this with logging
+                                                err.printStackTrace();
+
+                                                // Allow other ops to finish
+                                                return Mono.empty();
+                                            }),
+
+                                    // Run these in parallel
+                                    docIds.size())
+
+                    // The commit or rollback must also be done in serial
+                    ).then(Mono.defer(() -> {
+                        // Commit iff all ops succeeded
+                        if (allOpsSucceeded.get()) {
+                            return ctx.commit();
+                        } else {
+                            throw new RuntimeException("Retry the transaction");
+                        }
+                    }));
+        }).block();
+        // #end::concurrentOps[]
     }
 }
 
