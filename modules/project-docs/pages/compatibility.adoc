@@ -1,6 +1,6 @@
 = Compatibility of Couchbase Features, Couchbase Server Versions, and the Couchbase Java SDK
 :navtitle: Compatibility
-:page-aliases: ROOT:overview,ROOT:migrate,ROOT:compatibility-versions-features,compatibility-versions-features
+:page-aliases: ROOT:overview,ROOT:compatibility-versions-features,compatibility-versions-features
 
 [abstract]
 Features available in different SDK versions, and compatibility between Server and SDK.
