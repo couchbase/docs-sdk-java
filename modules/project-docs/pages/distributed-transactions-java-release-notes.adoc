@@ -22,18 +22,18 @@ Requires Couchbase Server 6.5 or above.
 
 === Bug-fixes And Stability
 * https://issues.couchbase.com/browse/TXNJ-127[TXNJ-127]:
-Fixes an ArrayIndexOutOfBoundsException error when using the reactive API to perform concurrency inside a txn.
+Fixes an `ArrayIndexOutOfBoundsException` error when using the reactive API to perform concurrency inside a txn.
 * https://issues.couchbase.com/browse/TXNJ-145[TXNJ-145]:
 ATR names are changed, to hash to their expected vbucket.
 It is recommended to flush (remove all documents from) the bucket to remove ATR documents from previous releases.
 * https://issues.couchbase.com/browse/TXNJ-136[TXNJ-136]:
-Fixes an erroneous IllegalDocumentState alert in edge-cases involving the DurabilityAmbiguous error
+Fixes an erroneous `IllegalDocumentState` alert in edge-cases involving the `DurabilityAmbiguous` error.
 
 === New Features and Enhancements
 * https://issues.couchbase.com/browse/TXNJ-124[TXNJ-124]:
-An aborting transaction will now attempt rollback before completing raising TransactionExpired failure, rather than leaving cleanup solely to cleanup process.
+An aborting transaction will now attempt rollback before completing raising `TransactionExpired` failure, rather than leaving cleanup solely to cleanup process.
 * https://issues.couchbase.com/browse/TXNJ-131[TXNJ-131]:
-Minor logging improvement
+Minor logging improvement.
 
 == Distributed Transactions Java 1.0.0-beta.2 (9th September 2019)
 
