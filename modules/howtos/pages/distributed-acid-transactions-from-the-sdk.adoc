@@ -38,7 +38,7 @@ to the correct 0 for a single node cluster (for example, during local developmen
 else all transactions will fail due to the default durability setting of `Majority` being impossible to achieve.
 
 
-== Getting started
+== Getting Started
 
 Couchbase transactions require no additional components or services to be configured. 
 Simply add the transactions library into your project. 
@@ -47,7 +47,7 @@ With gradle this can be accomplished by modifying these sections of your build.g
 [source,gradle]
 ----
 dependencies {
-    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.0.0-beta.2'
+    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.0.0-beta.3'
 }
 
 repositories {
@@ -374,6 +374,22 @@ TransactionConfigBuilder.create().logOnFailure(true, Event.Severity.WARN).build(
 By default the Couchbase Java logging event-bus is setup to look for and use SLF4J/logback, log4j1, and log4j2 on the classpath, and to fallback to java.util.Logging.  
 
 Please see the xref:howtos:collecting-information-and-logging[Java SDK logging documentation] for details.
+
+== Concurrent Operations with the Async API
+The async API allows operations to be performed concurrently inside a transaction, which can assist performance.
+There are two rules the application needs to follow:
+
+* The first mutation must be performed alone, in serial.
+This is because the first mutation also triggers the creation of metadata for the transaction.
+* All concurrent operations must be allowed to complete fully, so the transaction library can track which operations need to be rolled back in the event of failure.
+This means the application must 'swallow' the error, but record that an error occurred, and then at the end of the concurrent operations, if an error occurred, throw an error to cause the transaction to retry.
+
+These rules are demonstrated here:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=concurrentOps,indent=0]
+----
 
 == Deferred Commits
 NOTE: The deferred commit feature is currently in alpha, and the API may change.

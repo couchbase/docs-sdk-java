@@ -11,7 +11,29 @@ This page features the release notes for that library -- for release notes, down
 See the xref:6.5@server:learn:data/distributed-acid-transactions.adoc[Distributed ACID Transactions concept doc] in the server documentation for details of how Couchbase implements transactions.
 The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Transactions HOWTO doc] walks you through all aspects of working with Distributed Transactions.
 
+== Distributed Transactions Java 1.0.0-beta.3
 
+This is the third _Beta_ release of Distributed ACID Transactions 1.0.0 for Couchbase Server 6.5 and the Java 3.0.0 client.
+There are no major changes.
+The main purpose of the release is to rebuild on top of the new beta release of the java-client, so applications can use both together.
+
+Built on Couchbase java-client version 3.0.0-beta.1.
+Requires Couchbase Server 6.5 or above.
+
+=== Bug-fixes And Stability
+* https://issues.couchbase.com/browse/TXNJ-127[TXNJ-127]:
+Fixes an `ArrayIndexOutOfBoundsException` error when using the reactive API to perform concurrency inside a txn.
+* https://issues.couchbase.com/browse/TXNJ-145[TXNJ-145]:
+ATR names are changed, to hash to their expected vbucket.
+It is recommended to flush (remove all documents from) the bucket to remove ATR documents from previous releases.
+* https://issues.couchbase.com/browse/TXNJ-136[TXNJ-136]:
+Fixes an erroneous `IllegalDocumentState` alert in edge-cases involving the `DurabilityAmbiguous` error.
+
+=== New Features and Enhancements
+* https://issues.couchbase.com/browse/TXNJ-124[TXNJ-124]:
+An aborting transaction will now attempt rollback before completing raising `TransactionExpired` failure, rather than leaving cleanup solely to cleanup process.
+* https://issues.couchbase.com/browse/TXNJ-131[TXNJ-131]:
+Minor logging improvement.
 
 == Distributed Transactions Java 1.0.0-beta.2 (9th September 2019)
 
