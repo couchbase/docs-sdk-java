@@ -431,6 +431,6 @@ The transaction expiry timer (which is configurable) will begin ticking once the
 
 == Further Reading
 
-* There’s plenty of explanation about how Transactions work in Couchbase in our xref:6.5@server:learn:data/distributed-acid-transactions.adoc[Transactions documentation].
+* There’s plenty of explanation about how Transactions work in Couchbase in our xref:6.5@server:introduction:distributed-acid-transactions.adoc[Transactions documentation].
 * You can find further code examples on our https://github.com/couchbaselabs/couchbase-transactions-java-examples[GitHub transactions examples page].
 
