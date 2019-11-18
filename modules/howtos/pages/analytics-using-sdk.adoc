@@ -1,2 +1,8 @@
 = Analytics using the SDK
+:page-topic-type: howto
+:page-edition: Enterprise Edition:
 
+include::partial$beta-warning.adoc[]
+
+[abstract]
+Parallel data management for complex queries over many records, using a familiar N1QL-like syntax.
