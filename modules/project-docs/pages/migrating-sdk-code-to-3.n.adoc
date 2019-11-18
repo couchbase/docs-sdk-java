@@ -50,7 +50,7 @@ include::6.5@sdk:shared:partial$migration.adoc[tag=lang]
 // Please use before(2.n) / after (3.0) snippets in all cases where it is helpful
 // (probably nearly everywhere, I'm afraid)
 
-
+////
 ===  Installation and Configuration
 
  - where to get the new artifacts / vs old place
@@ -117,4 +117,4 @@ include::6.5@sdk:shared:partial$migration.adoc[tag=lang]
  - discusses how to migrate from each old management api to the new one
  - where it is found, what exceptions it throws, etc.
 
-
+////
