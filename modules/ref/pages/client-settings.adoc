@@ -47,7 +47,7 @@ The tables categorize the options into groups for bootstrapping, timeout, reliab
 == Bootstrap Options
 
 Name: *Enabling Encryption*::
-Builder Method: `sslEnabled (boolean)`
+Builder Method: `sslEnabled(boolean)`
 +
 Default:  `false`
 +
@@ -551,7 +551,7 @@ If this is set to false, "nagleing" is turned on.
 Make sure to only turn off TCP nodelay if you know what you are doing, because it can lead to decreased performance.
 
 Name: *Run Callbacks on the I/O Pool*::
-Builder Method: `callbacksOnIoPool \(boolean)`
+Builder Method: `callbacksOnIoPool(boolean)`
 +
 Default:  `false`
 +
