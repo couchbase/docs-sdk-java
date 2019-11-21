@@ -55,7 +55,7 @@ System Property: `sslEnabled`
 +
 If encrypted communication should be enabled.
 This feature is only available against a Couchbase Server 3.0 EE cluster or later, and setting it to true implies you also set a value for `sslKeystoreFile` and `sslKeystorePassword`.
-Please see the xref:managing-connections.adoc[Managing Connections] section for more details on how to set it up properly.
+Please see the xref:howtos:managing-connections.adoc[Managing Connections] section for more details on how to set it up properly.
 
 Name: *SSL Keystore Location*::
 Builder Method: `sslKeystoreFile(String)`
@@ -66,7 +66,7 @@ System Property: `sslKeystoreFile`
 +
 The location to the JVM keystore where the certificates are stored.
 This feature is only available against a Couchbase Server 3.0 EE cluster or later.
-See the xref:managing-connections.adoc#ssl["Connection Management"] section for more details on how to set it up properly.
+See the xref:howtos:managing-connections.adoc#ssl["Connection Management"] section for more details on how to set it up properly.
 
 Name: *Custom SSL Keystore*::
 Builder Method: `sslKeystore(KeyStore)`
@@ -87,7 +87,7 @@ System Property: `sslKeystorePassword`
 +
 The password of the JVM keystore where the certificates are stored.
 This feature is only available against a Couchbase Server 3.0 EE cluster or later.
-Please see the "Connection Management" section for more details on how to set it up properly.
+Please see the xref:howtos:managing-connections.adoc[Connection Management] section for more details on how to set it up properly.
 
 Name: *Config Loading through HTTP*::
 Builder Method: `bootstrapHttpEnabled(boolean)`
@@ -201,253 +201,325 @@ All asynchronous operations must chain in their own `timeout()` operators in ord
 All default values can be overridden through the overloaded methods that accept both a time and time unit.
 All timeouts are reasonable defaults and should be adjusted to the environments after profiling the expected latencies.
 
-.Timeout Options Reference
-[#java-timeout-options-ref,cols="1,1,1,1,3"]
-|===
-| Name | Builder | Property | Default | Description
+=== Timeout Options Reference
 
-| Key-Value Timeout
-| `kvTimeout \ (long)`
-| `kvTimeout`
-| `2500ms`
-| The Key/Value default timeout is used on all blocking operations which are performed on a specific key if not overridden by a custom timeout.
+Name: *Key-Value Timeout*::
+Builder Method: `kvTimeout(long)`
++
+Default:  `2500ms`
++
+System Property: `kvTimeout`
++
+The Key/Value default timeout is used on all blocking operations which are performed on a specific key if not overridden by a custom timeout.
 It does not affect asynchronous operations.
 This includes all commands like get(), getFromReplica() and all mutation commands.
 
-| View Timeout
-| `viewTimeout \ (long)`
-| `viewTimeout`
-| `75000ms`
-| The View timeout is used on both regular and geospatial view operations if not overridden by a custom timeout.
+Name: *View Timeout*::
+Builder Method: `viewTimeout(long)`
++
+Default:  `75000ms`
++
+System Property: `viewTimeout`
++
+The View timeout is used on both regular and geospatial view operations if not overridden by a custom timeout.
 It does not affect asynchronous operations.
 Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
 Also, if there is a node failure during the request the internal cluster timeout is set to 60 seconds.
 
-| Query Timeout
-| `queryTimeout \(long)`
-| `queryTimeout`
-| `75000ms`
-| The Query timeout is used on all N1QL query operations if not overridden by a custom timeout.
+Name: *Query Timeout*::
+Builder Method: `queryTimeout(long)`
++
+Default:  `75000ms``
++
+System Property: `queryTimeout`
++
+The Query timeout is used on all N1QL query operations if not overridden by a custom timeout.
 It does not affect asynchronous operations.
 Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
 
-| Search Timeout
-| `searchTimeout \(long)`
-| `searchTimeout`
-| `75000ms`
-| The Search timeout is used on all FTS operations if not overridden by a custom timeout.
+Name: *Search Timeout*::
+Builder Method: `searchTimeout(long)`
++
+Default:  `75000ms`
++
+System Property: `searchTimeout`
++
+The Search timeout is used on all FTS operations if not overridden by a custom timeout.
 It does not affect asynchronous operations.
 Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
 
-| Analytics Timeout
-| `analyticsTimeout \(long)`
-| `analyticsTimeout`
-| `75000ms`
-| The Analytics timeout is used on all Analytics query operations if not overridden by a custom timeout.
+Name: *Analytics Timeout*::
+Builder Method: `analyticsTimeout(long)`
++
+Default:  `75000ms`
++
+System Property: `analyticsTimeout`
++
+The Analytics timeout is used on all Analytics query operations if not overridden by a custom timeout.
 It does not affect asynchronous operations.
 Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
 
-| Connect Timeout
-| `connectTimeout \(long)`
-| `connect \Timeout`
-| `5000ms`
-| The connect timeout is used when a Bucket is opened and if not overridden by a custom timeout.
+Name: *Connect Timeout*::
+Builder Method: `connectTimeout(long)`
++
+Default:  `5000ms`
++
+System Property: `connectTimeout`
++
+The connect timeout is used when a Bucket is opened and if not overridden by a custom timeout.
 It does not affect asynchronous operations.
 If you feel the urge to change this value to something higher, there is a good chance that your network is not properly set up.
 Opening a bucket should in practice not take longer than a second on a reasonably fast network.
 
-| Disconnect Timeout
-| `disconnect \Timeout(long)`
-| `disconnect \Timeout`
-| `25000ms`
-| The disconnect timeout is used when a Cluster is disconnected or a Bucket is closed synchronously and if not overridden by a custom timeout.
+Name: *Disconnect Timeout*::
+Builder Method: `disconnectTimeout(long)`
++
+Default:  `25000ms`
++
+System Property: `disconnectTimeout`
++
+The disconnect timeout is used when a Cluster is disconnected or a Bucket is closed synchronously and if not overridden by a custom timeout.
 It does not affect asynchronous operations.
 A timeout is applied here always to make sure that your code does not get stuck at shutdown.
 25 seconds should provide enough room to drain all outstanding operations properly, but make sure to adapt this timeout to fit your application requirements.
 
-| Management Timeout
-| `management \Timeout(long)`
-| `management \Timeout`
-| `75000ms`
-| The management timeout is used on all synchronous BucketManager and ClusterManager operations and if not overridden by a custom timeout.
+Name: *Management Timeout*::
+Builder Method: `managementTimeout(long)`
++
+Default:  `75000ms`
++
+System Property: `managementTimeout`
++
+The management timeout is used on all synchronous BucketManager and ClusterManager operations and if not overridden by a custom timeout.
 It set to a quite high timeout because some operations might take a longer time to complete (for example flush).
 
-| Socket Connect Timeout
-| `socketConnect \Timeout(int)`
-| `socketConnect \Timeout`
-| `1000ms`
-| The amount of time the SDK will wait on the socket connect until an error is raised and handled.
-|===
+Name: *Socket Connect Timeout*::
+Builder Method: `socketConnectTimeout(int)`
++
+Default:  `1000ms`
++
+System Property: `socketConnectTimeout`
++
+The amount of time the SDK will wait on the socket connect until an error is raised and handled.
+
 
 == Reliability Options
 
-.Reliability Options Reference
-[#java-reliability-options-ref,cols="1,1,1,1,3"]
-|===
-| Name | Builder | Property | Default | Description
-
-| Reconnect Delay
-| `reconnectDelay \(Delay)`
-| `-`
-| `Exponential between 32ms and 4096ms`
-| The reconnect delay defines the time intervals between a socket getting closed on the SDK side and trying to reopen (reconnect) to it.
+Name: *Reconnect Delay*::
+Builder Method: `reconnectDelay(Delay)`
++
+Default:  `Exponential between 32ms and 4096ms`
++
+System Property: `-`
++
+The reconnect delay defines the time intervals between a socket getting closed on the SDK side and trying to reopen (reconnect) to it.
 The default is to retry relatively quickly (32ms) and then gradually approach 4 second intervals, so that in case a server is longer down than usual the clients do not flood the server with socket requests.
 Feel free to tune this interval based on your application requirements.
 Applying a very large ceiling may lead to longer down times than needed, while very short delays may flood the target node and spam the network unnecessarily.
 
-| Retry Delay
-| `retryDelay \(Delay)`
-| `-`
-| `Exponential between 100µs and 100ms`
-| When a request needs to be retried for some reason (for example if the retry strategy is best effort and the target node is not reachable), this delay configures the boundaries.
+Name: *Retry Delay*::
+Builder Method: `retryDelay(Delay)`
++
+Default:  `Exponential between 100µs and 100ms`
++
+System Property: `-`
++
+When a request needs to be retried for some reason (for example if the retry strategy is best effort and the target node is not reachable), this delay configures the boundaries.
 An internal counter tracks the number of retries for a given request and it gradually increases by default from a very quick 100 microseconds up to a 100 millisecond delay.
 The operation will be retried until it succeeds or the maximum request lifetime is reached.
 If you find yourself wanting to tweak this value to a very low setting, you might want to consider a different retry strategy like "fail fast" to get tighter control on the retry handling yourself.
 
-| Retry Strategy
-| `retryStrategy \(RetryStrategy)`
-| `-`
-| `Best Effort`
-| The retry strategy decides if an operation should be retried or canceled.
+Name: *Retry Strategy*::
+Builder Method: `retryStrategy(RetryStrategy)`
++
+Default:  `Best Effort`
++
+System Property: `-`
++
+The retry strategy decides if an operation should be retried or canceled.
 While implementing a custom strategy is fairly advanced, the SDK ships with two out of the box: BestEffortRetryStrategy and FailFastRetryStrategy.
 The first one will retry the operation until it either succeeds or the maximum request lifetime is reached.
 The fail fast strategy will cancel it right away and therefore the client needs to be prepared to retry on its own, but gets much tighter control on when and how to retry.
 See the advanced section in the documentation on more specific information on retry strategies and failure management.
 
-| Maximum Request Lifetime
-| `maxRequest \Lifetime(long)`
-| `maxRequest \Lifetime`
-| `75000ms`
-| The maximum request lifetime is used by the best effort retry strategy to decide if its time to cancel the request instead of retrying it again.
+Name: *Maximum Request Lifetime*::
+Builder Method: `maxRequestLifetime(long)`
++
+Default:  `75000ms`
++
+System Property: `maxRequestLifetime`
++
+The maximum request lifetime is used by the best effort retry strategy to decide if its time to cancel the request instead of retrying it again.
 This is needed in order to prevent requests from circling around forever and occupying precious slots in the request ring buffer.
 Make sure to set this higher than the largest timeout in your application, otherwise you risk requests being canceled prematurely.
 This is why the default value is set to 75 seconds, which is the highest default timeout on the environment.
 
-| Socket Keepalive Interval
-| `keepAlive \Interval(long)`
-| `keepAlive \Interval`
-| `30000ms`
-| To avoid nasty firewalls and other network equipment cutting off stale TCP connections, at the configured interval the client will send a heartbeat keepalive message to the remote node and port.
+Name: *Socket Keepalive Interval*::
+Builder Method: `keepAliveInterval(long)`
++
+Default:  `30000ms`
++
+System Property: `keepAliveInterval`
++
+To avoid nasty firewalls and other network equipment cutting off stale TCP connections, at the configured interval the client will send a heartbeat keepalive message to the remote node and port.
 This only happens if for the given amount of time no traffic has happened, so if a socket is busy sending data back and forth it will have no effect.
 If you set this value to 0, no keepalive will be sent over the sockets.
 
-| Socket Keepalive ErrorThreshold
-| `keepAlive \ErrorThreshold(long)`
-| `keepAlive \ErrorThreshold`
-| `4`
-| The error count on keepalive per socket can be set to a customized value, after which the connection will be recycled (proactively closed and reconnected).
+Name: *Socket Keepalive ErrorThreshold*::
+Builder Method: `keepAliveErrorThreshold(long)`
++
+Default:  `4`
++
+System Property: `keepAliveErrorThreshold`
++
+The error count on keepalive per socket can be set to a customized value, after which the connection will be recycled (proactively closed and reconnected).
 
-| Socket Keepalive Timeout
-| `keepAlive \Timeout(long)`
-| `keepAlive \Timeout`
-| `2500ms`
-| The timeout used for the keepalive operations per socket, in milliseconds.
+Name: *Socket Keepalive Timeout*::
+Builder Method: `keepAliveTimeout(long)`
++
+Default:  `2500ms`
++
+System Property: `keepAliveTimeout`
++
+The timeout used for the keepalive operations per socket, in milliseconds.
 
-| Config Poll Interval
-| `configPoll \Interval(long)`
-| `configPoll \Interval`
-| `2500ms`
-| This interval helps to tune the timeframe when the SDK proactively grabs a new configuration from the server to detect cluster changes in a timely fashion.
-|===
+Name: *Config Poll Interval*::
+Builder Method: `configPollInterval(long)`
++
+Default:  `2500ms`
++
+System Property: `configPollInterval`
++
+This interval helps to tune the timeframe when the SDK proactively grabs a new configuration from the server to detect cluster changes in a timely fashion.
+
+
 
 == Performance Options
 
-.Performance Options Reference
-[#java-performance-options-ref,cols="1,1,1,1,3"]
-|===
-| Name | Builder | Property | Default | Description
-
-| Observe Interval
-| `observeInterval \Delay(Delay)`
-| `-`
-| `Exponential between 10µs and 100ms`
-| The way PersistTo and ReplicateTo work is that once the regular mutation operation succeeds, the key state on the target nodes is polled until the desired state is reached.
+Name: *Observe Interval*::
+Builder Method: `observeIntervalDelay(Delay)`
++
+Default:  `Exponential between 10µs and 100ms`
++
+System Property: `-`
++
+The way PersistTo and ReplicateTo work is that once the regular mutation operation succeeds, the key state on the target nodes is polled until the desired state is reached.
 Since replication and persistence latency differs greatly on servers (fast or slow networks and disks), this value can be tuned for maximum efficiency.
 The tradeoffs to consider here is how quickly the desired state is detected as well as how much the SDK will spam the network.
 The default is an exponential delay, starting with very short intervals but very quickly approaching the 100 milliseconds if replication or persistence takes longer than expected.
 You should monitor the average persistence and replication latency and adjust the delay accordingly.
 
-| Key/Value Endpoints per Node [Static]
-| `kvEndpoints(int)`
-| `kvEndpoints`
-| `1`
-| The number of actual endpoints (sockets) to open per Node in the cluster against the Key/value service.
+Name: *Key/Value Endpoints per Node [Static]*::
+Builder Method: `kvEndpoints(int)`
++
+Default:  `1`
++
+System Property: `kvEndpoints`
++
+The number of actual endpoints (sockets) to open per Node in the cluster against the Key/value service.
 By default, for every node in the cluster one socket is opened where all traffic is pushed through.
 That way the SDK implicitly benefits from network batching characteristics when the workload increases.
 If you suspect based on profiling and benchmarking that the socket is saturated you can think about slightly increasing it to have more "parallel pipelines".
 This might be especially helpful if you need to push large documents through it.
 The recommendation is keeping it at 1 unless there is other evidence.
 
-| Key/Value Endpoints per Node [Dynamic]
-| `kvServiceConfig(int, int)`
-| `kvServiceConfig`
-| Need to set minimum and maximum values
-| To allow dynamic pooling, as an alternative to the fixed values of kvEndPoints.
+Name: *Key/Value Endpoints per Node [Dynamic]*::
+Builder Method: `kvServiceConfig(int, int)`
++
+Default:  `Need to set minimum and maximum values`
++
+System Property: `kvServiceConfig`
++
+To allow dynamic pooling, as an alternative to the fixed values of kvEndPoints.
 Note that if both kvEndpoints and kvServiceConfig are set, kvEndpoints takes priority.
 This helps to ensure backwards compatibility.
 
-| View Endpoints per Node [Static]
-| `viewEndpoints(int)`
-| `viewEndpoints`
-| The default is dynamic mode, please see next row.
-| The number of actual endpoints (sockets) to open per node in the cluster against the view service.
+Name: *View Endpoints per Node [Static]*::
+Builder Method: `viewEndpoints(int)`
++
+Default:  `The default is dynamic mode, please see next entry.`
++
+System Property: `viewEndpoints`
++
+The number of actual endpoints (sockets) to open per node in the cluster against the view service.
 If you plan to run a view heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
 We recommend that you tune this value based on evidence obtained during benchmarking with a real workload.
 
-| View Endpoints per Node [Dynamic]
-| `viewServiceConfig(int, int, int)`
-| `viewServiceConfig`
-| `(0, 12, 300)`
-| To allow dynamic pooling, as an alternative to the fixed values of viewEndPoints. Need to set minimum and maximum number of Endpoints; whether or not the service is pipelined (more than one request at the same time on the same socket); and the minimum idle time, in seconds, after which the socket will be closed.
+Name: *View Endpoints per Node [Dynamic]*::
+Builder Method: `viewServiceConfig(int, int, int)`
++
+Default:  `(0, 12, 300)`
++
+System Property: `viewServiceConfig`
++
+To allow dynamic pooling, as an alternative to the fixed values of viewEndPoints. Need to set minimum and maximum number of Endpoints; whether or not the service is pipelined (more than one request at the same time on the same socket); and the minimum idle time, in seconds, after which the socket will be closed.
 Note that if both viewEndpoints and viewServiceConfig are set, viewEndpoints takes priority.
 This helps to ensure backwards compatibility.
 
-| Query Endpoints per Node [Static]
-| `query \ Endpoints(int)`
-| `query \ Endpoints`
-| The default is dynamic mode, please see next row.
-| The number of actual endpoints (sockets) to open per node in the cluster against the query service.
+Name: *Query Endpoints per Node [Static]*::
+Builder Method: `queryEndpoints(int)`
++
+Default:  `The default is dynamic mode, please see next entry.`
++
+System Property: `queryEndpoints`
++
+The number of actual endpoints (sockets) to open per node in the cluster against the query service.
 If you plan to run a view heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
 We recommend that you tune this value based on evidence obtained during benchmarking with a real workload.
 
-| Query Endpoints per Node [Dynamic]
-| `query \ ServiceConfig(int, int, int)` or `query \ ServiceConfig(int, int)`
-| `query \ ServiceConfig`
-| `(0, 12, 300)`
-| To allow dynamic pooling, as an alternative to the fixed values of queryEndPoints. Need to set minimum and maximum number of Endpoints; whether or not the service is pipelined (more than one request at the same time on the same socket); and the minimum idle time, in seconds, after which the socket will be closed.
+Name: *Query Endpoints per Node [Dynamic]*::
+Builder Method: `queryServiceConfig(int, int, int)` or `queryServiceConfig(int, int)`
++
+Default:  `(0, 12, 300)`
++
+System Property: `queryServiceConfig`
++
+To allow dynamic pooling, as an alternative to the fixed values of queryEndPoints. Need to set minimum and maximum number of Endpoints; whether or not the service is pipelined (more than one request at the same time on the same socket); and the minimum idle time, in seconds, after which the socket will be closed.
 Note that if both queryEndpoints and queryServiceConfig are set, queryEndpoints takes priority.
 This helps to ensure backwards compatibility.
 
-| Search Endpoints per Node [Static]
-| `search \Endpoints(int)`
-| `search \Endpoints`
-| `The default is dynamic mode, please see next row.`
-| The number of actual endpoints (sockets) to open per Node in the cluster against the Search (FTS) service.
+Name: *Search Endpoints per Node [Static]*::
+Builder Method: `searchEndpoints(int)`
++
+Default:  `The default is dynamic mode, please see next entry.`
++
+System Property: `searchEndpoints`
++
+The number of actual endpoints (sockets) to open per Node in the cluster against the Search (FTS) service.
 If you plan to run a query heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
 We recommend that you tune this value based on evidence obtained during benchmarking with a real workload.
 
 
-| Search Endpoints per Node [Dynamic]
-| `search \ServiceConfig(int, int, int)` or `search \ ServiceConfig(int, int)`
-| `search \ServiceConfig`
-| `(0, 12, 300)`
-| To allow dynamic pooling, as an alternative to the fixed values of searchEndPoints. Need to set minimum and maximum number of Endpoints; whether or not the service is pipelined (more than one request at the same time on the same socket); and the minimum idle time, in seconds, after which the socket will be closed.
+Name: *Search Endpoints per Node [Dynamic]*::
+`searchServiceConfig(int, int, int)` or `searchServiceConfig(int, int)`
++
+Default:  `(0, 12, 300)`
++
+System Property: `searchServiceConfig`
++
+To allow dynamic pooling, as an alternative to the fixed values of searchEndPoints. Need to set minimum and maximum number of Endpoints; whether or not the service is pipelined (more than one request at the same time on the same socket); and the minimum idle time, in seconds, after which the socket will be closed.
 Note that if both searchEndpoints and searchServiceConfig are set, queryEndpoints takes priority.
 This helps to ensure backwards compatibility.
 
-| I/O Thread Pool Size
-| `ioPoolSize(int)`
-| `ioPoolSize`
-| `Runtime# \available \Processors()`
-| The number of threads in the I/O thread pool.
+Name: *I/O Thread Pool Size*::
+Builder Method: `ioPoolSize(int)`
++
+Default:  `Runtime#availableProcessors()`
++
+System Property: `ioPoolSize`
++
+The number of threads in the I/O thread pool.
 This defaults to the number of available processors that the runtime returns (which, as a well known fact, sometimes does not represent the actual number of processors).
 Every thread represents an internal event loop where all needed sockets are multiplexed on.
 The default value should be fine most of the time, it may only need to be tuned if you run a very large number of nodes in the cluster or the runtime value is incorrect.
 As a rule of thumb, it should roughly correlate with the number of cores available to the JVM.
 
-| Computation Thread Pool Size
-| `computation \PoolSize(int)`
-| `computation \PoolSize`
+Name: *Computation Thread Pool Size*::
+Builder Method: `computationPoolSize(int)`
++
+Default:  `2500ms`
++
+System Property: `computationPoolSize`
 | `Runtime# \available \Processors()`
 | The number of threads in the computation thread pool.
 This defaults to the number of available processors that the runtime returns (which, as a well known fact, sometimes does not represent the actual number of processors).
@@ -455,128 +527,168 @@ Every thread represents an internal event loop where all needed computation task
 The default value should be fine most of the time, it might only need to be tuned if you run more than usual CPU-intensive tasks and profiling the application indicates fully saturated threads in the pool.
 As a rule of thumb, it should roughly correlate with the number of cores available to the JVM.
 
-| I/O Pool Group
-| `ioPool \(EventLoopGroup)`
-| `-`
-| `NioEvent \ LoopGroup`
-| For those who want the last drop of performance, on Linux Netty provides a way to use edge triggered epoll instead of going through JVM NIO.
+Name: *I/O Pool Group*::
+Builder Method: `ioPool(EventLoopGroup)`
++
+Default:  `NioEventLoopGroup`
++
+System Property: `-`
++
+For those who want the last drop of performance, on Linux Netty provides a way to use edge triggered epoll instead of going through JVM NIO.
 This provides better throughput, lower latency and less garbage.
 Note that this mode has not been tested by Couchbase and therefore is not supported officially.
 If you like to take a walk on the wild side, you can find out more here: http://netty.io/wiki/native-transports.html[Netty Native-transports.^]
 
-| TCP Nodelay
-| `tcpNodelay \Enabled(boolean)`
-| `tcpNodelay \ Enabled`
-| `true`
-| By default, TCP Nodelay is turned on (which in effect turns off "nagleing"), and if possible negotiated with the server as well.
+Name: *TCP Nodelay*::
+Builder Method: `tcpNodelayEnabled(boolean)`
++
+Default:  `true`
++
+System Property: `tcpNodelayEnabled`
++
+By default, TCP Nodelay is turned on (which in effect turns off "nagleing"), and if possible negotiated with the server as well.
 If this is set to false, "nagleing" is turned on.
 Make sure to only turn off TCP nodelay if you know what you are doing, because it can lead to decreased performance.
 
-| Run Callbacks on the I/O Pool
-| `callbacks \OnIoPool \(boolean)`
-| `callbacks \OnIoPool`
-| `false`
-| If set to true, all callbacks will not be moved onto the scheduler but rather executed on the IO threads.
+Name: *Run Callbacks on the I/O Pool*::
+Builder Method: `callbacksOnIoPool \(boolean)`
++
+Default:  `false`
++
+System Property: `callbacksOnIoPool`
++
+If set to true, all callbacks will not be moved onto the scheduler but rather executed on the IO threads.
 This can aid performance under high throughput scenarios but extra care must be taken to not block in a callback since this has direct impact on the performance of the I/O loops!
-|===
+
+
 
 == Advanced Options
 
 Values for the advanced options listed in the following table should not be changed unless there is a very good reason to do so.
 
-.Advanced Options Reference
-[#java-advanced-options-ref,cols="1,1,1,1,3"]
-|===
-| Name | Builder | Property | Default | Description
-
-| Request Ring Buffer Size
-| `requestBuffer \Size(int)`
-| `requestBuffer \Size`
-| `16384`
-| The size of the request ring buffer where all request initially are stored and then picked up to be pushed onto the I/O threads.
+Name: *Request Ring Buffer Size*::
+Builder Method: `requestBufferSize(int)`
++
+Default:  `16384`
++
+System Property: `requestBufferSize`
++
+The size of the request ring buffer where all request initially are stored and then picked up to be pushed onto the I/O threads.
 Tuning this to a lower value will more quickly lead to BackpressureExceptions during overload or failure scenarios.
 Setting it to a higher value means backpressure will take longer to occur, but more requests will potentially be queued up and more heap space is used.
 
-| Response Ring Buffer Size
-| `responseBuffer \Size(int)`
-| `responseBuffer \Size`
-| `16384`
-| The size of the response ring buffer where all responses are passed through from the I/O threads before the target Observable is completed.
+Name: *Response Ring Buffer Size*::
+Builder Method: `responseBufferSize(int)`
++
+Default:  `16384`
++
+System Property: `responseBufferSize`
++
+The size of the response ring buffer where all responses are passed through from the I/O threads before the target Observable is completed.
 Since the I/O threads are pushing data in this ring buffer, setting it to a lower value is likely to have a negative effect on I/O performance.
 In general it should be kept in line with the request ring buffer size.
 
-| Computation Scheduler
-| `scheduler \(Scheduler)`
-| `-`
-| `CoreScheduler`
-| The scheduler used for all CPU-intensive, non-blocking computations in the core, client and in user space.
+Name: *Computation Scheduler*::
+Builder Method: `scheduler(Scheduler)`
++
+Default:  `CoreScheduler`
++
+System Property: `-`
++
+The scheduler used for all CPU-intensive, non-blocking computations in the core, client and in user space.
 This is a slightly modified version of the ComputationScheduler that ships with RxJava, mainly for the reason to manually name threads as needed.
 Changing the scheduler should be used with extra care, especially since lots of internal components also depend on it.
 
-| User Agent String
-| `userAgent \(String)`
-| `-`
-| `Based on OS, Runtime and SDK Version`
-| The user agent string that is used to identify the SDK against the Couchbase Server cluster on different occasions, for example when doing a view or query request.
+Name: *User Agent String*::
+Builder Method: `userAgent(String)`
++
+Default:  `Based on OS, Runtime, and SDK Version`
++
+System Property: `-`
++
+The user agent string that is used to identify the SDK against the Couchbase Server cluster on different occasions, for example when doing a view or query request.
 There is no need to tune that because it is dynamically generated based on properties set during build time (based on the package name and version, OS and runtime).
 
-| Package Name and Version Identifier
-| `packageNameAnd \Version(String)`
-| `-`
-| `Based on SDK Version`
-| The package name and identifier is used as part of the user agent string and in the environment info output to see which version of the SDK the application is running.
+Name: *Package Name and Version Identifier*::
+Builder Method: `packageNameAndVersion(String)`
++
+Default:  `Based on SDK Version`
++
+System Property: `-`
++
+The package name and identifier is used as part of the user agent string and in the environment info output to see which version of the SDK the application is running.
 There is no need to change it because it is dynamically generated based on properties set during build time.
 
-| Event Bus
-| `eventBus \(EventBus)`
-| `-`
-| `DefaultEventBus`
-| The event bus implementation used to transport system, performance and debug events from producers to subscribers.
+Name: *Event Bus*::
+Builder Method: `eventBus(EventBus)`
++
+Default:  `DefaultEventBus`
++
+System Property: `-`
++
+The event bus implementation used to transport system, performance and debug events from producers to subscribers.
 The default implementation is based on an internal RxJava Subject which does not cache the values and only pushes subsequent events to the subscribers.
 If you provide a custom implementation, double check that it fits with the contract of the event bus as documented.
 
-| Buffer Pooling Enabled
-| `bufferPooling \Enabled(boolean)`
-| `bufferPooling \Enabled`
-| `true`
-| If the SDK is suspected to leak buffers (it pools buffers in its IO layer for performance) you can set this field to false.
+Name: *Buffer Pooling Enabled*::
+Builder Method: `bufferPoolingEnabled(boolean)`
++
+Default:  `true`
++
+System Property: `bufferPoolingEnabled`
++
+If the SDK is suspected to leak buffers (it pools buffers in its IO layer for performance) you can set this field to false.
 This will make sure buffers are not pooled, but remember the tradeoff here is higher GC pressure on the system.
 Only turn off to prevent a memory leak from happening (in production).
 If you suspect a memory leak, please open a bug ticket.
 
-| Runtime Metrics Collector
-| `runtimeMetrics \CollectorConfig \(Metrics \CollectorConfig)`
-| `-`
-| `DefaultMetrics \CollectorConfig`
-| The configuration of the runtime metrics collector can be modified (or completely disabled).
+Name: *Runtime Metrics Collector*::
+Builder Method: `runtimeMetricsCollectorConfig(Metrics \CollectorConfig)`
++
+Default:  `DefaultMetricsCollectorConfig`
++
+System Property: `-`
++
+The configuration of the runtime metrics collector can be modified (or completely disabled).
 By default, it will emit an event every hour.
 
-| Network Latency Metrics Collector
-| `networkLatency \MetricsCollector \Config(Latency \MetricsCollector \Config)`
-| `-`
-| `DefaultLatency \Metrics Collector \Config`
-| The configuration of the network latency metrics collector can be modified (or completely disabled).
+Name: *Network Latency Metrics Collector*::
+Builder Method: `networkLatencyMetricsCollectorConfig(LatencyMetricsCollectorConfig)`
++
+Default:  `DefaultLatencyMetricsCollectorConfig`
++
+System Property: `-`
++
+The configuration of the network latency metrics collector can be modified (or completely disabled).
 By default, it will emit an event every hour, but collect the stats all the time.
 
-| Default Metrics Consumer
-| `defaultMetrics \LoggingConsumer \ (boolean, CouchbaseLogLevel, OutputFormat)`
-| `-`
-| `enabled, INFO, JSON`
-| The default metric consumer which will log all metric events.
+Name: *Default Metrics Consumer*::
+Builder Method: `defaultMetricsLoggingConsumer (boolean, CouchbaseLogLevel, OutputFormat)`
++
+Default:  `enabled, INFO, JSON`
++
+System Property: `-`
++
+The default metric consumer which will log all metric events.
 You can configure if it should be enabled, as well as the log level and the target output format.
 
-| Request Buffer Wait Strategy
-| `requestBuffer \ WaitStrategy \ (WaitStrategy)`
-| `-`
-| `BlockingWait \ Strategy`
-| The underlying request buffer can use a different wait strategy which can be used to get better performance under high throughput/low latency circumstances, trading CPU time for it.
+Name: *Request Buffer Wait Strategy*::
+Builder Method: `requestBufferWaitStrategy(WaitStrategy)`
++
+Default:  `BlockingWaitStrategy`
++
+System Property: `-`
++
+The underlying request buffer can use a different wait strategy which can be used to get better performance under high throughput/low latency circumstances, trading CPU time for it.
 This is an export option, only use it if you are comfortable with the LMAX Disruptor and know the impact of plugging in a different strategy!
 
-| Automatic Observable Resource Release Time Period
-| `autorelease\ After(int)`
-| `-`
-| `2000`
-| The time period in milliseconds that a subscriber needs to subscribe to the observable.
+Name: *Automatic Observable Resource Release Time Period*::
+Builder Method: `autoreleaseAfter(int)`
++
+Default:  `2000`
++
+System Property: `-`
++
+The time period in milliseconds that a subscriber needs to subscribe to the observable.
 After this period, the resources involved in the observable are released and can't be subscribed to anymore.
 This is required to avoid leaking data, it also needs to be a short time bound to avoid having the observable move into older GC generations unnecessarily, which harms performance.
-|===
