@@ -124,7 +124,7 @@ System.out.println("Country = " + str);
     static void arrayAppendFunc() {
 // #tag::array-append[]
         collection.mutateIn("customer123", Arrays.asList(
-                arrayAppend("purchases.complete", 777)
+                arrayAppend("purchases.complete", Collections.singletonList(777))
         ));
 
         // purchases.complete is now [339, 976, 442, 666, 777]
@@ -134,7 +134,7 @@ System.out.println("Country = " + str);
     static void arrayPrependFunc() {
 // #tag::array-prepend[]
         collection.mutateIn("customer123", Arrays.asList(
-                arrayPrepend("purchases.abandoned", 18)
+                arrayPrepend("purchases.abandoned", Collections.singletonList(18))
         ));
 
         // purchases.abandoned is now [18, 157, 49, 999]
@@ -146,7 +146,7 @@ System.out.println("Country = " + str);
         collection.upsert("my_array", JsonArray.create());
 
         collection.mutateIn("my_array", Arrays.asList(
-                arrayAppend("", "some element")
+                arrayAppend("", Collections.singletonList("some element"))
         ));
         // the document my_array is now ["some element"]
 // #end::array-create[]
@@ -155,7 +155,7 @@ System.out.println("Country = " + str);
     static void arrayCreate() {
 // #tag::array-upsert[]
         collection.mutateIn("some_doc", Arrays.asList(
-                arrayAppend("some.array", "hello world").createPath()
+                arrayAppend("some.array", Collections.singletonList("hello world")).createPath()
         ));
 // #end::array-upsert[]
     }
@@ -180,7 +180,7 @@ System.out.println("Country = " + str);
     static void arrayInsertFunc() {
 // #tag::array-insert[]
         collection.mutateIn("some_doc", Arrays.asList(
-                arrayInsert("foo.bar[1]", "cruel")
+                arrayInsert("foo.bar[1]", Collections.singletonList("cruel"))
         ));
 // #end::array-insert[]
     }
@@ -222,12 +222,12 @@ System.out.println("Country = " + str);
 // #tag::concurrent[]
         // Thread 1
         collection.mutateIn("customer123", Arrays.asList(
-                arrayAppend("purchases.complete", 99)
+                arrayAppend("purchases.complete", Collections.singletonList(99))
         ));
 
         // Thread 2
         collection.mutateIn("customer123", Arrays.asList(
-                arrayAppend("purchases.abandoned", 101)
+                arrayAppend("purchases.abandoned", Collections.singletonList(101))
         ));
 // #end::concurrent[]
 
