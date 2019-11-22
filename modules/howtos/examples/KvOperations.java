@@ -1,13 +1,12 @@
 // #tag::imports[]
-import com.couchbase.client.core.error.CASMismatchException;
-import com.couchbase.client.core.error.KeyExistsException;
-import com.couchbase.client.core.error.KeyNotFoundException;
+import com.couchbase.client.core.error.CasMismatchException;
+import com.couchbase.client.core.error.DocumentExistsException;
+import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.core.msg.kv.DurabilityLevel;
 import com.couchbase.client.java.AsyncCollection;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
-import com.couchbase.client.core.error.KeyNotFoundException;
 import com.couchbase.client.java.ReactiveCollection;
 import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.json.JsonObject;
@@ -62,7 +61,7 @@ MutationResult result = collection.upsert("document-key", content);
 try {
   JsonObject content = JsonObject.create().put("foo", "bar");
   MutationResult insertResult = collection.insert("document-key", content);
-} catch (KeyExistsException ex) {
+} catch (DocumentExistsException ex) {
   System.err.println("The document already exists!");
 } catch (Exception ex) {
   System.err.println("Something else happened: " + ex);
@@ -75,7 +74,7 @@ try {
 try {
   GetResult getResult = collection.get("document-key");
   System.out.println("Found document: " + getResult);
-} catch (KeyNotFoundException ex) {
+} catch (DocumentNotFoundException ex) {
   System.out.println("Document not found!");
 }
 // #end::get-simple[]
@@ -118,7 +117,7 @@ while (true) {
     try {
         collection.replace(id, content, replaceOptions().cas(found.cas()));
         break; // if successful, break out of the retry loop
-    } catch (CASMismatchException ex) {
+    } catch (CasMismatchException ex) {
         // don't do anything, we'll retry the loop
     }
 }
@@ -129,7 +128,7 @@ while (true) {
 // #tag::remove[]
 try {
   collection.remove("my-document");
-} catch (KeyNotFoundException ex) {
+} catch (DocumentNotFoundException ex) {
   System.out.println("Document did not exist when trying to remove");
 }
 // #end::remove[]

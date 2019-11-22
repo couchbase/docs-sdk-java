@@ -18,6 +18,74 @@ Java 11 is recommended, which has various enhancements like lambda local variabl
 // note below is for after the αλφα release, when 3.0α relnotes are tidied away to a separate page (so will be below all of the relnotes left on this page):
 // Note, should you need them, release notes for the alpha versions of the Java SDK are xref:3.0αλφα-sdk-release-notes.adoc[archived here].
 
+== Version 3.0.0-beta.2 (22 November 2019)
+
+This is the second beta release of the third generation Java SDK.
+While it is not yet suitable to be used in production, the surface area of the API is largely complete and not expected to change dramatically.
+
+http://packages.couchbase.com/clients/java/3.0.0-beta.2/Couchbase-Java-Client-3.0.0-beta.2.zip[Download] |
+http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-beta.2/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.0-beta.2/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.0-beta.2**
+* com.couchbase.client:**core-io:2.0.0-beta.2**
+* io.projectreactor:**reactor-core:3.3.0.RELEASE**
+* org.reactivestreams:**reactive-streams:1.0.2**
+
+=== Enhancements
+
+* http://issues.couchbase.com/browse/JCBC-1467[JCBC-1467]:
+The Search API has been completely refactored and aligned with the SDK-RFC.
+* http://issues.couchbase.com/browse/JCBC-1504[JCBC-1504]:
+Cluster connect now defers all I/O errors into the operation.
+* http://issues.couchbase.com/browse/JCBC-1510[JCBC-1510]:
+Bucket open now defers all I/O errors into the operation.
+* http://issues.couchbase.com/browse/JVMCBC-637[JVMCBC-637]:
+Support for tracing has been added.
+* http://issues.couchbase.com/browse/JVMCBC-760[JVMCBC-760]:
+Security can be configured from the connection string.
+* http://issues.couchbase.com/browse/JVMCBC-761[JVMCBC-761]:
+TCP Keepalive support has been added.
+* http://issues.couchbase.com/browse/JVMCBC-769[JVMCBC-769]:
+Exists uses GetMeta underneath instead of "observe".
+* http://issues.couchbase.com/browse/JCBC-1502[JCBC-1502]:
+If the user adds jackson as a dependency, a new JsonSerializer is automatically used.
+* http://issues.couchbase.com/browse/JCBC-1503[JCBC-1503]:
+Support added for deserializing JSON into parameterized types through TypeRef.
+* http://issues.couchbase.com/browse/JCBC-1487[JCBC-1487]:
+Jackson afterburner module is enabled by default.
+
+=== Bug Fixes
+
+* http://issues.couchbase.com/browse/JVMCBC-764[JVMCBC-764]:
+TLS connections were not working, this is now fixed.
+* http://issues.couchbase.com/browse/JVMCBC-755[JVMCBC-755]:
+Revert KV opaque back to global instead of per socket.
+* http://issues.couchbase.com/browse/JCBC-1360[JCBC-1360]:
+Should not allow user to set timeout value greater than the KV supported value.
+* http://issues.couchbase.com/browse/JCBC-1492[JCBC-1492]:
+Subdoc now transparently reorders operations so XATTR calls are handled properly.
+* http://issues.couchbase.com/browse/JCBC-1477[JCBC-1477]:
+A bug with view query timeouts have been fixed.
+
+=== API Changes
+
+* http://issues.couchbase.com/browse/JCBC-1498[JCBC-1498]:
+Error handling (exceptions) have been heavily reworked and aligned, so please expect exceptions to be renamed and different ones to be thrown.
+* http://issues.couchbase.com/browse/JCBC-1496[JCBC-1496]:
+On subdocument mutations, arrayAppend and similar take a List of values.
+* http://issues.couchbase.com/browse/JVMCBC-772[JVMCBC-772]:
+The Authenticator now holds the SASL mechanism instead the IoConfig.
+* http://issues.couchbase.com/browse/JVMCBC-771[JVMCBC-771]:
+RequestTimeoutException has been renamed to TimeoutException.
+* http://issues.couchbase.com/browse/JVMCBC-765[JVMCBC-765]:
+The CertificateAuthenticator now holds the client certificates instead of the SecurityConfig.
+* http://issues.couchbase.com/browse/JCBC-1497[JCBC-1497]:
+All deprecated APIs are removed.
+* http://issues.couchbase.com/browse/JCBC-1512[JCBC-1512]:
+ExpandMacro is gone, there are now sentinel values that are passed in.
+
 == Version 3.0.0-beta.1 (30 September 2019)
 
 This is the first beta release of the third generation Java SDK.
@@ -29,7 +97,7 @@ http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-beta.1/[API Refere
 The supported and tested dependencies for this release are:
 
 * com.couchbase.client:**java-client:3.0.0-beta.1**
-* com.couchbase.client:**core-io:2.0.0-beta.**
+* com.couchbase.client:**core-io:2.0.0-beta.1**
 * io.projectreactor:**reactor-core:3.2.10.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.2**
 
