@@ -303,6 +303,13 @@ System Property: `socketConnectTimeout`
 The amount of time the SDK will wait on the socket connect until an error is raised and handled.
 
 
+
+// Need to add 2500ms default durability timeout.
+// & its behaviour
+// does not stop the sync write?
+// An ambiguous state?
+
+
 == Reliability Options
 
 Name: *Reconnect Delay*::
