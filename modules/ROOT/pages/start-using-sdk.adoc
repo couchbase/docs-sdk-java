@@ -160,7 +160,7 @@ The reference for the latest version can be found https://docs.couchbase.com/sdk
 == Additional Resources
 
 The Couchbase JVM Core module is the common library responsible for all the Couchbase Server interaction -- used by both the Java SDK, and the new Scala SDK. 
-It is designed to be quite low level and only exposes a message-oriented API -- the APIreference is https://docs.couchbase.com/sdk-api/couchbase-core-io[here^].
+It is designed to be quite low level and only exposes a message-oriented API -- the API reference is https://docs.couchbase.com/sdk-api/couchbase-core-io[here^].
 
 
 
