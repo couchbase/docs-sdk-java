@@ -388,13 +388,18 @@ There are two important API changes:
 * On the request side, overloads have been massively reduced and moved under a `Options` block
 * On the response side, the return types have been unified.
 
-The signatures now look very similar. The concept of the `Document` as a type is gone in SDK 3 and instead you need to pass in the properties explicitly. Especially on the response side this makes it very clear what gets returned.
+The signatures now look very similar. 
+The concept of the `Document` as a type is gone in SDK 3 and instead you need to pass in the properties explicitly. 
+This makes it very clear what gets returned, especially on the response side.
 
-So the `get` method does not return a `Document` but a `GetResult` instead. The `upsert` does not return a `Document` but a `MutationResult` instead. Each of those results only contains the field that the specific method can actually return, making it impossible to i.e. by accident try to access the `expiry` on the `Document` after a mutation.
+Thus, the `get` method does not return a `Document` but a `GetResult` instead, and the `upsert` does not return a `Document` but a `MutationResult`. 
+Each of those results only contains the field that the specific method can actually return, making it impossible to accidentally try to access the `expiry` on the `Document` after a mutation, for example.
 
-Instead of having many overloads, all optional params are now part of the `Option` block. All required params are still part of the method signature, making it clear what is required and what is not (or has default values applied if not overridden).
+Instead of having many overloads, all optional params are now part of the `Option` block. 
+All required params are still part of the method signature, making it clear what is required and what is not (or has default values applied if not overridden).
 
-The timeout can be overridden on every operation and now takes a `Duration` from java 8. Compare SDK 2 and SDK 3 custom timeout setting:
+The timeout can be overridden on every operation and now takes a `Duration` from java 8. 
+Compare SDK 2 and SDK 3 custom timeout setting:
 
 [source,java]
 ----
@@ -407,9 +412,19 @@ bucket.get("mydoc-id", 5, TimeUnit.SECONDS);
 include::example$Migrating.java[tag=customtimeout,indent=0]
 ----
 
-In SDK 2 the `getFromReplica` method had a `ReplicaMode` argument which allowed to customize its behavior on how many replicas should be reached. We have identified this as a potential source of confusion and as a result split it up in two methods that simplify usage significantly. There is now a `getAllReplicas` method and a `getAnyReplica` method. The former asks the active node and all available replicas and returns it as a stream. The latter uses the former and returns once it returns one result. Unless you want to build some kind of consensus between the different replica responses, we recommend using `getAnyReplica` when used as a fallback to a regular `get`.
+In SDK 2, the `getFromReplica` method had a `ReplicaMode` argument which allowed to customize its behavior on how many replicas should be reached. 
+We have identified this as a potential source of confusion and as a result split it up in two methods that simplify usage significantly. 
+There is now a `getAllReplicas` method and a `getAnyReplica` method. 
 
-NOTE: Operations which cannot be performed on JSON documents have been moved to the `BinaryCollection`, accessible through `Collection.binary()`. These operations include `append`, `prepend`, `increment` and `decrement` (previously called `counter` in SDK 2). These operations should only be used against non-json data. The same functionality is available through `mutateIn` on JSON documents.
+* `getAllReplicas` asks the active node and all available replicas and returns the results as a stream. 
+* `getAnyReplica` uses `getAllReplicas`, and returns the first result obtained. 
+ 
+Unless you want to build some kind of consensus between the different replica responses, we recommend `getAnyReplica` for a fallback to a regular `get` when the active node times out.
+
+NOTE: Operations which cannot be performed on JSON documents have been moved to the `BinaryCollection`, accessible through `Collection.binary()`. 
+These operations include `append`, `prepend`, `increment`, and `decrement` (previously called `counter` in SDK 2). 
+These operations should only be used against non-json data. 
+The same functionality is available through `mutateIn` on JSON documents.
 
 === Query
 
@@ -430,7 +445,8 @@ for (N1qlQueryRow row : queryResult) {
 include::example$Migrating.java[tag=querysimple,indent=0]
 ----
 
-Note that there is no `N1qlQuery.simple` anymore, parameter option have been moved to the `queryOptions()` for consistency reasons. The following shows how to do named and positional parameters in SDK 2 and their SDK 3 counterparts:
+Note that there is no `N1qlQuery.simple` any more -- parameter option have been moved to the `queryOptions()` for consistency reasons. 
+The following shows how to do named and positional parameters in SDK 2, and their SDK 3 counterparts:
 
 [source,java]
 ----
@@ -452,13 +468,13 @@ bucket.query(N1qlQuery.parameterized(
 include::example$Migrating.java[tag=queryparameterized,indent=0]
 ----
 
-If you want to use prepared statements, the `adhoc()` method is still available on the `QueryOptions`, alongside every other option that used to be exposed on the SDK 2 query options.
+If you want to use prepared statements, the `adhoc()` method is still available on the `QueryOptions`, alongside every other option that used to be exposed on the SDK 2 Query options.
 
 Much of the non-row metadata has been moved into a specific `QueryMetaData` section:
 
 .Query Metadata Changes
 [options="header"]
-|=======================
+|====
 | SDK 2                             | SDK 3
 |`N1qlQueryResult.signature`        | `QueryResult.metaData.signature`
 |`N1qlQueryResult.info`             | `QueryResult.metaData.metrics`
@@ -469,9 +485,11 @@ Much of the non-row metadata has been moved into a specific `QueryMetaData` sect
 |`N1qlQueryResult.errors`           | throws an Exception on `QueryResult`
 |`N1qlQueryResult.requestId`        | `QueryResult.metaData.requestId`
 |`N1qlQueryResult.clientContextId`  | `QueryResult.metaData.clientContextId`
-|=======================
+|====
 
-It is not needed anymore to check for a specific error if it happend in the stream, if an error happened during processing it will throw an exception at the toplevel of the query. The reactive streaming API will terminate the rows `Flux` with an exception as well as soon as it is discovered. This makes error handling much easier both in the blocking and non-blocking case.
+It is no longer necessary to check for a specific error in the stream: if an error happened during processing it will throw an exception at the top level of the query. 
+The reactive streaming API will terminate the rows' `Flux` with an exception as well as soon as it is discovered. 
+This makes error handling much easier in both the blocking and non-blocking cases.
 
 While in SDK 2 you had to manually check for errors (otherwise you'd get an empty row collection):
 
@@ -483,7 +501,7 @@ if (!queryResult.errors().isEmpty()) {
 }
 ----
 
-In SDK 3 the toplevel `query` method will throw an exception:
+In SDK 3 the top level `query` method will throw an exception:
 
 [source]
 ----
@@ -496,7 +514,8 @@ Not only does it throw a `CouchbaseException`, it also tries to map it to a spec
 
 === Analytics
 
-Analytics querying, like N1QL, also moved to the `Cluster` level. It is now accessible through the `Cluster.analyticsQuery` method. Like N1QL, paremters for the query moved into the `AnalyticsOptions`:
+Analytics querying, like N1QL, is also moved to the `Cluster` level: it is now accessible through the `Cluster.analyticsQuery` method. 
+As with the Query service, paremters for the Analytics queries have moved into the `AnalyticsOptions`:
 
 [source,java]
 ----
@@ -508,7 +527,7 @@ include::example$Migrating.java[tag=analyticssimple,indent=0]
 include::example$Migrating.java[tag=analyticsparameterized,indent=0]
 ----
 
-Also, errors will now be thrown as toplevel exceptions and it is not needed anymore to explicitly check for error presence:
+Also, errors will now be thrown as top level exceptions and it is no longer necessary to explicitly check for errors:
 
 [source,java]
 ----
@@ -521,18 +540,19 @@ if (!analyticsQueryResult.errors().isEmpty()) {
 
 [source]
 ----
-// SDK 3 toplevel exception
+// SDK 3 top level exception
 com.couchbase.client.core.error.DatasetNotFoundException: The analytics dataset is not found {"completed":true,"coreId":1,"errors":[{"code":24045,"message":"Cannot find dataset foo in dataverse Default nor an alias with name foo! (in line 1, at column 15)"}],"idempotent":false,"lastDispatchedFrom":"127.0.0.1:51942","lastDispatchedTo":"127.0.0.1:8095","requestId":5,"requestType":"AnalyticsRequest","retried":0,"service":{"operationId":"80265061-62e0-4c35-860f-a07a97e1a5ee","priority":0,"statement":"select * from foo","type":"analytics"},"timeoutMs":75000,"timings":{"dispatchMicros":27005,"totalMicros":89888}}
 	at com.couchbase.client.java.AsyncUtils.block(AsyncUtils.java:51)
 	at com.couchbase.client.java.Cluster.analyticsQuery(Cluster.java:250)
 ----
 
-
 === Search
 
-The Search API has changed a bit in SDK 3 so that it aligns with the other query APIs. The type of queries have stayed the same, but all optional parameters moved into `SearchOptions`. Also, similar to the other query APIs it is now available at the `Cluster` level.
+The Search API has changed a bit in SDK 3 so that it aligns with the other query APIs. 
+The type of queries have stayed the same, but all optional parameters moved into `SearchOptions`. 
+Also, similar to the other query APIs, it is now available at the `Cluster` level.
 
-Here is a SDK 2 Search query with some options and its SDK 3 equivalent:
+Here is a SDK 2 Search query with some options, and its SDK 3 equivalent:
 
 [source,java]
 ----
@@ -553,9 +573,11 @@ for (SearchQueryRow row : searchResult.hits()) {
 include::example$Migrating.java[tag=searchsimple,indent=0]
 ----
 
-Error handling is a bit different to query and analytics. While fatal errors will still raise top-level exceptions, any errors that happend during streaming (for example if one node is down and only partial results are returned) they will not terminate the result. The reasoning behind this is that usually with search results, having partial results is better than none.
+Error handling for streaming is handled differently. 
+While fatal errors will still raise top-level exceptions, any errors that happend during streaming (for example if one node is down, and only partial results are returned) they will not terminate the result. 
+The reasoning behind this is that usually with search results, having partial results is better than none.
 
-Here is a toplevel exception, for example if the index does not exist:
+Here is a top level exception, for _the index does not exist_:
 
 [source]
 ----
@@ -573,18 +595,19 @@ include::example$Migrating.java[tag=searchcheck,indent=0]
 
 === Views
 
-Views have stayed at the `Bucket` level, because it does not have the concept of collections and is scoped at the bucket level on the server as well. The API has stayed mostly the same, the most important change is that we unified `staleness` under the `ViewConsistency` enum.
+Views have stayed at the `Bucket` level, because it does not have the concept of collections and is scoped at the bucket level on the server as well. 
+The API has stayed mostly the same, the most important change is that `staleness` is unified under the `ViewConsistency` enum.
 
 .View Staleness Mapping
 [options="header"]
-|=======================
+|====
 | SDK 2                             | SDK 3
 |`Stale.TRUE`                       | `ViewScanConsistency.NOT_BOUNDED`
 |`Stale.FALSE`                      | `ViewScanConsistency.REQUEST_PLUS`
 |`Stale.UPDATE_AFTER`               | `ViewScanConsistency.UPDATE_AFTER`
-|=======================
+|====
 
-Compare this SDK 2 view query to its SDK 3 equivalent:
+Compare this SDK 2 view query with its SDK 3 equivalent:
 
 [source,java]
 ----
@@ -604,7 +627,7 @@ for (ViewRow row : query) {
 include::example$Migrating.java[tag=viewquery,indent=0]
 ----
 
-Exceptions are exclusively raised at the top level, for example if the design document is not found:
+Exceptions are exclusively raised at the top level: for example, if the design document is not found:
 
 [source]
 ----
@@ -616,13 +639,16 @@ com.couchbase.client.core.error.ViewNotFoundException: The queried view is not f
 
 === Management APIs
 
-In SDK 2, the management APIs were centralized in the `ClusterManager` at the cluster level and the `BucketManager` at the bucket level. Since SDK 3 provides more management APIs, they have been split up in their respective domains. So for example when in SDK 2 you needed to remove a bucket you would call `ClusterManager.removeBucket` you will now find it under `BucketManager.dropBucket`. Also, creating a N1QL index now lives in the `QueryIndexManager` which is accessible through the `Cluster`.
+In SDK 2, the management APIs were centralized in the `ClusterManager` at the cluster level and the `BucketManager` at the bucket level. 
+Since SDK 3 provides more management APIs, they have been split up in their respective domains. 
+So for example when in SDK 2 you needed to remove a bucket you would call `ClusterManager.removeBucket` you will now find it under `BucketManager.dropBucket`. 
+Also, creating a N1QL index now lives in the `QueryIndexManager`, which is accessible through the `Cluster`.
 
-The following table provides a mapping from the SDK 2 management APIs and how they are now surfaced in SDK 3:
+The following table provides a mapping from the SDK 2 management APIs to those of SDK 3:
 
 .SDK 2.x vs SDK 3.x ClusterManager
 [options="header"]
-|=======================
+|====
 | SDK 2                          | SDK 3
 |`ClusterManager.info`           | removed
 |`ClusterManager.getBuckets`     | `BucketManager.getAllBuckets`
@@ -636,11 +662,11 @@ The following table provides a mapping from the SDK 2 management APIs and how th
 |`ClusterManager.getUsers`       | `UserManager.getAllUsers`
 |`ClusterManager.getUser`        | `UserManager.getUser`
 |`ClusterManager.apiClient`      | removed
-|=======================
+|====
 
 .SDK 2.x vs SDK 3.x BucketManager
 [options="header"]
-|=======================
+|====
 | SDK 2                                    | SDK 3
 |`BucketManager.info`                      | removed
 |`BucketManager.flush`                     | `BucketManager.flushBucket`
@@ -657,36 +683,47 @@ The following table provides a mapping from the SDK 2 management APIs and how th
 |`BucketManager.dropN1qlPrimaryIndex`      | `QueryIndexManager.dropPrimaryIndex`
 |`BucketManager.buildN1qlDeferredIndexes`  | `QueryIndexManager.buildDeferredIndexes`
 |`BucketManager.watchN1qlIndexes`          | `QueryIndexManager.watchIndexes`
-|=======================
+|====
 
 
 == Reactive and Async APIs
 
-The move to Java 8 as a baseline has opened the door to expose `CompletableFuture` in addition to a reactive API. You can now find it under the `async()` namespace of each level (i.e. `Cluster.async()` -> `AsyncCluster`). We also moved from `RxJava` to `Reactor` because it provides native Java 8 support and better performance out of the box. Also, it has a growing community and integrates very well into the Spring ecosystem. The reactive API can now be found under the `reactive()` namespace (i.e. `Collection.reactive()` -> `ReactiveCollection`).
+The move to Java 8 as a baseline has opened the door to expose `CompletableFuture` in addition to a reactive API. 
+You can now find it under the `async()` namespace of each level (for example, `Cluster.async()` -> `AsyncCluster`). 
+We also moved from `RxJava` to `Reactor` because it provides native Java 8 support and better performance out of the box. 
+`Reactor` has a growing community, and integrates very well into the Spring ecosystem. 
+The reactive API can now be found under the `reactive()` namespace (for example, `Collection.reactive()` -> `ReactiveCollection`).
 
-Like in SDK 2, the async and reactive APIs provide the same functionality as their blocking counterpart. There are only a couple places in the SDK where it does not make sense (i.e. the blocking datastructure APIs at the collection level implement the Java interfaces which do not have async or reactive counterparts).
+Like in SDK 2, the async and reactive APIs provide the same functionality as their blocking counterpart. 
+There are only a couple places in the SDK where it does not make sense (such as the blocking datastructure APIs, which at the collection level implement the Java interfaces which do not have async or reactive counterparts).
 
-IMPORTANT: if you need to use non-blocking APIs, we recommend using the reactive one. The async one based on `CompletableFuture` should only be used as a building block for higher level abstractions or if you absolutely need the last drop of performance. The `Flux` and `Mono` types of reactor are very powerful and allow you to build efficient and flexible domain logic without blocking.
+IMPORTANT: if you need to use non-blocking APIs, we recommend using the reactive one. 
+The async API based on `CompletableFuture` should only be used as a building block for higher level abstractions, or if you absolutely need the last drop of performance. 
+The `Flux` and `Mono` types of reactor are very powerful and allow you to build efficient and flexible domain logic without blocking.
 
-Since `Reactor` implements the reactive stream specification, you can still use `RxJava` through the interoperability interfaces. Since this is out of scope for the migration guide, please consult the reactor and rxjava documentations for further information.
+Since `Reactor` implements the reactive stream specification, you can still use `RxJava` through the interoperability interfaces. 
+This is out of scope for the migration guide -- please consult the reactor and rxjava documentations for further information.
 
 As a starting point, the following types are comparable:
 
 .SDK Reactor vs RxJava
 [options="header"]
-|=======================
+|====
 | SDK 2 RxJava          | SDK 3 Reactor
 |`Observable<T>`        | `Flux<T>`
 |`Single<T>`            | `Mono<T>`
 |`Completable`          | `Mono<Void>`
-|=======================
+|====
+
 
 == Configuration Options Reference
-The following table provides commonly used configuration options in SDK 2 and where they can be now applied in SDK 3. Note that some options have been removed, and others have different ways to configure them.
+
+The following table provides commonly used configuration options in SDK 2 and where they can be now applied in SDK 3. 
+Note that some options have been removed, and others have different ways to configure them.
 
 .SDK 2.x vs SDK 3.x Environment Configs
 [options="header"]
-|=======================
+|====
 | SDK 2                        | SDK 3
 |`sslEnabled`                  | `SecurityConfig.enableTls`
 |`sslKeystoreFile`             | on `CertificateAuthenticator`
@@ -768,5 +805,5 @@ The following table provides commonly used configuration options in SDK 2 and wh
 |`dnsSrvEnabled`               | `IoConfig.enableDnsSrv`
 |`cryptoManager`               | removed
 |`propagateParentSpan`         | removed
-|=======================
+|====
 
