@@ -45,11 +45,14 @@ include::6.5@sdk:shared:partial$migration.adoc[tag=lang]
 
 ==  Installation and Configuration
 
-The Java SDK 3.x is available to download from the same resources as the previous generation. Stable builds can be found on maven central, pre-releases are available from our own maven repository. In addition, a `zip` file is available with the required jars. Please see the xref:sdk-release-notes.adoc[Release Notes] for up-to-date information.
+The Java SDK 3.x is available to download from the same resources as the previous generation. Stable builds can be found on maven central, pre-releases are available from our own maven repository. 
+In addition, a `zip` file is available with the required jars. 
+Please see the xref:sdk-release-notes.adoc[Release Notes] for up-to-date information.
 
 IMPORTANT: Java SDK 3.x has a minimum required Java version of 8, altough we recommend running the latest stable version (i.e. at the time of writing JDK 11) with the highest patch version available.
 
-Note that the transitive dependency list has changed. As a refresher, Java SDK 2 depended on the following artifacts:
+Note that the transitive dependency list has changed. 
+As a refresher, Java SDK 2 depended on the following artifacts:
 
 * com.couchbase.client:**core-io**
 * io.reactivex:**rxjava**
@@ -61,13 +64,18 @@ SDK 3 depends on the following ones instead:
 * io.projectreactor:**reactor-core**
 * org.reactivestreams:**reactive-streams**
 
-Note that the SDK now uses `Reactor` instead of `RxJava` and the explicit dependency on `OpenTracing` is gone. We are now providing support for different tracing backends with additional dependencies that can be pulled in as needed. `ReactiveStreams` is a transitive dependency of `Reactor` and provides interoperability code so you can use other reactive streams implementations as well.
+Note that the SDK now uses `Reactor` instead of `RxJava` and the explicit dependency on `OpenTracing` is gone. 
+We are now providing support for different tracing backends with additional dependencies that can be pulled in as needed. 
+`ReactiveStreams` is a transitive dependency of `Reactor` and provides interoperability code so you can use other reactive streams implementations as well.
 
-If you are pulling in the SDK through a package manager (recommended), all these dependencies will be resolved for you automatically. Otherwise please download the zip file and adjust your jar files accordingly.
+If you are pulling in the SDK through a package manager (recommended), all these dependencies will be resolved for you automatically. 
+Otherwise please download the zip file and adjust your jar files accordingly.
+
 
 === Configuring the Environment
 
-The fundamental semantics of the `CouchbaseEnvironment` from SDK 2 stayed the same, although it is more flexible now and its configuration is cleaned up to be easier discoverable. The `CouchbaseEnvironment` has been renamed to `ClusterEnvironment` and can be customized through a builder:
+The fundamental semantics of the `CouchbaseEnvironment` from SDK 2 remain the same, although somewhat more flexible, with its configuration cleaned up to be more easily discoverable. 
+The `CouchbaseEnvironment` has been renamed to `ClusterEnvironment` and can be customized through a builder:
 
 [source,java]
 ----
@@ -83,14 +91,16 @@ CouchbaseEnvironment env = DefaultCouchbaseEnvironment
 include::example$Migrating.java[tag=timeoutbuilder,indent=0]
 ----
 
-Similar to SDK 2, if you create your own `ClusterEnvironment` the SDK will not shut it down for you - you need to do this manually at the end of the program lifetime:
+Similar to SDK 2, if you create your own `ClusterEnvironment` the SDK will not shut it down for you -- you need to do this manually at the end of the program lifetime:
 
 [source,java]
 ----
 include::example$Migrating.java[tag=shutdown,indent=0]
 ----
 
-If no custom environment is passed in, the default settings can still be customized through either the connection string or system properties. The SDK has elaborate reflection logic in place to parse "flat" string values and apply it on the builder, which means that you can now configure more properties than in SDK 2. Note that the property paths have changed.
+If no custom environment is passed in, the default settings can still be customized through either the connection string or xref:ref:client-settings.adoc[system properties]. 
+The SDK has elaborate reflection logic in place to parse "flat" string values and apply them to the builder, which means that you can now configure more properties than in SDK 2. 
+Note that the property paths have changed.
 
 [source,java]
 ----
@@ -102,20 +112,25 @@ include::example$Migrating.java[tag=sysprops,indent=0]
 include::example$Migrating.java[tag=connstr,indent=0]
 ----
 
-The paths for each config start with a pattern `com.couchbase.env.` followed by either a toplevel or nested config. `IoConfig` is under the `io` path, similar to `TimeoutConfig` under `timeout`. So if you want to modify a KV timeout you can use the `com.couchbase.env.timeout.kvTimeout` path. See the configuration section for specifics.
+The paths for each config start with the pattern `com.couchbase.env.` followed by either a toplevel or nested config. `IoConfig` is under the `io` path, similar to `TimeoutConfig` under `timeout`. 
+So, if you want to modify a KV timeout you can use the `com.couchbase.env.timeout.kvTimeout` path. 
+See the xref:ref:client-settings.adoc[configuration section] for full specifics.
 
-At the end of this guide you'll find a reference that describes the SDK 2 environment options and their SDK 3 equivalents where applicable.
+At the end of this guide you'll find a xref:#configurations-options-reference[reference] that describes the SDK 2 environment options and their SDK 3 equivalents where applicable.
+
 
 === Authentication
 
-Since SDK 2 supports Couchbase Server clusters older than 5.0, it had to support both Role-Based access control as well as bucket-level passwords. The minimum cluster version supported is 5.0, which means that only RBAC is supported. This is why you can set the username and password right when connecting:
+Since SDK 2 supports Couchbase Server clusters older than 5.0, it had to support both Role-Based access control as well as bucket-level passwords. 
+The minimum cluster version supported by SDK 3 is Server 5.0, which means that only RBAC is supported. 
+This is why you can set the username and password right directly connecting:
 
 [source,java]
 ----
 include::example$Migrating.java[tag=rbac,indent=0]
 ----
 
-This is actually just a shorthand for:
+This is just a shorthand for:
 
 [source,java]
 ----
@@ -130,15 +145,20 @@ The reason why you can pass in a specific authenticator is that you can also use
 include::example$Migrating.java[tag=certauth,indent=0]
 ----
 
-Please see the documentation on certificate-based authentication for detailed information on how to configure it properly.
+Please see the xref:howtos:authentication.adoc[documentation on certificate-based authentication] for detailed information on how to configure this properly.
+
 
 == Connection Lifecycle
 
-From a high-level perspective, bootstrapping and shutdown is very similar to SDK 2. One notable difference is that the `Collection` is introduced and that the individual methods like `bucket` immediately return and do not throw exception. If you compare this to SDK 2, the `openBucket` method would not work if it could not open the bucket.
+From a high-level perspective, bootstrapping and shutdown is very similar to SDK 2. 
+One notable difference is that the `Collection` is introduced and that the individual methods like `bucket` immediately return, and do not throw an exception. 
+Compare SDK 2: the `openBucket` method would not work if it could not open the bucket.
 
-The reason behind this change is that even if a bucket can be opened, a millisecond later it might not be available anymore. All this state has been moved into the actual operation so there is only a single place where the error handling needs to take place. This simplifies error handling and retry logic on the application side.
+The reason behind this change is that even if a bucket can be opened, a millisecond later it may not be available any more. 
+All this state has been moved into the actual operation so there is only a single place where the error handling needs to take place. 
+This simplifies error handling and retry logic on the application side.
 
-In SDK 2, you connected, opened a bucket, performed a KV op and disconnected like this:
+In SDK 2, you connected, opened a bucket, performed a KV op, and disconnected like this:
 
 [source,java]
 ----
@@ -158,17 +178,29 @@ Here is the SDK 3 equivalent:
 include::example$Migrating.java[tag=simpleget,indent=0]
 ----
 
-`Collections` are being introduced as a new concept with an upcoming Couchbase Server release, but the SDK already encodes it in its API to be future-proof. If you are using a server version which does not support it, always use the `defaultCollection()` method to access the KV API. It will map to the full bucket transparently in the background.
+`Collections` are being introduced as a new concept with an upcoming Couchbase Server release, but the SDK already encodes it in its API to be future-proof. 
+If you are using a Couchbase Server version which does not support `Collections`, always use the `defaultCollection()` method to access the KV API;
+it will map to the full bucket transparently in the background.
 
-IMPORTANT: You'll notice that `bucket(String)` returns immediately, even if the bucket resources are not completely opened. This means that the subsequent `get` operation is dispatched maybe even before the socket is open in the background. The SDK will handle this case transparently and reschedule the operation until the bucket is opened properly. This also means that if a bucket could not be opened (i.e. because no socket was reachable) the operation will time out! Please check the logs to see the cause of the timeout (i.e. you'll see socket connect rejections).
+IMPORTANT: You'll notice that `bucket(String)` returns immediately, even if the bucket resources are not completely opened. 
+This means that the subsequent `get` operation may be dispatched even before the socket is open in the background. 
+The SDK will handle this case transparently, and reschedule the operation until the bucket is opened properly. 
+This also means that if a bucket could not be opened (say, because no socket was reachable) the operation will time out! 
+Please check the logs to see the cause of the timeout (in this case, you'll see socket connect rejections).
 
-One thing to note is that you'll find query, search and analytics at the `Cluster` level - this is where they logically belong. If you are using Couchbase Server 6.5 or later, you will be able to perform cluster-level queries even if no bucket is open. If you are using an earlier version of the cluster you must open at least one bucket otherwise cluster-level queries will fail.
+One more thing to note: you'll now find Query, Search, and Analytics at the `Cluster` level -- this is where they logically belong. 
+If you are using Couchbase Server 6.5 or later, you will be able to perform cluster-level queries even if no bucket is open. 
+If you are using an earlier version of the cluster you must open at least one bucket, otherwise cluster-level queries will fail.
+
 
 == Serialization and Transcoding
 
-In SDK 2 the main method to control transcoding was through providing different `Document` instances (which in turn had their own transcoder associated), i.e. the `JsonDocument`. This only worked for the KV APIs though - query, search, views etc. exposed their JSON rows/hits in different ways. All of this has been unified in SDK 3 under a single concept: serializers and transcoders.
+In SDK 2 the main method to control transcoding was through providing different `Document` instances (which in turn had their own transcoder associated), such as the `JsonDocument`. 
+This only worked for the KV APIs though -- Query, Search, Views, and other services exposed their JSON rows/hits in different ways.
+All of this has been unified in SDK 3 under a single concept: serializers and transcoders.
 
-By default, all KV APIs transcode to and from JSON - you can also provide java POJOs which you couldn't in the past. `JsonObject` and `JsonArray` like in SDK 2 are still available:
+By default, all KV APIs transcode to and from JSON -- you can also provide java POJOs which you couldn't in the past. 
+`JsonObject` and `JsonArray` are still available, like in SDK 2:
 
 [source,java]
 ----
@@ -184,7 +216,7 @@ JsonDocument getResult = bucket.get("mydoc-id");
 include::example$Migrating.java[tag=upsertandget,indent=0]
 ----
 
-If you want to write already encoded JSON, instead of using the `RawJsonDocument` you now need to use the `RawJsonTranscoder.INSTANCE`:
+If you want to write already-encoded JSON, instead of using the `RawJsonDocument` you now need to use the `RawJsonTranscoder.INSTANCE`:
 
 [source,java]
 ----
@@ -212,18 +244,29 @@ Here is a mapping table from the SDK 2 `Document` types to the new transcoder ty
 |`EntityDocument`                | `JsonTranscoder` (default)
 |=======================
 
-The `LegacyDocument` in SDK 2 has been in place to support SDK 1 so it has been removed. Serializers and transcoders can also be customized and overwritten on a per-operation basis, please see the appropriate documentation section for details.
+The `LegacyDocument` in SDK 2 was in place to support SDK 1, so it has been removed. 
+Serializers and transcoders can also be customized and overwritten on a per-operation basis, please see the appropriate documentation section for details.
 
-The JSON `Transcoders` use a `Serializer` underneath. While a transcoder can handle many different storage types, the serializer is specialized for JSON encoding and decoding. On all JSON-only APIs (i.e. subdoc, query, search,...) you'll only find a `Serializer`, not a `Transcoder`, on the operation options. Usually there is no need to override it unless you want to provide your own implementation (i.e. if you have your own POJO mapping json logic in place and want to reuse it).
+The JSON `Transcoders` use a `Serializer` underneath. 
+While a transcoder can handle many different storage types, the serializer is specialized for JSON encoding and decoding. 
+On all JSON-only APIs (i.e. Sub-doc, Query, Search,...) you'll only find a `Serializer`, not a `Transcoder`, in the operation options. 
+Usually there is no need to override it unless you want to provide your own implementation (i.e. if you have your own POJO mapping json logic in place, and want to reuse it).
+
 
 == Exception Handling
-How to handle exceptions has not changed over SDK 2. You should still use `try/catch` on the blocking APIs and the corresponding reactive/async methods on the other APIs. There have been changes made in the following areas:
 
-- Exception hierachy and naming
-- Proactive retry where possible
+How to _handle_ exceptions is unchanged from SDK 2. 
+You should still use `try/catch` on the blocking APIs and the corresponding reactive/async methods on the other APIs. 
+There have been changes made in the following areas:
+
+- Exception hierachy and naming.
+- Proactive retry where possible.
+
 
 === Exception hierachy
-The exception hierachy is now flat and unified under a `CouchbaseException`. Each `CouchbaseException` has an `ErrorContext` associated which is populated with as much info as possible and then dumped alongside the stack trace if an error happens.
+
+The exception hierachy is now flat and unified under a `CouchbaseException`. 
+Each `CouchbaseException` has an associated `ErrorContext` which is populated with as much info as possible and then dumped alongside the stack trace if an error happens.
 
 Here is an example of the error context if a N1QL query is performed with an invalid syntax (i.e. `select 1= from`):
 
@@ -232,7 +275,10 @@ Here is an example of the error context if a N1QL query is performed with an inv
 Exception in thread "main" com.couchbase.client.core.error.ParsingFailedException: Parsing of the input failed {"completed":true,"coreId":1,"errors":[{"code":3000,"message":"syntax error - at from"}],"idempotent":false,"lastDispatchedFrom":"127.0.0.1:62253","lastDispatchedTo":"127.0.0.1:8093","requestId":3,"requestType":"QueryRequest","retried":11,"retryReasons":["ENDPOINT_TEMPORARILY_NOT_AVAILABLE","BUCKET_OPEN_IN_PROGRESS"],"service":{"operationId":"9111b961-e585-42f2-9cab-e1501da7a40b","statement":"select 1= from","type":"query"},"timeoutMs":75000,"timings":{"dispatchMicros":15599,"totalMicros":1641134}}
 ----
 
-The expectation is that the application always catches the `CouchbaseException` and deals with it as an unexpected error (i.e. logging with subsequent bubbling up of the exception or failing). In addition to that, each method exposes exceptions that can be caught separately if needed. As an example, consider the javadoc for the `Collection.get` API:
+The expectation is that the application always catches the `CouchbaseException` and deals with it as an unexpected error
+(i.e. logging with subsequent bubbling up of the exception or failing). 
+In addition to that, each method exposes exceptions that can be caught separately if needed. 
+As an example, consider the javadoc for the `Collection.get` API:
 
 [source]
 ----
@@ -243,17 +289,29 @@ The expectation is that the application always catches the `CouchbaseException` 
 ...
 ----
 
-All of these exceptions extend `CouchbaseException`, but both the `TimeoutException` or the `DocumentNotFoundException` might be caught individually if specific logic should be executed to handle them.
+All of these exceptions extend `CouchbaseException`, but both the `TimeoutException` and the `DocumentNotFoundException` can be caught individually if specific logic should be executed to handle them.
 
 === Proactive retry
-One reason why the APIs do not expose a big list of exceptions is that it now retries as much operations as it can if it can do so safely. This depends on the type of operation (idempotent or not), in which state of processing it is (already dispatched or not) and what the actual response code is if it arrived already. As a result, many transient cases like locked documents, temporary failure, etc. is now retried by default and should less often impact the user application.
 
-NOTE: operations are retried by default as described above with the default `BestEffortRetryStrategy` like in SDK 2 you can configure fail fast retry strategies to not retry certain or all operations. The `RetryStrategy` interface has been extended heavily in SDK 3 - please see the corresponding documentation for it.
+One reason why the APIs do not expose a long list of exceptions is that it now retries as many operations as it can if it can do so safely. 
+This depends on the type of operation (idempotent or not), in which state of processing it is (already dispatched or not), and what the actual response code is if it arrived already. 
+As a result, many transient cases -- such as locked documents, or temporary failure -- are now retried by default and should less often impact the user application.
 
-As a result, when migrating from your SDK 2 exception handling code to SDK 3, make sure to wrap every call with a catch for `CouchbaseException` (or let it bubble up immediately). You can likely remove your user-level retry code for temporary failures, backpressure exception etc. One notable exception from this is the `CasMismatchException` which is still thrown since it requires more app-level code to handle (most likely identical to SDK 2).
+NOTE: Operations are retried by default as described above with the default `BestEffortRetryStrategy`.
+Like in SDK 2 you can configure fail-fast retry strategies to not retry certain or all operations. 
+The `RetryStrategy` interface has been extended heavily in SDK 3 -- please see the xref:howtos:error-handling.adoc[error handling documentation].
+
+As a result, when migrating your SDK 2 exception handling code to SDK 3, make sure to wrap every call with a catch for `CouchbaseException` (or let it bubble up immediately). 
+You can likely remove your user-level retry code for temporary failures, backpressure exception, and so on. 
+One notable exception from this is the `CasMismatchException`, which is still thrown since it requires more app-level code to handle (most likely identical to SDK 2).
+
 
 == Logging and Events
-From a high-level perspective, configuring and consuming logs has not changed. The SDK still uses SLF4J if found on the classpath and if not reverts back to the JDK logger (it can also be configured to log to stderr instead). The big difference is that the `EventBus` (which has been present in SDK 2) has been made much more powerful and all logs are sent as events through it. The `LoggingEventConsumer` being one of the potential consumers and turning events into log lines.
+
+Configuring and consuming logs has not greatly changed. 
+The SDK still uses _SLF4J_, if found on the classpath, and if not reverts back to the JDK logger (it can also be configured to log to `stderr` instead). 
+The big difference is that the `EventBus` (also present in SDK 2) has been made much more powerful -- and all logs are sent as events through it. 
+The `LoggingEventConsumer` being one of the potential consumers, and turning events into log lines.
 
 The biggest impact you'll see from it is that the log messages now look very structured and contain contextual information where possible.
 
@@ -263,20 +321,24 @@ The biggest impact you'll see from it is that the log messages now look very str
 13:36:46 INFO  [com.couchbase.core:470] [com.couchbase.core][BucketOpenedEvent][393161µs] Opened bucket "travel-sample" {"coreId":1}
 ----
 
-Notice the package path (which you can also filter on if needed), the event name, an optional time that it took to perform the operation, the message and surrounding context. This makes it easier to debug potential problems but also allows consuming all the events and feeding them in other monitoring systems without having to round-trip a file log. Please see the documentation section on logging for further information.
+Notice the package path (which you can also filter on if needed), the event name, an optional time that it took to perform the operation, the message and surrounding context. 
+This makes it easier to debug potential problems but also allows consuming all the events and feeding them in other monitoring systems without having to round-trip a file log. 
+Please see xref:howtos:collecting-information-and-logging.adoc[the logging documentation] for further information.
+
 
 == Migrating Services
 
 The following section discusses each service in detail and covers specific bits that have not been covered by the more generic sections above.
 
 === Key Value
-The Key/Value (KV) API is now located under the `Collection` interface. So even if you do not use collections, the `defaultCollection()` needs to be opened in order to access it.
+
+The Key/Value (KV) API is now located under the `Collection` interface, so even if you do not use collections, the `defaultCollection()` needs to be opened in order to access it.
 
 The following table describes the SDK 2 KV APIs and where they are now located in SDK 3:
 
 .SDK 2.x KV API vs. SDK 3.x KV API
 [options="header"]
-|=======================
+|====
 | SDK 2                          | SDK 3
 |`Bucket.upsert`                 | `Collection.upsert`
 |`Bucket.get`                    | `Collection.get`
@@ -295,13 +357,13 @@ The following table describes the SDK 2 KV APIs and where they are now located i
 |`Bucket.counter`                | `BinaryCollection.increment` and `BinaryCollection.decrement`
 |`Bucket.append`                 | `BinaryCollection.append`
 |`Bucket.prepend`                | `BinaryCollection.prepend`
-|=======================
+|====
 
 In addition, the datastructure APIs have been renamed and moved:
 
 .Datastructure API Changes
 [options="header"]
-|=======================
+|====
 | SDK 2                   | SDK 3
 |`Bucket.mapAdd`                 | `Collection.map`
 |`Bucket.mapGet`                 | `Collection.map`
@@ -319,12 +381,12 @@ In addition, the datastructure APIs have been renamed and moved:
 |`Bucket.setSize`                | `Collection.set`
 |`Bucket.queuePush`              | `Collection.queue`
 |`Bucket.queuePop`               | `Collection.queue`
-|=======================
+|====
 
-API wise, there are two important changes:
+There are two important API changes:
 
-- On the request side, overloads have been massively reduced and moved under a `Options` block
-- On the response side, the return types have been unified.
+* On the request side, overloads have been massively reduced and moved under a `Options` block
+* On the response side, the return types have been unified.
 
 The signatures now look very similar. The concept of the `Document` as a type is gone in SDK 3 and instead you need to pass in the properties explicitly. Especially on the response side this makes it very clear what gets returned.
 
@@ -350,6 +412,7 @@ In SDK 2 the `getFromReplica` method had a `ReplicaMode` argument which allowed 
 NOTE: Operations which cannot be performed on JSON documents have been moved to the `BinaryCollection`, accessible through `Collection.binary()`. These operations include `append`, `prepend`, `increment` and `decrement` (previously called `counter` in SDK 2). These operations should only be used against non-json data. The same functionality is available through `mutateIn` on JSON documents.
 
 === Query
+
 N1QL querying is now available at the `Cluster` level instead of the bucket level, because you can also write N1QL queries that span multiple buckets. Compare a simple N1QL query from SDK 2 with its SDK 3 equivalent:
 
 [source,java]
@@ -432,6 +495,7 @@ Exception in thread "main" com.couchbase.client.core.error.ParsingFailedExceptio
 Not only does it throw a `CouchbaseException`, it also tries to map it to a specific exception type and include extensive contextual information for a better troubleshooting experience.
 
 === Analytics
+
 Analytics querying, like N1QL, also moved to the `Cluster` level. It is now accessible through the `Cluster.analyticsQuery` method. Like N1QL, paremters for the query moved into the `AnalyticsOptions`:
 
 [source,java]
@@ -463,7 +527,9 @@ com.couchbase.client.core.error.DatasetNotFoundException: The analytics dataset 
 	at com.couchbase.client.java.Cluster.analyticsQuery(Cluster.java:250)
 ----
 
+
 === Search
+
 The Search API has changed a bit in SDK 3 so that it aligns with the other query APIs. The type of queries have stayed the same, but all optional parameters moved into `SearchOptions`. Also, similar to the other query APIs it is now available at the `Cluster` level.
 
 Here is a SDK 2 Search query with some options and its SDK 3 equivalent:
@@ -506,6 +572,7 @@ include::example$Migrating.java[tag=searchcheck,indent=0]
 ----
 
 === Views
+
 Views have stayed at the `Bucket` level, because it does not have the concept of collections and is scoped at the bucket level on the server as well. The API has stayed mostly the same, the most important change is that we unified `staleness` under the `ViewConsistency` enum.
 
 .View Staleness Mapping
@@ -548,6 +615,7 @@ com.couchbase.client.core.error.ViewNotFoundException: The queried view is not f
 ----
 
 === Management APIs
+
 In SDK 2, the management APIs were centralized in the `ClusterManager` at the cluster level and the `BucketManager` at the bucket level. Since SDK 3 provides more management APIs, they have been split up in their respective domains. So for example when in SDK 2 you needed to remove a bucket you would call `ClusterManager.removeBucket` you will now find it under `BucketManager.dropBucket`. Also, creating a N1QL index now lives in the `QueryIndexManager` which is accessible through the `Cluster`.
 
 The following table provides a mapping from the SDK 2 management APIs and how they are now surfaced in SDK 3:
@@ -591,7 +659,9 @@ The following table provides a mapping from the SDK 2 management APIs and how th
 |`BucketManager.watchN1qlIndexes`          | `QueryIndexManager.watchIndexes`
 |=======================
 
+
 == Reactive and Async APIs
+
 The move to Java 8 as a baseline has opened the door to expose `CompletableFuture` in addition to a reactive API. You can now find it under the `async()` namespace of each level (i.e. `Cluster.async()` -> `AsyncCluster`). We also moved from `RxJava` to `Reactor` because it provides native Java 8 support and better performance out of the box. Also, it has a growing community and integrates very well into the Spring ecosystem. The reactive API can now be found under the `reactive()` namespace (i.e. `Collection.reactive()` -> `ReactiveCollection`).
 
 Like in SDK 2, the async and reactive APIs provide the same functionality as their blocking counterpart. There are only a couple places in the SDK where it does not make sense (i.e. the blocking datastructure APIs at the collection level implement the Java interfaces which do not have async or reactive counterparts).
