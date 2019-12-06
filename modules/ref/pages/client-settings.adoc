@@ -79,6 +79,7 @@ For example, `TimeoutConfig` is set via the environment builder's `timeoutConfig
 Many client settings may also be configured by setting a Java system property.
 If a system property is set, it always takes precedence over the builder setting.
 
+[#duration-values]
 .Configuration via system property
 [source,java]
 ----
@@ -260,6 +261,7 @@ If you get a timeout exception, it may be a symptom of another issue; increasing
 
 Most timeouts can be overridden on a per-operation basis (for example, by passing a custom options block to a "get" or "query" method).
 The values set here are used as the defaults when no per-operation timeout is specified.
+See <<duration-values, setting duration values>> under xref:#system-properties[System Properties].
 
 Timeout settings are represented by the Java class `TimeoutConfig`.
 The associated `ClusterEnvironement.Builder` method is called `timeoutConfig`.
