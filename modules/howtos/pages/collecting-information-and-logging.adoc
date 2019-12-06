@@ -1,0 +1,7 @@
+= Collecting Information & Logging
+:page-topic-type: howto
+
+[abstract]
+Java logging.
+
+include::partial$beta-warning.adoc[]
