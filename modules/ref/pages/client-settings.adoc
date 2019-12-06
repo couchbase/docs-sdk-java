@@ -82,11 +82,11 @@ If a system property is set, it always takes precedence over the builder setting
 .Configuration via system property
 [source,java]
 ----
-System.setProperty("com.couchbase.env.timeout.kvTimeout", "10s"); <1>
+System.setProperty("com.couchbase.env.timeout.kvTimeout", "10s"); // <1>
 System.setProperty("com.couchbase.env.timeout.queryTimeout", "15s");
 
 ClusterEnvironment environment = ClusterEnvironment.builder()
-    .timeoutConfig(TimeoutConfig.kvTimeout(Duration.ofSeconds(5))) <2>
+    .timeoutConfig(TimeoutConfig.kvTimeout(Duration.ofSeconds(5))) // <2>
     .build();
 ----
 <1> When specifying durations, `s` stands for seconds.
