@@ -97,7 +97,6 @@ In this example the actual `kvTimeout` is 10 seconds, and the `queryTimeout` is 
 
 TIP: System property names starting with `com.couchbase.env` are paths in a Java object graph rooted at the environment builder.
 Setting the property `com.couchbase.env.timeout.kvTimeout` tells the SDK to invoke `envBuilder.timeoutConfig().kvTimeout(...)` using reflection.
-Now that you know this secret, you can use system properties to override undocumented environment settings.
 
 == Configuration Options
 
