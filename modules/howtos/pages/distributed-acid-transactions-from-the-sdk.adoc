@@ -373,7 +373,7 @@ TransactionConfigBuilder.create().logOnFailure(true, Event.Severity.WARN).build(
 
 By default the Couchbase Java logging event-bus is setup to look for and use SLF4J/logback, log4j1, and log4j2 on the classpath, and to fallback to java.util.Logging.  
 
-Please see the xref:howtos:collecting-information-and-logging[Java SDK logging documentation] for details.
+Please see the xref:howtos:collecting-information-and-logging.adoc[Java SDK logging documentation] for details.
 
 == Concurrent Operations with the Async API
 The async API allows operations to be performed concurrently inside a transaction, which can assist performance.
