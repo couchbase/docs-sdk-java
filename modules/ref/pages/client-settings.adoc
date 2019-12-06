@@ -4,7 +4,7 @@
 :page-aliases: ROOT:client-settings, ROOT:env-config
 
 [abstract]
-The `CouchbaseEnvironment` class enables you to configure Java SDK options for bootstrapping, timeouts, reliability, and performance.
+The `ClusterEnvironment` class enables you to configure Java SDK options for bootstrapping, timeouts, reliability, and performance.
 
 include::ref:partial$beta-warning.adoc[]
 
@@ -14,30 +14,89 @@ Do not use!
 
 == The Environment Builder
 
-Because `CouchbaseEnvironment` is an immutable class, you need to configure it by using its embedded `Builder` class.
-It is designed to apply the builder arguments in a fluent fashion and then create the `CouchbaseEnvironment` at the very end:
+Most client settings are related to the `ClusterEnvironment`.
+Because `ClusterEnvironment` is an immutable class, you need to configure it by using its embedded `Builder` class.
+It is designed to apply the builder arguments in a fluent fashion and then create the `ClusterEnvironment` at the very end.
 
+.Creating a cluster with custom settings
 [source,java]
 ----
-environment = environment().build();
-    cluster = Cluster.connect(connectionString(), ClusterOptions.clusterOptions(authenticator()).environment(environment).seedNodes(seedNodes()));
-----
-
-Alternatively, most options are tunable through system properties as well.
-If a system property is set, it always takes precedence over the builder setting:
-
-[source,java]
-----
-System.setProperty("com.couchbase.kvEndpoints", "3");
-CouchbaseEnvironment environment = DefaultCouchbaseEnvironment
-    .builder()
-    .kvEndpoints(2)
+ClusterEnvironment env = ClusterEnvironment.builder()
+    // [Customize client settings here]
     .build();
-CouchbaseCluster cluster = CouchbaseCluster.create(environment);
+
+// Create a cluster using the custom client settings.
+Cluster cluster = Cluster.connect(connectionString, ClusterOptions
+    .clusterOptions(username, password)
+    .environment(environment));
+
+// [Your code to interact with the cluster]
+
+// Shut down gracefully.
+cluster.disconnect();
+env.shutdown();
 ----
 
-All system properties start with the `com.couchbase` prefix.
+== Config Builders
 
+Environment settings are grouped into categories, with one builder class per category.
+These builders all work in the same way, which we'll illustrate by using timeout settings as an example.
+
+Timeout settings are configured using an instance of `TimeoutConfig.Builder`.
+The usual way to create an instance is to call a static factory method on the `TimeoutConfig` class.
+The method `TimeoutConfig.builder()` returns a builder with default settings.
+There are also static factory methods that create a builder and set a configuration value in one step.
+For example, instead of `TimeoutConfig.builder().kvTimeout(...)` you can write simply `TimeoutConfig.kvTimeout(...)`.
+
+.Creating a new timeout config builder
+[source,java]
+----
+ClusterEnvironment env = ClusterEnvironment.builder()
+    .timeoutConfig(TimeoutConfig
+        .kvTimeout(Duration.ofSeconds(5))
+        .queryTimeout(Duration.ofSeconds(10)))
+    .build();
+----
+
+Another way to obtain an instance of a config builder is to borrow it from the cluster environment builder.
+This technique may be useful if you're configuring the environment in stages and wish to preserve values set by a previous stage.
+
+.Borrowing the existing timeout config builder
+[source,java]
+----
+ClusterEnvironment.Builder envBuilder = ClusterEnvironment.builder();
+envBuilder.timeoutConfig() // returns a TimeoutConfig.Builder
+    .kvTimeout(Duration.ofSeconds(5))
+    .queryTimeout(Duration.ofSeconds(10));
+ClusterEnvironment env = envBuilder.build();
+----
+
+The name of the cluster environment builder method for getting and setting each config builder always matches the name of the config class.
+For example, `TimeoutConfig` is set via the environment builder's `timeoutConfig` method, `IoConfig` is set via the `ioConfig` method, and so on.
+
+== System properties
+
+Many client settings may also be configured by setting a Java system property.
+If a system property is set, it always takes precedence over the builder setting.
+
+.Configuration via system property
+[source,java]
+----
+System.setProperty("com.couchbase.env.timeout.kvTimeout", "10s"); <1>
+System.setProperty("com.couchbase.env.timeout.queryTimeout", "15s");
+
+ClusterEnvironment environment = ClusterEnvironment.builder()
+    .timeoutConfig(TimeoutConfig.kvTimeout(Duration.ofSeconds(5))) <2>
+    .build();
+----
+<1> When specifying durations, `s` stands for seconds.
+Other valid qualifiers are `ns` for nanoseconds, `us` for microseconds, `ms` for milliseconds, and `m` for minutes.
+<2> The `kvTimeout` value specified via `TimeoutConfig.Builder` is overridden by the system property.
+In this example the actual `kvTimeout` is 10 seconds, and the `queryTimeout` is 15 seconds.
+
+TIP: System property names starting with `com.couchbase.env` are paths in a Java object graph rooted at the environment builder.
+Setting the property `com.couchbase.env.timeout.kvTimeout` tells the SDK to invoke `envBuilder.timeoutConfig().kvTimeout(...)` using reflection.
+Now that you know this secret, you can use system properties to override undocumented environment settings.
 
 == Configuration Options
 
@@ -196,112 +255,120 @@ For providing `AlternateAddress` in multi-network configurations - such as NATed
 
 == Timeout Options
 
-Timeouts apply only for blocking operations.
-All asynchronous operations must chain in their own `timeout()` operators in order to apply a timeout.
-All default values can be overridden through the overloaded methods that accept both a time and time unit.
-All timeouts are reasonable defaults and should be adjusted to the environments after profiling the expected latencies.
+The default timeout values are suitable for most environments, and should be adjusted only after profiling the expected latencies in your deployment environment.
+If you get a timeout exception, it may be a symptom of another issue; increasing the timeout duration is sometimes not the best long-term solution.
+
+Most timeouts can be overridden on a per-operation basis (for example, by passing a custom options block to a "get" or "query" method).
+The values set here are used as the defaults when no per-operation timeout is specified.
+
+Timeout settings are represented by the Java class `TimeoutConfig`.
+The associated `ClusterEnvironement.Builder` method is called `timeoutConfig`.
+
+.Template for configuring timeouts
+[source,java]
+----
+ClusterEnvironment env = ClusterEnvironment.builder()
+    .timeoutConfig(TimeoutConfig
+        .kvTimeout(Duration.ofMillis(2500))
+        ...)
+    .build()
+----
 
 === Timeout Options Reference
 
 Name: *Key-Value Timeout*::
-Builder Method: `kvTimeout(long)`
+Builder Method: `TimeoutConfig.kvTimeout(Duration)`
 +
-Default:  `2500ms`
+Default: `2.5s`
 +
-System Property: `kvTimeout`
+System Property: `com.couchbase.env.timeout.kvTimeout`
 +
-The Key/Value default timeout is used on all blocking operations which are performed on a specific key if not overridden by a custom timeout.
-It does not affect asynchronous operations.
-This includes all commands like get(), getFromReplica() and all mutation commands.
+The Key/Value default timeout is used on operations which are performed on a specific key if not overridden by a custom timeout.
+This includes all commands like get(), getFromReplica() and all mutation commands, but does not include operations that are performed with enhanced durability requirements.
+
+Name: *Key-Value Durable Operation Timeout*::
+Builder Method: `TimeoutConfig.kvDurableTimeout(Duration)`
++
+Default: `10s`
++
+System Property: `com.couchbase.env.timeout.kvDurableTimeout`
++
+Key/Value operations with enhanced durability requirements may take longer to complete, so they have a separate default timeout.
++
+WARNING: The `kvDurableTimeout` property is not part of the stable API and may change or be removed at any time.
 
 Name: *View Timeout*::
-Builder Method: `viewTimeout(long)`
+Builder Method: `TimeoutConfig.viewTimeout(Duration)`
 +
-Default:  `75000ms`
+Default: `75s`
 +
-System Property: `viewTimeout`
+System Property: `com.couchbase.env.timeout.viewTimeout`
 +
-The View timeout is used on both regular and geospatial view operations if not overridden by a custom timeout.
-It does not affect asynchronous operations.
+The View timeout is used on view operations if not overridden by a custom timeout.
 Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
 Also, if there is a node failure during the request the internal cluster timeout is set to 60 seconds.
 
 Name: *Query Timeout*::
-Builder Method: `queryTimeout(long)`
+Builder Method: `TimeoutConfig.queryTimeout(Duration)`
 +
-Default:  `75000ms``
+Default: `75s`
 +
-System Property: `queryTimeout`
+System Property: `com.couchbase.env.timeout.queryTimeout`
 +
 The Query timeout is used on all N1QL query operations if not overridden by a custom timeout.
-It does not affect asynchronous operations.
 Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
 
 Name: *Search Timeout*::
-Builder Method: `searchTimeout(long)`
+Builder Method: `TimeoutConfig.searchTimeout(Duration)`
 +
-Default:  `75000ms`
+Default: `75s`
 +
-System Property: `searchTimeout`
+System Property: `com.couchbase.env.timeout.searchTimeout`
 +
 The Search timeout is used on all FTS operations if not overridden by a custom timeout.
-It does not affect asynchronous operations.
 Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
 
 Name: *Analytics Timeout*::
-Builder Method: `analyticsTimeout(long)`
+Builder Method: `TimeoutConfig.analyticsTimeout(Duration)`
 +
-Default:  `75000ms`
+Default: `75s`
 +
-System Property: `analyticsTimeout`
+System Property: `com.couchbase.env.timeout.analyticsTimeout`
 +
 The Analytics timeout is used on all Analytics query operations if not overridden by a custom timeout.
-It does not affect asynchronous operations.
 Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
 
 Name: *Connect Timeout*::
-Builder Method: `connectTimeout(long)`
+Builder Method: `TimeoutConfig.connectTimeout(Duration)`
 +
-Default:  `5000ms`
+Default: `10s`
 +
-System Property: `connectTimeout`
+System Property: `com.couchbase.env.timeout.connectTimeout`
 +
 The connect timeout is used when a Bucket is opened and if not overridden by a custom timeout.
-It does not affect asynchronous operations.
 If you feel the urge to change this value to something higher, there is a good chance that your network is not properly set up.
-Opening a bucket should in practice not take longer than a second on a reasonably fast network.
+Connecting to the server should in practice not take longer than a second on a reasonably fast network.
 
 Name: *Disconnect Timeout*::
-Builder Method: `disconnectTimeout(long)`
+Builder Method: `TimeoutConfig.disconnectTimeout(Duration)`
 +
-Default:  `25000ms`
+Default: `10s`
 +
-System Property: `disconnectTimeout`
+System Property: `com.couchbase.env.timeout.disconnectTimeout`
 +
-The disconnect timeout is used when a Cluster is disconnected or a Bucket is closed synchronously and if not overridden by a custom timeout.
-It does not affect asynchronous operations.
+The disconnect timeout is used when a Cluster is disconnected and if not overridden by a custom timeout.
 A timeout is applied here always to make sure that your code does not get stuck at shutdown.
-25 seconds should provide enough room to drain all outstanding operations properly, but make sure to adapt this timeout to fit your application requirements.
+The default should provide enough time to drain all outstanding operations properly, but make sure to adapt this timeout to fit your application requirements.
 
 Name: *Management Timeout*::
-Builder Method: `managementTimeout(long)`
+Builder Method: `TimeoutConfig.managementTimeout(Duration)`
 +
-Default:  `75000ms`
+Default: `75s`
 +
-System Property: `managementTimeout`
+System Property: `com.couchbase.env.timeout.managementTimeout`
 +
-The management timeout is used on all synchronous BucketManager and ClusterManager operations and if not overridden by a custom timeout.
-It set to a quite high timeout because some operations might take a longer time to complete (for example flush).
-
-Name: *Socket Connect Timeout*::
-Builder Method: `socketConnectTimeout(int)`
-+
-Default:  `1000ms`
-+
-System Property: `socketConnectTimeout`
-+
-The amount of time the SDK will wait on the socket connect until an error is raised and handled.
-
+The management timeout is used on all cluster management APIs (BucketManager, UserManager, CollectionManager, QueryIndexManager, etc.) if not overridden by a custom timeout.
+The default is quite high because some operations (such as flushing a bucket, for example) might take a long time.
 
 
 // Need to add 2500ms default durability timeout.
