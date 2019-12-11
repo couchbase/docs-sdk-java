@@ -151,7 +151,7 @@ Default:  N/A
 System Property: `com.couchbase.env.security.trustCertificate`
 +
 Path to a file containing a single X.509 certificate to trust as a Certificate Authority when establishing secure connections.
-See the xref:howtos:managing-connections.adoc#ssl["Connection Management"] section for more details on how to set it up properly.
+See the xref:howtos:managing-connections.adoc#ssl[Connection Management] section for more details on how to set it up properly.
 
 Name: *TLS Certificates*::
 Builder Method: `SecurityConfig.trustCertificates(List<X509Certificate>)`
@@ -161,7 +161,7 @@ Default:  N/A
 System Property: N/A
 +
 If you wish to trust more than one certificate, or prefer to load the certificate yourself, then call this method to specify the certificates to trust as Certificate Authorities when establishing secure connections.
-See the xref:howtos:managing-connections.adoc#ssl["Connection Management"] section for more details on how to set it up properly.
+See the xref:howtos:managing-connections.adoc#ssl[Connection Management] section for more details on how to set it up properly.
 
 Name: *Custom TLS Trust Manager Factory*::
 Builder Method: `SecurityConfig.trustManagerFactory(TrustManagerFactory)`
@@ -171,7 +171,7 @@ Default:  N/A
 System Property: N/A
 +
 As an alternative to specifying the certificates to trust, you can specify a custom `TrustManagerFactory` to use when establishing secure connections.
-See the xref:howtos:managing-connections.adoc#ssl["Connection Management"] section for more details on how to set it up properly.
+See the xref:howtos:managing-connections.adoc#ssl[Connection Management] section for more details on how to set it up properly.
 
 
 == I/O Options
@@ -197,7 +197,7 @@ Default:  `false`
 System Property: `com.couchbase.env.io.enableDnsSrv`
 +
 Set this to `true` if you want to get the bootstrap node list from a DNS SRV record.
-See the "Connection Management" section for more information on how to use it properly.
+See the xref:howtos:managing-connections.adoc#using-dns-srv-records[Connection Management] section for more information on how to use it properly.
 
 Name: *Mutation Tokens Enabled*::
 Builder Method: `IoConfig.mutationTokensEnabled(boolean)`
@@ -273,6 +273,8 @@ That way the SDK implicitly benefits from network batching characteristics when 
 If you suspect based on profiling and benchmarking that the socket is saturated you can think about slightly increasing it to have more "parallel pipelines".
 This might be especially helpful if you need to push large documents through it.
 The recommendation is keeping it at 1 unless there is other evidence.
++
+NOTE: xref:concept-docs:durability-replication-failure-considerations.adoc#synchronous-writes[Durable Write] operations with Couchbase Server 6.5 and above require up to 16 KV Endpoints per node, for most efficient operation, unless the environment dictates something a little lower.
 
 Name: *Max HTTP Endpoints per Service per Node*::
 Builder Method: `IoConfig.maxHttpConnections(int)`
@@ -393,12 +395,15 @@ ClusterEnvironment env = ClusterEnvironment.builder()
 Name: *Key-Value Timeout*::
 Builder Method: `TimeoutConfig.kvTimeout(Duration)`
 +
-Default: `2.5s`
+Default: `2.5s` -- _but see WARNING, below_
 +
 System Property: `com.couchbase.env.timeout.kvTimeout`
 +
 The Key/Value default timeout is used on operations which are performed on a specific key if not overridden by a custom timeout.
 This includes all commands like get(), getFromReplica() and all mutation commands, but does not include operations that are performed with enhanced durability requirements.
++
+WARNING: xref:concept-docs:durability-replication-failure-considerations.adoc#synchronous-writes[Durable Write operations] cause the default `kvTimeout` to be changed to 10s.
+This may still be overridden by setting the above property.
 
 Name: *Key-Value Durable Operation Timeout*::
 Builder Method: `TimeoutConfig.kvDurableTimeout(Duration)`
