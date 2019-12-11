@@ -103,155 +103,268 @@ Setting the property `com.couchbase.env.timeout.kvTimeout` tells the SDK to invo
 The following tables cover all possible configuration options and explain their usage and default values.
 The tables categorize the options into groups for bootstrapping, timeout, reliability, performance, and advanced options.
 
-== Bootstrap Options
+== Security Options
 
-Name: *Enabling Encryption*::
-Builder Method: `sslEnabled(boolean)`
+By default the client will connect to Couchbase Server using an unencrypted connection.
+If you are using the Enterprise Edition, it's possible to secure the connection using TLS.
+
+.Template for configuring security settings
+[source,java]
+----
+ClusterEnvironment env = ClusterEnvironment.builder()
+    .securityConfig(SecurityConfig
+        .enableTls(true)
+        ...)
+    .build()
+----
+
+NOTE: Unless you set `enableTls` to `true`, none of the other security settings in this section have any effect.
+
+Name: *Enabling Secure Connections*::
+Builder Method: `SecurityConfig.enableTls(boolean)`
 +
 Default:  `false`
 +
-System Property: `sslEnabled`
+System Property: `com.couchbase.env.security.enableTls`
 +
-If encrypted communication should be enabled.
-This feature is only available against a Couchbase Server 3.0 EE cluster or later, and setting it to true implies you also set a value for `sslKeystoreFile` and `sslKeystorePassword`.
+Set this to `true` to encrypt all communication between the client and server using TLS.
+This feature requires the Enterprise Edition of Couchbase Server 3.0 or later.
+If TLS is enabled you must also specify the trusted certificates by calling exactly one of `trustCertificate`, `trustCertificates`, or `trustManagerFactory`.
 Please see the xref:howtos:managing-connections.adoc[Managing Connections] section for more details on how to set it up properly.
 
-Name: *SSL Keystore Location*::
-Builder Method: `sslKeystoreFile(String)`
+Name: *Disabling Native TLS Provider*::
+Builder Method: `SecurityConfig.enableNativeTls(boolean)`
 +
-Default:  `[empty]`
+Default:  `true`
 +
-System Property: `sslKeystoreFile`
+System Property: `com.couchbase.env.security.enableNativeTls`
 +
-The location to the JVM keystore where the certificates are stored.
-This feature is only available against a Couchbase Server 3.0 EE cluster or later.
+When TLS is enabled, the client will by default use an optimized native TLS provider if one is available.
+If for some reason you need to disable the native provider and use the JDK's portable provider instead, set this to `false`.
+If `enableTls` is  `false` then `enableNativeTls` has no effect.
+
+Name: *TLS Certificate Location*::
+Builder Method: `SecurityConfig.trustCertificate(Path)`
++
+Default:  N/A
++
+System Property: `com.couchbase.env.security.trustCertificate`
++
+Path to a file containing a single X.509 certificate to trust as a Certificate Authority when establishing secure connections.
 See the xref:howtos:managing-connections.adoc#ssl["Connection Management"] section for more details on how to set it up properly.
 
-Name: *Custom SSL Keystore*::
-Builder Method: `sslKeystore(KeyStore)`
+Name: *TLS Certificates*::
+Builder Method: `SecurityConfig.trustCertificates(List<X509Certificate>)`
 +
-Default:  `[empty]`
+Default:  N/A
 +
-System Property: `-`
+System Property: N/A
 +
-A custom KeyStore instance instead of creating one through the filepath.
-Allows for heavily customized and differently loaded keystores.
+If you wish to trust more than one certificate, or prefer to load the certificate yourself, then call this method to specify the certificates to trust as Certificate Authorities when establishing secure connections.
+See the xref:howtos:managing-connections.adoc#ssl["Connection Management"] section for more details on how to set it up properly.
 
-Name: *SSL Keystore Password*::
-Builder Method: `sslKeystorePassword(String)`
+Name: *Custom TLS Trust Manager Factory*::
+Builder Method: `SecurityConfig.trustManagerFactory(TrustManagerFactory)`
 +
-Default:  `[empty]`
+Default:  N/A
 +
-System Property: `sslKeystorePassword`
+System Property: N/A
 +
-The password of the JVM keystore where the certificates are stored.
-This feature is only available against a Couchbase Server 3.0 EE cluster or later.
-Please see the xref:howtos:managing-connections.adoc[Connection Management] section for more details on how to set it up properly.
+As an alternative to specifying the certificates to trust, you can specify a custom `TrustManagerFactory` to use when establishing secure connections.
+See the xref:howtos:managing-connections.adoc#ssl["Connection Management"] section for more details on how to set it up properly.
 
-Name: *Config Loading through HTTP*::
-Builder Method: `bootstrapHttpEnabled(boolean)`
-+
-Default:  `true`
-+
-System Property: `bootstrapHttpEnabled`
-+
-If it should be possible for the client to bootstrap and grab configurations over the HTTP port 8091 (and also attach a streaming connection).
-If you are running Couchbase Server 2.2 or earlier, this setting must be set to true.
-Against newer clusters it can be disabled, but it doesn't hurt to keep it enabled as a last-resort fallback option.
-Also, if configuration loading through carrier publication is manually disabled, this option is used as a fallback.
-If both option are disabled, the client is not able to function properly.
-If you don't have a good reason to disable it (for example as instructed by Couchbase Support), keep it enabled.
 
-Name: *Config HTTP Non-Encrypted Port*::
-Builder Method: `bootstrapHttpDirectPort(int)`
-+
-Default:  `8091`
-+
-System Property: `bootstrapHttpDirectPort`
-+
-The port which is used if encryption is not enabled and the client needs to bootstrap through HTTP.
-In general, there is no need to change this value (unless you run a custom Couchbase Server build during development or testing that runs on different ports).
+== I/O Options
 
-Name: *Config HTTP Encrypted Port*::
-Builder Method: `bootstrapHttpSslPort(int)`
-+
-Default:  `18091`
-+
-System Property: `bootstrapHttpSslPort`
-+
-The port which is used if encryption is enabled and the client needs to bootstrap through HTTP.
-In general, there is no need to change this value (unless you run a custom Couchbase Server build during development or testing that runs on different ports).
+I/O settings are represented by the Java class `IoConfig`.
+The associated `ClusterEnvironement.Builder` method is called `ioConfig`.
 
-Name: *Config Loading through Carrier Publication*::
-Builder Method: `bootstrapCarrierEnabled(boolean)`
-+
-Default:  `true`
-+
-System Property: `bootstrapCarrierEnabled`
-+
-This is the preferred way to bootstrap and grab configurations.
-It is not done over HTTP, but through the key-value connections automatically.
-If this setting is manually disabled, the client will fallback to HTTP (if enabled).
-If both option are disabled, the client is not able to function properly.
-If you don't have a good reason to disable it (for example as instructed by Couchbase Support), keep it enabled.
-
-Name: *Config Carrier Non-Encrypted Port*::
-Builder Method: `bootstrapCarrierDirectPort(int)`
-+
-Default:  `11210`
-+
-System Property: `bootstrapCarrierDirectPort`
-+
-The port which is used if encryption is not enabled and the client needs to bootstrap through carrier publication.
-In general, there is no need to change this value (unless you run a custom Couchbase Server build during development or testing that runs on different ports).
-
-Name: *Config Carrier Encrypted Port*::
-Builder Method: `bootstrapCarrierSslPort(int)`
-+
-Default:  `11207`
-+
-System Property: `bootstrapCarrierSslPort`
-+
-The port which is used if encryption is enabled and the client needs to bootstrap through carrier publication.
-In general, there is no need to change this value (unless you run a custom Couchbase Server build during development or testing that runs on different ports).
+.Template for configuring I/O settings
+[source,java]
+----
+ClusterEnvironment env = ClusterEnvironment.builder()
+    .ioConfig(IoConfig
+        .networkResolution(NetworkResolution.AUTO)
+        ...)
+    .build()
+----
 
 Name: *DNS SRV Enabled*::
-Builder Method: `dnsSrvEnabled(boolean)`
+Builder Method: `IoConfig.enableDnsSrv(boolean)`
 +
 Default:  `false`
 +
-System Property: `dnsSrvEnabled`
+System Property: `com.couchbase.env.io.enableDnsSrv`
 +
-Enable manually if you explicitly want to grab a bootstrap node list through a DNS SRV record.
+Set this to `true` if you want to get the bootstrap node list from a DNS SRV record.
 See the "Connection Management" section for more information on how to use it properly.
 
 Name: *Mutation Tokens Enabled*::
-Builder Method: `mutationTokensEnabled(boolean)`
+Builder Method: `IoConfig.mutationTokensEnabled(boolean)`
 +
-Default:  `false`
+Default:  `true`
 +
-System Property: `mutationTokensEnabled`
+System Property: `com.couchbase.env.io.mutationTokensEnabled`
 +
-If mutation tokens should be enabled, adding more overhead to every mutation but providing enhanced durability requirements as well as advanced N1QL querying capabilities.
-
-Name: *Client Certificate Auth Enabled*::
-Builder Method: `certAuthEnabledEnabled(boolean)`
-+
-Default:  `false`
-+
-System Property: `certAuthEnabledEnabled`
-+
-If enabled, it will use the information in the key store for authentication (basically skip the Cluster#authenticate) instead of sending the username and password.
+Mutation tokens allow enhanced durability requirements as well as advanced N1QL querying capabilities.
+Set this to `false` if you do not require these features and wish to avoid the associated overhead.
 
 Name: *Network Resolution*::
-Builder Method: `NetworkResolution(String)`
+Builder Method: `IoConfig.networkResolution(NetworkResolution)`
 +
 Default:  `auto`
 +
-System Property: `NetworkResolution`
+System Property: `com.couchbase.env.io.networkResolution`
 +
-For providing `AlternateAddress` in multi-network configurations - such as NATed or portmapped virtualized or containerized environments. Based on heuristics, discovers if internal or external resolution will be used. Set to `external` to pin to resolving external network, and to `default` (backwards compatible mode) to work with whatever the server returns in the config.
+NOTE: The system property value should be one of `auto`, `default`, or `external` (lower case).
++
+Each node in the Couchbase Server cluster might have multiple addresses associated with it.
+For example, a node might have one address that should be used when connecting from inside the same virtual network environment where the server is running, and a second address for connecting from outside the server's network environment.
++
+By default the client will use a simple matching heuristic to determine which set of addresses to use (it will select the set of addresses that contains a seed node's host and port).
++
+If you wish to override the heuristic, you can set this value to `default` if the client is running in the same network as the server, or `external` if the client is running in a different network.
 
+Name: *Capture Traffic*::
+Builder Method: `IoConfig.captureTraffic(ServiceType...)`
++
+Default:  capture is disabled
++
+System Property: `com.couchbase.env.io.captureTraffic`
++
+TIP: Multiple services may be specified in the system property value using a comma-delimited list such as `KV,QUERY`.
+To enable capture for all services, set the value of the system property to an empty string.
++
+Call this method to log all traffic to the specified services.
+If no services are specified, traffic to all services is captured.
+
+Name: *Socket Keepalive*::
+Builder Method: `IoConfig.enableTcpKeepAlives(boolean)`
++
+Default:  `true`
++
+System Property: `com.couchbase.env.io.enableTcpKeepAlives`
++
+If enabled, the client periodically sends a TCP keepalive to the server to prevent firewalls and other network equipment from dropping idle TCP connections.
+
+Name: *Socket Keepalive Interval*::
+Builder Method: `IoConfig.tcpKeepAliveTime(Duration)`
++
+Default:  `60s`
++
+System Property: `com.couchbase.env.io.tcpKeepAliveTime`
++
+The idle time after which a TCP keepalive gets fired.
+(This setting has no effect if `enableTcpKeepAlives` is `false`.)
++
+NOTE: This setting only propagates to the OS on Linux when the epoll transport is used.
+On all other platforms, the OS-configured time is used (and you need to tune it there if you want to override the default interval).
+
+Name: *Key/Value Endpoints per Node*::
+Builder Method: `IoConfig.numKvConnections(int)`
++
+Default:  `1`
++
+System Property: `com.couchbase.env.io.numKvConnections`
++
+The number of actual endpoints (sockets) to open per node in the cluster against the Key/Value service.
+By default, for every node in the cluster one socket is opened where all traffic is pushed through.
+That way the SDK implicitly benefits from network batching characteristics when the workload increases.
+If you suspect based on profiling and benchmarking that the socket is saturated you can think about slightly increasing it to have more "parallel pipelines".
+This might be especially helpful if you need to push large documents through it.
+The recommendation is keeping it at 1 unless there is other evidence.
+
+Name: *Max HTTP Endpoints per Service per Node*::
+Builder Method: `IoConfig.maxHttpConnections(int)`
++
+Default:  `12`
++
+System Property: `com.couchbase.env.io.maxHttpConnections`
++
+Each service (except the Key/Value service) has a separate dynamically sized pool of HTTP connections for issuing requests.
+This setting puts an upper bound on the number of HTTP connections in each pool.
+
+Name: *Idle HTTP Connection Timeout*::
+Builder Method: `IoConfig.idleHttpConnectionTimeout(Duration)`
++
+Default:  `5m`
++
+System Property: `com.couchbase.env.io.idleHttpConnectionTimeout`
++
+The length of time an HTTP connection may remain idle before it is closed and removed from the pool.
+
+
+=== Circuit Breaker Options
+
+Circuit breakers are a tool for preventing cascading failures.
+
+When a circuit is closed, requests are sent to the server as normal.
+If too many requests fail within a certain time window, the breaker opens the circuit, preventing requests from going through.
+
+When a circuit is open, any requests to the service immediately fail without the client even talking to the server.
+After a "sleep delay" elapses, the next request is allowed to go through the to the server. This trial request is called a "canary."
+
+Each service has an associated circuit breaker which may be configured independently of the others.
+The `IoConfig` builder has methods for configuring the circuit breakers of each service.
+
+.Template for configuring circuit breaker settings
+[source,java]
+----
+ClusterEnvironment env = ClusterEnvironment.builder()
+    .ioConfig(IoConfig.
+        kvCircuitBreakerConfig(CircuitBreakerConfig.builder()
+            .enabled(true)
+            .volumeThreshold(45)
+            .errorThresholdPercentage(25)
+            .sleepWindow(Duration.ofSeconds(1))
+            .rollingWindow(Duration.ofMinutes(2))
+        ))
+    .build();
+----
+
+The corresponding system properties would be:
+
+[source,properties]
+----
+com.couchbase.env.io.kvCircuitBreaker.enabled=true
+com.couchbase.env.io.kvCircuitBreaker.volumeThreshold=45
+com.couchbase.env.io.kvCircuitBreaker.errorThresholdPercentage=25
+com.couchbase.env.io.kvCircuitBreaker.sleepWindow=1s
+com.couchbase.env.io.kvCircuitBreaker.rollingWindow=2m
+----
+
+For the other services, replace `kv` with `query`, `view`, `search`, `analytics`, or `manager`.
+
+The properties of a circuit breaker are described below.
+
+enabled::
+Default: `true`
++
+Enables or disables this circuit breaker.
++
+If this property is set to false, then the circuit breaker is not used and all other properties are ignored.
+
+volumeThreshold::
+Default: `20`
++
+The volume threshold defines how many operations must be in the window before the threshold percentage can be meaningfully calculated.
+
+errorThresholdPercentage::
+Default: `50`
++
+The percentage of operations in a window that may fail before the circuit is opened.
+The value is an integer in the range [1,100].
+
+sleepWindow::
+Default: `5s`
++
+The delay between when the circuit opens and when the canary is tried.
+
+
+rollingWindow::
+Default: `1m`
++
+How long the window is in which the number of failed ops are tracked in a rolling fashion.
 
 == Timeout Options
 
@@ -429,34 +542,6 @@ This is needed in order to prevent requests from circling around forever and occ
 Make sure to set this higher than the largest timeout in your application, otherwise you risk requests being canceled prematurely.
 This is why the default value is set to 75 seconds, which is the highest default timeout on the environment.
 
-Name: *Socket Keepalive Interval*::
-Builder Method: `keepAliveInterval(long)`
-+
-Default:  `30000ms`
-+
-System Property: `keepAliveInterval`
-+
-To avoid nasty firewalls and other network equipment cutting off stale TCP connections, at the configured interval the client will send a heartbeat keepalive message to the remote node and port.
-This only happens if for the given amount of time no traffic has happened, so if a socket is busy sending data back and forth it will have no effect.
-If you set this value to 0, no keepalive will be sent over the sockets.
-
-Name: *Socket Keepalive ErrorThreshold*::
-Builder Method: `keepAliveErrorThreshold(long)`
-+
-Default:  `4`
-+
-System Property: `keepAliveErrorThreshold`
-+
-The error count on keepalive per socket can be set to a customized value, after which the connection will be recycled (proactively closed and reconnected).
-
-Name: *Socket Keepalive Timeout*::
-Builder Method: `keepAliveTimeout(long)`
-+
-Default:  `2500ms`
-+
-System Property: `keepAliveTimeout`
-+
-The timeout used for the keepalive operations per socket, in milliseconds.
 
 Name: *Config Poll Interval*::
 Builder Method: `configPollInterval(long)`
@@ -483,31 +568,6 @@ Since replication and persistence latency differs greatly on servers (fast or sl
 The tradeoffs to consider here is how quickly the desired state is detected as well as how much the SDK will spam the network.
 The default is an exponential delay, starting with very short intervals but very quickly approaching the 100 milliseconds if replication or persistence takes longer than expected.
 You should monitor the average persistence and replication latency and adjust the delay accordingly.
-
-Name: *Key/Value Endpoints per Node [Static]*::
-Builder Method: `kvEndpoints(int)`
-+
-Default:  `1`
-+
-System Property: `kvEndpoints`
-+
-The number of actual endpoints (sockets) to open per Node in the cluster against the Key/value service.
-By default, for every node in the cluster one socket is opened where all traffic is pushed through.
-That way the SDK implicitly benefits from network batching characteristics when the workload increases.
-If you suspect based on profiling and benchmarking that the socket is saturated you can think about slightly increasing it to have more "parallel pipelines".
-This might be especially helpful if you need to push large documents through it.
-The recommendation is keeping it at 1 unless there is other evidence.
-
-Name: *Key/Value Endpoints per Node [Dynamic]*::
-Builder Method: `kvServiceConfig(int, int)`
-+
-Default:  `Need to set minimum and maximum values`
-+
-System Property: `kvServiceConfig`
-+
-To allow dynamic pooling, as an alternative to the fixed values of kvEndPoints.
-Note that if both kvEndpoints and kvServiceConfig are set, kvEndpoints takes priority.
-This helps to ensure backwards compatibility.
 
 Name: *View Endpoints per Node [Static]*::
 Builder Method: `viewEndpoints(int)`
