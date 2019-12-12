@@ -295,6 +295,14 @@ System Property: `com.couchbase.env.io.idleHttpConnectionTimeout`
 +
 The length of time an HTTP connection may remain idle before it is closed and removed from the pool.
 
+Name: *Config Poll Interval*::
+Builder Method: `IoConfig.configPollInterval(Duration)`
++
+Default:  `2.5s`
++
+System Property: `com.couchbase.env.io.configPollInterval`
++
+The interval at which the client fetches cluster topology information in order to proactively detect changes.
 
 === Circuit Breaker Options
 
@@ -355,13 +363,12 @@ errorThresholdPercentage::
 Default: `50`
 +
 The percentage of operations in a window that may fail before the circuit is opened.
-The value is an integer in the range [1,100].
+The value is an integer in the range [0,100].
 
 sleepWindow::
 Default: `5s`
 +
 The delay between when the circuit opens and when the canary is tried.
-
 
 rollingWindow::
 Default: `1m`
@@ -415,6 +422,10 @@ System Property: `com.couchbase.env.timeout.kvDurableTimeout`
 Key/Value operations with enhanced durability requirements may take longer to complete, so they have a separate default timeout.
 +
 WARNING: The `kvDurableTimeout` property is not part of the stable API and may change or be removed at any time.
+
+// todo: is kvDurableTimeout a strictly client-side timeout?
+// When there's a timeout, does it stop the sync write?
+// Does it result in an ambiguous state?
 
 Name: *View Timeout*::
 Builder Method: `TimeoutConfig.viewTimeout(Duration)`
@@ -489,346 +500,202 @@ System Property: `com.couchbase.env.timeout.managementTimeout`
 The management timeout is used on all cluster management APIs (BucketManager, UserManager, CollectionManager, QueryIndexManager, etc.) if not overridden by a custom timeout.
 The default is quite high because some operations (such as flushing a bucket, for example) might take a long time.
 
+== Diagnostics Options
 
-// Need to add 2500ms default durability timeout.
-// & its behaviour
-// does not stop the sync write?
-// An ambiguous state?
+The client can periodically log diagnostic information about server connectivity.
 
+Diagnostics settings are represented by the Java class `DiagnosticsConfig`.
+The associated `ClusterEnvironement.Builder` method is called `diagnosticsConfig`.
 
-== Reliability Options
+.Template for configuring diagnostics settings
+[source,java]
+----
+ClusterEnvironment env = ClusterEnvironment.builder()
+    .diagnosticsConfig(DiagnosticsConfig
+        .enabled(true)
+        ...)
+    .build()
+----
 
-Name: *Reconnect Delay*::
-Builder Method: `reconnectDelay(Delay)`
+Name: *Enabling Diagnostics*::
+Builder Method: `DiagnosticsConfig.enabled(boolean)`
 +
-Default:  `Exponential between 32ms and 4096ms`
+Default:  `false`
 +
-System Property: `-`
+System Property: `com.couchbase.env.diagnostics.enabled`
 +
-The reconnect delay defines the time intervals between a socket getting closed on the SDK side and trying to reopen (reconnect) to it.
-The default is to retry relatively quickly (32ms) and then gradually approach 4 second intervals, so that in case a server is longer down than usual the clients do not flood the server with socket requests.
-Feel free to tune this interval based on your application requirements.
-Applying a very large ceiling may lead to longer down times than needed, while very short delays may flood the target node and spam the network unnecessarily.
+If enabled, the client periodically logs diagnostic information.
 
-Name: *Retry Delay*::
-Builder Method: `retryDelay(Delay)`
+Name: *Diagnostics Interval*::
+Builder Method: `DiagnosticsConfig.emitInterval(Duration)`
 +
-Default:  `Exponential between 100µs and 100ms`
+Default:  `30m`
 +
-System Property: `-`
+System Property: `com.couchbase.env.diagnostics.emitInterval`
 +
-When a request needs to be retried for some reason (for example if the retry strategy is best effort and the target node is not reachable), this delay configures the boundaries.
-An internal counter tracks the number of retries for a given request and it gradually increases by default from a very quick 100 microseconds up to a 100 millisecond delay.
-The operation will be retried until it succeeds or the maximum request lifetime is reached.
-If you find yourself wanting to tweak this value to a very low setting, you might want to consider a different retry strategy like "fail fast" to get tighter control on the retry handling yourself.
+The interval at which diagnostic information is logged.
+
+== Compression Options
+
+The client can optionally compress documents before sending them to Couchbase Server.
+
+Compression settings are represented by the Java class `CompressionConfig`.
+The associated `ClusterEnvironement.Builder` method is called `compressionConfig`.
+
+.Template for configuring compression settings
+[source,java]
+----
+ClusterEnvironment env = ClusterEnvironment.builder()
+    .compressionConfig(CompressionConfig
+        .enabled(true)
+        ...)
+    .build()
+----
+
+Name: *Enabling Compression*::
+Builder Method: `CompressionConfig.enabled`
++
+Default: `true`
++
+System Property: `com.couchbase.env.compression.enabled(boolean)`
++
+If enabled, the client will compress documents before they are sent to Couchbase Server.
+If this is set to `false`, the other compression settings have no effect.
+
+Name: *Document Minimum Size*::
+Builder Method: `CompressionConfig.minSize(int)`
++
+Default: `32`
++
+System Property: `com.couchbase.env.compression.minSize`
++
+Size in bytes.
+Documents smaller than this size are never compressed.
+
+Name: *Document Minimum Compressibility*::
+Builder Method: `CompressionConfig.minRatio(double)`
++
+Default: `0.83`
++
+System Property: `com.couchbase.env.compression.minRatio`
++
+A floating point value between 0 and 1.
+Specifies how "compressible" a document must be in order for the compressed form to be sent to the server.
++
+TIP: Increasing the value allows compression to be used with less-compressible documents.
++
+If the compressed document size divided by the uncompressed document size is greater than this value, then the uncompressed version of the document will be sent to Couchbase Server instead of the compressed version.
++
+For example, with a `minRatio` of `0.83`, compression will only be used if the size of the compressed document is less than 83% of the uncompressed document size.
+
+== General Options
+
+The settings in this category apply to the client in general.
+They are configured directly on the `ClusterEnvironment.Builder`.
+
+.Template for configuring general settings
+[source,java]
+----
+ClusterEnvironment env = ClusterEnvironment.builder()
+    .retryStrategy(BestEffortRetryStrategy.INSTANCE)
+    ...
+    .build()
+----
 
 Name: *Retry Strategy*::
 Builder Method: `retryStrategy(RetryStrategy)`
 +
-Default:  `Best Effort`
+Default:  `BestEffortRetryStrategy.INSTANCE`
 +
-System Property: `-`
+System Property: N/A
 +
-The retry strategy decides if an operation should be retried or canceled.
-While implementing a custom strategy is fairly advanced, the SDK ships with two out of the box: BestEffortRetryStrategy and FailFastRetryStrategy.
-The first one will retry the operation until it either succeeds or the maximum request lifetime is reached.
-The fail fast strategy will cancel it right away and therefore the client needs to be prepared to retry on its own, but gets much tighter control on when and how to retry.
+The client's default retry strategy.
++
+A retry strategy decides whether a failed operation should be retried.
+Implementing a custom strategy is fairly advanced, so the SDK ships with two out of the box: `BestEffortRetryStrategy` and `FailFastRetryStrategy`.
++
+The "best effort" strategy will retry the operation until it either succeeds or the timeout expires.
+The "fail fast" strategy will immediately report the failure to your application, giving you more control over how and when to retry.
++
+TIP: Most client operations that accept an options block allow for overriding the default strategy as one of the options.
++
 See the advanced section in the documentation on more specific information on retry strategies and failure management.
 
-Name: *Maximum Request Lifetime*::
-Builder Method: `maxRequestLifetime(long)`
+Name: *JSON Serializer*::
+Builder Method: `jsonSerializer(JsonSerializer)`
 +
-Default:  `75000ms`
+Default:  _see below_
 +
-System Property: `maxRequestLifetime`
+System Property: N/A
 +
-The maximum request lifetime is used by the best effort retry strategy to decide if its time to cancel the request instead of retrying it again.
-This is needed in order to prevent requests from circling around forever and occupying precious slots in the request ring buffer.
-Make sure to set this higher than the largest timeout in your application, otherwise you risk requests being canceled prematurely.
-This is why the default value is set to 75 seconds, which is the highest default timeout on the environment.
+The JSON serializer handles the conversion between JSON and Java objects.
++
+If Jackson is present in the class path, the default serializer will be an instance of `JacksonJsonSerializer` using a default `ObjectMapper`.
++
+TIP: To create a serializer backed by a custom `ObjectMapper`, call `JacksonJsonSerializer.create` and pass in your custom mapper.
++
+If Jackson is not present, the client will fall back to using an unspecified default serializer.
+(Actually, it will use a repackaged version of Jackson, but this is an implementation detail you should not depend on.)
 
+Name: *Transcoder*::
+Builder Method: `transcoder(Transcoder)`
++
+Default: `JsonTranscoder`
++
+System Property: N/A
++
+The transcoder is responsible for converting KV binary packages to and from Java objects.
++
+The default transcoder assumes you are working with JSON documents.
+It uses the configured `jsonSerializer` to convert between JSON and Java objects.
+When writing documents it sets the appropriate flags to indicate the document content is JSON.
++
+The transcoder configured here is just the default; it can be overridden on a per-operation basis.
 
-Name: *Config Poll Interval*::
-Builder Method: `configPollInterval(long)`
+Name: *Request Tracer*::
+Builder Method: `requestTracer(RequestTracer)`
 +
-Default:  `2500ms`
+Default:  `ThresholdRequestTracer`
 +
-System Property: `configPollInterval`
+System Property: N/A
 +
-This interval helps to tune the timeframe when the SDK proactively grabs a new configuration from the server to detect cluster changes in a timely fashion.
-
-
-
-== Performance Options
-
-Name: *Observe Interval*::
-Builder Method: `observeIntervalDelay(Delay)`
+The default tracer logs the slowest requests per service.
 +
-Default:  `Exponential between 10µs and 100ms`
+Various `RequestTracer` implementations exist, both as part of the core library and as external modules that can be attached (i.e. for OpenTracing and OpenTelemetry).
+It is recommended to use those modules and not write your own tracer unless absolutely needed.
 +
-System Property: `-`
-+
-The way PersistTo and ReplicateTo work is that once the regular mutation operation succeeds, the key state on the target nodes is polled until the desired state is reached.
-Since replication and persistence latency differs greatly on servers (fast or slow networks and disks), this value can be tuned for maximum efficiency.
-The tradeoffs to consider here is how quickly the desired state is detected as well as how much the SDK will spam the network.
-The default is an exponential delay, starting with very short intervals but very quickly approaching the 100 milliseconds if replication or persistence takes longer than expected.
-You should monitor the average persistence and replication latency and adjust the delay accordingly.
-
-Name: *View Endpoints per Node [Static]*::
-Builder Method: `viewEndpoints(int)`
-+
-Default:  `The default is dynamic mode, please see next entry.`
-+
-System Property: `viewEndpoints`
-+
-The number of actual endpoints (sockets) to open per node in the cluster against the view service.
-If you plan to run a view heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
-We recommend that you tune this value based on evidence obtained during benchmarking with a real workload.
-
-Name: *View Endpoints per Node [Dynamic]*::
-Builder Method: `viewServiceConfig(int, int, int)`
-+
-Default:  `(0, 12, 300)`
-+
-System Property: `viewServiceConfig`
-+
-To allow dynamic pooling, as an alternative to the fixed values of viewEndPoints. Need to set minimum and maximum number of Endpoints; whether or not the service is pipelined (more than one request at the same time on the same socket); and the minimum idle time, in seconds, after which the socket will be closed.
-Note that if both viewEndpoints and viewServiceConfig are set, viewEndpoints takes priority.
-This helps to ensure backwards compatibility.
-
-Name: *Query Endpoints per Node [Static]*::
-Builder Method: `queryEndpoints(int)`
-+
-Default:  `The default is dynamic mode, please see next entry.`
-+
-System Property: `queryEndpoints`
-+
-The number of actual endpoints (sockets) to open per node in the cluster against the query service.
-If you plan to run a view heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
-We recommend that you tune this value based on evidence obtained during benchmarking with a real workload.
-
-Name: *Query Endpoints per Node [Dynamic]*::
-Builder Method: `queryServiceConfig(int, int, int)` or `queryServiceConfig(int, int)`
-+
-Default:  `(0, 12, 300)`
-+
-System Property: `queryServiceConfig`
-+
-To allow dynamic pooling, as an alternative to the fixed values of queryEndPoints. Need to set minimum and maximum number of Endpoints; whether or not the service is pipelined (more than one request at the same time on the same socket); and the minimum idle time, in seconds, after which the socket will be closed.
-Note that if both queryEndpoints and queryServiceConfig are set, queryEndpoints takes priority.
-This helps to ensure backwards compatibility.
-
-Name: *Search Endpoints per Node [Static]*::
-Builder Method: `searchEndpoints(int)`
-+
-Default:  `The default is dynamic mode, please see next entry.`
-+
-System Property: `searchEndpoints`
-+
-The number of actual endpoints (sockets) to open per Node in the cluster against the Search (FTS) service.
-If you plan to run a query heavy workload, especially paired with larger responses, increasing this value significantly (most likely between 5 and 10) can provide greater throughput.
-We recommend that you tune this value based on evidence obtained during benchmarking with a real workload.
-
-
-Name: *Search Endpoints per Node [Dynamic]*::
-`searchServiceConfig(int, int, int)` or `searchServiceConfig(int, int)`
-+
-Default:  `(0, 12, 300)`
-+
-System Property: `searchServiceConfig`
-+
-To allow dynamic pooling, as an alternative to the fixed values of searchEndPoints. Need to set minimum and maximum number of Endpoints; whether or not the service is pipelined (more than one request at the same time on the same socket); and the minimum idle time, in seconds, after which the socket will be closed.
-Note that if both searchEndpoints and searchServiceConfig are set, queryEndpoints takes priority.
-This helps to ensure backwards compatibility.
-
-Name: *I/O Thread Pool Size*::
-Builder Method: `ioPoolSize(int)`
-+
-Default:  `Runtime#availableProcessors()`
-+
-System Property: `ioPoolSize`
-+
-The number of threads in the I/O thread pool.
-This defaults to the number of available processors that the runtime returns (which, as a well known fact, sometimes does not represent the actual number of processors).
-Every thread represents an internal event loop where all needed sockets are multiplexed on.
-The default value should be fine most of the time, it may only need to be tuned if you run a very large number of nodes in the cluster or the runtime value is incorrect.
-As a rule of thumb, it should roughly correlate with the number of cores available to the JVM.
-
-Name: *Computation Thread Pool Size*::
-Builder Method: `computationPoolSize(int)`
-+
-Default:  `2500ms`
-+
-System Property: `computationPoolSize`
-| `Runtime# \available \Processors()`
-| The number of threads in the computation thread pool.
-This defaults to the number of available processors that the runtime returns (which, as a well known fact, sometimes does not represent the actual number of processors).
-Every thread represents an internal event loop where all needed computation tasks are run.
-The default value should be fine most of the time, it might only need to be tuned if you run more than usual CPU-intensive tasks and profiling the application indicates fully saturated threads in the pool.
-As a rule of thumb, it should roughly correlate with the number of cores available to the JVM.
-
-Name: *I/O Pool Group*::
-Builder Method: `ioPool(EventLoopGroup)`
-+
-Default:  `NioEventLoopGroup`
-+
-System Property: `-`
-+
-For those who want the last drop of performance, on Linux Netty provides a way to use edge triggered epoll instead of going through JVM NIO.
-This provides better throughput, lower latency and less garbage.
-Note that this mode has not been tested by Couchbase and therefore is not supported officially.
-If you like to take a walk on the wild side, you can find out more here: http://netty.io/wiki/native-transports.html[Netty Native-transports.^]
-
-Name: *TCP Nodelay*::
-Builder Method: `tcpNodelayEnabled(boolean)`
-+
-Default:  `true`
-+
-System Property: `tcpNodelayEnabled`
-+
-By default, TCP Nodelay is turned on (which in effect turns off "nagleing"), and if possible negotiated with the server as well.
-If this is set to false, "nagleing" is turned on.
-Make sure to only turn off TCP nodelay if you know what you are doing, because it can lead to decreased performance.
-
-Name: *Run Callbacks on the I/O Pool*::
-Builder Method: `callbacksOnIoPool(boolean)`
-+
-Default:  `false`
-+
-System Property: `callbacksOnIoPool`
-+
-If set to true, all callbacks will not be moved onto the scheduler but rather executed on the IO threads.
-This can aid performance under high throughput scenarios but extra care must be taken to not block in a callback since this has direct impact on the performance of the I/O loops!
-
-
-
-== Advanced Options
-
-Values for the advanced options listed in the following table should not be changed unless there is a very good reason to do so.
-
-Name: *Request Ring Buffer Size*::
-Builder Method: `requestBufferSize(int)`
-+
-Default:  `16384`
-+
-System Property: `requestBufferSize`
-+
-The size of the request ring buffer where all request initially are stored and then picked up to be pushed onto the I/O threads.
-Tuning this to a lower value will more quickly lead to BackpressureExceptions during overload or failure scenarios.
-Setting it to a higher value means backpressure will take longer to occur, but more requests will potentially be queued up and more heap space is used.
-
-Name: *Response Ring Buffer Size*::
-Builder Method: `responseBufferSize(int)`
-+
-Default:  `16384`
-+
-System Property: `responseBufferSize`
-+
-The size of the response ring buffer where all responses are passed through from the I/O threads before the target Observable is completed.
-Since the I/O threads are pushing data in this ring buffer, setting it to a lower value is likely to have a negative effect on I/O performance.
-In general it should be kept in line with the request ring buffer size.
+NOTE: When using a non-default tracer, you are responsible for starting and stopping it.
 
 Name: *Computation Scheduler*::
 Builder Method: `scheduler(Scheduler)`
 +
-Default:  `CoreScheduler`
+Default: _see below_
 +
-System Property: `-`
+System Property: N/A
 +
-The scheduler used for all CPU-intensive, non-blocking computations in the core, client and in user space.
-This is a slightly modified version of the ComputationScheduler that ships with RxJava, mainly for the reason to manually name threads as needed.
-Changing the scheduler should be used with extra care, especially since lots of internal components also depend on it.
-
-Name: *User Agent String*::
-Builder Method: `userAgent(String)`
+This is an advanced setting that should not be modified without good reason.
 +
-Default:  `Based on OS, Runtime, and SDK Version`
+The scheduler used for all CPU-intensive, non-blocking computations in the core, client, and user space.
+The default is a scheduler created from Reactor's `Schedulers.newParallel` method, with one daemon thread per CPU core.
+Extra care should be used when changing the scheduler, since many internal components depend on it.
 +
-System Property: `-`
-+
-The user agent string that is used to identify the SDK against the Couchbase Server cluster on different occasions, for example when doing a view or query request.
-There is no need to tune that because it is dynamically generated based on properties set during build time (based on the package name and version, OS and runtime).
-
-Name: *Package Name and Version Identifier*::
-Builder Method: `packageNameAndVersion(String)`
-+
-Default:  `Based on SDK Version`
-+
-System Property: `-`
-+
-The package name and identifier is used as part of the user agent string and in the environment info output to see which version of the SDK the application is running.
-There is no need to change it because it is dynamically generated based on properties set during build time.
+NOTE: Shutting down the cluster environment will not dispose of a custom scheduler.
+You are responsible for disposing of it after it is no longer needed.
 
 Name: *Event Bus*::
 Builder Method: `eventBus(EventBus)`
 +
 Default:  `DefaultEventBus`
 +
-System Property: `-`
+System Property: N/A
 +
-The event bus implementation used to transport system, performance and debug events from producers to subscribers.
-The default implementation is based on an internal RxJava Subject which does not cache the values and only pushes subsequent events to the subscribers.
+This is an advanced setting that should not be modified without good reason.
++
+The event bus implementation used to transport system, performance, and debug events from producers to subscribers.
 If you provide a custom implementation, double check that it fits with the contract of the event bus as documented.
++
+NOTE: Shutting down the cluster environment will not stop a custom event bus.
+You are responsible for stopping it after it is no longer needed.
 
-Name: *Buffer Pooling Enabled*::
-Builder Method: `bufferPoolingEnabled(boolean)`
-+
-Default:  `true`
-+
-System Property: `bufferPoolingEnabled`
-+
-If the SDK is suspected to leak buffers (it pools buffers in its IO layer for performance) you can set this field to false.
-This will make sure buffers are not pooled, but remember the tradeoff here is higher GC pressure on the system.
-Only turn off to prevent a memory leak from happening (in production).
-If you suspect a memory leak, please open a bug ticket.
-
-Name: *Runtime Metrics Collector*::
-Builder Method: `runtimeMetricsCollectorConfig(Metrics \CollectorConfig)`
-+
-Default:  `DefaultMetricsCollectorConfig`
-+
-System Property: `-`
-+
-The configuration of the runtime metrics collector can be modified (or completely disabled).
-By default, it will emit an event every hour.
-
-Name: *Network Latency Metrics Collector*::
-Builder Method: `networkLatencyMetricsCollectorConfig(LatencyMetricsCollectorConfig)`
-+
-Default:  `DefaultLatencyMetricsCollectorConfig`
-+
-System Property: `-`
-+
-The configuration of the network latency metrics collector can be modified (or completely disabled).
-By default, it will emit an event every hour, but collect the stats all the time.
-
-Name: *Default Metrics Consumer*::
-Builder Method: `defaultMetricsLoggingConsumer (boolean, CouchbaseLogLevel, OutputFormat)`
-+
-Default:  `enabled, INFO, JSON`
-+
-System Property: `-`
-+
-The default metric consumer which will log all metric events.
-You can configure if it should be enabled, as well as the log level and the target output format.
-
-Name: *Request Buffer Wait Strategy*::
-Builder Method: `requestBufferWaitStrategy(WaitStrategy)`
-+
-Default:  `BlockingWaitStrategy`
-+
-System Property: `-`
-+
-The underlying request buffer can use a different wait strategy which can be used to get better performance under high throughput/low latency circumstances, trading CPU time for it.
-This is an export option, only use it if you are comfortable with the LMAX Disruptor and know the impact of plugging in a different strategy!
-
-Name: *Automatic Observable Resource Release Time Period*::
-Builder Method: `autoreleaseAfter(int)`
-+
-Default:  `2000`
-+
-System Property: `-`
-+
-The time period in milliseconds that a subscriber needs to subscribe to the observable.
-After this period, the resources involved in the observable are released and can't be subscribed to anymore.
-This is required to avoid leaking data, it also needs to be a short time bound to avoid having the observable move into older GC generations unnecessarily, which harms performance.
+// todo LoggingConfig ?
+// todo IoEnvironment ?
