@@ -409,8 +409,7 @@ System Property: `com.couchbase.env.timeout.kvTimeout`
 The Key/Value default timeout is used on operations which are performed on a specific key if not overridden by a custom timeout.
 This includes all commands like get(), getFromReplica() and all mutation commands, but does not include operations that are performed with enhanced durability requirements.
 +
-WARNING: xref:concept-docs:durability-replication-failure-considerations.adoc#synchronous-writes[Durable Write operations] cause the default `kvTimeout` to be changed to 10s.
-This may still be overridden by setting the above property.
+TIP: xref:concept-docs:durability-replication-failure-considerations.adoc#synchronous-writes[Durable Write operations] have their own timeout setting, `kvDurableTimeout`, see below.
 
 Name: *Key-Value Durable Operation Timeout*::
 Builder Method: `TimeoutConfig.kvDurableTimeout(Duration)`
