@@ -8,9 +8,6 @@ The `ClusterEnvironment` class enables you to configure Java SDK options for boo
 
 include::ref:partial$beta-warning.adoc[]
 
-WARNING: This page is being built -- it is not linked from the navigation -- much of it is still to be updated, and/or is just plain _wrong_.
-Do not use!
-
 
 == The Environment Builder
 
@@ -402,7 +399,7 @@ ClusterEnvironment env = ClusterEnvironment.builder()
 Name: *Key-Value Timeout*::
 Builder Method: `TimeoutConfig.kvTimeout(Duration)`
 +
-Default: `2.5s` -- _but see WARNING, below_
+Default: `2.5s` -- _but see TIP, below_
 +
 System Property: `com.couchbase.env.timeout.kvTimeout`
 +
