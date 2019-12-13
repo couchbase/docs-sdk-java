@@ -99,6 +99,8 @@ If no arguments are provided it will connect to a cluster listening on `localhos
 Note that not all nodes of the cluster need to be passed to the method, just a few to allow it to bootstrap itself are enough.
 We recommend more than one though since if one of the nodes happens to be not available during application startup it still has a chance to try another one and bootstrap properly.
 
+IMPORTANT: Any Cluster nodes addresses passed in to establish (bootstrap) the connection should be for data (KV) nodes.
+
 To connect to a Couchbase bucket, you must use Couchbase _Role-Based Access Control_ (RBAC).
 This is fully described in the section xref:6.0@server:learn:security/authorization-overview.adoc[Authorization].
 A username and password for the current user must be specified.
