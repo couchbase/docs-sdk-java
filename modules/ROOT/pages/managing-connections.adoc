@@ -26,6 +26,8 @@ Cluster cluster = CouchbaseCluster.create("192.168.56.101", "192.168.56.102");
 Bucket bucket = cluster.openBucket("myapp", "password");
 ----
 
+IMPORTANT: Any Cluster nodes addresses passed in to establish (bootstrap) the connection should be for data (KV) nodes.
+
 Alternatively, a list of nodes can be passed in:
 
 [source,java]
