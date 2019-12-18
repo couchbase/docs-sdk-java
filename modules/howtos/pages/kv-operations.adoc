@@ -146,10 +146,10 @@ include::example$KvOperations.java[tag=durability]
 
 If no argument is provided the application will report success back as soon as the primary node has acknowledged the mutation in its memory. However, we recognize that there are times when the application needs that extra certainty that especially vital mutations have been successfully replicated, and the other durability options provide the means to achieve this.
 
-The options differ depend on what Couchbase Server version is in use.  If 6.5 or above is being used, you can take advantage of the `synchronous replication` feature, in which Couchbase Server will only return success to the SDK after the requested replication level has been achieved.  The three replication levels are:
+The options differ depend on what Couchbase Server version is in use.  If 6.5 or above is being used, you can take advantage of the `Durable Write` feature, in which Couchbase Server will only return success to the SDK after the requested replication level has been achieved.  The three replication levels are:
 
  - `Majority` - The server will ensure that the change is available in memory on the majority of configured replicas.
- - `MajorityAndPersistOnMaster` - Majority level, plus persisted to disk on the master node.
+ - `MajorityAndPersistToActive` - Majority level, plus persisted to disk on the active node.
  - `PersistToMajority` - Majority level, plus persisted to disk on the majority of configured replicas.
 
 The options are in increasing levels of safety.  Note that nothing comes for free - for a given node, waiting for writes to storage is considerably slower than waiting for it to be available in-memory.
