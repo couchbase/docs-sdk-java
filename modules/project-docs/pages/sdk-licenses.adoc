@@ -28,3 +28,4 @@ Any dependencies may have their https://www.couchbase.com/legal/agreements[own, 
 |`reactive-streams` 1.0.2 | Creative Commons Zero v1.0 Universal
 |`LatencyUtils` 2.0.3.redhat-00001 | Creative Commons Public Domain Dedication License
 |`gatlingwindows` 1.0.0 | Apache Licence 2.0
+|===
