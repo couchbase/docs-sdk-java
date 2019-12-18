@@ -1,8 +1,30 @@
-= SDK Licence
+= SDK License
+:page-topic-type: project-doc
+:page-aliases: ROOT:sdk-licenses.adoc
+
+[abstract]
+Couchbase SDKs' source code is licensed under the Apache Licence 2.0.
+Dependencies carry their own licenses.
 
 The Couchbase Java Client is distributed as source under the https://www.apache.org/licenses/LICENSE-2.0[Apache License, Version 2.0].
-Any dependencies may have their https://www.couchbase.com/legal/agreements[own, separate licenses].
+
+
+== Binary Distribution
 
 Binary distributions are made under Couchbase's own license agreements. 
 * https://www.couchbase.com/LA03262019[Enterprise License Agreement]
 * https://www.couchbase.com/binaries/content/assets/website/legal/ce-license-agreement.pdf[Community License Agreement (PDF)]
+
+
+== Dependencies
+
+Any dependencies may have their https://www.couchbase.com/legal/agreements[own, separate licenses].
+
+.Third Party Component Licenses
+|===
+| Component | License
+
+|`Native Library Loader` 2.0.2 | Creative Commons Zero v1.0 Universal
+|`reactive-streams` 1.0.2 | Creative Commons Zero v1.0 Universal
+|`LatencyUtils` 2.0.3.redhat-00001 | Creative Commons Public Domain Dedication License
+|`gatlingwindows` 1.0.0 | Apache Licence 2.0
