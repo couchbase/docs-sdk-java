@@ -286,11 +286,12 @@ This setting puts an upper bound on the number of HTTP connections in each pool.
 Name: *Idle HTTP Connection Timeout*::
 Builder Method: `IoConfig.idleHttpConnectionTimeout(Duration)`
 +
-Default:  `5m`
+Default:  `30s`
 +
 System Property: `com.couchbase.env.io.idleHttpConnectionTimeout`
 +
 The length of time an HTTP connection may remain idle before it is closed and removed from the pool.
+Durations longer than 50 seconds are not recommended, since some services have a 1 minute server side idle timeout.
 
 Name: *Config Poll Interval*::
 Builder Method: `IoConfig.configPollInterval(Duration)`
