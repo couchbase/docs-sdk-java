@@ -25,7 +25,7 @@ ClusterEnvironment env = ClusterEnvironment.builder()
 // Create a cluster using the custom client settings.
 Cluster cluster = Cluster.connect(connectionString, ClusterOptions
     .clusterOptions(username, password)
-    .environment(environment));
+    .environment(env));
 
 // [Your code to interact with the cluster]
 
@@ -71,7 +71,7 @@ ClusterEnvironment env = envBuilder.build();
 The name of the cluster environment builder method for getting and setting each config builder always matches the name of the config class.
 For example, `TimeoutConfig` is set via the environment builder's `timeoutConfig` method, `IoConfig` is set via the `ioConfig` method, and so on.
 
-== System properties
+== System Properties
 
 Many client settings may also be configured by setting a Java system property.
 If a system property is set, it always takes precedence over the builder setting.

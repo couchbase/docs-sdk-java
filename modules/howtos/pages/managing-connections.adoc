@@ -4,195 +4,160 @@
 :page-aliases: howtos:managing-connections,howtos:multi-network,connecting,connection-advanced
 
 [abstract]
-This section describes how to connect the Java SDK to a Couchbase cluster and bucket.
-It contains best practices as well as information on SSL and other advanced connection options.
+This section describes how to connect the Java SDK to a Couchbase cluster.
+It contains best practices as well as information on TLS/SSL and other advanced connection options.
 
-== Connecting to a Bucket
+== Connecting to a Cluster
 
-Connecting to a bucket is a two-step process: first, a `CouchbaseCluster` object needs to be initialized, followed by one or more calls to openBucket():
-
-[source,java]
-----
-Cluster cluster = CouchbaseCluster.create();
-Bucket bucket = cluster.openBucket();
-----
-
-If no further arguments are applied, this code connects to `localhost` and opens the default bucket.
-While this is suitable for development, you most probably want to connect to a remote cluster and also a different bucket (with a password):
+A connection to a Couchbase Server cluster is represented by a `Cluster` object.
+A `Cluster` provides access to Buckets, Scopes, and Collections, as well as various Couchbase services and management interfaces.
+The simplest way to create a `Cluster` object is to call `Cluster.connect()` with a <<connection-strings, connection string>>, username, and password:
 
 [source,java]
 ----
-Cluster cluster = CouchbaseCluster.create("192.168.56.101", "192.168.56.102");
-Bucket bucket = cluster.openBucket("myapp", "password");
+include::example$ManagingConnections.java[tag=simpleconnect,indent=0]
 ----
 
-Alternatively, a list of nodes can be passed in:
+In a production environment, your connection string should include the addresses of multiple server nodes in case some are currently unavailable.
+Multiple addresses may be specified in a connection string by delimiting them with commas:
 
 [source,java]
 ----
-List<String> nodes = Arrays.asList("192.168.56.101", "192.168.56.102");
-Cluster cluster = CouchbaseCluster.create(nodes);
+include::example$ManagingConnections.java[tag=multinodeconnect,indent=0]
 ----
 
-The Java SDK also offers limited support for creating a cluster from a Couchbase connection string:
+TIP: You don't need to include the address of every node in the cluster.
+The client fetches the full address list from the first node it is able to contact.
+
+
+[#cluster-environment]
+== Cluster Environment
+
+A `ClusterEnvironment` manages shared resources like thread pools, timers, and schedulers.
+It also holds the client settings.
+One way to customize the client's behavior is to build your own `ClusterEnvironment` with custom settings:
 
 [source,java]
 ----
-String connectionString = "couchbase://192.168.56.101,192.168.56.102";
-CouchbaseCluster cluster = CouchbaseCluster.fromConnectionString(connectionString);
+include::example$ManagingConnections.java[tag=clusterenv,indent=0]
 ----
 
-WARNING: When creating a cluster from a connection string, the Java SDK ignores the scheme component; if a secure connection is desired, the Couchbase environment must be configured as described in <<ssl>>.
-The Java SDK also ignores any options in the connection string, and will not work with a connection string that specifies a bucket name.
+TIP: If you create a `Cluster` without specifying a custom environment, the client creates a default environment used exclusively by that `Cluster`.
+This default `ClusterEnvironment` is managed completely by the Java SDK, and is automatically shut down when the associated `Cluster` is disconnected.
 
-[NOTE]
-====
-From Couchbase Java SDK 2.6.0, [.api]`AlternateAddress` is implemented, for connecting to nodes in a NATed environment, such as Docker containers using portmapping.
-It is on by default, if the server provides a topology that includes a multi-network configuration.
-Whichever network is selected at bootstrap will be logged.
+[#connection-strings]
+== Connection Strings
 
-If using __Docker Swarm__, or otherwise running the SDK inside the NAT, then you will want to disable with `?network=default` in the connection string, or an xref:client-settings.adoc[environmental setting] can be made.
+A Couchbase connection string is a comma-delimited list of IP addresses and/or hostnames, optionally followed by a list of parameters.
 
-Note that any SSL/TLS certificates must be set up at the point where the connections are being made.
-The Couchbase SDKs will honor any valid SSL/TLS certificates.
+The parameter list is just like the query component of a URI; name-value pairs have an equals sign (`=`) separating the name and value, with an ampersand (`&`) between each pair.
+Just as in a URI, the first parameter is prefixed by a question mark (`?`).
 
-====
+.Simple connection string with one seed node
+----
+127.0.0.1
+----
 
+.Connection string with two seed nodes
+----
+nodeA.example.com,nodeB.example.com
+----
 
-It is very important in a production setup to pass in at least two or three nodes of the cluster because if the first one in the list fails the other ones can be tried.
-After initial contact is made, the bootstrap list provided by the user is thrown away and replaced with a list provided by the server (which contains all nodes of the cluster).
+.Connection string with two parameters
+----
+127.0.0.1?io.networkResolution=external&timeout.kvTimeout=10s
+----
 
-More buckets can be open at the same time if needed:
+The full list of recognized parameters is documented in the client settings reference.
+Any client setting with a system property name may also be specified as a connection string parameter (without the `com.couchbase.env.` prefix).
+
+WARNING: When creating a `Cluster` using a custom `ClusterEnvironment`, *_connection string parameters are ignored_*, since client settings are frozen when the cluster environment is built.
+
+A connection string may optionally be prefixed by either `"couchbase://"` or `"couchbases://"`, although the Java SDK completely ignores this prefix if present.
+If you wish to use TLS, the `ClusterEnvironment` must be configured as described in <<ssl>>.
+
+[#connection-lifecycle]
+== Connection Lifecycle
+
+Most of the high-level classes in the Java SDK are designed to be safe for concurrent use by multiple threads.
+You will get the best performance if you share and reuse instances of `ClusterEnvironment`, `Cluster`, `Bucket`, `Scope`, and `Collection`, all of which are thread-safe.
+
+We recommend creating a single `Cluster` instance when your application starts up, and sharing this instance throughout your application.
+If you know at startup time which buckets, scopes, and collections your application will use, we recommend obtaining them from the `Cluster` at startup time and sharing those instances throughout your application as well.
+
+Before your application stops, gracefully shut down the client by calling the `disconnect()` method of each `Cluster` you created.
+If you created any `ClusterEnvironment` instances, call their `shutdown()` method after disconnecting the associated clusters.
+
+[#multiple-clusters]
+== Connecting to Multiple Clusters
+
+If a single application needs to connect to multiple Couchbase Server clusters, we recommend creating a single `ClusterEnvironment` and sharing it between the `Clusters`:
 
 [source,java]
 ----
-Bucket bucket1 = cluster.openBucket("bucket1", "password");
-Bucket bucket2 = cluster.openBucket("bucket2", "password");
+include::example$ManagingConnections.java[tag=shareclusterenvironment,indent=0]
 ----
 
-If more than one bucket is open at a time, the underlying `core-io` library makes sure to utilize the resources as best as possible, that is sharing sockets, thread pools and so on.
+When you manually create a `ClusterEnvironment` like this, the SDK will not shut it down when you call `Cluster.disconnect()`.
+Instead you are responsible for shutting it down after disconnecting all clusters that share the environment.
 
-Here are some very important things to keep in mind:
+TIP: If you create a `Cluster` without specifying a custom environment, the client creates a default environment used exclusively by that `Cluster`.
+This default `ClusterEnvironment` is managed completely by the Java SDK, and is automatically shut down when the associated `Cluster` is disconnected.
 
-* Always create only one instance of a `CouchbaseCluster` and share it across threads (same with buckets).
-* The SDK is thread-safe, so no additional synchronization is needed when interacting with the SDK.
-* If different clusters need to be accessed, reuse the `CouchbaseEnvironment` (See <<concurrency>>).
+[#alternate-addresses]
+== Alternate Addresses and Custom Ports
 
-If the underlying environment is not shared the application will continue to work, but a warning is raised in the logs:
+If your Couchbase Server cluster is running in a containerized, port mapped, or otherwise NAT'd environment like Docker or Kubernetes, a client running outside that environment may need additional information in order to connect the cluster.
+Both the client and server require special configuration in this case.
 
-----
-WARNING: More than 1 Couchbase Environments found (N), this can have severe
-impact on performance and stability. Reuse environments!
-----
+On the server side, each server node must be configured to advertise its external address as well as any custom port mapping.
+This is done with the `setting-alternate-address` CLI command introduced in Couchbase Server 6.5.
+A node configured in this way will advertise two addresses: one for connecting from the same network, and another for connecting from an external network.
+// todo link to https://docs.couchbase.com/server/6.5/cli/cbcli/couchbase-cli-setting-alternate-address.html
 
-In general, this is an indication of misconfiguration, the only exception being unit and integration tests where multiple paths are executed at once and cannot share the `ClusterEnvironment` for whatever reason.
+On the client side, the externally visible ports must be used when connecting.
+If the external ports are not the default, you can specify custom ports using the overloaded `Cluster.connect()` method that takes a set of `SeedNode` objects instead of a connection string.
 
-WARNING: You are strongly recommended against using Round Robin DNS, which can return a different address at each connection, as Java uses $host from the Cluster Map -- which can cause connection issues.
-Use of a xref:managing-connections.adoc#using-dns-srv-records[Service record (SRV record)], to provide real hostnames (A records) in the bootstrap list, will ensure consistent connections.
-
-== Disconnecting from a Bucket
-
-The most common case is to disconnect the whole `CouchbaseCluster` from the server, which has the same effect as closing all buckets manually and in addition close all underlying resources like thread pools.
-This also means that once disconnect has happened, you can't reopen buckets from the same `Cluster` instance.
-
+// todo use the include (and uncomment in ManageingConnections.java) after next client snapshot is published
+// include::example$ManagingConnections.java[tag=seednodes,indent=0]
 [source,java]
 ----
-Boolean disconnected = cluster.disconnect();
+int customKvPort = 1234;
+int customManagerPort = 2345;
+Set<SeedNode> seedNodes = new HashSet<>(Arrays.asList(
+  SeedNode.create("127.0.0.1",
+      Optional.of(customKvPort),
+      Optional.of(customManagerPort))));
+
+Cluster cluster = Cluster.connect(seedNodes, "username", "password");
 ----
 
-If the `ClusterEnvironment` is shared it needs to be closed manually, but if not (which is the regular case) it gets auto shut down.
+TIP: In a deployment that uses multi-dimensional scaling, a custom KV port is only applicable for nodes running the KV service.
+A custom manager port may be specified regardless of which services are running on the node.
 
-After a disconnect, it is not possible to open buckets again, so only use it when you are sure that you do not need access to a `CouchbaseCluster` again.
-If you only want to close a bucket, you can do that without shutting down everything:
+In many cases the client is able to automatically select the correct set of addresses to use when connecting to a cluster that advertises multiple addresses.
+If the detection heuristic fails in your environment, you can override it by setting the `io.networkResolution` client setting to `default` if the client and server are on the same network, or `external` if they're on different networks.
 
-[source,java]
-----
-Boolean closed = bucket.close();
-----
+NOTE: Any TLS certificates must be set up at the point where the connections are being made.
+// todo what does that mean in practice? Also, should this be in the TLS docs section instead?
 
-This will release only the resources allocated for this bucket and it is possible to reopen it at a later point.
-
-All threads used by the SDK are daemon threads, so even if you do not `disconnect()` manually, your JVM will exit.
-It is very important that you properly shut down the SDK so that remaining operations are finished and nothing is left behind.
-
-If no timeout is used for the synchronous `disconnect()` method, the environment `disconnect timeout` is used, which defaults to 25 seconds.
-This holds also true if you call `close()` on a bucket.
-
-== Connecting Asynchronously
-
-Every synchronous API is just a wrapper around an asynchronous one.
-To get to it, you can use one of these methods:
-
-* Use `async()` on the interface to access its `Async*` counterpart.
-* Instantiate a `CouchbaseAsyncCluster` in the first place.
-
-So if you are connecting to the bucket synchronously but then want to switch over to asynchronous data operations, you can do it like this:
-
-[source,java]
-----
-Cluster cluster = CouchbaseCluster.create();
-Bucket bucket = cluster.openBucket();
-
-// Same API as Bucket, but completely async with Observables
-AsyncBucket asyncBucket = bucket.async();
-----
-
-On the other hand, you can use the Async API right from the beginning:
-
-[source,java]
-----
-AsyncCluster cluster = CouchbaseAsyncCluster.create();
-Observable<AsyncBucket> bucketObservable = cluster.openBucket();
-----
-
-[#concurrency]
-== Scalability and Concurrency
-
-As mentioned previously, you should create only one instance of a CouchbaseCluster and open buckets from there.
-If you need to connect to multiple clusters though, this is not going to work.
-To keep things efficient, you should share the `CouchbaseEnvironment` object between those instances:
-
-[source,java]
-----
-CouchbaseEnvironment env = DefaultCouchbaseEnvironment.create();
-CouchbaseCluster cluster1 = CouchbaseCluster.create(env, "192.168.56.1");
-CouchbaseCluster cluster2 = CouchbaseCluster.create(env, "192.168.57.10");
-----
-
-This ensures that the resources in the environment (thread pools for I/O and computation) are reused.
-Note that if you pass in your custom environment, it needs to be shut down manually because it's not under the complete control of any cluster.
-The recommended approach is to first shut down all clusters and after this is done shut down the environment (here using asynchronous code, but you can also loop synchronously):
-
-[source,java]
-----
-Observable
-    .just(cluster1, cluster2)
-    .flatMap(CouchbaseCluster::disconnect)
-    .last()
-    .flatMap(aBoolean -> env.shutdown())
-    .toBlocking()
-    .single();
-----
-
-include::6.0@sdk:pages:partial$max-connections.adoc[tag=limits]
 
 [#ssl]
-== Connecting with SSL
+== Secure Connections
 
-Couchbase Server EE 3.0 and later supports full encryption of client-side traffic.
+Couchbase Server Enterprise Edition supports full encryption of client-side traffic using Transport Layer Security (TLS).
 That includes key-value type operations, queries, and configuration communication.
-Make sure to have a proper Couchbase Server version installed before proceeding with configuring encryption on the client side.
+Make sure you have the Enterprise Edition of Couchbase Server before proceeding with configuring encryption on the client side.
 
 To configure encryption for the Java SDK:
 
-. Load and import the certificate from the cluster into your JVM keystore
-. Enable encryption on the client side and point it to the keystore
+. Get the CA certificate from the cluster and save it in a text file.
+. Enable encryption on the client side and point it to the file containing the certificate.
 
-The JVM keystore is independent of the Java SDK, so your own setup might look different.
 It is important to make sure you are transferring the certificate in an encrypted manner from the server to the client side, so either copy it through SSH or through a similar secure mechanism.
 
-If you are running on `localhost` and just want to enable it for a development machine, just copying and pasting it suffices.
-Navigate in the admin UI to menu:Settings[Cluster] and copy the input box of the SSL certificate into a file on your machine (here named cluster.cert).
+If you are running on `localhost` and just want to enable TLS for a development machine, just copying and pasting it suffices.
+Navigate in the admin UI to menu:Settings[Cluster] and copy the input box of the TLS certificate into a file on your machine (which we will refer to as `cluster.cert`).
 It looks similar to this:
 
 ----
@@ -209,72 +174,16 @@ F4+FjEqAEIr1mQepDaNM0gEfVcgd2SzGhC3yhYFBAH//8W4DUot5ciEhoBs=
 -----END CERTIFICATE-----
 ----
 
-Now, use the [.cmd]`keytool` command to import it into your JVM keystore.
-
-NOTE: Use the `-keystore` option to specify where to create the keystore.
-If you don't use this option, the default location is the `.keystore` file in user's home directory.
-
-[source,bash]
-----
-$ keytool -importcert -file cluster.cert
-Enter keystore password:
-Owner: CN=*
-Issuer: CN=*
-Serial number: 1381528ec7379f22
-Valid from: Tue Jan 01 01:00:00 CET 2013 until: Sat Jan 01 00:59:59 CET 2050
-Certificate fingerprints:
-	 MD5:  4A:5E:DB:4F:F6:7E:FD:C3:0E:0C:56:C4:05:34:C1:4A
-	 SHA1: 3A:BC:48:3C:0F:36:99:EB:35:76:7C:E5:14:DE:89:DE:AE:79:9B:ED
-	 SHA256: 24:46:59:55:F2:65:23:85:E2:80:9F:CC:D1:EF:41:E9:4E:D8:ED:11:C8:CF:60:C7:C5:AD:63:56:D0:E6:7F:4D
-	 Signature algorithm name: SHA1withRSA
-	 Version: 3
-Trust this certificate? [no]:  yes
-Certificate was added to keystore
-----
-
-You can verify with [.cmd]`keytool -list`:
-
-[source,bash]
-----
-$ keytool -list
-Enter keystore password:
-
-Keystore type: JKS
-Keystore provider: SUN
-
-Your keystore contains 1 entry
-
-mykey, Aug 18, 2014, trustedCertEntry,
-Certificate fingerprint (SHA1): 3A:BC:48:3C:0F:36:99:EB:35:76:7C:E5:14:DE:89:DE:AE:79:9B:ED
-----
-
-The next step is to enable encryption and pass it the path and password of the file.
+The next step is to enable encryption and pass it the path to the certificate file.
 
 [source,java]
 ----
-CouchbaseEnvironment env = DefaultCouchbaseEnvironment
-    .builder()
-    .sslEnabled(true)
-    .sslKeystoreFile("/path/tokeystore")
-    .sslKeystorePassword("password")
-    .build();
+include::example$ManagingConnections.java[tag=tls,indent=0]
 ----
 
-Alternatively, since 2.3.0 it is possible to point it directly to a keystore that has been previously initialized so it can be created from different sources:
+Then use this custom `ClusterEnvironment` when opening the connection to the cluster.
+See <<cluster-environment>> for an example of creating a `Cluster` with a custom environment.
 
-[source,java]
-----
-KeyStore myKeystore = loadKeystore();
-
-CouchbaseEnvironment env = DefaultCouchbaseEnvironment.builder()
-    .sslEnabled(true)
-    .sslKeystore(myKeystore)
-    .build();
-----
-
-Depending on the OS used there are different default passwords and paths, so consult the JDK manual if you need further information on keytool (Java 7 for http://docs.oracle.com/javase/7/docs/technotes/tools/windows/keytool.html#OptionsInAll[Windows^] and http://docs.oracle.com/javase/7/docs/technotes/tools/solaris/keytool.html#OptionsInAll[Unix^]) and the JVM keystore.
-
-There are no other application changes needed.
 If you want to verify it's actually working ,you can use a tool like [.cmd]`tcpdump`.
 For example, an unencrypted upsert request looks like this (using `sudo tcpdump -i lo0 -A -s 0 port 11210`):
 
@@ -298,12 +207,7 @@ In order to make the SDK actually use the SRV records, you need to enable DNS SR
 
 [source,java]
 ----
-CouchbaseEnvironment env = DefaultCouchbaseEnvironment
-    .builder()
-    .dnsSrvEnabled(true)
-    .build();
-
-Cluster cluster = CouchbaseCluster.create(env, "example.com");
+include::example$ManagingConnections.java[tag=dnssrv,indent=0]
 ----
 
 If the DNS SRV records could not be loaded properly you'll get the exception logged and the given host name will be used as a A record lookup.
@@ -321,4 +225,43 @@ Also, if you pass in more than one node, DNS SRV bootstrap will not be initiated
 ----
 INFO: DNS SRV enabled, but less or more than one seed node given.
 Proceeding with normal bootstrap.
+----
+
+== Async and Reactive APIs
+
+The Couchbase Java SDK provides first-class support for asynchronous and reactive programming.
+In fact, the synchronous API is just a thin wrapper around the asynchronous API.
+
+Methods in the asynchronous API return instances of the standard `CompletableFuture` introduced in Java 8.
+
+The Java SDK's reactive API is built on link:https://projectreactor.io[Project Reactor].
+Reactor implements the standard Reactive Streams API introduced in Java 9, and extends it with a rich set of useful operators.
+Methods in the reactive API return instances of `Flux` or `Mono`.
+
+If you wish to embrace the async or reactive programming model, there are two ways to get started:
+
+* Call `async()` or `reactive()` on the object to access its `Async*` or `Reactive*` counterpart.
+For example, if you have a `Collection` called `myCollection`, you can obtain a `ReactiveCollection` by calling `myCollection.reactive()`.
+* Instantiate a `AsyncCluster` or `ReactiveCluster` in the first place.
+The `bucket()` method of an `AsyncCluster` returns an `AsyncBucket`, while the `bucket()` method of a `ReactiveCluster` turns a `ReactiveBucket`.
+
+So if you are connecting to the bucket synchronously but then want to switch over to asynchronous data operations, you can do it like this:
+
+[source,java]
+----
+include::example$ManagingConnections.java[tag=blockingtoasync,indent=0]
+----
+
+On the other hand, you can use the Async API right from the beginning:
+// todo use tabs here?
+[source,java]
+----
+include::example$ManagingConnections.java[tag=asynccluster,indent=0]
+----
+
+Here's the same example, but using the Reactive API instead of the Async API:
+
+[source,java]
+----
+include::example$ManagingConnections.java[tag=reactivecluster,indent=0]
 ----
