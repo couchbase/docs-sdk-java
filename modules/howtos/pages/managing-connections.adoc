@@ -42,7 +42,7 @@ One way to customize the client's behavior is to build your own `ClusterEnvironm
 
 [source,java]
 ----
-include::example$ManagingConnections.java[tag=clusterenv,indent=0]
+include::example$ManagingConnections.java[tag=customenv,indent=0]
 ----
 
 TIP: If you create a `Cluster` without specifying a custom environment, the client creates a default environment used exclusively by that `Cluster`.
