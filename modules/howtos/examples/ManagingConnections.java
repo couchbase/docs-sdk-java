@@ -40,7 +40,7 @@ public class ManagingConnections {
     {
       // #tag::multinodeconnect[]
       Cluster cluster = Cluster.connect("192.168.56.101,192.168.56.102", "username", "password");
-      // #end::simpleconnect[]
+      // #end::multinodeconnect[]
     }
 
 
