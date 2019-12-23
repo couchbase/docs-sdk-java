@@ -187,7 +187,7 @@ include::example$ManagingConnections.java[tag=tls,indent=0]
 Then use this custom `ClusterEnvironment` when opening the connection to the cluster.
 See <<cluster-environment>> for an example of creating a `Cluster` with a custom environment.
 
-If you want to verify it's actually working ,you can use a tool like [.cmd]`tcpdump`.
+If you want to verify it's actually working, you can use a tool like [.cmd]`tcpdump`.
 For example, an unencrypted upsert request looks like this (using `sudo tcpdump -i lo0 -A -s 0 port 11210`):
 
 ----
@@ -245,7 +245,7 @@ If you wish to embrace the async or reactive programming model, there are two wa
 
 * Call `async()` or `reactive()` on the object to access its `Async*` or `Reactive*` counterpart.
 For example, if you have a `Collection` called `myCollection`, you can obtain a `ReactiveCollection` by calling `myCollection.reactive()`.
-* Instantiate a `AsyncCluster` or `ReactiveCluster` in the first place.
+* Instantiate an `AsyncCluster` or `ReactiveCluster` in the first place.
 The `bucket()` method of an `AsyncCluster` returns an `AsyncBucket`, while the `bucket()` method of a `ReactiveCluster` turns a `ReactiveBucket`.
 
 So if you are connecting to the bucket synchronously but then want to switch over to asynchronous data operations, you can do it like this:

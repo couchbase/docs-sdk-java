@@ -122,7 +122,7 @@ public class ManagingConnections {
       ReactiveBucket reactiveBucket = bucket.reactive();
 
       cluster.disconnect();
-      // #end::connectionstringparams[]
+      // #end::blockingtoasync[]
     }
 
     {
@@ -134,7 +134,7 @@ public class ManagingConnections {
       // Nothing actually happens until you subscribe to the Mono.
       // The simplest way to subscribe is to await completion by calling call `block()`.
       cluster.disconnect().block();
-      // #end::connectionstringparams[]
+      // #end::reactivecluster[]
     }
 
     {
@@ -146,20 +146,7 @@ public class ManagingConnections {
       // The disconnection starts as soon as you call disconnect().
       // The simplest way to wait for the disconnect to complete is to call `join()`.
       cluster.disconnect().join();
-      // #end::connectionstringparams[]
-    }
-
-
-    {
-      // #tag::asynccluster[]
-      AsyncCluster cluster = AsyncCluster.connect("127.0.0.1", "username", "password");
-      AsyncBucket bucket = cluster.bucket("travel-sample");
-
-      // An async cluster's disconnect methods returns a CompletableFuture<Void>.
-      // The disconnection starts as soon as you call disconnect().
-      // The simplest way to wait for the disconnect to complete is to call `join()`.
-      cluster.disconnect().join();
-      // #end::connectionstringparams[]
+      // #end::asynccluster[]
     }
 
 
