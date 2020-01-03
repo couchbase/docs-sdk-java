@@ -7,6 +7,11 @@ Features available in different SDK versions, and compatibility between Server a
 
 include::ref:partial$beta-warning.adoc[]
 
+The 3.0 SDK requires Java 8 or later to be installed, earlier versions will not work. 
+_Java 11 is recommended_, which has various enhancements like lambda local variable type inference, profiling tools, and updated security features. 
+Most of the flavors available will do, although we may only provide support for OpenJDK and Oracle JDK going forward. 
+The Java SDK _has not been tested (and is not supported on) Java 12_.
+
 == Couchbase Version/SDK Version Matrix
 
 Couchbase SDKs are tested against a variety of different environments to ensure both backward and forward compatibility with different versions of Couchbase Server.
