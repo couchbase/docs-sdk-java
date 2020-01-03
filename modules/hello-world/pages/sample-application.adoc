@@ -1,9 +1,74 @@
-= Sample App Tutorial
+= Sample Application
+:nav-title: Travel Sample App
 :content-type: tutorial
+:page-topic-type: tutorial
 :page-aliases: ROOT:sample-application,ROOT:tutorial4,ROOT:sample-app-backend
 
+[abstract]
 
 include::ref:partial$beta-warning.adoc[]
+
+
+
+
+
+
+
+6.5@sdk:pages:partial$sample-application.adoc
+
+
+== Preparation
+
+
+[source,bash]
+.Enable Collections Developer Preview
+----
+/opt/couchbase/bin/couchbase-cli enable-developer-preview --enable -c http://localhost:8091 -u Administrator -p password
+Developer preview cannot be disabled once it is enabled. If you enter developer preview mode you will not be able to upgrade. DO NOT USE IN PRODUCTION.
+Are you sure [y/n]: y
+----
+
+
+
+edit the `storage.host` field in src/main/resources/application.properties to the one for your containerised Couchbase server (or localhost, 127.0.0.1, if appropriate), and any other local changes.
+From here onwards, we'll assume the defaults.
+
+Now run
+
+
+[source,bash]
+.Create Sample Collections
+----
+sh create-collections.sh Administrator password 127.0.0.1
+----
+
+adjusting for any changes you have made to server URL, or admin password.
+
+
+You will also need to head to Search in the web interface and create a xref:[Search index].
+
+
+
+Now you're ready to install the travel sample application.
+
+[source,bash]
+----
+git clone git@github.com:couchbaselabs/try-cb-java.git
+----
+
+and check out the latest branch
+
+[source,bash]
+----
+git checkout 6.5.0-branch
+----
+
+
+
+
+== Sample App Backend
+
+
 
 
 
