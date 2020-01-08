@@ -19,22 +19,24 @@ include::ref:partial$beta-warning.adoc[]
 
 == Preparation
 
+To usebuild the Travel Sample application, which in the case of the Java SDK utilises the Collections _Ceveloper Preview_, you need to enable this -- do not run this on a production server: Collections is  _Developer Preview_, and is not supported for production use with Couchbase Server 6.5.
+// link
+// no upgrade
 
 [source,bash]
 .Enable Collections Developer Preview
 ----
 /opt/couchbase/bin/couchbase-cli enable-developer-preview --enable -c http://localhost:8091 -u Administrator -p password
+----
++
+[source,bash]
+----
 Developer preview cannot be disabled once it is enabled. If you enter developer preview mode you will not be able to upgrade. DO NOT USE IN PRODUCTION.
 Are you sure [y/n]: y
 ----
 
 
-
-edit the `storage.host` field in src/main/resources/application.properties to the one for your containerised Couchbase server (or localhost, 127.0.0.1, if appropriate), and any other local changes.
-From here onwards, we'll assume the defaults.
-
-Now run
-
+Now run:
 
 [source,bash]
 .Create Sample Collections
@@ -43,11 +45,21 @@ sh create-collections.sh Administrator password 127.0.0.1
 ----
 
 adjusting for any changes you have made to server URL, or admin password.
+You should now have the Travel Sample Data Bucket split into collections:
+
+----
+{"uid":"1"}{"uid":"2"}{"uid":"3"}
+
+THE FINAL RESULT
+{"uid":"3","scopes":[{"name":"userData","uid":"8","collections":[{"name":"flights","uid":"9"},{"name":"users","uid":"8"}]},{"name":"_default","uid":"0","collections":[{"name":"_default","uid":"0"}]}]}
+----
 
 
-You will also need to head to Search in the web interface and create a xref:[Search index].
+
+You will also need to head to Search in the web interface and create a xref:6.5@server:fts:fts-searching-from-the-ui.adoc#create-an-index[Search index].
 
 
+== Running the Travel Sample Application
 
 Now you're ready to install the travel sample application.
 
@@ -56,14 +68,44 @@ Now you're ready to install the travel sample application.
 git clone git@github.com:couchbaselabs/try-cb-java.git
 ----
 
-and check out the latest branch
+Change directory into your cloned repository, and check out the latest branch
 
 [source,bash]
 ----
 git checkout 6.5.0-branch
 ----
 
+Next, edit the `storage.host` field in src/main/resources/application.properties to the one for your containerised Couchbase Server (or localhost, 127.0.0.1, if appropriate), and any other local changes -- such as password.
+From here onwards, we'll assume the defaults.
 
+
+
+And run with
+
+[source,bash]
+----
+mvn spring-boot:run
+----
+
+
+Most likely, you'll want to open up your preferred IDE for the `storage.host` step, and stay there to build the app, rather than running Maven from the command line.
+
+After your preferred activity away from the screen for a couple of minutes of build (we recommend making a cup of tea, and staring meditatively out of the window), you should see messages from `Tomcat` and `trycb.Application`, which tells you that you've been successful.
+Head to port 8080 of the local machine.
+
+
+// *PIC -- screenshot
+
+
+
+== Using the Sample App
+
+Give yourself a username and password and click *Register*.
+
+Now try out a few queries.
+You'll see the
+??
+??
 
 
 == Sample App Backend
