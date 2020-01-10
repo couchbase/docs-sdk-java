@@ -31,7 +31,8 @@ Java 11 is recommended, which has various enhancements like lambda local variabl
 This is the first GA release of the third generation Java SDK.
 
 http://packages.couchbase.com/clients/java/3.0.0/Couchbase-Java-Client-3.0.0.zip[Download] |
-http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.0/[Core API Reference]
+http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0/[API Reference] | 
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.0/[Core API Reference]
 
 The supported and tested dependencies for this release are:
 
@@ -55,7 +56,7 @@ The Search API has been slightly improved to align with the SDK RFC.
 * http://issues.couchbase.com/browse/JCBC-1599[JCBC-1599]:
 Bucket, Scope and Collection instances are now cached so repeated open attempts produce less garbage and happen quicker.
 * http://issues.couchbase.com/browse/JVMCBC-785[JVMCBC-785], http://issues.couchbase.com/browse/JVMCBC-786[JVMCBC-786], http://issues.couchbase.com/browse/JVMCBC-675[JVMCBC-675]:
-View, Search, Analytics and Query retryable error codes are now retried as part of the configured retry strategy.
+View, Search, Analytics, and Query retryable error codes are now retried as part of the configured retry strategy.
 * http://issues.couchbase.com/browse/JCBC-1561[JCBC-1561], http://issues.couchbase.com/browse/JCBC-1562[JCBC-1562]:
 Added Option overloads to collection and search index managers.
 * http://issues.couchbase.com/browse/JVMCBC-787[JVMCBC-787], http://issues.couchbase.com/browse/JVMCBC-788[JVMCBC-788]:
@@ -97,25 +98,26 @@ All reactive APIs are now deferred and will not execute I/O side effects when no
 * http://issues.couchbase.com/browse/JCBC-1539[JCBC-1539]:
 A bug has been fixed where the IoConfig.networkResolution could not be set through a system property.
 * http://issues.couchbase.com/browse/JVMCBC-793[JVMCBC-793]:
-Various fixed have been made around DNS SRV bootstrapping that make it more robust and fixed a bug that prevented it from working properly.
+Various fixes have been made around DNS SRV bootstrapping that make it more robust, including fixing a bug that prevented it from working properly.
 * http://issues.couchbase.com/browse/JCBC-1524[JCBC-1524]:
-The projections on `get` have been refactored, the test suite expanded and a couple of issues fixed along the way.
+The projections on `get` have been refactored, the test suite expanded, and a couple of issues fixed along the way.
 * http://issues.couchbase.com/browse/JCBC-1531[JCBC-1531]:
 The QueryIndexManager now only returns GSI indexes.
 * http://issues.couchbase.com/browse/JVMCBC-802[JVMCBC-802]:
 A bug has been fixed where a non-existing view in an existing design document would not cause an exception.
 * http://issues.couchbase.com/browse/JCBC-1565[JCBC-1565]:
-Views now use the right default view timeout instead of the analytics one.
+Views now use the right default View timeout instead of the Analytics one.
 * http://issues.couchbase.com/browse/JVMCBC-789[JVMCBC-789]:
 Performing operations while initially loading the collection map is now handled gracefully.
 
 === API Changes
 
-The following list describes the API changes between 3.0.0 beta.2 and 3.0.0 GA. Since SDK 3 is a complete rewrite over SDK 2, the
-individual changes between them are not listed here. Please refer to the migration guide for this.
+The following list describes the API changes between 3.0.0 beta.2 and 3.0.0 GA. 
+Since SDK 3 is a complete rewrite over SDK 2, the individual changes between them are not listed here. 
+Please refer to the xref:project-docs:migrating-sdk-code-to-3.n.adoc[migration guide] for this.
 
 * http://issues.couchbase.com/browse/JCBC-1533[JCBC-1533], http://issues.couchbase.com/browse/JCBC-1534[JCBC-1534], http://issues.couchbase.com/browse/JCBC-1535[JCBC-1535], http://issues.couchbase.com/browse/JCBC-1541[JCBC-1541], http://issues.couchbase.com/browse/JCBC-1542[JCBC-1542]:
-Exceptions have been consolidated, renamed and overall aligned with the latest RFC.
+Exceptions have been consolidated, renamed, and overall aligned with the latest RFC.
 * http://issues.couchbase.com/browse/JCBC-1536[JCBC-1536]:
 `SeedNodes` have been moved out of the `ClusterOptions` into a `Cluster#connect()` overload.
 * http://issues.couchbase.com/browse/JCBC-1540[JCBC-1540]:
