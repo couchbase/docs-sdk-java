@@ -67,7 +67,7 @@ include::example$StartUsing.java[tag=collection]
 
 The 3.0 SDK is ready for the introduction of xref:concept-docs:collections.adoc[Collections] in an upcoming release of the Couchbase Data Platform.
 The latest release, Couchbase Server 6.5, brings a limited _Developer Preview_ of Collections, allowing Documents to be grouped by purpose or theme, according to specified _Scope_.
-Here we will use the `DefaultCollection`, which covers the whole Bucket and is also must be used when connecting to a 6.5 cluster or earlier.
+Here we will use the `DefaultCollection`, which covers the whole Bucket and _must be used when connecting to a 6.5 cluster or earlier_.
 
 [source,java]
 ----
@@ -84,7 +84,9 @@ You can also perform a N1QL query at the cluster level:
 include::example$StartUsing.java[tag=n1ql-query]
 ----
 
-You can learn more about N1QL queries on the xref:howtos:n1ql-queries-with-sdk.adoc[Query page]. Other services (like analytics, search or views) work very similar to the two shown above. Please refer to their respective documentation sections to learn more.
+You can learn more about N1QL queries on the xref:howtos:n1ql-queries-with-sdk.adoc[Query page]. 
+Other services (like analytics, search or views) work very similar to the two shown above. 
+Please refer to their respective documentation sections to learn more.
 
 == Additional Resources
 
