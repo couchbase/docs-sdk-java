@@ -138,7 +138,7 @@ public class Migrating {
 
     {
       // #tag::upsertandget[]
-      MutationResult upsertResult = collection.upsert("mydoc-id", JsonObject.empty());
+      MutationResult upsertResult = collection.upsert("mydoc-id", JsonObject.create());
       GetResult getResult = collection.get("mydoc-id");
       // #end::upsertandget[]
     }

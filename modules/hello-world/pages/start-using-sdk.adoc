@@ -5,8 +5,6 @@
 
 The Couchbase Java SDK allows Java applications to access a Couchbase cluster. It offers traditional synchronous APIs as well as reactive and asynchronous APIs to maximize flexibility and performance.
 
-include::partial$beta-warning.adoc[]
-
 The Couchbase Java SDK 3.0 is a complete rewrite of the API, reducing the number of overloads to present a simplified surface area, and adding support for future Couchbase Server features like Collections and Scopes (available in Couchbase Server 6.5 as a xref:concept-docs:collections.adoc[developer preview]).
 The 3.0 SDK also moves from `RxJava` to `Java Reactor`, along with other improvements to performance, logging, and timeout troubleshooting.
 If you're upgrading your application from Java SDK 2.x, please read our xref:project-docs:migrating-sdk-code-to-3.n.adoc[Migrating 2.x code to SDK 3.0 Guide].
@@ -19,23 +17,15 @@ Java 11 is recommended, which has various enhancements like lambda local variabl
 Most of the flavors available will do, although we might only provide support for OpenJDK and Oracle JDK going forward.
 It has not been tested (and is not supported on) Java 12.
 
-You can use your favorite dependency management tool to install the SDK. The following snippet shows how to do it with maven.
+Couchbase publishes all stable artifacts to Maven Central. You can use your favorite dependency management tool to install the SDK. The following snippet shows how to do it with maven.
 
 [source,xml]
 ----
-<repositories>
-    <repository>
-      <id>couchbase</id>
-      <name>Couchbase Preview Repository</name>
-      <url>http://files.couchbase.com/maven2</url>
-    </repository>
-</repositories>
-
 <dependencies>
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.0-beta.2</version>
+        <version>3.0.0</version>
     </dependency>
 </dependencies>
 ----
@@ -54,6 +44,13 @@ Here we will use the _Full Admin_ role created during installation of the Couchb
 For production client code, you will want to use more appropriate, restrictive settings -- but here we want to get you up and running quickly.
 If you're developing client code on the same VM or machine as the Couchbase Server, your URI can be _localhost_.
 
+If you are not using an IDE or are new to java, the following imports are necessary to build the following snippets:
+
+[source,java]
+----
+include::example$StartUsing.java[tag=imports]
+----
+
 Connection to the cluster is initialized by
 
 [source,java]
@@ -70,7 +67,7 @@ include::example$StartUsing.java[tag=collection]
 
 The 3.0 SDK is ready for the introduction of xref:concept-docs:collections.adoc[Collections] in an upcoming release of the Couchbase Data Platform.
 The latest release, Couchbase Server 6.5, brings a limited _Developer Preview_ of Collections, allowing Documents to be grouped by purpose or theme, according to specified _Scope_.
-Here we will use the `DefaultCollection`, which covers the whole Bucket.
+Here we will use the `DefaultCollection`, which covers the whole Bucket and _must be used when connecting to a 6.5 cluster or earlier_.
 
 [source,java]
 ----
@@ -79,11 +76,21 @@ include::example$StartUsing.java[tag=upsert-get]
 
 KV Operations are described in detail on the xref:howtos:kv-operations.adoc[KV Operations page].
 Now that you know the basics, you may wish to go straight to that page.
-// -- or first see a complete worked example of using the Couchbase Java client, our xref:3.0dp1@sample-application.adoc[Travel Sample Application].
+
+You can also perform a N1QL query at the cluster level:
+
+[source,java]
+----
+include::example$StartUsing.java[tag=n1ql-query]
+----
+
+You can learn more about N1QL queries on the xref:howtos:n1ql-queries-with-sdk.adoc[Query page]. 
+Other services (like analytics, search or views) work very similar to the two shown above. 
+Please refer to their respective documentation sections to learn more.
 
 == Additional Resources
 
-The API reference is generated for each release and can be found http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0-beta.1/[here].
+The API reference is generated for each release and can be found http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0/[here].
 
 // xref:migrating-sdk-code-to-3.n.adoc[The Migrating from SDK2 to 3 page] highlights the main differences to be aware of when migrating your code.
 

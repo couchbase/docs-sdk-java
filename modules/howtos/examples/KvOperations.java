@@ -1,22 +1,9 @@
 // #tag::imports[]
-import com.couchbase.client.core.error.CasMismatchException;
-import com.couchbase.client.core.error.DocumentExistsException;
-import com.couchbase.client.core.error.DocumentNotFoundException;
+import com.couchbase.client.core.error.*;
 import com.couchbase.client.core.msg.kv.DurabilityLevel;
-import com.couchbase.client.java.AsyncCollection;
-import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.ReactiveCollection;
-import com.couchbase.client.java.Scope;
-import com.couchbase.client.java.json.JsonObject;
-import com.couchbase.client.java.kv.GetOptions;
-import com.couchbase.client.java.kv.GetResult;
-import com.couchbase.client.java.kv.InsertOptions;
-import com.couchbase.client.java.kv.MutationResult;
-import com.couchbase.client.java.kv.PersistTo;
-import com.couchbase.client.java.kv.ReplicateTo;
-import com.couchbase.client.java.kv.UpsertOptions;
+import com.couchbase.client.java.*;
+import com.couchbase.client.java.json.*;
+import com.couchbase.client.java.kv.*;
 
 import java.time.Duration;
 
@@ -48,9 +35,7 @@ ReactiveCollection reactiveCollection = collection.reactive();
 
 {
 // #tag::upsert[]
-JsonObject content = JsonObject.create()
-  .put("foo", "bar")
-  .put("baz", "qux");
+JsonObject content = JsonObject.create().put("foo", "bar");
 
 MutationResult result = collection.upsert("document-key", content);
 // #end::upsert[]
@@ -63,7 +48,7 @@ try {
   MutationResult insertResult = collection.insert("document-key", content);
 } catch (DocumentExistsException ex) {
   System.err.println("The document already exists!");
-} catch (Exception ex) {
+} catch (CouchbaseException ex) {
   System.err.println("Something else happened: " + ex);
 }
 // #end::insert[]
@@ -98,9 +83,7 @@ collection.upsert("my-document", JsonObject.create().put("initial", true));
 
 GetResult result = collection.get("my-document");
 JsonObject content = result.contentAsObject();
-content
-  .put("modified", true)
-  .put("initial", false);
+content.put("modified", true).put("initial", false);
 collection.replace("my-document", content, replaceOptions().cas(result.cas()));
 // #end::replace[]
 }
@@ -173,10 +156,7 @@ System.out.println("Expiry of found doc: " + found.expiry());
 
 {
 // #tag::expiry-replace[]
-GetResult found = collection.get(
-  "my-document",
-  getOptions().withExpiry(true)
-);
+GetResult found = collection.get("my-document", getOptions().withExpiry(true));
 
 collection.replace(
   "my-document",

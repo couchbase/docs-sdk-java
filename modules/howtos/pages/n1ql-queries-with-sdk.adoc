@@ -3,7 +3,7 @@
 :page-topic-type: howto
 :page-aliases: n1ql-query
 :lang: Java
-:version: 3.0.0 alpha
+:version: 3.0.0
 :example-source: 3.0@java-sdk:howtos:example$Queries.java
 :example-source-lang: java
 
@@ -20,19 +20,13 @@ include::example$Queries.java[tag=simple]
 
 (Note that we won't be covering the N1QL language itself in any detail here, but if you're familiar with SQL you'll see it's very similar.)
 
-Error handling: the Java SDK will throw an exception derived from `CouchbaseException` if there are any errors.
-
-[NOTE]
-=====
-Most of the examples here use the simplest of the three APIs provided by the Java SDK, which blocks until the operation is performed.  There's also an asynchronous API that is based around `CompletableFuture`, and a
-streaming reactive API, for which we'll see an example later.
-=====
+The Java SDK will throw an exception derived from `CouchbaseException` if there are any errors.
 
 include::1.0@scala-sdk:howtos:partial$n1ql-placeholders.adoc[]
 include::1.0@scala-sdk:howtos:partial$n1ql-scan-consistency.adoc[]
 
 == Streaming Large Result Sets
-As mentioned earlier, the Java SDK provides three SDKs:
+The Java API provides three distinct APIs for all services:
 
 * The blocking API you've seen so far, that returns a `QueryResult` containing all rows.
 
