@@ -5,8 +5,6 @@
 [abstract]
 Features available in different SDK versions, and compatibility between Server and SDK.
 
-include::ref:partial$beta-warning.adoc[]
-
 == Couchbase Version/SDK Version Matrix
 
 Couchbase SDKs are tested against a variety of different environments to ensure both backward and forward compatibility with different versions of Couchbase Server.
