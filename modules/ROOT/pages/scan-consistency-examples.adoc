@@ -22,12 +22,15 @@ At the other end of the scale there is "request plus" which will — when a quer
 This will make sure that you read your own writes, but it might take some time if there is a write-heavy workload.
 Also sometimes you are only interested in the last mutation(s) you performed, so waiting for everything else in the index to be updated can mean unnecessary latency.
 
+Note that `REQUEST_PLUS` is broadly equivalent to `STATEMENT_PLUS`, and that the latter is removed from Couchbase Java SDK 3.0 and onwards.
+
+
 == Read Your Own Writes
 
-This is where "statement plus" comes in: roughly equivalent to building a query with "at_plus" in the other SDKs, this enum also provides the same _Read Your Own Writes (RYOW)_ consistency.
+_Read Your Own Writes (RYOW)_ consistency (also known as "at_plus") in the Java SDK uses the `consistentWith()` method on the Query builder.
 This option will send some information previously retrieved at mutation time to the query engine which will then make sure to only wait for (at least) those mutations to have been indexed.
 
-If `statement_plus` is used, mutation tokens need to be enabled in the environment:
+If "at_plus" is used, mutation tokens need to be enabled in the environment:
 
 ----
 CouchbaseEnvironment env = DefaultCouchbaseEnvironment
