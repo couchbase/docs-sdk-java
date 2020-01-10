@@ -6,8 +6,6 @@
 [abstract]
 The `ClusterEnvironment` class enables you to configure Java SDK options for bootstrapping, timeouts, reliability, and performance.
 
-include::ref:partial$beta-warning.adoc[]
-
 
 == The Environment Builder
 
