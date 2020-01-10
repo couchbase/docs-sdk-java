@@ -3,12 +3,10 @@
 :page-topic-type: howto
 include::partial$attributes.adoc[]
 :lang: Java
-:version: 3.0.0 alpha.3
+:version: 3.0.0
 
 [abstract]
 Sub-Document operations can be used to efficiently access and change parts of documents.
-
-include::ref:partial$beta-warning.adoc[]
 
 Sub-Document operations may be quicker and more network-efficient than _full-document_ operations such as _upsert_, _replace_ and _get_ because they only transmit the accessed sections of the document over the network.
 
@@ -16,8 +14,6 @@ Sub-Document operations are also atomic, in that if one Sub-Document mutation fa
 
 == Sub-Documents
 
-Starting with Couchbase Server 4.5 you can atomically and efficiently update and retrieve _parts_ of a document.
-These parts are called _Sub-Documents_.
 While full-document retrievals retrieve the entire document and full document updates require sending the entire document, Sub-Document retrievals only retrieve relevant parts of a document and Sub-Document updates only require sending the updated portions of a document.
 
 You should use Sub-Document operations when you are modifying only portions of a document, and full-document operations when the contents of a document is to change significantly.

@@ -3,8 +3,6 @@
 :page-topic-type: howto
 :page-aliases: document-operations.adoc
 
-include::ref:partial$beta-warning.adoc[]
-
 The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/blob/release/3.0alpha/modules/howtos/examples/KvOperations.java[here].
 
 At its heart Couchbase Server is a high-performance key-value store, and the key-value interface outlined below is the fastest and best method to perform operations involving single documents.
@@ -34,7 +32,8 @@ The Couchbase Server is a key-value store that's agnostic to what's stored, but 
 
 The Java SDK provides you with several options for working with JSON.
 
-If you pass any object (like the provided `JsonObject` and `JsonArray`), including `Map<String, Object>` or `List<Object>` into the APIs provided, the SDK will use its internal JSON codec (utilizing https://github.com/FasterXML/jackson[Jackson]) to encode/decode those objects transparently. Note that custom POJOs are not yet supported, but will be in one of the next developer previews. If you use the `EncodedJsonContent` wrapper type, you can use any JSON serializer you like and pass in the encoded JSON string/byte array directly.
+If you pass any object (like the provided `JsonObject` and `JsonArray`), including `Map<String, Object>` or `List<Object>` into the APIs provided, the SDK will use its internal JSON codec (utilizing https://github.com/FasterXML/jackson[Jackson]) to encode/decode those objects transparently. The SDK also supports custom transcoders and serializers which are covered
+separately.
 
 == Upsert
 
@@ -66,7 +65,7 @@ include::example$KvOperations.java[tag=apis]
 =====
 
 == Insert
-Insert works very similarly to upsert, but will fail if the document already exists with a `KeyExistsException`:
+Insert works very similarly to upsert, but will fail if the document already exists with a `DocumentExistsException`:
 
 [source,java]
 ----
@@ -101,13 +100,9 @@ include::example$KvOperations.java[tag=replace]
 
 We `upsert` an initial version of the document. We don't care about the exact details of the result, just whether it succeeded or not, so do not assign a return value. Then we `get` it back into `doc` and pull out the document's content as a `JsonObject` using `contentAs`. Afterwards, we update a field in the `JsonObject` with `put`.  `JsonObject` is mutable, we don't need to store the result of the `put`. Finally, we `replace` the document with the updated content, and a CAS value, storing the final result as `result`.
 
-There's a couple of things to cover with the `replace`.
-
-First, most of the methods in the Java SDK take optional parameters that have sensible defaults. One of them, `cas`, is provided here.  We'll see more throughout this document.
-
 So, what is CAS?
 
-CAS, or Compare And Swap, is a form of optimistic locking. Every document in Couchbase has a CAS value, and it's changed on every mutation.  When you `get` a document you also get the document's CAS, and then when it's time to write the document, you send the same CAS back.  If another agent has modified that document, the Couchbase Server can detect you've provided a now-outdated CAS, and return an error.  This provides cheap, safe concurrency.  See xref:concurrent-document-mutations.adoc[this detailed description of CAS] for further details.
+CAS, or Compare And Swap, is a form of optimistic locking. Every document in Couchbase has a CAS value, and it's changed on every mutation.  When you `get` a document you also get the document's CAS, and then when it's time to write the document, you send the same CAS back.  If another thread or program has modified that document in the meantime, the Couchbase Server can detect you've provided a now-outdated CAS, and return an error.  This provides cheap, safe concurrency.  See xref:concurrent-document-mutations.adoc[this detailed description of CAS] for further details.
 
 In general, you'll want to provide a CAS value whenever you `replace` a document, to prevent overwriting another agent's mutations.
 
@@ -163,7 +158,7 @@ include::example$KvOperations.java[tag=durability-observed]
 
 To stress, durability is a useful feature but should not be the default for most applications, as there is a performance consideration, and the default level of safety provided by Couchbase will be reasonable for the majority of situations.
 
-== Expiry/TTL
+== Document Expiration
 Couchbase Server includes an option to have particular documents automatically expire after a set time.  This can be useful for some use-cases, such as user sessions, caches, or other temporary documents.
 
 You can set an expiry value when creating a document:

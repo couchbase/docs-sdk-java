@@ -15,8 +15,115 @@ At least Java 8 is required for current releases; all newer, vendor supported Ja
 See the xref:compatibility.adoc[Compatibility] section for details.
 Java 11 is recommended, which has various enhancements like lambda local variable type inference, profiling tools, and updated security features.
 
-// note below is for after the αλφα release, when 3.0α relnotes are tidied away to a separate page (so will be below all of the relnotes left on this page):
-// Note, should you need them, release notes for the alpha versions of the Java SDK are xref:3.0αλφα-sdk-release-notes.adoc[archived here].
+[source,xml]
+----
+<dependencies>
+    <dependency>
+        <groupId>com.couchbase.client</groupId>
+        <artifactId>java-client</artifactId>
+        <version>3.0.0</version>
+    </dependency>
+</dependencies>
+----
+
+== Version 3.0.0 (10 January 2020)
+
+This is the first GA release of the third generation Java SDK.
+
+http://packages.couchbase.com/clients/java/3.0.0/Couchbase-Java-Client-3.0.0.zip[Download] |
+http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.0/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.0**
+* com.couchbase.client:**core-io:2.0.0**
+* io.projectreactor:**reactor-core:3.3.1.RELEASE**
+* org.reactivestreams:**reactive-streams:1.0.2**
+
+=== Enhancements
+
+The following list describes the API changes between 3.0.0 beta.2 and 3.0.0 GA.
+
+* http://issues.couchbase.com/browse/JCBC-1563[JCBC-1563]:
+Added the reactive API to the view index manager.
+* http://issues.couchbase.com/browse/JVMCBC-776[JVMCBC-776]:
+Added support for server-side KV tracing statistics.
+* http://issues.couchbase.com/browse/JCBC-1522[JCBC-1522]:
+All data commands have been instrumented to be included in RTO (Response Time Observability).
+* http://issues.couchbase.com/browse/JCBC-1566[JCBC-1566], http://issues.couchbase.com/browse/JCBC-1568[JCBC-1568]:
+The Search API has been slightly improved to align with the SDK RFC.
+* http://issues.couchbase.com/browse/JCBC-1599[JCBC-1599]:
+Bucket, Scope and Collection instances are now cached so repeated open attempts produce less garbage and happen quicker.
+* http://issues.couchbase.com/browse/JVMCBC-785[JVMCBC-785], http://issues.couchbase.com/browse/JVMCBC-786[JVMCBC-786], http://issues.couchbase.com/browse/JVMCBC-675[JVMCBC-675]:
+View, Search, Analytics and Query retryable error codes are now retried as part of the configured retry strategy.
+* http://issues.couchbase.com/browse/JCBC-1561[JCBC-1561], http://issues.couchbase.com/browse/JCBC-1562[JCBC-1562]:
+Added Option overloads to collection and search index managers.
+* http://issues.couchbase.com/browse/JVMCBC-787[JVMCBC-787], http://issues.couchbase.com/browse/JVMCBC-788[JVMCBC-788]:
+View requests and KV collection requests are now short-circuited against unsupported clusters.
+* http://issues.couchbase.com/browse/JCBC-1552[JCBC-1552]:
+Added support for Java 9 automatic module names.
+
+* http://issues.couchbase.com/browse/JCBC-1554[JCBC-1554]:
+`JsonArry` and `JsonObject` now support `toArray` in addition to `toString`.
+* http://issues.couchbase.com/browse/JCBC-1545[JCBC-1545]:
+The `ping` command has been reintroduced to the cluster and bucket level APIs.
+* http://issues.couchbase.com/browse/JCBC-1518[JCBC-1518]:
+An internal server error from the KV engine is now properly mapped to the exception equivalent.
+* http://issues.couchbase.com/browse/JVMCBC-779[JVMCBC-779]:
+It is now possible to customize the event loop thread count instead of having to provide a new event loop itself.
+* http://issues.couchbase.com/browse/JVMCBC-767[JVMCBC-767]:
+A new `ConfigIdleRedialTimeout` has been introduced which recycles idle HTTP streaming connections.
+* http://issues.couchbase.com/browse/JVMCBC-782[JVMCBC-782]:
+The orphan response reporter (as part of RTO) has been ported to SDK 3 from SDK 2 and is now enabled by default.
+* http://issues.couchbase.com/browse/JVMCBC-784[JVMCBC-784]:
+Idle HTTP connections are now closed after 30 seconds.
+* http://issues.couchbase.com/browse/JVMCBC-773[JVMCBC-773]:
+SASL PLAIN is now not negotiated by default on non-TLS connections to prevent downgrade attacks out of the box.
+* http://issues.couchbase.com/browse/JVMCBC-795[JVMCBC-795]:
+Requests are now failed fast if it can be determined that the service is not available on the cluster.
+* http://issues.couchbase.com/browse/JVMCBC-790[JVMCBC-790]:
+The concept of backpressure has been re-introduced but in slightly different form.
+* http://issues.couchbase.com/browse/JVMCBC-[JVMCBC-]:
+The circuit breaker now has a customizable completion callback.
+
+=== Bug Fixes
+
+The following list describes the API changes between 3.0.0 beta.2 and 3.0.0 GA.
+
+* http://issues.couchbase.com/browse/JCBC-1550[JCBC-1550]:
+The owned environment in the `Cluster` is now properly shutdown on disconnect.
+* http://issues.couchbase.com/browse/JCBC-1517[JCBC-1517], http://issues.couchbase.com/browse/JCBC-1566[JCBC-1566]:
+All reactive APIs are now deferred and will not execute I/O side effects when not subscribed to.
+* http://issues.couchbase.com/browse/JCBC-1539[JCBC-1539]:
+A bug has been fixed where the IoConfig.networkResolution could not be set through a system property.
+* http://issues.couchbase.com/browse/JVMCBC-793[JVMCBC-793]:
+Various fixed have been made around DNS SRV bootstrapping that make it more robust and fixed a bug that prevented it from working properly.
+* http://issues.couchbase.com/browse/JCBC-1524[JCBC-1524]:
+The projections on `get` have been refactored, the test suite expanded and a couple of issues fixed along the way.
+* http://issues.couchbase.com/browse/JCBC-1531[JCBC-1531]:
+The QueryIndexManager now only returns GSI indexes.
+* http://issues.couchbase.com/browse/JVMCBC-802[JVMCBC-802]:
+A bug has been fixed where a non-existing view in an existing design document would not cause an exception.
+* http://issues.couchbase.com/browse/JCBC-1565[JCBC-1565]:
+Views now use the right default view timeout instead of the analytics one.
+* http://issues.couchbase.com/browse/JVMCBC-789[JVMCBC-789]:
+Performing operations while initially loading the collection map is now handled gracefully.
+
+=== API Changes
+
+The following list describes the API changes between 3.0.0 beta.2 and 3.0.0 GA. Since SDK 3 is a complete rewrite over SDK 2, the
+individual changes between them are not listed here. Please refer to the migration guide for this.
+
+* http://issues.couchbase.com/browse/JCBC-1533[JCBC-1533], http://issues.couchbase.com/browse/JCBC-1534[JCBC-1534], http://issues.couchbase.com/browse/JCBC-1535[JCBC-1535], http://issues.couchbase.com/browse/JCBC-1541[JCBC-1541], http://issues.couchbase.com/browse/JCBC-1542[JCBC-1542]:
+Exceptions have been consolidated, renamed and overall aligned with the latest RFC.
+* http://issues.couchbase.com/browse/JCBC-1536[JCBC-1536]:
+`SeedNodes` have been moved out of the `ClusterOptions` into a `Cluster#connect()` overload.
+* http://issues.couchbase.com/browse/JCBC-1540[JCBC-1540]:
+`MajorityAndPersistOnMaster` has been renamed to `MajorityAndPersistToActive` on the durability enum.
+* http://issues.couchbase.com/browse/JCBC-1545[JCBC-1545]:
+The diagnostics API has been reworked on all levels.
+* http://issues.couchbase.com/browse/JCBC-1551[JCBC-1551]:
+The `empty` constructors are gone from `JsonObject` and `JsonArray` since they duplicate `create`.
 
 == Version 3.0.0-beta.2 (22 November 2019)
 
