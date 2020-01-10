@@ -32,8 +32,9 @@ The Couchbase Server is a key-value store that's agnostic to what's stored, but 
 
 The Java SDK provides you with several options for working with JSON.
 
-If you pass any object (like the provided `JsonObject` and `JsonArray`), including `Map<String, Object>` or `List<Object>` into the APIs provided, the SDK will use its internal JSON codec (utilizing https://github.com/FasterXML/jackson[Jackson]) to encode/decode those objects transparently. The SDK also supports custom transcoders and serializers which are covered
-separately.
+If you pass any object (like the provided `JsonObject` and `JsonArray`), including `Map<String, Object>` or `List<Object>` into the APIs provided, 
+the SDK will use its internal JSON codec (utilizing https://github.com/FasterXML/jackson[Jackson]) to encode/decode those objects transparently. 
+The SDK also supports custom transcoders and serializers which are covered separately.
 
 == Upsert
 
@@ -41,7 +42,8 @@ separately.
 .Sub-Document Operations
 ====
 All of these operations involve fetching the complete document from the Cluster.
-Where the number of operations or other circumstances make bandwidth a significant issue, the SDK can work on just a specific _path_ of the document with xref:subdocument-operations.adoc[Sub-Docunent Operations].
+Where the number of operations or other circumstances make bandwidth a significant issue, 
+the SDK can work on just a specific _path_ of the document with xref:subdocument-operations.adoc[Sub-Docunent Operations].
 ====
 
 Here is a simple upsert operation, which will insert the document if it does not exist, or replace it if it does.
@@ -55,8 +57,10 @@ include::example$KvOperations.java[tag=upsert]
 
 [NOTE]
 =====
-All the examples here use the Java SDK's simplest API, which blocks until the operation is performed. There's also an asynchronous API that is based around Java's `CompletableFuture`, and a
-reactive API built around https://projectreactor.io/[Project Reactor]. They can be accessed like this:
+All the examples here use the Java SDK's simplest API, which blocks until the operation is performed. 
+There's also an asynchronous API that is based around Java's `CompletableFuture`, 
+and a reactive API built around https://projectreactor.io/[Project Reactor]. 
+They can be accessed like this:
 
 [source,java]
 ----
@@ -88,7 +92,9 @@ Of course if we're getting a document we probably want to do something with the 
 include::example$KvOperations.java[tag=get]
 ----
 
-Once we have a `GetResult`, we can use `contentAsObject()` to turn the content back into a `JsonObject` like we inserted it in the examples before, or use the more generic `contentAs(T.class)` equivalent to turn it back into other entity structures. In fact, the `contentAsObject()` method is just a convenience method for `contentAs(JsonObject.class)`.
+Once we have a `GetResult`, we can use `contentAsObject()` to turn the content back into a `JsonObject` like we inserted it in the examples before, 
+or use the more generic `contentAs(T.class)` equivalent to turn it back into other entity structures. 
+In fact, the `contentAsObject()` method is just a convenience method for `contentAs(JsonObject.class)`.
 
 == Replace
 A very common sequence of operations is to `get` a document, modify its contents, and `replace` it.
@@ -98,24 +104,35 @@ A very common sequence of operations is to `get` a document, modify its contents
 include::example$KvOperations.java[tag=replace]
 ----
 
-We `upsert` an initial version of the document. We don't care about the exact details of the result, just whether it succeeded or not, so do not assign a return value. Then we `get` it back into `doc` and pull out the document's content as a `JsonObject` using `contentAs`. Afterwards, we update a field in the `JsonObject` with `put`.  `JsonObject` is mutable, we don't need to store the result of the `put`. Finally, we `replace` the document with the updated content, and a CAS value, storing the final result as `result`.
+We `upsert` an initial version of the document. 
+We don't care about the exact details of the result, just whether it succeeded or not, so do not assign a return value. 
+Then we `get` it back into `doc` and pull out the document's content as a `JsonObject` using `contentAs`. 
+Afterwards, we update a field in the `JsonObject` with `put`.  `JsonObject` is mutable, we don't need to store the result of the `put`. 
+Finally, we `replace` the document with the updated content, and a CAS value, storing the final result as `result`.
 
 So, what is CAS?
 
-CAS, or Compare And Swap, is a form of optimistic locking. Every document in Couchbase has a CAS value, and it's changed on every mutation.  When you `get` a document you also get the document's CAS, and then when it's time to write the document, you send the same CAS back.  If another thread or program has modified that document in the meantime, the Couchbase Server can detect you've provided a now-outdated CAS, and return an error.  This provides cheap, safe concurrency.  See xref:concurrent-document-mutations.adoc[this detailed description of CAS] for further details.
+CAS, or Compare And Swap, is a form of optimistic locking. Every document in Couchbase has a CAS value, and it's changed on every mutation. 
+When you `get` a document you also get the document's CAS, and then when it's time to write the document, you send the same CAS back. 
+If another thread or program has modified that document in the meantime, the Couchbase Server can detect you've provided a now-outdated CAS, and return an error. 
+This provides cheap, safe concurrency. 
+See xref:concurrent-document-mutations.adoc[this detailed description of CAS] for further details.
 
 In general, you'll want to provide a CAS value whenever you `replace` a document, to prevent overwriting another agent's mutations.
 
 == Retrying on CAS failures
 
-But if we get a CAS mismatch, we usually just want to retry the operation. Let's see a more advanced `replace` example that shows one way to handle this:
+But if we get a CAS mismatch, we usually just want to retry the operation. 
+Let's see a more advanced `replace` example that shows one way to handle this:
 
 [source,java]
 ----
 include::example$KvOperations.java[tag=replace-retry]
 ----
 
-Note that this code is simplistic to show how CAS retry works in general. In later chapters we cover more sophisticated approaches to this, including asynchronous retry, retry with backoff and bailing out after a maximum amount of tries. All these should be in place for robust, production ready code.
+Note that this code is simplistic to show how CAS retry works in general. 
+In later chapters we cover more sophisticated approaches to this, including asynchronous retry, retry with backoff and bailing out after a maximum amount of tries. 
+All these should be in place for robust, production ready code.
 
 == Removing
 Removing a document is straightforward:
@@ -139,27 +156,37 @@ It can be used like this:
 include::example$KvOperations.java[tag=durability]
 ----
 
-If no argument is provided the application will report success back as soon as the primary node has acknowledged the mutation in its memory. However, we recognize that there are times when the application needs that extra certainty that especially vital mutations have been successfully replicated, and the other durability options provide the means to achieve this.
+If no argument is provided the application will report success back as soon as the primary node has acknowledged the mutation in its memory. 
+However, we recognize that there are times when the application needs that extra certainty that especially vital mutations have been successfully replicated, 
+and the other durability options provide the means to achieve this.
 
-The options differ depend on what Couchbase Server version is in use.  If 6.5 or above is being used, you can take advantage of the `Durable Write` feature, in which Couchbase Server will only return success to the SDK after the requested replication level has been achieved.  The three replication levels are:
+The options differ depend on what Couchbase Server version is in use. 
+If 6.5 or above is being used, you can take advantage of the `Durable Write` feature, 
+in which Couchbase Server will only return success to the SDK after the requested replication level has been achieved. 
+The three replication levels are:
 
- - `Majority` - The server will ensure that the change is available in memory on the majority of configured replicas.
- - `MajorityAndPersistToActive` - Majority level, plus persisted to disk on the active node.
- - `PersistToMajority` - Majority level, plus persisted to disk on the majority of configured replicas.
+ * `Majority` - The server will ensure that the change is available in memory on the majority of configured replicas.
+ * `MajorityAndPersistToActive` - Majority level, plus persisted to disk on the active node.
+ * `PersistToMajority` - Majority level, plus persisted to disk on the majority of configured replicas.
 
-The options are in increasing levels of safety.  Note that nothing comes for free - for a given node, waiting for writes to storage is considerably slower than waiting for it to be available in-memory.
+The options are in increasing levels of safety. 
+Note that nothing comes for free - for a given node, waiting for writes to storage is considerably slower than waiting for it to be available in-memory.
 
-In a version of Couchbase Server lower than 6.5 is being used then the application can fall-back to 'client verified' durability.  Here the SDK will do a simple poll of the replicas and only return once the requested durability level is achieved.  This can be achieved like this:
+In a version of Couchbase Server lower than 6.5 is being used then the application can fall-back to 'client verified' durability. 
+Here the SDK will do a simple poll of the replicas and only return once the requested durability level is achieved. 
+This can be achieved like this:
 
 [source,java]
 ----
 include::example$KvOperations.java[tag=durability-observed]
 ----
 
-To stress, durability is a useful feature but should not be the default for most applications, as there is a performance consideration, and the default level of safety provided by Couchbase will be reasonable for the majority of situations.
+To stress, durability is a useful feature but should not be the default for most applications, as there is a performance consideration, 
+and the default level of safety provided by Couchbase will be reasonable for the majority of situations.
 
 == Document Expiration
-Couchbase Server includes an option to have particular documents automatically expire after a set time.  This can be useful for some use-cases, such as user sessions, caches, or other temporary documents.
+Couchbase Server includes an option to have particular documents automatically expire after a set time. 
+This can be useful for some use-cases, such as user sessions, caches, or other temporary documents.
 
 You can set an expiry value when creating a document:
 
@@ -175,14 +202,16 @@ When getting a document, the expiry is not provided automatically by Couchbase S
 include::example$KvOperations.java[tag=expiry-get]
 ----
 
-Note that when updating the document, special care must be taken to avoid resetting the expiry to zero.  Here's how:
+Note that when updating the document, special care must be taken to avoid resetting the expiry to zero. 
+Here's how:
 
 [source,java]
 ----
 include::example$KvOperations.java[tag=expiry-replace]
 ----
 
-Some applications may find `getAndTouch` useful, which fetches a document while updating its expiry field.  It can be used like this:
+Some applications may find `getAndTouch` useful, which fetches a document while updating its expiry field. 
+It can be used like this:
 
 [source,java]
 ----
@@ -191,7 +220,7 @@ include::example$KvOperations.java[tag=expiry-touch]
 
 == Additional resources
 
-Working on just a specific path within a JSON document will reduce network bandwidth requirements - see the xref:subdocument-operations.adoc[Sub-Document] pages.
+Working on just a specific path within a JSON document will reduce network bandwidth requirements -- see the xref:subdocument-operations.adoc[Sub-Document] pages.
 
 // For working with metadata on a document, reference our xref:sdk-xattr-example.adoc[Extended Attributes] pages.
 
