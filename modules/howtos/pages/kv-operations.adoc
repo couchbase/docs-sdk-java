@@ -161,7 +161,7 @@ However, we recognize that there are times when the application needs that extra
 and the other durability options provide the means to achieve this.
 
 The options differ depend on what Couchbase Server version is in use. 
-If 6.5 or above is being used, you can take advantage of the `Durable Write` feature, 
+If 6.5 or above is being used, you can take advantage of the xref:concept-docs:durability-replication-failure-considerations.adoc#durable-writes[Durable Write] feature, 
 in which Couchbase Server will only return success to the SDK after the requested replication level has been achieved. 
 The three replication levels are:
 
