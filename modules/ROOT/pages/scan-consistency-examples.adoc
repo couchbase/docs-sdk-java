@@ -6,7 +6,7 @@
 You can balance performance against consistency in N1QL queries via the Couchbase Java client and the STATEMENT_PLUS (AtPlus) option.
 
 [#scan_consistency]
---
+
 N1QL provides a couple of options for scan consistency, represented in Java by the `ScanConsistency` enum:
 
 ----
