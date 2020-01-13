@@ -1,6 +1,6 @@
 = N1QL Scan Consistency Using the Java SDK with Couchbase Server
 :navtitle: Using Scan Consistency
-:page-topic-type: concept
+:page-topic-type: howto
 
 [abstract]
 You can balance performance against consistency in N1QL queries via the Couchbase Java client and the STATEMENT_PLUS (AtPlus) option.
