@@ -314,7 +314,7 @@ Couchbase’s traditional durability, using `PersistTo` and `ReplicateTo`, is st
 include::example$SubDocument.java[tag=old-durability,indent=0]
 ----
 
-In Couchbase Server 6.5 and up, this is built upon with Synchronous Replication, which uses the concept of majority to indicate the number of configured Data Service nodes to which commitment is required:
+In Couchbase Server 6.5 and up, this is built upon with xref:concept-docs:durability-replication-failure-considerations.adoc#durable-writes[Durable Writes], which uses the concept of majority to indicate the number of configured Data Service nodes to which commitment is required:
 
 [source,java]
 ----
