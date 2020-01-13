@@ -171,6 +171,7 @@ The three replication levels are:
 
 The options are in increasing levels of safety. 
 Note that nothing comes for free - for a given node, waiting for writes to storage is considerably slower than waiting for it to be available in-memory.
+These trade offs, as well as which settings may be tuned, are discussed in the xref:concept-docs:durability-replication-failure-considerations.adoc#durable-writes[durability page].
 
 In a version of Couchbase Server lower than 6.5 is being used then the application can fall-back to 'client verified' durability. 
 Here the SDK will do a simple poll of the replicas and only return once the requested durability level is achieved. 
