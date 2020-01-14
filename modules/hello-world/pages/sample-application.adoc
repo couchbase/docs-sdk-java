@@ -31,9 +31,7 @@ Change directory into your cloned repository, and check out the latest branch (t
 git checkout 6.5.0-branch
 ----
 
-Before building the Travel Sample Application, which in the case of the Java SDK utilises the Collections _Developer Preview_, you need to enable this DP feature.
-Remember, do not run this on a production server: Collections is  _Developer Preview_, and is not supported for _production_ use with Couchbase Server 6.5; 
-there is no upgrade path from a DP-enabled server.
+Before building the Travel Sample Application, which in the case of the Java SDK utilises the Collections _Developer Preview_, you need to enable this DP feature (see warning above).
 
 [source,bash]
 .Enable Collections Developer Preview
@@ -82,9 +80,7 @@ mvn spring-boot:run
 Most likely, you'll want to open up your preferred IDE for the `storage.host` step, 
 and stay there to build the app, rather than running Maven from the command line.
 
-After your preferred activity away from the screen for a couple of minutes of build 
-(we recommend making a cup of tea, and staring meditatively out of the window), 
-you should see messages from `Tomcat` and `trycb.Application`, which tells you that you've been successful.
+After the build, you should see messages from `Tomcat` and `trycb.Application`, which tells you that you've been successful.
 With your Web browser of choice, head to port 8080 of the local machine.
 
 
