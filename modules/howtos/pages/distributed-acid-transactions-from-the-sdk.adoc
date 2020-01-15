@@ -16,7 +16,7 @@ This is the beta release of Distributed Transactions for Couchbase, providing th
 * An isolation level of Read Committed, to support high performance and scalability.
 * A high-level and easy-to-use API that allows the developer to express what they want the transaction to do as a block of logic, while the library takes care of the nuts and bolts of handling any temporary conflicts with other transactions.  
 
-Please see xref:6.5@server:introduction:distributed-acid-transactions.adoc[our introduction to ACID Transactions] for a guide to the benefits and trade-offs of multi-document transactions.
+Please see xref:6.5@server:learn:data/transactions.adoc[our introduction to ACID Transactions] for a guide to the benefits and trade-offs of multi-document transactions.
 
 Below we show you how to create Transactions, step-by-step.
 You may also want to start with our https://github.com/couchbaselabs/couchbase-transactions-java-examples[GitHub transactions examples page], 
@@ -431,6 +431,6 @@ The transaction expiry timer (which is configurable) will begin ticking once the
 
 == Further Reading
 
-* There’s plenty of explanation about how Transactions work in Couchbase in our xref:6.5@server:introduction:distributed-acid-transactions.adoc[Transactions documentation].
+* There’s plenty of explanation about how Transactions work in Couchbase in our xref:6.5@server:learn:data/transactions.adoc[Transactions documentation].
 * You can find further code examples on our https://github.com/couchbaselabs/couchbase-transactions-java-examples[GitHub transactions examples page].
 
