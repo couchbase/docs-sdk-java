@@ -45,6 +45,24 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 Note the https://www.couchbase.com/support-policy[End of Life dates^] for Couchbase Server and SDK versions.
 See the notes there for Support details.
 
+
+[#jdk-compat]
+== JDK Version Compatibility
+
+The Java SDK is tested with Oracle JDK and OpenJDK.
+Other JDK implementations might work but are not tested and are unsupported.
+We recommend running the latest LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
+
+The following JDK releases are supported:
+
+* OpenJDK 11 with HotSpot JVM (recommended)
+* Oracle JDK 11 (recommended)
+* OpenJDK 1.8 with HotSpot JVM
+* Oracle JDK 1.8
+
+Please make sure you run on one of the latest patch releases, since they provide stability improvements and security fixes in general.
+
+
 == Couchbase Feature Availability Matrix
 
 TBI
