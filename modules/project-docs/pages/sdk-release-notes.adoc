@@ -11,9 +11,12 @@ Please see the xref:distributed-transactions-java-release-notes.adoc[Transaction
 
 == Installation
 
-At least Java 8 is required for current releases; all newer, vendor supported Java versions are supported (and encouraged), up to and including Java 11. 
-See the xref:compatibility.adoc[Compatibility] section for details.
-Java 11 is recommended, which has various enhancements like lambda local variable type inference, profiling tools, and updated security features.
+// tag:jdk-version
+At least Java 8 is required for current releases;
+see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section for details.
+We recommend running the latest LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
+Java 11 has various enhancements like lambda local variable type inference, profiling tools, and updated security features.
+// end:jdk-version
 
 [source,xml]
 ----
