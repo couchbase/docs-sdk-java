@@ -11,11 +11,59 @@ This page features the release notes for that library -- for release notes, down
 See the xref:6.5@server:learn:data/transactions.adoc[Distributed ACID Transactions concept doc] in the server documentation for details of how Couchbase implements transactions.
 The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Transactions HOWTO doc] walks you through all aspects of working with Distributed Transactions.
 
-== Distributed Transactions Java 1.0.0-beta.3
+== Distributed Transactions Java 1.0.0 (17th January 2020)
+This is the first General Availability (GA) release of Distributed ACID Transactions 1.0.0 for Couchbase Server 6.5.
+
+Built on Couchbase java-client version 3.0.0 (GA).
+Requires Couchbase Server 6.5 or above.
+
+=== Bug Fixes & Stability
+* https://issues.couchbase.com/browse/TXNJ-119[TXNJ-119]:
+Calling commit multiple times leads to an error mentioning "rollback"; changed to separate error messages for commit and rollback
+* https://issues.couchbase.com/browse/TXNJ-126[TXNJ-126]:
+Expire a transaction immediately if it expires while deferred
+* https://issues.couchbase.com/browse/TXNJ-149[TXNJ-149]:
+Improve ambiguous error handling during commit
+* https://issues.couchbase.com/browse/TXNJ-163[TXNJ-163], https://issues.couchbase.com/browse/TXNJ-156[TXNJ-156]:
+Ensure that java-client errors are correctly handled after its changes to error handling
+* https://issues.couchbase.com/browse/TXNJ-165[TXNJ-165]:
+Fix reactor.core.Exceptions$OverflowException seen during cleanup.  Would only affect users setting a cleanup window of 1 second or less.
+
+=== Enhancements
+* https://issues.couchbase.com/browse/TXNJ-173[TXNJ-173]:
+Register for changes to bucket configurations, so if the application opens a bucket after creating Transactions object, background cleanup will be started on those new buckets.
+* https://issues.couchbase.com/browse/TXNJ-69[TXNJ-69]:
+Provide some future proofing for client-record.  Implementation detail, allows for future extensibility of the background cleanup process.
+* https://issues.couchbase.com/browse/TXNJ-111[TXNJ-111], https://issues.couchbase.com/browse/TXNJ-110[TXNJ-110]:
+Sends new events to the java-client event-bus with details from the background cleanup process.
+* https://issues.couchbase.com/browse/TXNJ-120[TXNJ-120]:
+Once Transactions object is closed, prevent futher operations on it as a sanity check
+* https://issues.couchbase.com/browse/TXNJ-151[TXNJ-151]:
+Add Java client metadata to help track failures.  Implementation detail, adds some additional info to exceptions to help debugging.
+* https://issues.couchbase.com/browse/TXNJ-152[TXNJ-152]:
+When transaction expires, attempt to roll it back (or complete commit).  Completes the work in TXNJ-124 (in 1.0.0-beta.3), to cover all cases.
+* https://issues.couchbase.com/browse/TXNJ-155[TXNJ-155]:
+Remove OpenTracing dependency.  An implementation detail as it has already been removed from the API, this completes the work and removes the dependency on the jar.  Once OpenTelemetry (OpenTracing's direct replacement) is stable, support for it will be added.
+* https://issues.couchbase.com/browse/TXNJ-162[TXNJ-162]:
+Performance improvements related to String parsing.  Internal benchmarking sees a huge reduction in memory allocations and GC pressure with this change.
+* https://issues.couchbase.com/browse/TXNJ-167[TXNJ-167]:
+Rebuild on java-client 3.0.0 GA
+* https://issues.couchbase.com/browse/TXNJ-170[TXNJ-170]:
+Perform ATR cleanup in serial, which prevents errors being sent to Hooks.onErrorDropped (and by default stdout) when shutting down transactions.  Along with java-client fix https://issues.couchbase.com/browse/JVMCBC-781[JVMCBC-781], users should no longer see Hooks.onErrorDropped errors.
+
+=== API changes
+* https://issues.couchbase.com/browse/TXNJ-171[TXNJ-171]:
+Rename MAJORITY_AND_PERSIST_ON_MASTER to MAJORITY_AND_PERSIST_ON_ACTIVE, in accordance with new naming conventions
+* https://issues.couchbase.com/browse/TXNJ-169[TXNJ-169]:
+Simplify cleanup window logic to remove divide-by-2; previously, specifying `TransactionConfigBuilder.cleanupWindow(120 seconds)` would lead to ATRs getting checked every 60 seconds (in the general case): now to reduce confusion they will be checked every 120 seconds
+* https://issues.couchbase.com/browse/TXNJ-164[TXNJ-164]:
+Remove `TransactionConfigBuilder.logDirectlyCleanup`.  As all cleanup trace is now sent directly to java-client's event-bus, it can be configured from there and this parameter is useless.
+
+== Distributed Transactions Java 1.0.0-beta.3 (13th November 2019)
 
 This is the third _Beta_ release of Distributed ACID Transactions 1.0.0 for Couchbase Server 6.5 and the Java 3.0.0 client.
 There are no major changes.
-The main purpose of the release is to rebuild on top of the new beta release of the java-client, so applications can use both together.
+The main purpose of the release is to rebuild on top of the beta.1 release of the java-client, so applications can use both together.
 
 Built on Couchbase java-client version 3.0.0-beta.1.
 Requires Couchbase Server 6.5 or above.
