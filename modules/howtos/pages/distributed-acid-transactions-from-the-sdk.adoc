@@ -71,7 +71,10 @@ It is very important that the application ensures that only one of these is crea
 include::example$TransactionsExample.java[tag=init,indent=0]
 ----
 
-The default configuration will perform all writes with the durability setting Majority, ensuring that each write is available in-memory on the majority of replicas before the transaction continues.  The application is free to adjust this to the level of None for performance at the cost of some data safety and possible loss of atomicity in the advent of node failures, or to a higher durability level for even greater safety (of course, at some loss in performance).  Majority has been selected as the best default durability for most use-cases.
+The default configuration will perform all writes with the durability setting Majority, ensuring that each write is available in-memory on the majority of replicas before the transaction continues. 
+The application is free to adjust this to the level of None for performance at the cost of some data safety and possible loss of atomicity in the advent of node failures, or to a higher durability level for even greater safety 
+(of course, at some loss in performance). 
+Majority has been selected as the best default durability for most use-cases.
 
 
 == Creating a Transaction
@@ -241,7 +244,8 @@ include::example$TransactionsExample.java[tag=full,indent=0]
 This release of transactions for Couchbase requires a degree of co-operation from the application.
 Specifically, the application should ensure that transactional and non-transactional writes (such as the SDK API using the data service or issuing N1QL UPDATES) are never done concurrently with documents involved in a transaction.
 It is recommended that if your app is using transactions, all transacted-upon document access for mutation is through the transactions API.
-In many applications, this means you will have a mix of use of the traditional API for documents not involved in transactions, and the transactions API for documents used from transactions, even if some sections of that logic do not require multi-document atomicity.
+In many applications, this means you will have a mix of use of the traditional API for documents not involved in transactions, 
+and the transactions API for documents used from transactions, even if some sections of that logic do not require multi-document atomicity.
 Queries and read access from other APIs are perfectly fine, and are at a Read Committed isolation level.
 We may change this in a future release.
 
