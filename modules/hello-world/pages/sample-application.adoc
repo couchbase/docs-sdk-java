@@ -8,7 +8,7 @@
 Discover how to program interactions with the Couchbase Server via the data, Query, and search services -- using the Travel Sample Application with the built-in Travel Sample data Bucket.
 This version also demonstrated the Developer Preview of the upcoming Collections feature.
 
-6.5@sdk:pages:partial$sample-application.adoc
+include::6.5@sdk:shared:partial$sample-application.adoc[tag=prereq]
 
 This version of the Travel Sample App uses the xref:6.5@server:developer-preview:preview-mode.adoc[Collections Developer Preview (DP)] 
 -- enabling Developer Preview should only be done on a development machine; 
@@ -31,8 +31,8 @@ Change directory into your cloned repository, and check out the latest branch (t
 git checkout 6.5.0-branch
 ----
 
-Before building the Travel Sample Application, which in the case of the Java SDK utilises the Collections _Developer Preview_, you need to enable this DP feature (see warning above).
-
+* Before building the Travel Sample Application, which in the case of the Java SDK utilises the Collections _Developer Preview_, you need to enable this DP feature (see warning above).
++
 [source,bash]
 .Enable Collections Developer Preview
 ----
