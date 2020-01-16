@@ -14,7 +14,12 @@ If you're upgrading your application from Java SDK 2.x, please read our xref:pro
 
 == Installing the SDK
 
-include::project-docs:sdk-release-notes.adoc[tag=jdk-version]
+At least Java 8 is required for current releases;
+see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section for details.
+We recommend running the latest LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
+Java 11 has various enhancements like lambda local variable type inference, profiling tools, and updated security features.
+
+// include::project-docs:sdk-release-notes.adoc[tag=jdk-version]
 
 Couchbase publishes all stable artifacts to Maven Central. You can use your favorite dependency management tool to install the SDK. The following snippet shows how to do it with maven.
 
