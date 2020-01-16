@@ -1,7 +1,7 @@
 = Field Level Encryption
 :page-topic-type: concept
 :page-edition: Enterprise Edition
-include::partial$attributes.adoc[]
+#include::partial$attributes.adoc[]
 
 [abstract]
 Fields within a document can be securely encrypted by the SDK, to support FIPS-140-2 compliance.
