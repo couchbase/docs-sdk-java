@@ -7,7 +7,19 @@
 :example-source: 3.0@java-sdk:howtos:example$Queries.java
 :example-source-lang: java
 
-include::1.0@scala-sdk:howtos:partial$n1ql-intro.adoc[]
+You can query for documents in Couchbase using the N1QL query language, a language based on SQL, but designed for structured and flexible JSON documents.
+
+Our query service uses N1QL, which will be fairly familiar to anyone who's used any dialect of SQL.
+<<Additional Resources>> for learning about N1QL are listed at the bottom of the page.
+Before you get started you may wish to checkout the xref:6.0@server:n1ql:n1ql-language-reference/index.adoc[N1QL intro page].
+
+[TIP]
+.N1QL Compared to Key-Value
+====
+N1QL is excellent for performing queries against multiple documents, but if you only need to access or mutate a single document and you know its unique ID, it will be
+much more efficient to use the Key-Value API.  We strongly recommend using both APIs to create a flexible, performant application.
+====
+
 include::1.0@scala-sdk:howtos:partial$n1ql-getting-started.adoc[]
 
 == A Simple Query
