@@ -17,12 +17,12 @@
 * xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed ACID Transactions]
 
 .Managing Couchbase
-* User Management
- ** xref:howtos:sdk-authentication.adoc[Authentication]
+// * User Management
+//  ** xref:howtos:sdk-authentication.adoc[Authentication]
 * xref:howtos:managing-connections.adoc[Managing Connections]
 
 .Errors & Diagnostics
-* xref:howtos:health-check.adoc[Health Check]
+// * xref:howtos:health-check.adoc[Health Check]
 
 .Learn
 * xref:concept-docs:concepts.adoc[Overview]
