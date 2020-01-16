@@ -1,7 +1,8 @@
 = Couchbase Java SDK Release Notes and Archives
 :navtitle: Release Notes
 :page-topic-type: project-doc
-:page-aliases: relnotes-java-sdk,ROOT:sdk-release-notes
+:page-partial:
+:page-aliases: relnotes-java-sdk,ROOT:sdk-release-notes,ROOT:relnotes-java-sdk,ROOT:release-notes
 
 These pages cover the 3.0 versions of the Couchbase Java SDK. 
 For release notes, download links, and installation methods for 2.7 and earlier releases of the Couchbase Java Client, which will not work with Distributed Transactions, please see the xref:2.7@java-sdk::sdk-release-notes[2.x Java Release Notes & Download Archive].
@@ -11,12 +12,12 @@ Please see the xref:distributed-transactions-java-release-notes.adoc[Transaction
 
 == Installation
 
-// tag:jdk-version
+// tag::jdk-version[]
 At least Java 8 is required for current releases;
 see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section for details.
 We recommend running the latest LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
 Java 11 has various enhancements like lambda local variable type inference, profiling tools, and updated security features.
-// end:jdk-version
+// end::jdk-version[]
 
 [source,xml]
 ----

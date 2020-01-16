@@ -1,5 +1,7 @@
 = Install and Start Using the Java SDK with Couchbase Server
 :navtitle: Start Using the SDK
+:page-partial:
+:page-aliases: ROOT:start-using-sdk
 
 [abstract]
 
@@ -12,7 +14,7 @@ If you're upgrading your application from Java SDK 2.x, please read our xref:pro
 
 == Installing the SDK
 
-include::project-docs::sdk-release-notes.adoc[tag=jdk-version]
+include::project-docs:sdk-release-notes.adoc[tag=jdk-version]
 
 Couchbase publishes all stable artifacts to Maven Central. You can use your favorite dependency management tool to install the SDK. The following snippet shows how to do it with maven.
 
