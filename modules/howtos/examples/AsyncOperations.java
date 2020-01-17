@@ -9,7 +9,6 @@ import com.couchbase.client.java.ReactiveCluster;
 import com.couchbase.client.java.ReactiveCollection;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
-import com.couchbase.client.java.query.ReactiveQueryResult;
 import io.reactivex.Single;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -53,7 +52,7 @@ reactiveCollection
 // #end::simple-get[]
 
 // #tag::non-used-upsert[]
-reactiveCollection.upsert("my-doc", JsonObject.empty());
+reactiveCollection.upsert("my-doc", JsonObject.create());
 // #end::non-used-upsert[]
 
 // #tag::verbose-query[]

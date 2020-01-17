@@ -5,7 +5,7 @@
 include::partial$attributes.adoc[]
 
 [abstract]
-In response to increasing volumes of data being sent over the wire, Couchbase Data Platform now provides data compression between the SDK and Couchbase Server.
+In response to increasing volumes of data being sent over the wire, Couchbase Data Platform provides data compression between the SDK and Couchbase Server.
 
 // 2.7 docs to update <---------------------
 // needs moving to sdk-common

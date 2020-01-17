@@ -3,11 +3,23 @@
 :page-topic-type: howto
 :page-aliases: n1ql-query
 :lang: Java
-:version: 3.0.0 alpha
+:version: 3.0.0
 :example-source: 3.0@java-sdk:howtos:example$Queries.java
 :example-source-lang: java
 
-include::1.0@scala-sdk:howtos:partial$n1ql-intro.adoc[]
+You can query for documents in Couchbase using the N1QL query language, a language based on SQL, but designed for structured and flexible JSON documents.
+
+Our query service uses N1QL, which will be fairly familiar to anyone who's used any dialect of SQL.
+<<Additional Resources>> for learning about N1QL are listed at the bottom of the page.
+Before you get started you may wish to checkout the xref:6.0@server:n1ql:n1ql-language-reference/index.adoc[N1QL intro page].
+
+[TIP]
+.N1QL Compared to Key-Value
+====
+N1QL is excellent for performing queries against multiple documents, but if you only need to access or mutate a single document and you know its unique ID, it will be
+much more efficient to use the Key-Value API.  We strongly recommend using both APIs to create a flexible, performant application.
+====
+
 include::1.0@scala-sdk:howtos:partial$n1ql-getting-started.adoc[]
 
 == A Simple Query
@@ -20,19 +32,13 @@ include::example$Queries.java[tag=simple]
 
 (Note that we won't be covering the N1QL language itself in any detail here, but if you're familiar with SQL you'll see it's very similar.)
 
-Error handling: the Java SDK will throw an exception derived from `CouchbaseException` if there are any errors.
-
-[NOTE]
-=====
-Most of the examples here use the simplest of the three APIs provided by the Java SDK, which blocks until the operation is performed.  There's also an asynchronous API that is based around `CompletableFuture`, and a
-streaming reactive API, for which we'll see an example later.
-=====
+The Java SDK will throw an exception derived from `CouchbaseException` if there are any errors.
 
 include::1.0@scala-sdk:howtos:partial$n1ql-placeholders.adoc[]
 include::1.0@scala-sdk:howtos:partial$n1ql-scan-consistency.adoc[]
 
 == Streaming Large Result Sets
-As mentioned earlier, the Java SDK provides three SDKs:
+The Java API provides three distinct APIs for all services:
 
 * The blocking API you've seen so far, that returns a `QueryResult` containing all rows.
 

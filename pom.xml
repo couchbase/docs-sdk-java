@@ -12,7 +12,7 @@
         <dependency>
             <groupId>com.couchbase.client</groupId>
             <artifactId>java-client</artifactId>
-            <version>3.0.0-beta.2</version>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.couchbase.client</groupId>
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>io.projectreactor.addons</groupId>
             <artifactId>reactor-adapter</artifactId>
-            <version>3.2.3.RELEASE</version>
+            <version>3.3.1.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>io.reactivex.rxjava2</groupId>

@@ -11,9 +11,6 @@ Retry behaviour is more proactive, and lazy bootstrapping moves all error handli
 Individual behaviour changes across services are explained here.
 
 
-include::partial$beta-warning.adoc[]
-
-
 include::6.5@sdk:shared:partial$migration.adoc[tag=intro]
 
 
@@ -45,11 +42,11 @@ include::6.5@sdk:shared:partial$migration.adoc[tag=lang]
 
 ==  Installation and Configuration
 
-The Java SDK 3.x is available to download from the same resources as the previous generation. Stable builds can be found on maven central, pre-releases are available from our own maven repository. 
+The Java SDK 3.x is available for download from the same resources as the previous generation. Builds can be found on maven central, pre-releases are available from our own maven repository.
 In addition, a `zip` file is available with the required jars. 
 Please see the xref:sdk-release-notes.adoc[Release Notes] for up-to-date information.
 
-IMPORTANT: Java SDK 3.x has a minimum required Java version of 8, altough we recommend running the latest stable version (i.e. at the time of writing JDK 11) with the highest patch version available.
+IMPORTANT: Java SDK 3.x has a minimum required Java version of 8, although we recommend running the latest LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
 
 Note that the transitive dependency list has changed. 
 As a refresher, Java SDK 2 depended on the following artifacts:
@@ -68,7 +65,7 @@ Note that the SDK now uses `Reactor` instead of `RxJava` and the explicit depend
 We are now providing support for different tracing backends with additional dependencies that can be pulled in as needed. 
 `ReactiveStreams` is a transitive dependency of `Reactor` and provides interoperability code so you can use other reactive streams implementations as well.
 
-If you are pulling in the SDK through a package manager (recommended), all these dependencies will be resolved for you automatically. 
+If you are pulling in the SDK through a package manager (recommended), all dependencies will be resolved for you automatically.
 Otherwise please download the zip file and adjust your jar files accordingly.
 
 
@@ -123,7 +120,7 @@ At the end of this guide you'll find a xref:#configurations-options-reference[re
 
 Since SDK 2 supports Couchbase Server clusters older than 5.0, it had to support both Role-Based access control as well as bucket-level passwords. 
 The minimum cluster version supported by SDK 3 is Server 5.0, which means that only RBAC is supported. 
-This is why you can set the username and password right directly connecting:
+This is why you can set the username and password when directly connecting:
 
 [source,java]
 ----
@@ -178,17 +175,16 @@ Here is the SDK 3 equivalent:
 include::example$Migrating.java[tag=simpleget,indent=0]
 ----
 
-`Collections` are being introduced as a new concept with an upcoming Couchbase Server release, but the SDK already encodes it in its API to be future-proof. 
-If you are using a Couchbase Server version which does not support `Collections`, always use the `defaultCollection()` method to access the KV API;
-it will map to the full bucket transparently in the background.
+`Collections` will be generally available with an upcoming Couchbase Server release, but the SDK already encodes it in its API to be future-proof.
+If you are using a Couchbase Server version which does not support `Collections`, always use the `defaultCollection()` method to access the KV API; it will map to the full bucket transparently in the background.
 
 IMPORTANT: You'll notice that `bucket(String)` returns immediately, even if the bucket resources are not completely opened. 
 This means that the subsequent `get` operation may be dispatched even before the socket is open in the background. 
 The SDK will handle this case transparently, and reschedule the operation until the bucket is opened properly. 
-This also means that if a bucket could not be opened (say, because no socket was reachable) the operation will time out! 
+This also means that if a bucket could not be opened (say, because no socket was reachable) the operation will time out.
 Please check the logs to see the cause of the timeout (in this case, you'll see socket connect rejections).
 
-One more thing to note: you'll now find Query, Search, and Analytics at the `Cluster` level -- this is where they logically belong. 
+Also note, you will now find Query, Search, and Analytics at the `Cluster` level -- this is where they logically belong.
 If you are using Couchbase Server 6.5 or later, you will be able to perform cluster-level queries even if no bucket is open. 
 If you are using an earlier version of the cluster you must open at least one bucket, otherwise cluster-level queries will fail.
 

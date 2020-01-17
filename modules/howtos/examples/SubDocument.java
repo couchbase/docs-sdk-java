@@ -44,88 +44,90 @@ System.out.println("Country = " + str);
 
     static void existsFunc() {
 // #tag::exists[]
-        LookupInResult result = collection.lookupIn("customer123",
-                Arrays.asList(exists("addresses.delivery.does_not_exist")));
+LookupInResult result = collection.lookupIn(
+  "customer123",
+  Collections.singletonList(exists("addresses.delivery.does_not_exist"))
+);
 
-        boolean exists = result.contentAs(0, Boolean.class);
+boolean exists = result.contentAs(0, Boolean.class);
 // #end::exists[]
     }
 
     static void combine() {
 // #tag::combine[]
-        LookupInResult result = collection.lookupIn("customer123",
-                Arrays.asList(
-                        get("addresses.delivery.country"),
-                        exists("addresses.delivery.does_not_exist")
-                ));
+LookupInResult result = collection.lookupIn(
+    "customer123",
+    Arrays.asList(
+        get("addresses.delivery.country"),
+        exists("addresses.delivery.does_not_exist")
+    )
+);
 
-        String country = result.contentAs(0, String.class);
-        boolean exists = result.contentAs(1, Boolean.class);
+String country = result.contentAs(0, String.class);
+boolean exists = result.contentAs(1, Boolean.class);
 // #end::combine[]
     }
 
     static void future() throws ExecutionException, InterruptedException {
 // #tag::get-future[]
-        CompletableFuture<LookupInResult> future =
-                collection.async().lookupIn("customer123", Arrays.asList(
-                        get("addresses.delivery.country")
-                ));
+CompletableFuture<LookupInResult> future = collection.async().lookupIn(
+  "customer123",
+  Collections.singletonList(get("addresses.delivery.country"))
+);
 
-        // Just for example, block on the result - this is not best practice
-        LookupInResult result = future.get();
+// Just for example, block on the result - this is not best practice
+LookupInResult result = future.get();
 // #end::get-future[]
     }
 
     static void reactive() {
 // #tag::get-reactive[]
-        Mono<LookupInResult> mono =
-                collection.reactive().lookupIn("customer123",
-                        Arrays.asList(
-                                get("addresses.delivery.country")
-                        ));
+Mono<LookupInResult> mono = collection.reactive().lookupIn(
+  "customer123",
+  Collections.singletonList(get("addresses.delivery.country"))
+);
 
-        // Just for example, block on the result - this is not best practice
-        LookupInResult result = mono.block();
+// Just for example, block on the result - this is not best practice
+LookupInResult result = mono.block();
 // #end::get-reactive[]
     }
 
 
     static void upsertFunc() {
 // #tag::upsert[]
-        collection.mutateIn("customer123", Arrays.asList(
-                upsert("email", "dougr96@hotmail.com")
-        ));
-
+collection.mutateIn("customer123", Arrays.asList(
+        upsert("email", "dougr96@hotmail.com")
+));
 // #end::upsert[]
     }
 
     static void insertFunc() {
 // #tag::insert[]
-        try {
-            collection.mutateIn("customer123", Arrays.asList(
-                    insert("email", "dougr96@hotmail.com")
-            ));
-        } catch (PathExistsException err) {
-            System.out.println("Error, path already exists");
-        }
+try {
+    collection.mutateIn("customer123", Collections.singletonList(
+      insert("email", "dougr96@hotmail.com")
+    ));
+} catch (PathExistsException err) {
+    System.out.println("Error, path already exists");
+}
 // #end::insert[]
     }
 
     static void multiFunc() {
 // #tag::multi[]
-        collection.mutateIn("customer123", Arrays.asList(
-                remove("addresses.billing"),
-                replace("email", "dougr96@hotmail.com")
-        ));
+collection.mutateIn("customer123", Arrays.asList(
+        remove("addresses.billing"),
+        replace("email", "dougr96@hotmail.com")
+));
 // #end::multi[]
     }
 
 
     static void arrayAppendFunc() {
 // #tag::array-append[]
-        collection.mutateIn("customer123", Arrays.asList(
-                arrayAppend("purchases.complete", Collections.singletonList(777))
-        ));
+collection.mutateIn("customer123", Collections.singletonList(
+  arrayAppend("purchases.complete", Collections.singletonList(777))
+));
 
         // purchases.complete is now [339, 976, 442, 666, 777]
 // #end::array-append[]
@@ -133,9 +135,9 @@ System.out.println("Country = " + str);
 
     static void arrayPrependFunc() {
 // #tag::array-prepend[]
-        collection.mutateIn("customer123", Arrays.asList(
-                arrayPrepend("purchases.abandoned", Collections.singletonList(18))
-        ));
+collection.mutateIn("customer123", Collections.singletonList(
+  arrayPrepend("purchases.abandoned", Collections.singletonList(18))
+));
 
         // purchases.abandoned is now [18, 157, 49, 999]
 // #end::array-prepend[]
@@ -143,92 +145,92 @@ System.out.println("Country = " + str);
 
     static void createAndPopulateArrays() {
 // #tag::array-create[]
-        collection.upsert("my_array", JsonArray.create());
+collection.upsert("my_array", JsonArray.create());
 
-        collection.mutateIn("my_array", Arrays.asList(
-                arrayAppend("", Collections.singletonList("some element"))
-        ));
+collection.mutateIn("my_array", Collections.singletonList(
+  arrayAppend("", Collections.singletonList("some element"))
+));
         // the document my_array is now ["some element"]
 // #end::array-create[]
     }
 
     static void arrayCreate() {
 // #tag::array-upsert[]
-        collection.mutateIn("some_doc", Arrays.asList(
-                arrayAppend("some.array", Collections.singletonList("hello world")).createPath()
-        ));
+collection.mutateIn("some_doc", Collections.singletonList(
+  arrayAppend("some.array", Collections.singletonList("hello world")).createPath()
+));
 // #end::array-upsert[]
     }
 
     static void arrayUnique() {
 // #tag::array-unique[]
-        collection.mutateIn("customer123", Arrays.asList(
-                arrayAddUnique("purchases.complete", 95)
-        ));
+collection.mutateIn("customer123", Collections.singletonList(
+  arrayAddUnique("purchases.complete", 95)
+));
 
-        try {
-            collection.mutateIn("customer123", Arrays.asList(
-                    arrayAddUnique("purchases.complete", 95)
-            ));
-        } catch (PathExistsException err) {
-            System.out.println("Error, path already exists");
-        }
+try {
+    collection.mutateIn("customer123", Collections.singletonList(
+      arrayAddUnique("purchases.complete", 95)
+    ));
+} catch (PathExistsException err) {
+    System.out.println("Error, path already exists");
+}
 
 // #end::array-unique[]
     }
 
     static void arrayInsertFunc() {
 // #tag::array-insert[]
-        collection.mutateIn("some_doc", Arrays.asList(
-                arrayInsert("foo.bar[1]", Collections.singletonList("cruel"))
-        ));
+collection.mutateIn("some_doc", Collections.singletonList(
+  arrayInsert("foo.bar[1]", Collections.singletonList("cruel"))
+));
 // #end::array-insert[]
     }
 
     static void counterInc() {
 // #tag::counter-inc[]
-        MutateInResult result = collection.mutateIn("customer123", Arrays.asList(
-                increment("logins", 1)
-        ));
+MutateInResult result = collection.mutateIn("customer123", Collections.singletonList(
+  increment("logins", 1)
+));
 
-        // Counter operations return the updated count
-        Long count = result.contentAs(0, Long.class);
+// Counter operations return the updated count
+Long count = result.contentAs(0, Long.class);
 // #end::counter-inc[]
     }
 
     static void counterDec() {
 // #tag::counter-dec[]
-        collection.upsert("player432", JsonObject.create().put("gold", 1000));
+collection.upsert("player432", JsonObject.create().put("gold", 1000));
 
-        collection.mutateIn("player432", Arrays.asList(
-                decrement("gold", 150)
-        ));
+collection.mutateIn("player432", Collections.singletonList(
+  decrement("gold", 150)
+));
 // #end::counter-dec[]
     }
 
     static void createPath() {
 // #tag::create-path[]
-        collection.mutateIn("customer123", Arrays.asList(
-                upsert("level_0.level_1.foo.bar.phone",
-                        JsonObject.create()
-                                .put("num", "311-555-0101")
-                                .put("ext", 16))
-                        .createPath()
-        ));
+collection.mutateIn("customer123", Collections.singletonList(
+  upsert("level_0.level_1.foo.bar.phone",
+    JsonObject.create()
+      .put("num", "311-555-0101")
+      .put("ext", 16))
+    .createPath()
+));
 // #end::create-path[]
     }
 
     static void concurrent() {
 // #tag::concurrent[]
-        // Thread 1
-        collection.mutateIn("customer123", Arrays.asList(
-                arrayAppend("purchases.complete", Collections.singletonList(99))
-        ));
+// Thread 1
+collection.mutateIn("customer123", Collections.singletonList(
+  arrayAppend("purchases.complete", Collections.singletonList(99))
+));
 
-        // Thread 2
-        collection.mutateIn("customer123", Arrays.asList(
-                arrayAppend("purchases.abandoned", Collections.singletonList(101))
-        ));
+// Thread 2
+collection.mutateIn("customer123", Collections.singletonList(
+  arrayAppend("purchases.abandoned", Collections.singletonList(101))
+));
 // #end::concurrent[]
 
 
@@ -239,7 +241,7 @@ System.out.println("Country = " + str);
 GetResult doc = collection.get("player432");
 collection.mutateIn(
   "player432",
-  Arrays.asList(decrement("gold", 150)),
+  Collections.singletonList(decrement("gold", 150)),
   mutateInOptions().cas(doc.cas())
 );
         // #end::cas[]

@@ -10,7 +10,6 @@ endif::[]
 :url-playbook: {url-org}/docs-site
 
 This repository hosts the documentation source for the Couchbase Java SDK.
-You are in the branch for the _Beta_ release of 3.0.
 
 == Contributing
 
@@ -30,7 +29,7 @@ Keep in mind these key repository features:
 
 * Component name, version, and start page are configured in each branch's _antora.yml_ file.
 * The navigation for all of the modules is stored in the ROOT module's _nav.adoc_ file.
-* Production branches use the *release/X.Y* naming pattern (e.g., release/5.5, release/6.0).
+* Production branches use the *release/X.Y* naming pattern (e.g., release/2.7, release/3.0).
  ** The {url-playbook}[docs site playbook] instructs Antora to automatically aggregate any branch names that start with *release/*.
 
 == Documentation Site Toolchain

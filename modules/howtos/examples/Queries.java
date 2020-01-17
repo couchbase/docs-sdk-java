@@ -34,54 +34,52 @@ public static void main(String[] args) {
 
 void simple() {
 // #tag::simple[]
-String statement = "select * from `travel-sample` limit 10;";
-QueryResult result = cluster.query(statement);
+QueryResult result = cluster.query("select * from `travel-sample` limit 10");
 
-List<JsonObject> rows = result.rowsAsObject();
-
-for (JsonObject json: rows) {
-  System.out.println("Row: " + json);
+for (JsonObject row : result.rowsAsObject()) {
+  System.out.println("Row: " + row);
 }
 // #end::simple[]
 }
 
 void positional() {
 // #tag::positional[]
-String stmt = "select * from `travel-sample` where type=$1 and country=$2 limit 10;";
-QueryResult result = cluster.query(stmt,
-  queryOptions().parameters(JsonArray.from("airline", "United States")));
+String stmt = "select * from `travel-sample` where type=$1 and country=$2 limit 10";
+QueryResult result = cluster.query(
+  stmt,
+  queryOptions().parameters(JsonArray.from("airline", "United States"))
+);
 // #end::positional[]
 }
 
 void named() {
 // #tag::named[]
-String stmt = "select * from `travel-sample` where type=$type and country=$country limit 10;";
-QueryResult result = cluster.query(stmt,
+String stmt = "select * from `travel-sample` where type=$type and country=$country limit 10";
+QueryResult result = cluster.query(
+  stmt,
   queryOptions().parameters(JsonObject.create()
-          .put("type", "airline")
-          .put("country", "United States")));
+    .put("type", "airline")
+    .put("country", "United States")
+  )
+);
 // #end::named[]
 }
 
 void requestPlus() {
 // #tag::request-plus[]
-String stmt = "select * from `travel-sample` limit 10;";
-QueryResult result = cluster.query(stmt,
-  queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS));
+String stmt = "select * from `travel-sample` limit 10";
+QueryResult result = cluster.query(stmt, queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS));
 // #end::request-plus[]
 }
 
 void async() {
 // #tag::async[]
 AsyncCluster async = cluster.async();
-String stmt = "select * from `travel-sample` limit 10;";
-CompletableFuture<QueryResult> future = async.query(stmt);
+CompletableFuture<QueryResult> future = async.query("select * from `travel-sample` limit 10");
 
 // Just for demo purposes, block on the CompletableFutures.
 try {
-  List<JsonObject> rows = future
-                  .thenApply(QueryResult::rowsAsObject)
-                  .get();
+  List<JsonObject> rows = future.thenApply(QueryResult::rowsAsObject).get();
 } catch (InterruptedException | ExecutionException e) {
   e.printStackTrace();
 }
@@ -91,16 +89,14 @@ try {
 void reactive() {
 // #tag::reactive[]
 ReactiveCluster reactive = cluster.reactive();
-String stmt = "select * from `travel-sample`;";
-Mono<ReactiveQueryResult> mono = reactive.query(stmt);
+Mono<ReactiveQueryResult> mono = reactive.query("select * from `travel-sample`");
 
-Flux<JsonObject> rows = mono
-  .flatMapMany(result -> result.rowsAsObject());
+Flux<JsonObject> rows = mono.flatMapMany(ReactiveQueryResult::rowsAsObject);
 
 // Just for example, block on the rows.  This is not best practice and apps
 // should generally not block.
 List<JsonObject> allRows = rows
-  .doOnNext(row -> System.out.println(row))
+  .doOnNext(System.out::println)
   .doOnError(err -> System.err.println("Error: " + err))
   .collectList()
   .block();

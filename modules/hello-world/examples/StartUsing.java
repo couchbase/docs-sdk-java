@@ -1,11 +1,9 @@
-import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.kv.MutationResult;
-import com.couchbase.client.java.json.JsonObject;
-import com.couchbase.client.java.kv.GetResult;
-import com.couchbase.client.java.Collection;
-
-import java.util.Optional;
+// #tag::imports[]
+import com.couchbase.client.java.*;
+import com.couchbase.client.java.kv.*;
+import com.couchbase.client.java.json.*;
+import com.couchbase.client.java.query.*;
+// #end::imports[]
 
 class StartUsing {
 
@@ -34,7 +32,13 @@ MutationResult upsertResult = collection.upsert(
 
 // Get Document
 GetResult getResult = collection.get("my-document");
+System.out.println(getResult);
 // #end::upsert-get[]
+
+// #tag::n1ql-query[]
+QueryResult result = cluster.query("select \"Hello World\" as greeting");
+System.out.println(result.rowsAsObject());
+// #end::n1ql-query[]
 
     }
 }
