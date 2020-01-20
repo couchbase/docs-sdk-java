@@ -9,7 +9,7 @@ A practical guide to using Couchbase’s distributed ACID transactions, via the 
 
 
 
-This is the beta release of Distributed Transactions for Couchbase, providing these semantics and features:
+Distributed Transactions for Couchbase provide these semantics and features:
 
 * Insertion, mutation, and removal of multiple documents can be staged inside a transaction.  
 * Until the transaction is committed, these changes will not be visible to other transactions, or any other part of the Couchbase Data Platform.
@@ -22,12 +22,12 @@ Below we show you how to create Transactions, step-by-step.
 You may also want to start with our https://github.com/couchbaselabs/couchbase-transactions-java-examples[GitHub transactions examples page], 
 which features useful downloadable examples of using Distributed Transactions.
 
-
+Javadocs are available http://docs.couchbase.com.s3.amazonaws.com/sdk-api/couchbase-transactions-java/1.0.0/index.html[online].
 
 == Requirements
 
 * Couchbase Server 6.5 or above. 
-* Couchbase Java client 3.x.  It is recommended to follow the transitive dependency from maven.
+* Couchbase Java client 3.0.0 or above.  It is recommended to follow the transitive dependency for the transactions library from maven.
 * NTP should be configured so nodes of the Couchbase cluster are in sync with time. The time being out of sync will not cause incorrect behavior, but can impact metadata cleanup.
 * The application, if it is using xref:concept-docs:xattr.adoc[extended attributes (XATTRs)], must avoid using the XATTR field `txn`, which is now reserved for Couchbase use.
 
@@ -42,18 +42,13 @@ else all transactions will fail due to the default durability setting of `Majori
 
 Couchbase transactions require no additional components or services to be configured. 
 Simply add the transactions library into your project. 
-With gradle this can be accomplished by modifying these sections of your build.gradle file like so -- along with adding a separate repository where the beta is published:
+With gradle this can be accomplished by modifying these sections of your build.gradle file like so:
 
 [source,gradle]
 ----
 dependencies {
-    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.0.0-beta.3'
+    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.0.0'
 }
-
-repositories {
-    maven { url 'http://files.couchbase.com/maven2/' }
-}
-
 ----
 
 Use of this maven repository from other tools is similar. 
@@ -76,8 +71,10 @@ It is very important that the application ensures that only one of these is crea
 include::example$TransactionsExample.java[tag=init,indent=0]
 ----
 
-The default configuration will perform all writes with the durability setting Majority, ensuring that each write is available in-memory on the majority of replicas before the transaction continues.  The application is free to adjust this to the level of None for performance at the cost of some data safety and possible loss of atomicity in the advent of node failures, or to a higher durability level for even greater safety (of course, at some loss in performance).  Majority has been selected as the best default durability for most use-cases. 
-
+The default configuration will perform all writes with the durability setting Majority, ensuring that each write is available in-memory on the majority of replicas before the transaction continues. 
+The application is free to adjust this to the level of None for performance at the cost of some data safety and possible loss of atomicity in the advent of node failures, or to a higher durability level for even greater safety 
+(of course, at some loss in performance). 
+Majority has been selected as the best default durability for most use-cases.
 
 
 == Creating a Transaction
@@ -247,7 +244,8 @@ include::example$TransactionsExample.java[tag=full,indent=0]
 This release of transactions for Couchbase requires a degree of co-operation from the application.
 Specifically, the application should ensure that transactional and non-transactional writes (such as the SDK API using the data service or issuing N1QL UPDATES) are never done concurrently with documents involved in a transaction.
 It is recommended that if your app is using transactions, all transacted-upon document access for mutation is through the transactions API.
-In many applications, this means you will have a mix of use of the traditional API for documents not involved in transactions, and the transactions API for documents used from transactions, even if some sections of that logic do not require multi-document atomicity.
+In many applications, this means you will have a mix of use of the traditional API for documents not involved in transactions, 
+and the transactions API for documents used from transactions, even if some sections of that logic do not require multi-document atomicity.
 Queries and read access from other APIs are perfectly fine, and are at a Read Committed isolation level.
 We may change this in a future release.
 
@@ -394,11 +392,11 @@ include::example$TransactionsExample.java[tag=concurrentOps,indent=0]
 == Deferred Commits
 NOTE: The deferred commit feature is currently in alpha, and the API may change.
 
-Introduced in transactions 1.0.0-beta.2, deferred commits allow a transaction to be paused just before the commit point.
-Optionally, everything required to finish the transaction can then be bundled up into a context that may be serialized into a String or byte array, and deserialized elsewhere.
+Deferred commits allow a transaction to be paused just before the commit point.
+Optionally, everything required to finish the transaction can then be bundled up into a context that may be serialized into a String or byte array, and deserialized elsewhere (for example, in another process).
 The transaction can then be committed, or rolled back.
 
-The intention behind this feature is to allow multiple transactions to be brought to just before the commit point, and then all committed together.
+The intention behind this feature is to allow multiple transactions, potentially spanning multiple databases, to be brought to just before the commit point, and then all committed together.
 
 Here's an example of deferring the initial commit and serializing the transaction:
 
