@@ -65,7 +65,30 @@ Please make sure you run on one of the latest patch releases, since they provide
 
 == Couchbase Feature Availability Matrix
 
-TBI
+.Couchbase Server and SDK Supported Version Matrix
+|===
+| | Server 5.0, 5.1, & 5.5 | Server 6.0 | Server 6.5
+
+| Enhanced Durability
+3+| All SDK versions
+
+| Durable Writes 
+2+| Not Supported
+| Since 3.0
+
+| Analytics
+| DP in 5.5 with 2.6
+2+| Since 2.7
+
+| Distributed ACID Transactions
+2+| Not Supported
+| Since 3.0
+
+| Collections
+2+| Not Supported
+| Developer Preview in 6.5, SDK 3.0
+
+|===
 
 
 include::6.5@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]
