@@ -1,7 +1,7 @@
 = Install and Start Using the Java SDK with Couchbase Server
 :navtitle: Start Using the SDK
 :page-partial:
-:page-aliases: ROOT:start-using-sdk
+:page-aliases: ROOT:getting-started,ROOT:start-using,ROOT:hello-couchbase,ROOT:start-using-sdk
 
 [abstract]
 
