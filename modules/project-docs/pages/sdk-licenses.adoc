@@ -25,8 +25,17 @@ Any dependencies may have their https://www.couchbase.com/legal/agreements[own, 
 |===
 | Component | License
 
-|`Native Library Loader` 2.0.2 | Creative Commons Zero v1.0 Universal
-|`reactive-streams` 1.0.2 | Creative Commons Zero v1.0 Universal
-|`LatencyUtils` 2.0.3.redhat-00001 | Creative Commons Public Domain Dedication License
 |`gatlingwindows` 1.0.0 | Apache Licence 2.0
+|`HdrHistogram`	2.1.8	| Public Domain / BSD 2-clause "Simplified" License / Creative Commons Zero v1.0 Universal
+|`io.projectreactor`	3.3.1.RELEASE	| Apache License 2.0
+|`jackson-annotations`	2.10.1	| Apache License 2.0
+|`jackson-core`	2.10.1	| Apache License 2.0
+|`jackson-databind`	2.10.1	| Apache License 2.0
+|`Jackson-module-Afterburner`	2.10.1	| Apache License 2.0
+|`Java Concurrency Tools Core Library`	2.1.2	| Apache License 2.0
+|`LatencyUtils`	2.0.3	| Creative Commons Public Domain Dedication License
+|`Native Library Loader` 2.0.2 | Creative Commons Zero v1.0 Universal
+|`Netty/TomcatNative` [BoringSSL - Static]	2.0.28.Final	| Apache License 2.0
+|`reactive-streams`	v1.0.3	| Creative Commons Zero v1.0 Universal
+|`snappy`	0.4	| Apache License 2.0
 |===
