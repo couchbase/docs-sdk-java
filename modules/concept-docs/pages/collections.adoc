@@ -8,3 +8,9 @@ Please see the xref:6.5@server:developer-preview:collections/collections-overvie
 
 
 // bucket.collections()
+
+////
+to access a non-default collection it's just bucket.collection("whatever") (edited) 
+
+you can also do bucket.scope("scopey_mcscopeface").collection("whatever") too
+////
