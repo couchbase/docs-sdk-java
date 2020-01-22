@@ -5,4 +5,3 @@
 [abstract]
 MapReduce Views.
 
-include::ref:partial$beta-warning.adoc[]

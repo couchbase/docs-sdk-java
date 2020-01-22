@@ -7,7 +7,6 @@
 [abstract]
 Common errors and exceptions, and how to handle them.
 
-include::ref:partial$beta-warning.adoc[]
 
 Errors are inevitable.
 The developer’s job is to be prepared for whatever is likely to come up -- and to try and be prepared for anything that conceivably could come up.

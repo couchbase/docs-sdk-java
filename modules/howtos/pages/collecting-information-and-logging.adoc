@@ -4,4 +4,3 @@
 [abstract]
 Java logging.
 
-include::partial$beta-warning.adoc[]
