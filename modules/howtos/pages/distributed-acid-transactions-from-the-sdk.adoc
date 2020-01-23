@@ -22,7 +22,7 @@ Below we show you how to create Transactions, step-by-step.
 You may also want to start with our https://github.com/couchbaselabs/couchbase-transactions-java-examples[GitHub transactions examples page], 
 which features useful downloadable examples of using Distributed Transactions.
 
-Javadocs are available http://docs.couchbase.com.s3.amazonaws.com/sdk-api/couchbase-transactions-java/1.0.0/index.html[online].
+Javadocs are available https://docs.couchbase.com/sdk-api/couchbase-transactions-java/1.0.0/[online].
 
 == Requirements
 
