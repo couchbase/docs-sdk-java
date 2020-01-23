@@ -7,5 +7,4 @@
 When the unexpected happens.
 
 
-include::ref:partial$beta-warning.adoc[]
 

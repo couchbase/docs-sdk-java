@@ -8,6 +8,7 @@
 :example-source: 3.0@java-sdk:howtos:example$Analytics.java
 :example-source-lang: java
 
+[abstract]
 Parallel data management for complex queries over many records, using a familiar N1QL-like syntax.
 
 For complex and long-running queries, involving large ad hoc join, set, aggregation, and grouping operations, the Couchbase Data Platform offers the xref:6.5@server:analytics:introduction.adoc[Couchbase Analytics Service (CBAS)].
