@@ -28,7 +28,7 @@ If a system property is set, it always takes precedence over the builder setting
 System.setProperty("com.couchbase.kvEndpoints", "3");
 CouchbaseEnvironment environment = DefaultCouchbaseEnvironment
     .builder()
-    .kvEndpoints(2)
+    .keyValueServiceConfig(KeyValueServiceConfig.create(2))
     .build();
 CouchbaseCluster cluster = CouchbaseCluster.create(environment);
 ----
@@ -326,24 +326,16 @@ The tradeoffs to consider here is how quickly the desired state is detected as w
 The default is an exponential delay, starting with very short intervals but very quickly approaching the 100 milliseconds if replication or persistence takes longer than expected.
 You should monitor the average persistence and replication latency and adjust the delay accordingly.
 
-| Key/Value Endpoints per Node [Static]
-| `kvEndpoints(int)`
-| `kvEndpoints`
+| Key/Value Endpoints per Node
+| `keyValueServiceConfig(int)`
+| `keyValueServiceConfig`
 | `1`
-| The number of actual endpoints (sockets) to open per Node in the cluster against the Key/value service.
-By default, for every node in the cluster one socket is opened where all traffic is pushed through.
+| By default, for every node in the cluster one socket is opened where all traffic is pushed through.
 That way the SDK implicitly benefits from network batching characteristics when the workload increases.
 If you suspect based on profiling and benchmarking that the socket is saturated you can think about slightly increasing it to have more "parallel pipelines".
 This might be especially helpful if you need to push large documents through it.
-The recommendation is keeping it at 1 unless there is other evidence.
-
-| Key/Value Endpoints per Node [Dynamic]
-| `kvServiceConfig(int, int)`
-| `kvServiceConfig`
-| Need to set minimum and maximum values
-| To allow dynamic pooling, as an alternative to the fixed values of kvEndPoints.
-Note that if both kvEndpoints and kvServiceConfig are set, kvEndpoints takes priority.
-This helps to ensure backwards compatibility.
+The recommendation is keeping it at 1 unless there is other evidence -- multiple threads calling in at around the same time will be easily pipelined together over a single socket..
+Replaced the deprecated `kvEndpoints`.
 
 | View Endpoints per Node [Static]
 | `viewEndpoints(int)`
