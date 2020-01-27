@@ -1,1 +1,4 @@
+= Couchbase Java SDK Release Notes and Archives
+:navtitle: Release Notes
+:page-aliases: sdk-release-notes,release-notes,download-links,project-docs:migrating-sdk-code-to-3.n,project-docs:sdk-release-notes
 include::2.5@java-sdk::page$relnotes-java-sdk.adoc[tag=latest]
