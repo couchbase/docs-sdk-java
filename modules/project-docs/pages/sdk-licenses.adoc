@@ -19,14 +19,4 @@ Binary distributions are made under Couchbase's own license agreements.
 
 == Dependencies
 
-Any dependencies may have their https://www.couchbase.com/legal/agreements[own, separate licenses].
-
-.Third Party Component Licenses
-|===
-| Component | License
-
-|`Native Library Loader` 2.0.2 | Creative Commons Zero v1.0 Universal
-|`reactive-streams` 1.0.2 | Creative Commons Zero v1.0 Universal
-|`LatencyUtils` 2.0.3.redhat-00001 | Creative Commons Public Domain Dedication License
-|`gatlingwindows` 1.0.0 | Apache Licence 2.0
-|===
+Any dependencies may have their https://www.couchbase.com/legal/agreements#ThirdPartyComponents[own, separate licenses].
