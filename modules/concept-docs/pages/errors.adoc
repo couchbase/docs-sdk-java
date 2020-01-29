@@ -20,4 +20,6 @@ include::6.5@sdk:shared:partial$errors.adoc[tag=diag]
 // until opentelemetry release for link below, could add note on API to expose own tracing features?
 // include::6.5@sdk:shared:partial$errors.adoc[tag=rto]
 
+== ACID Transactions
+
 For a discussion of errors affecting multi-document ACID transactions, see xref:howtos:distributed-acid-transactions-from-the-sdk.adoc#error-handling[our documentation on transactions from the Java SDK].
