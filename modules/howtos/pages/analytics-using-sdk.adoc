@@ -23,6 +23,11 @@ Intentionally, the API for analytics is nearly identical to that of the query se
 
 Before starting, here's all imports used in the following examples:
 
+[source,java]
+----
+include::example$Analytics.java[tag=imports,indent=0]
+----
+
 Here's a complete example of doing an analytics query and handling the results:
 
 [source,java]
