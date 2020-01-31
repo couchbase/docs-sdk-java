@@ -8,37 +8,36 @@ import com.couchbase.client.java.query.*;
 class StartUsing {
 
     public static void main(String... args) {
+        // #tag::connect[]
+        Cluster cluster = Cluster.connect("localhost", "username", "password");
+        // #end::connect[]
 
-// #tag::connect[]
-Cluster cluster = Cluster.connect("localhost", "username", "password");
-// #end::connect[]
+        // #tag::bucket[]
+        // get a bucket reference
+        Bucket bucket = cluster.bucket("bucket-name");
+        // #end::bucket[]
 
-// #tag::bucket[]
-// get a bucket reference
-Bucket bucket = cluster.bucket("bucket-name");
-// #end::bucket[]
+        // #tag::collection[]
+        // get a collection reference
+        Collection collection = bucket.defaultCollection();
+        // #end::collection[]
 
-// #tag::collection[]
-// get a collection reference
-Collection collection = bucket.defaultCollection();
-// #end::collection[]
+        // #tag::upsert-get[]
+        // Upsert Document
+        MutationResult upsertResult = collection.upsert(
+            "my-document",
+            JsonObject.create().put("name", "mike")
+        );
 
-// #tag::upsert-get[]
-// Upsert Document
-MutationResult upsertResult = collection.upsert(
-    "my-document", 
-    JsonObject.create().put("name", "mike")
-);
+        // Get Document
+        GetResult getResult = collection.get("my-document");
+        System.out.println(getResult);
+        // #end::upsert-get[]
 
-// Get Document
-GetResult getResult = collection.get("my-document");
-System.out.println(getResult);
-// #end::upsert-get[]
-
-// #tag::n1ql-query[]
-QueryResult result = cluster.query("select \"Hello World\" as greeting");
-System.out.println(result.rowsAsObject());
-// #end::n1ql-query[]
-
+        // #tag::n1ql-query[]
+        QueryResult result = cluster.query("select \"Hello World\" as greeting");
+        System.out.println(result.rowsAsObject());
+        // #end::n1ql-query[]
     }
+
 }
