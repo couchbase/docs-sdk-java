@@ -5,23 +5,19 @@
 
 [abstract]
 
-The Couchbase Java SDK allows Java applications to access a Couchbase cluster. It offers traditional synchronous APIs as well as reactive and asynchronous APIs to maximize flexibility and performance.
+The Couchbase Java SDK allows Java applications to access a Couchbase cluster. It offers synchronous APIs as well as reactive and asynchronous equivalents to maximize flexibility and performance.
 
-The Couchbase Java SDK 3.0 is a complete rewrite of the API, reducing the number of overloads to present a simplified surface area, and adding support for future Couchbase Server features like Collections and Scopes (available in Couchbase Server 6.5 as a xref:concept-docs:collections.adoc[developer preview]).
-The 3.0 SDK also moves from `RxJava` to `Java Reactor`, along with other improvements to performance, logging, and timeout troubleshooting.
+The Couchbase Java SDK 3.0 is a complete rewrite of the 2.x API, providing a simpler surface area and adding support for future Couchbase Server features like Collections and Scopes (available in Couchbase Server 6.5 as a xref:concept-docs:collections.adoc[developer preview]).
+The (reactive) API also migrated from `RxJava` to `Reactor`, along with other improvements to performance, logging, debugging and timeout troubleshooting.
 If you're upgrading your application from Java SDK 2.x, please read our xref:project-docs:migrating-sdk-code-to-3.n.adoc[Migrating 2.x code to SDK 3.0 Guide].
-
 
 == Installing the SDK
 
 At least Java 8 is required for current releases;
 see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section for details.
-We recommend running the latest LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
-Java 11 has various enhancements like lambda local variable type inference, profiling tools, and updated security features.
+We recommend running the latest Java LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
 
-// include::project-docs:sdk-release-notes.adoc[tag=jdk-version]
-
-Couchbase publishes all stable artifacts to Maven Central. You can use your favorite dependency management tool to install the SDK. The following snippet shows how to do it with maven.
+Couchbase publishes all stable artifacts to https://search.maven.org/search?q=com.couchbase.client[Maven Central]. You can use your favorite dependency management tool to install the SDK. The following snippet shows how to do it with https://maven.apache.org/[maven].
 
 [source,xml]
 ----
@@ -34,69 +30,109 @@ Couchbase publishes all stable artifacts to Maven Central. You can use your favo
 </dependencies>
 ----
 
+For https://gradle.org/[gradle], you can use:
+
+[source]
+----
+implementation 'com.couchbase.client:java-client:3.0.0'
+----
+
+Alternatively, we provide a zip file with all the dependencies bundled if you wish to manually include the `jar` files in your classpath. Refer to the xref:project-docs:sdk-release-notes.adoc[Release Notes] for further details. You can also find links to the hosted javadocs there.
+
 == Hello Couchbase
 
 Once you have the Java client installed, open your IDE, and try out the following:
 
 [source,java]
 ----
-include::example$StartUsing.java[tag=connect]
+include::example$StartUsing.java[tag=connect,indent=0]
 ----
 
 Couchbase uses xref:6.5@server:learn:security/roles.adoc[Role Based Access Control (RBAC)] to control access to resources.
 Here we will use the _Full Admin_ role created during installation of the Couchbase Data Platform.
 For production client code, you will want to use more appropriate, restrictive settings -- but here we want to get you up and running quickly.
-If you're developing client code on the same VM or machine as the Couchbase Server, your URI can be _localhost_.
+If you're developing client code on the same VM or machine as the Couchbase Server, your connection string can be just `localhost`.
+
+The `Cluster` provides access to cluster-level operations like N1Ql queries, analytics or full-text search. You will also find different management APIs on it.
 
 If you are not using an IDE or are new to java, the following imports are necessary to build the following snippets:
 
 [source,java]
 ----
-include::example$StartUsing.java[tag=imports]
+include::example$StartUsing.java[tag=imports,indent=0]
 ----
 
-Connection to the cluster is initialized by
-
-[source,java]
-----
-include::example$StartUsing.java[tag=bucket]
-----
-
-If you installed the travel sample data bucket, substitute _travel-sample_ for _bucket-name_.
+To access the KV (Key/Value) API or to query views, you need to open a `Bucket`:
 
 [source,java]
 ----
-include::example$StartUsing.java[tag=collection]
+include::example$StartUsing.java[tag=bucket,indent=0]
 ----
+
+If you installed the travel-sample` data bucket, substitute _travel-sample_ for _bucket-name_.
 
 The 3.0 SDK is ready for the introduction of xref:concept-docs:collections.adoc[Collections] in an upcoming release of the Couchbase Data Platform.
 The latest release, Couchbase Server 6.5, brings a limited _Developer Preview_ of Collections, allowing Documents to be grouped by purpose or theme, according to specified _Scope_.
-Here we will use the `DefaultCollection`, which covers the whole Bucket and _must be used when connecting to a 6.5 cluster or earlier_.
+Here we will use the `defaultCollection`, which covers the whole Bucket and _must be used when connecting to a 6.5 cluster or earlier_.
 
 [source,java]
 ----
-include::example$StartUsing.java[tag=upsert-get]
+include::example$StartUsing.java[tag=collection,indent=0]
 ----
 
-KV Operations are described in detail on the xref:howtos:kv-operations.adoc[KV Operations page].
-Now that you know the basics, you may wish to go straight to that page.
+KV Operations are described in detail on the xref:howtos:kv-operations.adoc[KV Operations page], but to get you started the following code creates a new document and then fetches it again, printing the result.
+
+[source,java]
+----
+include::example$StartUsing.java[tag=upsert-get,indent=0]
+----
 
 You can also perform a N1QL query at the cluster level:
 
 [source,java]
 ----
-include::example$StartUsing.java[tag=n1ql-query]
+include::example$StartUsing.java[tag=n1ql-query,indent=0]
 ----
 
 You can learn more about N1QL queries on the xref:howtos:n1ql-queries-with-sdk.adoc[Query page]. 
 Other services (like analytics, search or views) work very similar to the two shown above. 
 Please refer to their respective documentation sections to learn more.
 
+== Full Example
+
+If you want to copy and paste to run the full example, here it is:
+
+[source,java]
+----
+import com.couchbase.client.java.*;
+import com.couchbase.client.java.kv.*;
+import com.couchbase.client.java.json.*;
+import com.couchbase.client.java.query.*;
+
+class StartUsing {
+
+    public static void main(String... args) {
+        Cluster cluster = Cluster.connect("localhost", "username", "password");
+        Bucket bucket = cluster.bucket("bucket-name");
+        Collection collection = bucket.defaultCollection();
+
+        MutationResult upsertResult = collection.upsert(
+            "my-document",
+            JsonObject.create().put("name", "mike")
+        );
+        GetResult getResult = collection.get("my-document");
+        System.out.println(getResult);
+
+        QueryResult result = cluster.query("select \"Hello World\" as greeting");
+        System.out.println(result.rowsAsObject());
+    }
+
+}
+----
+
 == Additional Resources
 
-The API reference is generated for each release and can be found http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0/[here].
-
-// xref:migrating-sdk-code-to-3.n.adoc[The Migrating from SDK2 to 3 page] highlights the main differences to be aware of when migrating your code.
+The API reference is generated for each release and can be found in the xref:project-docs:sdk-release-notes.adoc[Release Notes].
 
 Couchbase welcomes community contributions to the Java SDK.
 The Java SDK source code is available on https://github.com/couchbaselabs/couchbase-jvm-clients[GitHub].
