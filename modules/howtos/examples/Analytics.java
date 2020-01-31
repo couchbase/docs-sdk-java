@@ -1,4 +1,5 @@
 // #tag::imports[]
+
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.analytics.AnalyticsResult;
@@ -6,15 +7,12 @@ import com.couchbase.client.java.analytics.AnalyticsScanConsistency;
 import com.couchbase.client.java.analytics.ReactiveAnalyticsResult;
 import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.json.JsonObject;
-import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscription;
 import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static com.couchbase.client.java.analytics.AnalyticsOptions.analyticsOptions;
 // #end::imports[]
