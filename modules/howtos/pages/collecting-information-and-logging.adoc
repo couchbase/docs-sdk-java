@@ -75,7 +75,7 @@ log4j:WARN Please initialize the log4j system properly.
 log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
 ----
 
-(Note that the `Reactor` library which the Java SDK depends upon also uses the same strategy with SLF4J) so logging for both can be configured with the same strategies out of the box.
+Note that the `Reactor` library which the Java SDK depends upon also uses the same strategy with SLF4J, so logging for both can be configured with the same strategies out of the box.
 
 This `log4j.xml` sets it to INFO level:
 
@@ -144,7 +144,7 @@ You can also use it to enable the http://logback.qos.ch/manual/mdc.html[Mapped D
 [NOTE]
 .Event Bus Stability
 ====
-While the event bus functionality itself is considered stable, the events itself maybe not. Please only consume the events you are interested in and add error handling code should they do not like you intended.
+While the event bus functionality itself is considered stable, the events itself may not be. Please only consume the events you are interested in, and add error handling code in case of unexpected behaviour.
 ====
 
 Log files are neither fun to wade through, nor do they have any kind of real-time aspect.
@@ -153,12 +153,10 @@ Since most setups interleave all different kinds of log messages, it makes it ve
 
 To make the situation better and ultimately improve supportability, the Java SDK provides you with the ability to tap into all events before they get logged and consume them in "real-time".
 
-It may not be visible instantly that this provides a huge leap forward in detecting and reacting to different kinds of situations.
-You can subscribe to the event bus, receive and react to events as they are happening; not when someone parses the logs, sends them into another system where an alarm is triggered and eventually a sysadmin will check whats going on.
-The time delta between an event happening and reacting to it can be massively decreased.
+You can subscribe to the event bus, and receive and react to events as they are happening; not when someone parses the logs, sends them into another system where an alarm is triggered, and eventually a sysadmin checks what iss going on.
+The time delta between an event happening and reacting to it can thus be substantially decreased.
 
-
-The following code subscribes to the event bus and prints out all events with INFO or WARN leven that are published on it:
+The following code subscribes to the event bus and prints out all events that are published on it with INFO or WARN level:
 
 [source,java]
 ----
@@ -191,7 +189,7 @@ BucketOpenedEvent{severity=INFO, category=com.couchbase.core, duration=PT0.28162
 
 We recommend filtering on the specific events you are interested in, since most of the time only a subset of the published ones will be of use to you. Also, there are new events added between releases so make sure these new events do not break your functionality.
 
-[NOTE]
+[WARNING]
 .Blocking Warning
 ====
 If you consume the `EventBus` you MUST NOT block inside the consumer callback. It will stall all other consumers. If you must write into a blocking sink like a blocking HTTP API you MUST write it onto a different thread with a non-blocking queue first.
