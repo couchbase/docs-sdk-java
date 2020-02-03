@@ -28,7 +28,8 @@ include::example$Search.java[tag=simple,indent=0]
 ----
 
 Let's break it down. 
-A search query is always performed at the `Cluster` level, using the `searchQuery` method. It takes the name of the index and the type of query  as required arguments and then allows to provide additional options if needed 
+A search query is always performed at the `Cluster` level, using the `searchQuery` method. 
+It takes the name of the index and the type of query  as required arguments and then allows to provide additional options if needed 
 (in the example above, no options are specified).
 
 Once a result returns you can iterate over the returned rows, and/or access the `SearchMetaData` associated with the query. 
