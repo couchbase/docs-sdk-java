@@ -1,11 +1,20 @@
-= Extended Attributes Overview
+= Extended Attributes
 :nav-title: XATTR
 :page-topic-type: concept
 :page-aliases: sdk-xattr-overview,ROOT:sdk-xattr-overview
 
 [abstract]
-Extended attributes.
+Extended Attributes (XATTR) are metadata that can be provided on a per-application basis.
 
-Until all details of the API for SDK 3.0's implementation of Extended Attributes (XATTR) are finalised, 
-please see xref:2.7@java-sdk::sdk-xattr-overview.adoc[the previous version of this page] for general details.
+include::6.5@sdk:shared:partial$sdk-xattr-overview.adoc[tag=intro_extended_attributes]
 
+include::6.5@sdk:shared:partial$sdk-xattr-overview.adoc[tag=using_extended_attributes]
+
+include::6.5@sdk:shared:partial$sdk-xattr-overview.adoc[tag=virtual_extended_attributes]
+
+[source,java]
+----
+bucket.lookupIn(key).get("$document.exptime", new SubdocOptionsBuilder().xattr(true)).execute()
+----
+
+// See the xref:howtos:sdk-xattr-example.adoc#virtual-extended-attributes-example[example page] for a complete code sample.

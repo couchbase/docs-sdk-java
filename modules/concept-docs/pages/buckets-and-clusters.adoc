@@ -78,7 +78,7 @@ clusterManager.removeBucket("new_bucket");
 [#flushing]
 == Flushing Buckets
 
-include::6.0@sdk:shared:partial$flush-info-pars.adoc[tag=flush-intro]
+include::6.5@sdk:shared:partial$flush-info-pars.adoc[tag=flush-intro]
 
 You may flush a bucket in the Java SDK by using the [.api]`BucketManager#flush()` method:
 

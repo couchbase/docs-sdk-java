@@ -225,7 +225,8 @@ A simple reactive query is similar to the blocking one:
 include::example$Search.java[tag=simplereactive,indent=0]
 ----
 
-This search query will stream all rows as they become available form the server. If you want to manually control the data flow (which is important if you are streaming a lot of rows which could cause a potential out of memory situation) you can do this by using explicit `request()` calls.
+This search query will stream all rows as they become available form the server. 
+If you want to manually control the data flow (which is important if you are streaming a lot of rows which could cause a potential out of memory situation) you can do this by using explicit `request()` calls.
 
 [source,java]
 ----
