@@ -18,16 +18,22 @@ Some of the supported query-types include simple queries like Match and Term que
 
 == Getting Started
 
-After familiarizing yourself with how to create and query a search index in the UI you can query it from the SDK. Intentionally the API itself is very similar to the query and analytics ones, the main difference being that you cannot cast the resulting rows into a domain object directly but rather get a `SearchRow` returned. The reason for this is that a search row ("hit") has more metadata associated you potentially want to look at.
+After familiarizing yourself with how to create and query a search index in the UI you can query it from the SDK. 
+Intentionally the API itself is very similar to the query and analytics ones, the main difference being that you cannot cast the resulting rows into a domain object directly but rather get a `SearchRow` returned. 
+The reason for this is that a search row ("hit") has more metadata associated with it than you potentially want to look at.
 
 [source,java]
 ----
 include::example$Search.java[tag=simple,indent=0]
 ----
 
-Let's break it down. An search query is always performed at the `Cluster` level, using the `searchQuery` method. It takes the name of the index and the type of query  as required arguments and then allows to provide additional options if needed (in the example above, no options are specified).
+Let's break it down. 
+A search query is always performed at the `Cluster` level, using the `searchQuery` method. 
+It takes the name of the index and the type of query  as required arguments and then allows to provide additional options if needed 
+(in the example above, no options are specified).
 
-Once a result returns you can iterate the returned rows and/or accessing the `SearchMetaData` associated with the query. If something goes wrong during the execution of the search query, a subclass of the `CouchbaseException` will be thrown that also provides additional context on the operation:
+Once a result returns you can iterate over the returned rows, and/or access the `SearchMetaData` associated with the query. 
+If something goes wrong during the execution of the search query, a subclass of the `CouchbaseException` will be thrown that also provides additional context on the operation:
 
 [source,java]
 ----
@@ -37,12 +43,16 @@ Exception in thread "main" com.couchbase.client.core.error.IndexNotFoundExceptio
 [NOTE]
 .Open Buckets and Cluster-Level Queries
 ====
-If you are using a cluster older than Couchbase Server 6.5, it is required that there is at least one bucket open before performing a cluster-level query. If you fail to do so, the SDK will return a `FeatureNotAvailableException` with a descriptive error message asking you to open one.
+If you are using a cluster older than Couchbase Server 6.5, it is required that there is at least one bucket open before performing a cluster-level query. 
+If you fail to do so, the SDK will return a `FeatureNotAvailableException` with a descriptive error message asking you to open one.
 ====
 
 == Search Queries
 
-The second mandatory argument in the example above used `SearchQuery.queryString("query")` to specify the query to run against the search index. The query string is the simplest form, but there are many more available. The table below lists all of them with a short description each. You can combine them with `conjuncts` and `disjuncts` respectively.
+The second mandatory argument in the example above used `SearchQuery.queryString("query")` to specify the query to run against the search index. 
+The query string is the simplest form, but there are many more available. 
+The table below lists all of them with a short description of each. 
+You can combine them with `conjuncts` and `disjuncts` respectively.
 
 .Available Search Queries
 [options="header"]
@@ -71,7 +81,7 @@ The second mandatory argument in the example above used `SearchQuery.queryString
 
 == The Search Result
 
-Once the search query is executed successfully, the server starts sending back the result hits.
+Once the search query is executed successfully, the server starts sending back the resultant hits.
 
 [source,java]
 ----
@@ -93,10 +103,10 @@ The `SearchRow` contains the following methods:
 | `fieldsAs(final TypeRef<T> target)` | Access to the returned fields, decoded via a `TypeRef` type.
 |====
 
-Note that the `SearchMetaData` also contains potential `errors`, because the SDK will keep streaming results if the
-initial response came back successfully. This makes sure that even with partial data usually search results are useable,
-so if you absolutely need to check if all partitions are present in the result double check the error (and not only
-catch an exception on the query itself).
+Note that the `SearchMetaData` also contains potential `errors`, because the SDK will keep streaming results if the initial response came back successfully. 
+This makes sure that even with partial data usually search results are useable,
+so if you absolutely need to check if all partitions are present in the result double check the error 
+(and not only catch an exception on the query itself).
 
 == Search Options
 
@@ -121,7 +131,8 @@ The search service provides an array of options to customize your query. The fol
 
 === Limit and Skip
 
-It is possible to limit the returned results to a maximum amount using the `limit` option. If you want to skip the first N records it can be done with the `skip` option.
+It is possible to limit the returned results to a maximum amount using the `limit` option. 
+If you want to skip the first N records it can be done with the `skip` option.
 
 [source,java]
 ----
@@ -130,9 +141,12 @@ include::example$Search.java[tag=limit,indent=0]
 
 === ScanConsistency and ConsistentWith
 
-By default, all search queries will return the data from whatever is in the index at the time of query. These semantics can be tuned if needed so that the hits returned include the most recently performed mutations, at the cost of slightly higher latency since the index needs to be updated first.
+By default, all search queries will return the data from whatever is in the index at the time of query. 
+These semantics can be tuned if needed so that the hits returned include the most recently performed mutations, at the cost of slightly higher latency since the index needs to be updated first.
 
-There are two ways to control consistency: either by supplying a custom `SearchScanConsistency` or using `consistentWith`. At the moment the cluster only supports `consistentWith`, which is why you only see `SearchScanConsistency.NOT_BOUNDED` in the enum which is the default setting. The way to make sure that recently written documents show up in the rfc works as follows (commonly referred to "read your own writes"):
+There are two ways to control consistency: either by supplying a custom `SearchScanConsistency` or using `consistentWith`.
+At the moment the cluster only supports `consistentWith`, which is why you only see `SearchScanConsistency.NOT_BOUNDED` in the enum which is the default setting. 
+The way to make sure that recently written documents show up in the rfc works as follows (commonly referred to "read your own writes" -- RYOW):
 
 [source,java]
 ----
@@ -141,7 +155,9 @@ include::example$Search.java[tag=ryow,indent=0]
 
 === Highlight
 
-It is possible to enable highlighting for matched fields. You can either rely on the default highlighting style or provide a specific one. The following snippet uses HTML formatting for two fields:
+It is possible to enable highlighting for matched fields. 
+You can either rely on the default highlighting style or provide a specific one. 
+The following snippet uses HTML formatting for two fields:
 
 [source,java]
 ----
@@ -150,14 +166,17 @@ include::example$Search.java[tag=highlight,indent=0]
 
 === Sort
 
-By default the search engine will sort the results in descending order by score. This behavior can be modified by providing a different sorting order which can also be nested.
+By default the search engine will sort the results in descending order by score. 
+This behavior can be modified by providing a different sorting order which can also be nested.
 
 [source,java]
 ----
 include::example$Search.java[tag=sort,indent=0]
 ----
 
-Facets are aggregate information collected on a result set and are useful when it comes to categorization of result data. The SDK allows you to provide many different facet configurations to the search engine, the following example shows how to create a facet based on a term. Other possible facets include numeric and date ranges.
+Facets are aggregate information collected on a result set and are useful when it comes to categorization of result data. 
+The SDK allows you to provide many different facet configurations to the search engine, the following example shows how to create a facet based on a term. 
+Other possible facets include numeric and date ranges.
 
 === Facets
 
@@ -177,20 +196,26 @@ include::example$Search.java[tag=fields,indent=0]
 
 === Custom JSON Serializer
 
-Like with all JSON apis, it is possible to customize the JSON serializer. It allows to plug in your own library (like GSON) or custom configured mappings on your own Jackson serializer. This in turn makes it possible to serialize rows into POJOs or other structures that your application defines and the SDK has no idea about.
+As with all JSON APIs, it is possible to customize the JSON serializer. 
+You can plug in your own library (like GSON) or custom configure mappings on your own Jackson serializer. 
+This in turn makes it possible to serialize rows into POJOs or other structures that your application defines, and which the SDK has no idea about.
 
-Please see the documentation transcoding and serialization for more information.
+Please see the documentation on transcoding and serialization for more information.
 
 == Reactive And Async APIs
 
-In addition to the blocking API on `Cluster`, the SDK provides reactive and async APIs on `ReactiveCluster` or `AsyncCluster` respectively. If you are in doubt of which API to use, we recommend looking at the reactive first. It builds on top of reactor, a powerful library that allows you to compose reactive computations and deal with error handling and other related concerns (like retry) in an elegant manner. The async API on the other hand exposes a `CompletableFuture` and is more meant for lower level integration into other libraries or if you need the last drop of performance.
+In addition to the blocking API on `Cluster`, the SDK provides reactive and async APIs on `ReactiveCluster` or `AsyncCluster` respectively. 
+If you are in doubt of which API to use, we recommend looking at the reactive first: 
+it builds on top of reactor, a powerful library that allows you to compose reactive computations and deal with error handling and other related concerns (like retry) in an elegant manner. 
+The async API on the other hand exposes a `CompletableFuture` and is more meant for lower level integration into other libraries or if you need the last drop of performance.
 
-Also, there is another reason you want to use the reactive API: streaming large results with backpressure from the application side. Both the blocking and async APIs have no means of signalling backpressure in a good way, so if you need it the reactive API is your best option.
+There is another reason for using the reactive API here: streaming large results with backpressure from the application side. 
+Both the blocking and async APIs have no means of signalling backpressure in a good way, so if you need it the reactive API is your best option.
 
 [TIP]
 .Advanced Reactive Concepts Ahead
 ====
-Please see the guides on reactive programming for more information on the basics, this guide is diving straight into their impact on querying search.
+Please see recent guides to reactive programming for more information on the basics -- this guide dives straight into their impact on querying search.
 ====
 
 A simple reactive query is similar to the blocking one:
@@ -207,4 +232,8 @@ This search query will stream all rows as they become available form the server.
 include::example$Search.java[tag=backpressure,indent=0]
 ----
 
-In this example we initially request a batch size of 10 rows (so streaming can begin). Then as each row gets streamed it is written to a `process()` method which does whatever it needs to do to process. Then a counter is decremented and once all of the 10 outstanding rows are processed another batch is loaded. Please note that if your `process()` method equivalent is blocking, like always with reactive code, you *must* move it onto another scheduler so that the I/O threads are not stalled. As always we recommend not blocking in the first place in reactive code.
+In this example we initially request a batch size of 10 rows (so streaming can begin). 
+Then as each row gets streamed it is written to a `process()` method which does whatever it needs to do to process. 
+Then a counter is decremented, and once all of the 10 outstanding rows are processed another batch is loaded. 
+Please note that with reactive code, if your `process()` method equivalent is blocking, you *must* move it onto another scheduler so that the I/O threads are not stalled. 
+We always recommend not blocking in the first place in reactive code.
