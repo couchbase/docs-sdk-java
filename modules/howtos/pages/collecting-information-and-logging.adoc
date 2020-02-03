@@ -194,3 +194,15 @@ We recommend filtering on the specific events you are interested in, since most 
 ====
 If you consume the `EventBus` you MUST NOT block inside the consumer callback. It will stall all other consumers. If you must write into a blocking sink like a blocking HTTP API you MUST write it onto a different thread with a non-blocking queue first.
 ====
+
+== Log Redaction
+Redacting logs is a two-stage process. If you want to redact client logs (for example before handing them off to the Couchbase Support team) you first need to enable log redaction in your application.
+
+[source,java]
+----
+LogRedaction.setRedactionLevel(RedactionLevel.FULL);
+----
+
+Different redaction levels are supported - please see the `RedactionLevel` enum description for more information.
+
+Note that you need to run this command before any of the SDK code is initialized so all of the logs are captured properly. Once the SDK writes the logs with the tags to a file, you can then use the `cblogredaction` tool to obfuscate the log.
