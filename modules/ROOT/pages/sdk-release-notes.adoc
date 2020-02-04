@@ -20,13 +20,40 @@ As a result the dependency can be included easily using your favorite package ma
    <dependency>
      <groupId>com.couchbase.client</groupId>
      <artifactId>java-client</artifactId>
-     <version>2.7.10</version>
+     <version>2.7.12</version>
    </dependency>
  </dependencies>
 ----
 
 The java-client dependency will pull in two more transitive dependencies. One is called com.couchbase.client.core-io and is an internal dependency which performs all the underlying tasks like IO and cluster management. 
 The other dependency is RxJava which is both used internally and exposed as a first-class API to the user in order to perform scalable and performant asynchronous, reactive operations.
+
+== Version 2.7.12 (4th February 2019)
+
+Version 2.7.12 is the thirteenth release of the 2.7 series.
+
+http://packages.couchbase.com/clients/java/2.7.12/Couchbase-Java-Client-2.7.12.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.12/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-1.7.12/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:2.7.12**
+* com.couchbase.client:**core-io:1.7.12**
+* io.reactivex:**rxjava:1.3.8**
+* io.opentracing:**opentracing-api:0.31.0**
+
+=== Enhancements & New Features
+
+* http://issues.couchbase.com/browse/JCBC-1544[JCBC-1544]: 
+Allow doc annotiations in meta-annotations.
+* http://issues.couchbase.com/browse/JCBC-1574[JCBC-1574]: 
+Add support for JsonObject/Array.put(String,Object) on Map or List.
+
+=== Bug Fixes
+
+* http://issues.couchbase.com/browse/JVMCBC-806[JVMCBC-806]: 
+Fix an issue where hostname validation (introduced in 2.7.11) was not working correctly because hostname and port are not passed down to the SSL engine.
+* http://issues.couchbase.com/browse/JVMCBC-807[JVMCBC-807]: 
+Hostnames are now re-resolved on each socket connect attempt to catch DNS resolution changes from the hostname to another IP address.
 
 == Version 2.7.11 (4th December 2019)
 
