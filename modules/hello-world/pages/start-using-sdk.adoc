@@ -25,7 +25,7 @@ Couchbase publishes all stable artifacts to https://search.maven.org/search?q=co
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.0</version>
+        <version>3.0.1</version>
     </dependency>
 </dependencies>
 ----
@@ -34,7 +34,7 @@ For https://gradle.org/[gradle], you can use:
 
 [source]
 ----
-implementation 'com.couchbase.client:java-client:3.0.0'
+implementation 'com.couchbase.client:java-client:3.0.1'
 ----
 
 Alternatively, we provide a zip file with all the dependencies bundled if you wish to manually include the `jar` files in your classpath. Refer to the xref:project-docs:sdk-release-notes.adoc[Release Notes] for further details. You can also find links to the hosted javadocs there.
