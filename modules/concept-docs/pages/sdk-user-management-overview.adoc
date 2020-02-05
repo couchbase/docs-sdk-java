@@ -1,9 +1,24 @@
 = User Management
 :nav-title: User Management
 :page-topic-type: concept
-:page-aliases: 
+:page-aliases: concept-docs:sdk-user-management-overview
 
 [abstract]
-Users, permissions, authentication.
+The Java SDK lets you create _users_, assign them _roles_ and associated _privileges_, and remove them from the system, as well as working with groups.
 
+include::6.5@sdk:shared:partial$sdk-user-management-overview.adoc[tag=users_resources_roles_and_privileges]
 
+include::6.5@sdk:shared:partial$sdk-user-management-overview.adoc[tag=creating_a_user]
+
+include::6.5@sdk:shared:partial$sdk-user-management-overview.adoc[tag=listing_users]
+
+include::6.5@sdk:shared:partial$sdk-user-management-overview.adoc[tag=getting_a_user]
+
+include::6.5@sdk:shared:partial$sdk-user-management-overview.adoc[tag=removing_a_user]
+
+== Language-Specific Variations
+
+Each language supported by the Couchbase SDK implements the above methods in a slightly different way.
+For Java examples, see xref:sdk-user-management-example.adoc[Sample Code].
+
+include::6.5@sdk:shared:partial$sdk-user-management-overview.adoc[tag=rbac]

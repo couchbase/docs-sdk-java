@@ -17,9 +17,9 @@
 * xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed ACID Transactions]
 
 .Managing Couchbase
-// * User Management
-//  ** xref:howtos:sdk-authentication.adoc[Authentication]
 * xref:howtos:managing-connections.adoc[Managing Connections]
+* xref:howtos:sdk-user-management-example.adoc[User Management]
+//  ** xref:howtos:sdk-authentication.adoc[Authentication]
 
 .Errors & Diagnostics
 * xref:howtos:collecting-information-and-logging.adoc[Logging]
@@ -45,7 +45,7 @@
 ** xref:concept-docs:understanding-views.adoc[Map Reduce Views]
 ** xref:concept-docs:n1ql-query.adoc[Query]
 ** xref:concept-docs:full-text-search-overview.adoc[Search]
-// * xref:concept-docs:sdk-user-management-overview.adoc[User Management]
+* xref:concept-docs:sdk-user-management-overview.adoc[User Management]
 // ** xref:concept-docs:certificate-based-authentication.adoc[Cert Auth]
 // ** xref:concept-docs:rbac.adoc[RBAC]
 

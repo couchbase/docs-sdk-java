@@ -1,3 +1,18 @@
+
+
+
+
+:page-aliases: certificate-based-authentication
+
+
+
+
+
+
+
+
+
+////
 = Certificate-Based Authentication
 :nav-title: Cert Auth
 :page-topic-type: concept
@@ -6,4 +21,4 @@
 [abstract]
 Certificates.
 
-
+////

@@ -1,5 +1,0 @@
-= Authenticating against Couchbase Server
-
-
-
-:page-aliases: sdk-authentication-overview

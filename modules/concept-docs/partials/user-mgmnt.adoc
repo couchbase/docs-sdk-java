@@ -1,0 +1,101 @@
+= User Management
+
+// tag::upsert[]
+[source,java]
+----
+boolean upsertUser (String userid, UserSettings settings)
+----
+// end::upsert[]
+
+
+
+// tag::user-settings[]
+[source,java]
+----
+UserSettings {
+    String password;
+    String name;
+    Role[] roles;
+}
+----
+// end::user-settings[]
+
+
+
+
+
+// tag::role-object[]
+[source,java]
+----
+Role {
+    String role;
+    String bucket_name;
+}
+----
+// end::role-object[]
+
+
+
+
+
+// tag::list[]
+[source,java]
+----
+List<User> getUsers()
+----
+// end::list[]
+
+
+
+
+// tag::object[]
+[source,java]
+----
+User {
+    String name;
+    String id;
+    String domain;
+    Role[] roles;
+}
+----
+// end::object[]
+
+
+
+
+// tag::get[]
+[source,java]
+----
+User getUser (String userid)
+----
+// end::get[]
+
+
+
+
+// tag::return[]
+[source,java]
+----
+User {
+    String name;
+    String id;
+    String domain;
+    Role[] roles;
+}
+----
+// end::return[]
+
+
+
+
+
+
+// tag::remove[]
+[source,java]
+----
+boolean removeUser (String userid)
+----
+// end::remove[]
+
+
+
