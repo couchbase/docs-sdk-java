@@ -25,10 +25,52 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.0</version>
+        <version>3.0.1</version>
     </dependency>
 </dependencies>
 ----
+
+== Version 3.0.1 (5 February 2020)
+
+Version 3.0.1 is the second release of the 3.0 series, bringing  enhancements and bugfixes over the last stable release.
+
+http://packages.couchbase.com/clients/java/3.0.1/Couchbase-Java-Client-3.0.1.zip[Download] |
+http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.1/[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.2/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.1**
+* com.couchbase.client:**core-io:2.0.2**
+* io.projectreactor:**reactor-core:3.3.1.RELEASE**
+* org.reactivestreams:**reactive-streams:1.0.2**
+
+=== Enhancements
+
+* http://issues.couchbase.com/browse/JCBC-1578[JCBC-1578]:
+Added support for Java Object Serialization as a custom `Transcoder`.
+* http://issues.couchbase.com/browse/JVMCBC-808[JVMCBC-808]:
+The internal packaged `netty` dependency has been reduced to the minimum amount of artifacts needed, trimming the resulting jar size a little.
+
+=== Bug Fixes
+
+* http://issues.couchbase.com/browse/JCBC-1574[JCBC-1574]:
+`JsonObject/Array.put(String,Object)` now supports writing generic Maps and Lists.
+* http://issues.couchbase.com/browse/JCBC-1580[JCBC-1580]:
+The code for get projections had an import for unbundled jackson which prevented it from working in an environment where no unbundled jackson is on the classpath.
+This no longer occurs.
+* http://issues.couchbase.com/browse/JCBC-1582[JCBC-1582]:
+The client context ID is now propagated into the `PREPARE` query if needed.
+* http://issues.couchbase.com/browse/JVMCBC-806[JVMCBC-806]:
+TLS: remote hostname and port are passed down to the SSL engine, making sure that hostname validation works as expected.
+* http://issues.couchbase.com/browse/JCBC-1575[JCBC-1575]:
+Bucket Management: BucketSettings load does now recognize numReplicas properly.
+
+=== Known Issues
+
+* http://issues.couchbase.com/browse/JVMCBC-805[JVMCBC-805]:
+When bootstrapping against a non-KV node the KV socket is not cleaned up properly. 
+As a workaround (and as we recommend in general), please only bootstrap against nodes which have the KV service enabled.
 
 == Version 3.0.0 (10 January 2020)
 
@@ -113,6 +155,12 @@ A bug has been fixed where a non-existing view in an existing design document wo
 Views now use the right default View timeout instead of the Analytics one.
 * http://issues.couchbase.com/browse/JVMCBC-789[JVMCBC-789]:
 Performing operations while initially loading the collection map is now handled gracefully.
+
+=== Known Issues
+
+* http://issues.couchbase.com/browse/JVMCBC-805[JVMCBC-805]:
+When bootstrapping against a non-KV node the KV socket is not cleaned up properly. As a workaround (an we recommend in general) please
+only bootstrap against nodes which have the KV service enabled.
 
 === API Changes
 
