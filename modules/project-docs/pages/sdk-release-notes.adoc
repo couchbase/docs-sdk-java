@@ -70,7 +70,7 @@ Bucket Management: BucketSettings load does now recognize numReplicas properly.
 
 * http://issues.couchbase.com/browse/JVMCBC-805[JVMCBC-805]:
 When bootstrapping against a non-KV node the KV socket is not cleaned up properly. 
-As a workaround (and as we recommend in general), please only bootstrap against nodes which have the KV service enabled.
+As a workaround (and as we recommend in general -- unless you are using xref:howtos:managing-connections.adoc#using-dns-srv-records[DNS SRV]), please only bootstrap against nodes which have the KV service enabled.
 
 == Version 3.0.0 (10 January 2020)
 
