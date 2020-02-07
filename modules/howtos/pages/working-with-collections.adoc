@@ -1,8 +1,7 @@
 = Working with the  Collections Developer Preview
 :nav-title: Collections DP
-:content-type: tutorial
-:page-topic-type: tutorial
-:page-aliases: ROOT:sample-application,ROOT:tutorial4,ROOT:sample-app-backend
+:content-type: howto
+:page-topic-type: howto
 
 [abstract]
 Collections is introduced as a Developer Preview feature in Couchbase Server 6.5.
