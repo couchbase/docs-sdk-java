@@ -6,13 +6,9 @@
 
 [abstract]
 Discover how to program interactions with the Couchbase Server via the data, Query, and search services -- using the Travel Sample Application with the built-in Travel Sample data Bucket.
-This version also demonstrated the Developer Preview of the upcoming Collections feature.
 
 include::6.5@sdk:shared:partial$sample-application.adoc[tag=prereq]
 
-This version of the Travel Sample App uses the xref:6.5@server:developer-preview:preview-mode.adoc[Collections Developer Preview (DP)] 
--- enabling Developer Preview should only be done on a development machine; 
-there is no upgrade path available from a DP-enabled Couchbase Server.
 
 == Preparation
 
@@ -28,40 +24,7 @@ Change directory into your cloned repository, and check out the latest branch (t
 
 [source,bash]
 ----
-git checkout 6.5.0-branch
-----
-
-* Before building the Travel Sample Application, which in the case of the Java SDK utilises the Collections _Developer Preview_, you need to enable this DP feature (see warning above).
-+
-[source,bash]
-.Enable Collections Developer Preview
-----
-/opt/couchbase/bin/couchbase-cli enable-developer-preview --enable -c http://localhost:8091 -u Administrator -p password
-----
-+
-[source,bash]
-----
-Developer preview cannot be disabled once it is enabled. If you enter developer preview mode you will not be able to upgrade. DO NOT USE IN PRODUCTION.
-Are you sure [y/n]: y
-----
-
-The Travel Sample Bucket needs altering to be split into collections. 
-There is a script to do this included with the Travel Sample App -- run:
-
-[source,bash]
-.Create Sample Collections
-----
-sh create-collections.sh Administrator password 127.0.0.1
-----
-
-adjusting for any changes you have made to server URL, or admin password.
-You should now have the Travel Sample Data Bucket split into collections:
-
-----
-{"uid":"1"}{"uid":"2"}{"uid":"3"}
-
-THE FINAL RESULT
-{"uid":"3","scopes":[{"name":"userData","uid":"8","collections":[{"name":"flights","uid":"9"},{"name":"users","uid":"8"}]},{"name":"_default","uid":"0","collections":[{"name":"_default","uid":"0"}]}]}
+git checkout 6.5
 ----
 
 
@@ -117,12 +80,11 @@ public class User {
     static final String FLIGHTS_COLLECTION_NAME = "flights";
 ----
 
-Here showing _users_ and _flights_ as Collections.
 Creating a user shows the typical security concerns, with salted password hashes, as well as the mundane but essential business of using the KV interface to `insert` the username into the database:
 
 [source,java]
 ----
-    public Result<Map<String, Object>> createLogin(final Scope scope, final String username, final String password,
+    public Result<Map<String, Object>> createLogin(final Bucket bucket, final String username, final String password,
             DurabilityLevel expiry) {
         String passHash = BCrypt.hashpw(password, BCrypt.gensalt());
         JsonObject doc = JsonObject.create()
@@ -133,12 +95,11 @@ Creating a user shows the typical security concerns, with salted password hashes
         if (expiry.ordinal() > 0) {
             options.durability(expiry);
         }
-        String narration = "User account created in document " + username + " in bucket " + scope.bucketName()
-                + " scope " + scope.name() + " collection " + USERS_COLLECTION_NAME
+        String narration = "User account created in document " + username + " in bucket " + bucket.name()
                 + (expiry.ordinal() > 0 ? ", with expiry of " + expiry.ordinal() + "s" : "");
 
         try {
-            scope.collection(USERS_COLLECTION_NAME).insert(username, doc);
+            bucket.defaultCollection().insert(username, doc);
             return Result.of(
                     JsonObject.create().put("token", jwtService.buildToken(username)).toMap(),
                     narration);
@@ -153,7 +114,7 @@ Here, the _flights_ array, containing the flight IDs, is converted to actual obj
 
 [source,java]
 ----
-        Collection flightsCollection = scope.collection(FLIGHTS_COLLECTION_NAME);
+        Collection flightsCollection = bucket.defaultCollection();
         List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < flights.size(); i++) {
             String flightId = flights.getString(i);
@@ -168,8 +129,6 @@ Here, the _flights_ array, containing the flight IDs, is converted to actual obj
         }
         return results;
     }
-
-}
 ----
 
 
