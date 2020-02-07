@@ -1,16 +1,24 @@
-= Collections
+= Collections & Scope
+:page-topic-type: concept
+:nav-title: Collections
+:page-status: Developer Preview
+
 
 [abstract]
 Available as a _Developer Preview_ in Couchbase Server 6.5.
 
-Please see the xref:6.5@server:developer-preview:collections/collections-overview.adoc[Collections Overview documents] in the Server docs.
-       
+Access a non-default collection, in the default scpoe, with:
 
+[source,java]
+----
+bucket.collection("flights")
+----
 
-// bucket.collections()
+And for  a non-default scope:
+[source,java]
+----
+bucket.scope("marlowe_agency").collection("flights") too
+----
 
-////
-to access a non-default collection it's just bucket.collection("whatever") (edited) 
-
-you can also do bucket.scope("scopey_mcscopeface").collection("whatever") too
-////
+* Please see the xref:6.5@server:developer-preview:collections/collections-overview.adoc[Collections Overview documents] in the Server docs.
+*  To see Collections in action, take a look at our xref:howtos:working-with-collections.adoc[Collections-enabled Travel Sample page].
