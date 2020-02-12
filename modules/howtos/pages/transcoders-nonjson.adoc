@@ -268,10 +268,11 @@ include::example$Transcoding.java[tag=msgpack-encode,indent=0]
 ----
 
 == Further reading
-For _Common flags_, setting the data format used, see the xref:ref:data-structures.adoc#common-flags[Data Structures reference].
-_Format flags_ for ancient SDKs are still available for compatibility, if you are porting a long-lived legacy app. 
+
+* For _Common flags_, setting the data format used, see the xref:ref:data-structures.adoc#common-flags[Data Structures reference].
+* _Format flags_ for ancient SDKs are still available for compatibility, if you are porting a long-lived legacy app. 
 See the xref:ref:data-structures.adoc#legacy-formats[Legacy formats reference].
-If you want to work with binary documents and our Search service, you might like to take a look at https://github.com/khanium/couchbase-fts-binary
+* If you want to work with binary documents and our Search service, you might like to take a look at https://github.com/khanium/couchbase-fts-binary
 
 
 
