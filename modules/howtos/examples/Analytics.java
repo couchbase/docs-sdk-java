@@ -1,19 +1,23 @@
 // #tag::imports[]
+
 import com.couchbase.client.core.error.CouchbaseException;
-import com.couchbase.client.java.*;
-import com.couchbase.client.java.json.*;
-import com.couchbase.client.java.query.*;
+import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.analytics.AnalyticsResult;
+import com.couchbase.client.java.analytics.AnalyticsScanConsistency;
+import com.couchbase.client.java.analytics.ReactiveAnalyticsResult;
+import com.couchbase.client.java.json.JsonArray;
+import com.couchbase.client.java.json.JsonObject;
 import org.reactivestreams.Subscription;
-import reactor.core.publisher.*;
+import reactor.core.publisher.BaseSubscriber;
+import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.couchbase.client.java.query.QueryOptions.queryOptions;
+import static com.couchbase.client.java.analytics.AnalyticsOptions.analyticsOptions;
 // #end::imports[]
 
-
-class Queries {
+public class Analytics {
 
   static Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
 
@@ -21,15 +25,15 @@ class Queries {
     {
       // #tag::simple[]
       try {
-        final QueryResult result = cluster
-          .query("select * from `travel-sample` limit 10", queryOptions().metrics(true));
+        final AnalyticsResult result = cluster
+          .analyticsQuery("select \"hello\" as greeting");
 
         for (JsonObject row : result.rowsAsObject()) {
           System.out.println("Found row: " + row);
         }
 
         System.out.println("Reported execution time: "
-          + result.metaData().metrics().get().executionTime());
+          + result.metaData().metrics().executionTime());
       } catch (CouchbaseException ex) {
         ex.printStackTrace();
       }
@@ -38,9 +42,9 @@ class Queries {
 
     {
       // #tag::named[]
-      QueryResult result = cluster.query(
-        "select count(*) from `travel-sample` where type = \"airports\" and country = $country",
-        queryOptions().parameters(JsonObject.create().put("country", "France"))
+      AnalyticsResult result = cluster.analyticsQuery(
+        "select count(*) from airports where country = $country",
+        analyticsOptions().parameters(JsonObject.create().put("country", "France"))
       );
       // #end::named[]
     }
@@ -48,52 +52,61 @@ class Queries {
 
     {
       // #tag::positional[]
-      QueryResult result = cluster.query(
-        "select count(*) from `travel-sample` where type = \"airports\" and country = ?",
-        queryOptions().parameters(JsonArray.from("France"))
+      AnalyticsResult result = cluster.analyticsQuery(
+        "select count(*) from airports where country = ?",
+        analyticsOptions().parameters(JsonArray.from("France"))
       );
       // #end::positional[]
     }
 
     {
       // #tag::scanconsistency[]
-      QueryResult result = cluster.query(
+      AnalyticsResult result = cluster.analyticsQuery(
         "select ...",
-        queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS)
+        analyticsOptions().scanConsistency(AnalyticsScanConsistency.REQUEST_PLUS)
       );
       // #end::scanconsistency[]
     }
 
     {
       // #tag::clientcontextid[]
-      QueryResult result = cluster.query(
+      AnalyticsResult result = cluster.analyticsQuery(
         "select ...",
-        queryOptions().clientContextId("user-44" + UUID.randomUUID().toString())
+        analyticsOptions().clientContextId("user-44" + UUID.randomUUID().toString())
       );
       // #end::clientcontextid[]
     }
 
     {
-      // #tag::readonly[]
-      QueryResult result = cluster.query(
+      // #tag::priority[]
+      AnalyticsResult result = cluster.analyticsQuery(
         "select ...",
-        queryOptions().readonly(true)
+        analyticsOptions().priority(true)
+      );
+      // #end::priority[]
+    }
+
+    {
+      // #tag::readonly[]
+      AnalyticsResult result = cluster.analyticsQuery(
+        "select ...",
+        analyticsOptions().readonly(true)
       );
       // #end::readonly[]
     }
 
     {
       // #tag::printmetrics[]
-      QueryResult result = cluster.query("select 1=1", queryOptions().metrics(true));
+      AnalyticsResult result = cluster.analyticsQuery("select 1=1");
       System.err.println(
-        "Execution time: " + result.metaData().metrics().get().executionTime()
+        "Execution time: " + result.metaData().metrics().executionTime()
       );
       // #end::printmetrics[]
     }
 
     {
       // #tag::rowsasobject[]
-      QueryResult result = cluster.query(
+      AnalyticsResult result = cluster.analyticsQuery(
         "select * from `travel-sample` limit 10"
       );
       for (JsonObject row : result.rowsAsObject()) {
@@ -104,24 +117,24 @@ class Queries {
 
     {
       // #tag::simplereactive[]
-      Mono<ReactiveQueryResult> result = cluster
+      Mono<ReactiveAnalyticsResult> result = cluster
         .reactive()
-        .query("select 1=1");
+        .analyticsQuery("select 1=1");
 
       result
-        .flatMapMany(ReactiveQueryResult::rowsAsObject)
+        .flatMapMany(ReactiveAnalyticsResult::rowsAsObject)
         .subscribe(row -> System.out.println("Found row: " + row));
       // #end::simplereactive[]
     }
 
     {
       // #tag::backpressure[]
-      Mono<ReactiveQueryResult> result = cluster
+      Mono<ReactiveAnalyticsResult> result = cluster
         .reactive()
-        .query("select * from hugeBucket");
+        .analyticsQuery("select * from hugeDataset");
 
       result
-        .flatMapMany(ReactiveQueryResult::rowsAsObject)
+        .flatMapMany(ReactiveAnalyticsResult::rowsAsObject)
         .subscribe(new BaseSubscriber<JsonObject>() {
           // Number of outstanding requests
           final AtomicInteger oustanding = new AtomicInteger(0);
@@ -139,7 +152,7 @@ class Queries {
               request(10);
             }
           }
-        });
+      });
       // #end::backpressure[]
     }
 

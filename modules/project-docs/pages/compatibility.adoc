@@ -5,6 +5,12 @@
 [abstract]
 Features available in different SDK versions, and compatibility between Server and SDK.
 
+The 3.0 SDK requires Java 8 or later to be installed, earlier versions will not work. 
+_Java 11 is recommended_, which has various enhancements like lambda local variable type inference, profiling tools, and updated security features. 
+Most of the flavors available will do, although we may only provide support for OpenJDK and Oracle JDK going forward. 
+The Java SDK _has not been tested (and is not supported on) Java 12 or later_.
+
+
 == Couchbase Version/SDK Version Matrix
 
 Couchbase SDKs are tested against a variety of different environments to ensure both backward and forward compatibility with different versions of Couchbase Server.
@@ -26,7 +32,7 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 | *✔*
 | *✔*
 | *✔*
-| *✔*
+| *◎*
 
 | *Server 6.0*
 | ◎
@@ -65,7 +71,30 @@ Please make sure you run on one of the latest patch releases, since they provide
 
 == Couchbase Feature Availability Matrix
 
-TBI
+.Couchbase Server and SDK Supported Version Matrix
+|===
+| | Server 5.0, 5.1, & 5.5 | Server 6.0 | Server 6.5
+
+| Enhanced Durability
+3+| All SDK versions
+
+| Durable Writes 
+2+| Not Supported
+| Since 3.0
+
+| Analytics
+| DP in 5.5 with 2.6
+2+| Since 2.7
+
+| Distributed ACID Transactions
+2+| Not Supported
+| Since 3.0
+
+| Collections
+2+| Not Supported
+| Developer Preview in 6.5, SDK 3.0
+
+|===
 
 
 include::6.5@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]

@@ -3,6 +3,10 @@
 :page-topic-type: howto
 :page-aliases: document-operations.adoc
 
+[abstract]
+Key Value (KV) or data service offers the simplest way to retrieve or mutate data where the key is known.
+Here we cover CRUD operations, document expiration, and optimistic locking with CAS.
+
 The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/blob/release/3.0alpha/modules/howtos/examples/KvOperations.java[here].
 
 At its heart Couchbase Server is a high-performance key-value store, and the key-value interface outlined below is the fastest and best method to perform operations involving single documents.
@@ -131,6 +135,9 @@ include::example$KvOperations.java[tag=replace-retry]
 ----
 
 Note that this code is simplistic to show how CAS retry works in general. 
+If the `replace()` above never works, you would always get a CAS mismatch, and never break out of the loop - so 
+`for(int i = 0; i < maxAttempts; i++)` would be a resaonable alternative.
+
 In later chapters we cover more sophisticated approaches to this, including asynchronous retry, retry with backoff and bailing out after a maximum amount of tries. 
 All these should be in place for robust, production ready code.
 

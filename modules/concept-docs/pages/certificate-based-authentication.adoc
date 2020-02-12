@@ -6,5 +6,4 @@
 [abstract]
 Certificates.
 
-include::ref:partial$beta-warning.adoc[]
 
