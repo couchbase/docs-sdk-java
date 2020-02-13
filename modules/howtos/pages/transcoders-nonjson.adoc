@@ -3,59 +3,35 @@
 :page-topic-type: howtos
 
 [abstract]
-Couchbase is a document database and functions best when document contents are JSON. 
-Nevertheless Couchbase may be used to store non-JSON data for various use cases. 
-This page discusses how to use Couchbase with non-JSON documents, including strings and binary-data, and how to work with custom transcoders.
-
-
-Non-JSON formats may be more efficient in terms of memory and processing power (for example, if storing only flat strings, JSON adds an additional syntactical overhead of two bytes per string).
-Non-JSON documents may be desirable if migrating a legacy application which is using a customized binary format.
-
-Note: Only JSON documents can be accessed using Query (N1QL), Analytics, or Search.
-
-== Using non-JSON documents
-
-It's important to note that a JSON document can also refer to a simple integer (`42`), string (`"hello"`), array (`[1,2,3]`), boolean (`true`, `false`) and the JSON `null` value.
-Nevertheless if your application requires a non-JSON format, the SDK may still support it natively.
-
-If there is no native support for your format, you can write a _transcoder_ which handles the encoding and decoding of your documents to and from the server.
-
-
-
-== Transcoders
-
-
-// TODO JacksonJsonSerializer
+The Java SDK supports common JSON document requirements out-of-the-box.
+Custom transcoders and serializers provide support for applications needing to perform advanced operations, including supporting non-JSON data.
 
 The Java SDK uses the concepts of transcoders and serializers, which are used whenever data is sent to or retrieved from Couchbase Server.
 
-Serializers convert arrays of bytes to and from concrete objects.
-
-Transcoders can either use a serializer, or pass through bytes directly.
-In addition they are responsible for setting the _Common Flag_ stored alongside each document.
-
-This Common Flag specifies whether the data is JSON, a non-JSON string, or raw binary data.
-
-When sending data to Couchbase, the SDK passes the Object being sent to a transcoder.  
-The transcoder can either reject the Object as being unsupported, or convert it into a `byte[]` and a Common Flag.  
+When sending data to Couchbase, the SDK passes the Object being sent to a transcoder.
+The transcoder can either reject the Object as being unsupported, or convert it into a `byte[]` and a Common Flag.
+The Common Flag specifies whether the data is JSON, a non-JSON string, or raw binary data.
 It may, but does not have to, use a serializer to perform the byte conversion.
 
 On retrieving data from Couchbase, the fetched `byte[]` and Common Flag are passed to a transcoder.  
 The transcoder converts the bytes into a concrete class (the application specifies the required type) if possible.  
 It may use a serializer for this.
 
-=== Default Behaviour
+NOTE: Many applications will not need to be aware of transcoders and serializers, as the defaults support most standard JSON use cases.
+The information in this page is only needed if the application has an advanced use-case, likely involving either non-JSON data, or a requirement for a particular JSON serialization library.
+
+== Default Behaviour
 The `ClusterEnvironment` contains a global transcoder and serializer, which by default are  `JsonTranscoder` and `DefaultJsonSerializer`.
 
 `DefaultJsonSerializer` uses the high-performance JSON library https://github.com/FasterXML/jackson[Jackson] for serializing and deserializing byte arrays to and from concrete objects.
 
-On sending data to Couchbase, `JsonTranscoder` will send Objects to its serializer to convert into a `byte[]`.  
+On sending data to Couchbase, `JsonTranscoder` will send Objects to its serializer (`DefaultJsonSerializer` by default) to convert into a `byte[]`.
 The serialized bytes are then sent to the Couchbase Server, along with a Common Flag of JSON.
 
 `JsonTranscoder` will pass any Object to its serializer, apart from a `byte[]`.  
 It will reject this with an InvalidArgumentException, as it is ambiguous how it should be handled.
 
-On retrieving data from Couchbase, `JsonTranscoder` passes the fetched `byte[]` and Common Flag to its serializer to convert into a concrete class.
+On retrieving data from Couchbase, `JsonTranscoder` passes the fetched `byte[]` and Common Flag to its serializer (`DefaultJsonSerializer` by default) to convert into a concrete class.
 
 This table summarizes that information, and this more concise form will be used to describe the other transcoders included in the SDK.
 
@@ -78,19 +54,19 @@ This table summarizes that information, and this more concise form will be used 
 |JSON
 |===
 
-==== Using Custom Jackson
+== Using Custom Jackson
 As described above, the default serializer (`DefaultJsonSerializer`) uses Jackson for serializing objects.
 (This Jackson dependency is shaded into a different namespace, so that it does not clash with any Jackson used by your application.)
 
-If you do have Jackson on your classpath, the SDK will automatically default to using this.  
+If Jackson is on the application's classpath, the SDK will instead automatically default to using this.
 It does this during `ClusterEnvironment` creation: if no serializer has been specified, and if Jackson is detected on the classpath, then a `JacksonJsonSerializer` is used as the global default serializer instead of `DefaultJsonSerializer`.  
-This will create and use a Jackson  `ObjectMapper` from the standard `com.fasterxml.jackson.databind` package.
+This will create and use a Jackson `ObjectMapper` from the standard `com.fasterxml.jackson.databind` package.
 
-=== RawJsonTranscoder
-The RawJsonTranscoder provides the ability for the application to explicitly specify that the data they are storing or retrieving is meant to be strictly JSON bytes.
+== RawJsonTranscoder
+The RawJsonTranscoder provides the ability for the application to explicitly specify that the data they are storing or retrieving is JSON.
+This transcoder does not accept a serializer, and always performs straight pass through of the data to the server.
 This enables the application to avoid unnecessary parsing costs when they are certain they are using JSON data.
 
-Note that this transcoder does not accept a serializer, and always performs straight pass through of the data to the server.
 It only accepts Strings and `byte[]`.
 
 [cols="3", options="header"]
@@ -121,7 +97,7 @@ include::example$Transcoding.java[tag=gson-encode,indent=0]
 ----
 
 Since Gson has already done the serialization work, we don't want to use the default `JsonTranscoder`, as this will run the provided String needlessly through `DefaultJsonSerializer` (Jackson).
-Instead, RawJsonTranscoder is used, which just passes through the serialized bytes, and stores them in Couchbase with the JSON flag set.
+Instead, RawJsonTranscoder is used, which just passes through the serialized bytes, and stores them in Couchbase with the JSON Common Flag set.
 
 Similarly, the same transcoder is used on reading the document, so the raw bytes can be retrieved in a String without going through `DefaultJsonSerializer` (Jackson).  
 Gson can then be used for the deserialization.
@@ -131,11 +107,20 @@ Gson can then be used for the deserialization.
 include::example$Transcoding.java[tag=gson-decode,indent=0]
 ----
 
-=== RawStringTranscoder
-The RawStringTranscoder provides the ability for the user to explicitly store and retrieve raw string data to Couchbase.  
-It only accepts Strings.
+== Non-JSON Transcoders
+It is most common to store JSON with Couchbase.
+However, it is possible to store non-JSON documents, such as raw binary data, perhaps using an concise binary encoding like https://msgpack.org[MessagePack] or https://cbor.io/[CBOR], in the Key-Value store.
 
-Note that this transcoder does not accept a serializer, and always performs straight pass through of the data to the server.
+NOTE: It's important to note that the Couchbase Data Platform includes multiple components other than the Key-Value store -- including N1QL and its indexes, FTS, analytics, and eventing -- and these are optimized for JSON and will either ignore or provide limited functionality with non-JSON documents.
+
+Also note that some simple data types can be stored directly as JSON, without recourse to non-JSON transcoding.
+A valid JSON document can be a simple integer (`42`), string (`"hello"`), array (`[1,2,3]`), boolean (`true`, `false`) and the JSON `null` value.
+
+=== RawStringTranscoder
+The RawStringTranscoder provides the ability for the user to explicitly store and retrieve raw string data with Couchbase.
+It can be used to avoid the overhead of storing the string as JSON, which requires two bytes for double quotes, plus potentially more for escaping characters.
+
+Note that this transcoder does not accept a serializer, and always performs straight passthrough of the data to the server.  It only accepts Strings.
 
 [cols="3", options="header"]
 |===
@@ -196,8 +181,6 @@ include::example$Transcoding.java[tag=binary,indent=0]
 == Custom Transcoders and Serializers
 More advanced transcoding needs can be accomplished if the application implements their own transcoders and serializers.
 
-Recall that a serializer is responsible for converting an Object to and from an array of bytes, while a transcoder decides what Objects get sent to the serializer and which are passed through directly, and what Common Flag (JSON, string, binary) the data is stored with.
-
 === Creating a Custom Serializer
 We saw above one example of using Google Gson with the `RawJsonTranscoder`, but it requires the application to explicitly serialize and deserialize objects each time.  
 By creating a custom Gson serializer, we can avoid this.
@@ -209,7 +192,7 @@ include::example$Transcoding.java[tag=gson-serializer,indent=0]
 ----
 
 NOTE: The `TypeRef` overload is optional, and is only used if the application explicitly uses it with for example `result.contentAs(new TypeRef<String> {})`, which is an uncommon requirement.  
-It is fine to throw an exception from this method rather than implementing it, if it is not required.
+It is fine to throw an exception from this method rather than implementing it, if it is not needed.
 
 In this case, there is no need to provide a custom transcoder.
 The <<Default Behaviour,table for `JsonTranscoder`>> shows that it already does what we need: for any Object (that’s not a `byte[]`), it sends it to its serializer, and then stores the result in Couchbase with the JSON Common Flag set.
@@ -238,7 +221,7 @@ The default global `JsonTranscoder` will be initialized with this serializer.
 Now our GsonSerializer will be automatically used by all operations, without needing to provide a transcoder each time.
 
 === Creating a Custom Transcoder
-Let’s look at a more complex example: encoding https://msgpack.org[MessagePack].  
+Let’s look at a more complex example: encoding the JSON alternative, https://msgpack.org[MessagePack].
 MessagePack is a compact binary data representation, so it should be stored with the binary Common Flag.
 The Common Flag is chosen by the transcoder, and none of the existing transcoders matches our needs (`RawBinaryTranscoder` does set the binary flag, but it passes data through directly rather than using a serializer).  
 So we need to write one.
