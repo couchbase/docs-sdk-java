@@ -7,7 +7,12 @@
 [abstract]
 Available as a _Developer Preview_ in Couchbase Server 6.5.
 
-Access a non-default collection, in the default scpoe, with:
+The Developer Preview of the upcoming Collections feature in Couchbase Server is fully implemented in the 3.0 API versions of the Couchbase SDKs. 
+Information on the Developer Preview (DP) of _Collections_ can be found in the xref:6.5@server:developer-preview:collections/collections-overview.adoc[server docs].
+
+== Using Collections & Scope DP
+
+Access a non-default collection, in the default scope, with:
 
 [source,java]
 ----
