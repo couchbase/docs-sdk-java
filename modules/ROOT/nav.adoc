@@ -13,7 +13,7 @@
 // * xref:howtos:view-queries-with-sdk.adoc[MapReduce Views]
 
 .Advanced Data Operations
-* xref:howtos:concurrent-async-apis.adoc[Async & React APIs]
+* xref:howtos:concurrent-async-apis.adoc[Async & Reactive APIs]
 // * xref:howtos:concurrent-document-mutations.adoc[Concurrent Document Mutations]
 * xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed ACID Transactions]
 * xref:howtos:transcoders-nonjson.adoc[Transcoders & Non-JSON]
