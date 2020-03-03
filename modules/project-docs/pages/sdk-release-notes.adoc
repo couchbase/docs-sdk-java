@@ -52,6 +52,18 @@ The supported and tested dependencies for this release are:
 
 * http://issues.couchbase.com/browse/JCBC-1588[JCBC-1588]:
 Give TypeRef overload of JsonSerializer a default "unsupported" impl, making it easier for applications to implement custom JsonSerializers.
+* http://issues.couchbase.com/browse/JVMCBC-813[JVMCBC-813]:
+Improve error message if bucket is missing
+* http://issues.couchbase.com/browse/JVMCBC-815[JVMCBC-815]:
+Check if key exceeds size limits
+* http://issues.couchbase.com/browse/JVMCBC-818[JVMCBC-818]:
+Trim netty stack in connect failures for more readable output
+* http://issues.couchbase.com/browse/JVMCBC-819[JVMCBC-819]:
+Distinguish bucket not found in select bucket failures
+* http://issues.couchbase.com/browse/JVMCBC-823[JVMCBC-823]:
+Add a global component to the core id
+* http://issues.couchbase.com/browse/JVMCBC-825[JVMCBC-825]:
+Support new VATTR HELLO flag
 
 === Bug Fixes
 
@@ -61,6 +73,8 @@ Exists returns wrong value if executed right after remove.
 Using expiry together with document flags on a Sub-Document mutateIn causes an incorrect flags field to be sent.
 * http://issues.couchbase.com/browse/JCBC-1604[JCBC-1604]:
 Properly clear cache when repreparing/retrying query.
+* http://issues.couchbase.com/browse/JVMCBC-824[JVMCBC-824]:
+Native Netty transports not included, resulting in fallback to default implementation.  Only affected 2.0.2 core release.
 
 == Version 3.0.1 (5 February 2020)
 
