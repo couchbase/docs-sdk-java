@@ -28,10 +28,39 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2</version>
     </dependency>
 </dependencies>
 ----
+
+== Version 3.0.2 (3 March 2020)
+
+Version 3.0.2 is the third release of the 3.0 series, bringing  enhancements and bugfixes over the last stable release.
+
+http://packages.couchbase.com/clients/java/3.0.2/Couchbase-Java-Client-3.0.2.zip[Download] |
+http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.2/[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.3/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.2**
+* com.couchbase.client:**core-io:2.0.3**
+* io.projectreactor:**reactor-core:3.3.1.RELEASE**
+* org.reactivestreams:**reactive-streams:1.0.2**
+
+=== Enhancements
+
+* http://issues.couchbase.com/browse/JCBC-1588[JCBC-1588]:
+Give TypeRef overload of JsonSerializer a default "unsupported" impl, making it easier for applications to implement custom JsonSerializers.
+
+=== Bug Fixes
+
+* http://issues.couchbase.com/browse/JCBC-1587[JCBC-1587]:
+Exists returns wrong value if executed right after remove.
+* http://issues.couchbase.com/browse/JCBC-1600[JCBC-1600]:
+Using expiry together with document flags on a Sub-Document mutateIn causes an incorrect flags field to be sent.
+* http://issues.couchbase.com/browse/JCBC-1604[JCBC-1604]:
+Properly clear cache when repreparing/retrying query.
 
 == Version 3.0.1 (5 February 2020)
 
