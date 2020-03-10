@@ -510,6 +510,13 @@ Exception in thread "main" com.couchbase.client.core.error.ParsingFailedExceptio
 
 Not only does it throw a `CouchbaseException`, it also tries to map it to a specific exception type and include extensive contextual information for a better troubleshooting experience.
 
+==== DSL Deprecation
+
+The fluent API feature tried out in SDK 2 was found not to scale well for larger queries, nor for SQL++.
+There was also some impedance mismatch with the Java language.
+For these reaasons it is not amongst the features initially carried over to SDK 3.0.
+
+
 === Analytics
 
 Analytics querying, like N1QL, is also moved to the `Cluster` level: it is now accessible through the `Cluster.analyticsQuery` method. 
