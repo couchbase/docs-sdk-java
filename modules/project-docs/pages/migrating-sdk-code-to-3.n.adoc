@@ -516,6 +516,8 @@ The fluent API feature tried out in SDK 2 was found not to scale well for larger
 There was also some impedance mismatch with the Java language.
 For these reaasons it is not amongst the features initially carried over to SDK 3.0.
 
+In most cases, a simple string statement is the best replacement.
+
 
 === Analytics
 
