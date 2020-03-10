@@ -45,7 +45,7 @@ The supported and tested dependencies for this release are:
 
 * http://issues.couchbase.com/browse/JCBC-1594[JCBC-1594]: 
 To provide better compatibility with cluster upgrades and with query prepared statements on Couchbase Server 6.5 and later, 
-the SDK now transparently retries the 4040 reponse code in a similar way to with related error codes.
+the SDK now transparently retries the 4040 response code in a similar way to with related error codes.
 
 == Version 2.7.12 (4th February 2020)
 
