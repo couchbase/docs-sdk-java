@@ -512,9 +512,8 @@ Not only does it throw a `CouchbaseException`, it also tries to map it to a spec
 
 ==== DSL Deprecation
 
-The fluent API feature tried out in SDK 2 was found not to scale well for larger queries, nor for SQL++.
-There was also some impedance mismatch with the Java language.
-For these reasons it is not amongst the features initially carried over to SDK 3.0.
+The fluent API feature in SDK 2 was found not to scale well for larger queries, nor for SQL++.
+For these reasons it is not amongst the features carried over to SDK 3.0.
 
 In most cases, a simple string statement is the best replacement.
 
