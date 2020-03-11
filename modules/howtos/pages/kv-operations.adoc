@@ -47,7 +47,7 @@ The SDK also supports custom transcoders and serializers which are covered separ
 ====
 All of these operations involve fetching the complete document from the Cluster.
 Where the number of operations or other circumstances make bandwidth a significant issue, 
-the SDK can work on just a specific _path_ of the document with xref:subdocument-operations.adoc[Sub-Docunent Operations].
+the SDK can work on just a specific _path_ of the document with xref:subdocument-operations.adoc[Sub-Document Operations].
 ====
 
 Here is a simple upsert operation, which will insert the document if it does not exist, or replace it if it does.
