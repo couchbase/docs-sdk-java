@@ -22,7 +22,7 @@ Before starting, here's all imports used in the following examples:
 include::example$Queries.java[tag=imports,indent=0]
 ----
 
-Here's a complete example of doing an query and handling the results:
+Here's a complete example of doing a query and handling the results:
 
 [source,java]
 ----
