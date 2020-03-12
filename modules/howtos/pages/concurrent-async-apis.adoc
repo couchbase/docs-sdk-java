@@ -87,7 +87,7 @@ If you want to separate out failures from completions, one way would be to use s
 include::example$AsyncOperations.java[tag=split-bulk]
 ----
 
-If the result succeeds the side-effect method `doOnNext` is used to store it into the `successfulResults` and if the operation fails we are utilizing the same operator as before (`onErrorResume`) to on the one hand store it in the `erroredResults` map but then also to ignore it for the overall sequence.
+If the result succeeds the side-effect method `doOnNext` is used to store it into the `successfulResults` and if the operation fails we are utilizing the same operator as before (`onErrorResume`) to store it in the `erroredResults` map -- but then also to ignore it for the overall sequence.
 
 Finally, it is also possible to retry individual failures before giving up. The built-in retry mechanisms help with this:
 
