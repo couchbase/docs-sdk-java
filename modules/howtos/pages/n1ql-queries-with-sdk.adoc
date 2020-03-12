@@ -157,7 +157,7 @@ include::example$Queries.java[tag=readonly,indent=0]
 
 Like with all JSON apis, it is possible to customize the JSON serializer. It allows to plug in your own library (like GSON) or custom configured mappings on your own Jackson serializer. This in turn makes it possible to serialize rows into POJOs or other structures that your application defines and the SDK has no idea about.
 
-Please see the documentation transcoding and serialization for more information.
+Please see the xref:transcoders-nonjson.adoc[documentation on transcoding and serialization] for more information.
 
 == Reactive And Async APIs
 
