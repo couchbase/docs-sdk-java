@@ -55,7 +55,7 @@ You can access this API by using the `async()` accessor methods both on the bloc
 include::example$AsyncOperations.java[tag=access-async]
 ----
 
-We recommend using this API only if you are either writing integration code for higher level concurrency mechanisms or you really ned the last drop of performance. In all other cases, the blocking API (for simplicity) or the reactive API (for richness in operators) is likely the better choice.
+We recommend using this API only if you are either writing integration code for higher level concurrency mechanisms or you really need the last drop of performance. In all other cases, the blocking API (for simplicity) or the reactive API (for richness in operators) is likely the better choice.
 
 == Batching
 The SDK itself does not provide explicit APIs for batching, because using the reactive mechanisms it allows you to build batching code applied to your use case much better than a generic implementation could in the first place.
