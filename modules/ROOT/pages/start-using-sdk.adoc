@@ -157,14 +157,14 @@ More information on managing connections including error handling can be found x
 == API Reference
 
 Each stable Java SDK version has the Javadocs API reference published.
-The reference for the latest version can be found https://docs.couchbase.com/sdk-api/couchbase-java-client/[here^].
+The reference for the latest version can be found https://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.12/[here^].
 
 == Additional Resources
 
 The Couchbase JVM Core module is the common library responsible for all the Couchbase Server interaction -- used by both the Java SDK, and the new Scala SDK. 
-It is designed to be quite low level and only exposes a message-oriented API -- the API reference is https://docs.couchbase.com/sdk-api/couchbase-core-io[here^].
+It is designed to be quite low level and only exposes a message-oriented API -- the API reference is https://docs.couchbase.com/sdk-api/couchbase-core-io-1.7.12/[here^].
 
-
+Links to older versions of the API docs can be found on the xref:sdk-release-notes.adoc[Release Notes page], and links to the new 3.0 SDK API docs can be found on the xref:3.0@java-sdk:project-docs:sdk-release-notes.adoc[3.0 Release Notes page].
 
 [#java-contributing]
 == Contributing
