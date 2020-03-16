@@ -37,7 +37,7 @@ Java 11 has various enhancements like lambda local variable type inference, prof
 
 Version 3.0.2 is the third release of the 3.0 series, bringing  enhancements and bugfixes over the last stable release.
 
-// http://packages.couchbase.com/clients/java/3.0.2/Couchbase-Java-Client-3.0.2.zip[Download] |
+http://packages.couchbase.com/clients/java/3.0.2/Couchbase-Java-Client-3.0.2.zip[Download] |
 http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.2/[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.3/[Core API Reference]
 
