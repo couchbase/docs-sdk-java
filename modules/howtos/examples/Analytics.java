@@ -150,6 +150,7 @@ public class Analytics {
             process(value);
             if (oustanding.decrementAndGet() == 0) {
               request(10);
+              oustanding.set(10);
             }
           }
       });
