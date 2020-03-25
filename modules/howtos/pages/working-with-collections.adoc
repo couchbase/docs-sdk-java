@@ -28,7 +28,7 @@ there is no upgrade path available from a DP-enabled Couchbase Server.
 
 == Preparation
 
-As well as the xref:hello-world:start-using-sdk.adoc[Java SDK 3.0] and Couchbase Server, 
+Along with the xref:hello-world:start-using-sdk.adoc[Java SDK 3.0] and Couchbase Server, 
 set up as described above, you will need `git` to fetch the travel sample application code:
 
 [source,bash]
