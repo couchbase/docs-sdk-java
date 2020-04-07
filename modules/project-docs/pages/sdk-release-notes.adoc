@@ -81,8 +81,8 @@ Now Docs created under custom collection should no longer raise an exception whe
 A NullPointerException was occuring when LDAP is enabled.
 The code now explicitly fails the connection with a descriptive error message instructing the user what to do next (either use TLS which is preferred) or enable PLAIN on the password authenticator (insecure).
 * http://issues.couchbase.com/browse/JVMCBC-827[JVMCBC-827]:
-Search query results row_hit typo resulted in 0 being returned fir total rows.
-This has now been fixed.
+Search query results row_hit typo resulted in 0 being returned for total rows. 
+This has now been fixed. 
 * http://issues.couchbase.com/browse/JVMCBC-828[JVMCBC-828]:
 Omit internal config request in orphan reporting.
 * http://issues.couchbase.com/browse/JVMCBC-839[JVMCBC-839]:
