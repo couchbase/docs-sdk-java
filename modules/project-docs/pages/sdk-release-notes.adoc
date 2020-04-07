@@ -56,11 +56,33 @@ Expose API to set the collections TTL
 CreateCollection CollectionSpec must include MaxTTL
 * http://issues.couchbase.com/browse/JCBC-1617[JCBC-1617]:
 Fail with FeatureNotAvailable on collection manager for older clusters
+* http://issues.couchbase.com/browse/JVMCBC-830[JVMCBC-830]:
+Additional overloads for SecurityConfig and CertAuth
+* http://issues.couchbase.com/browse/JVMCBC-831[JVMCBC-831]:
+Improve timeout for waitUntilReady
+* http://issues.couchbase.com/browse/JVMCBC-832[JVMCBC-832]:
+Support multiple ports in connection string
+* http://issues.couchbase.com/browse/JVMCBC-835[JVMCBC-835]:
+Fail fast if user connects to host:8091
+* http://issues.couchbase.com/browse/JVMCBC-836[JVMCBC-836]:
+Enable Unordered Execution by Default
+* http://issues.couchbase.com/browse/JVMCBC-837[JVMCBC-837]:
+Update OpenTelemetry to 0.3
+* http://issues.couchbase.com/browse/JVMCBC-839[JVMCBC-839]:
+Bootstrap on mapped port if alternate addr present
 
 === Bug Fixes
 
 * http://issues.couchbase.com/browse/JCBC-1618[JCBC-1618]:
 "fields" in SearchRows not deserialized
+* http://issues.couchbase.com/browse/JVMCBC-834[JVMCBC-834]:
+[Collections] Doc creates under custom collection throws 'CollectionNotFoundException', but created in the server
+* http://issues.couchbase.com/browse/JVMCBC-826[JVMCBC-826]:
+NullPointerException when LDAP is enabled
+* http://issues.couchbase.com/browse/JVMCBC-827[JVMCBC-827]:
+Search query results row_hit typo
+* http://issues.couchbase.com/browse/JVMCBC-828[JVMCBC-828]:
+Omit internal config request in orphan reporting
 
 
 == Version 3.0.2 (3 March 2020)
