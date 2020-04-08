@@ -20,13 +20,41 @@ As a result the dependency can be included easily using your favorite package ma
    <dependency>
      <groupId>com.couchbase.client</groupId>
      <artifactId>java-client</artifactId>
-     <version>2.7.13</version>
+     <version>2.7.14</version>
    </dependency>
  </dependencies>
 ----
 
 The java-client dependency will pull in two more transitive dependencies. One is called com.couchbase.client.core-io and is an internal dependency which performs all the underlying tasks like IO and cluster management. 
 The other dependency is RxJava which is both used internally and exposed as a first-class API to the user in order to perform scalable and performant asynchronous, reactive operations.
+
+== Version 2.7.14 (8th April 2020)
+
+Version 2.7.14 is a bugfix release of the 2.7 series, bringing enhancements over the last stable release.
+
+http://packages.couchbase.com/clients/java/2.7.14/Couchbase-Java-Client-2.7.14.zip[Download] | http://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.14/[API Reference] | http://docs.couchbase.com/sdk-api/couchbase-core-io-1.7.14/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:2.7.14**
+* com.couchbase.client:**core-io:1.7.14**
+* io.reactivex:**rxjava:1.3.8**
+* io.opentracing:**opentracing-api:0.31.0**
+
+=== Enhancements & New Features
+
+* http://issues.couchbase.com/browse/JCBC-1622[JCBC-1622]: 
+The (experimental) repository API now also searches for meta-annotations.
+* http://issues.couchbase.com/browse/JCBC-1613[JCBC-1613]: 
+Experimental support for FTS polygon queries has been added to the API.
+
+=== Bug Fixes
+
+* http://issues.couchbase.com/browse/JVMCBC-829[JVMCBC-829]:
+The shaded netty dependency has been updated from 4.0 to 4.1 because the
+netty version in used has been identified to contain CVEs.
+* http://issues.couchbase.com/browse/JVMCBC-833[JVMCBC-833]:
+Seed nodes are now properly updated when alternate addresses are used, fixing issues when more than one bucket is opened at the same time (this bug mainly affects environments in docker containers and/or in kubernetes clusters).
 
 == Version 2.7.13 (3rd March 2020)
 
