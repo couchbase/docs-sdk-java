@@ -187,11 +187,11 @@ ClusterEnvironment env = ClusterEnvironment.builder()
 Name: *DNS SRV Enabled*::
 Builder Method: `IoConfig.enableDnsSrv(boolean)`
 +
-Default:  `false`
+Default:  `true`
 +
 System Property: `com.couchbase.env.io.enableDnsSrv`
 +
-Set this to `true` if you want to get the bootstrap node list from a DNS SRV record.
+Gets the bootstrap node list from a DNS SRV record.
 See the xref:howtos:managing-connections.adoc#using-dns-srv-records[Connection Management] section for more information on how to use it properly.
 
 Name: *Mutation Tokens Enabled*::
