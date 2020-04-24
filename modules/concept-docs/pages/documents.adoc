@@ -82,10 +82,13 @@ You can also retrieve _parts_ of documents using xref:subdocument-operations.ado
 ----
 name, email = cb.retrieve_in('user:kingarthur', 'contact.name', 'contact.email')
 ----
+
+include::6.5@sdk:shared:partial$documents.adoc[tag=expiration]
+
+
 ////
 include::6.5@sdk:shared:partial$documents.adoc[tag=]
 
-include::6.5@sdk:shared:partial$documents.adoc[tag=]
 
 include::6.5@sdk:shared:partial$documents.adoc[tag=]
 
