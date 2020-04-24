@@ -226,6 +226,9 @@ It can be used like this:
 include::example$KvOperations.java[tag=expiry-touch]
 ----
 
+include::6.5@sdk:shared:partial$documents.adoc[tag=exp-note]
+
+
 == Additional resources
 
 Working on just a specific path within a JSON document will reduce network bandwidth requirements -- see the xref:subdocument-operations.adoc[Sub-Document] pages.
