@@ -8,7 +8,7 @@ The 3.0 API breaks the existing 2.0 APIs in order to provide a number of improve
 Collections and Scopes are introduced.
 The Document class and structure has been completely removed from the API, and the returned value is now `Result`.
 Retry behaviour is more proactive, and lazy bootstrapping moves all error handling to a single place.
-Individual behaviour changes across services are explained here.
+Individual behavior changes across services are explained here.
 
 
 include::6.5@sdk:shared:partial$migration.adoc[tag=intro]
@@ -95,7 +95,7 @@ Similar to SDK 2, if you create your own `ClusterEnvironment` the SDK will not s
 include::example$Migrating.java[tag=shutdown,indent=0]
 ----
 
-If no custom environment is passed in, the default settings can still be customized through either the connection string or xref:ref:client-settings.adoc[system properties]. 
+If a default environment is used, the default settings can still be customized through either the connection string or xref:ref:client-settings.adoc[system properties].
 The SDK has elaborate reflection logic in place to parse "flat" string values and apply them to the builder, which means that you can now configure more properties than in SDK 2. 
 Note that the property paths have changed.
 
@@ -179,7 +179,7 @@ include::example$Migrating.java[tag=simpleget,indent=0]
 If you are using a Couchbase Server version which does not support `Collections`, always use the `defaultCollection()` method to access the KV API; it will map to the full bucket.
 
 IMPORTANT: You'll notice that `bucket(String)` returns immediately, even if the bucket resources are not completely opened. 
-This means that the subsequent `get` operation may be dispatched even before the socket is open in the background. 
+This means that the subsequent `get` operation may be dispatched even before the connection is opened in the background.
 The SDK will handle this case transparently, and reschedule the operation until the bucket is opened properly. 
 This also means that if a bucket could not be opened (say, because no server was reachable) the operation will time out.
 Please check the logs to see the cause of the timeout (in this case, you'll see socket connect rejections).
@@ -263,7 +263,7 @@ There have been changes made in the following areas:
 === Exception hierachy
 
 The exception hierachy is now flat and unified under a `CouchbaseException`. 
-Each `CouchbaseException` has an associated `ErrorContext` which is populated with as much info as possible and then dumped alongside the stack trace if an error happens.
+Each `CouchbaseException` has an associated `ErrorContext` which is populated with as much information as possible and then dumped alongside the stack trace if an error happens.
 
 Here is an example of the error context if a N1QL query is performed with an invalid syntax (i.e. `select 1= from`):
 
@@ -410,7 +410,7 @@ bucket.get("mydoc-id", 5, TimeUnit.SECONDS);
 include::example$Migrating.java[tag=customtimeout,indent=0]
 ----
 
-In SDK 2, the `getFromReplica` method had a `ReplicaMode` argument which allowed to customize its behavior on how many replicas should be reached. 
+In SDK 2, the `getFromReplica` method had a `ReplicaMode` argument which allowed you to customize its behavior on how many replicas should be reached.
 We have identified this as a potential source of confusion and as a result split it up in two methods that simplify usage significantly. 
 There is now a `getAllReplicas` method and a `getAnyReplica` method. 
 
