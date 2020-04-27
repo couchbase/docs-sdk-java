@@ -391,7 +391,7 @@ The concept of the `Document` as a type is gone in SDK 3 and instead you need to
 This makes it very clear what is returned, especially on the response side.
 
 Thus, the `get` method does not return a `Document` but a `GetResult` instead, and the `upsert` does not return a `Document` but a `MutationResult`. 
-Each of those results only contain the field that the specific method can actually return, making it impossible to accidentally try to access the `expiry` on the `Document` after a mutation, for example.
+Each of those results only contains the field that the specific method can actually return, making it impossible to accidentally try to access the `expiry` on the `Document` after a mutation, for example.
 
 Instead of having many overloads, all optional params are now part of the `Option` block. 
 All required params are still part of the method signature, making it clear what is required and what is not (or has default values applied if not overridden).
