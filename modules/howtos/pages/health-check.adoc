@@ -29,7 +29,7 @@ include::devguide:example$java/src/main/java/com/couchbase/devguide/HealthCheck.
 However this call _does not_ actively poll the nodes, reporting instead the state the last time it tried to access each node.
 If you want the _current_ status, then use xref:#ping[Ping].
 
-[source,javascript]
+[source,java]
 ----
 include::devguide:example$java/src/main/java/com/couchbase/devguide/HealthCheck.java[tag=diagnostics]
 ----
