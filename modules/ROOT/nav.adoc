@@ -26,7 +26,7 @@
 
 .Errors & Diagnostics
 * xref:howtos:collecting-information-and-logging.adoc[Logging]
-// * xref:howtos:health-check.adoc[Health Check]
+* xref:howtos:health-check.adoc[Health Check]
 
 .Learn
 * xref:concept-docs:concepts.adoc[Overview]
