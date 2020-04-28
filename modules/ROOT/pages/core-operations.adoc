@@ -42,24 +42,26 @@ Because JSON is a structured format, it can be subsequently searched and queried
 [#crud-overview]
 == Primitive Key-Value Operations
 
-[source,python]
+[source,java]
 ----
-upsert(docid, document)
-insert(docid, document)
-replace(docid, document)
-get(docid)
-remove(docid)
+bucket.upsert(document);
+bucket.insert(document);
+bucket.replace(document);
+bucket.get(docid);
+bucket.remove(docid);
 ----
 
 In Couchbase documents are stored using one of the operations: _upsert_, _insert_, and _replace_.
 Each of these operations will write a JSON document with a given document ID (key) to the database.
 The update methods differ in behavior in respect to the existing state of the document:
 
-* _insert_ will only create the document if the given ID is not found within the database.
-* _replace_ will only replace the document if the given ID already exists within the database.
-* _upsert_ will always replace the document, ignoring whether the ID has already existed or not.
+* _insert_ will only create the document if the given document ID is not found within the database.
+* _replace_ will only replace the document if the given document ID already exists within the database.
+* _upsert_ will always replace the document, ignoring whether the document ID exists or not.
 
-Documents can be retrieved using the _get_ operation, and finally removed using the _remove_ operations.
+For detailed explanations, please refer xref:document-operations.adoc#java-creating-updating-full-docs[Creating and Updating Full Documents] section.
+
+Documents can be retrieved using the _get_ operation, and finally removed using the _remove_ operations. You can refer xref:document-operations.adoc#java-retrieving-full-docs[Retrieving full docs] and xref:document-operations.adoc#java-removing-full-docs[Removing full docs] section.
 
 Since Couchbase’s KV store may be thought of as a distributed hashmap or dictionary, the following code samples are explanatory of Couchbase’ update operations in pseudo-code:
 
@@ -126,9 +128,11 @@ See xref:concurrent-mutations-cluster.adoc[CAS] for a description on how to use 
 ====
 If you wish to only modify certain parts of a document, you can use xref:subdocument-operations.adoc[sub-document] operations which operate on specific subsets of documents:
 
-[source,python]
+[source,java]
 ----
-cb.mutate_in('docid', subdoc.array_addunique('tags', 'fast'))
+bucket.mutateIn("docid")
+        .arrayAddUnique("tags", "fast")
+        .execute();
 ----
 
 or xref:6.0@server:n1ql:n1ql-language-reference/update.adoc[N1QL UPDATE] to update documents based on specific query criteria:
@@ -186,9 +190,15 @@ SELECT * FROM default WHERE META(default).id = "docid";
 
 You can also retrieve _parts_ of documents using xref:subdocument-operations.adoc[sub-document operations], by specifying one or more sections of the document to be retrieved
 
-[source,python]
+[source,java]
 ----
-name, email = cb.retrieve_in('user:kingarthur', 'contact.name', 'contact.email')
+DocumentFragment<Lookup> result = bucket.lookupIn("user:kingarthur")
+        .get("contact.name")
+        .get("contact.email")
+        .execute();
+String name = result.content(0).toString();
+String email = result.content(1).toString();
+        
 ----
 
 [#devguide_kvcore_counter_generic]
@@ -202,19 +212,16 @@ The same is the case for `decr()`.
 
 A document may be used as a counter if its value is a simple ASCII number, like `42`.
 Couchbase allows you to increment and decrement these values atomically using a special [.api]`counter` operation.
-The example below (in Python) shows how to use counters:
+The example below (in Java) shows how to use counters:
 
-[source,python]
+[source,java]
 ----
->>> cb.counter('counter_id', delta=20, initial=100).value
-100L
->>> cb.counter('counter_id', delta=1).value
-101L
->>> cb.counter('counter_id', delta=-50).value
-51L
+bucket.counter("counter_id", 20, 100).content(); //100L
+bucket.counter("counter_id", 1).content(); //101L
+bucket.counter("counter_id", -50).content(); //51L
 ----
 
-In the above example, a counter is created by using the [.api]`counter` Python method with an [.param]`initial` value.
+In the above example, a counter is created by using the [.api]`counter` Java method with an [.param]`initial` value.
 The initial value is the value the counter uses if the counter ID does not yet exist.
 
 Once created, the counter can be incremented or decremented atomically by a given _amount_ or _delta_.
@@ -231,12 +238,14 @@ xref:concurrent-mutations-cluster.adoc[CAS] values are not used with counter ope
 The intent of the counter operation is to simply increment the current server-side value of the document.
 If you wish to only increment the document if it is at a certain value, then you may use a normal [.api]`upsert` function with CAS:
 
-[source,python]
+[source,java]
 ----
-rv = cb.get('counter_id')
-value, cas = rv.value, rv.cas
-if should_increment_value(value):
-  cb.upsert('counter_id', value + increment_amount, cas=cas)
+JsonLongDocument counter = bucket.get("counter_id", JsonLongDocument.class);
+long cas = counter.cas();
+long value = counter.content();
+if(should_increment_value(value)){
+  bucket.upsert(JsonLongDocument.create("counter_id", (value+increment_amount), cas));
+}
 ----
 
 You can also use xref:subdocument-operations.adoc#ul_fp2_2yw_mv[sub-document counter operations] to increment numeric values _within_ a document containing other content.
@@ -247,16 +256,16 @@ You can also use xref:subdocument-operations.adoc#ul_fp2_2yw_mv[sub-document cou
 You can use collection data structures such as lists, maps, sets and queues in Couchbase.
 These data structures may be manipulated with basic operations without retrieving and storing the entire document.
 
-See the data structures xref:python-sdk::datastructures.adoc[documentation for each SDK language] for details on implementation.
-Some Python examples are provided below for easy reference, but more advanced Collections frameworks are accessible in xref:java-sdk::datastructures.adoc[Java] and xref:dotnet-sdk::datastructures.adoc[.NET] as well.
+See the data structures xref:java-sdk::datastructures.adoc[documentation for each SDK language] for details on implementation.
+Some Java examples are provided below for easy reference, but more advanced Collections frameworks are accessible in xref:java-sdk::datastructures.adoc[Java] and xref:dotnet-sdk::datastructures.adoc[.NET] as well.
 
-Data structures in Couchbase are similar in concept to data structures in, for example, Python:
+Data structures in Couchbase are similar in concept to data structures in, for example, Java:
 
-* *Map* is like Python `dict`, and is a key-value structure, where a value is accessed by using a key string.
-* *List* is like a Python `list` and is a sequential data structure.
+* *Map* is like Java `Map<String, Object>` and is a key-value structure, where a value is accessed by using a key string.
+* *List* is like a Java `List<Object>` and is a sequential data structure.
 Values can be placed in the beginning or end of a list, and can be accessed using numeric indexes.
 * *Queue* is a wrapper over a _list_ which offers FIFO (first-in-first-out) semantics, allowing it to be used as a lightweight job queue.
-* *Set* is a wrapper over a _list_ which provides the ability to handle unique values.
+* *Set* is a wrapper over a _list_ which ensures each value in the list is unique.
 
 These data structures are stored as JSON documents in Couchbase, and can therefore be accessed using N1QL, Full Text Search, and normal key-value operations.
 Data structures can also be manipulated using the traditional sub-document and full-document key-value APIs.
@@ -264,18 +273,19 @@ Data structures can also be manipulated using the traditional sub-document and f
 To add an item to a map, specify the _document ID_ of the map itself (i.e.
 the ID which uniquely identifies the map in the server), the key _within_ the map, and the value to store under the key:
 
-[source,python]
+[source,java]
 ----
-bucket.map_add('map_id', 'name', 'Mark Nunberg', create=True)
+bucket.mapAdd("map_id", "name", "Mark Nunberg",
+        MutationOptionBuilder.builder().createDocument(true));
 ----
 
 Data structures can be accessed using their appropriate methods.
-Most data access methods will return an [.api]`ValueResult`-like object with the actual returned value under the [.var]`value` property.
+Most data access methods will return a generic type [.api]`V` which is provided as a generic parameter such as `Class<V>`.
 
-[source,python]
+[source,java]
 ----
-bucket.list_get(0).value  # 'hello'
-bucket.map_get('map_id', 'name').value  # 'mark nunberg'
+bucket.listGet("list_id", 0, String.class); // "hello"
+bucket.mapGet("map_id", "name", String.class);  // "mark nunberg"
 ----
 
 [#devguide_kvcore_append_prepend_generic]
@@ -292,10 +302,10 @@ Using the append and prepend methods may invalidate an existing JSON document.
 You can use xref:subdocument-operations.adoc[sub-document operations] if you want to have true JSON-aware prepend and append operations which add values to JSON arrays.
 ====
 
-[source,python]
+[source,java]
 ----
-append(docid, fragment)
-prepend(docid, fragment)
+append(document);
+prepend(document);
 ----
 
 The _append_ and _prepend_ operations atomically add bytes to the end or beginning of a binary document.
@@ -303,40 +313,63 @@ They are an efficient alternative to retrieving a binary document in its entiret
 
 Because these methods do raw string manipulation, they are only suitable for non-JSON documents: Prepending or appending anything to a JSON document will invalidate the JSON and make it unparseable by standard JSON parsers.
 
-The semantics of the _append_ and _prepend_ operations are similar to those of the _upsert_ family of operations, except that they accept the fragment to append as their value, rather than the entire document.
+The semantics of the _append_ and _prepend_ operations are similar to those of the _upsert_ family of operations, except that they accept the document whose content can be appended to the existing one, rather than the entire document.
 These functions may be used to add efficiency for custom binary data structures (such as logs), as they avoid transferring the contents of the entire document for each operation.
 Consider the following versions (which are equivalent)
 
 .Append using get() and replace() (slow)
-[source,python]
+[source,java]
 ----
-# Store the document
-cb.upsert('binary_doc', '\x01', format=couchbase.FMT_BYTES)
+// Create buffer out of a string
+ByteBuf toWrite = Unpooled.copiedBuffer("Hello", CharsetUtil.UTF_8);
 
-while True:
-    # Retrieve the entire document
-    rv = cb.get('binary_doc')
-    value = rv.value + '\x02'
-    try:
-        # Upload the entire document
-        cb.replace('binary_doc', value, format=couchbase.FMT_BYTES)
-        break
-    except couchbase.exceptions.KeyExistsError:
-        continue
+// Store the document
+bucket.upsert(BinaryDocument.create("binaryDoc", toWrite));
 
-print repr(cb.get('binary_doc').value)
+// Get the document
+BinaryDocument read1 = bucket.get("binaryDoc", BinaryDocument.class);
+
+// Create a replacement document
+ByteBuf toAppend = Unpooled.copiedBuffer("World", CharsetUtil.UTF_8);
+ByteBuf toReplace = read1.content().writeBytes(toAppend);
+
+// Replace the existing document
+bucket.replace(BinaryDocument.create("binaryDoc", toReplace));
+
+// Read it back
+BinaryDocument read2 = bucket.get("binaryDoc", BinaryDocument.class);
+
+// Print it
+System.out.println(read2.content().toString(CharsetUtil.UTF_8)); //HelloWorld
+
+// Free the resources
+ReferenceCountUtil.release(read1.content());
+ReferenceCountUtil.release(read2.content());
 ----
 
 .Append using append() (fast)
-[source,python]
+[source,java]
 ----
-# Store the document
-cb.upsert('binary_doc', '\x01', format=couchbase.FMT_BYTES)
+// Create buffer out of a string
+ByteBuf toWrite = Unpooled.copiedBuffer("Hello", CharsetUtil.UTF_8);
 
-# Append a fragment
-cb.append('binary_doc', '\x02', format=couchbase.FMT_BYTES)
+// Store the document
+bucket.upsert(BinaryDocument.create("binaryDoc", toWrite));
 
-print repr(cb.get('binary_doc').value)
+// Create a buffer to be appended
+ByteBuf toAppend = Unpooled.copiedBuffer("World", CharsetUtil.UTF_8);
+
+// Append a document
+bucket.append(BinaryDocument.create("binaryDoc", toAppend));
+
+// Get the document
+BinaryDocument read = bucket.get("binaryDoc", BinaryDocument.class);
+
+// Print it
+System.out.println(read.content().toString(CharsetUtil.UTF_8)); //HelloWorld
+
+// Free the resources
+ReferenceCountUtil.release(read.content());
 ----
 
 Note that since the _append_ operation is done atomically, there is no need for a CAS check (though one can still be supplied if the document must be at a specific state).
