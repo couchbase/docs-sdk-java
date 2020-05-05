@@ -7,10 +7,53 @@
 Couchbase's use of JSON as a storage format allows powerful search and query over documents.
 Several data structures are supported by the SDK, including map, list, queue, and set.
 
+Data structures in Couchbase are similar in concept to data structures in the Java Collections Framework:
 
-include::6.5@sdk:shared:partial$data-model.adoc[tag=intro]
+* *Map* is like Java `Map<String, Object>` and is a key-value structure, where a value is accessed by using a key string.
+* *List* is like a Java `List<Object>` and is a sequential data structure.
+Values can be placed in the beginning or end of a list, and can be accessed using numeric indexes.
+* *Queue* is a wrapper over a _list_ which offers FIFO (first-in-first-out) semantics, allowing it to be used as a lightweight job queue.
+* *Set* is a wrapper over a _list_ which ensures each value in the list is unique.
 
-include::6.5@sdk:shared:partial$data-model.adoc[tag=structures]
+In fact, the Java SDK provides implementations of the [.api]`Map`, [.api]`List`, [.api]`Set`, and [.api]`Queue` interfaces which are described in the <<jcf>> section.
+
+These data structures are stored as JSON documents in Couchbase, and can therefore be accessed using N1QL, Full Text Search, and normal key-value operations.
+Data structures can also be manipulated using the traditional sub-document and full-document KV APIs.
+
+Using the data structures API may help your application in two ways:
+
+* *Simplicity*: Data structures provide high level operations by which you can deal with documents as if they were container data structures.
+Adding an item to a dictionary is expressed as `mapAdd`, rather than retrieving the entire document, modifying it locally, and then saving it back to the server.
+* *Efficiency*: Data structure operations do not transfer the entire document across the network.
+Only the relevant data is exchanged between client and server, allowing for less network overhead and lower latency.
+
+
+
+// include::6.5@sdk:shared:partial$data-model.adoc[tag=intro]
+
+// include::6.5@sdk:shared:partial$data-model.adoc[tag=structures]
 
 // == Creating a Data Structure
+
+
+
+[#jcf]
+== Collections Framework Integration
+
+In addition to the [.api]`Bucket` level methods for working with data structures, the Java SDK provides implementations of the [.api]`Map`, [.api]`List`, [.api]`Set`, and [.api]`Queue` interfaces from the Java Collections Framework.
+Instead of maintaining in-memory storage, these implementations are backed by JSON documents stored in Couchbase Server.
+The implementations are thread-safe and suitable for concurrent use.
+The [.api]`Map`, [.api]`List`, and [.api]`Queue` implementations may contain values of the following types:
+
+* String
+* Integer
+* Long
+* Double
+* Boolean
+* BigInteger
+* BigDecimal
+* JsonObject
+* JsonArray
+
+The [.api]`Set` implementation may contain values of all of the above types except [.api]`JsonObject` and [.api]`JsonArray`.
 
