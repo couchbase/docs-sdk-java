@@ -28,10 +28,38 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.3</version>
+        <version>3.0.4</version>
     </dependency>
 </dependencies>
 ----
+
+== Version 3.0.4 (7 May 2020)
+
+Version 3.0.4 is the fifth release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
+
+http://packages.couchbase.com/clients/java/3.0.4/Couchbase-Java-Client-3.0.4.zip[Download] |
+http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.4/[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.5/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.4**
+* com.couchbase.client:**core-io:2.0.5**
+* io.projectreactor:**reactor-core:3.3.4.RELEASE**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== Enhancements
+
+* http://issues.couchbase.com/browse/JVMCBC-841[JVMCBC-841]:
+Bumped Netty dependency to 2.0.30, and reactor to 3.3.4
+
+=== Bug Fixes
+
+* http://issues.couchbase.com/browse/JVMCBC-845[JVMCBC-845]:
+If a rebalance is stopped in the middle, an edge case occasionally causes KV ops to time out as the fast forward map is chosen over the retry.
+The behavior has now been changed so that even if the map never moves forward and the operation has been retried it will make progress eventually and complete.
+* http://issues.couchbase.com/browse/JCBC-1626[JCBC-1626]:
+If bucket is not flushable, a `BucketNotFlushableException` is now raised.
 
 == Version 3.0.3 (7 April 2020)
 
