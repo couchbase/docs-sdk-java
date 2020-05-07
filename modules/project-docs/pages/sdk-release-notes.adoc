@@ -49,13 +49,17 @@ The supported and tested dependencies for this release are:
 * org.reactivestreams:**reactive-streams:1.0.3**
 
 === Enhancements
+
 * http://issues.couchbase.com/browse/JVMCBC-841[JVMCBC-841]:
-Bumps Netty dependency to 2.0.30, and reactor to 3.3.4
+Bumped Netty dependency to 2.0.30, and reactor to 3.3.4
+
 === Bug Fixes
+
 * http://issues.couchbase.com/browse/JVMCBC-845[JVMCBC-845]:
-Prevent KV ops from timing out, if rebalance is stopped in the middle
+If a rebalance is stopped in the middle, an edge case occasionally causes KV ops to time out as the fast forward map is chosen over the retry.
+The behavior has now been changed so that even if the map never moves forward and the operation has been retried it will make progress eventually and complete.
 * http://issues.couchbase.com/browse/JCBC-1626[JCBC-1626]:
-Raise BucketNotFlushableException if bucket is not flushable
+If bucket is not flushable, a `BucketNotFlushableException` is now raised.
 
 == Version 3.0.3 (7 April 2020)
 
