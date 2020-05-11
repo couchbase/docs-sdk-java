@@ -44,7 +44,8 @@ The supported and tested dependencies for this release are:
 === Bug Fixes
 
 * http://issues.couchbase.com/browse/JVMCBC-844[JVMCBC-844]:
-Null out request and response in json parser after completion. This change will make sure that leftovers of a previous (i.e. query) request can be cleaned up by th GC more quickly.
+Null out request and response in json parser after completion. 
+This change will make sure that leftovers of a previous (i.e. query) request can be cleaned up by the GC more quickly.
 
 == Version 2.7.14 (8th April 2020)
 
