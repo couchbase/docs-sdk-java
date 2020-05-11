@@ -57,7 +57,7 @@ Bumped Netty dependency to 2.0.30, and reactor to 3.3.4
 
 * http://issues.couchbase.com/browse/JVMCBC-845[JVMCBC-845]:
 If a rebalance is stopped in the middle, an edge case occasionally causes KV ops to time out as the fast forward map is chosen over the retry.
-The behavior has now been changed so that even if the map never moves forward and the operation has been retried it will make progress eventually and complete.
+The behavior has now been changed so that the client will try the old and new servers to make sure the operation eventually gets dispatched to the right node.
 * http://issues.couchbase.com/browse/JCBC-1626[JCBC-1626]:
 If bucket is not flushable, a `BucketNotFlushableException` is now raised.
 
