@@ -1,7 +1,7 @@
 = Errors, Exceptions, and Diagnostics
 :nav-title: Errors & Diagnostics
 :page-topic-type: concept
-:page-aliases: 
+:page-aliases: handling-error-conditions
 
 [abstract]
 When the unexpected happens, take a step-by-step approach. .
