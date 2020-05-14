@@ -17,7 +17,7 @@ set up as described above, you will need `git` to fetch the travel sample applic
 
 [source,bash]
 ----
-git clone git@github.com:couchbaselabs/try-cb-java.git
+git clone https://github.com/couchbaselabs/try-cb-java.git
 ----
 
 Change directory into your cloned repository, and check out the latest branch (this will most probably be enabled as the default branch).
