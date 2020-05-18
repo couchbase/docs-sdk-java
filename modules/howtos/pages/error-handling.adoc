@@ -108,7 +108,8 @@ Errors & Exception handling is an expansive topic.
 Here, we have covered examples of the kinds of exception scenarios that you are most likely to face.
 More fundamentally, you also need to weigh up xref:concept-docs:durability-replication-failure-considerations.adoc[concepts of durability].
 
-Diagnostic methods are available to check on the xref:health-check.adoc[health of the cluster], and the xref:tracing-from-the-sdk.adoc[health of the network].
+Diagnostic methods are available to check on the xref:health-check.adoc[health of the cluster].
+// , and the xref:tracing-from-the-sdk.adoc[health of the network].
 
 Logging methods are dependent upon the platform and SDK used.
 We offer xref:collecting-information-and-logging.adoc[recommendations and practical examples].
