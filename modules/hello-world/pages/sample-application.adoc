@@ -132,5 +132,7 @@ Here, the _flights_ array, containing the flight IDs, is converted to actual obj
 ----
 
 
+== Data Model
 
+See the xref:ref:travel-app-data-model.adoc[Travel App Data Model] reference page for more information about the sample data set used.
 
