@@ -36,12 +36,12 @@ include::example$HealthCheck.java[tag=ping-options]
 
 In this example, only the Query service is included in the ping report.
 
-Note that `ping` is available both on the `Cluster` and the `Bucket` level. The difference is that at the cluster level, the Key/Value service might not be
-included based on the Couchbase Server version in use. If you want to make sure the Key/Value service is included, perform it at the bucket level.
+Note that `ping` is available both on the `Cluster` and the `Bucket` level. The difference is that at the cluster level, the key-value service might not be
+included based on the Couchbase Server version in use. If you want to make sure the key-value service is included, perform it at the bucket level.
 
 == Diagnostics
 
-Diagnostics work similar to `ping` in the sense that it returns a report of how all the sockets/endpoints are doing, but the main difference is that it is passive. While a ping proactively sends an operation across the network, a diagnostics report just returns whatever current state the client is in. This makes it much cheaper to call on a regular basis, but does not provide any live insight into network slowness etc.
+Diagnostics works in a similar fashion to `ping` in the sense that it returns a report of how all the sockets/endpoints are doing, but the main difference is that it is passive. While a ping proactively sends an operation across the network, a diagnostics report just returns whatever current state the client is in. This makes it much cheaper to call on a regular basis, but does not provide any live insight into network slowness, etc.
 
 [source,java]
 ----
