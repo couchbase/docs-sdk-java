@@ -1,7 +1,7 @@
 = Choosing an API
 :navtitle: Choosing an API
 :page-topic-type: howto
-:page-aliases: ROOT:async-programming,ROOT:batching-operations,multiple-apis,ROOT:documents-bulk
+:page-aliases: ROOT:async-programming,ROOT:batching-operations,multiple-apis,ROOT:documents-bulk,ROOT:observables
 
 [abstract]
 The Java SDK offers efficient, non-blocking alternatives to the regular blocking API. This page outlines the different options with their drawbacks and benefits.
