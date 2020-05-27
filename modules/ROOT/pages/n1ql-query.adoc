@@ -256,11 +256,25 @@ To indicate that an SDK should optimize a query, the [.param]`adhoc` parameter s
 When a query is not _ad-hoc_, the SDK will fetch the plan (if it does not already have it).
 Do not turn off the _adhoc_ flag for each query since only a finite number of query plans (currently 5000) can be stored in the SDK.
 
-[source,python]
+[source,java]
 ----
-query = N1QLQuery("SELECT airportname FROM `travel-sample` WHERE country=$1", "USA")
-q.adhoc = False
+private static final String PLACEHOLDER_STATEMENT = "SELECT airportname FROM `travel-sample` WHERE city=$city AND type=\"airport\"";
+
+private N1qlQueryResult queryCity(String city, boolean optimize) {
+    //the placeholder values can be provided as a JSON array (if using $1 syntax)
+    // or map-like JSON object (if using $name syntax)
+    JsonObject placeholderValues = JsonObject.create().put("city", city);
+
+    //the N1qlParams.adhoc(false) is used to trigger server-side optimizations, namely preparing
+    // the query and reusing the prepared data on subsequent calls
+    N1qlParams params = N1qlParams.build().adhoc(!optimize);
+
+    ParameterizedN1qlQuery query = N1qlQuery.parameterized(PLACEHOLDER_STATEMENT, placeholderValues, params);
+    return bucket.query(query);
+}
 ----
+
+The above snippet can be seen in context in https://github.com/couchbaselabs/devguide-examples/blob/master/java/src/main/java/com/couchbase/devguide/QueryPrepared.java[the SDK Devguide Examples repo].
 
 NOTE: Parameterized queries are considered the same query for caching and planning purposes, even if the supplied parameters are different.
 
