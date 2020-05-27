@@ -1,7 +1,7 @@
 = N1QL Queries from the SDK
 :navtitle: N1QL from the SDK
 :page-topic-type: howto
-:page-aliases: n1ql-query
+:page-aliases: n1ql-query,ROOT:querying-n1ql
 :lang: Java
 :version: 3.0.0
 :example-source: 3.0@java-sdk:howtos:example$Queries.java
