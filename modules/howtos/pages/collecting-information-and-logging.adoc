@@ -1,9 +1,9 @@
 = Collecting Information & Logging
 :page-topic-type: howto
+:page-aliases: ROOT:logging
 
 [abstract]
-Java logging.
-
+Logging
 
 [abstract]
 The Java SDK logs events and also provides an event bus that transmits information about the behavior of your database system, including system and metric events.
