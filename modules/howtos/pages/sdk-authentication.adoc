@@ -46,7 +46,7 @@ For sample procedures whereby certificates can be generated and deployed, see xr
 The rest of this document assumes that the processes there, or something similar, have been followed.
 That is, a cluster certificate has been created and installed on the server, a client certificate has been created, and it is stored in a JVM keystore along with the cluster's certificate.
 
-[source,scala]
+[source,java]
 ----
 include::example$Auth.java[tag=certauth,indent=0]
 ----
