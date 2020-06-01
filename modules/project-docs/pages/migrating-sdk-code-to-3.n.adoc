@@ -18,7 +18,6 @@ include::6.5@sdk:shared:partial$migration.adoc[tag=terms]
 
 As an example here is a KeyValue document fetch:
 
-// change to $Your_language
 [source,java]
 ----
 GetResult getResult = collection.get("key", getOptions().timeout(Duration.ofSeconds(3));
@@ -26,7 +25,6 @@ GetResult getResult = collection.get("key", getOptions().timeout(Duration.ofSeco
 
 Compare this to a N1QL query:
 
-// change to $Your_language
 [source,java]
 ----
 QueryResult queryResult = cluster.query("select 1=1", queryOptions().timeout(Duration.ofSeconds(3));
@@ -142,7 +140,7 @@ The reason why you can pass in a specific authenticator is that you can also use
 include::example$Migrating.java[tag=certauth,indent=0]
 ----
 
-// Please see the xref:howtos:authentication.adoc[documentation on certificate-based authentication] for detailed information on how to configure this properly.
+Please see the xref:howtos:sdk-authentication.adoc[documentation on certificate-based authentication] for detailed information on how to configure this properly.
 
 
 == Connection Lifecycle
