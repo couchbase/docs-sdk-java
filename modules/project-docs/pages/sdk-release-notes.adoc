@@ -52,43 +52,18 @@ The supported and tested dependencies for this release are:
 
 * http://issues.couchbase.com/browse/JVMCBC-852[JVMCBC-852]:
 Bumped Reactor to 3.3.5, Netty to 4.1.50.Final, and Jackson to 2.11.0
-* http://issues.couchbase.com/browse/JCBC-1637[JCBC-1637]:
-ConfigurationProvider now provides a seedNodes() Flux, allowing the application to be informed when all address resolution is complete and the final seed-nodes hostnames are known
+* https://issues.couchbase.com/browse/JVMCBC-693[JVMCBC-693]:
+For performance, the KV bootstrap sequence is now partially pipelined
+
+In addition, there are internal revisions to support the forthcoming Field Level Encryption (FLE) support.
+This will be available in a separate library for Enterprise Edition subscribers.
 
 === Bug Fixes
 
 * http://issues.couchbase.com/browse/JVMCBC-851[JVMCBC-851]:
 Reactive getAllReplicas methods will now honor a provided custom transcoder
-* http://issues.couchbase.com/browse/JCBC-1635[JCBC-1635]:
-Subscribing to DefaultConfigurationProvider.configs() will now correctly replay the current config
-
-== Version 3.0.4 (7 May 2020)
-
-Version 3.0.4 is the fifth release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
-
-http://packages.couchbase.com/clients/java/3.0.4/Couchbase-Java-Client-3.0.4.zip[Download] |
-http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.4/[API Reference] |
-http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.5/[Core API Reference]
-
-The supported and tested dependencies for this release are:
-
-* com.couchbase.client:**java-client:3.0.4**
-* com.couchbase.client:**core-io:2.0.5**
-* io.projectreactor:**reactor-core:3.3.4.RELEASE**
-* org.reactivestreams:**reactive-streams:1.0.3**
-
-=== Enhancements
-
-* http://issues.couchbase.com/browse/JVMCBC-841[JVMCBC-841]:
-Bumped Netty dependency to 2.0.30, and reactor to 3.3.4
-
-=== Bug Fixes
-
-* http://issues.couchbase.com/browse/JVMCBC-845[JVMCBC-845]:
-If a rebalance is stopped in the middle, an edge case occasionally causes KV ops to time out as the fast forward map is chosen over the retry.
-The behavior has now been changed so that the client will try the old and new servers to make sure the operation eventually gets dispatched to the right node.
-* http://issues.couchbase.com/browse/JCBC-1626[JCBC-1626]:
-If bucket is not flushable, a `BucketNotFlushableException` is now raised.
+* http://issues.couchbase.com/browse/JVMCBC-849[JVMCBC-849]:
+Duplicate global loading exceptions are now swallowed to remove redundant warnings from logging (this was a cosmetic-only issue)
 
 == Version 3.0.4 (7 May 2020)
 
