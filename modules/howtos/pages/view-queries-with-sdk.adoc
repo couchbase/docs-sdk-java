@@ -4,7 +4,70 @@
 :page-aliases: ROOT:view-queries-with-sdk
 
 [abstract]
-You can use MapReduce views to create queryable indexes in Couchbase Data Platform.
+You can use MapReduce views to create queryable indexes in Couchbase Server.
+
+WARNING: Although still maintained and supported for legacy use, Views date from the earliest days of Couchbase Server development, and as such are rarely the best choice over, say, xref:n1ql-queries-with-sdk.adoc[our Query service] for your application, see xref:concept-docs:data-services.adoc[our guide to choosing the right service].
+
+include::6.5@sdk:shared:partial$views.adoc[tag=views-intro]
+
+== Querying Views
+
+View operations are accessible on the `Bucket` API. So once you have a reference to the bucket you need to at least supply the name of the design document and the name of the view:
+
+[source,java]
+----
+include::example$Views.java[tag=views-simple,indent=0]
+----
+
+It is important to remember that by default, the SDK will look or a view deployed to the production namespace. If you want to query one which is still in the development namespace you can do it like this:
+
+[source,java]
+----
+include::example$Views.java[tag=views-dev,indent=0]
+----
+
+In the same way you can supply all kinds of different options, including the `ViewScanConsistency` which was previously called `Stale`.
+
+[source,java]
+----
+include::example$Views.java[tag=views-opts,indent=0]
+----
+
+If you have a `reduce` function in your view and you want to call it, make sure to call `.reduce(true)` as well.
+
+== Working with View Rows
+
+A `ViewResult` can emit 0 to N view rows. The available data inside each `ViewRow` depends both on the map function written and if a reduce function is used.
+
+The structure of a `ViewRow` looks like this:
+
+[source,java]
+----
+public class ViewRow {
+  public Optional<String> id() { /* ... */ }
+
+  public <T> Optional<T> keyAs(Class<T> target) { /* ... */ }
+
+  public <T> Optional<T> keyAs(TypeRef<T> target) { /* ... */ }
+
+  public <T> Optional<T> valueAs(Class<T> target) { /* ... */ }
+
+  public <T> Optional<T> valueAs(TypeRef<T> target) { /* ... */ }
+}
+----
+
+Both the `key` and the `value` can be converted into any target type, depending on how you wrote your view function. Note that the document ID is always a `String`, but it is wrapped in an `Optional` because it is not available if a reduce function is used.
+
+== Accessing View Metadata
+
+In addition to the rows the view result contains additional `ViewMetaData`.
+
+[source,java]
+----
+include::example$Views.java[tag=views-meta,indent=0]
+----
+
+The number of rows is always present, the debug information only if you enable it on the `ViewOptions` as indicated through being wrapped into an `Optional<JsonObject>`.
 
 ////
 include::6.5@sdk:shared:partial$views.adoc[tag=views-intro]
