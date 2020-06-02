@@ -39,7 +39,7 @@ Version 3.0.5 is the sixth release of the 3.0 series, bringing enhancements and 
 
 http://packages.couchbase.com/clients/java/3.0.5/Couchbase-Java-Client-3.0.5.zip[Download] |
 http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.5/[API Reference] |
-http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.6/[Core API Reference]
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.5/[Core API Reference]
 
 The supported and tested dependencies for this release are:
 
@@ -51,9 +51,9 @@ The supported and tested dependencies for this release are:
 === Enhancements
 
 * http://issues.couchbase.com/browse/JVMCBC-852[JVMCBC-852]:
-Bumped Reactor to 3.3.5, Netty to 4.1.50.Final, and Jackson to 2.11.0
+Bumped Reactor to 3.3.5, Netty to 4.1.50.Final, and Jackson to 2.11.0.
 * https://issues.couchbase.com/browse/JVMCBC-693[JVMCBC-693]:
-For performance, the KV bootstrap sequence is now partially pipelined
+For performance, the KV bootstrap sequence is now partially pipelined.
 
 In addition, there are internal revisions to support the forthcoming Field Level Encryption (FLE) support.
 This will be available in a separate library for Enterprise Edition subscribers.
@@ -61,9 +61,9 @@ This will be available in a separate library for Enterprise Edition subscribers.
 === Bug Fixes
 
 * http://issues.couchbase.com/browse/JVMCBC-851[JVMCBC-851]:
-Reactive getAllReplicas methods will now honor a provided custom transcoder
+Reactive getAllReplicas methods will now honor a provided custom transcoder.
 * http://issues.couchbase.com/browse/JVMCBC-849[JVMCBC-849]:
-Duplicate global loading exceptions are now swallowed to remove redundant warnings from logging (this was a cosmetic-only issue)
+Duplicate global loading exceptions are now swallowed to remove redundant warnings from logging (this was a cosmetic-only issue).
 
 == Version 3.0.4 (7 May 2020)
 
