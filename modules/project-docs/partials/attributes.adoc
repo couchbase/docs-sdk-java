@@ -1,3 +1,3 @@
 :java-api-link: https://docs.couchbase.com/sdk-api/couchbase-java-client/
-:java-current-version: 3.0.4
+:java-current-version: 3.0.5
 :version-server: 6.5
