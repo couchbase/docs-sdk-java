@@ -17,7 +17,11 @@ At least Java 8 is required for current releases;
 see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section for details.
 We recommend running the latest Java LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
 
-Couchbase publishes all stable artifacts to https://search.maven.org/search?q=com.couchbase.client[Maven Central]. You can use your favorite dependency management tool to install the SDK. The following snippet shows how to do it with https://maven.apache.org/[maven].
+Couchbase publishes all stable artifacts to https://search.maven.org/search?q=com.couchbase.client[Maven Central].
+The latest version (as of June 2020) is 3.0.5.
+
+You can use your favorite dependency management tool to install the SDK.
+The following snippet shows how to do it with https://maven.apache.org/[maven].
 
 [source,xml]
 ----
@@ -25,7 +29,7 @@ Couchbase publishes all stable artifacts to https://search.maven.org/search?q=co
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.4</version>
+        <version>3.0.5</version>
     </dependency>
 </dependencies>
 ----
@@ -34,7 +38,7 @@ For https://gradle.org/[gradle], you can use:
 
 [source]
 ----
-implementation 'com.couchbase.client:java-client:3.0.4'
+implementation 'com.couchbase.client:java-client:3.0.5'
 ----
 
 Alternatively, we provide a zip file with all the dependencies bundled if you wish to manually include the `jar` files in your classpath. Refer to the xref:project-docs:sdk-release-notes.adoc[Release Notes] for further details. You can also find links to the hosted javadocs there.
