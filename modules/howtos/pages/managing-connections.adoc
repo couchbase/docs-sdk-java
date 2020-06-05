@@ -230,6 +230,41 @@ INFO: DNS SRV enabled, but less or more than one seed node given.
 Proceeding with normal bootstrap.
 ----
 
+
+== Waiting for Bootstrap Completion
+
+Sometimes, cluster resources are not ready, and a simple connection attempt will result in a timeout error.
+In these circumstances, wrapping the first call to the Cluster object in waitUntilReady() will avoid such an error.
+
+Add to the `cluster()` in the xref:#connecting-to-a-cluster[earlier example]:
+
+[source,java]
+----
+Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");
+cluster.waitUntilReady(Duration.ofSeconds(10));
+Bucket bucket = cluster.bucket("travel-sample");
+Collection collection = bucket.defaultCollection();
+----
+
+Or more fully:
+
+[source,java]
+----
+public class ClusterExample {
+  public static void main(String... args) throws Exception {
+    Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");
+    cluster.waitUntilReady(Duration.ofSeconds(10));
+    Bucket bucket = cluster.bucket("travel-sample");
+    Collection collection = bucket.defaultCollection();
+  }
+}
+----
+
+// Other timeout issues may occur when using the SDK located geographically separately from the Couchbase Server cluster -- this is xref:project-docs:compatibility#[not recommended].
+// See the xref:#working-in-the-cloud[Cloud section] below for some suggestions of settings adjustments.
+
+
+
 == Async and Reactive APIs
 
 The Couchbase Java SDK provides first-class support for asynchronous and reactive programming.
@@ -268,3 +303,6 @@ Here's the same example, but using the Reactive API instead of the Async API:
 ----
 include::example$ManagingConnections.java[tag=reactivecluster,indent=0]
 ----
+
+
+// == Working in the Cloud
