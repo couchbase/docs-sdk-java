@@ -236,9 +236,6 @@ Proceeding with normal bootstrap.
 Depending on the environment and network latency, bootstrapping the SDK fully might take a little longer than the default key-value timeout of 2.5 seconds, so you may see timeouts during bootstrap. 
 To prevent those early timeouts from happening, you can use the `waitUntilReady` method.
 
-Sometimes, cluster resources are not ready, and a simple connection attempt will result in a timeout error.
-In these circumstances, wrapping the first call to the Cluster object in waitUntilReady() will avoid such an error.
-
 Add to the `cluster()` in the xref:#connecting-to-a-cluster[earlier example]:
 
 [source,java]
