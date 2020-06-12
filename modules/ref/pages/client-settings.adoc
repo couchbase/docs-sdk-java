@@ -694,3 +694,8 @@ You are responsible for stopping it after it is no longer needed.
 
 // todo LoggingConfig ?
 // todo IoEnvironment ?
+
+// section on wide area network support
+[source,asciidoc]
+----
+include::6.0@sdk:shared:partial$client-settings-wide-network.adoc

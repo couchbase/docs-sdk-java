@@ -96,5 +96,7 @@ Please make sure you run on one of the latest patch releases, since they provide
 
 |===
 
+include::6.5@sdk:shared:partial$network-requirements.adoc
+
 
 include::6.5@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]
