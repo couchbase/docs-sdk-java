@@ -263,7 +263,7 @@ public class ClusterExample {
 If you are working at the _Bucket_ level, then the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Bucket.html#waitUntilReady-java.time.Duration-[Bucket-level `waitUntilReady`] does the same as the Cluster-level version,
 _plus_ it waits for the K-V (data) sockets to be ready.
 
-// Other timeout issues may occur when using the SDK located geographically separately from the Couchbase Server cluster -- this is xref:project-docs:compatibility#network-requirements[not recommended].
+Other timeout issues may occur when using the SDK located geographically separately from the Couchbase Server cluster -- this is xref:project-docs:compatibility#network-requirements[not recommended].
 // See the xref:#working-in-the-cloud[Cloud section] below for some suggestions of settings adjustments.
 
 
