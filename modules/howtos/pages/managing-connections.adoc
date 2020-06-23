@@ -76,9 +76,6 @@ Any client setting with a system property name may also be specified as a connec
 
 WARNING: When creating a `Cluster` using a custom `ClusterEnvironment`, *_connection string parameters are ignored_*, since client settings are frozen when the cluster environment is built.
 
-A connection string may optionally be prefixed by either `"couchbase://"` or `"couchbases://"`, although the Java SDK completely ignores this prefix if present.
-If you wish to use TLS, the `ClusterEnvironment` must be configured as described in <<ssl>>.
-
 [#connection-lifecycle]
 == Connection Lifecycle
 
