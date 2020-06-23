@@ -4,7 +4,7 @@
 :page-aliases: ROOT:n1ql-query,ROOT:prepared-statements,ROOT:querying
 
 [abstract]
-Parallel data management for complex queries over many records, using a familiar N1QL-like syntax.
+Parallel data management for complex queries over many records, using a familiar SQL-like syntax.
 
 The N1QL Query Language provides a familiar, SQL-like experience for querying documents stored in Couchbase.
 You can xref:6.5@server:n1ql:n1ql-language-reference/index.adoc[read up on the language in our reference guide], 
@@ -56,12 +56,13 @@ For more information, see xref:6.5@server:n1ql:n1ql-language-reference/covering-
 
 You can also create and define indexes in the SDK using:
 
-[source,csharp]
+[source,java]
 ----
-var bucketManager = bucket.CreateManager();
-await bucketManager.CreateN1qlPrimaryIndexAsync();
-await bucketManager.CreateN1qlIndexAsync("index_name", new string[] { "name" })
-await bucketManager.CreateN1qlIndexAsync("index_emai", new string[] { "email" })
+QueryIndexManager indexManager = cluster.queryIndexes();
+
+indexManager.createPrimaryIndex("users");
+indexManager.createIndex("users", "ix_name", Collections.singletonList("name"));
+indexManager.createIndex("users", "ix_email", Collections.singletonList("email"));
 ----
 
 
@@ -85,14 +86,15 @@ and indexes it for all of the applicable indexes (in this case, those that have 
 
 Building deferred indexes can also be done via the SDK:
 
-[source,csharp]
+[source,java]
 ----
-var bucketManager = bucket.CreateManager();
-await bucketManager.CreateN1qlPrimaryIndexAsync(defer = true);
-await bucketManager.CreateN1qlIndexAsync("ix_name", defer = true, new string[] { "name" });
-await bucketManager.CreateN1qlIndexAsync("ix_email", defer = true, new string[] { "email" });
-await bucketManager.BuildN1qlDeferredIndexesAsync();
-await bucketManager.WatchN1qlIndexes(new List<string> { "ix_name", "ix_email", "#primary"}, TimeSpan.FromSeconds(2));
+QueryIndexManager indexManager = cluster.queryIndexes();
+
+indexManager.createPrimaryIndex("users", createPrimaryQueryIndexOptions().deferred(true));
+indexManager.createIndex("users", "ix_name", Collections.singletonList("name"), createQueryIndexOptions().deferred(true));
+indexManager.createIndex("users", "ix_email", Collections.singletonList("email"), createQueryIndexOptions().deferred(true));
+indexManager.buildDeferredIndexes("users");
+indexManager.watchIndexes("users", Arrays.asList("ix_name", "ix_email"), Duration.ofMinutes(5));
 ----
 
 
@@ -115,91 +117,38 @@ ensuring that indexes are synchronized with the data service before querying.
 The following options are available:
 
 include::6.5@server:learn:page$services-and-indexes/indexes/index-replication.adoc[tag=scan_consistency]
-////
-* `not_bounded`: Executes the query immediately, without requiring any consistency for the query.
-If index-maintenance is running behind, out-of-date results may be returned.
-* `at_plus`: Executes the query, requiring indexes first to be updated to the timestamp of the last update.
-If index-maintenance is running behind, the query waits for it to catch up.
-* `request_plus`: Executes the query, requiring the indexes first to be updated to the timestamp of the current query-request.
-If index-maintenance is running behind, the query waits for it to catch up.
 
-For N1QL, the default consistency is `not_bounded`.
-////
 Consider the following snippet:
 
-[source,csharp]
+[source,java]
 ----
+String id = "user::" + UUID.randomUUID().toString();
+collection.insert(
+  id,
+  JsonObject.create().put("value", true)
+);
 
-var randomNumber = new Random().Next(0, 10000000);
-
-bucket.Upsert($"user:{randomNumber}", new {
-    name = "Brass Doorknob",
-    email = "brass.doorknob@juno.com",
-    random = randomNumber
-});
-
-var query = new QueryRequest("SELECT name, email, random, META(default).id FROM default WHERE $1 IN name'")
-    .AddPositionalParamter("Brass");
-
-var result = bucket.Query<dynamic>(query);
+cluster.query(
+  "select * from bucket where META().id = $id", 
+  queryOptions()
+    .parameters(JsonObject.create().put("id", id))
+);
 ----
 
 The above query may not return the newly inserted document because it has not yet been indexed.
 The query is issued immediately after document creation, and in this case the query engine may process the query before the index has been updated.
 
-If the above code is modified to use _RequestPlus_, query processing will wait until all updates have been processed and recalculated into the index from the point in time the query was received:
+If the above code is modified to use _REQUEST_PLUS_, query processing will wait until all updates have been processed and recalculated into the index from the point in time the query was received:
 
-[source,csharp]
+[source,java]
 ----
-var query = new QueryRequest("SELECT name, email, random, META(default).id FROM default WHERE $1 IN name'")
-    .AddPositionalParamter("Brass")
-    // If this line is removed, the latest 'random' field might not be present
-    .ScanConsistency(ScanConsistency.RequestPlus);
-
-var result = bucket.Query<dynamic>(query);
+cluster.query(
+  "select * from bucket where META().id = $id",
+  queryOptions()
+    .parameters(JsonObject.create().put("id", id))
+    .scanConsistency(QueryScanConsistency.REQUEST_PLUS)
+);
 ----
 
 This gives the application developer more control over the balance between performance (latency) and consistency,
 and allows optimization on a case-by-case basis.
-
-
-
-
-////
-Can put in equiv if available
-
-** Awaiting LINQ updates **
-
-== Building Statements with LINQ
-
-[NOTE]
-LINQ is a community project.
-Although it works well with Couchbase, it is not part of the officially-supported product.
-
-LINQ (Language Integrated Query), is a powerful way to guide you in building your statements: 
-you obtain Type safety and auto completion of relevant methods and N1QL clauses. 
-It implements https://msdn.microsoft.com/en-us/library/mt693024.aspx[Microsoft’s language integrated query extensions to the C# language], 
-and is similar to other LINQ providers like Linq2SQL, Entity Framework and NHibernate. 
-The difference is that it emits N1QL in place of SQL. 
-If you have used any other LINQ provider, you will find its familiarity and consistency make it an easy transition.
-
-_Linq2Couchbase_, the LINQ provider for the Couchbase .NET SDK, is a stand-alone project which depends on Couchbase .NET SDK 
-and can be found on https://www.nuget.org/packages/linq2Couchbase[NuGet] -- and by using the NuGet package manager to include the dependency:
-
-[source]
-----
-PM> Install-Package Linq2Couchbase
-----
-
-Once you have included the dependency, you can construct queries just like any other LINQ provider in a SQL-like fashion. Nearly all N1QL statements and functions are supported, for example:
-
-* INNER, LEFT Outer, and Index JOINs
-* Math and Date functions
-* Filtering, projections and sorting
-* Grouping and aggregations
-* META keyword, NEST and UNNEST
-* Etc.
-
-In addition to N1QL language features, Linq2Coucbase supports ORM features like Change-tracking, and mapping of JSON fields to keys and other POCO properties. 
-The provider’s core object is the `BucketContext`, which is a Unit of Work (UoW) type object for performing querying and mutations on a per request basis. 
-////

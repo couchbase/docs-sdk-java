@@ -14,7 +14,9 @@ include::6.5@sdk:shared:partial$sdk-xattr-overview.adoc[tag=virtual_extended_att
 
 [source,java]
 ----
-bucket.lookupIn(key).get("$document.exptime", new SubdocOptionsBuilder().xattr(true)).execute()
+collection.lookupIn(
+    "id", 
+    Collections.singletonList(
+    LookupInSpec.get(LookupInMacro.EXPIRY_TIME).xattr())
+);
 ----
-
-// See the xref:howtos:sdk-xattr-example.adoc#virtual-extended-attributes-example[example page] for a complete code sample.

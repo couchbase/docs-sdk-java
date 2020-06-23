@@ -11,110 +11,190 @@ include::6.5@sdk:pages:partial$health-check.adoc[tag="intro"]
 
 include::6.5@sdk:pages:partial$health-check.adoc[tag="users"]
 
-include::6.5@sdk:pages:partial$health-check.adoc[tag="ping"]
+== Ping
+A call to `ping` actively sends requests to the different services on the target cluster, measuring the latency and returning any errors as part of the report.
 
-[source,javascript]
+A `ping` can be performed either at the `Cluster` or at the `Bucket` level. They are very similar, altough at the `Bucket` level also the Key/Value and View connections for the specific bucket are taken into account.
+
+The report can either be analyzed in code or can be turned into JSON and printed:
+
+[source,java]
 ----
-let services = [couchbase.ServiceType.KeyValue, couchbase.ServiceType.Query]
-bucket.ping(services, (err, res) => {
-    console.log(res)
-})
-/*
+PingResult pingResult = cluster.ping();
+System.out.println(pingResult.exportToJson());
+----
+
+You will see an output similar to this:
+
+[source,json]
+----
 {
-    "config_rev":1822,
-    "id":"0x102f09dc0",
-    "sdk":"libcouchbase/2.9.5-njs couchnode/2.6.9 (node/10.16.0; v8/6.8.275.32-node.52; ssl/1.1.1b)",
-    "services":{
-        "kv":[
-            {
-                "id":"0x104802900",
-                "latency_us":1542,
-                "local":"10.112.195.1:51707",
-                "remote":"10.112.195.101:11210",
-                "scope":"travel-sample",
-                "status":"ok"
-            },
-            {
-                "id":"0x1029253d0",
-                "latency_us":6639,
-                "local":"10.112.195.1:51714",
-                "remote":"10.112.195.103:11210",
-                "scope":"travel-sample",
-                "status":"ok"
-            },
-            {
-                "id":"0x102924bc0",
-                "latency_us":1240660,
-                "local":"10.112.195.1:51713",
-                "remote":"10.112.195.102:11210",
-                "scope":"travel-sample",
-                "status":"timeout"
-            }
-        ],
-        "n1ql":[
-            {
-                "id":"0x10291d980",
-                "latency_us":3787,
-                "local":"10.112.195.1:51710",
-                "remote":"10.112.195.101:8093",
-                "status":"ok"
-            },
-            {
-                "id":"0x1029240f0",
-                "latency_us":9321,
-                "local":"10.112.195.1:51712",
-                "remote":"10.112.195.103:8093",
-                "status":"ok"
-            },
-            {
-                "id":"0x102923350",
-                "latency_us":7003363,
-                "local":"10.112.195.1:51711",
-                "remote":"10.112.195.102:8093",
-                "status":"timeout"
-            }
-        ]
-    },
-    "version":1
+   "services":{
+      "query":[
+         {
+            "latency_us":1622,
+            "state":"ok",
+            "id":"0x01e2bef7",
+            "remote":"10.143.200.101:8093",
+            "local":"10.143.200.1:59775"
+         },
+         {
+            "latency_us":1911,
+            "state":"ok",
+            "id":"0x8dff2eb6",
+            "remote":"10.143.200.102:8093",
+            "local":"10.143.200.1:59778"
+         }
+      ]
+   },
+   "sdk":"java/0.0.0 (Mac OS X 10.15.4 x86_64; OpenJDK 64-Bit Server VM 13+33)",
+   "id":"fcc08fb8-5a56-40aa-8967-47bc7517382d",
+   "version":2
 }
-*/
 ----
 
-include::6.5@sdk:pages:partial$health-check.adoc[tag="diag"]
+On the target system, only the query service has been enabled at the cluster level according to this report. If you have more services configured (for example analytics or search) you could achieve the same effect by asking for only the query service to ping explicitly:
 
-
-[source,javascript]
+[source,java]
 ----
-bucket.diagnostics((err, res) => {
-    console.log(res)
-})
-/*
+cluster.ping(pingOptions().serviceTypes(EnumSet.of(ServiceType.QUERY)));
+----
+
+If the ping is performed at the bucket level, the Key/Value and View sockets are also visible:
+
+[source,java]
+----
 {
-    "id":"0x10290d100","kv":[
-        {
-            "id":"0000000072b21d66",
-            "last_activity_us":2363294,
-            "local":"10.112.195.1:51473",
-            "remote":"10.112.195.101:11210",
-            "status":"connected"
-        },
-        {
-            "id":"000000000ba84e5e",
-            "last_activity_us":7369021,
-            "local":"10.112.195.1:51486",
-            "remote":"10.112.195.102:11210",
-            "status":"connected"
-        },
-        {
-            "id":"0000000077689398",
-            "last_activity_us":4855640,
-            "local":"10.112.195.1:51409",
-            "remote":"10.112.195.103:11210",
-            "status":"connected"
-        }
-    ],
-    "sdk":"libcouchbase/2.9.5-njs couchnode/2.6.9 (node/10.16.0; v8/6.8.275.32-node.52; ssl/1.1.1b)",
-    "version":1
+   "services":{
+      "query":[
+         {
+            "latency_us":1364,
+            "state":"ok",
+            "id":"0x178a666c",
+            "remote":"10.143.200.102:8093",
+            "local":"10.143.200.1:59864"
+         },
+         {
+            "latency_us":1343,
+            "state":"ok",
+            "id":"0x65cda678",
+            "remote":"10.143.200.101:8093",
+            "local":"10.143.200.1:59865"
+         }
+      ],
+      "kv":[
+         {
+            "latency_us":703,
+            "namespace":"travel-sample",
+            "state":"ok",
+            "id":"0x2e2abd35",
+            "remote":"10.143.200.102:11210",
+            "local":"10.143.200.1:59869"
+         },
+         {
+            "latency_us":1260,
+            "namespace":"travel-sample",
+            "state":"ok",
+            "id":"0xf3fc7e9f",
+            "remote":"10.143.200.101:11210",
+            "local":"10.143.200.1:59868"
+         }
+      ],
+      "views":[
+         {
+            "latency_us":9547,
+            "namespace":"travel-sample",
+            "state":"ok",
+            "id":"0x712e8eca",
+            "remote":"10.143.200.102:8092",
+            "local":"10.143.200.1:59871"
+         },
+         {
+            "latency_us":7863,
+            "namespace":"travel-sample",
+            "state":"ok",
+            "id":"0x2c988f93",
+            "remote":"10.143.200.101:8092",
+            "local":"10.143.200.1:59873"
+         }
+      ]
+   },
+   "sdk":"java/0.0.0 (Mac OS X 10.15.4 x86_64; OpenJDK 64-Bit Server VM 13+33)",
+   "id":"3ffecdae-5abe-413b-aa26-c2b2774ef872",
+   "version":2
 }
-*/
+----
+
+== Diagnostics
+
+Performing a `diagnostics()` call at the `Cluster` level is conceptually different from a ping, but still very useful. It returns information about the current state of all the connections inside the SDK without actually performing any I/O. So if you haven't done any operations against a service with a pool (i.e. Query) you might not see any sockets show up.
+
+Similar to ping, you can turn a diagnostics result into JSON. The following code and output shows a state directly after bootstrap, without performing any query operations:
+
+[source,java]
+----
+Cluster cluster = Cluster.connect("127.0.0.1", "user", "pass");
+System.err.println(cluster.diagnostics().exportToJson());
+----
+
+[source,json]
+----
+{
+   "services":{
+      "kv":[
+         {
+            "state":"connecting"
+         }
+      ]
+   },
+   "sdk":"java/0.0.0 (Mac OS X 10.15.4 x86_64; OpenJDK 64-Bit Server VM 13+33)",
+   "id":"484f20c4-f9c8-47c9-90b1-6901279066b0",
+   "state":"offline",
+   "version":2
+}
+----
+
+If you perform a query and look at the diagnostics again, you'll see them show up in the report:
+
+[source,json]
+----
+{
+   "services":{
+      "query":[
+         {
+            "last_activity_us":3306,
+            "state":"connected",
+            "id":"0x809fa38a",
+            "remote":"10.143.200.1:61127",
+            "local":"10.143.200.101:8093"
+         },
+         {
+            "state":"connected",
+            "id":"0xc292ca2d",
+            "remote":"10.143.200.1:61128",
+            "local":"10.143.200.102:8093"
+         }
+      ],
+      "kv":[
+         {
+            "last_activity_us":751662,
+            "state":"connected",
+            "id":"0x35b05053",
+            "remote":"10.143.200.1:61125",
+            "local":"10.143.200.101:11210"
+         },
+         {
+            "last_activity_us":751304,
+            "state":"connected",
+            "id":"0x4510d5e8",
+            "remote":"10.143.200.1:61126",
+            "local":"10.143.200.102:11210"
+         }
+      ]
+   },
+   "sdk":"java/0.0.0 (Mac OS X 10.15.4 x86_64; OpenJDK 64-Bit Server VM 13+33)",
+   "id":"167f0f08-a6e0-4aca-8832-4e3ab688820e",
+   "state":"online",
+   "version":2
+}
 ----
