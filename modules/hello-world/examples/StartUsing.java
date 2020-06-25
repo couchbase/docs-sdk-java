@@ -31,8 +31,8 @@ class StartUsing {
 
         // Get Document
         GetResult getResult = collection.get("my-document");
-        System.out.println(getResult);
-        // #end::upsert-get[]
+        String name = getResult.contentAsObject().getString("name");
+        System.out.println(name); // name == "mike"        // #end::upsert-get[]
 
         // #tag::n1ql-query[]
         QueryResult result = cluster.query("select \"Hello World\" as greeting");
