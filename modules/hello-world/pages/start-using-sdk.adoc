@@ -125,7 +125,8 @@ class StartUsing {
             JsonObject.create().put("name", "mike")
         );
         GetResult getResult = collection.get("my-document");
-        System.out.println(getResult);
+        String name = getResult.contentAsObject().getString("name");
+        System.out.println(name); // name == "mike"
 
         QueryResult result = cluster.query("select \"Hello World\" as greeting");
         System.out.println(result.rowsAsObject());
