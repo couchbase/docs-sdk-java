@@ -27,8 +27,8 @@ public class HealthCheck extends ConnectionBase {
 //        Collection collection = scope.collection("collection-name");
 //
 //        JsonObject json = JsonObject.create()
-//                .put("foo", "bar")
-//                .put("baz", "qux");
+//                .put("title", "My Blog Post")
+//                .put("author", "mike");
 //
 //
 //// #tag::apis[]
@@ -36,7 +36,7 @@ public class HealthCheck extends ConnectionBase {
 //        ReactiveCollection reactiveCollection = collection.reactive();
 //// #end::apis[]
 //
-//        JsonObject content = JsonObject.create().put("foo", "bar");
+//        JsonObject content = JsonObject.create().put("author", "mike");
 ////        MutationResult result = collection.upsert("document-key", content);
 //
 //// #tag::apis[]
@@ -48,8 +48,8 @@ public class HealthCheck extends ConnectionBase {
         bucket.waitUntilReady(Duration.ofSeconds(5));
 
         JsonObject content = JsonObject.create()
-        .put("foo", "bar")
-        .put("baz", "qux");
+        .put("title", "My Blog Post")
+        .put("author", "mike");
 
         MutationResult result = collection.upsert("document-key", content);
 
