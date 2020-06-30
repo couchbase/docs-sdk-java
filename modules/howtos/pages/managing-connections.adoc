@@ -261,8 +261,9 @@ If you are working at the _Bucket_ level, then the https://docs.couchbase.com/sd
 _plus_ it waits for the K-V (data) sockets to be ready.
 
 Other timeout issues may occur when using the SDK located geographically separately from the Couchbase Server cluster -- this is xref:project-docs:compatibility#network-requirements[not recommended].
-// See the xref:#working-in-the-cloud[Cloud section] below for some suggestions of settings adjustments.
+See the xref:#working-in-the-cloud[Cloud section] below for some suggestions of settings adjustments.
 
+include::6.5@sdk:shared:partial$managing-connections.adoc[tag=cloud]
 
 
 == Async and Reactive APIs
