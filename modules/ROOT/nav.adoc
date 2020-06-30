@@ -23,6 +23,7 @@
 // * User Management
 * xref:howtos:managing-connections.adoc[Managing Connections]
 ** xref:howtos:sdk-authentication.adoc[Authentication]
+** xref:howtos:troubleshooting-cloud-connections.adoc[Troubleshooting Cloud Connections]
 
 .Errors & Diagnostics
 * xref:howtos:collecting-information-and-logging.adoc[Logging]
@@ -56,6 +57,7 @@
 * https://docs.couchbase.com/sdk-api/couchbase-java-client[API Reference]
 * xref:ref:client-settings.adoc[Client Settings]
 // * xref:ref:data-structures[Data Structures]
+// * xref:ref:error-codes.adoc[Error Messages]
 * xref:ref:travel-app-data-model.adoc[Travel Sample Data Model]
 
 .Project Docs
