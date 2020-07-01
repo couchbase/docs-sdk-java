@@ -24,8 +24,8 @@ Scope scope = bucket.scope("scope-name");
 Collection collection = scope.collection("collection-name");
 
 JsonObject json = JsonObject.create()
-  .put("foo", "bar")
-  .put("baz", "qux");
+  .put("title", "My Blog Post")
+  .put("author", "mike");
 
 
 // #tag::apis[]
@@ -35,7 +35,7 @@ ReactiveCollection reactiveCollection = collection.reactive();
 
 {
 // #tag::upsert[]
-JsonObject content = JsonObject.create().put("foo", "bar");
+JsonObject content = JsonObject.create().put("author", "mike");
 
 MutationResult result = collection.upsert("document-key", content);
 // #end::upsert[]
@@ -44,7 +44,7 @@ MutationResult result = collection.upsert("document-key", content);
 {
 // #tag::insert[]
 try {
-  JsonObject content = JsonObject.create().put("foo", "bar");
+  JsonObject content = JsonObject.create().put("title", "My Blog Post");
   MutationResult insertResult = collection.insert("document-key", content);
 } catch (DocumentExistsException ex) {
   System.err.println("The document already exists!");
@@ -57,8 +57,9 @@ try {
 {
 // #tag::get-simple[]
 try {
-  GetResult getResult = collection.get("document-key");
-  System.out.println("Found document: " + getResult);
+  GetResult getResult = collection.get("document-key"); 
+  String title = getResult.contentAsObject().getString("title");
+  System.out.println(title); // title == "My Blog Post"
 } catch (DocumentNotFoundException ex) {
   System.out.println("Document not found!");
 }
@@ -69,7 +70,7 @@ try {
 // #tag::get[]
 GetResult found = collection.get("document-key");
 JsonObject content = found.contentAsObject();
-if (content.getString("foo").equals("bar")) {
+if (content.getString("author").equals("mike")) {
     // do something
 } else {
     // do something else
