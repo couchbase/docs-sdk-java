@@ -135,7 +135,7 @@ include::example$TransactionsExample.java[tag=examples,indent=0]
 include::example$TransactionsExample.java[tag=examplesReactive,indent=0]
 ----
 
-[mechanics]
+[#mechanics]
 === Transaction Mechanics at a High-Level
 While this document is focussed on presenting how transactions are used at the API level, it is useful to have a high-level understanding of the mechanics.
 Reading this section is completely optional.
@@ -168,7 +168,9 @@ This is only required for non-transactional actors.
 Transactional actors will begin reading the post-transactional version of documents as soon as the ATR entry is changed to committed.
 
 === Mutating Documents
+
 ==== Replacing
+
 Replacing a document requires a `ctx.get()` call first.
 This is necessary to ensure that the document is not involved in another transaction.
 (If it is, then the transaction will handle this, generally by rolling back what has been done so far, and retrying the lambda.)
@@ -186,6 +188,7 @@ include::example$TransactionsExample.java[tag=replaceReactive,indent=0]
 ----
 
 ==== Removing
+
 As with replaces, removing a document requires a `ctx.get()` call first.
 
 .With the asynchronous API:
@@ -201,6 +204,7 @@ include::example$TransactionsExample.java[tag=remove,indent=0]
 ----
 
 ==== Inserting
+
 As above, mutations currently rely on having an existing document to stage their changes alongside.
 For inserts, an existing document does not exist, so the protocol currently creates an empty, but visible, marker document.
 Transactional actors will ignore this marker document until the commit point is reached, but non-transaction actors will be able to view it (though its body is empty).
@@ -419,6 +423,7 @@ include::example$TransactionsExample.java[tag=full-error-handling,indent=0]
 ----
 
 == Asynchronous Cleanup
+
 Transactions will try to clean up after themselves in the advent of failures.
 However, there are situations that inevitably created failed, or 'lost' transactions, such as an application crash.
 
@@ -527,7 +532,9 @@ For those starting from scratch here is a complete example using the basic `java
 include::example$TransactionsExample.java[tag=full-logging,indent=0]
 ----
 
+
 == Concurrent Operations with the Async API
+
 The async API allows operations to be performed concurrently inside a transaction, which can assist performance.
 There are two rules the application needs to follow:
 
@@ -543,7 +550,9 @@ These rules are demonstrated here:
 include::example$TransactionsExample.java[tag=concurrentOps,indent=0]
 ----
 
+
 == Deferred Commits
+
 NOTE: The deferred commit feature is currently in alpha, and the API may change.
 
 Deferred commits allow a transaction to be paused just before the commit point.
