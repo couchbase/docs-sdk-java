@@ -280,7 +280,7 @@ include::example$TransactionsExample.java[tag=full,indent=0]
 == Concurrency with Non-Transactional Writes
 
 This release of transactions for Couchbase requires a degree of co-operation from the application.
-Specifically, the application should ensure that non-transactional writes (such as Key-Value writes or N1QL UPDATES) are never done concurrently with transactional writes, on the same document.
+Specifically, the application should ensure that non-transactional writes (such as key-value writes or N1QL UPDATES) are never done concurrently with transactional writes, on the same document.
 
 If two such writes *do* conflict then the transactional write will 'win', overwriting the non-transactional write.
 
@@ -324,6 +324,7 @@ In this case, if `ctx.rollback()` is reached, then the transaction will be regar
 After a transaction is rolled back, it cannot be committed, no further operations are allowed on it, and the library will not try to automatically commit it at the end of the code block.
 
 == Error Handling
+
 As discussed previously, the transactions library will attempt to resolve many errors itself, through a combination of retrying individual operations and the application's lambda.
 This includes some transient server errors, and conflicts with other transactions.
 
@@ -343,7 +344,8 @@ This is signalled to the application through the `TransactionResult.unstagingCom
 There are three exceptions that the transactions library can raise to the application: `TransactionFailed`, `TransactionExpired` and `TransactionCommitAmbiguous`.
 All exceptions derive from `TransactionFailed` for backwards-compatibility purposes.
 
-=== `TransactionFailed` and `TransactionExpired`
+=== TransactionFailed and TransactionExpired
+
 The transaction definitely did not reach the commit point.
 `TransactionFailed` indicates a fast-failure whereas `TransactionExpired` indicates that retries were made until the expiration point was reached, but this distinction is not normally important to the application and generally `TransactionExpired` does not need to be handled individually.
 
@@ -368,7 +370,8 @@ Note that expiration is not guaranteed to be followed precisely.
 For example, if the application were to do a long blocking operation inside the lambda (which should be avoided), then expiration can only trigger after this finishes.
 Similarly, if the transaction attempts a key-value operation close to the expiration time, and that key-value operation times out, then the expiration time may be exceeded.
 
-=== `TransactionCommitAmbiguous`
+=== TransactionCommitAmbiguous
+
 As discussed <<mechanics,previously>>, each transaction has a 'single point of truth' that is updated atomically to reflect whether it is committed.
 
 However, it is not always possible for the protocol to become 100% certain that the operation was successful, before the transaction expires.
@@ -389,6 +392,7 @@ As with `TransactionFailed` it is recommended that it at least writes any logs f
 It may wish to retry the transaction at a later point, or globally extend transactional expiration times to give the protocol additional time to resolve the ambiguity.
 
 === TransactionResult.unstagingComplete()
+
 As above, there is a 'single point of truth' for a transaction.
 After this atomic commit point is reached, the documents themselves will still be individually committed (we also call this "unstaging").
 However, transactionally-aware actors will now be returning the post-transaction versions of the documents, and the transaction is effectively fully committed to those actors.
@@ -406,6 +410,7 @@ This should be used any time that the application needs all results of the trans
 Error handling differs depending on whether a transaction is before or after the point of commit (or rollback).
 
 === Full Error Handling Example
+
 Pulling all of the above together, this is the suggested best practice for error handling:
 
 [source,java]
@@ -421,12 +426,12 @@ This requires an asynchronous cleanup task, described in this section.
 
 Creating the `Transactions` object spawns a background cleanup task, whose job it is to periodically scan for expired transactions and clean them up.
 It does this by scanning a subset of the Active Transaction Record (ATR) transaction metadata documents on a bucket.
-As you'll recall from <<earlier,mechanics>>, an entry for each transaction attempt exists in one of these documents.
+As you'll recall from <<mechanics,earlier>>, an entry for each transaction attempt exists in one of these documents.
 (They are removed during cleanup or at some time after successful completion.)
 
 The default settings are tuned to find expired transactions reasonably quickly, while creating neglible impact from the background reads required by the scanning process.
 To be exact, with default settings it will generally find expired transactions within 60 seconds, and use less than 20 reads per second.
-This is unlikely to impact performance on any cluster, but the settings may be <<tuned,tuning-cleanup>> as desired.
+This is unlikely to impact performance on any cluster, but the settings may be <<tuning-cleanup,tuned>> as desired.
 
 Cleanup is done on each bucket in the cluster.
 
@@ -444,17 +449,19 @@ If this is an issue, then the deployment may want to consider running a simple a
 
 [tuning-cleanup]
 === Configuring Cleanup
+
 The cleanup settings can be configured as so:
 
 [options="header"]
-|============================
+|===
 |Setting|Default|Description
 |`cleanupWindow`|60 seconds|This determines how long a cleanup 'run' is; that is, how frequently this client will check its subset of ATR documents.  It is perfectly valid for the application to change this setting, which is at a conservative default.  Decreasing this will cause expiration transactions to be found more swiftly (generally, within this cleanup window), with the tradeoff of increasing the number of reads per second used for the scanning process.
 |`cleanupLostAttempts`|true|This is the thread that takes part in the distributed cleanup process described above, that cleans up expired transactions created by any client.  It is strongly recommended that it is left enabled.
 |`cleanupClientAttempts`|true|This thread is for cleaning up transactions created just by this client.  The client will preferentially aim to send any transactions it creates to this thread, leaving transactions for the distributed cleanup process only when it is forced to (for example, on an application crash).  It is strongly recommended that it is left enabled.
-|============================
+|===
 
 === Monitoring Cleanup
+
 If the application wishes to monitor cleanup it may subscribe to these events:
 
 [source,java]
