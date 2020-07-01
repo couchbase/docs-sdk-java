@@ -452,7 +452,7 @@ It is important to understand that if an application is not running, then cleanu
 
 If this is an issue, then the deployment may want to consider running a simple application at all times that just    opens a `Transactions` object, to guarantee that cleanup is running.
 
-[tuning-cleanup]
+[#tuning-cleanup]
 === Configuring Cleanup
 
 The cleanup settings can be configured as so:
