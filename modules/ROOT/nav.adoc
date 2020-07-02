@@ -57,7 +57,7 @@
 * https://docs.couchbase.com/sdk-api/couchbase-java-client[API Reference]
 * xref:ref:client-settings.adoc[Client Settings]
 // * xref:ref:data-structures[Data Structures]
-// * xref:ref:error-codes.adoc[Error Messages]
+* xref:ref:error-codes.adoc[Error Messages]
 * xref:ref:travel-app-data-model.adoc[Travel Sample Data Model]
 
 .Project Docs
