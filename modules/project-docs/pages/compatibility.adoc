@@ -59,12 +59,15 @@ The Java SDK is tested with Oracle JDK and OpenJDK.
 Other JDK implementations might work but are not tested and are unsupported.
 We recommend running the latest LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
 
+We only support LTS versions of Oracle JDK and OpenJDK.
+Other versions, such as JDK 12, may work -- _but they are not tested and they are not supported_.
+
 The following JDK releases are supported:
 
-* OpenJDK 11 with HotSpot JVM (recommended)
-* Oracle JDK 11 (recommended)
-* OpenJDK 1.8 with HotSpot JVM
-* Oracle JDK 1.8
+* https://adoptopenjdk.net/[OpenJDK 11 with HotSpot JVM] (recommended)
+* https://www.oracle.com/java/technologies/javase-jdk11-downloads.html[Oracle JDK 11 (recommended)]
+* https://adoptopenjdk.net/[OpenJDK 1.8 with HotSpot JVM]
+* https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html[Oracle JDK 1.8]
 
 Please make sure you run on one of the latest patch releases, since they provide stability improvements and security fixes in general.
 
