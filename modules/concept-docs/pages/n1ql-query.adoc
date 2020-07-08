@@ -23,10 +23,6 @@ QueryResult result = cluster.query(
 );
 ----
 
-NOTE: Parameterized queries are considered the same query for caching and planning purposes, even if the supplied parameters are different.
-
-For more information on how to optimize queries using prepared statements, see xref:6.5@server:n1ql:n1ql-language-reference/prepare.adoc[PREPARE] statement in the N1QL language reference.
-
 
 == Indexes
 
