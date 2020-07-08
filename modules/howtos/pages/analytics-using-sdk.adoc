@@ -50,7 +50,7 @@ Exception in thread "main" com.couchbase.client.core.error.ParsingFailureExcepti
 If you are using a cluster older than Couchbase Server 6.5, it is required that there is at least one bucket open before performing a cluster-level query. If you fail to do so, the SDK will return a `FeatureNotAvailableException` with a descriptive error message asking you to open one.
 ====
 
-== Paramerterized Queries
+== Parameterized Queries
 Supplying parameters as individual arguments to the query allows the analytics engine to optimize the parsing and planning of the query. You can either supply these parameters by name or by position.
 
 The first example shows how to provide them by name:
