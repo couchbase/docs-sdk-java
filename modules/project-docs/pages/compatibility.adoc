@@ -100,6 +100,40 @@ Please make sure you run on one of the latest patch releases, since they provide
 |===
 
 include::6.5@sdk:shared:partial$network-requirements.adoc[]
+   
+
+[#spring-compat]
+== Spring Data Couchbase Compatibility
+
+https://projects.spring.io/spring-data-couchbase/[Spring Data Couchbase^] uses the Java SDK underneath and as a result is also provides different compatibilities with Couchbase Server.
+The following table provides an overview.
+
+.Recommended Spring Data Couchbase per Server Version Matrix
+[#table_spring_versions]
+|===
+| | SDC 3.x | SDC 4.0 & 4.1
+
+| _Status >_
+| _SDK 2.x only_
+| _New Features, Active Development_
+
+| *Server 5.x*
+| SDK 2.x
+| *Not Compatible*
+
+| *Server 6.0*
+| SDK 2.x
+| *Recommended*
+
+| *Server 6.5*
+| SDK 2.x
+| *Recommended*
+|===
+
+NOTE: Check the Spring Data Couchbase's compile dependencies -- older versions may link an out-of-date version of the Java SDK in their dependencies list, although a supported version should be in the `updates`.
+Please make sure that you are using a supported version of the Couchbase Java SDK, prefereably the latest version, which will contain any available bug fixes.
+Using the latest Spring Data Couchbase should ensure that this is so.
+
 
 
 include::6.5@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]
