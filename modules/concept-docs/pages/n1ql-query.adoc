@@ -13,7 +13,9 @@ include::6.5@sdk:shared:partial$n1ql-queries.adoc[tag=intro]
 // Prepared Statements for Query Optimization
 include::6.5@sdk:shared:partial$n1ql-queries.adoc[tag=prepared]
 
-Do not turn off the `adhoc` flag for _every_ query to Server 6.0 and earlier, since only a finite number of query plans (currently 5000) can be stored in the SDK.
+If your queries are highly dynamic, we recommend using parameterized queries if possible (epecially when prepared statements are not used). 
+Parameterized queries are more cache efficient and will allow for better performance. 
+The maximum client-side query cache size is 5000 entries.
 
 [source,java]
 ----
