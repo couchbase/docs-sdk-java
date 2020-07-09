@@ -20,8 +20,8 @@ The maximum client-side query cache size is 5000 entries.
 [source,java]
 ----
 QueryResult result = cluster.query(
-  "select count(*) from `travel-sample` where type = \"airports\" and country = ?",
-  queryOptions().adhoc(false)
+        "select count(*) from `travel-sample` where type = \"airports\" and country = ?",
+        queryOptions().adhoc(false).parameters(JsonArray.from("France"))
 );
 ----
 
