@@ -12,7 +12,6 @@ include::6.5@sdk:shared:partial$n1ql-queries.adoc[tag=intro]
 
 // Prepared Statements for Query Optimization
 include::6.5@sdk:shared:partial$n1ql-queries.adoc[tag=prepared]
-
 The maximum client-side query cache size is 5000 entries.
 
 [source,java]
