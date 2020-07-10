@@ -232,8 +232,20 @@ To give an example of working with an absolute time stamp, rather than an offset
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=expiry-abs]
+Calendar calendar = Calendar.getInstance();
+calendar.add(Calendar.DAY_OF_MONTH, 60);
+Long time = calendar.getTime().getTime();
+System.out.println(time);
+
+try {
+    MutationResult result = collection.upsert("test", JsonObject.create().put("test", "testing"), 
+    UpsertOptions.upsertOptions().expiry(Duration.ofMillis(time))); 
+    System.out.println(result);
+} catch (Exception e){ 
+    e.printStackTrace(); 
+}
 ----
+// include::example$KvOperations.java[tag=expiry-abs]
 
 
 == Additional resources
