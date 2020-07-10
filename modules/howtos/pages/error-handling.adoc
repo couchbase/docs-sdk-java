@@ -1,7 +1,7 @@
 = Handling Errors
 :navtitle: Handling Errors
 :page-topic-type: howto
-// :page-aliases: ROOT:handling-error-conditions.adoc
+:page-aliases: ROOT:handling-error-conditions,handling-error-conditions,errors,handling-errors
 :source-language: java
 :lang: java
 
