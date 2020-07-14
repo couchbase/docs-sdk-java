@@ -71,7 +71,7 @@ Redundant global loading exceptions no longer propagated -- now logged at `debug
 * https://issues.couchbase.com/browse/JVMCBC-856[JVMCBC-856]:
 A just-opened connection in pool no longer gets cleaned up prematurely .
 * https://issues.couchbase.com/browse/JVMCBC-858[JVMCBC-858]:
-Channel writeAndFlush failures are no longes ignored.
+Channel writeAndFlush failures are no longer ignored.
 * https://issues.couchbase.com/browse/JVMCBC-862[JVMCBC-862]:
 Race condition with node identifier change on bootstrap identified.
 New logic and some changes to the config provider code ensures that retry and resubscribe picks up fresh seed nodes.
