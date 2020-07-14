@@ -58,25 +58,29 @@ In order to preserve compatibility for users that worked around this behaviour, 
 * https://issues.couchbase.com/browse/JCBC-1632[JCBC-1632]:
 Bootstrapping is now fully pipelined for performance, building on the improvements in the previous release.
 * https://issues.couchbase.com/browse/JVMCBC-865[JVMCBC-865]:
-Change the default idle timeout to 4.5s for http connections, to support performance improvements in query service.
+Changed the default idle timeout to 4.5s for http connections, to support performance improvements in query service.
 
 === Bug Fixes
 * https://issues.couchbase.com/browse/JCBC-1662[JCBC-1662]:
-MutateInMacro for CRC32 is fixed.
+`MutateInMacro` for CRC32 is fixed.
 * https://issues.couchbase.com/browse/JCBC-1664[JCBC-1664]:
-viewQuery with ViewOptions.viewOptions().keys(keys) was returning a bad_request error.
+`viewQuery` with `ViewOptions.viewOptions().keys(keys)` was returning a bad_request error.
+This is now fixed.
 * https://issues.couchbase.com/browse/JVMCBC-849[JVMCBC-849]:
-Swallow redundant global loading exception.
+Redundant global loading exceptions no longer propagated -- now logged at `debug` level.
 * https://issues.couchbase.com/browse/JVMCBC-856[JVMCBC-856]:
-A just-opened connection in pool must not be cleaned up.
+A just-opened connection in pool no longer gets cleaned up prematurely .
 * https://issues.couchbase.com/browse/JVMCBC-858[JVMCBC-858]:
-Do not ignore channel writeAndFlush failures.
+Channel writeAndFlush failures are no longes ignored.
 * https://issues.couchbase.com/browse/JVMCBC-862[JVMCBC-862]:
-Race condition with node identifiers on bootstrap.
+Race condition with node identifier change on bootstrap identified.
+New logic and some changes to the config provider code ensures that retry and resubscribe picks up fresh seed nodes.
 * https://issues.couchbase.com/browse/JVMCBC-863[JVMCBC-863]:
-Bucket-Level ping report includes other buckets.
+Bucket-Level ping report no longer includes other view and KV services buckets.
 * https://issues.couchbase.com/browse/JVMCBC-866[JVMCBC-866]:
-Seeing 'invalid IPv6 address' warnings when trying to connect to a valid Ipv6 address.
+Trailing : no longer added to IPv6 addresses without [].
+'invalid IPv6 address' warnings now no longer produced when trying to connect to a valid Ipv6 address thus specified.
+
 
 == Version 3.0.5 (2 June 2020)
 
