@@ -28,10 +28,59 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.5</version>
+        <version>3.0.6</version>
     </dependency>
 </dependencies>
 ----
+
+== Version 3.0.6 (14 July 2020)
+
+Version 3.0.6 is the seventh release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
+
+http://packages.couchbase.com/clients/java/3.0.6/Couchbase-Java-Client-3.0.6.zip[Download] |
+http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.6/[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.7/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.6**
+* com.couchbase.client:**core-io:2.0.7**
+* io.projectreactor:**reactor-core:3.3.5.RELEASE**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== Enhancements
+* https://issues.couchbase.com/browse/JCBC-1645[JCBC-1645]:
+Specifying document expiries has been made significantly easier.
+Expiries are supplied as a `Duration`, and now any such duration that is less than 50 years, will be interpreted as being a relative timestamp from the current time.
+E.g. `Duration.ofDays(5)` will expire in 5 days time.
+(Previously, a `Duration` longer than 30 days would be interpreted as being an absolute, or epoch time.
+In order to preserve compatibility for users that worked around this behaviour, any `Duration` longer than 50 years will continue to be interpreted as that same epoch time.)
+* https://issues.couchbase.com/browse/JCBC-1632[JCBC-1632]:
+Bootstrapping is now fully pipelined for performance, building on the improvements in the previous release.
+* https://issues.couchbase.com/browse/JVMCBC-865[JVMCBC-865]:
+Changed the default idle timeout to 4.5s for http connections, to support performance improvements in query service.
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/JCBC-1662[JCBC-1662]:
+`MutateInMacro` for CRC32 is fixed.
+* https://issues.couchbase.com/browse/JCBC-1664[JCBC-1664]:
+`viewQuery` with `ViewOptions.viewOptions().keys(keys)` was returning a bad_request error.
+This is now fixed.
+* https://issues.couchbase.com/browse/JVMCBC-849[JVMCBC-849]:
+Redundant global loading exceptions no longer propagated -- now logged at `debug` level.
+* https://issues.couchbase.com/browse/JVMCBC-856[JVMCBC-856]:
+A just-opened connection in pool no longer gets cleaned up prematurely .
+* https://issues.couchbase.com/browse/JVMCBC-858[JVMCBC-858]:
+Channel writeAndFlush failures are no longes ignored.
+* https://issues.couchbase.com/browse/JVMCBC-862[JVMCBC-862]:
+Race condition with node identifier change on bootstrap identified.
+New logic and some changes to the config provider code ensures that retry and resubscribe picks up fresh seed nodes.
+* https://issues.couchbase.com/browse/JVMCBC-863[JVMCBC-863]:
+Bucket-Level ping report no longer includes other view and KV services buckets.
+* https://issues.couchbase.com/browse/JVMCBC-866[JVMCBC-866]:
+Trailing : no longer added to IPv6 addresses without [].
+'invalid IPv6 address' warnings now no longer produced when trying to connect to a valid Ipv6 address thus specified.
+
 
 == Version 3.0.5 (2 June 2020)
 
@@ -39,7 +88,7 @@ Version 3.0.5 is the sixth release of the 3.0 series, bringing enhancements and 
 
 http://packages.couchbase.com/clients/java/3.0.5/Couchbase-Java-Client-3.0.5.zip[Download] |
 http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.5/[API Reference] |
-http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.5/[Core API Reference]
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.6/[Core API Reference]
 
 The supported and tested dependencies for this release are:
 
