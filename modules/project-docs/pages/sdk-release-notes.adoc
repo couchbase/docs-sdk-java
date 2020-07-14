@@ -51,10 +51,11 @@ The supported and tested dependencies for this release are:
 === Enhancements
 * https://issues.couchbase.com/browse/JCBC-1645[JCBC-1645]:
 Specifying document expiries has been made significantly easier.
-Expiries are supplied as a `Duration`, and now any such duration that is less than 50 years, will be interpreted as being a relative timestamp from the current time.
-E.g. `Duration.ofDays(5)` will expire in 5 days time.
-(Previously, a `Duration` longer than 30 days would be interpreted as being an absolute, or epoch time.
-In order to preserve compatibility for users that worked around this behaviour, any `Duration` longer than 50 years will continue to be interpreted as that same epoch time.)
+Expiries are supplied as a `Duration`.  The new behaviour is that if that duration is less than 50 years, then it will be interpreted as being a relative timestamp from the current time.
+E.g. `Duration.ofDays(35)` will expire in 35 days time.
+(Previously, a `Duration` longer than 30 days would be interpreted as being an epoch time.
+Unless this epoch time occurred in the future then it would expire immediately.
+In order to preserve compatibility for users that worked around this behaviour, any `Duration` longer than 50 years will continue to be interpreted as an epoch time.)
 * https://issues.couchbase.com/browse/JCBC-1632[JCBC-1632]:
 Bootstrapping is now fully pipelined for performance, building on the improvements in the previous release.
 * https://issues.couchbase.com/browse/JVMCBC-865[JVMCBC-865]:
