@@ -141,5 +141,4 @@ Please make sure that you are using a supported version of the Couchbase Java SD
 Using the latest Spring Data Couchbase should ensure that this is so.
 
 
-
 include::6.5@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]
