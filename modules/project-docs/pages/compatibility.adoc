@@ -28,11 +28,17 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 |===
 | | SDK 2.4, 2.5 | SDK 2.6 | SDK 2.7  | SDK 3.0 
 
-| *Server 5.0-5.5*
+| *Server 5.0*
 | *✔*
 | *✔*
 | *✔*
 | *◎*
+
+| *Server 5.5*
+| *✔*
+| *✔*
+| *✔*
+| *✔*
 
 | *Server 6.0*
 | ◎
