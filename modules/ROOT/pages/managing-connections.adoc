@@ -114,7 +114,7 @@ Boolean closed = bucket.close();
 
 This will release only the resources allocated for this bucket and it is possible to reopen it at a later point.
 
-All threads used by the SDK are daemon threads, so even if you do not `disconnect()` manually, your JVM will exit.
+All threads used by the SDK are daemon threads, so even if you do not `disconnect()` manually, your JVM will be able to exit.
 It is very important that you properly shut down the SDK so that remaining operations are finished and nothing is left behind.
 
 If no timeout is used for the synchronous `disconnect()` method, the environment `disconnect timeout` is used, which defaults to 25 seconds.
