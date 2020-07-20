@@ -140,5 +140,19 @@ NOTE: Check the Spring Data Couchbase's compile dependencies -- older versions m
 Please make sure that you are using a supported version of the Couchbase Java SDK, prefereably the latest version, which will contain any available bug fixes.
 Using the latest Spring Data Couchbase should ensure that this is so.
 
+[CAUTION]
+.Reactor Core Version
+====
+SpringBoot may set the io.projectreactor version at an earlier virsion than the one needed by the current version of https://search.maven.org/artifact/com.couchbase.client/core-io/2.0.7/jar[Couchbase JVM Core IO]. 
+in case of errirs, override with Core IO's preferred version, e.g.:
+
+----
+<dependency>
+    <groupId>io.projectreactor</groupId>
+    <artifactId>reactor-core</artifactId>
+    <version>3.3.5.RELEASE</version>
+</dependency>
+----
+====
 
 include::6.5@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]
