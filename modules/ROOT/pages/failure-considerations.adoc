@@ -37,7 +37,6 @@ JsonDocument result;
     if (ex.getCause() instanceof TimeoutException) {
       Iterator<JsonDocument> replicas = bucket.getFromReplica("key");
       while (replicas.hasNext())
-    }
     { result = replicas.next(); break; }
   } else
   { throw ex; }
