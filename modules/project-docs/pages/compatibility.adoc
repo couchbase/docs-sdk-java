@@ -144,7 +144,7 @@ Using the latest Spring Data Couchbase should ensure that this is so.
 .Reactor Core Version
 ====
 SpringBoot may set the io.projectreactor version at an earlier virsion than the one needed by the current version of https://search.maven.org/artifact/com.couchbase.client/core-io/2.0.7/jar[Couchbase JVM Core IO]. 
-in case of errors, override with Core IO's preferred version, e.g.:
+In case of errors, override with Core IO's preferred version, e.g.:
 
 ----
 <dependency>
