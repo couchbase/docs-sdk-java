@@ -31,15 +31,18 @@ It is possible a newer version exists in the active node, but did not manage to 
 [source,java]
 ----
 JsonDocument result;
-  try {
-    result = bucket.get("key"); 
-  } catch (RuntimeException ex) {
-    if (ex.getCause() instanceof TimeoutException) {
-      Iterator<JsonDocument> replicas = bucket.getFromReplica("key");
-      while (replicas.hasNext())
-    { result = replicas.next(); break; }
-  } else
-  { throw ex; }
+try {
+  result = bucket.get("key");
+} catch (RuntimeException ex) {
+  if (ex.getCause() instanceof TimeoutException) {
+    Iterator<JsonDocument> replicas = bucket.getFromReplica("key");
+    while (replicas.hasNext()) {
+      result = replicas.next();
+      break;
+    }
+  } else {
+    throw ex;
+  }
 }
 ----
 
