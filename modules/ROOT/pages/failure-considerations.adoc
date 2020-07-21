@@ -30,12 +30,18 @@ It is possible a newer version exists in the active node, but did not manage to 
 
 [source,java]
 ----
-static JsonDocument getOrGetReplica(Bucket bucket, String docId) {
-  try {
-    return bucket.get(docId);
-  } catch (CouchbaseException e) {
-    Iterator<JsonDocument> docs = bucket.getFromReplica(docId);
-    return docs.hasNext() ? docs.next() : null;
+JsonDocument result;
+try {
+  result = bucket.get("key");
+} catch (RuntimeException ex) {
+  if (ex.getCause() instanceof TimeoutException) {
+    Iterator<JsonDocument> replicas = bucket.getFromReplica("key");
+    while (replicas.hasNext()) {
+      result = replicas.next();
+      break;
+    }
+  } else {
+    throw ex;
   }
 }
 ----
