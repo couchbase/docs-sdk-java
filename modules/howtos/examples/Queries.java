@@ -39,7 +39,7 @@ class Queries {
     {
       // #tag::named[]
       QueryResult result = cluster.query(
-        "select count(*) from `travel-sample` where type = \"airports\" and country = $country",
+        "select count(*) from `travel-sample` where type = \"airport\" and country = $country",
         queryOptions().parameters(JsonObject.create().put("country", "France"))
       );
       // #end::named[]
@@ -49,7 +49,7 @@ class Queries {
     {
       // #tag::positional[]
       QueryResult result = cluster.query(
-        "select count(*) from `travel-sample` where type = \"airports\" and country = ?",
+        "select count(*) from `travel-sample` where type = \"airport\" and country = ?",
         queryOptions().parameters(JsonArray.from("France"))
       );
       // #end::positional[]
