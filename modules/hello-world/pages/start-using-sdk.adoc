@@ -36,7 +36,7 @@ The following snippet shows how to do it with https://maven.apache.org/[maven].
 
 For https://gradle.org/[gradle], you can use:
 
-[source]
+[source,groovy]
 ----
 implementation 'com.couchbase.client:java-client:3.0.6'
 ----

@@ -15,16 +15,16 @@ include::6.5@sdk:shared:partial$sample-application.adoc[tag=prereq]
 As well as the xref:start-using-sdk.adoc[Java SDK 3.0] and Couchbase Server, 
 set up as described above, you will need `git` to fetch the travel sample application code:
 
-[source,bash]
+[source,console]
 ----
-git clone https://github.com/couchbaselabs/try-cb-java.git
+$ git clone https://github.com/couchbaselabs/try-cb-java.git
 ----
 
 Change directory into your cloned repository, and check out the latest branch (this will most probably be enabled as the default branch).
 
-[source,bash]
+[source,console]
 ----
-git checkout 6.5
+$ git checkout 6.5
 ----
 
 
@@ -35,9 +35,9 @@ From here onwards, we'll assume the defaults.
 
 And run with
 
-[source,bash]
+[source,console]
 ----
-mvn spring-boot:run
+$ mvn spring-boot:run
 ----
 
 Most likely, you'll want to open up your preferred IDE for the `storage.host` step, 
