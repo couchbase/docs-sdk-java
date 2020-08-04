@@ -60,7 +60,7 @@ The `Set` implementation may contain values of all of the above types except `Js
 
 == Using the CouchbaseMap Object
 
-If you need to feed a Couchbase document to an existing API that only works with `java.util.Map`, then CouchbaseMap may be a quick way to get started with tackling the task.
+If you need to feed a Couchbase document to an existing API that only works with `java.util.Map`, then CouchbaseMap may be a quick way to get started with tackling the task without delving into the xref:subdocument-operations.adoc[Sub-Document API].
 You can create a CouchbaseMap like this:
 
 [source,java]
@@ -75,3 +75,8 @@ To implement this behavior, CouchbaseMap needs to make at least 2 subdocument re
 If the document changes between these two requests, the code retries up to the `casMismatchRetries` limit, after which it gives up and throws an exception.
 If the return values of `put` and `remove` are never actually used, you could end up making a lot of unnecessary requests. 
 There's also the potential for exceptions if concurrent map updates are extremely frequent.
+
+[TIP}
+====
+For many use cases, the xref:howtos:subdocument-operations.adoc[Sub-Document API] will be a useful and possibly better altermative to `CouchbaseMap`.
+====
