@@ -28,10 +28,40 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.6</version>
+        <version>3.0.7</version>
     </dependency>
 </dependencies>
 ----
+== Version 3.0.7 (4 August 2020)
+
+Version 3.0.7 is the either release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
+
+http://packages.couchbase.com/clients/java/3.0.7/Couchbase-Java-Client-3.0.7.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.7/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.8/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.7**
+* com.couchbase.client:**core-io:2.0.8**
+* io.projectreactor:**reactor-core:3.3.7.RELEASE**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== API Affecting
+* https://issues.couchbase.com/browse/JCBC-1681[JCBC-1681]: Remove cas from `IncrementOptions` and `DecrementOptions`.  CAS is not supported by the underlying protocol and should not have been exposed in these options.
+* https://issues.couchbase.com/browse/JCBC-1625[JCBC-1625]: Deprecate `maxTTL` on BucketSettings in favor of `maxExpiry`.
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/JCBC-1647[JCBC-1647]: BucketManager doesn't recognize ephemeral bucket ejection values.
+* https://issues.couchbase.com/browse/JCBC-1668[JCBC-1668]: Fix NPE when toString on SearchRow.
+* https://issues.couchbase.com/browse/JVMCBC-870[JVMCBC-870]: View reduce responses are never completed.
+
+=== Enhancements
+* https://issues.couchbase.com/browse/JCBC-1661[JCBC-1661], https://issues.couchbase.com/browse/JCBC-1665[JCBC-1665]: Building on the expiry improvements in the previous release, this adds a new `expiryTime()` method that returns expiry as an `Instant`, which better expresses the concept than the `Duration` returned by `expiry()`.  The latter will be deprecated in a future release.  Similarly, everywhere a `Duration`-based expiry could be provided previously, an overload has been added to take an `Instant`-based expiry.
+* https://issues.couchbase.com/browse/JCBC-1666[JCBC-1666]: AsyncScope.collection() refreshes collection map for default collection.
+* https://issues.couchbase.com/browse/JCBC-1670[JCBC-1670]: Add WaitUntilReadyOptions.serviceTypes() overload that accepts varargs.
+* https://issues.couchbase.com/browse/JVMCBC-867[JVMCBC-867]: Performance improvement: do not grab ByteBuf slice when extracting server response time.
+* https://issues.couchbase.com/browse/JVMCBC-869[JVMCBC-869]: Maintenance dependency bump: Netty -> 4.1.51, Jackson -> 2.11.1, Reactor -> 3.3.7, OpenTelemetry -> 0.6.0
 
 == Version 3.0.6 (14 July 2020)
 
