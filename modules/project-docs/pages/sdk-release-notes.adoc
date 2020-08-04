@@ -44,7 +44,7 @@ The supported and tested dependencies for this release are:
 
 * com.couchbase.client:**java-client:3.0.7**
 * com.couchbase.client:**core-io:2.0.8**
-* io.projectreactor:**reactor-core:3.3.7.RELEASE**
+* io.projectreactor:**reactor-core:3.3.8.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
 === API Affecting
