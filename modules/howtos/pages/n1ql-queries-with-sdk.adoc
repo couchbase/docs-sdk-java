@@ -15,7 +15,7 @@ Querying can solve typical programming tasks such as finding a user profile by e
 
 After familiarizing yourself with the basics on how the N1QL query language works and how to query it from the UI you can use it from the Java SDK.
 
-Before starting, here's all imports used in the following examples:
+Before starting, here are all of the imports used in the following examples:
 
 [source,java]
 ----
