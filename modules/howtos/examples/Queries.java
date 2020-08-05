@@ -1,111 +1,152 @@
 // #tag::imports[]
+import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.*;
 import com.couchbase.client.java.json.*;
 import com.couchbase.client.java.query.*;
+import org.reactivestreams.Subscription;
 import reactor.core.publisher.*;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 // #end::imports[]
 
 
 class Queries {
-void cluster() {
-// #tag::cluster[]
-Cluster cluster = Cluster.connect("localhost", "username", "password");
-Bucket bucket = cluster.bucket("travel-sample");
-// #end::cluster[]
-}
 
-// For testing
-Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
+  static Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
 
-public Queries() {
-    Bucket bucket = cluster.bucket("travel-sample");
-}
+  public static void main(String... args) {
+    {
+      // #tag::simple[]
+      try {
+        final QueryResult result = cluster
+          .query("select * from `travel-sample` limit 10", queryOptions().metrics(true));
 
-public static void main(String[] args) {
-    Queries queries = new Queries();
-    queries.simple();
-}
+        for (JsonObject row : result.rowsAsObject()) {
+          System.out.println("Found row: " + row);
+        }
 
-void simple() {
-// #tag::simple[]
-String statement = "select * from `travel-sample` limit 10;";
-QueryResult result = cluster.query(statement);
+        System.out.println("Reported execution time: "
+          + result.metaData().metrics().get().executionTime());
+      } catch (CouchbaseException ex) {
+        ex.printStackTrace();
+      }
+      // #end::simple[]
+    }
 
-List<JsonObject> rows = result.rowsAsObject();
+    {
+      // #tag::named[]
+      QueryResult result = cluster.query(
+        "select count(*) from `travel-sample` where type = \"airport\" and country = $country",
+        queryOptions().parameters(JsonObject.create().put("country", "France"))
+      );
+      // #end::named[]
+    }
 
-for (JsonObject json: rows) {
-  System.out.println("Row: " + json);
-}
-// #end::simple[]
-}
 
-void positional() {
-// #tag::positional[]
-String stmt = "select * from `travel-sample` where type=$1 and country=$2 limit 10;";
-QueryResult result = cluster.query(stmt,
-  queryOptions().parameters(JsonArray.from("airline", "United States")));
-// #end::positional[]
-}
+    {
+      // #tag::positional[]
+      QueryResult result = cluster.query(
+        "select count(*) from `travel-sample` where type = \"airport\" and country = ?",
+        queryOptions().parameters(JsonArray.from("France"))
+      );
+      // #end::positional[]
+    }
 
-void named() {
-// #tag::named[]
-String stmt = "select * from `travel-sample` where type=$type and country=$country limit 10;";
-QueryResult result = cluster.query(stmt,
-  queryOptions().parameters(JsonObject.create()
-          .put("type", "airline")
-          .put("country", "United States")));
-// #end::named[]
-}
+    {
+      // #tag::scanconsistency[]
+      QueryResult result = cluster.query(
+        "select ...",
+        queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS)
+      );
+      // #end::scanconsistency[]
+    }
 
-void requestPlus() {
-// #tag::request-plus[]
-String stmt = "select * from `travel-sample` limit 10;";
-QueryResult result = cluster.query(stmt,
-  queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS));
-// #end::request-plus[]
-}
+    {
+      // #tag::clientcontextid[]
+      QueryResult result = cluster.query(
+        "select ...",
+        queryOptions().clientContextId("user-44" + UUID.randomUUID().toString())
+      );
+      // #end::clientcontextid[]
+    }
 
-void async() {
-// #tag::async[]
-AsyncCluster async = cluster.async();
-String stmt = "select * from `travel-sample` limit 10;";
-CompletableFuture<QueryResult> future = async.query(stmt);
+    {
+      // #tag::readonly[]
+      QueryResult result = cluster.query(
+        "select ...",
+        queryOptions().readonly(true)
+      );
+      // #end::readonly[]
+    }
 
-// Just for demo purposes, block on the CompletableFutures.
-try {
-  List<JsonObject> rows = future
-                  .thenApply(QueryResult::rowsAsObject)
-                  .get();
-} catch (InterruptedException | ExecutionException e) {
-  e.printStackTrace();
-}
-// #end::async[]
-}
+    {
+      // #tag::printmetrics[]
+      QueryResult result = cluster.query("select 1=1", queryOptions().metrics(true));
+      System.err.println(
+        "Execution time: " + result.metaData().metrics().get().executionTime()
+      );
+      // #end::printmetrics[]
+    }
 
-void reactive() {
-// #tag::reactive[]
-ReactiveCluster reactive = cluster.reactive();
-String stmt = "select * from `travel-sample`;";
-Mono<ReactiveQueryResult> mono = reactive.query(stmt);
+    {
+      // #tag::rowsasobject[]
+      QueryResult result = cluster.query(
+        "select * from `travel-sample` limit 10"
+      );
+      for (JsonObject row : result.rowsAsObject()) {
+        System.out.println("Found row: " + row);
+      }
+      // #end::rowsasobject[]
+    }
 
-Flux<JsonObject> rows = mono
-  .flatMapMany(result -> result.rowsAsObject());
+    {
+      // #tag::simplereactive[]
+      Mono<ReactiveQueryResult> result = cluster
+        .reactive()
+        .query("select 1=1");
 
-// Just for example, block on the rows.  This is not best practice and apps
-// should generally not block.
-List<JsonObject> allRows = rows
-  .doOnNext(row -> System.out.println(row))
-  .doOnError(err -> System.err.println("Error: " + err))
-  .collectList()
-  .block();
+      result
+        .flatMapMany(ReactiveQueryResult::rowsAsObject)
+        .subscribe(row -> System.out.println("Found row: " + row));
+      // #end::simplereactive[]
+    }
 
-// #end::reactive[]
-}
+    {
+      // #tag::backpressure[]
+      Mono<ReactiveQueryResult> result = cluster
+        .reactive()
+        .query("select * from hugeBucket");
+
+      result
+        .flatMapMany(ReactiveQueryResult::rowsAsObject)
+        .subscribe(new BaseSubscriber<JsonObject>() {
+          // Number of outstanding requests
+          final AtomicInteger oustanding = new AtomicInteger(0);
+
+          @Override
+          protected void hookOnSubscribe(Subscription subscription) {
+            request(10); // initially request to rows
+            oustanding.set(10);
+          }
+
+          @Override
+          protected void hookOnNext(JsonObject value) {
+            process(value);
+            if (oustanding.decrementAndGet() == 0) {
+              request(10);
+            }
+          }
+        });
+      // #end::backpressure[]
+    }
+
+  }
+
+  static void process(JsonObject value) {
+
+  }
 
 }

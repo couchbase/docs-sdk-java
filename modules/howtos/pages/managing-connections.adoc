@@ -1,7 +1,7 @@
 = Managing Connections using the Java SDK with Couchbase Server
 :navtitle: Managing Connections
-:page-topic-type: concept
-:page-aliases: ROOT:managing-connections,howtos:multi-network,ROOT:connecting,ROOT:connection-advanced
+:page-topic-type: howto
+:page-aliases: ROOT:managing-connections,howtos:multi-network,ROOT:connecting,ROOT:connection-advanced,6.5@server:developer-guide:connection-advanced
 
 [abstract]
 This section describes how to connect the Java SDK to a Couchbase cluster.
@@ -75,9 +75,6 @@ The full list of recognized parameters is documented in the client settings refe
 Any client setting with a system property name may also be specified as a connection string parameter (without the `com.couchbase.env.` prefix).
 
 WARNING: When creating a `Cluster` using a custom `ClusterEnvironment`, *_connection string parameters are ignored_*, since client settings are frozen when the cluster environment is built.
-
-A connection string may optionally be prefixed by either `"couchbase://"` or `"couchbases://"`, although the Java SDK completely ignores this prefix if present.
-If you wish to use TLS, the `ClusterEnvironment` must be configured as described in <<ssl>>.
 
 [#connection-lifecycle]
 == Connection Lifecycle
@@ -187,7 +184,7 @@ include::example$ManagingConnections.java[tag=tls,indent=0]
 Then use this custom `ClusterEnvironment` when opening the connection to the cluster.
 See <<cluster-environment>> for an example of creating a `Cluster` with a custom environment.
 
-If you want to verify it's actually working ,you can use a tool like [.cmd]`tcpdump`.
+If you want to verify it's actually working, you can use a tool like [.cmd]`tcpdump`.
 For example, an unencrypted upsert request looks like this (using `sudo tcpdump -i lo0 -A -s 0 port 11210`):
 
 ----
@@ -230,6 +227,45 @@ INFO: DNS SRV enabled, but less or more than one seed node given.
 Proceeding with normal bootstrap.
 ----
 
+
+== Waiting for Bootstrap Completion
+
+Depending on the environment and network latency, bootstrapping the SDK fully might take a little longer than the default key-value timeout of 2.5 seconds, so you may see timeouts during bootstrap. 
+To prevent those early timeouts from happening, you can use the `waitUntilReady` method.
+
+If you are working at the _Cluster_ level, then add to the `cluster()` in the xref:#connecting-to-a-cluster[earlier example]:
+
+[source,java]
+----
+Cluster cluster = Cluster.connect("127.0.0.1", "username", "password");
+cluster.waitUntilReady(Duration.ofSeconds(10));
+Bucket bucket = cluster.bucket("travel-sample");
+Collection collection = bucket.defaultCollection();
+----
+
+Or more fully:
+
+[source,java]
+----
+public class ClusterExample {
+  public static void main(String... args) throws Exception {
+    Cluster cluster = Cluster.connect("127.0.0.1", "username", "password");
+    cluster.waitUntilReady(Duration.ofSeconds(10));
+    Bucket bucket = cluster.bucket("travel-sample");
+    Collection collection = bucket.defaultCollection();
+  }
+}
+----
+
+If you are working at the _Bucket_ level, then the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Bucket.html#waitUntilReady-java.time.Duration-[Bucket-level `waitUntilReady`] does the same as the Cluster-level version,
+_plus_ it waits for the K-V (data) sockets to be ready.
+
+Other timeout issues may occur when using the SDK located geographically separately from the Couchbase Server cluster -- this is xref:project-docs:compatibility#network-requirements[not recommended].
+See the xref:#working-in-the-cloud[Cloud section] below for some suggestions of settings adjustments.
+
+include::6.5@sdk:shared:partial$managing-connections.adoc[tag=cloud]
+
+
 == Async and Reactive APIs
 
 The Couchbase Java SDK provides first-class support for asynchronous and reactive programming.
@@ -245,7 +281,7 @@ If you wish to embrace the async or reactive programming model, there are two wa
 
 * Call `async()` or `reactive()` on the object to access its `Async*` or `Reactive*` counterpart.
 For example, if you have a `Collection` called `myCollection`, you can obtain a `ReactiveCollection` by calling `myCollection.reactive()`.
-* Instantiate a `AsyncCluster` or `ReactiveCluster` in the first place.
+* Instantiate an `AsyncCluster` or `ReactiveCluster` in the first place.
 The `bucket()` method of an `AsyncCluster` returns an `AsyncBucket`, while the `bucket()` method of a `ReactiveCluster` turns a `ReactiveBucket`.
 
 So if you are connecting to the bucket synchronously but then want to switch over to asynchronous data operations, you can do it like this:
@@ -268,3 +304,6 @@ Here's the same example, but using the Reactive API instead of the Async API:
 ----
 include::example$ManagingConnections.java[tag=reactivecluster,indent=0]
 ----
+
+
+// == Working in the Cloud

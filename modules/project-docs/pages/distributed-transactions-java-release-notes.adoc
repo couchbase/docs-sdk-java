@@ -8,14 +8,160 @@ This page features the release notes for that library -- for release notes, down
 
 == Using Distributed Transactions
 
-See the xref:6.5@server:introduction:distributed-acid-transactions.adoc[Distributed ACID Transactions concept doc] in the server documentation for details of how Couchbase implements transactions.
+See the xref:6.5@server:learn:data/transactions.adoc[Distributed ACID Transactions concept doc] in the server documentation for details of how Couchbase implements transactions.
 The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Transactions HOWTO doc] walks you through all aspects of working with Distributed Transactions.
 
-== Distributed Transactions Java 1.0.0-beta.3
+== Distributed Transactions Java 1.0.1 (19 June 2020)
+This is the second release of Couchbase Distributed ACID Transactions.
+
+It is built on Couchbase java-client version 3.0.5, and requires Couchbase Server 6.5 or above.
+
+It is strongly recommended that all users read the "API Changes" section, as they may desire to make application changes in order to use this newly exposed information.
+
+https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.0.1/[JavaDocs]
+
+=== API Changes
+
+==== TransactionCommitAmbiguous
+*Summary:* A TransactionCommitAmbiguous exception has been added, and applications may wish to handle it (https://issues.couchbase.com/browse/TXNJ-205[TXNJ-205]).
+
+Ambiguity is inevitable in any system, especially a distributed one.
+
+Each transaction has a 'single point of truth' that is updated atomically to reflect whether it is committed.
+
+However, it is not always possible for the protocol to become 100% certain that the operation was successful, before the transaction expires.
+This is important as the transaction may or may not have successfully committed, and in the previous release this was not reported to the application.
+
+The library will now raise a new error, TransactionCommitAmbiguous, to indicate this state.
+TransactionCommitAmbiguous derives from the existing TransactionFailed that applications will already be handling.
+
+On TransactionCommitAmbiguous, the transaction may or may not have reached the commit point.
+If it has reached it, then the transaction will be fully completed ("unstaged") by the asynchronous cleanup process at some point in the future.
+With default settings this will usually be within a minute, but whatever underlying fault has caused the TransactionCommitAmbiguous may lead to it taking longer.
+
+*Handling:* This error can be challenging for an application to handle.
+One simple approach is to retry the transaction at some point in the future.
+Alternatively, if transaction completion time is not a priority, then transaction expiration times can be extended across the board through `TransactionConfigBuilder`.
+This will allow the protocol more time to resolve the ambiguity, if possible.
+
+==== TransactionResult.unstagingComplete()
+*Summary:* Failures during the post-commit unstaging phase can now result in the transaction successfully returning.  A new `TransactionResult.unstagingComplete()` method has been added (https://issues.couchbase.com/browse/TXNJ-209[TXNJ-209]).
+
+As above, there is a 'single point of truth' for a transaction.
+After this atomic commit point is reached, the documents themselves still need to be committed (we also call this "unstaging").
+However, transactionally-aware actors will now be returning the post-transaction versions of the documents, and the transaction is effectively fully committed to those actors.
+
+So if the application is solely working with transaction-aware actors, then the unstaging process is optional.
+The previous release would retry any failures during the unstaging process until the transaction expires, but this unnecessarily penalises applications that do not require unstaging to be completed.
+
+So, many errors during unstaging will now cause the transaction to immediately return success.
+The asynchronous cleanup process will still complete the unstaging process at a later point.
+
+A new `unstagingComplete()` call is added to `TransactionResult` to indicate whether the unstaging process completed successfully or not.
+This should be used any time that the application needs all results of the transaction to be immediately available to non-transactional actors (which currently includes N1QL and non-transactional Key-Value reads).
+
+Putting two API changes above together, the recommendation for error handling of a typical transaction is now this:
+
+[source,java]
+----
+include::example$Transactions.java[tag=imports,indent=0]
+----
+
+[source,java]
+----
+include::example$Transactions.java[tag=demo_1_0_1,indent=0]
+----
+
+=== Bug Fixes and Stability
+* https://issues.couchbase.com/browse/TXNJ-184[TXNJ-184]:
+If doc is found to be removed while committing it, create it.
+* https://issues.couchbase.com/browse/TXNJ-187[TXNJ-187]:
+Errors raised while setting ATR state to Committed are now regarded as pre-commit errors, e.g. they can cause the transaction to fail or retry.
+* https://issues.couchbase.com/browse/TXNJ-188[TXNJ-188], https://issues.couchbase.com/browse/TXNJ-192[TXNJ-192]:
+The TransactionResult.attempts() field now always correctly reflects all attempts made.
+* https://issues.couchbase.com/browse/TXNJ-196[TXNJ-196]:
+Pre-commit expiry now always triggers rollback.
+* https://issues.couchbase.com/browse/TXNJ-197[TXNJ-197]:
+Expiry during app-rollback now enters expiry-overtime-mode and has one more attempt at completing rollback.
+* https://issues.couchbase.com/browse/TXNJ-202[TXNJ-202], https://issues.couchbase.com/browse/TXNJ-200[TXNJ-200]:
+FAIL_ATR_FULL now handled consistently throughout protocol.
+* https://issues.couchbase.com/browse/TXNJ-210[TXNJ-210]:
+If anything goes wrong during app-rollback, return success. 
+Rollback will be completed by the asynchronous cleanup process, and unrolled-back metadata is handled by the protocol anyway.
+* https://issues.couchbase.com/browse/TXNJ-211[TXNJ-211]:
+If rollback fails, the original error that caused the rollback is the one raised as the `getCause()` of any final exception raised to the application.
+* https://issues.couchbase.com/browse/TXNJ-218[TXNJ-218]:
+Inserting the same document in the same transaction is now caught as an application bug, and will fail the transaction.
+
+=== Improvements
+* https://issues.couchbase.com/browse/TXNJ-189[TXNJ-189]:
+Adds a transactionId field throughout the metadata, to assist with debugging.
+* https://issues.couchbase.com/browse/TXNJ-190[TXNJ-190]:
+Write elided stacktraces in the logs to improve readability.
+* https://issues.couchbase.com/browse/TXNJ-191[TXNJ-191], https://issues.couchbase.com/browse/TXNJ-199[TXNJ-199]:
+Performance improvement so that transactions are only rolled back and/or cleaned up if they reached the point of creating an ATR entry (e.g. if there is anything to cleanup).
+* https://issues.couchbase.com/browse/TXNJ-204[TXNJ-204]:
+All context methods, such as ctx.insert and ctx.replace, will now consistently only raise `ErrorWrapper` exceptions. 
+Applications should not be catching any exceptions from these methods so this is not expected to be impacting.
+* https://issues.couchbase.com/browse/TXNJ-215[TXNJ-215]:
+Adjust exponential backoff retry parameter from 250msecs down to 100msecs.
+
+== Distributed Transactions Java 1.0.0 (17 January 2020)
+This is the first General Availability (GA) release of Distributed ACID Transactions 1.0.0 for Couchbase Server 6.5.
+
+Built on Couchbase java-client version 3.0.0 (GA).
+Requires Couchbase Server 6.5 or above.
+
+=== Bug Fixes & Stability
+* https://issues.couchbase.com/browse/TXNJ-119[TXNJ-119]:
+Calling commit multiple times leads to an error mentioning "rollback"; changed to separate error messages for commit and rollback.
+* https://issues.couchbase.com/browse/TXNJ-126[TXNJ-126]:
+Expire a transaction immediately if it expires while deferred.
+* https://issues.couchbase.com/browse/TXNJ-149[TXNJ-149]:
+Improve ambiguous error handling during commit.
+* https://issues.couchbase.com/browse/TXNJ-163[TXNJ-163], https://issues.couchbase.com/browse/TXNJ-156[TXNJ-156]:
+Ensure that java-client errors are correctly handled after its changes to error handling.
+* https://issues.couchbase.com/browse/TXNJ-165[TXNJ-165]:
+Fix reactor.core.Exceptions$OverflowException seen during cleanup.  Would only affect users setting a cleanup window of 1 second or less.
+
+=== Enhancements
+* https://issues.couchbase.com/browse/TXNJ-173[TXNJ-173]:
+Register for changes to bucket configurations, so if the application opens a bucket after creating Transactions object, background cleanup will be started on those new buckets.
+* https://issues.couchbase.com/browse/TXNJ-69[TXNJ-69]:
+Provide some future proofing for client-record.  Implementation detail, allows for future extensibility of the background cleanup process.
+* https://issues.couchbase.com/browse/TXNJ-111[TXNJ-111], https://issues.couchbase.com/browse/TXNJ-110[TXNJ-110]:
+Sends new events to the java-client event-bus with details from the background cleanup process.
+* https://issues.couchbase.com/browse/TXNJ-120[TXNJ-120]:
+Once Transactions object is closed, prevent futher operations on it as a sanity check.
+* https://issues.couchbase.com/browse/TXNJ-151[TXNJ-151]:
+Add Java client metadata to help track failures.  Implementation detail, adds some additional info to exceptions to help debugging.
+* https://issues.couchbase.com/browse/TXNJ-152[TXNJ-152]:
+When transaction expires, attempt to roll it back (or complete commit). 
+Completes the work in TXNJ-124 (in 1.0.0-beta.3), to cover all cases.
+* https://issues.couchbase.com/browse/TXNJ-155[TXNJ-155]:
+Remove OpenTracing dependency.  An implementation detail as it has already been removed from the API, this completes the work and removes the dependency on the jar. 
+Once OpenTelemetry (OpenTracing's direct replacement) is stable, support for it will be added.
+* https://issues.couchbase.com/browse/TXNJ-162[TXNJ-162]:
+Performance improvements related to String parsing.  Internal benchmarking sees a huge reduction in memory allocations and GC pressure with this change.
+* https://issues.couchbase.com/browse/TXNJ-167[TXNJ-167]:
+Rebuild on java-client 3.0.0 GA.
+* https://issues.couchbase.com/browse/TXNJ-170[TXNJ-170]:
+Perform ATR cleanup in serial, which prevents errors being sent to Hooks.onErrorDropped (and by default stdout) when shutting down transactions. 
+Along with java-client fix https://issues.couchbase.com/browse/JVMCBC-781[JVMCBC-781], users should no longer see Hooks.onErrorDropped errors.
+
+=== API changes
+* https://issues.couchbase.com/browse/TXNJ-171[TXNJ-171]:
+Rename MAJORITY_AND_PERSIST_ON_MASTER to MAJORITY_AND_PERSIST_ON_ACTIVE, in accordance with new naming conventions.
+* https://issues.couchbase.com/browse/TXNJ-169[TXNJ-169]:
+Simplify cleanup window logic to remove divide-by-2; previously, specifying `TransactionConfigBuilder.cleanupWindow(120 seconds)` would lead to ATRs getting checked every 60 seconds (in the general case): now to reduce confusion they will be checked every 120 seconds.
+* https://issues.couchbase.com/browse/TXNJ-164[TXNJ-164]:
+Remove `TransactionConfigBuilder.logDirectlyCleanup`.  As all cleanup trace is now sent directly to java-client's event-bus, it can be configured from there and this parameter is useless.
+
+== Distributed Transactions Java 1.0.0-beta.3 (13th November 2019)
 
 This is the third _Beta_ release of Distributed ACID Transactions 1.0.0 for Couchbase Server 6.5 and the Java 3.0.0 client.
 There are no major changes.
-The main purpose of the release is to rebuild on top of the new beta release of the java-client, so applications can use both together.
+The main purpose of the release is to rebuild on top of the beta.1 release of the java-client, so applications can use both together.
 
 Built on Couchbase java-client version 3.0.0-beta.1.
 Requires Couchbase Server 6.5 or above.

@@ -1,10 +1,138 @@
-= Sample App Tutorial
+= Sample Application
+:nav-title: Travel Sample App
 :content-type: tutorial
+:page-topic-type: tutorial
 :page-aliases: ROOT:sample-application,ROOT:tutorial4,ROOT:sample-app-backend
 
+[abstract]
+Discover how to program interactions with the Couchbase Server via the data, Query, and search services -- using the Travel Sample Application with the built-in Travel Sample data Bucket.
 
-include::ref:partial$beta-warning.adoc[]
+include::6.5@sdk:shared:partial$sample-application.adoc[tag=prereq]
+
+
+== Preparation
+
+As well as the xref:start-using-sdk.adoc[Java SDK 3.0] and Couchbase Server, 
+set up as described above, you will need `git` to fetch the travel sample application code:
+
+[source,console]
+----
+$ git clone https://github.com/couchbaselabs/try-cb-java.git
+----
+
+Change directory into your cloned repository, and check out the latest branch (this will most probably be enabled as the default branch).
+
+[source,console]
+----
+$ git checkout 6.5
+----
+
+
+== Running the Travel Sample Application
+
+Next, edit the `storage.host` field in src/main/resources/application.properties to the one for your containerised Couchbase Server (or localhost, 127.0.0.1, if appropriate), and any other local changes -- such as password.
+From here onwards, we'll assume the defaults.
+
+And run with
+
+[source,console]
+----
+$ mvn spring-boot:run
+----
+
+Most likely, you'll want to open up your preferred IDE for the `storage.host` step, 
+and stay there to build the app, rather than running Maven from the command line.
+
+After the build, you should see messages from `Tomcat` and `trycb.Application`, which tells you that you've been successful.
+With your Web browser of choice, head to port 8080 of the local machine.
+
+
+// *PIC -- screenshot
 
 
 
+== Using the Sample App
+
+Give yourself a username and password and click *Register*.
+
+Now try out a few queries, and see Search in action for the hotel finder feature..
+
+
+== Sample App Backend
+
+The backend code shows Couchbase Java SDK in action with Query and Search, 
+but also how to plug together all of the elements and build an application with Couchbase Server and the Java SDK.
+Look at `User.java` to see some of the pieces necessary in most applications, such as the User `@Service`:
+
+[source,java]
+----
+@Service
+public class User {
+
+    private final TokenService jwtService;
+
+    @Autowired
+    public User(TokenService jwtService) {
+        this.jwtService = jwtService;
+    }
+
+    static final String USERS_COLLECTION_NAME = "users";
+    static final String FLIGHTS_COLLECTION_NAME = "flights";
+----
+
+Creating a user shows the typical security concerns, with salted password hashes, as well as the mundane but essential business of using the KV interface to `insert` the username into the database:
+
+[source,java]
+----
+    public Result<Map<String, Object>> createLogin(final Bucket bucket, final String username, final String password,
+            DurabilityLevel expiry) {
+        String passHash = BCrypt.hashpw(password, BCrypt.gensalt());
+        JsonObject doc = JsonObject.create()
+            .put("type", "user")
+            .put("name", username)
+            .put("password", passHash);
+        InsertOptions options = insertOptions();
+        if (expiry.ordinal() > 0) {
+            options.durability(expiry);
+        }
+        String narration = "User account created in document " + username + " in bucket " + bucket.name()
+                + (expiry.ordinal() > 0 ? ", with expiry of " + expiry.ordinal() + "s" : "");
+
+        try {
+            bucket.defaultCollection().insert(username, doc, options);
+            return Result.of(
+                    JsonObject.create().put("token", jwtService.buildToken(username)).toMap(),
+                    narration);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AuthenticationServiceException("There was an error creating account");
+        }
+    }
+----
+
+Here, the _flights_ array, containing the flight IDs, is converted to actual objects:
+
+[source,java]
+----
+        Collection flightsCollection = bucket.defaultCollection();
+        List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
+        for (int i = 0; i < flights.size(); i++) {
+            String flightId = flights.getString(i);
+            GetResult res;
+            try {
+                res = flightsCollection.get(flightId);
+            } catch (DocumentNotFoundException ex) {
+                throw new RuntimeException("Unable to retrieve flight id " + flightId);
+            }
+            Map<String, Object> flight = res.contentAsObject().toMap();
+            results.add(flight);
+        }
+        return results;
+    }
+----
+
+
+== Data Model
+
+See the xref:ref:travel-app-data-model.adoc[Travel App Data Model] reference page for more information about the sample data set used.
 

@@ -1,40 +1,44 @@
-import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.kv.MutationResult;
-import com.couchbase.client.java.json.JsonObject;
-import com.couchbase.client.java.kv.GetResult;
-import com.couchbase.client.java.Collection;
-
-import java.util.Optional;
+// #tag::imports[]
+import com.couchbase.client.java.*;
+import com.couchbase.client.java.kv.*;
+import com.couchbase.client.java.json.*;
+import com.couchbase.client.java.query.*;
+// #end::imports[]
 
 class StartUsing {
 
     public static void main(String... args) {
+        // #tag::connect[]
+        Cluster cluster = Cluster.connect("localhost", "username", "password");
+        // #end::connect[]
 
-// #tag::connect[]
-Cluster cluster = Cluster.connect("localhost", "username", "password");
-// #end::connect[]
+        // #tag::bucket[]
+        // get a bucket reference
+        Bucket bucket = cluster.bucket("bucket-name");
+        // #end::bucket[]
 
-// #tag::bucket[]
-// get a bucket reference
-Bucket bucket = cluster.bucket("bucket-name");
-// #end::bucket[]
+        // #tag::collection[]
+        // get a collection reference
+        Collection collection = bucket.defaultCollection();
+        // #end::collection[]
 
-// #tag::collection[]
-// get a collection reference
-Collection collection = bucket.defaultCollection();
-// #end::collection[]
+        // #tag::upsert-get[]
+        // Upsert Document
+        MutationResult upsertResult = collection.upsert(
+            "my-document",
+            JsonObject.create().put("name", "mike")
+        );
 
-// #tag::upsert-get[]
-// Upsert Document
-MutationResult upsertResult = collection.upsert(
-    "my-document", 
-    JsonObject.create().put("name", "mike")
-);
+        // Get Document
+        GetResult getResult = collection.get("my-document");
+        String name = getResult.contentAsObject().getString("name");
+        System.out.println(name); // name == "mike"
+        // #end::upsert-get[]
 
-// Get Document
-GetResult getResult = collection.get("my-document");
-// #end::upsert-get[]
-
+        // #tag::n1ql-query[]
+        QueryResult result = cluster.query("select \"Hello World\" as greeting");
+        System.out.println(result.rowsAsObject());
+        // #end::n1ql-query[]
     }
+
 }

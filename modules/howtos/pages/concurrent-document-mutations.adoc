@@ -1,4 +1,36 @@
 = Concurrent Document Mutations
-:navtitle: Concurrent Document Mutations
 :page-topic-type: howto
-:page-aliases: concurrent-mutations-cluster,cas
+include::partial$attributes.adoc[]
+:page-aliases: ROOT:concurrent-document-mutations.adoc,6.5@server:developer-guide:cas-concurrency
+
+include::6.5@sdk:shared:partial$cas.adoc[tag=intro]
+
+include::6.5@sdk:shared:partial$cas.adoc[tag=demo]
+
+include::6.5@sdk:shared:partial$cas.adoc[tag=example]
+
+include::6.5@sdk:shared:partial$cas.adoc[tag=errors]
+
+[source,java]
+----
+include::example$Cas.java[tag=handlingerrors,indent=0]
+----
+
+Sometimes more logic is needed when performing updates, for example, if a property is mutually exclusive with another property; only one or the other can exist, but not both.
+
+
+include::6.5@sdk:shared:partial$cas.adoc[tag=performance]
+
+include::6.5@sdk:shared:partial$cas.adoc[tag=format]
+
+include::6.5@sdk:shared:partial$cas.adoc[tag=locking]
+
+[source,java]
+----
+include::example$Cas.java[tag=locking,indent=0]
+----
+
+The handler will unlock the item either via an explicit unlock operation ([.api]`unlock`) or implicitly via modifying the item with the correct CAS.
+
+If the item has already been locked, the server will respond with CasMismatch which means that the operation could not be executed temporarily, but may succeed later on.
+

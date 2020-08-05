@@ -1,0 +1,118 @@
+= Handling Errors
+:navtitle: Handling Errors
+:page-topic-type: howto
+:page-aliases: ROOT:handling-error-conditions,handling-error-conditions,errors,handling-errors
+:source-language: java
+:lang: java
+
+Errors are inevitable.
+The developer’s job is to be prepared for whatever is likely to come up -- and to try and be prepared for anything that conceivably could come up.
+Couchbase gives you a lot of flexibility, but it is recommended that you equip yourself with an understanding of the possibilities.
+
+
+As covered xref:concurrent-async-apis.adoc[here], the Java SDK ships with three different APIs, allowing you to structure your application the way you want.
+That guide also covers how errors are actually returned (e.g. via `Try`, `Future`, or `Mono`) and handled, so this document will focus instead on specific errors, along with a broader look at error handling strategies.
+
+== Key-Value Errors
+
+The KV Service exposes several common errors that can be encountered - both during development, and to be handled by the production app. Here we will cover some of the most common errors.
+
+If a particular key cannot be found it is raised as an `DocumentNotFoundException`:
+////
+[source,scala]
+----
+include::example$ErrorHandling.scala[tag=key-not-found,indent=0]
+----
+
+[source,scala]
+----
+include::example$ErrorHandling.scala[tag=get,indent=0]
+----
+////
+On the other hand if the key already exists and should not (e.g. on an insert) then it is raised as a `DocumentExistsException`:
+////
+[source,scala]
+----
+include::example$ErrorHandling.scala[tag=key-exists,indent=0]
+----
+////
+=== Concurrency
+Couchbase provides optimistic concurrency using CAS.
+Each document gets a CAS value on the server, which is changed on each mutation.
+When you get a document you automatically receive its CAS value, and when replacing the document, if you provide that CAS the server can check that the document has not been concurrently modified by another agent in-between.  If it has, it returns `CasMismatchException`, and the most appropriate response is to simply retry it:
+////
+[source,scala]
+----
+include::example$ErrorHandling.scala[tag=cas,indent=0]
+----
+////
+=== Ambiguity
+There are situations with any distributed system in which it is simply impossible to know for sure if the operation completed successfully or not.
+Take this as an example: your application requests that a new document be created on Couchbase Server.  This completes, but, just before the server can notify the client that it was successful, a network switch dies and the application's connection to the server is lost.  The client will timeout waiting for a response and will raise a `TimeoutException`, but it's ambiguous to the app whether the operation succeeded or not.
+
+So `TimeoutException` is one ambiguous error, another is `DurabilityAmbiguousException`, which can returned when performing a durable operation.  This similarly indicates that the operation may or may not have succeeded: though when using durability you are guaranteed that the operation will either have been applied to all replicas, or none.
+
+Given the inevitability of ambiguity, how is the application supposed to handle this?
+
+It really needs to be considered case-by-case, but the general strategy is to become certain if the operation succeeded or not, and to retry it if required.
+
+For instance, for inserts, they can simply be retried to see if they fail on `DocumentExistsException`, in which case the operation was successful:
+////
+[source,scala]
+----
+include::example$ErrorHandling.scala[tag=insert,indent=0]
+----
+
+That example is much closer to what an application will want to be doing.  Let's flesh it out further.
+////
+
+////
+=== Real-World Error Handling
+The application can write wrappers so that it can easily do operations without having to duplicate the error handling each time.  Something like this:
+
+[source,scala]
+----
+include::example$ErrorHandling.scala[tag=insert-real,indent=0]
+----
+
+This will make a 'best effort' to do the insert (though its retry strategy is rather naive, and applications may want to implement a more sophisticated approach involving exponential backoff and circuit breaking.)
+
+If that best effort fails, and the `doInsert` call still returns a `Failure`, then it's highly context-dependent how to handle that.  Examples would include displaying a "please try again later" error to a user, if there is one, and logging it for manual human review.  The application must make a suitable call for each case.
+
+The application can write similar wrappers for the other operations - replace, upsert et al.
+Note that the logic is a little different in each case: for inserts, we confirm if the operation has already been successful on an ambiguous result by checking for `DocumentExistsException`.  But this wouldn't make sense for an upsert.
+////
+=== Non-Idempotent Operations
+Idempotent operations are those that can be applied multiple times and only have one effect.  Repeatedly setting an email field is idempotent - increasing a counter by one is not.
+
+Some operations we can view as idempotent as they will fail with no effect after the first success - such as inserts.
+
+Idempotent operations are much easier to handle, as on ambiguous error results (`DurabilityAmbiguousException` and `TimeoutException`) the operation can simply be retried.
+
+Most key-value operations are idempotent.  For those that aren't, such as a Sub-Document `arrayAppend` call, or a counter increment, the application should, on an ambiguous result, first read the document to see if that change was applied.
+
+////
+== Query and Analytics Errors
+A N1QL query either returns results or `QueryError`, like so:
+
+[source,scala]
+----
+include::example$ErrorHandling.scala[tag=query,indent=0]
+----
+
+Analytics works in an identical fashion, raising an `AnalyticsError`.
+////
+
+== Additional Resources
+Errors & Exception handling is an expansive topic.
+Here, we have covered examples of the kinds of exception scenarios that you are most likely to face.
+More fundamentally, you also need to weigh up xref:concept-docs:durability-replication-failure-considerations.adoc[concepts of durability].
+
+Diagnostic methods are available to check on the xref:health-check.adoc[health of the cluster].
+// , and the xref:tracing-from-the-sdk.adoc[health of the network].
+
+Logging methods are dependent upon the platform and SDK used.
+We offer xref:collecting-information-and-logging.adoc[recommendations and practical examples].
+
+// We have a xref:ref:error-codes.adoc[listing of error messages], with some pointers to what to do when you encounter them.
+

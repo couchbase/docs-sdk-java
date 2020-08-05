@@ -8,10 +8,7 @@ The 3.0 API breaks the existing 2.0 APIs in order to provide a number of improve
 Collections and Scopes are introduced.
 The Document class and structure has been completely removed from the API, and the returned value is now `Result`.
 Retry behaviour is more proactive, and lazy bootstrapping moves all error handling to a single place.
-Individual behaviour changes across services are explained here.
-
-
-include::partial$beta-warning.adoc[]
+Individual behavior changes across services are explained here.
 
 
 include::6.5@sdk:shared:partial$migration.adoc[tag=intro]
@@ -21,7 +18,6 @@ include::6.5@sdk:shared:partial$migration.adoc[tag=terms]
 
 As an example here is a KeyValue document fetch:
 
-// change to $Your_language
 [source,java]
 ----
 GetResult getResult = collection.get("key", getOptions().timeout(Duration.ofSeconds(3));
@@ -29,7 +25,6 @@ GetResult getResult = collection.get("key", getOptions().timeout(Duration.ofSeco
 
 Compare this to a N1QL query:
 
-// change to $Your_language
 [source,java]
 ----
 QueryResult queryResult = cluster.query("select 1=1", queryOptions().timeout(Duration.ofSeconds(3));
@@ -49,7 +44,7 @@ The Java SDK 3.x is available to download from the same resources as the previou
 In addition, a `zip` file is available with the required jars.
 Please see the xref:sdk-release-notes.adoc[Release Notes] for up-to-date information.
 
-IMPORTANT: Java SDK 3.x has a minimum required Java version of 8, altough we recommend running the latest stable version (i.e. at the time of writing JDK 11) with the highest patch version available.
+IMPORTANT: Java SDK 3.x has a minimum required Java version of 8, although we recommend running the latest LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
 
 Note that the transitive dependency list has changed.
 As a refresher, Java SDK 2 depended on the following artifacts:
@@ -145,7 +140,7 @@ The reason why you can pass in a specific authenticator is that you can also use
 include::example$Migrating.java[tag=certauth,indent=0]
 ----
 
-Please see the xref:howtos:authentication.adoc[documentation on certificate-based authentication] for detailed information on how to configure this properly.
+Please see the xref:howtos:sdk-authentication.adoc[documentation on certificate-based authentication] for detailed information on how to configure this properly.
 
 
 == Connection Lifecycle
@@ -289,9 +284,9 @@ As an example, consider the javadoc for the `Collection.get` API:
 ...
 ----
 
-All of these exceptions extend `CouchbaseException`, but both the `TimeoutException` and the `DocumentNotFoundException` can be caught individually if specific logic should be executed to handle them.
+These exceptions extend `CouchbaseException`, but both the `TimeoutException` and the `DocumentNotFoundException` can be caught individually if specific logic should be executed to handle them.
 
-=== Proactive retry
+=== Proactive Retry
 
 One reason why the APIs do not expose a long list of exceptions is that it now retries as many operations as it can if it can do so safely.
 This depends on the type of operation (idempotent or not), in which state of processing it is (already dispatched or not), and what the actual response code is if it arrived already.
@@ -385,7 +380,7 @@ In addition, the datastructure APIs have been renamed and moved:
 
 There are two important API changes:
 
-* On the request side, overloads have been massively reduced and moved under a `Options` block
+* On the request side, overloads have been reduced and moved under a `Options` block
 * On the response side, the return types have been unified.
 
 The signatures now look very similar.
@@ -425,6 +420,7 @@ NOTE: Operations which cannot be performed on JSON documents have been moved to 
 These operations include `append`, `prepend`, `increment`, and `decrement` (previously called `counter` in SDK 2).
 These operations should only be used against non-json data.
 The same functionality is available through `mutateIn` on JSON documents.
+
 
 === Query
 
@@ -511,6 +507,14 @@ Exception in thread "main" com.couchbase.client.core.error.ParsingFailedExceptio
 ----
 
 Not only does it throw a `CouchbaseException`, it also tries to map it to a specific exception type and include extensive contextual information for a better troubleshooting experience.
+
+==== DSL Deprecation
+
+The fluent API feature in SDK 2 was found not to scale well for larger queries, nor for SQL++.
+For these reasons it is not amongst the features carried over to SDK 3.0.
+
+In most cases, a simple string statement is the best replacement.
+
 
 === Analytics
 

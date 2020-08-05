@@ -1,7 +1,7 @@
 = Choosing an API
 :navtitle: Choosing an API
 :page-topic-type: howto
-:page-aliases: ROOT:async-programming,ROOT:batching-operations,multiple-apis
+:page-aliases: ROOT:async-programming,ROOT:batching-operations,multiple-apis,ROOT:documents-bulk,ROOT:observables,6.5@server:developer-guide:async-clients
 
 [abstract]
 The Java SDK offers efficient, non-blocking alternatives to the regular blocking API. This page outlines the different options with their drawbacks and benefits.
@@ -55,7 +55,7 @@ You can access this API by using the `async()` accessor methods both on the bloc
 include::example$AsyncOperations.java[tag=access-async]
 ----
 
-We recommend using this API only if you are either writing integration code for higher level concurrency mechanisms or you really ned the last drop of performance. In all other cases, the blocking API (for simplicity) or the reactive API (for richness in operators) is likely the better choice.
+We recommend using this API only if you are either writing integration code for higher level concurrency mechanisms or you really need the last drop of performance. In all other cases, the blocking API (for simplicity) or the reactive API (for richness in operators) is likely the better choice.
 
 == Batching
 The SDK itself does not provide explicit APIs for batching, because using the reactive mechanisms it allows you to build batching code applied to your use case much better than a generic implementation could in the first place.
@@ -87,7 +87,7 @@ If you want to separate out failures from completions, one way would be to use s
 include::example$AsyncOperations.java[tag=split-bulk]
 ----
 
-If the result succeeds the side-effect method `doOnNext` is used to store it into the `successfulResults` and if the operation fails we are utilizing the same operator as before (`onErrorResume`) to on the one hand store it in the `erroredResults` map but then also to ignore it for the overall sequence.
+If the result succeeds the side-effect method `doOnNext` is used to store it into the `successfulResults` and if the operation fails we are utilizing the same operator as before (`onErrorResume`) to store it in the `erroredResults` map -- but then also to ignore it for the overall sequence.
 
 Finally, it is also possible to retry individual failures before giving up. The built-in retry mechanisms help with this:
 

@@ -4,13 +4,18 @@
 
 [abstract]
 Features available in different SDK versions, and compatibility between Server and SDK.
+Plus notes on Cloud, networks, and AWS Lambda.
 
-include::ref:partial$beta-warning.adoc[]
+The 3.0 SDK requires Java 8 or later to be installed, earlier versions will not work. 
+_Java 11 is recommended_, which has various enhancements like lambda local variable type inference, profiling tools, and updated security features. 
+Most of the flavors available will do, although we may only provide support for OpenJDK and Oracle JDK going forward. 
+The Java SDK _has not been tested (and is not supported on) Java 12 or later_.
+
 
 == Couchbase Version/SDK Version Matrix
 
 Couchbase SDKs are tested against a variety of different environments to ensure both backward and forward compatibility with different versions of Couchbase Server.
-The matrix below denotes the version of Couchbase Server, the version of the .NET SDK and whether the SDK is:
+The matrix below denotes the version of Couchbase Server, the version of the Java SDK and whether the SDK is:
 
 * ✖ *Unsupported*: This combination is not tested, and is not within the scope of technical support if you have purchased a support agreement.
 * ◎ *Compatible*: This combination has been tested previously, and should be compatible.
@@ -24,7 +29,13 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 |===
 | | SDK 2.4, 2.5 | SDK 2.6 | SDK 2.7  | SDK 3.0 
 
-| *Server 5.0-5.5*
+| *Server 5.0*
+| *✔*
+| *✔*
+| *✔*
+| *◎*
+
+| *Server 5.5*
 | *✔*
 | *✔*
 | *✔*
@@ -47,9 +58,102 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 Note the https://www.couchbase.com/support-policy[End of Life dates^] for Couchbase Server and SDK versions.
 See the notes there for Support details.
 
+
+[#jdk-compat]
+== JDK Version Compatibility
+
+The Java SDK is tested with Oracle JDK and OpenJDK.
+Other JDK implementations might work but are not tested and are unsupported.
+We recommend running the latest LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
+
+We only support LTS versions of Oracle JDK and OpenJDK.
+Other versions, such as JDK 12, may work -- _but they are not tested and they are not supported_.
+
+The following JDK releases are supported:
+
+* https://adoptopenjdk.net/[OpenJDK 11 with HotSpot JVM] (recommended)
+* https://www.oracle.com/java/technologies/javase-jdk11-downloads.html[Oracle JDK 11 (recommended)]
+* https://adoptopenjdk.net/[OpenJDK 1.8 with HotSpot JVM]
+* https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html[Oracle JDK 1.8]
+
+Please make sure you run on one of the latest patch releases, since they provide stability improvements and security fixes in general.
+
+
 == Couchbase Feature Availability Matrix
 
-TBI
+.Couchbase Server and SDK Supported Version Matrix
+|===
+| | Server 5.0, 5.1, & 5.5 | Server 6.0 | Server 6.5
 
+| Enhanced Durability
+3+| All SDK versions
+
+| Durable Writes 
+2+| Not Supported
+| Since 3.0
+
+| Analytics
+| DP in 5.5 with 2.6
+2+| Since 2.7
+
+| Distributed ACID Transactions
+2+| Not Supported
+| Since 3.0
+
+| Collections
+2+| Not Supported
+| Developer Preview in 6.5, SDK 3.0
+
+|===
+
+include::6.5@sdk:shared:partial$network-requirements.adoc[]
+   
+
+[#spring-compat]
+== Spring Data Couchbase Compatibility
+
+https://projects.spring.io/spring-data-couchbase/[Spring Data Couchbase^] uses the Java SDK underneath and as a result is also provides different compatibilities with Couchbase Server.
+The following table provides an overview.
+
+.Recommended Spring Data Couchbase per Server Version Matrix
+[#table_spring_versions]
+|===
+| | SDC 3.x | SDC 4.0 & 4.1
+
+| _Status >_
+| _SDK 2.x only_
+| _New Features, Active Development_
+
+| *Server 5.x*
+| SDK 2.x
+| *Not Compatible*
+
+| *Server 6.0*
+| SDK 2.x
+| *Recommended*
+
+| *Server 6.5*
+| SDK 2.x
+| *Recommended*
+|===
+
+NOTE: Check the Spring Data Couchbase's compile dependencies -- older versions may link an out-of-date version of the Java SDK in their dependencies list, although a supported version should be in the `updates`.
+Please make sure that you are using a supported version of the Couchbase Java SDK, prefereably the latest version, which will contain any available bug fixes.
+Using the latest Spring Data Couchbase should ensure that this is so.
+
+[CAUTION]
+.Reactor Core Version
+====
+SpringBoot may set the io.projectreactor version at an earlier virsion than the one needed by the current version of https://search.maven.org/artifact/com.couchbase.client/core-io/2.0.7/jar[Couchbase JVM Core IO]. 
+In case of errors, override with Core IO's preferred version, e.g.:
+
+----
+<dependency>
+    <groupId>io.projectreactor</groupId>
+    <artifactId>reactor-core</artifactId>
+    <version>3.3.5.RELEASE</version>
+</dependency>
+----
+====
 
 include::6.5@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]

@@ -5,21 +5,30 @@ import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.ReactiveCollection;
 import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.kv.GetResult;
+import com.couchbase.transactions.TransactionDurabilityLevel;
 import com.couchbase.transactions.TransactionGetResult;
 import com.couchbase.transactions.TransactionResult;
 import com.couchbase.transactions.Transactions;
 import com.couchbase.transactions.config.TransactionConfigBuilder;
 import com.couchbase.transactions.deferred.TransactionSerializedContext;
+import com.couchbase.transactions.error.TransactionCommitAmbiguous;
 import com.couchbase.transactions.error.TransactionFailed;
 import com.couchbase.transactions.log.IllegalDocumentState;
 import com.couchbase.transactions.log.LogDefer;
+import com.couchbase.transactions.log.TransactionCleanupAttempt;
+import com.couchbase.transactions.log.TransactionCleanupEndRunEvent;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
+
+import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 // #end::imports[]
 
 public class TransactionsExample {
@@ -36,13 +45,22 @@ public class TransactionsExample {
 
         // Create the single Transactions object
         Transactions transactions = Transactions.create(cluster, TransactionConfigBuilder.create()
-                // The configuration can be altered here, but in most cases the defaults are fine.
+                // The configuration can be altered here, but in most cases
+                // the defaults are fine.
                 .build());
         // #end::init[]
 
         TransactionsExample.cluster = cluster;
         TransactionsExample.collection = collection;
         TransactionsExample.transactions = transactions;
+    }
+
+    static void config() {
+        // #tag::config[]
+        Transactions transactions = Transactions.create(cluster, TransactionConfigBuilder.create()
+                .durabilityLevel(TransactionDurabilityLevel.PERSIST_TO_MAJORITY)
+                .build());
+        // #end::config[]
     }
 
     static void create() {
@@ -59,9 +77,16 @@ public class TransactionsExample {
                 // will be committed anyway.
                 ctx.commit();
             });
+        } catch (TransactionCommitAmbiguous e) {
+            // The application will of course want to use its own logging rather
+            // than System.err
+            System.err.println("Transaction possibly committed");
+
+            for (LogDefer err : e.result().log().logs()) {
+                System.err.println(err.toString());
+            }
         } catch (TransactionFailed e) {
-            // System.err is used for example, log failures to your own logging system
-            System.err.println("Transaction " + e.result().transactionId() + " failed");
+            System.err.println("Transaction did not reach commit point");
 
             for (LogDefer err : e.result().log().logs()) {
                 System.err.println(err.toString());
@@ -86,11 +111,16 @@ public class TransactionsExample {
                             .then(ctx.commit());
 
         }).doOnError(err -> {
-            if (err instanceof TransactionFailed) {
-                for (LogDefer e : ((TransactionFailed) err).result().log().logs()) {
-                    // System.err is used for example, log failures to your own logging system
-                    System.err.println(err.toString());
-                }
+            if (err instanceof TransactionCommitAmbiguous) {
+                System.err.println("Transaction possibly committed: ");
+            }
+            else {
+                System.err.println("Transaction failed: ");
+            }
+
+            for (LogDefer e : ((TransactionFailed) err).result().log().logs()) {
+                // System.err is used for example, log failures to your own logging system
+                System.err.println(err.toString());
             }
         });
 
@@ -103,34 +133,41 @@ public class TransactionsExample {
     static void examples() {
         // #tag::examples[]
         try {
-            transactions.run((ctx) -> {
+            TransactionResult result = transactions.run((ctx) -> {
                 // Inserting a doc:
-                String docId = "aDocument";
-                ctx.insert(collection, docId, JsonObject.create());
+                ctx.insert(collection, "doc-a", JsonObject.create());
 
                 // Getting documents:
                 // Use ctx.getOptional if the document may or may not exist
-                Optional<TransactionGetResult> docOpt = ctx.getOptional(collection, docId);
+                Optional<TransactionGetResult> docOpt =
+                        ctx.getOptional(collection, "doc-a");
 
-                // Use ctx.get if the document should exist, and the transaction will fail if not
-                TransactionGetResult doc = ctx.get(collection, docId);
+                // Use ctx.get if the document should exist, and the transaction
+                // will fail if it does not
+                TransactionGetResult docA = ctx.get(collection, "doc-a");
 
                 // Replacing a doc:
-                TransactionGetResult anotherDoc = ctx.get(collection, "anotherDoc");
-                // TransactionGetResult is immutable, so get its content as a mutable JsonObject
-                JsonObject content = anotherDoc.contentAs(JsonObject.class);
+                TransactionGetResult docB = ctx.get(collection, "doc-b");
+                // TransactionGetResult is immutable, so get its content as a
+                // mutable JsonObject
+                JsonObject content = docB.contentAs(JsonObject.class);
                 content.put("transactions", "are awesome");
-                ctx.replace(anotherDoc, content);
+                ctx.replace(docB, content);
 
                 // Removing a doc:
-                TransactionGetResult yetAnotherDoc = ctx.get(collection, "yetAnotherDoc");
-                ctx.remove(yetAnotherDoc);
+                TransactionGetResult docC = ctx.get(collection, "doc-c");
+                ctx.remove(docC);
 
                 ctx.commit();
             });
+        } catch (TransactionCommitAmbiguous e) {
+            System.err.println("Transaction possibly committed");
+
+            for (LogDefer err : e.result().log().logs()) {
+                System.err.println(err.toString());
+            }
         } catch (TransactionFailed e) {
-            // System.err is used for example, log failures to your own logging system
-            System.err.println("Transaction " + e.result().transactionId() + " failed");
+            System.err.println("Transaction did not reach commit point");
 
             for (LogDefer err : e.result().log().logs()) {
                 System.err.println(err.toString());
@@ -144,29 +181,34 @@ public class TransactionsExample {
         Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
             return
                     // Inserting a doc:
-                    ctx.insert(collection.reactive(), "aDoc", JsonObject.create())
+                    ctx.insert(collection.reactive(), "doc-a", JsonObject.create())
 
                             // Getting and replacing a doc:
-                            .then(ctx.get(collection.reactive(), "anotherDoc"))
-                            .flatMap(doc -> {
-                                JsonObject content = doc.contentAs(JsonObject.class);
+                            .then(ctx.get(collection.reactive(), "doc-b"))
+                            .flatMap(docB -> {
+                                JsonObject content = docB.contentAs(JsonObject.class);
                                 content.put("transactions", "are awesome");
-                                return ctx.replace(doc, content);
+                                return ctx.replace(docB, content);
                             })
 
                             // Getting and removing a doc:
-                            .then(ctx.get(collection.reactive(), "yetAnotherDoc"))
+                            .then(ctx.get(collection.reactive(), "doc-c"))
                             .flatMap(doc -> ctx.remove(doc))
 
                             // Committing:
                             .then(ctx.commit());
 
         }).doOnError(err -> {
-            if (err instanceof TransactionFailed) {
-                for (LogDefer e : ((TransactionFailed) err).result().log().logs()) {
-                    // System.err is used for example, log failures to your own logging system
-                    System.err.println(err.toString());
-                }
+            if (err instanceof TransactionCommitAmbiguous) {
+                System.err.println("Transaction possibly committed: ");
+            }
+            else {
+                System.err.println("Transaction failed: ");
+            }
+
+            for (LogDefer e : ((TransactionFailed) err).result().log().logs()) {
+                // System.err is used for example, log failures to your own logging system
+                System.err.println(err.toString());
             }
         });
 
@@ -345,20 +387,69 @@ public class TransactionsExample {
         // #end::concurrency[]
     }
 
-    static void rollback() {
-        // #tag::rollback[]
-        transactions.run((ctx) -> {
-            ctx.insert(collection, "docId", JsonObject.create());
-
-            Optional<TransactionGetResult> docOpt = ctx.getOptional(collection, "requiredDoc");
-            if (docOpt.isPresent()) {
-                ctx.remove(docOpt.get());
-                ctx.commit();
-            } else {
-                ctx.rollback();
+    static void cleanupEvents() {
+        // #tag::cleanup-events[]
+        cluster.environment().eventBus().subscribe(event -> {
+            if (event instanceof TransactionCleanupAttempt
+                    || event instanceof TransactionCleanupEndRunEvent) {
+                // log this event
             }
         });
+        // #end::cleanup-events[]
+    }
+
+    static void rollback() {
+        final int costOfItem = 10;
+
+        // #tag::rollback[]
+        transactions.run((ctx) -> {
+            TransactionGetResult customer = ctx.get(collection, "customer-name");
+
+            if (customer.contentAsObject().getInt("balance") < costOfItem) {
+                ctx.rollback();
+            }
+            // else continue transaction
+        });
         // #end::rollback[]
+    }
+
+    static void rollbackCause() {
+        final int costOfItem = 10;
+
+        // #tag::rollback-cause[]
+        class BalanceInsufficient extends RuntimeException {}
+
+        try {
+            transactions.run((ctx) -> {
+                TransactionGetResult customer = ctx.get(collection, "customer-name");
+
+                if (customer.contentAsObject().getInt("balance") < costOfItem) {
+                    throw new BalanceInsufficient();
+                }
+                // else continue transaction
+            });
+        } catch (TransactionCommitAmbiguous e) {
+            // This exception can only be thrown at the commit point, after the
+            // BalanceInsufficient logic has been passed, so there is no need to
+            // check getCause here.
+            System.err.println("Transaction possibly committed");
+            for (LogDefer err : e.result().log().logs()) {
+                System.err.println(err.toString());
+            }
+        } catch (TransactionFailed e) {
+            if (e.getCause() instanceof BalanceInsufficient) {
+                // Re-raise the error
+                throw (RuntimeException) e.getCause();
+            }
+            else {
+                System.err.println("Transaction did not reach commit point");
+
+                for (LogDefer err : e.result().log().logs()) {
+                    System.err.println(err.toString());
+                }
+            }
+        }
+        // #end::rollback-cause[]
     }
 
     static void deferredCommit1() {
@@ -383,7 +474,7 @@ public class TransactionsExample {
 
         } catch (TransactionFailed e) {
             // System.err is used for example, log failures to your own logging system
-            System.err.println("Transaction " + e.result().transactionId() + " failed");
+            System.err.println("Transaction did not reach commit point");
 
             for (LogDefer err : e.result().log().logs()) {
                 System.err.println(err.toString());
@@ -401,7 +492,7 @@ public class TransactionsExample {
 
         } catch (TransactionFailed e) {
             // System.err is used for example, log failures to your own logging system
-            System.err.println("Transaction " + e.result().transactionId() + " failed");
+            System.err.println("Transaction did not reach commit point");
 
             for (LogDefer err : e.result().log().logs()) {
                 System.err.println(err.toString());
@@ -419,13 +510,31 @@ public class TransactionsExample {
 
         } catch (TransactionFailed e) {
             // System.err is used for example, log failures to your own logging system
-            System.err.println("Transaction " + e.result().transactionId() + " failed");
+            System.err.println("Transaction did not reach commit point");
 
             for (LogDefer err : e.result().log().logs()) {
                 System.err.println(err.toString());
             }
         }
         // #end::defer3[]
+    }
+
+    static void configExpiration(byte[] encoded) {
+        // #tag::config-expiration[]
+        Transactions transactions = Transactions.create(cluster, TransactionConfigBuilder.create()
+                .expirationTime(Duration.ofSeconds(120))
+                .build());
+        // #end::config-expiration[]
+    }
+
+    static void configCleanup(byte[] encoded) {
+        // #tag::config-cleanup[]
+        Transactions transactions = Transactions.create(cluster, TransactionConfigBuilder.create()
+                .cleanupClientAttempts(false)
+                .cleanupLostAttempts(false)
+                .cleanupWindow(Duration.ofSeconds(120))
+                .build());
+        // #end::config-cleanup[]
     }
 
     static void concurrentOps() {
@@ -479,6 +588,78 @@ public class TransactionsExample {
         }).block();
         // #end::concurrentOps[]
     }
+
+    static void completeErrorHandling() {
+        // #tag::full-error-handling[]
+        try {
+            TransactionResult result = transactions.run((ctx) -> {
+                // ... transactional code here ...
+            });
+
+            // The transaction definitely reached the commit point. Unstaging
+            // the individual documents may or may not have completed
+
+            if (result.unstagingComplete()) {
+                // Operations with non-transactional actors will want
+                // unstagingComplete() to be true.
+                cluster.query(" ... N1QL ... ",
+                        queryOptions()
+                                .consistentWith(result.mutationState()));
+
+                String documentKey = "a document key involved in the transaction";
+                GetResult getResult = collection.get(documentKey);
+            }
+            else {
+                // This step is completely application-dependent.  It may
+                // need to throw its own exception, if it is crucial that
+                // result.unstagingComplete() is true at this point.
+                // (Recall that the asynchronous cleanup process will
+                // complete the unstaging later on).
+            }
+        }
+        catch (TransactionCommitAmbiguous err) {
+            // The transaction may or may not have reached commit point
+            System.err.println("Transaction returned TransactionCommitAmbiguous and" +
+                    " may have succeeded, logs:");
+
+            // Of course, the application will want to use its own logging rather
+            // than System.err
+            err.result().log().logs().forEach(log -> System.err.println(log.toString()));
+        }
+        catch (TransactionFailed err) {
+            // The transaction definitely did not reach commit point
+            System.err.println("Transaction failed with TransactionFailed, logs:");
+            err.result().log().logs().forEach(log -> System.err.println(log.toString()));
+        }
+        // #end::full-error-handling[]
+    }
+
+    static void completeLogging() {
+        // #tag::full-logging[]
+        final Logger LOGGER = Logger.getLogger("transactions");
+
+        try {
+            TransactionResult result = transactions.run((ctx) -> {
+                // ... transactional code here ...
+            });
+        }
+        catch (TransactionCommitAmbiguous err) {
+            // The transaction may or may not have reached commit point
+            LOGGER.info("Transaction returned TransactionCommitAmbiguous and" +
+                    " may have succeeded, logs:");
+
+            // Of course, the application will want to use its own logging rather
+            // than System.err
+            err.result().log().logs().forEach(log -> LOGGER.info(log.toString()));
+        }
+        catch (TransactionFailed err) {
+            // The transaction definitely did not reach commit point
+            LOGGER.info("Transaction failed with TransactionFailed, logs:");
+            err.result().log().logs().forEach(log -> LOGGER.info(log.toString()));
+        }
+        // #end::full-logging[]
+    }
+
 }
 
 

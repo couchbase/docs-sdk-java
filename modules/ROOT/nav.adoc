@@ -7,21 +7,26 @@
 * xref:howtos:subdocument-operations.adoc[Sub-Document Operations]
 //  ** xref:howtos:sdk-xattr-example.adoc[Extended Attributes]
 * xref:howtos:n1ql-queries-with-sdk.adoc[Query]
-// * xref:howtos:analytics-using-sdk.adoc[Analytics]
+* xref:howtos:analytics-using-sdk.adoc[Analytics]
 //  ** xref:howtos:advanced-analytics-querying.adoc[Advanced Analytics Querying]
-// * xref:howtos:full-text-searching-with-sdk.adoc[Full Text Search]
-// * xref:howtos:view-queries-with-sdk.adoc[MapReduce Views]
+* xref:howtos:full-text-searching-with-sdk.adoc[Full Text Search]
+* xref:howtos:view-queries-with-sdk.adoc[MapReduce Views]
 
 .Advanced Data Operations
-* xref:howtos:concurrent-async-apis.adoc[Async & React APIs]
+* xref:howtos:concurrent-async-apis.adoc[Async & Reactive APIs]
+* xref:howtos:concurrent-document-mutations.adoc[Concurrent Document Mutations]
 * xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed ACID Transactions]
+* xref:howtos:transcoders-nonjson.adoc[Transcoders & Non-JSON]
+* xref:howtos:working-with-collections.adoc[Working with Collections DP]
 
 .Managing Couchbase
-* User Management
- ** xref:howtos:sdk-authentication.adoc[Authentication]
+// * User Management
 * xref:howtos:managing-connections.adoc[Managing Connections]
+** xref:howtos:sdk-authentication.adoc[Authentication]
+** xref:howtos:troubleshooting-cloud-connections.adoc[Troubleshooting Cloud Connections]
 
 .Errors & Diagnostics
+* xref:howtos:collecting-information-and-logging.adoc[Logging]
 * xref:howtos:health-check.adoc[Health Check]
 
 .Learn
@@ -49,8 +54,11 @@
 ** xref:concept-docs:rbac.adoc[RBAC]
 
 .References
-* https://docs.couchbase.com/sdk-api/couchbase-java[API Reference]
+* https://docs.couchbase.com/sdk-api/couchbase-java-client[API Reference]
 * xref:ref:client-settings.adoc[Client Settings]
+// * xref:ref:data-structures[Data Structures]
+* xref:ref:error-codes.adoc[Error Messages]
+* xref:ref:travel-app-data-model.adoc[Travel Sample Data Model]
 
 .Project Docs
 * xref:project-docs:sdk-release-notes.adoc[SDK Release Notes]
