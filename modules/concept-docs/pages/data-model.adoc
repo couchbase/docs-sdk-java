@@ -76,7 +76,7 @@ If the document changes between these two requests, the code retries up to the `
 If the return values of `put` and `remove` are never actually used, you could end up making a lot of unnecessary requests. 
 There's also the potential for exceptions if concurrent map updates are extremely frequent.
 
-[TIP}
+[TIP]
 ====
 For many use cases, the xref:howtos:subdocument-operations.adoc[Sub-Document API] will be a useful and possibly better altermative to `CouchbaseMap`.
 ====
