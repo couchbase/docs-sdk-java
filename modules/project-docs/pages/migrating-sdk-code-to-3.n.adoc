@@ -232,7 +232,7 @@ Here is a mapping table from the SDK 2 `Document` types to the new transcoder ty
 |`JsonDoubleDocument`            | `JsonTranscoder` (default)
 |`LegacyDocument`                | removed
 |`RawJsonDocument`               | `RawJsonTranscoder`
-|`SerializableDocument`          | removed
+|`SerializableDocument`          | `SerializableTranscoder`
 |`StringDocument`                | `RawStringTranscoder`
 |`ByteArrayDocument`             | `RawBinaryTranscoder`
 |`BinaryDocument`                | `RawBinaryTranscoder`
