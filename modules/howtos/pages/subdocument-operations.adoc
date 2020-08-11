@@ -404,8 +404,7 @@ include::6.5@sdk:shared:partial$sdk-xattr-overview.adoc[tag=extended_attributes]
     JsonObject docContent = JsonObject.create().put("body", "value");
 collection.mutateIn("doc-id", Arrays.asList(
             MutateInSpec.upsert("foo", "bar").xattr().createPath(),
-            MutateInSpec.replace("", docContent)),
-            MutateInOptions.mutateInOptions().storeSemantics(StoreSemantics.UPSERT)
+            MutateInSpec.replace("", docContent))
     );
 ----
 
