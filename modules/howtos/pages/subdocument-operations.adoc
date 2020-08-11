@@ -396,3 +396,18 @@ NOTE: Currently, paths cannot exceed 1024 characters, and cannot be more than 32
 
 
 include::6.5@sdk:shared:partial$sdk-xattr-overview.adoc[tag=extended_attributes]
+
+
+[source,java]
+.Full Document Example
+----
+    JsonObject docContent = JsonObject.create().put("body", "value");
+collection.mutateIn("doc-id", Arrays.asList(
+            MutateInSpec.upsert("foo", "bar").xattr().createPath(),
+            MutateInSpec.replace("", docContent))
+    );
+----
+
+The full document can be replaced using the Sub-Doc API. 
+In the above snippet, the full document is replaced, whilst xattrs are updated with the same command. 
+The empty `""` in `MutateInSpec.replace("", docContent)` represents the full document. 
