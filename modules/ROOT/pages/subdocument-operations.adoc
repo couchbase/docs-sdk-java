@@ -390,6 +390,12 @@ a quote or backslash) and then encapsulating it in backticks (`pass:c[`path`]`).
 
 NOTE: Currently, paths cannot exceed 1024 characters, and cannot be more than 32 levels deep.
 
+
+== Extended Attributes (XATTRs)
+
+Extended Attributes (XATTRs) are covered xref:sdk-xattr-overview.adoc#using-extended-attributes[on their own pages].
+
+
 == XDCR
 
 XDCR only replicates full documents.
