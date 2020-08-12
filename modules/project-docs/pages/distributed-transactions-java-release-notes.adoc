@@ -11,7 +11,104 @@ This page features the release notes for that library -- for release notes, down
 See the xref:6.5@server:learn:data/transactions.adoc[Distributed ACID Transactions concept doc] in the server documentation for details of how Couchbase implements transactions.
 The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Transactions HOWTO doc] walks you through all aspects of working with Distributed Transactions.
 
+== Distributed Transactions Java 1.1.0 (12 August 2020)
+This is the third release of Couchbase Distributed ACID Transactions for Java.
+It includes 24 bug-fixes and improvements (some internal improvements are not listed below).
+
+It is built on Couchbase java-client version 3.0.7, and requires Couchbase Server 6.6 or above.
+Note this is a change from the previous requirement for Couchbase Server 6.5.
+
+https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.1.0/[JavaDocs]
+
+=== Upgrading
+IMPORTANT: All existing users are _strongly_ recommended to read this section.
+
+Couchbase Server 6.6 adds crucial functionality for transactions.
+This functionality is so important to our isolation guarantees that we are making Couchbase Server 6.6 the new minimum supported version for Couchbase transactions, as of this release.
+
+In general we work hard to ensure that Couchbase software, including transactions, works seamlessly across all currently supported Couchbase Server releases, and that transactional releases are fully interopable with each other.
+For technical reasons, we were unable to achieve that goal for this release, and there are two compatibility rules that the user must understand in order to safely upgrade.
+
+These are the two compatibility rules:
+
+* This release requires Couchbase Server 6.6, it cannot run on 6.5.
+** Transactions that try to perform an insert will fail with `TransactionFailed`.
+* Previous releases are not fully forward-compatible with this release.  This release must not be run concurrently with a previous release.
+** In fact, the previous release must not be run at all, after this release has been run once.
+
+The suggested upgrade path is:
+
+* Upgrade the cluster fully from Couchbase Server 6.5 to 6.6.  
+This can be a live or offline upgrade.
+* Fully bring down the application running the previous release.  
+Make sure no such application instances are running.
+* Bring up the application running the new release.
+* Make sure to never bring up an application running the previous release.
+
+We have added forwards-compatibility features to the transactions protocol and software, with the intent that in the future, upgrading will be as seamless and simple as you expect from Couchbase.
+
+=== Headline Improvements
+* https://issues.couchbase.com/browse/TXNJ-125[TXNJ-125]: 
+Our transactions stages changes to a document alongside that document.
+In previous releases and Couchbase Server 6.5, this required creating an empty document to store inserts.
+Whilst these were not visible pre-commit to many parts of the Couchbase Data Platform, they were visible in some places -- including the UI.
+Couchbase Server 6.6 brings new functionality that allows these inserts to be fully committed, providing full Read Committed isolation for all mutations.
+
+=== Write-Write Conflict Improvements
+When a transaction (T1) tries to mutate a document that's in another transaction (T2), this is a write-write conflict.
+
+* https://issues.couchbase.com/browse/TXNJ-246[TXNJ-246]: 
+Write-write conflict has been tuned to backoff-and-retry much less aggressively, which will result in much less 'churn' and overhead.
+* https://issues.couchbase.com/browse/TXNJ-86[TXNJ-86]: 
+T1 previously had to backoff and retry until either T2 completed, or cleanup discovered it (with default settings, that can take up to a minute).
+Now, T1 can proceed to overwrite the document if it finds T2 has expired or completed.
+* https://issues.couchbase.com/browse/TXNJ-217[TXNJ-217]: 
+Performance improvement -- T1 now only fetches the T2-specific data from T2's Active Transaction Record (ATR), rather than the full document.
+
+=== Cleanup Improvements
+Creating the `Transactions` object creates a background thread performing cleanup, which scans for expired transactions created by any application on any bucket.
+
+* https://issues.couchbase.com/browse/TXNJ-208[TXNJ-208]: 
+If cleanup is still unable to cleanup a transaction after two hours, it will begin logging that failure at WARN level.
+If there is not a reasonable explanation for cleanup continuing to fail (such as a downed node that has not been failed-over), then users are encouraged to send these logs to Couchbase support.
+* https://issues.couchbase.com/browse/TXNJ-13[TXNJ-13]: 
+Performance improvement -- cleanup has been tuned to remove unnecessary writes.
+* https://issues.couchbase.com/browse/TXNJ-108[TXNJ-108]: 
+Cancel cleanup if a pending transaction is discovered to now be committed.
+This should not occur, and is simply a safety-check.
+* https://issues.couchbase.com/browse/TXNJ-229[TXNJ-229]: 
+Cleanup already checked that documents are in the expected state before cleaning them up, and now also uses CAS to verify that this is still the case when it gets to the cleanup point.
+* https://issues.couchbase.com/browse/TXNJ-240[TXNJ-240]: 
+Cleanup of documents is now done with durable writes.
+* https://issues.couchbase.com/browse/TXNJ-232[TXNJ-232]: 
+The expiry field inside an attempt now reflects time elapsed inside the transaction.
+
+=== API Impacting
+* https://issues.couchbase.com/browse/TXNJ-227[TXNJ-227]: 
+A runtime check is now performed to ensure the minimum required java-client version is used.
+This will cause the application to fast-fail at the point of creating the `Transactions` object, rather than failing with a less clear error when creating transactions.
+* https://issues.couchbase.com/browse/TXNJ-219[TXNJ-219]: 
+The `TransactionConfigBuilder` documentation stated that underlying Key-Value reads and writes would use kvTimeout and kvDurableTimeout from the configured environment if one is not specified.
+That was not being done, and now is.
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/TXNJ-237[TXNJ-237]: 
+A Scala bug with Class.getSimpleName meant the library could not be called from Scala.
+* https://issues.couchbase.com/browse/TXNJ-250[TXNJ-250]: 
+MAV reads should return post-transaction content on COMPLETED, not just COMMITTED.
+
+=== Reliability Improvements
+* https://issues.couchbase.com/browse/TXNJ-249[TXNJ-249]: 
+The documentation advises applications to not catch exceptions inside the lambda (and if they have to, to propagate them).
+This advice remains, but if it is not followed, now subsequent operations (including commit) will fail.
+This means we no longer rely on the application propagating errors to ensure that transactions work correctly.
+* https://issues.couchbase.com/browse/TXNJ-231[TXNJ-231]: 
+Rollback previously assumed that documents had not changed between them being staged and rolled back.
+That should be the case, but now CAS is used to confirm it.
+
+
 == Distributed Transactions Java 1.0.1 (19 June 2020)
+
 This is the second release of Couchbase Distributed ACID Transactions.
 
 It is built on Couchbase java-client version 3.0.5, and requires Couchbase Server 6.5 or above.
