@@ -21,7 +21,7 @@ Note this is a change from the previous requirement for Couchbase Server 6.5.
 https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.1.0/[JavaDocs]
 
 === Upgrading
-IMPORTANT: All existing users are strongly recommended to read this section.
+IMPORTANT: All existing users are _strongly_ recommended to read this section.
 
 Couchbase Server 6.6 adds crucial functionality for transactions.
 This functionality is so important to our isolation guarantees that we are making Couchbase Server 6.6 the new minimum supported version for Couchbase transactions, as of this release.
@@ -38,8 +38,10 @@ These are the two compatibility rules:
 
 The suggested upgrade path is:
 
-* Upgrade the cluster fully from Couchbase Server 6.5 to 6.6.  This can be a live or offline upgrade.
-* Fully bring down the application running the previous release.  Make sure no such application instances are running.
+* Upgrade the cluster fully from Couchbase Server 6.5 to 6.6.  
+This can be a live or offline upgrade.
+* Fully bring down the application running the previous release.  
+Make sure no such application instances are running.
 * Bring up the application running the new release.
 * Make sure to never bring up an application running the previous release.
 
