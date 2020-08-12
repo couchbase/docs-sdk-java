@@ -55,6 +55,7 @@
 
 .References
 * https://docs.couchbase.com/sdk-api/couchbase-java-client[API Reference]
+* https://docs.couchbase.com/sdk-api/couchbase-transactions-java/index.html?overview-summary.html[Txns API Reference]
 * xref:ref:client-settings.adoc[Client Settings]
 // * xref:ref:data-structures[Data Structures]
 * xref:ref:error-codes.adoc[Error Messages]
