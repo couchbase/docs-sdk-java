@@ -16,36 +16,38 @@ Distributed Transactions for Couchbase provide these semantics and features:
 * An isolation level of Read Committed, to support high performance and scalability.
 * A high-level and easy-to-use API that allows the developer to express what they want the transaction to do as a block of logic, while the library takes care of the details of error handling, including conflicts with other transactions.
 
-Please see xref:6.5@server:learn:data/transactions.adoc[our introduction to ACID Transactions] for a guide to the benefits and trade-offs of multi-document transactions.
+Please see xref:6.6@server:learn:data/transactions.adoc[our introduction to ACID Transactions] for a guide to the benefits and trade-offs of multi-document transactions.
 
 Below we show you how to create Transactions, step-by-step.
 You may also want to start with our https://github.com/couchbaselabs/couchbase-transactions-java-examples[transactions examples repository],
 which features useful downloadable examples of using Distributed Transactions.
 
-Javadocs are available https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.0.1/[online].
+Javadocs are available https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.1.0/[online].
 
 == Requirements
 
-* Couchbase Server 6.5 or above. 
-* Couchbase Java client 3.0.0 or above.  It is recommended to follow the transitive dependency for the transactions library from maven.
+* Couchbase Server 6.6 or above.
+* Couchbase Java client 3.0.7 or above.  It is recommended to follow the transitive dependency for the transactions library from maven.
 * NTP should be configured so nodes of the Couchbase cluster are in sync with time.
 * The application, if it is using xref:concept-docs:xattr.adoc[extended attributes (XATTRs)], must avoid using the XATTR field `txn`, which is reserved for Couchbase use.
 
 NOTE: If using a single node cluster (for example, during development), then note that the default number of replicas for a newly created bucket is 1.
 If left at this default, then all Key-Value writes performed at with durabiltiy will fail with a `DurabilityImpossibleException`.
 In turn this will cause all transactions (which perform all Key-Value writes durably) to fail.
-This setting can be changed via xref:6.5@server:manage:manage-buckets/create-bucket.adoc#couchbase-bucket-settings[GUI] or xref:6.5@server:cli:cbcli/couchbase-cli-bucket-create.adoc#options[command line].
+This setting can be changed via xref:6.6@server:manage:manage-buckets/create-bucket.adoc#couchbase-bucket-settings[GUI] or xref:6.6@server:cli:cbcli/couchbase-cli-bucket-create.adoc#options[command line].
 
 == Getting Started
 
 Couchbase transactions require no additional components or services to be configured. 
-Simply add the transactions library into your project. 
+Simply add the transactions library into your project.
+The latest version, as of August 2020, is 1.1.0.
+
 With Gradle this can be accomplished by modifying these sections of your build.gradle file like so:
 
 [source,gradle]
 ----
 dependencies {
-    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.0.1'
+    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.1.0'
 }
 ----
 
@@ -136,58 +138,70 @@ include::example$TransactionsExample.java[tag=examplesReactive,indent=0]
 ----
 
 [#mechanics]
-=== Transaction Mechanics at a High-Level
+== Transaction Mechanics
 While this document is focussed on presenting how transactions are used at the API level, it is useful to have a high-level understanding of the mechanics.
 Reading this section is completely optional.
 
-There are two main mechanics to understand.
-
-Recall that the application-provided lambda containing the transaction logic, may be run multiple times by the transactions library.
+Recall that the application-provided lambda (containing the transaction logic) may be run multiple times by the transactions library.
 Each such run is called an 'attempt' inside the overall transaction.
 
+=== Active Transaction Record Entries
 The first mechanic is that each of these attempts adds an entry to a metadata document in the Couchbase cluster.
-These metadata documents being with "_txn:atr-", and each can contain entries for multiple attempts.
-These metadata documents are viewable, and they should not be modified externally.
+These metadata documents:
+* Are named Active Transaction Records, or ATRs.
+* Are created and maintained automatically.
+* Begin with "_txn:atr-".
+* Each contain entries for multiple attempts.
+* Are viewable, and they should not be modified externally.
 
-Each attempt entry stores some metadata and, crucially, whether the attempt has committed or not.
-Attempt entries are more often called "ATR entries" after the ATRs (Active Transaction Records) they are stored in.
+Each such ATR entry stores some metadata and, crucially, whether the attempt has committed or not.
+In this way, the entry acts as the single point of truth for the transaction, which is essential for providing an 'atomic commit' during reads.
 
+=== Staged Mutations
 The second mechanic is that mutating a document inside a transaction, does not directly change the body of the document.
 Instead, the post-transaction version of the document is staged alongside the document (technically in its xref:concept-docs:xattr.adoc[extended attributes (XATTRs)]).
 In this way, all changes are invisible to all parts of the Couchbase Data Platform until the commit point is reached.
 
 These staged document changes effectively act as a lock against other transactions trying to modify the document, preventing write-write conflicts.
+
+=== Cleanup
 There are safety mechanisms to ensure that leftover staged changes from a failed transaction cannot block live transactions indefinitely.
+These include an asynchronous cleanup process that is started with the creation of the `Transactions` object, and scans for expired transactions created by any application, on all buckets.
 
+Note that if an application is not running, then this cleanup is also not running.
+
+The cleanup process is detailed below in <<Asynchronous Cleanup>>.
+
+=== Committing
 Only once the lambda has successfully run to conclusion, will the attempt be committed.
-This updates the ATR entry, which can be used as a signal by transactional actors as to whether to use the post-transaction version of a document from its XATTRs.
-Hence updating the ATR entry is effectively an atomic commit switch for the attempt (and by extension the transaction).
+This updates the attempt entry, which can be used as a signal by transactional actors as to whether to use the post-transaction version of a document from its XATTRs.
+Hence updating the ATR entry is effectively an 'atomic commit' switch for the transaction.
 
-Only after this atomic commit point is reached will the individual documents be committed (or "unstaged").
-This is only required for non-transactional actors.
-Transactional actors will begin reading the post-transactional version of documents as soon as the ATR entry is changed to committed.
+After this atomic commit point is reached, the individual documents be committed (or "unstaged").
+This provides an eventually consistent commit for non-transactional actors (including standard Key-Value reads and N1QL statements).
+Transactions will begin reading the post-transactional version of documents as soon as the ATR entry is changed to committed.
 
-=== Mutating Documents
+== Mutating Documents
 
-==== Replacing
+=== Replacing
 
 Replacing a document requires a `ctx.get()` call first.
 This is necessary to ensure that the document is not involved in another transaction.
 (If it is, then the transaction will handle this, generally by rolling back what has been done so far, and retrying the lambda.)
 
-.With the asynchronous API:
+.With the synchronous API:
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=replace,indent=0]
 ----
 
-.Synchronous API:
+.Asynchronous API:
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=replaceReactive,indent=0]
 ----
 
-==== Removing
+=== Removing
 
 As with replaces, removing a document requires a `ctx.get()` call first.
 
@@ -203,13 +217,7 @@ include::example$TransactionsExample.java[tag=removeReactive,indent=0]
 include::example$TransactionsExample.java[tag=remove,indent=0]
 ----
 
-==== Inserting
-
-As above, mutations currently rely on having an existing document to stage their changes alongside.
-For inserts, an existing document does not exist, so the protocol currently creates an empty, but visible, marker document.
-Transactional actors will ignore this marker document until the commit point is reached, but non-transaction actors will be able to view it (though its body is empty).
-
-The forthcoming Couchbase Server 6.6 release will resolve this by instead creating an invisible "shadow document" for staging.
+=== Inserting
 
 .With the asynchronous API:
 [source,java]
@@ -222,7 +230,7 @@ include::example$TransactionsExample.java[tag=insert,indent=0]
 include::example$TransactionsExample.java[tag=insertReactive,indent=0]
 ----
 
-=== Getting Documents
+== Getting Documents
 
 There are two ways to get a document, `get` and `getOptional`:
 
@@ -241,7 +249,7 @@ Gets will 'read your own writes', e.g. this will succeed:
 include::example$TransactionsExample.java[tag=getReadOwnWrites,indent=0]
 ----
 
-=== Committing
+== Committing
 
 Committing is automatic: if there is no explicit call to `ctx.commit()` at the end of the transaction logic callback, and no exception is thrown, it will be committed.
 
@@ -252,19 +260,18 @@ With the asynchronous API, if you leave off the explicit call to `commit` then y
 include::example$TransactionsExample.java[tag=commit,indent=0]
 ----
 
-As described above, as soon as the transaction is committed, all its changes will be atomically visible to transactional actors.
+As described above, as soon as the transaction is committed, all its changes will be atomically visible to reads from other transactions.
 The changes will also be committed (or "unstaged") so they are visible to non-transactional actors, in an eventually consistent fashion.
 
 Commit is final: after the transaction is committed, it cannot be rolled back, and no further operations are allowed on it.
+
+An asynchronous cleanup process ensures that once the transaction reaches the commit point, it will be fully committed - even if the application crashes.
 
 == A Full Transaction Example
 
 Let's pull together everything so far into a more real-world example of a transaction.
 
-This example is based on the Game Simulation sample bucket, which can be installed in the _Couchbase Admin UI_ through *Settings -> Sample Buckets*.
-(The bucket does not have to be installed to run the sample though, the sample will create any required documents).
-
-The sample data simulates that of a simple Massively Multiplayer Online game, and includes documents representing:
+This example simulates a simple Massively Multiplayer Online game, and includes documents representing:
 
 * Players, with experience points and levels;
 * Monsters, with hitpoints, and the number of experience points a player earns from their death.
@@ -272,6 +279,7 @@ The sample data simulates that of a simple Massively Multiplayer Online game, an
 In this example, the player is dealing damage to the monster.  
 The player’s client has sent this instruction to a central server, where we’re going to record that action.
 We’re going to do this in a transaction, as we don’t want a situation where the monster is killed, but we fail to update the player’s document with the earned experience.
+
 (Though this is just a demo - in reality, the game would likely live with the small risk and limited impact of this, rather than pay the performance cost for using a transaction.)
 
 A complete version of this example is available on our https://github.com/couchbaselabs/couchbase-transactions-java-examples[GitHub transactions examples page].
@@ -286,6 +294,9 @@ include::example$TransactionsExample.java[tag=full,indent=0]
 This release of transactions for Couchbase requires a degree of co-operation from the application.
 Specifically, the application should ensure that non-transactional writes (such as key-value writes or N1QL UPDATES) are never done concurrently with transactional writes, on the same document.
 
+This requirement is to ensure that the strong Key-Value performance of Couchbase was not compromised.
+A key philosophy of our transactions is that you 'pay only for what you use'.
+
 If two such writes *do* conflict then the transactional write will 'win', overwriting the non-transactional write.
 
 Note this only applies to _writes_.
@@ -298,7 +309,7 @@ To help detect that this co-operative requirement is fulfilled, the application 
 include::example$TransactionsExample.java[tag=concurrency,indent=0]
 ----
 
-These events will be raised in the advent of a non-transactional write being detected and overridden.
+These events will be raised in the event of a non-transactional write being detected and overridden.
 The event contains the key of the document involved, to aid the application with debugging.
 
 == Rollback
@@ -340,7 +351,9 @@ These errors include:
 * Attempting to remove or replace a document that does not exist.
 * Calling `ctx.get` on a document key that does not exist.
 
-IMPORTANT: Exceptions are crucial to transactions error handling, and it is preferable that you do not catch exceptions inside the lambda.
+IMPORTANT: Once one of these errors occurs, the current attempt is irrevocably failed (though the transaction may retry the lambda).
+It is not possible for the application to catch the failure and continue.
+Once a failure has occurred, all other operations tried in this attempt (including commit) will instantly fail.
 
 Transactions, as they are multi-stage and multi-document, also have a concept of partial success/failure.
 This is signalled to the application through the `TransactionResult.unstagingComplete()` method, described later.
@@ -480,6 +493,10 @@ include::example$TransactionsExample.java[tag=cleanup-events,indent=0]
 A `TransactionCleanupAttempt` event is raised when an expired transaction was found by this process, and a cleanup attempt was made.
 It contains whether that attempt was successful, along with any logs relevant to the attempt.
 
+In addition, if cleanup fails to cleanup a transaction that is more than two hours past expiry, it will raise the `TransactionCleanupAttempt` event at WARN level (rather than the default DEBUG).
+With most default configurations of the event-bus (see <<Logging>> below), this will cause that event to be logged somewhere visible to the application.
+If there is not a good reason for the cleanup to be failed (such as a downed node that has not yet been failed-over), then the user is encouraged to report the issue.
+
 == Logging
 
 To aid troubleshooting, each transaction maintains a list of log entries, which can be logged on failure like this:
@@ -582,16 +599,11 @@ Alternatively the transaction can be rolled back:
 include::example$TransactionsExample.java[tag=defer3,indent=0]
 ----
 
-As usual, once committed, the transactions library will make every effort to commit the transaction.
-Even if it expires (which throws `TransactionExpired` as usual), a background cleanup process will continue trying to commit.
-The same applies for rollback.
-
-
 The transaction expiry timer (which is configurable) will begin ticking once the transaction starts, and is not paused while the transaction is in a deferred state.
 
 
 == Further Reading
 
-* There’s plenty of explanation about how Transactions work in Couchbase in our xref:6.5@server:learn:data/transactions.adoc[Transactions documentation].
+* There’s plenty of explanation about how Transactions work in Couchbase in our xref:6.6@server:learn:data/transactions.adoc[Transactions documentation].
 * You can find further code examples on our https://github.com/couchbaselabs/couchbase-transactions-java-examples[transactions examples repository].
 

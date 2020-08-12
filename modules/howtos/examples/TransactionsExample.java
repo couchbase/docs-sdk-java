@@ -44,10 +44,7 @@ public class TransactionsExample {
         Collection collection = bucket.defaultCollection();
 
         // Create the single Transactions object
-        Transactions transactions = Transactions.create(cluster, TransactionConfigBuilder.create()
-                // The configuration can be altered here, but in most cases
-                // the defaults are fine.
-                .build());
+        Transactions transactions = Transactions.create(cluster);
         // #end::init[]
 
         TransactionsExample.cluster = cluster;
@@ -57,9 +54,10 @@ public class TransactionsExample {
 
     static void config() {
         // #tag::config[]
-        Transactions transactions = Transactions.create(cluster, TransactionConfigBuilder.create()
-                .durabilityLevel(TransactionDurabilityLevel.PERSIST_TO_MAJORITY)
-                .build());
+        Transactions transactions = Transactions.create(cluster,
+                TransactionConfigBuilder.create()
+                        .durabilityLevel(TransactionDurabilityLevel.PERSIST_TO_MAJORITY)
+                        .build());
         // #end::config[]
     }
 
@@ -148,8 +146,6 @@ public class TransactionsExample {
 
                 // Replacing a doc:
                 TransactionGetResult docB = ctx.get(collection, "doc-b");
-                // TransactionGetResult is immutable, so get its content as a
-                // mutable JsonObject
                 JsonObject content = docB.contentAs(JsonObject.class);
                 content.put("transactions", "are awesome");
                 ctx.replace(docB, content);
