@@ -142,7 +142,7 @@ update `default` SET sale_price = msrp * 0.75 WHERE msrp < 19.95;
 [#devguide_kvcore_get_generic]
 == Retrieving Documents
 
-FASTPATH: This section discusses retrieving documents using their IDs, or primary keys.
+This section discusses retrieving documents using their IDs, or primary keys.
 Documents can also be accessed using secondary lookups via xref:n1ql-query.adoc[N1QL queries] and xref:view-queries-with-sdk.adoc[MapReduce].
 Primary key lookups are performed using the key-value API, which simplifies use and increases performance (as applications may interact with the KV store directly, rather than a secondary index or query processor).
 
@@ -194,7 +194,7 @@ name, email = cb.retrieve_in('user:kingarthur', 'contact.name', 'contact.email')
 [#devguide_kvcore_counter_generic]
 == Counters
 
-You can atomically increment or decrement the numerical value of special counter document
+You can atomically increment or decrement the numerical value of a special counter document.
 
 NOTE: Do not increment or decrement counters if using XDCR.
 Within a single cluster the `incr()` is atomic, as is `decr()`; across XDCR however, if two clients connecting to two different (bidirectional) clusters issue `incr` concurrently, this may (and most likely will) result in the value only getting incremented once in total.
@@ -214,7 +214,7 @@ The example below (in Python) shows how to use counters:
 51L
 ----
 
-In the above example, a counter is created by using the [.api]`counter` Python method with an [.param]`initial` value.
+In the above example, a counter is created by using the `counter` Python method with an `initial` value.
 The initial value is the value the counter uses if the counter ID does not yet exist.
 
 Once created, the counter can be incremented or decremented atomically by a given _amount_ or _delta_.
@@ -229,7 +229,7 @@ Many SDKs will limit the _delta_ argument to the value of a _signed_ 64-bit inte
 
 xref:concurrent-mutations-cluster.adoc[CAS] values are not used with counter operations since counter operations are atomic.
 The intent of the counter operation is to simply increment the current server-side value of the document.
-If you wish to only increment the document if it is at a certain value, then you may use a normal [.api]`upsert` function with CAS:
+If you wish to only increment the document if it is at a certain value, then you may use a normal `upsert` function with CAS:
 
 [source,python]
 ----
@@ -240,6 +240,25 @@ if should_increment_value(value):
 ----
 
 You can also use xref:subdocument-operations.adoc#ul_fp2_2yw_mv[sub-document counter operations] to increment numeric values _within_ a document containing other content.
+
+=== Use Cases
+
+The SDK provides a high-level abstraction over the simple `incr()`/`decr()` of Couchbase Server's memcached binary protocol. 
+This enables you to work with counters using `get()` and `upsert()` operations -- allowing, _inter alia_, the use of durabelety options with the operations.
+You will find several ways of working with counters https://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.16/com/couchbase/client/java/Bucket.html#counter(java.lang.String,long)[in the API docs].
+
+The example below shows a counter being initialised, then being replaced using a `bucket.upsert()`:
+
+[source,java]
+----
+bucket.remove("countme");
+bucket.counter("countme", 1, 0); // init at 0, incr by 1 if exists
+System.out.println(bucket.counter("countme", 1).content()); // prints 1
+JsonLongDocument overrider = JsonLongDocument.create("countme", new Long(99));
+bucket.upsert(overrider);
+System.out.println("after increment: " + bucket.counter("countme", 1).content()); // prints 100
+----
+
 
 [#devguide_datastructures]
 == Datastructures - List, Map, Set, Queue
