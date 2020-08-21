@@ -106,6 +106,11 @@ Please refer to their respective documentation sections to learn more.
 
 If you want to copy and paste to run the full example, here it is:
 
+[{tabs}] 
+==== 
+Local Couchbase Server::
++ 
+-- 
 [source,java]
 ----
 import com.couchbase.client.java.*;
@@ -134,6 +139,20 @@ class StartUsing {
 
 }
 ----
+--
+
+Couchbase Cloud Sample::
++
+--
+If you are connecting to https://docs.couchbase.com/cloud/index.html[Couchbase Cloud], be sure to get the correct endpoint as well as user, password, and `couchbasecloudbucket`.
+
+[source,java]
+----
+include::devguide:example$java/src/main/java/com/couchbase/devguide/CloudConnect.java []
+----
+--
+====
+
 
 == Additional Resources
 
