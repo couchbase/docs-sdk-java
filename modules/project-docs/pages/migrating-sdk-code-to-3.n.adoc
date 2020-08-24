@@ -277,11 +277,9 @@ As an example, consider the javadoc for the `Collection.get` API:
 
 [source]
 ----
-...
    * @throws DocumentNotFoundException the given document id is not found in the collection.
    * @throws TimeoutException if the operation times out before getting a result.
    * @throws CouchbaseException for all other error reasons (acts as a base type and catch-all).
-...
 ----
 
 These exceptions extend `CouchbaseException`, but both the `TimeoutException` and the `DocumentNotFoundException` can be caught individually if specific logic should be executed to handle them.
