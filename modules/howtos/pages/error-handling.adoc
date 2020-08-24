@@ -151,7 +151,7 @@ It also means, when migrating to the new SDK API, you may observe a longer perio
 
 NOTE: Operations are retried by default as described above with the default `BestEffortRetryStrategy`.
 Like in SDK 2 you can configure fail-fast retry strategies to not retry certain or all operations. 
-The `RetryStrategy` interface has been extended heavily in SDK 3 -- please see the xref:howtos:error-handling.adoc[error handling documentation].
+The `RetryStrategy` interface has been extended heavily in SDK 3 -- please see the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/CommonOptions.html#retryStrategy-com.couchbase.client.core.retry.RetryStrategy-[API documentation].
 
 ////
 When migrating your SDK 2 exception handling code to SDK 3, make sure to wrap every call with a catch for `CouchbaseException` (or let it bubble up immediately).
