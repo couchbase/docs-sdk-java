@@ -103,6 +103,66 @@ include::example$ErrorHandling.scala[tag=query,indent=0]
 Analytics works in an identical fashion, raising an `AnalyticsError`.
 ////
 
+
+// temporary borrowed content from migration guide, until sme time available
+
+== Exception Handling
+
+How to _handle_ exceptions is unchanged from SDK 2. 
+You should still use `try/catch` on the blocking APIs and the corresponding reactive/async methods on the other APIs. 
+There have been changes made in the following areas:
+
+- Exception hierachy and naming.
+- Proactive retry where possible.
+
+
+=== Exception hierachy
+
+The exception hierachy is now flat and unified under a `CouchbaseException`. 
+Each `CouchbaseException` has an associated `ErrorContext` which is populated with as much information as possible and then dumped alongside the stack trace if an error happens.
+
+Here is an example of the error context if a N1QL query is performed with an invalid syntax (i.e. `select 1= from`):
+
+[source]
+----
+Exception in thread "main" com.couchbase.client.core.error.ParsingFailedException: Parsing of the input failed {"completed":true,"coreId":1,"errors":[{"code":3000,"message":"syntax error - at from"}],"idempotent":false,"lastDispatchedFrom":"127.0.0.1:62253","lastDispatchedTo":"127.0.0.1:8093","requestId":3,"requestType":"QueryRequest","retried":11,"retryReasons":["ENDPOINT_TEMPORARILY_NOT_AVAILABLE","BUCKET_OPEN_IN_PROGRESS"],"service":{"operationId":"9111b961-e585-42f2-9cab-e1501da7a40b","statement":"select 1= from","type":"query"},"timeoutMs":75000,"timings":{"dispatchMicros":15599,"totalMicros":1641134}}
+----
+
+The expectation is that the application catches the `CouchbaseException` and deals with it as an unexpected error
+(e.g. logging with subsequent bubbling up of the exception or failing).
+In addition to that, each method exposes exceptions that can be caught separately if needed. 
+As an example, consider the javadoc for the `Collection.get` API:
+
+[source]
+----
+   * @throws DocumentNotFoundException the given document id is not found in the collection.
+   * @throws TimeoutException if the operation times out before getting a result.
+   * @throws CouchbaseException for all other error reasons (acts as a base type and catch-all).
+----
+
+These exceptions extend `CouchbaseException`, but both the `TimeoutException` and the `DocumentNotFoundException` can be caught individually if specific logic should be executed to handle them.
+
+=== Proactive Retry
+
+One reason why the APIs do not expose a long list of exceptions is that the SDK now retries as many operations as it can if it can do so safely.
+This depends on the type of operation (idempotent or not), in which state of processing it is (already dispatched or not), and what the actual response code is if it arrived already. 
+As a result, many transient cases -- such as locked documents, or temporary failure -- are now retried by default and should less often impact applications.
+It also means, when migrating to the new SDK API, you may observe a longer period of time until an error is returned by default.
+
+NOTE: Operations are retried by default as described above with the default `BestEffortRetryStrategy`.
+Like in SDK 2 you can configure fail-fast retry strategies to not retry certain or all operations. 
+The `RetryStrategy` interface has been extended heavily in SDK 3 -- please see the xref:howtos:error-handling.adoc[error handling documentation].
+
+////
+When migrating your SDK 2 exception handling code to SDK 3, make sure to wrap every call with a catch for `CouchbaseException` (or let it bubble up immediately).
+You can likely remove your user-level retry code for temporary failures, backpressure exception, and so on. 
+One notable exception from this is the `CasMismatchException`, which is still thrown since it requires more app-level code to handle (most likely identical to SDK 2).
+////
+
+
+// end temporary borrowed content 
+
+
 == Additional Resources
 Errors & Exception handling is an expansive topic.
 Here, we have covered examples of the kinds of exception scenarios that you are most likely to face.
