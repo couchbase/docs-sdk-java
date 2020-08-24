@@ -27,6 +27,9 @@ NOTE: When using a Couchbase version earlier than 6.5, you must create a valid B
 
 The `ClusterManager` interface may be used to create and delete buckets from the Couchbase cluster.
 It is instantiated through the `Cluster.Buckets()` method.
+Refer to https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Bucket.html[the API `Bucket` documentation] -- 
+and to its https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/AsyncBucket.html[Async counterpart] -- 
+for further details.
 
 ////
 [source,golang,indent=0]
@@ -83,8 +86,7 @@ include::devguide:example$go/provisioning-resources-buckets.go[tag=removeBucket]
 
 include::6.5@sdk:shared:partial$flush-info-pars.adoc[tag=flush-intro]
 
-You can flush a bucket in the SDK by using the `Flush` method:
-
+You can flush a bucket in the SDK by using the `FlushBucketOptions` -- see the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/manager/bucket/FlushBucketOptions.html[API docs].
 ////
 [source,golang,indent=0]
 ----
@@ -96,19 +98,18 @@ The `Flush` operation may fail if the bucket does not have flush enabled, in tha
 
 == Collection Management
 
-This is a xref:6.5@server:developer-preview:collections/collections-overview.adoc[Developer Preview feature], see the https://pkg.go.dev/github.com/couchbase/gocb/v2?tab=doc#Bucket.Collections[API doc].
+This is a xref:6.5@server:developer-preview:collections/collections-overview.adoc[Developer Preview feature], see the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/manager/collection/CollectionManager.html[API doc].
 
-////
+
 == Index Management
 
 In general,you will rarely need to work with Index Managers from the SDK.
 For those occasions when you do, please see the relevant API docs:
 
-* QueryIndexManager -- https://pkg.go.dev/github.com/couchbase/gocb/v2?tab=doc#Cluster.QueryIndexes[`Cluster.QueryIndexes()`];
-* AnalyticsIndexManager -- https://pkg.go.dev/github.com/couchbase/gocb/v2?tab=doc#Cluster.AnalyticsIndexes[`Cluster.AnalyticsIndexes()`];
-* SearchIndexManager -- https://pkg.go.dev/github.com/couchbase/gocb/v2?tab=doc#Cluster.SearchIndexes[`Cluster.SearchIndexes()`];
-* ViewIndexManager -- https://pkg.go.dev/github.com/couchbase/gocb/v2?tab=doc#Bucket.ViewIndexes[`Bucket.ViewIndexes()`].
-////
+* QueryIndexManager -- https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/manager/query/QueryIndexManager.html[`QueryIndexManager(AsyncQueryIndexManager async)`];
+* AnalyticsIndexManager -- https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/manager/analytics/AnalyticsIndexManager.html[`AnalyticsIndexManager(Cluster cluster)`];
+* SearchIndexManager -- https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/manager/search/SearchIndexManager.html[`SearchIndexManager(AsyncSearchIndexManager asyncIndexManager)`];
+* ViewIndexManager -- https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/manager/view/ViewIndexManager.html[`ViewIndexManager(AsyncViewIndexManager async)`].
 
 // * Query
 
