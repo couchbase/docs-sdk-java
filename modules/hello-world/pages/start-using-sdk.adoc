@@ -144,7 +144,7 @@ class StartUsing {
 Couchbase Cloud Sample::
 +
 --
-If you are connecting to https://docs.couchbase.com/cloud/index.html[Couchbase Cloud], be sure to get the correct endpoint as well as user, password, and `couchbasecloudbucket`.
+If you are connecting to https://docs.couchbase.com/cloud/index.html[Couchbase Cloud], be sure to get the correct endpoint as well as user, password, and `couchbasecloudbucket`  -- and see the <<cloud-connections, Cloud section>>, below.
 
 [source,java]
 ----
@@ -152,6 +152,15 @@ include::devguide:example$java/src/main/java/com/couchbase/devguide/CloudConnect
 ----
 --
 ====
+
+
+== Cloud Connections
+
+For developing on Couchbase Cloud, if you are not working from the same _Availability Zone_, refer to the follorwing:
+
+* Notes on xref:ref:client-settings.adoc#constrained-network-environments[Constrained Network Environments], 
+* xref:project-docs:compatibility.adoc#network-requirements[Network Requirements], 
+* If you have a consumer-grade router which has problems with DNS-SRV records review our xref:howtos:troubleshooting-cloud-connections.adoc#troubleshooting-host-not-found[Troubleshooting Guide].
 
 
 == Additional Resources
