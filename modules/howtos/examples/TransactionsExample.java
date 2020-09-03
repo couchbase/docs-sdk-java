@@ -1,5 +1,6 @@
 // #tag::imports[]
 
+import com.couchbase.client.core.cnc.Event;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
@@ -57,7 +58,10 @@ public class TransactionsExample {
         Transactions transactions = Transactions.create(cluster,
                 TransactionConfigBuilder.create()
                         .durabilityLevel(TransactionDurabilityLevel.PERSIST_TO_MAJORITY)
-                        .build());
+                        // #tag::config_warn[]
+                        .logOnFailure(true, Event.Severity.WARN)
+                        // #end::config_warn[]
+                    .build());
         // #end::config[]
     }
 
@@ -75,6 +79,7 @@ public class TransactionsExample {
                 // will be committed anyway.
                 ctx.commit();
             });
+        // #tag::logging[]
         } catch (TransactionCommitAmbiguous e) {
             // The application will of course want to use its own logging rather
             // than System.err
@@ -90,6 +95,7 @@ public class TransactionsExample {
                 System.err.println(err.toString());
             }
         }
+        // #tag::logging[]
         // #end::create[]
     }
 
@@ -107,7 +113,7 @@ public class TransactionsExample {
                             // The commit call is optional - if you leave it off,
                             // the transaction will be committed anyway.
                             .then(ctx.commit());
-
+        // #tag::async_logging[]
         }).doOnError(err -> {
             if (err instanceof TransactionCommitAmbiguous) {
                 System.err.println("Transaction possibly committed: ");
@@ -121,6 +127,8 @@ public class TransactionsExample {
                 System.err.println(err.toString());
             }
         });
+        // #end::async_logging[]
+
 
         // Normally you will chain this result further and ultimately subscribe.  For simplicity, here we just block
         // on the result.

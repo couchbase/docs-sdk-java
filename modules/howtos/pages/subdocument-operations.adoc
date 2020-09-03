@@ -401,11 +401,7 @@ include::6.5@sdk:shared:partial$sdk-xattr-overview.adoc[tag=extended_attributes]
 [source,java]
 .Full Document Example
 ----
-    JsonObject docContent = JsonObject.create().put("body", "value");
-collection.mutateIn("doc-id", Arrays.asList(
-            MutateInSpec.upsert("foo", "bar").xattr().createPath(),
-            MutateInSpec.replace("", docContent))
-    );
+include::example$SubDocument.java[tag=full_doc_replace,indent=0]
 ----
 
 The full document can be replaced using the Sub-Doc API. 

@@ -20,14 +20,14 @@ As an example here is a KeyValue document fetch:
 
 [source,java]
 ----
-GetResult getResult = collection.get("key", getOptions().timeout(Duration.ofSeconds(3));
+include::example$Migrating.java[tag=simpleget,indent=0]
 ----
 
 Compare this to a N1QL query:
 
 [source,java]
 ----
-QueryResult queryResult = cluster.query("select 1=1", queryOptions().timeout(Duration.ofSeconds(3));
+include::example$Migrating.java[tag=queryparameterized,indent=0]
 ----
 
 include::6.5@sdk:shared:partial$migration.adoc[tag=terms2]
@@ -73,12 +73,6 @@ The fundamental semantics of the `CouchbaseEnvironment` from SDK 2 remain the sa
 The `CouchbaseEnvironment` has been renamed to `ClusterEnvironment` and can be customized through a builder:
 
 [source,java]
-----
-// SDK 2 custom KV timeout
-CouchbaseEnvironment env = DefaultCouchbaseEnvironment
-  .builder()
-  .kvTimeout(TimeUnit.SECONDS.toMillis(5))
-  .build();
 ----
 
 [source,java]
@@ -157,14 +151,6 @@ In SDK 2, you connected, opened a bucket, performed a KV op, and disconnected li
 
 [source,java]
 ----
-Cluster cluster = CouchbaseCluster.create("127.0.0.1");
-cluster.authenticate("user", "pass");
-Bucket bucket = cluster.openBucket("travel-sample");
-
-JsonDocument getResult = bucket.get("airline_10");
-
-cluster.disconnect();
-----
 
 Here is the SDK 3 equivalent:
 
@@ -198,12 +184,6 @@ By default, all KV APIs transcode to and from JSON -- you can also provide java 
 `JsonObject` and `JsonArray` are still available, like in SDK 2:
 
 [source,java]
-----
-// SDK 2 upsert and get
-JsonDocument upsertResult = bucket.upsert(
-  JsonDocument.create("mydoc-id", JsonObject.empty())
-);
-JsonDocument getResult = bucket.get("mydoc-id");
 ----
 
 [source,java]
@@ -397,9 +377,6 @@ Compare SDK 2 and SDK 3 custom timeout setting:
 
 [source,java]
 ----
-// SDK 2 custom timeout
-bucket.get("mydoc-id", 5, TimeUnit.SECONDS);
-----
 
 [source,java]
 ----
@@ -426,13 +403,6 @@ N1QL querying is now available at the `Cluster` level instead of the bucket leve
 
 [source,java]
 ----
-// SDK 2 simple query
-N1qlQueryResult queryResult = bucket.query(N1qlQuery.simple("select * from `travel-sample` limit 10"));
-for (N1qlQueryRow row : queryResult) {
-  JsonObject value = row.value();
-  // ...
-}
-----
 
 [source,java]
 ----
@@ -443,18 +413,6 @@ Note that there is no `N1qlQuery.simple` any more -- parameter option have been 
 The following shows how to do named and positional parameters in SDK 2, and their SDK 3 counterparts:
 
 [source,java]
-----
-// SDK 2 named parameters
-bucket.query(N1qlQuery.parameterized(
-  "select * from bucket where type = $type", 
-  JsonObject.create().put("type", "airport")
-));
-
-// SDK 2 positional parameters
-bucket.query(N1qlQuery.parameterized(
-  "select * from bucket where type = $1", 
-  JsonArray.from("airport")
-));
 ----
 
 [source,java]
@@ -488,11 +446,6 @@ This makes error handling much easier in both the blocking and non-blocking case
 While in SDK 2 you had to manually check for errors (otherwise you'd get an empty row collection):
 
 [source,java]
-----
-N1qlQueryResult queryResult = bucket.query(N1qlQuery.simple("select 1="));
-if (!queryResult.errors().isEmpty()) {
-  // errors contain [{"msg":"syntax error - at end of input","code":3000}]
-}
 ----
 
 In SDK 3 the top level `query` method will throw an exception:
@@ -533,12 +486,6 @@ Also, errors will now be thrown as top level exceptions and it is no longer nece
 
 [source,java]
 ----
-// SDK 2 error check
-AnalyticsQueryResult analyticsQueryResult = b1.query(AnalyticsQuery.simple("select * from foo"));
-if (!analyticsQueryResult.errors().isEmpty()) {
-  // errors contain [{"msg":"Cannot find dataset foo in dataverse Default nor an alias with name foo! (in line 1, at column 15)","code":24045}]
-}
-----
 
 [source]
 ----
@@ -557,17 +504,6 @@ Also, similar to the other query APIs, it is now available at the `Cluster` leve
 Here is a SDK 2 Search query with some options, and its SDK 3 equivalent:
 
 [source,java]
-----
-//  SDK 2 search query
-SearchQueryResult searchResult = bucket.query(new SearchQuery(
-  "indexname", 
-  SearchQuery.queryString("airports")).limit(5).fields("a", "b", "c"),
-  2,
-  TimeUnit.SECONDS
-);
-for (SearchQueryRow row : searchResult.hits()) {
-  // ...
-}
 ----
 
 [source,java]
@@ -612,16 +548,6 @@ The API has stayed mostly the same, the most important change is that `staleness
 Compare this SDK 2 view query with its SDK 3 equivalent:
 
 [source,java]
-----
-// SDK 2 view query
-ViewResult query = bucket.query(
-  ViewQuery.from("design", "view").limit(5).skip(2), 
-  10, 
-  TimeUnit.SECONDS
-);
-for (ViewRow row : query) {
-  // ...
-}
 ----
 
 [source,java]

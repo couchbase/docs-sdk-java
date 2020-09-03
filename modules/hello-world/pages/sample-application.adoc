@@ -66,69 +66,21 @@ Look at `User.java` to see some of the pieces necessary in most applications, su
 
 [source,java]
 ----
-@Service
-public class User {
-
-    private final TokenService jwtService;
-
-    @Autowired
-    public User(TokenService jwtService) {
-        this.jwtService = jwtService;
-    }
-
-    static final String USERS_COLLECTION_NAME = "users";
-    static final String FLIGHTS_COLLECTION_NAME = "flights";
+include::example$sample_application.java[tag=sample_application_1,indent=0];
 ----
 
 Creating a user shows the typical security concerns, with salted password hashes, as well as the mundane but essential business of using the KV interface to `insert` the username into the database:
 
 [source,java]
 ----
-    public Result<Map<String, Object>> createLogin(final Bucket bucket, final String username, final String password,
-            DurabilityLevel expiry) {
-        String passHash = BCrypt.hashpw(password, BCrypt.gensalt());
-        JsonObject doc = JsonObject.create()
-            .put("type", "user")
-            .put("name", username)
-            .put("password", passHash);
-        InsertOptions options = insertOptions();
-        if (expiry.ordinal() > 0) {
-            options.durability(expiry);
-        }
-        String narration = "User account created in document " + username + " in bucket " + bucket.name()
-                + (expiry.ordinal() > 0 ? ", with expiry of " + expiry.ordinal() + "s" : "");
-
-        try {
-            bucket.defaultCollection().insert(username, doc, options);
-            return Result.of(
-                    JsonObject.create().put("token", jwtService.buildToken(username)).toMap(),
-                    narration);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new AuthenticationServiceException("There was an error creating account");
-        }
-    }
+include::example$sample_application.java[tag=sample_application_2,indent=0];
 ----
 
 Here, the _flights_ array, containing the flight IDs, is converted to actual objects:
 
 [source,java]
 ----
-        Collection flightsCollection = bucket.defaultCollection();
-        List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < flights.size(); i++) {
-            String flightId = flights.getString(i);
-            GetResult res;
-            try {
-                res = flightsCollection.get(flightId);
-            } catch (DocumentNotFoundException ex) {
-                throw new RuntimeException("Unable to retrieve flight id " + flightId);
-            }
-            Map<String, Object> flight = res.contentAsObject().toMap();
-            results.add(flight);
-        }
-        return results;
-    }
+include::example$sample_application.java[tag=sample_application_3,indent=0];
 ----
 
 

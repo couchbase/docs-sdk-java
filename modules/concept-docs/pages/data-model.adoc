@@ -65,7 +65,7 @@ You can create a CouchbaseMap like this:
 
 [source,java]
 ----
-Map<String,String> myMap = collection.map(String.class);
+include::example$data_model.java[tag=data_model_1,indent=0];
 ----
 
 === Limitations

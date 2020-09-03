@@ -503,28 +503,14 @@ To aid troubleshooting, each transaction maintains a list of log entries, which 
 
 [source,java]
 ----
-} catch (TransactionFailed e) {
-    // 'yourLogger' is the logging approach your application uses
-    yourLogger.warning("Transaction {} failed:", e.result().transactionId());
-    for (LogDefer err : e.result().log().logs()) {
-        yourLogger.info(err.toString());
-    }
-}
+include::example$TransactionsExample.java[tag=logging,indent=0]
 ----
 
 or for the asynchronous API:
 
 [source,java]
 ----
-.doOnError(err -> {
-    if (error instanceof TransactionFailed) {
-        TransactionFailed err = (TransactionFailed) error;
-        yourLogger.warning("Transaction {} failed:", err.result().transactionId());
-        for (LogDefer e : err.result().log().logs()) {
-            yourLogger.info(err.toString());
-        }
-    }
-});
+include::example$TransactionsExample.java[tag=async_logging,indent=0]
 ----
 
 A failed transaction can involve dozens, even hundreds, of lines of logging, so the application may prefer to write failed transactions into a separate file.
@@ -533,7 +519,7 @@ For convenience there is also a config option that will automatically write this
 This will log all lines of any failed transactions, to `WARN` level:
 [source,java]
 ----
-TransactionConfigBuilder.create().logOnFailure(true, Event.Severity.WARN).build();
+include::example$TransactionsExample.java[tag=config_warn,indent=0]
 ----
 
 

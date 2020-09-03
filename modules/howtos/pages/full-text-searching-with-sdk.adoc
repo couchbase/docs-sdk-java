@@ -35,7 +35,6 @@ It takes the name of the index and the type of query  as required arguments and 
 Once a result returns you can iterate over the returned rows, and/or access the `SearchMetaData` associated with the query. 
 If something goes wrong during the execution of the search query, a subclass of the `CouchbaseException` will be thrown that also provides additional context on the operation:
 
-[source,java]
 ----
 Exception in thread "main" com.couchbase.client.core.error.IndexNotFoundException: Index not found {"completed":true,"coreId":1,"httpStatus":400,"idempotent":true,"lastDispatchedFrom":"127.0.0.1:53818","lastDispatchedTo":"127.0.0.1:8094","requestId":3,"requestType":"SearchRequest","service":{"indexName":"unknown-index","type":"search"},"status":"INVALID_ARGS","timeoutMs":75000,"timings":{"dispatchMicros":18289,"totalMicros":1359398}}
 ----

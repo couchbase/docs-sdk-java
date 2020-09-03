@@ -143,6 +143,16 @@ collection.mutateIn("customer123", Collections.singletonList(
 // #end::array-prepend[]
     }
 
+    static void full_doc_replaceFunc() {
+// #tag::full_doc_replace[]
+    JsonObject docContent = JsonObject.create().put("body", "value");
+    collection.mutateIn("doc-id", Arrays.asList(
+        MutateInSpec.upsert("foo", "bar").xattr().createPath(),
+        MutateInSpec.replace("", docContent))
+     );
+// #end::full_doc_replace[]
+    }
+
     static void createAndPopulateArrays() {
 // #tag::array-create[]
 collection.upsert("my_array", JsonArray.create());

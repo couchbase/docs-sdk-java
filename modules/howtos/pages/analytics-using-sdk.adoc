@@ -39,7 +39,6 @@ Let's break it down. An analytics query is always performed at the `Cluster` lev
 
 Once a result returns you can iterate the returned rows and/or accessing the `AnalyticsMetaData` associated with the query. If something goes wrong during the execution of the query, a derivate of the `CouchbaseException` will be thrown that also provides additional context on the operation:
 
-[source,java]
 ----
 Exception in thread "main" com.couchbase.client.core.error.ParsingFailureException: Parsing of the input failed {"completed":true,"coreId":1,"errors":[{"code":24000,"message":"Syntax error: In line 1 >>select 1=;<< Encountered \"=\" at column 9. "}], ... }
 ----

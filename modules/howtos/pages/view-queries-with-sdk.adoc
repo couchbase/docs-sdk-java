@@ -46,17 +46,7 @@ The structure of a `ViewRow` looks like this:
 
 [source,java]
 ----
-public class ViewRow {
-  public Optional<String> id() { /* ... */ }
-
-  public <T> Optional<T> keyAs(Class<T> target) { /* ... */ }
-
-  public <T> Optional<T> keyAs(TypeRef<T> target) { /* ... */ }
-
-  public <T> Optional<T> valueAs(Class<T> target) { /* ... */ }
-
-  public <T> Optional<T> valueAs(TypeRef<T> target) { /* ... */ }
-}
+include::example$Views.java[tag=view_rows_structure,indent=0];
 ----
 
 Both the `key` and the `value` can be converted into any target type, depending on how you wrote your view function. 

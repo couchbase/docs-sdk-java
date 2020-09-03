@@ -1,11 +1,14 @@
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.codec.TypeRef;
 import com.couchbase.client.java.view.DesignDocumentNamespace;
 import com.couchbase.client.java.view.ViewMetaData;
 import com.couchbase.client.java.view.ViewOptions;
 import com.couchbase.client.java.view.ViewResult;
 import com.couchbase.client.java.view.ViewRow;
 import com.couchbase.client.java.view.ViewScanConsistency;
+
+import java.util.Optional;
 
 import static com.couchbase.client.java.view.ViewOptions.viewOptions;
 
@@ -62,6 +65,21 @@ public class Views {
     }
 
   }
+
+  // #tag::view_row_structure[]
+  public class ViewRowExample {
+
+    public Optional<String> id() { Optional<String> result = null; /*  */ return result;}
+
+    public <T> Optional<T> keyAs(Class<T> target) { Optional<T>  result=null; /*  */ return result;}
+
+    public <T> Optional<T> keyAs(TypeRef<T> target) { Optional<T>  result=null; /*  */ return result;}
+
+    public <T> Optional<T> valueAs(Class<T> target) { Optional<T>  result=null; /*  */ return result;}
+
+    public <T> Optional<T> valueAs(TypeRef<T> target) { Optional<T>  result=null; /*  */ return result;}
+  }
+  // #end::view_row_structure[]
 
 
 }

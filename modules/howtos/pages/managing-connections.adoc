@@ -122,14 +122,7 @@ If the external ports are not the default, you can specify custom ports using th
 // include::example$ManagingConnections.java[tag=seednodes,indent=0]
 [source,java]
 ----
-int customKvPort = 1234;
-int customManagerPort = 2345;
-Set<SeedNode> seedNodes = new HashSet<>(Arrays.asList(
-  SeedNode.create("127.0.0.1",
-      Optional.of(customKvPort),
-      Optional.of(customManagerPort))));
-
-Cluster cluster = Cluster.connect(seedNodes, "username", "password");
+include::example$managing_connections.java[tag=managing_connections_5,indent=0];
 ----
 
 TIP: In a deployment that uses multi-dimensional scaling, a custom KV port is only applicable for nodes running the KV service.
@@ -237,24 +230,14 @@ If you are working at the _Cluster_ level, then add to the `cluster()` in the xr
 
 [source,java]
 ----
-Cluster cluster = Cluster.connect("127.0.0.1", "username", "password");
-cluster.waitUntilReady(Duration.ofSeconds(10));
-Bucket bucket = cluster.bucket("travel-sample");
-Collection collection = bucket.defaultCollection();
+include::example$managing_connections.java[tag=managing_connections_8,indent=0];
 ----
 
 Or more fully:
 
 [source,java]
 ----
-public class ClusterExample {
-  public static void main(String... args) throws Exception {
-    Cluster cluster = Cluster.connect("127.0.0.1", "username", "password");
-    cluster.waitUntilReady(Duration.ofSeconds(10));
-    Bucket bucket = cluster.bucket("travel-sample");
-    Collection collection = bucket.defaultCollection();
-  }
-}
+include::example$managing_connections.java[tag=managing_connections_9,indent=0];
 ----
 
 If you are working at the _Bucket_ level, then the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Bucket.html#waitUntilReady-java.time.Duration-[Bucket-level `waitUntilReady`] does the same as the Cluster-level version,

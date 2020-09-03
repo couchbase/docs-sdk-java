@@ -107,74 +107,20 @@ Look at `User.java` to see some of the pieces necessary in most applications, su
 
 [source,java]
 ----
-@Service
-public class User {
-
-    private final TokenService jwtService;
-
-    @Autowired
-    public User(TokenService jwtService) {
-        this.jwtService = jwtService;
-    }
-
-    static final String USERS_COLLECTION_NAME = "users";
-    static final String FLIGHTS_COLLECTION_NAME = "flights";
+include::example$working_with_collections.java[tag=working_with_collections_1,indent=0];
 ----
 
 Here we work on the `scope.collection(USERS_COLLECTION_NAME)` to `insert` the newly-created user document:
 
 [source,java]
 ----
-    public Result<Map<String, Object>> createLogin(final Scope scope, final String username, final String password,
-            DurabilityLevel expiry) {
-        String passHash = BCrypt.hashpw(password, BCrypt.gensalt());
-        JsonObject doc = JsonObject.create()
-            .put("type", "user")
-            .put("name", username)
-            .put("password", passHash);
-        InsertOptions options = insertOptions();
-        if (expiry.ordinal() > 0) {
-            options.durability(expiry);
-        }
-        String narration = "User account created in document " + username + " in bucket " + scope.bucketName()
-                + " scope " + scope.name() + " collection " + USERS_COLLECTION_NAME
-                + (expiry.ordinal() > 0 ? ", with expiry of " + expiry.ordinal() + "s" : "");
-
-        try {
-            scope.collection(USERS_COLLECTION_NAME).insert(username, doc);
-            return Result.of(
-                    JsonObject.create().put("token", jwtService.buildToken(username)).toMap(),
-                    narration);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new AuthenticationServiceException("There was an error creating account");
-        }
-    }
+include::example$working_with_collections.java[tag=working_with_collections_2,indent=0];
 ----
 
 Here, the _flights_ array, retrieved from the `flightsCollection` and containing the flight IDs, is converted to actual objects:
 
 [source,java]
 ----
-        Collection flightsCollection = scope.collection(FLIGHTS_COLLECTION_NAME);
-        List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < flights.size(); i++) {
-            String flightId = flights.getString(i);
-            GetResult res;
-            try {
-                res = flightsCollection.get(flightId);
-            } catch (DocumentNotFoundException ex) {
-                throw new RuntimeException("Unable to retrieve flight id " + flightId);
-            }
-            Map<String, Object> flight = res.contentAsObject().toMap();
-            results.add(flight);
-        }
-        return results;
-    }
-
-}
+include::example$working_with_collections.java[tag=working_with_collections_3,indent=0];
 ----
-
-
-
 

@@ -5,11 +5,9 @@ import com.couchbase.client.core.diagnostics.PingResult;
 import com.couchbase.client.core.service.ServiceType;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.ClusterOptions;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.diagnostics.PingOptions;
-import com.couchbase.client.java.env.ClusterEnvironment;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -17,7 +15,7 @@ import java.util.Map;
 
 import static com.couchbase.client.java.diagnostics.PingOptions.pingOptions;
 
-public class HealthCheck {
+public class HealthCheckConcepts {
 
 	public static void main(String... args) {
 		Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");

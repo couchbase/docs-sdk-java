@@ -113,31 +113,7 @@ Local Couchbase Server::
 -- 
 [source,java]
 ----
-import com.couchbase.client.java.*;
-import com.couchbase.client.java.kv.*;
-import com.couchbase.client.java.json.*;
-import com.couchbase.client.java.query.*;
-
-class StartUsing {
-
-    public static void main(String... args) {
-        Cluster cluster = Cluster.connect("localhost", "username", "password");
-        Bucket bucket = cluster.bucket("bucket-name");
-        Collection collection = bucket.defaultCollection();
-
-        MutationResult upsertResult = collection.upsert(
-            "my-document",
-            JsonObject.create().put("name", "mike")
-        );
-        GetResult getResult = collection.get("my-document");
-        String name = getResult.contentAsObject().getString("name");
-        System.out.println(name); // name == "mike"
-
-        QueryResult result = cluster.query("select \"Hello World\" as greeting");
-        System.out.println(result.rowsAsObject());
-    }
-
-}
+include::example$StartUsing.java[tag=connect_local,indent=0]
 ----
 --
 

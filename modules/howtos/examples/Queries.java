@@ -2,6 +2,8 @@
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.*;
 import com.couchbase.client.java.json.*;
+import com.couchbase.client.java.kv.MutationResult;
+import com.couchbase.client.java.kv.MutationState;
 import com.couchbase.client.java.query.*;
 import org.reactivestreams.Subscription;
 import reactor.core.publisher.*;
@@ -62,6 +64,20 @@ class Queries {
         queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS)
       );
       // #end::scanconsistency[]
+    }
+
+    {
+      // #tag::scanconsistency_with[]
+      Bucket bucket = cluster.bucket("travel-sample");
+      Collection collection = bucket.defaultCollection();
+      MutationResult mr = collection.upsert("someDoc",JsonObject.create().put("name", "roi"));
+      MutationState mutationState = MutationState.from(mr.mutationToken().get());
+    
+      QueryOptions qo = QueryOptions.queryOptions().consistentWith(mutationState); 
+      QueryResult result = cluster.query(
+        "select raw meta().id from `bucket1` limit 100;",qo
+      );
+      // #end::scanconsistency_with[]
     }
 
     {
