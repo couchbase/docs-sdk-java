@@ -171,4 +171,4 @@ Older API references are linked from their respective sections in the xref:proje
 Couchbase welcomes community contributions to the Java SDK.
 The Java SDK source code is available on https://github.com/couchbaselabs/couchbase-jvm-clients[GitHub].
 
-If you are planing to use Spring Data Couchbase, see the xref:project-docs:compatibility.adoc#spring-compat[notes on version compatibility].
+If you are planning to use Spring Data Couchbase, see the xref:project-docs:compatibility.adoc#spring-compat[notes on version compatibility].
