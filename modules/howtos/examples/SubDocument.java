@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2020 Couchbase, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // #tag::imports[]
 import com.couchbase.client.core.error.subdoc.PathExistsException;
 import com.couchbase.client.core.msg.kv.DurabilityLevel;
@@ -141,6 +157,16 @@ collection.mutateIn("customer123", Collections.singletonList(
 
         // purchases.abandoned is now [18, 157, 49, 999]
 // #end::array-prepend[]
+    }
+
+    static void full_doc_replaceFunc() {
+// #tag::full_doc_replace[]
+    JsonObject docContent = JsonObject.create().put("body", "value");
+    collection.mutateIn("doc-id", Arrays.asList(
+        MutateInSpec.upsert("foo", "bar").xattr().createPath(),
+        MutateInSpec.replace("", docContent))
+     );
+// #end::full_doc_replace[]
     }
 
     static void createAndPopulateArrays() {

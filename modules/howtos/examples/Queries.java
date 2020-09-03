@@ -1,7 +1,25 @@
+/*
+ * Copyright (c) 2020 Couchbase, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // #tag::imports[]
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.*;
 import com.couchbase.client.java.json.*;
+import com.couchbase.client.java.kv.MutationResult;
+import com.couchbase.client.java.kv.MutationState;
 import com.couchbase.client.java.query.*;
 import org.reactivestreams.Subscription;
 import reactor.core.publisher.*;
@@ -65,10 +83,24 @@ class Queries {
     }
 
     {
+      // #tag::scanconsistency_with[]
+      Bucket bucket = cluster.bucket("travel-sample");
+      Collection collection = bucket.defaultCollection();
+      MutationResult mr = collection.upsert("someDoc",JsonObject.create().put("name", "roi"));
+      MutationState mutationState = MutationState.from(mr.mutationToken().get());
+    
+      QueryOptions qo = QueryOptions.queryOptions().consistentWith(mutationState); 
+      QueryResult result = cluster.query(
+        "select raw meta().id from `bucket1` limit 100;",qo
+      );
+      // #end::scanconsistency_with[]
+    }
+
+    {
       // #tag::clientcontextid[]
       QueryResult result = cluster.query(
         "select ...",
-        queryOptions().clientContextId("user-44" + UUID.randomUUID().toString())
+        queryOptions().clientContextId("user-44" + UUID.randomUUID())
       );
       // #end::clientcontextid[]
     }

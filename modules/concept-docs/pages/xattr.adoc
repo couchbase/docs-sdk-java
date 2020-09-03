@@ -14,9 +14,5 @@ include::6.5@sdk:shared:partial$sdk-xattr-overview.adoc[tag=virtual_extended_att
 
 [source,java]
 ----
-collection.lookupIn(
-    "id", 
-    Collections.singletonList(
-    LookupInSpec.get(LookupInMacro.EXPIRY_TIME).xattr())
-);
+include::example$XattrExample.java[tag=xattr_1,indent=0]
 ----

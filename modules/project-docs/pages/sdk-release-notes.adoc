@@ -211,10 +211,10 @@ The supported and tested dependencies for this release are:
 === Enhancements
 
 * http://issues.couchbase.com/browse/JCBC-1603[JCBC-1603], http://issues.couchbase.com/browse/JCBC-1606[JCBC-1606]:
-Exposed API to set the collections TTL.
+Exposed API to set the CollectionsExample TTL.
 CreateCollection CollectionSpec now includes `MaxTTL`.
 * http://issues.couchbase.com/browse/JCBC-1617[JCBC-1617]:
-Attempting to work with the collection manager on clusters where collections are not available (or enabled as a DP) will now result in a `FeatureNotAvailable` failure.
+Attempting to work with the collection manager on clusters where CollectionsExample are not available (or enabled as a DP) will now result in a `FeatureNotAvailable` failure.
 * http://issues.couchbase.com/browse/JVMCBC-830[JVMCBC-830]:
 Added more convenient overloads for SecurityConfig and CertAuth.
 These overloads initialize both the SecurityConfig and the CertificateAuthenticator directly from a KeyStore or TrustStore.

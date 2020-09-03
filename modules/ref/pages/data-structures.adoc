@@ -4,9 +4,6 @@
 [abstract]
 You can use complex data structures such as dictionaries and lists in Couchbase.
 
-// awaiting porting to 3.0
-
-////
 Data structures in Couchbase are similar in concept to data structures in the Java Collections Framework:
 
 See our xref:concept-docs:data-model.adoc[Data Model pages].
@@ -24,7 +21,7 @@ Add a key to the map.
 
 [source,java]
 ----
-bucket.mapAdd("map_id", "some_key", "value")
+include::example$DataStructuresExample.java[tag=data_structures_1,indent=0]
 ----
 
 | [.api]`mapRemove`
@@ -33,7 +30,7 @@ Remove a key from a map.
 
 [source,java]
 ----
-bucket.mapRemove("map_id", "some_key")
+include::example$DataStructuresExample.java[tag=data_structures_2,indent=0]
 ----
 
 | [.api]`mapGet`
@@ -42,7 +39,7 @@ Get an item from a map.
 
 [source,java]
 ----
-bucket.mapGet("map_id", "some_key", String.class) //=> value
+include::example$DataStructuresExample.java[tag=data_structures_3,indent=0]
 ----
 
 If the key is not found, a [.api]`PathNotFoundException` is raised.
@@ -53,7 +50,7 @@ Add an item to the _end_ of a list.
 
 [source,java]
 ----
-bucket.listAppend("list_id", 1234)
+include::example$DataStructuresExample.java[tag=data_structures_4,indent=0]
 ----
 
 | [.api]`listPrepend`
@@ -62,7 +59,7 @@ Add an item to the _beginning_ of a list.
 
 [source,java]
 ----
-bucket.listPrepend("list_id", "hello world")
+include::example$DataStructuresExample.java[tag=data_structures_5,indent=0]
 ----
 
 | [.api]`listRemove`
@@ -71,7 +68,7 @@ Remove a value from a list.
 
 [source,java]
 ----
-bucket.listRemove("list_id", 2)
+include::example$DataStructuresExample.java[tag=data_structures_6,indent=0]
 ----
 
 | [.api]`listSet`
@@ -80,7 +77,7 @@ Set an element at a specific index in the list.
 
 [source,java]
 ----
-bucket.listSet("list_id", 0, "first value")
+include::example$DataStructuresExample.java[tag=data_structures_7,indent=0]
 ----
 
 | [.api]`listGet`
@@ -89,7 +86,7 @@ Get an item from a list by its index.
 
 [source,java]
 ----
- bucket.listGet("list_id", 0, String.class)
+include::example$DataStructuresExample.java[tag=data_structures_8,indent=0]
 ----
 
 If the index is out of range, a [.api]`PathNotFoundException` will be thrown.
@@ -101,7 +98,7 @@ Add an item to a set, if the item does not yet exist in the set.
 
 [source,java]
 ----
-bucket.setAdd("set_id", "some_value")
+include::example$DataStructuresExample.java[tag=data_structures_9,indent=0]
 ----
 
 Note that a _set_ is just a list.
@@ -109,7 +106,7 @@ You can retrieve the entire set by simply using a full-document [.api]`get` oper
 
 [source,java]
 ----
-set = bucket.get("set_id").content()
+include::example$DataStructuresExample.java[tag=data_structures_10,indent=0]
 ----
 
 NOTE: Currently, you can only store primitive values in sets, such as strings, ints, and booleans.
@@ -120,7 +117,7 @@ Check if a value exists in the set.
 
 [source,java]
 ----
-bucket.setContains("set_id", "value")
+include::example$DataStructuresExample.java[tag=data_structures_11,indent=0]
 ----
 
 | [.api]`setRemove`
@@ -132,7 +129,7 @@ If the item did not exist beforehand, `null` is returned.
 
 [source,java]
 ----
-bucket.setRemove("set_id", "some_value")
+include::example$DataStructuresExample.java[tag=data_structures_12,indent=0]
 ----
 
 | [.api]`queuePush`
@@ -141,7 +138,7 @@ Add an item to the beginning of the queue.
 
 [source,java]
 ----
-bucket.queuePush("a_queue", "job123")
+include::example$DataStructuresExample.java[tag=data_structures_13,indent=0]
 ----
 
 Note that a queue is just a list.
@@ -153,7 +150,7 @@ Remove an item from the end of the queue and return it.
 
 [source,java]
 ----
-item = bucket.queuePop("a_queue") //=> "job123"
+include::example$DataStructuresExample.java[tag=data_structures_14,indent=0]
 ----
 
 If the queue is empty, then [.api]`null` is returned.
@@ -166,7 +163,7 @@ For lists, queues, and sets, this is the number of elements in the structure.
 
 [source,java]
 ----
-len = bucket.listSize('a_list') //=> 42
+include::example$DataStructuresExample.java[tag=data_structures_15,indent=0]
 ----
 |===
 
@@ -210,15 +207,7 @@ Example usage:
 
 [source,java]
 ----
-Map<String, String> favorites = new CouchbaseMap<String>("mapDocId", bucket);
-favorites.put("color", "Blue");
-favorites.put("flavor", "Chocolate");
-
-System.out.println(favorites); //=> {flavor=Chocolate, color=Blue}
-
-// What does the JSON document look like?
-System.out.println(bucket.get("mapDocId").content());
-        //=> {"flavor":"Chocolate","color":"Blue"}
+include::example$DataStructuresExample.java[tag=data_structures_16,indent=0]
 ----
 
 == CouchbaseArrayList
@@ -230,16 +219,7 @@ Example usage:
 
 [source,java]
 ----
-List<String> names = new CouchbaseArrayList<String>("listDocId", bucket);
-names.add("Alice");
-names.add("Bob");
-names.add("Alice");
-
-System.out.println(names); //=> [Alice, Bob, Alice]
-
-// What does the JSON document look like?
-System.out.println(bucket.get(JsonArrayDocument.create("listDocId")).content());
-        //=> ["Alice","Bob","Alice"]
+include::example$DataStructuresExample.java[tag=data_structures_17,indent=0]
 ----
 
 == CouchbaseArraySet
@@ -251,16 +231,7 @@ Example usage:
 
 [source,java]
 ----
-Set<String> uniqueNames = new CouchbaseArraySet<String>("setDocId", bucket);
-uniqueNames.add("Alice");
-uniqueNames.add("Bob");
-uniqueNames.add("Alice");
-
-System.out.println(uniqueNames); //=> [Alice, Bob]
-
-// What does the JSON document look like?
-System.out.println(bucket.get(JsonArrayDocument.create("setDocId")).content());
-        //=> ["Alice","Bob"]
+include::example$DataStructuresExample.java[tag=data_structures_18,indent=0]
 ----
 
 == CouchbaseQueue
@@ -272,25 +243,6 @@ Example usage:
 
 [source,java]
 ----
-Queue<String> shoppingList = new CouchbaseQueue<String>("queueDocId", bucket);
-shoppingList.add("loaf of bread");
-shoppingList.add("container of milk");
-shoppingList.add("stick of butter");
-
-// What does the JSON document look like?
-System.out.println(bucket.get(JsonArrayDocument.create("queueDocId")).content());
-        //=> ["stick of butter","container of milk","loaf of bread"]
-
-String item;
-while ((item = shoppingList.poll()) != null) {
-    System.out.println(item);
-    // => loaf of bread
-    // => container of milk
-    // => stick of butter
-}
-
-// What does the JSON document look like after draining the queue?
-System.out.println(bucket.get(JsonArrayDocument.create("queueDocId")).content());
-        //=> []
+include::example$DataStructuresExample.java[tag=data_structures_19,indent=0]
 ----
-////
+

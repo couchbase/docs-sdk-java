@@ -16,13 +16,13 @@ Access a non-default collection, in the default scope, with:
 
 [source,java]
 ----
-bucket.collection("flights")
+include::example$CollectionsExample.java[tag=collections_1,indent=0]
 ----
 
 And for  a non-default scope:
 [source,java]
 ----
-bucket.scope("marlowe_agency").collection("flights") too
+include::example$CollectionsExample.java[tag=collections_2,indent=0]
 ----
 
 * Please see the xref:6.5@server:developer-preview:collections/collections-overview.adoc[Collections Overview documents] in the Server docs.

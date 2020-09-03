@@ -111,13 +111,7 @@ If you want to set it to DEBUG (or the JUL equivalent: Fine) you can do it like 
 
 [source,java]
 ----
-Logger logger = Logger.getLogger("com.couchbase.client");
-logger.setLevel(Level.FINE);
-for(Handler h : logger.getParent().getHandlers()) {
-	if(h instanceof ConsoleHandler){
-    	h.setLevel(Level.FINE);
-	}
-}
+include::example$CollectingInformationAndLogging.java[tag=collecting_information_and_logging_1,indent=0]
 ----
 
 You should not use JUL in production because SLF4J and Log4J provide better configuration options and performance.
@@ -128,13 +122,7 @@ The logger is configured in a way that it should work out of the box for most us
 
 [source,java]
 ----
-ClusterEnvironment environment = ClusterEnvironment
-  .builder()
-  .loggerConfig(LoggerConfig
-    .fallbackToConsole(true)
-    .disableSlf4J(true)
-  )
-  .build();
+include::example$CollectingInformationAndLogging.java[tag=collecting_information_and_logging_2,indent=0]
 ----
 
 You can also use it to enable the http://logback.qos.ch/manual/mdc.html[Mapped Diagnostic Context^].
@@ -160,21 +148,7 @@ The following code subscribes to the event bus and prints out all events that ar
 
 [source,java]
 ----
-ClusterEnvironment environment = ClusterEnvironment.builder().build();
-
-environment.eventBus().subscribe(event -> {
-  // handle events as they arrive
-  if (event.severity() == Event.Severity.INFO || event.severity() == Event.Severity.WARN) {
-    System.out.println(event);
-  }
-});
-
-Cluster cluster = Cluster.connect(
-  "127.0.0.1",
-  ClusterOptions.clusterOptions("Administrator", "password").environment(environment)
-);
-
-Bucket bucket = cluster.bucket("travel-sample");
+include::example$CollectingInformationAndLogging.java[tag=collecting_information_and_logging_3,indent=0]
 ----
 
 This leads to output similar to this:
@@ -203,7 +177,7 @@ If you want to redact client logs (for example before handing them off to the Co
 
 [source,java]
 ----
-LogRedaction.setRedactionLevel(RedactionLevel.FULL);
+include::example$CollectingInformationAndLogging.java[tag=collecting_information_and_logging_4,indent=0]
 ----
 
 Different redaction levels are supported -- please see the `RedactionLevel` enum description for more information.

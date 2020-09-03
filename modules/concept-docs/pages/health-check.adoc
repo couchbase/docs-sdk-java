@@ -20,8 +20,7 @@ The report can either be analyzed in code or can be turned into JSON and printed
 
 [source,java]
 ----
-PingResult pingResult = cluster.ping();
-System.out.println(pingResult.exportToJson());
+include::example$HealthCheckConcepts.java[tag=ping-json-export]
 ----
 
 You will see an output similar to this:
@@ -57,12 +56,12 @@ On the target system, only the query service has been enabled at the cluster lev
 
 [source,java]
 ----
-cluster.ping(pingOptions().serviceTypes(EnumSet.of(ServiceType.QUERY)));
+include::example$HealthCheckConcepts.java[tag=ping-options]
 ----
 
 If the ping is performed at the bucket level, the Key/Value and View sockets are also visible:
 
-[source,java]
+[source,json]
 ----
 {
    "services":{
@@ -133,8 +132,7 @@ Similar to ping, you can turn a diagnostics result into JSON. The following code
 
 [source,java]
 ----
-Cluster cluster = Cluster.connect("127.0.0.1", "user", "pass");
-System.err.println(cluster.diagnostics().exportToJson());
+include::example$HealthCheckConcepts.java[tag=diagnostics-basic]
 ----
 
 [source,json]
