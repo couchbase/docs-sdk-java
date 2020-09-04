@@ -2121,5 +2121,10 @@ has been fixed.
 regression has been fixed where disabled flush on the bucket was not
 surfaced as an exception inside the SDK when BucketManager#flush()
 is called.
+
+
+== Older Releases
+
+Although https://www.couchbase.com/support-policy/enterprise-software[no longer supported], documentation for older releases continues to be available in our https://docs-archive.couchbase.com/home/index.html[docs archive].
 // end::latest[]
 
