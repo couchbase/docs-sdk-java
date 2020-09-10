@@ -22,7 +22,7 @@ bucket.collection("flights")
 And for  a non-default scope:
 [source,java]
 ----
-bucket.scope("marlowe_agency").collection("flights") too
+bucket.scope("marlowe_agency").collection("flights")
 ----
 
 * Please see the xref:6.5@server:developer-preview:collections/collections-overview.adoc[Collections Overview documents] in the Server docs.
