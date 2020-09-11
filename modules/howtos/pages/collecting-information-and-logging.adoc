@@ -3,9 +3,9 @@
 :page-aliases: ROOT:logging
 
 [abstract]
-Logging
+Configuring logging; working with the event bus; and log redaction for data security.
 
-[abstract]
+
 The Java SDK logs events and also provides an event bus that transmits information about the behavior of your database system, including system and metric events.
 It has no hard dependency on a specific logger implementation, but you should add one you are comfortable with.
 

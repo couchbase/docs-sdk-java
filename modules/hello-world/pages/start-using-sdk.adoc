@@ -1,7 +1,7 @@
 = Install and Start Using the Java SDK with Couchbase Server
 :navtitle: Start Using the SDK
 :page-partial:
-:page-aliases: ROOT:getting-started,ROOT:start-using,ROOT:hello-couchbase,ROOT:start-using-sdk,ROOT:java-intro,ROOT:tutorial
+:page-aliases: ROOT:getting-started,ROOT:start-using,ROOT:hello-couchbase,ROOT:start-using-sdk,ROOT:java-intro,ROOT:tutorial,server:sdk:java/start-using-sdk
 
 [abstract]
 
@@ -18,7 +18,7 @@ see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section f
 We recommend running the latest Java LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
 
 Couchbase publishes all stable artifacts to https://search.maven.org/search?q=com.couchbase.client[Maven Central].
-The latest version (as of August 2020) is https://search.maven.org/artifact/com.couchbase.client/java-client/3.0.7/jar[3.0.7].
+The latest version (as of August 2020) is https://search.maven.org/artifact/com.couchbase.client/java-client/3.0.8/jar[3.0.8].
 
 You can use your favorite dependency management tool to install the SDK.
 The following snippet shows how to do it with https://maven.apache.org/[maven].
@@ -29,7 +29,7 @@ The following snippet shows how to do it with https://maven.apache.org/[maven].
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.7</version>
+        <version>3.0.8</version>
     </dependency>
 </dependencies>
 ----
@@ -38,7 +38,7 @@ For https://gradle.org/[gradle], you can use:
 
 [source,groovy]
 ----
-implementation 'com.couchbase.client:java-client:3.0.7'
+implementation 'com.couchbase.client:java-client:3.0.8'
 ----
 
 Alternatively, we provide a zip file with all the dependencies bundled if you wish to manually include the `jar` files in your classpath. Refer to the xref:project-docs:sdk-release-notes.adoc[Release Notes] for further details. You can also find links to the hosted javadocs there.
@@ -120,7 +120,7 @@ include::example$StartUsing.java[tag=connect_local,indent=0]
 Couchbase Cloud Sample::
 +
 --
-If you are connecting to https://docs.couchbase.com/cloud/index.html[Couchbase Cloud], be sure to get the correct endpoint as well as user, password, and `couchbasecloudbucket`.
+If you are connecting to https://docs.couchbase.com/cloud/index.html[Couchbase Cloud], be sure to get the correct endpoint as well as user, password, and `couchbasecloudbucket`  -- and see the <<cloud-connections, Cloud section>>, below.
 
 [source,java]
 ----
@@ -128,6 +128,15 @@ include::devguide:example$java/src/main/java/com/couchbase/devguide/CloudConnect
 ----
 --
 ====
+
+
+== Cloud Connections
+
+For developing on Couchbase Cloud, if you are not working from the same _Availability Zone_, refer to the following:
+
+* Notes on xref:ref:client-settings.adoc#constrained-network-environments[Constrained Network Environments], 
+* xref:project-docs:compatibility.adoc#network-requirements[Network Requirements], 
+* If you have a consumer-grade router which has problems with DNS-SRV records review our xref:howtos:troubleshooting-cloud-connections.adoc#troubleshooting-host-not-found[Troubleshooting Guide].
 
 
 == Additional Resources
@@ -138,4 +147,4 @@ Older API references are linked from their respective sections in the xref:proje
 Couchbase welcomes community contributions to the Java SDK.
 The Java SDK source code is available on https://github.com/couchbaselabs/couchbase-jvm-clients[GitHub].
 
-If you are planing to use Spring Data Couchbase, see the xref:project-docs:compatibility.adoc#spring-compat[notes on version compatibility].
+If you are planning to use Spring Data Couchbase, see the xref:project-docs:compatibility.adoc#spring-compat[notes on version compatibility].

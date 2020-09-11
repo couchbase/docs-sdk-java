@@ -2,7 +2,7 @@
 :navtitle: Release Notes
 :page-topic-type: project-doc
 :page-partial:
-:page-aliases: relnotes-java-sdk,ROOT:sdk-release-notes,ROOT:relnotes-java-sdk,ROOT:release-notes,ROOT:download-links
+:page-aliases: relnotes-java-sdk,ROOT:sdk-release-notes,ROOT:relnotes-java-sdk,ROOT:release-notes,ROOT:download-links,server:sdks:java-2.2/download-links
 
 [abstract]
 Release notes, installation instructions, and download archive for the Couchbase Java Client.
@@ -28,10 +28,67 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.7</version>
+        <version>3.0.8</version>
     </dependency>
 </dependencies>
 ----
+
+== Version 3.0.8 (31) August 2020)
+
+Version 3.0.8 is a bugfix release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
+
+http://packages.couchbase.com/clients/java/3.0.8/Couchbase-Java-Client-3.0.8.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.8/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.9/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.8**
+* com.couchbase.client:**core-io:2.0.9**
+* io.projectreactor:**reactor-core:3.3.9.RELEASE**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== Enhancements
+
+* https://issues.couchbase.com/browse/JCBC-1705[JCBC-1705]:
+A (uncomitted) API has been added which allows to very efficiently perform bulk fetch and bulk exists operations. See the `BatchHelper` class for more details.
+* https://issues.couchbase.com/browse/JCBC-1684[JCBC-1684]:
+The `PingOptions` services can now be configured through a vararg, making it easier to use.
+* https://issues.couchbase.com/browse/JCBC-1691[JCBC-1691]:
+A (uncomitted) API has been added which allows sending all kinds of requests to the cluster manager (called raw manager API).
+* https://issues.couchbase.com/browse/JVMCBC-883[JVMCBC-883]:
+The client is now a little less verbose when performing a DNS SRV request and the underlying JDK operation times out.
+* https://issues.couchbase.com/browse/JVMCBC-879[JVMCBC-879]:
+Updated internal and external dependencies to their latest maintenance releases.
+* https://issues.couchbase.com/browse/JVMCBC-871[JVMCBC-871]:
+On the `IoConfig` it is now possible to `captureTraffic()` with empty arguments, implying that all traffic will be captured.
+* https://issues.couchbase.com/browse/JVMCBC-874[JVMCBC-874]:
+When dealing with unknown collections, the SDK now returns a more user friendly retry reason when it can (outdated manifest vs. collection not found).
+* https://issues.couchbase.com/browse/JVMCBC-875[JVMCBC-875]:
+On the request timeout exception, the retry reasons are now accessible directly.
+* https://issues.couchbase.com/browse/JCBC-1693[JCBC-1693]:
+The `UserManager` API has been extended to support collections and scopes (needs at least Server 7.0 to be usable).
+* https://issues.couchbase.com/browse/JCBC-1660[JCBC-1660]:
+Support for scope-level N1QL queries has been added (needs at least Server 7.0 to be usable).
+* https://issues.couchbase.com/browse/JCBC-1658[JCBC-1658]:
+Support for scope-level analytics queries has been added (needs at least Server 7.0 to be usable).
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/JCBC-1696[JCBC-1696]:
+When adding the option `withExpiry(true)` to `GetOptions`, it is now possible to use a custom transcoder which is JSON compatible.
+* https://issues.couchbase.com/browse/JVMCBC-805[JVMCBC-805]:
+The client now handles bootstrapping against nodes much better which do not have the data service enabled (in an MDS setup).
+* https://issues.couchbase.com/browse/JVMCBC-882[JVMCBC-882]:
+A bug has been fixed where when bootstrapping against a node with no data service enabled, the endpoint would not be cleaned up and would keep trying to reconnect.
+* https://issues.couchbase.com/browse/JVMCBC-872[JVMCBC-872]:
+The client now more explicitly handles an error response code (`NO_ACCESS`) when a subdocument request is performed against a system xattr.
+* https://issues.couchbase.com/browse/JVMCBC-873[JVMCBC-873]:
+Durability information is now properly unwrapped from an optional when exported and dumped (for example as part of an exception).
+* https://issues.couchbase.com/browse/JVMCBC-880[JVMCBC-880]:
+The client now trackes multiple parallel bucket open attempts (against different buckets) in a better way, making sure that an internal state is only switched when all those bucket open attempts have completed (and not just the first one).
+* https://issues.couchbase.com/browse/JVMCBC-878[JVMCBC-878]:
+`EndpointDiagnostics` had the local and remote hostnames mixed up, they now show up in the correct order.
+
 == Version 3.0.7 (4 August 2020)
 
 Version 3.0.7 is the eighth release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
@@ -446,3 +503,8 @@ The `empty` constructors are gone from `JsonObject` and `JsonArray` since they d
 == Pre-releases
 
 Numerous _Alpha_ and _Beta_ releases were made in the run-up to the 3.0 release, and although unsupported, the release notes and download links are retained for archive purposes xref:3.0-pre-release-notes.adoc[here].
+
+
+== Older Releases
+
+Although https://www.couchbase.com/support-policy/enterprise-software[no longer supported], documentation for older releases continues to be available in our https://docs-archive.couchbase.com/home/index.html[docs archive].
