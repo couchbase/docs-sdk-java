@@ -7,7 +7,7 @@
 [abstract]
 Couchbase supports CRUD operations, various data structures, and binary documents.
 
-Although query and path-based (Sub-Document) services are available, the simplicity of the document-based kv interface is the fastest way to perform operations involving single documents.
+Although query and path-based (Sub-Document) services are available, the simplicity of the document-based key-value (kv) interface is the fastest way to perform operations involving single documents.
 
 
 // use the simplicity of https://developer.couchbase.com/documentation/server/3.x/developer/dev-guide-3.0/read-write.html possibly?
