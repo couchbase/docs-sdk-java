@@ -33,7 +33,7 @@ Let's break it down. A query is always performed at the `Cluster` level, using t
 
 Once a result returns you can iterate the returned rows and/or accessing the `QueryMetaData` associated with the query. If something goes wrong during the execution of the query, a derivate of the `CouchbaseException` will be thrown that also provides additional context on the operation:
 
-[source,text]
+[source,console]
 ----
 Exception in thread "main" com.couchbase.client.core.error.ParsingFailureException: Parsing of the input failed {"completed":true,"coreId":1,"errors":[{"code":3000,"message":"syntax error - at end of input"}],"idempotent":false,"lastDispatchedFrom":"127.0.0.1:56279","lastDispatchedTo":"127.0.0.1:8093","requestId":3,"requestType":"QueryRequest","service":{"operationId":"eee9b796-bfff-42dc-941d-1a985e019ff8","statement":"select 1=","type":"query"},"timeoutMs":75000,"timings":{"dispatchMicros":14381,"totalMicros":1365348}}
 ----
