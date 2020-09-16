@@ -20,14 +20,14 @@ As an example here is a KeyValue document fetch:
 
 [source,java]
 ----
-GetResult getResult = collection.get("key", getOptions().timeout(Duration.ofSeconds(3));
+include::example$MigratingSDKCodeTo3n.java[tag=migrating_sdk_code_to_3_n_1_1,indent=0]
 ----
 
 Compare this to a N1QL query:
 
 [source,java]
 ----
-QueryResult queryResult = cluster.query("select 1=1", queryOptions().timeout(Duration.ofSeconds(3));
+include::example$MigratingSDKCodeTo3n.java[tag=migrating_sdk_code_to_3_n_2,indent=0]
 ----
 
 include::6.5@sdk:shared:partial$migration.adoc[tag=terms2]
@@ -157,13 +157,7 @@ In SDK 2, you connected, opened a bucket, performed a KV op, and disconnected li
 
 [source,java]
 ----
-Cluster cluster = CouchbaseCluster.create("127.0.0.1");
-cluster.authenticate("user", "pass");
-Bucket bucket = cluster.openBucket("travel-sample");
-
-JsonDocument getResult = bucket.get("airline_10");
-
-cluster.disconnect();
+include::example$MigratingSDKCodeTo3n.java[tag=migrating_sdk_code_to_3_n_11,indent=0]
 ----
 
 Here is the SDK 3 equivalent:
@@ -326,7 +320,7 @@ The following section discusses each service in detail and covers specific bits 
 
 === Key Value
 
-The Key/Value (KV) API is now located under the `Collection` interface, so even if you do not use collections, the `defaultCollection()` needs to be opened in order to access it.
+The Key/Value (KV) API is now located under the `Collection` interface, so even if you do not use CollectionsExample, the `defaultCollection()` needs to be opened in order to access it.
 
 The following table describes the SDK 2 KV APIs and where they are now located in SDK 3:
 
@@ -489,10 +483,7 @@ While in SDK 2 you had to manually check for errors (otherwise you'd get an empt
 
 [source,java]
 ----
-N1qlQueryResult queryResult = bucket.query(N1qlQuery.simple("select 1="));
-if (!queryResult.errors().isEmpty()) {
-  // errors contain [{"msg":"syntax error - at end of input","code":3000}]
-}
+include::example$MigratingSDKCodeTo3n.java[tag=migrating_sdk_code_to_3_n_22,indent=0]
 ----
 
 In SDK 3 the top level `query` method will throw an exception:
@@ -558,7 +549,7 @@ Here is a SDK 2 Search query with some options, and its SDK 3 equivalent:
 
 [source,java]
 ----
-//  SDK 2 search query
+// SDK 2 search query
 SearchQueryResult searchResult = bucket.query(new SearchQuery(
   "indexname", 
   SearchQuery.queryString("airports")).limit(5).fields("a", "b", "c"),
@@ -597,7 +588,7 @@ include::example$Migrating.java[tag=searchcheck,indent=0]
 
 === Views
 
-Views have stayed at the `Bucket` level, because it does not have the concept of collections and is scoped at the bucket level on the server as well. 
+Views have stayed at the `Bucket` level, because it does not have the concept of CollectionsExample and is scoped at the bucket level on the server as well.
 The API has stayed mostly the same, the most important change is that `staleness` is unified under the `ViewConsistency` enum.
 
 .View Staleness Mapping

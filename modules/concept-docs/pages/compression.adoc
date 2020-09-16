@@ -1,4 +1,4 @@
-= Compression
+
 :page-topic-type: concept
 :page-edition: Enterprise Edition
 :page-aliases:../../ROOT/pages/compression-intro.adoc
@@ -79,11 +79,7 @@ To safeguard against the case of several thousand documents stealing CPU time to
 
 [source,java]
 ----
-ClusterEnvironment env = ClusterEnvironment
-  .builder()
-  // start compressing at 1024 bytes
-  .compressionConfig(CompressionConfig.minSize(1024))
-  .build();
+include::example$CompressionExample.java[tag=compression_1,indent=0]
 ----
 
 The `CompressionConfig` also allows you to disable compression completely or tune the ratio of when a compressed document (compared to the size of the uncompressed) should be sent over the wire.

@@ -16,10 +16,7 @@ The maximum client-side query cache size is 5000 entries.
 
 [source,java]
 ----
-QueryResult result = cluster.query(
-        "select count(*) from `travel-sample` where type = \"airports\" and country = ?",
-        queryOptions().adhoc(false).parameters(JsonArray.from("France"))
-);
+include::example$N1qlQueryExample.java[tag=n1ql_query_1,indent=0]
 ----
 
 
@@ -67,11 +64,7 @@ You can also create and define indexes in the SDK using:
 
 [source,java]
 ----
-QueryIndexManager indexManager = cluster.queryIndexes();
-
-indexManager.createPrimaryIndex("users");
-indexManager.createIndex("users", "ix_name", Collections.singletonList("name"));
-indexManager.createIndex("users", "ix_email", Collections.singletonList("email"));
+include::example$N1qlQueryExample.java[tag=n1ql_query_2,indent=0]
 ----
 
 
@@ -97,13 +90,7 @@ Building deferred indexes can also be done via the SDK:
 
 [source,java]
 ----
-QueryIndexManager indexManager = cluster.queryIndexes();
-
-indexManager.createPrimaryIndex("users", createPrimaryQueryIndexOptions().deferred(true));
-indexManager.createIndex("users", "ix_name", Collections.singletonList("name"), createQueryIndexOptions().deferred(true));
-indexManager.createIndex("users", "ix_email", Collections.singletonList("email"), createQueryIndexOptions().deferred(true));
-indexManager.buildDeferredIndexes("users");
-indexManager.watchIndexes("users", Arrays.asList("ix_name", "ix_email"), Duration.ofMinutes(5));
+include::example$N1qlQueryExample.java[tag=n1ql_query_3,indent=0]
 ----
 
 
@@ -118,17 +105,7 @@ Consider the following snippet:
 
 [source,java]
 ----
-String id = "user::" + UUID.randomUUID().toString();
-collection.insert(
-  id,
-  JsonObject.create().put("value", true)
-);
-
-cluster.query(
-  "select * from bucket where META().id = $id", 
-  queryOptions()
-    .parameters(JsonObject.create().put("id", id))
-);
+include::example$N1qlQueryExample.java[tag=n1ql_query_4,indent=0]
 ----
 
 The above query may not return the newly inserted document because it has not yet been indexed.
@@ -138,12 +115,7 @@ If the above code is modified to use _REQUEST_PLUS_, query processing will wait 
 
 [source,java]
 ----
-cluster.query(
-  "select * from bucket where META().id = $id",
-  queryOptions()
-    .parameters(JsonObject.create().put("id", id))
-    .scanConsistency(QueryScanConsistency.REQUEST_PLUS)
-);
+include::example$N1qlQueryExample.java[tag=n1ql_query_5,indent=0]
 ----
 
 This gives the application developer more control over the balance between performance (latency) and consistency,

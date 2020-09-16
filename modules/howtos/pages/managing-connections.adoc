@@ -83,7 +83,7 @@ Most of the high-level classes in the Java SDK are designed to be safe for concu
 You will get the best performance if you share and reuse instances of `ClusterEnvironment`, `Cluster`, `Bucket`, `Scope`, and `Collection`, all of which are thread-safe.
 
 We recommend creating a single `Cluster` instance when your application starts up, and sharing this instance throughout your application.
-If you know at startup time which buckets, scopes, and collections your application will use, we recommend obtaining them from the `Cluster` at startup time and sharing those instances throughout your application as well.
+If you know at startup time which buckets, scopes, and CollectionsExample your application will use, we recommend obtaining them from the `Cluster` at startup time and sharing those instances throughout your application as well.
 
 Before your application stops, gracefully shut down the client by calling the `disconnect()` method of each `Cluster` you created.
 If you created any `ClusterEnvironment` instances, call their `shutdown()` method after disconnecting the associated clusters.
@@ -122,14 +122,7 @@ If the external ports are not the default, you can specify custom ports using th
 // include::example$ManagingConnections.java[tag=seednodes,indent=0]
 [source,java]
 ----
-int customKvPort = 1234;
-int customManagerPort = 2345;
-Set<SeedNode> seedNodes = new HashSet<>(Arrays.asList(
-  SeedNode.create("127.0.0.1",
-      Optional.of(customKvPort),
-      Optional.of(customManagerPort))));
-
-Cluster cluster = Cluster.connect(seedNodes, "username", "password");
+include::example$managing_connections.java[tag=managing_connections_5,indent=0]
 ----
 
 TIP: In a deployment that uses multi-dimensional scaling, a custom KV port is only applicable for nodes running the KV service.
@@ -237,24 +230,14 @@ If you are working at the _Cluster_ level, then add to the `cluster()` in the xr
 
 [source,java]
 ----
-Cluster cluster = Cluster.connect("127.0.0.1", "username", "password");
-cluster.waitUntilReady(Duration.ofSeconds(10));
-Bucket bucket = cluster.bucket("travel-sample");
-Collection collection = bucket.defaultCollection();
+include::example$managing_connections.java[tag=managing_connections_8,indent=0]
 ----
 
 Or more fully:
 
 [source,java]
 ----
-public class ClusterExample {
-  public static void main(String... args) throws Exception {
-    Cluster cluster = Cluster.connect("127.0.0.1", "username", "password");
-    cluster.waitUntilReady(Duration.ofSeconds(10));
-    Bucket bucket = cluster.bucket("travel-sample");
-    Collection collection = bucket.defaultCollection();
-  }
-}
+include::example$managing_connections.java[tag=managing_connections_9,indent=0]
 ----
 
 If you are working at the _Bucket_ level, then the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Bucket.html#waitUntilReady-java.time.Duration-[Bucket-level `waitUntilReady`] does the same as the Cluster-level version,

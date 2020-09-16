@@ -5,6 +5,13 @@
 [abstract]
 Field Level Encryption is available in Couchbase Data Platform 5.5, from Java SDK version 2.6.0
 
+This library adds support for Field-Level Encryption (FLE) to the Couchbase
+Java SDK. It includes cryptographic algorithms and keyrings
+you can use out of the box, and provides a framework for implementing
+your own crypto components.
+
+Version `3.0.0-pre.1` of this library requires Couchbase Java SDK version `3.0.5` or later.
+
 [#package]
 == Packaging
 
@@ -13,85 +20,142 @@ The Couchbase Java SDK uses the https://github.com/couchbase/java-couchbase-encr
 NOTE: This separation of the encryption library ensures that the SDK does not have a dependency upon an encryption library in general use -- but it does mean you have to explicitly include this external dependency in your project configuration. See the xref:#_example[example project].
 
 The Couchbase Java Field Level Encryption (FLE) uses entity annotations/`JsonObject` methods to specify which field(s) to apply encryption and which algorithm to use.
-Here’s an example POJO entity definition:
 
-// needs updating for 3.0
 
-[source,java]
+== Maven Coordinates
+
+[source,xml]
 ----
-public static class Person {
-
-    @Id
-    public String id;
-
-    @EncryptedField(provider = "AES")
-    public String password;
-
-    //The rest will be transported and stored unencrypted
-    public String firstName;
-    public String lastName;
-    public String userName;
-    public int age;
-  }
+<dependency>
+    <groupId>com.couchbase.client</groupId>
+    <artifactId>couchbase-encryption</artifactId>
+    <version>${version}</version>
+</dependency>
 ----
 
-[#encryption_configuration]
+=== Optional Dependencies
+
+To reduce the footprint of this library, some of its dependencies
+are optional. Using certain features requires adding additional dependencies
+to your project.
+
+HashiCorp Vault Transit integration requires [Spring Vault](https://docs.spring.io/spring-vault/docs/current/reference/html/):
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.springframework.vault</groupId>
+    <artifactId>spring-vault-core</artifactId>
+    <version>2.2.2.RELEASE</version>
+</dependency>
+----
+
 == Configuration
 
-Create a configuration to connect to your Couchbase cluster and configure the crypto manager in the Couchbase environment with the encryption crypto algorithm and key store providers.
-
-NOTE: The alias used for registering the provider should match the provider name string in the annotation/parameter.
-
-// needs updating for 3.0
+To enable Field-Level Encryption, supply a `CryptoManager` when configuring
+the Java SDK's `ClusterEnvironment`.
 
 [source,java]
 ----
-JceksKeyStoreProvider kp = new JceksKeyStoreProvider("secret");
-kp.storeKey("SecretKey", "mysecretkey".getBytes());
-kp.storeKey("HMACsecret", "myauthsecret".getBytes());
-kp.publicKeyName("secret_key");
-kp.signingKeyName("hmac_key");
-AES256CryptoProvider aes256CryptoProvider = new AES256CryptoProvider(kp);
-CryptoManager cryptoManager = new CryptoManager();
-cryptoManager.registerProvider("AES", aes256CryptoProvider);
-CouchbaseEnvironment environment = DefaultCouchbaseEnvironment.builder().cryptoManager(cryptoManager).build();
+include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_1,indent=0]
 ----
 
-To apply encryption to a repository entity, use the `EncryptedField` annotation with provider name as registered on the crypto manager.
+== Usage
 
-// needs updating for 3.0
+Two modes of operation are available: transparent encryption/decryption
+during Jackson data binding, and manual field editing using `JsonObjectCrypto`.
+
+=== Data Binding
+
+Sensitive fields of your POJOs can be annotated with `@Encrypted`.
+Let's use this class as an example:
 
 [source,java]
 ----
-@EncryptedField(provider = "AES")
-public String password;
+include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_2,indent=0]
 ----
 
-Encryption can also be applied to JsonObjects.
-
-// needs updating for 3.0
+Now let's create an employee record:
 
 [source,java]
 ----
-JsonObject.create().putAndEncrypt("foo", "bar", "AES");
+include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_3,indent=0]
 ----
 
-[#decryption]
-== Decryption
-
-Encrypted fields in entities are decrypted based on the annotations.
-To decrypt use fields in `JsonObject`, use `getAndDecrypt` methods.
-
-// needs updating for 3.0
+You can get the document as a `JsonObject` to verify the field was encrypted:
 
 [source,java]
 ----
-JsonDocument stored = bucket.get("mydoc");
-stored.content().getAndDecrypt("foo", "AES")
+include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_4,indent=0]
 ----
 
-== Example
+Because `contentAsObject()` does not decrypt anything, the expected output
+is something like:
 
-// for 3.0, bring example into docs
+[source,json]
+----
+{
+  "encrypted$replicant": {
+    "alg": "AEAD_AES_256_CBC_HMAC_SHA512",
+    "ciphertext": "xwcxyUyZ.....",
+    "kid": "myKey"
+  }
+}
+----
 
-There is a complete example in our https://github.com/couchbaselabs/devguide-examples/blob/master/java/src/main/java/com/couchbase/devguide/FieldEncryptionAES.java[devguide examples collection].
+Now let's read the employee record using data binding:
+
+[source,java]
+----
+include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_5,indent=0]
+----
+
+This prints `true`.
+
+==== Using a custom ObjectMapper
+
+The code that enables encryption/decryption during data binding is packaged
+as a Jackson module called `EncryptionModule`. You can register this module
+with any Jackson `ObjectMapper`.
+
+You'll need to do this if you want to supply your own customized ObjectMapper
+for the Java SDK to use when serializing documents. Here's how to configure
+the cluster environment to use a a custom JSON serializer backed by your own
+ObjectMapper with support for Field-Level Encryption:
+
+[source,java]
+----
+include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_6,indent=0]
+----
+
+=== JsonObjectCrypto
+
+If you need more control of which fields get decrypted, or if you prefer
+working with the Couchbase `JsonObject` tree model, you can use
+a `JsonObjectCrypto` instance to read and write encrypted field values
+of a `JsonObject`.
+
+[source,java]
+----
+include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_7,indent=0]
+----
+
+== Creating Encryption Keys
+
+The AEAD_AES_256_CBC_HMAC_SHA512 algortihm included in this library uses
+encryption keys that are 64 bytes long.
+
+Here's an example that shows how to create a Java key store file containing
+a suitable encryption key:
+
+[source,java]
+----
+include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_8,indent=0]
+----
+
+And here's how to use that file to create a `Keyring` for use with
+Couchbase Field-Level Encryption:
+[source,java]
+----
+include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_9,indent=0]
+----

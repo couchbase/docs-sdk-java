@@ -16,20 +16,7 @@ It is designed to apply the builder arguments in a fluent fashion and then creat
 .Creating a cluster with custom settings
 [source,java]
 ----
-ClusterEnvironment env = ClusterEnvironment.builder()
-    // [Customize client settings here]
-    .build();
-
-// Create a cluster using the custom client settings.
-Cluster cluster = Cluster.connect(connectionString, ClusterOptions
-    .clusterOptions(username, password)
-    .environment(env));
-
-// [Your code to interact with the cluster]
-
-// Shut down gracefully.
-cluster.disconnect();
-env.shutdown();
+include::example$ClientSettingsExample.java[tag=client_settings_1,indent=0]
 ----
 
 == Config Builders
@@ -46,11 +33,7 @@ For example, instead of `TimeoutConfig.builder().kvTimeout(...)` you can write s
 .Creating a new timeout config builder
 [source,java]
 ----
-ClusterEnvironment env = ClusterEnvironment.builder()
-    .timeoutConfig(TimeoutConfig
-        .kvTimeout(Duration.ofSeconds(5))
-        .queryTimeout(Duration.ofSeconds(10)))
-    .build();
+include::example$ClientSettingsExample.java[tag=client_settings_2,indent=0]
 ----
 
 Another way to obtain an instance of a config builder is to borrow it from the cluster environment builder.
@@ -59,11 +42,7 @@ This technique may be useful if you're configuring the environment in stages and
 .Borrowing the existing timeout config builder
 [source,java]
 ----
-ClusterEnvironment.Builder envBuilder = ClusterEnvironment.builder();
-envBuilder.timeoutConfig() // returns a TimeoutConfig.Builder
-    .kvTimeout(Duration.ofSeconds(5))
-    .queryTimeout(Duration.ofSeconds(10));
-ClusterEnvironment env = envBuilder.build();
+include::example$ClientSettingsExample.java[tag=client_settings_3,indent=0]
 ----
 
 The name of the cluster environment builder method for getting and setting each config builder always matches the name of the config class.
@@ -78,12 +57,7 @@ If a system property is set, it always takes precedence over the builder setting
 .Configuration via system property
 [source,java]
 ----
-System.setProperty("com.couchbase.env.timeout.kvTimeout", "10s"); // <1>
-System.setProperty("com.couchbase.env.timeout.queryTimeout", "15s");
-
-ClusterEnvironment environment = ClusterEnvironment.builder()
-    .timeoutConfig(TimeoutConfig.kvTimeout(Duration.ofSeconds(5))) // <2>
-    .build();
+include::example$ClientSettingsExample.java[tag=client_settings_4,indent=0]
 ----
 <1> When specifying durations, `s` stands for seconds.
 Other valid qualifiers are `ns` for nanoseconds, `us` for microseconds, `ms` for milliseconds, and `m` for minutes.
@@ -106,11 +80,7 @@ If you are using the Enterprise Edition, it's possible to secure the connection 
 .Template for configuring security settings
 [source,java]
 ----
-ClusterEnvironment env = ClusterEnvironment.builder()
-    .securityConfig(SecurityConfig
-        .enableTls(true)
-        ...)
-    .build()
+include::example$ClientSettingsExample.java[tag=client_settings_5,indent=0]
 ----
 
 NOTE: Unless you set `enableTls` to `true`, none of the other security settings in this section have any effect.
@@ -177,11 +147,7 @@ The associated `ClusterEnvironement.Builder` method is called `ioConfig`.
 .Template for configuring I/O settings
 [source,java]
 ----
-ClusterEnvironment env = ClusterEnvironment.builder()
-    .ioConfig(IoConfig
-        .networkResolution(NetworkResolution.AUTO)
-        ...)
-    .build()
+include::example$ClientSettingsExample.java[tag=client_settings_6,indent=0]
 ----
 
 Name: *DNS SRV Enabled*::
@@ -316,16 +282,7 @@ The `IoConfig` builder has methods for configuring the circuit breakers of each 
 .Template for configuring circuit breaker settings
 [source,java]
 ----
-ClusterEnvironment env = ClusterEnvironment.builder()
-    .ioConfig(IoConfig.
-        kvCircuitBreakerConfig(CircuitBreakerConfig.builder()
-            .enabled(true)
-            .volumeThreshold(45)
-            .errorThresholdPercentage(25)
-            .sleepWindow(Duration.ofSeconds(1))
-            .rollingWindow(Duration.ofMinutes(2))
-        ))
-    .build();
+include::example$ClientSettingsExample.java[tag=client_settings_7,indent=0]
 ----
 
 The corresponding system properties would be:
@@ -386,11 +343,7 @@ The associated `ClusterEnvironement.Builder` method is called `timeoutConfig`.
 .Template for configuring timeouts
 [source,java]
 ----
-ClusterEnvironment env = ClusterEnvironment.builder()
-    .timeoutConfig(TimeoutConfig
-        .kvTimeout(Duration.ofMillis(2500))
-        ...)
-    .build()
+include::example$ClientSettingsExample.java[tag=client_settings_8,indent=0]
 ----
 
 === Timeout Options Reference
@@ -495,41 +448,6 @@ System Property: `com.couchbase.env.timeout.managementTimeout`
 The management timeout is used on all cluster management APIs (BucketManager, UserManager, CollectionManager, QueryIndexManager, etc.) if not overridden by a custom timeout.
 The default is quite high because some operations (such as flushing a bucket, for example) might take a long time.
 
-== Diagnostics Options
-
-The client can periodically log diagnostic information about server connectivity.
-
-Diagnostics settings are represented by the Java class `DiagnosticsConfig`.
-The associated `ClusterEnvironement.Builder` method is called `diagnosticsConfig`.
-
-.Template for configuring diagnostics settings
-[source,java]
-----
-ClusterEnvironment env = ClusterEnvironment.builder()
-    .diagnosticsConfig(DiagnosticsConfig
-        .enabled(true)
-        ...)
-    .build()
-----
-
-Name: *Enabling Diagnostics*::
-Builder Method: `DiagnosticsConfig.enabled(boolean)`
-+
-Default:  `false`
-+
-System Property: `com.couchbase.env.diagnostics.enabled`
-+
-If enabled, the client periodically logs diagnostic information.
-
-Name: *Diagnostics Interval*::
-Builder Method: `DiagnosticsConfig.emitInterval(Duration)`
-+
-Default:  `30m`
-+
-System Property: `com.couchbase.env.diagnostics.emitInterval`
-+
-The interval at which diagnostic information is logged.
-
 == Compression Options
 
 The client can optionally compress documents before sending them to Couchbase Server.
@@ -537,14 +455,10 @@ The client can optionally compress documents before sending them to Couchbase Se
 Compression settings are represented by the Java class `CompressionConfig`.
 The associated `ClusterEnvironement.Builder` method is called `compressionConfig`.
 
-.Template for configuring compression settings
+.Template for configuring CompressionExample settings
 [source,java]
 ----
-ClusterEnvironment env = ClusterEnvironment.builder()
-    .compressionConfig(CompressionConfig
-        .enabled(true)
-        ...)
-    .build()
+include::example$ClientSettingsExample.java[tag=client_settings_9,indent=0]
 ----
 
 Name: *Enabling Compression*::
@@ -552,10 +466,10 @@ Builder Method: `CompressionConfig.enabled`
 +
 Default: `true`
 +
-System Property: `com.couchbase.env.compression.enabled(boolean)`
+System Property: `com.couchbase.env.CompressionExample.enabled(boolean)`
 +
 If enabled, the client will compress documents before they are sent to Couchbase Server.
-If this is set to `false`, the other compression settings have no effect.
+If this is set to `false`, the other CompressionExample settings have no effect.
 
 Name: *Document Minimum Size*::
 Builder Method: `CompressionConfig.minSize(int)`
@@ -577,11 +491,11 @@ System Property: `com.couchbase.env.compression.minRatio`
 A floating point value between 0 and 1.
 Specifies how "compressible" a document must be in order for the compressed form to be sent to the server.
 +
-TIP: Increasing the value allows compression to be used with less-compressible documents.
+TIP: Increasing the value allows CompressionExample to be used with less-compressible documents.
 +
 If the compressed document size divided by the uncompressed document size is greater than this value, then the uncompressed version of the document will be sent to Couchbase Server instead of the compressed version.
 +
-For example, with a `minRatio` of `0.83`, compression will only be used if the size of the compressed document is less than 83% of the uncompressed document size.
+For example, with a `minRatio` of `0.83`, CompressionExample will only be used if the size of the compressed document is less than 83% of the uncompressed document size.
 
 == General Options
 
@@ -591,10 +505,7 @@ They are configured directly on the `ClusterEnvironment.Builder`.
 .Template for configuring general settings
 [source,java]
 ----
-ClusterEnvironment env = ClusterEnvironment.builder()
-    .retryStrategy(BestEffortRetryStrategy.INSTANCE)
-    ...
-    .build()
+include::example$ClientSettingsExample.java[tag=client_settings_10,indent=0]
 ----
 
 Name: *Retry Strategy*::

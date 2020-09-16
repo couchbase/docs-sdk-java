@@ -16,9 +16,7 @@ To create or delete a bucket, call the bucket manager with the `buckets()` call 
 
 [source,java]
 ----
-Cluster cluster = Cluster.connect("127.0.0.1", "user", "123456");
-BucketManager manager = cluster.buckets();
-manager.createBucket(bucketSettings);
+include::example$BucketsAndClustersExample.java[tag=buckets_and_clusters_1,indent=0]
 ----
 
 // The `BucketSettings` can be created via a builder, [.api]`DefaultBucketSettings.builder()`.
