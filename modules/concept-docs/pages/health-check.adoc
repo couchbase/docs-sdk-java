@@ -20,7 +20,7 @@ The report can either be analyzed in code or can be turned into JSON and printed
 
 [source,java]
 ----
-include::example$HealthCheckConcepts.java[tag=ping-json-export]
+include::example$HealthCheckConcepts.java[tag=ping-json-export,indent=0]
 ----
 
 You will see an output similar to this:
