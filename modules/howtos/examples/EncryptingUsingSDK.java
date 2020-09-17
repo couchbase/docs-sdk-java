@@ -85,7 +85,7 @@ public class EncryptingUsingSDK {
     Cluster cluster = Cluster.connect("localhost",
         ClusterOptions.clusterOptions("username", "password")
             .environment(env));
-    // #end::encrypting_using_sdk_1[];
+    // #end::encrypting_using_sdk_1[]
   }
 
   // file: howtos/pages/encrypting-using-sdk.adoc line: 97
