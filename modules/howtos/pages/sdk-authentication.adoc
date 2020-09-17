@@ -53,18 +53,6 @@ include::example$Auth.java[tag=certauth,indent=0]
 
 In addition to providing the initialized `KeyStore` directly, the `CertificateAuthenticator` can also be initialized from a key store path, a key directly or a `KeyManagerFactory` for maximum flexibility. Please see the API documentation for the `CertificateAuthenticator` for more details.
 
-////
-?
-certenv = ClusterEnvironment.builder()
-            .securityConfig(SecurityConfig
-                    .enableTls(true)
-                    .trustStore(keystore))
-            .build();
-cluster = Cluster.connect("10.112.194.101", "Administrator", "password");
-bucket = cluster.bucket("travel-sample");
-
-////
-
 include::6.5@sdk:shared:partial$auth-overview.adoc[tag=ldap]
 
 [source,java]
