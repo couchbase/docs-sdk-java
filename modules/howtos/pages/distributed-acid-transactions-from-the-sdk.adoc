@@ -86,7 +86,7 @@ There are two higher durability settings available that will additionally wait f
 This further increases safety, at a cost of additional latency.
 
 A level of `None` is present but its use is discouraged and unsupported.
-There are no atomicity guarantees if `None` is used.
+Durability _must not_ be set to `None` as in without durability, atomicity _cannot be guaranteed_.
 
 == Creating a Transaction
 
