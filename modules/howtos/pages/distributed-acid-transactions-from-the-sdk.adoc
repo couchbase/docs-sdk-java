@@ -72,6 +72,7 @@ It is very important that the application ensures that only one of these is crea
 include::example$TransactionsExample.java[tag=init,indent=0]
 ----
 
+
 == Configuration
 
 Transactions can optionally be configured at the point of creating the `Transactions` object:
@@ -86,7 +87,8 @@ There are two higher durability settings available that will additionally wait f
 This further increases safety, at a cost of additional latency.
 
 A level of `None` is present but its use is discouraged and unsupported.
-There are no atomicity guarantees if `None` is used.
+Durability _must not_ be set to `None` as without durability, atomicity _cannot be guaranteed_.
+
 
 == Creating a Transaction
 
@@ -118,6 +120,7 @@ NOTE: Some `AttemptContextReactive` methods, notably `remove`, return `Mono<Void
 Be careful to use `then` rather than `flatMap` or similar on these, 
 as `Mono<Void>` will only trigger a completion event, and not the next event, 
 so many methods including flatMap will not work as expected.
+
 
 == Examples
 
