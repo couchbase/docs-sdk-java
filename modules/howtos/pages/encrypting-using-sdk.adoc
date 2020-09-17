@@ -2,7 +2,7 @@
 :page-topic-type: howto
 :page-edition: Enterprise Edition
 :page-status: Developer Preview
-:page-aliases: ROOT:encrypting-using-sdk.adoc
+// :page-aliases: ROOT:encrypting-using-sdk.adoc
 
 [abstract]
 The Field Level Encryption library enables encryption and decryption of JSON fields.
