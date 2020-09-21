@@ -632,7 +632,7 @@ com.couchbase.client.core.error.ViewNotFoundException: The queried view is not f
 
 === Management APIs
 
-In SDK 2, the management APIs were centralized in the `ClusterManager` at the cluster level and the `BucketManager` at the bucket level. 
+In SDK 2, the management APIs were centralized in the `ClusterManager` for both cluster and bucket level management API. 
 Since SDK 3 provides more management APIs, they have been split up in their respective domains. 
 So for example when in SDK 2 you needed to remove a bucket you would call `ClusterManager.removeBucket` you will now find it under `BucketManager.dropBucket`. 
 Also, creating a N1QL index now lives in the `QueryIndexManager`, which is accessible through the `Cluster`.
