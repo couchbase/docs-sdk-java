@@ -268,16 +268,6 @@ class SubDocument {
 
   }
 
-    static void full_doc_replaceFunc() {
-// #tag::full_doc_replace[]
-    JsonObject docContent = JsonObject.create().put("body", "value");
-    collection.mutateIn("doc-id", Arrays.asList(
-        MutateInSpec.upsert("foo", "bar").xattr().createPath(),
-        MutateInSpec.replace("", docContent))
-     );
-// #end::full_doc_replace[]
-    }
-
     static void createAndPopulateArrays() {
     // #tag::array-create[]
     collection.upsert("my_array", JsonArray.create());
@@ -286,7 +276,7 @@ class SubDocument {
         arrayAppend("", Collections.singletonList("some element"))
     ));
     // the document my_array is now ["some element"]
-// #end::array-create[]
+    // #end::array-create[]
     System.out.println("createAndPopulateArrays: my_array some element");
 
   }

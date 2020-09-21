@@ -20,7 +20,7 @@ As an example here is a KeyValue document fetch:
 
 [source,java]
 ----
-include::example$MigratingSDKCodeTo3n.java[tag=migrating_sdk_code_to_3_n_1_1,indent=0]
+include::example$MigratingSDKCodeTo3n.java[tag=migrating_sdk_code_to_3_n_1,indent=0]
 ----
 
 Compare this to a N1QL query:
