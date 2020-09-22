@@ -8,15 +8,8 @@
 A practical guide to using Couchbase’s distributed ACID transactions, via the Java API.
 
 
+include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=intro]
 
-Distributed Transactions for Couchbase provide these semantics and features:
-
-* Insertion, mutation, and removal of multiple documents can be staged inside a transaction.  
-* Until the transaction is committed, these changes will not be visible to other transactions, or any other part of the Couchbase Data Platform.
-* An isolation level of Read Committed, to support high performance and scalability.
-* A high-level and easy-to-use API that allows the developer to express what they want the transaction to do as a block of logic, while the library takes care of the details of error handling, including conflicts with other transactions.
-
-Please see xref:6.6@server:learn:data/transactions.adoc[our introduction to ACID Transactions] for a guide to the benefits and trade-offs of multi-document transactions.
 
 Below we show you how to create Transactions, step-by-step.
 You may also want to start with our https://github.com/couchbaselabs/couchbase-transactions-java-examples[transactions examples repository],
@@ -24,17 +17,13 @@ which features useful downloadable examples of using Distributed Transactions.
 
 Javadocs are available https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.1.0/index.html?overview-summary.html[online].
 
+
 == Requirements
 
 * Couchbase Server 6.6 or above.
 * Couchbase Java client 3.0.7 or above.  It is recommended to follow the transitive dependency for the transactions library from maven.
-* NTP should be configured so nodes of the Couchbase cluster are in sync with time.
-* The application, if it is using xref:concept-docs:xattr.adoc[extended attributes (XATTRs)], must avoid using the XATTR field `txn`, which is reserved for Couchbase use.
+include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
 
-NOTE: If using a single node cluster (for example, during development), then note that the default number of replicas for a newly created bucket is 1.
-If left at this default, then all Key-Value writes performed at with durabiltiy will fail with a `DurabilityImpossibleException`.
-In turn this will cause all transactions (which perform all Key-Value writes durably) to fail.
-This setting can be changed via xref:6.6@server:manage:manage-buckets/create-bucket.adoc#couchbase-bucket-settings[GUI] or xref:6.6@server:cli:cbcli/couchbase-cli-bucket-create.adoc#options[command line].
 
 == Getting Started
 
@@ -54,6 +43,7 @@ dependencies {
 Use the same group, artifact, and version in your Maven-compatible tool of choice.
 
 A complete simple gradle project is available on our https://github.com/couchbaselabs/couchbase-transactions-java-examples[transactions examples repository].
+
 
 == Initializing Transactions
 
@@ -82,21 +72,10 @@ Transactions can optionally be configured at the point of creating the `Transact
 include::example$TransactionsExample.java[tag=config,indent=0]
 ----
 
-The default configuration will perform all writes with the durability setting `Majority`, ensuring that each write is available in-memory on the majority of replicas before the transaction continues.
-There are two higher durability settings available that will additionally wait for all mutations to be written to physical storage on either the active or the majority of replicas, before continuing.
-This further increases safety, at a cost of additional latency.
-
-A level of `None` is present but its use is discouraged and unsupported.
-If durability is set to `None`, then atomicity _cannot be guaranteed_.
+include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=config]
 
 
-== Creating a Transaction
-
-A core idea of the library is that the application supplies the logic for transaction inside a Java lambda, including any conditional logic required, and the transactions library takes care of getting the transaction committed.
-
-It is important to understand that the lambda may be run multiple times in order to handle some types of transient error, such as a temporary conflict with another transaction.
- 
-Each run of the lambda is called an `attempt`, inside an overall `transaction`.
+include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=creating]
 
 As with the Couchbase Java Client, you can use the library in either synchronous mode (the exceptions will be explained later in <<Error Handling>>):
 
@@ -140,49 +119,9 @@ include::example$TransactionsExample.java[tag=examples,indent=0]
 include::example$TransactionsExample.java[tag=examplesReactive,indent=0]
 ----
 
-[#mechanics]
-== Transaction Mechanics
-While this document is focussed on presenting how transactions are used at the API level, it is useful to have a high-level understanding of the mechanics.
-Reading this section is completely optional.
 
-Recall that the application-provided lambda (containing the transaction logic) may be run multiple times by the transactions library.
-Each such run is called an 'attempt' inside the overall transaction.
+include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=mechanics]
 
-=== Active Transaction Record Entries
-The first mechanic is that each of these attempts adds an entry to a metadata document in the Couchbase cluster.
-These metadata documents:
-* Are named Active Transaction Records, or ATRs.
-* Are created and maintained automatically.
-* Begin with "_txn:atr-".
-* Each contain entries for multiple attempts.
-* Are viewable, and they should not be modified externally.
-
-Each such ATR entry stores some metadata and, crucially, whether the attempt has committed or not.
-In this way, the entry acts as the single point of truth for the transaction, which is essential for providing an 'atomic commit' during reads.
-
-=== Staged Mutations
-The second mechanic is that mutating a document inside a transaction, does not directly change the body of the document.
-Instead, the post-transaction version of the document is staged alongside the document (technically in its xref:concept-docs:xattr.adoc[extended attributes (XATTRs)]).
-In this way, all changes are invisible to all parts of the Couchbase Data Platform until the commit point is reached.
-
-These staged document changes effectively act as a lock against other transactions trying to modify the document, preventing write-write conflicts.
-
-=== Cleanup
-There are safety mechanisms to ensure that leftover staged changes from a failed transaction cannot block live transactions indefinitely.
-These include an asynchronous cleanup process that is started with the creation of the `Transactions` object, and scans for expired transactions created by any application, on all buckets.
-
-Note that if an application is not running, then this cleanup is also not running.
-
-The cleanup process is detailed below in <<Asynchronous Cleanup>>.
-
-=== Committing
-Only once the lambda has successfully run to conclusion, will the attempt be committed.
-This updates the attempt entry, which can be used as a signal by transactional actors as to whether to use the post-transaction version of a document from its XATTRs.
-Hence updating the ATR entry is effectively an 'atomic commit' switch for the transaction.
-
-After this atomic commit point is reached, the individual documents be committed (or "unstaged").
-This provides an eventually consistent commit for non-transactional actors (including standard Key-Value reads and N1QL statements).
-Transactions will begin reading the post-transactional version of documents as soon as the ATR entry is changed to committed.
 
 == Mutating Documents
 
@@ -270,20 +209,9 @@ Commit is final: after the transaction is committed, it cannot be rolled back, a
 
 An asynchronous cleanup process ensures that once the transaction reaches the commit point, it will be fully committed - even if the application crashes.
 
-== A Full Transaction Example
 
-Let's pull together everything so far into a more real-world example of a transaction.
-
-This example simulates a simple Massively Multiplayer Online game, and includes documents representing:
-
-* Players, with experience points and levels;
-* Monsters, with hitpoints, and the number of experience points a player earns from their death.
-
-In this example, the player is dealing damage to the monster.  
-The player’s client has sent this instruction to a central server, where we’re going to record that action.
-We’re going to do this in a transaction, as we don’t want a situation where the monster is killed, but we fail to update the player’s document with the earned experience.
-
-(Though this is just a demo - in reality, the game would likely live with the small risk and limited impact of this, rather than pay the performance cost for using a transaction.)
+// == A Full Transaction Example
+include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=example]
 
 A complete version of this example is available on our https://github.com/couchbaselabs/couchbase-transactions-java-examples[GitHub transactions examples page].
 
@@ -292,20 +220,9 @@ A complete version of this example is available on our https://github.com/couchb
 include::example$TransactionsExample.java[tag=full,indent=0]
 ----
 
-== Concurrency with Non-Transactional Writes
 
-This release of transactions for Couchbase requires a degree of co-operation from the application.
-Specifically, the application should ensure that non-transactional writes (such as key-value writes or N1QL UPDATES) are never done concurrently with transactional writes, on the same document.
-
-This requirement is to ensure that the strong Key-Value performance of Couchbase was not compromised.
-A key philosophy of our transactions is that you 'pay only for what you use'.
-
-If two such writes *do* conflict then the transactional write will 'win', overwriting the non-transactional write.
-
-Note this only applies to _writes_.
-Any non-transactional _reads_ concurrent with transactions are fine, and are at a Read Committed level.
-
-To help detect that this co-operative requirement is fulfilled, the application can subscribe to the client's event logger and check for any `IllegalDocumentState` events, like so:
+// concurrency
+include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=concurrency]
 
 [source,java]
 ----
@@ -314,6 +231,7 @@ include::example$TransactionsExample.java[tag=concurrency,indent=0]
 
 These events will be raised in the event of a non-transactional write being detected and overridden.
 The event contains the key of the document involved, to aid the application with debugging.
+
 
 == Rollback
 
@@ -341,93 +259,22 @@ In this case, if `ctx.rollback()` is reached, then the transaction will be regar
 
 After a transaction is rolled back, it cannot be committed, no further operations are allowed on it, and the library will not try to automatically commit it at the end of the code block.
 
-== Error Handling
 
-As discussed previously, the transactions library will attempt to resolve many errors itself, through a combination of retrying individual operations and the application's lambda.
-This includes some transient server errors, and conflicts with other transactions.
+//  Error Handling
+include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=error]
 
-But there are situations that cannot be resolved, and total failure is indicated to the application via exceptions.
-These errors include:
 
-* Any exception thrown by your transaction lambda, either deliberately or through an application logic bug.
-* Attempting to insert a document that already exists.
-* Attempting to remove or replace a document that does not exist.
-* Calling `ctx.get` on a document key that does not exist.
 
-IMPORTANT: Once one of these errors occurs, the current attempt is irrevocably failed (though the transaction may retry the lambda).
-It is not possible for the application to catch the failure and continue.
-Once a failure has occurred, all other operations tried in this attempt (including commit) will instantly fail.
-
-Transactions, as they are multi-stage and multi-document, also have a concept of partial success/failure.
-This is signalled to the application through the `TransactionResult.unstagingComplete()` method, described later.
-
-There are three exceptions that the transactions library can raise to the application: `TransactionFailed`, `TransactionExpired` and `TransactionCommitAmbiguous`.
-All exceptions derive from `TransactionFailed` for backwards-compatibility purposes.
-
-=== TransactionFailed and TransactionExpired
-
-The transaction definitely did not reach the commit point.
-`TransactionFailed` indicates a fast-failure whereas `TransactionExpired` indicates that retries were made until the expiration point was reached, but this distinction is not normally important to the application and generally `TransactionExpired` does not need to be handled individually.
-
-Either way, an attempt will have been made to rollback all changes.
-This attempt may or may not have been successful, but the results of this will have no impact on the protocol or other actors.
-No changes from the transaction will be visible (presently with the potential and temporary exception of staged inserts being visible to non-transactional actors, as discussed under <<Inserting>>).
-
-*Handling:* Generally, debugging exactly why a given transaction failed requires review of the logs, so it is suggested that the application log these on failure.
-(see xref:#logging[Logging]).
-The application may want to try the transaction again later.
-Alternatively, if transaction completion time is not a priority, then transaction expiration times (which default to 15 seconds) can be extended across the board through `TransactionConfigBuilder`:
+//  txnfailed
+include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=txnfailed]
 
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=config-expiration,indent=0]
 ----
 
-This will allow the protocol more time to get past any transient failures (for example, those caused by a cluster rebalance).
-The tradeoff to consider with longer expiration times, is that documents that have been staged by a transaction are effectively locked from modification from other transactions, until the expiration time has exceeded.
+include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=txnfailed1]
 
-Note that expiration is not guaranteed to be followed precisely.
-For example, if the application were to do a long blocking operation inside the lambda (which should be avoided), then expiration can only trigger after this finishes.
-Similarly, if the transaction attempts a key-value operation close to the expiration time, and that key-value operation times out, then the expiration time may be exceeded.
-
-=== TransactionCommitAmbiguous
-
-As discussed <<mechanics,previously>>, each transaction has a 'single point of truth' that is updated atomically to reflect whether it is committed.
-
-However, it is not always possible for the protocol to become 100% certain that the operation was successful, before the transaction expires.
-That is, the operation may have successfully completed on the cluster, or may succeed soon, but the protocol is unable to determine this (whether due to transient network failure or other reason).
-This is important as the transaction may or may not have reached the commit point, e.g. succeeded or failed.
-
-The library raises TransactionCommitAmbiguous to indicate this state.
-It should be rare to receive this exception.
-
-If the transaction had in fact successfully reached the commit point, then the transaction will be fully completed ("unstaged") by the asynchronous cleanup process at some point in the future.
-With default settings this will usually be within a minute, but whatever underlying fault has caused the TransactionCommitAmbiguous may lead to it taking longer.
-
-If the transaction had not in fact reached the commit point, then the asynchronous cleanup process will instead attempt to roll it back at some point in the future.
-If unable to, any staged metadata from the transaction will not be visible, and will not cause problems (e.g. there are safety mechanisms to ensure it will not block writes to these documents for long).
-
-*Handling:* This error can be challenging for an application to handle.
-As with `TransactionFailed` it is recommended that it at least writes any logs from the transaction, for future debugging.
-It may wish to retry the transaction at a later point, or globally extend transactional expiration times to give the protocol additional time to resolve the ambiguity.
-
-=== TransactionResult.unstagingComplete()
-
-As above, there is a 'single point of truth' for a transaction.
-After this atomic commit point is reached, the documents themselves will still be individually committed (we also call this "unstaging").
-However, transactionally-aware actors will now be returning the post-transaction versions of the documents, and the transaction is effectively fully committed to those actors.
-
-So if the application is solely working with transaction-aware actors, then the unstaging process is optional.
-And failures during the unstaging process are not particularly important, in this case.
-(Note the asynchronous cleanup process will still complete the unstaging process at a later point.)
-
-Hence, many errors during unstaging will cause the transaction to immediately return success.
-That is, successful return simply means that the commit point was reached.
-
-A method `TransactionResult.unstagingComplete()` indicates whether the unstaging process completed successfully or not.
-This should be used any time that the application needs all results of the transaction to be immediately available to non-transactional actors (which currently includes N1QL and non-transactional Key-Value reads).
-
-Error handling differs depending on whether a transaction is before or after the point of commit (or rollback).
 
 === Full Error Handling Example
 
@@ -438,48 +285,8 @@ Pulling all of the above together, this is the suggested best practice for error
 include::example$TransactionsExample.java[tag=full-error-handling,indent=0]
 ----
 
-== Asynchronous Cleanup
 
-Transactions will try to clean up after themselves in the advent of failures.
-However, there are situations that inevitably created failed, or 'lost' transactions, such as an application crash.
-
-This requires an asynchronous cleanup task, described in this section.
-
-Creating the `Transactions` object spawns a background cleanup task, whose job it is to periodically scan for expired transactions and clean them up.
-It does this by scanning a subset of the Active Transaction Record (ATR) transaction metadata documents on a bucket.
-As you'll recall from <<mechanics,earlier>>, an entry for each transaction attempt exists in one of these documents.
-(They are removed during cleanup or at some time after successful completion.)
-
-The default settings are tuned to find expired transactions reasonably quickly, while creating neglible impact from the background reads required by the scanning process.
-To be exact, with default settings it will generally find expired transactions within 60 seconds, and use less than 20 reads per second.
-This is unlikely to impact performance on any cluster, but the settings may be <<tuning-cleanup,tuned>> as desired.
-
-Cleanup is done on each bucket in the cluster.
-
-All applications connected to the same cluster and running `Transactions` will share in the cleanup, via a low-touch communication protocol on the "_txn:client-record" metadata document that will be created in each bucket in the cluster.
-This document is visible and should not be modified externally.
-It is maintained automatically by the transactions library.
-All ATRs on a bucket will be distributed between all cleanup clients, so increasing the number of applications will not increase the reads required for scanning.
-
-An application may cleanup transactions created by another application.
-
-It is important to understand that if an application is not running, then cleanup is not running.
-(This is particularly relevant to developers running unit tests or similar.)
-
-If this is an issue, then the deployment may want to consider running a simple application at all times that just    opens a `Transactions` object, to guarantee that cleanup is running.
-
-[#tuning-cleanup]
-=== Configuring Cleanup
-
-The cleanup settings can be configured as so:
-
-[options="header"]
-|===
-|Setting|Default|Description
-|`cleanupWindow`|60 seconds|This determines how long a cleanup 'run' is; that is, how frequently this client will check its subset of ATR documents.  It is perfectly valid for the application to change this setting, which is at a conservative default.  Decreasing this will cause expiration transactions to be found more swiftly (generally, within this cleanup window), with the tradeoff of increasing the number of reads per second used for the scanning process.
-|`cleanupLostAttempts`|true|This is the thread that takes part in the distributed cleanup process described above, that cleans up expired transactions created by any client.  It is strongly recommended that it is left enabled.
-|`cleanupClientAttempts`|true|This thread is for cleaning up transactions created just by this client.  The client will preferentially aim to send any transactions it creates to this thread, leaving transactions for the distributed cleanup process only when it is forced to (for example, on an application crash).  It is strongly recommended that it is left enabled.
-|===
+include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=cleanup]
 
 === Monitoring Cleanup
 
@@ -591,8 +398,5 @@ include::example$TransactionsExample.java[tag=defer3,indent=0]
 The transaction expiry timer (which is configurable) will begin ticking once the transaction starts, and is not paused while the transaction is in a deferred state.
 
 
-== Further Reading
 
-* There’s plenty of explanation about how Transactions work in Couchbase in our xref:6.6@server:learn:data/transactions.adoc[Transactions documentation].
-* You can find further code examples on our https://github.com/couchbaselabs/couchbase-transactions-java-examples[transactions examples repository].
-
+include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=further]
