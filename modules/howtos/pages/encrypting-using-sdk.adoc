@@ -19,7 +19,8 @@ The Couchbase Java SDK uses the https://github.com/couchbase/java-couchbase-encr
 It includes cryptographic algorithms and keyrings you can use out of the box, and provides a framework for implementing your own crypto components.
 
 NOTE: This separation of the encryption library ensures that the SDK does not have a dependency upon an encryption library in general use -- 
-but it does mean you have to explicitly include this external dependency in your project configuration. See the xref:#_example[example project].
+but it does mean you have to explicitly include this external dependency in your project configuration. 
+Refer to the xref:#maven-coordinates[dependencies section].
 
 The Couchbase Java Field Level Encryption (FLE) uses entity annotations/`JsonObject` methods to specify which field(s) to apply encryption and which algorithm to use.
 
@@ -39,9 +40,8 @@ Version `3.0.0-pre.1` of this library requires Couchbase Java SDK version `3.0.5
 
 === Optional Dependencies
 
-To reduce the footprint of this library, some of its dependencies
-are optional. Using certain features requires adding additional dependencies
-to your project.
+To reduce the footprint of this library, some of its dependencies are optional. 
+Using certain features requires adding additional dependencies to your project.
 
 HashiCorp Vault Transit integration requires [Spring Vault](https://docs.spring.io/spring-vault/docs/current/reference/html/):
 
@@ -57,8 +57,7 @@ HashiCorp Vault Transit integration requires [Spring Vault](https://docs.spring.
 
 == Configuration
 
-To enable Field-Level Encryption, supply a `CryptoManager` when configuring
-the Java SDK's `ClusterEnvironment`.
+To enable Field-Level Encryption, supply a `CryptoManager` when configuring the Java SDK's `ClusterEnvironment`.
 
 [source,java]
 ----
@@ -69,8 +68,9 @@ include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_1,indent=0]
 == Usage
 
 Two modes of operation are available: 
-transparent encryption/decryption during Jackson data binding, 
-and manual field editing using `JsonObjectCrypto`.
+
+* Transparent encryption/decryption during Jackson data binding.
+* Manual field editing using `JsonObjectCrypto`.
 
 === Data Binding Example
 
@@ -96,8 +96,7 @@ You can get the document as a `JsonObject` to verify the field was encrypted:
 include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_4,indent=0]
 ----
 
-Because `contentAsObject()` does not decrypt anything, the expected output
-is something like:
+Because `contentAsObject()` does not decrypt anything, the expected output is something like:
 
 [source,json]
 ----
