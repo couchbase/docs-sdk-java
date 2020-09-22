@@ -3,7 +3,7 @@
 :page-edition: Enterprise Edition
 :page-aliases: ROOT:encryption.adoc
 :page-status: Developer Preview
-// include::partial$attributes.adoc[]
+include::partial$attributes.adoc[]
 
 [abstract]
 Fields within a document can be securely encrypted by the SDK, to support FIPS-140-2 compliance.
@@ -18,7 +18,7 @@ Refer to the https://github.com/couchbase/java-couchbase-encryption[GitHub repo^
 
 .Actors & Responsibilities in Field Level Encryption
 [#field_level_encryption--architecture]
-image::field_level_encryption-architecture.png[]
+image::{incimagesdir}/field_level_encryption-architecture.png[]
 
 This is a client-side implementation, with key management and initialization of data encryption done during configuration of the SDK, which then exposes the API during runtime, for normal read/write operations.
 
