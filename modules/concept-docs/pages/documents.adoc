@@ -99,6 +99,14 @@ collection.binary().decrement(counterDocId);
 collection.binary().decrement(counterDocId,
 DecrementOptions.decrementOptions().delta(5));
 ----
+
+You can simplify by importing `decrementOptions()` statically:
+
+[source,java]
+----
+collection.binary().decrement(counterDocId, decrementOptions().delta(5));   
+----
+
 include::6.5@sdk:shared:partial$documents.adoc[tag=counters2]
 
 [source,python]
@@ -108,13 +116,6 @@ rv = cb.get('counter_id')
 value, cas = rv.value, rv.cas
 if should_increment_value(value):
   cb.upsert('counter_id', value + increment_amount, cas=cas)
-----
-
-You can simplify by importing `decrementOptions()` statically:
-
-[source,java]
-----
-collection.binary().decrement(counterDocId, decrementOptions().delta(5));   
 ----
 
 include::6.5@sdk:shared:partial$documents.adoc[tag=counters3]
