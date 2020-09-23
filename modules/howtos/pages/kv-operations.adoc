@@ -141,7 +141,9 @@ If the `replace()` above never works, you would always get a CAS mismatch, and n
 In later chapters we cover more sophisticated approaches to this, including asynchronous retry, retry with backoff and bailing out after a maximum amount of tries. 
 All these should be in place for robust, production ready code.
 
+
 == Removing
+
 Removing a document is straightforward:
 
 [source,java]
@@ -151,7 +153,9 @@ include::example$KvOperations.java[tag=remove]
 
 Like `replace`, `remove` also optionally takes the CAS value if you want to make sure you are only removing the document if it hasn't changed since you last fetched it.
 
+
 == Durability
+
 Writes in Couchbase are written to a single node, and from there the Couchbase Server will take care of sending that mutation to any configured replicas.
 
 The optional `durability` parameter, which all mutating operations accept, allows the application to wait until this replication (or persistence) is successful before proceeding.
@@ -180,7 +184,7 @@ The options are in increasing levels of safety.
 Note that nothing comes for free - for a given node, waiting for writes to storage is considerably slower than waiting for it to be available in-memory.
 These trade offs, as well as which settings may be tuned, are discussed in the xref:concept-docs:durability-replication-failure-considerations.adoc#durable-writes[durability page].
 
-If a version of Couchbase Server lower than 6.5 is being used then the application can fall-back to 'client verified' durability. 
+If a version of Couchbase Server lower than 6.5 is being used then the application can fall-back to xref:concept-docs:durability-replication-failure-considerations.adoc#older-server-versions['client verified' durability.] 
 Here the SDK will do a simple poll of the replicas and only return once the requested durability level is achieved. 
 This can be achieved like this:
 
@@ -192,7 +196,9 @@ include::example$KvOperations.java[tag=durability-observed]
 To stress, durability is a useful feature but should not be the default for most applications, as there is a performance consideration, 
 and the default level of safety provided by Couchbase will be reasonable for the majority of situations.
 
+
 == Document Expiration
+
 Couchbase Server includes an option to have particular documents automatically expire after a set time. 
 This can be useful for some use-cases, such as user sessions, caches, or other temporary documents.
 
