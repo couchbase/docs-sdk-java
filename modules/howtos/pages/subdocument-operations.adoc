@@ -309,7 +309,7 @@ include::example$SubDocument.java[tag=cas,indent=0]
 
 == Durability
 
-Couchbase’s traditional durability, using `PersistTo` and `ReplicateTo`, is still available, particuarly for talking to Couchbase Server 6.0 and earlier:
+Couchbase’s xref:concept-docs:durability-replication-failure-considerations.adoc#older-server-versions[traditional 'client verified' durability], using `PersistTo` and `ReplicateTo`, is still available, particularly for talking to Couchbase Server 6.0 and earlier:
 
 [source,java]
 ----
