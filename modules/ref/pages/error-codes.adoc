@@ -139,7 +139,10 @@ Raised when decoding of the data into the user object failed.
 
 
 
-== KeyValue Error Definitions (ID Range 100 - 199)
+== KeyValue Error Definitions
+
+ID Range 100 - 199
+
 
 === # 101 DocumentNotFound
 
@@ -265,7 +268,10 @@ KV Code: `0x24`.
 
 
 
-== Query Error Definitions (ID Range 200 - 299)
+== Query Error Definitions
+
+ID Range 200 - 299
+
 
 === # 201 PlanningFailure
 
@@ -281,7 +287,10 @@ Query: Raised when codes xref:66@server:n1ql:n1ql-language-reference/n1ql-error-
 
 
 
-== Analytics Error Definitions (ID Range 300 - 399)
+== Analytics Error Definitions
+
+ID Range 300 - 399
+
 
 === # 301 CompilationFailure
 
@@ -313,13 +322,18 @@ Raised when xref:6.6@server:analytics:error-codes.adoc[24006].
 
 
 
-== Search Error Definitions (ID Range 400 - 499)
+== Search Error Definition
+
+ID Range 400 - 499
 
 There are no specific errors for Search; see the <<shared-error-definitions,Shared Error Definitions section>> for errors that apply to Search.
 
 
 
-== View Error Definitions (ID Range 500 - 599)
+== View Error Definitions
+
+ID Range 500 - 599
+
 
 === # 501 ViewNotFound
 
@@ -334,7 +348,10 @@ Raised on the Management APIs only when:
 
 
 
-== Management API Error Definitions (ID Range 600 - 699)
+== Management API Error Definitions
+
+ID Range 600 - 699
+
 
 === # 601 CollectionExists
 
@@ -366,7 +383,9 @@ Raised from the bucket management API.
 
 
 
-== Field-Level Encryption Error Definitions (ID Range 700 - 799)
+== Field-Level Encryption Error Definitions
+
+ID Range 700 - 799
 
 Note, in SDK 3.0, Field Level Encryption is only available as a xref:3.0@java-sdk:howtos:encrypting-using-sdk.adoc[Developer Preview with the Java SDK].
 
@@ -410,7 +429,10 @@ Raised when decryption fails due to malformed input, integrity check failure, et
 
 
 ////
-=== SDK-Specific Error Definitions (ID Range 1000 - 2000)
+=== SDK-Specific Error Definitions
+
+ID Range 1000 - 2000
+
 This range is reserved for sdk-specific error codes which are not standardized, but might be used later.
 ////
 
