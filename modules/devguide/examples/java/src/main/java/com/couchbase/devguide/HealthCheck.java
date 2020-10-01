@@ -16,7 +16,11 @@
 
 package com.couchbase.devguide;
 
-import com.couchbase.client.core.diagnostics.*;
+import com.couchbase.client.core.diagnostics.DiagnosticsResult;
+import com.couchbase.client.core.diagnostics.EndpointDiagnostics;
+import com.couchbase.client.core.diagnostics.EndpointPingReport;
+import com.couchbase.client.core.diagnostics.PingResult;
+import com.couchbase.client.core.diagnostics.PingState;
 import com.couchbase.client.core.endpoint.EndpointState;
 import com.couchbase.client.core.service.ServiceType;
 import com.couchbase.client.java.*;

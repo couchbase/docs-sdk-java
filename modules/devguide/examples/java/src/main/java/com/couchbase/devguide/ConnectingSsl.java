@@ -16,49 +16,56 @@
 
 package com.couchbase.devguide;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
+
+import com.couchbase.client.core.env.SecurityConfig;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.Scope;
+import com.couchbase.client.java.ClusterOptions;
+import com.couchbase.client.java.env.ClusterEnvironment;
+
 import org.apache.log4j.Logger;
 
-import java.time.Duration;
-
-public class ConnectionBase {
+public class ConnectingSsl {
 
     protected static final Logger LOGGER = Logger.getLogger("devguide");
-
     protected final Cluster cluster;
     protected final Bucket bucket;
-    protected final Scope scope;
-    protected final Collection collection;
-    protected final Scope namedScope;
-    protected final Collection namedCollection;
+    protected final ClusterEnvironment env;
 
     //=== EDIT THESE TO ADAPT TO YOUR COUCHBASE INSTALLATION ===
     public static final String bucketName = "default";
-    public static final String scopeName = "scope-name";
-    public static final String collectionName = "collection-name";
-    public static final String userName = "Administrator";
-    public static final String userPass = "password";
-    public static final String seedNode = "127.0.0.1";
+    static String connectstring = "127.0.0.1";
+    static String username="Administrator";
+    static String password="password";
 
-    public ConnectionBase() {
-        // connect deferred to the cluster by hitting one of the given nodes
-        cluster = Cluster.connect(seedNode, userName, userPass);
-        // get a Bucket reference from the cluster to the configured bucket
+    //=== You need to correctly set up your JVM keystore first! ===
+    //see instructions in http://developer.couchbase.com/documentation/server/4.0/sdks/java-2.2/managing-connections.html#story-h2-5
+
+    protected ConnectingSsl() {
+        //configure the SDK to use SSL and point it to the keystore
+
+        env = ClusterEnvironment.builder()
+                .securityConfig(SecurityConfig.enableTls(true)
+                    .trustStore(Paths.get("/path/tokeystore"),"password", Optional.empty()))
+                .build();
+
+        //connect to the cluster using the SSL configuration, by hitting one of the given nodes
+        cluster = Cluster.connect(connectstring,
+            ClusterOptions.clusterOptions(username, password).environment(env));
+
+        //get a Bucket reference from the cluster to the configured bucket
         bucket = cluster.bucket(bucketName);
-        // reference the scope and collection
-        scope = bucket.defaultScope();
-        collection = bucket.defaultCollection();
-        namedScope = bucket.scope(scopeName);
-        namedCollection = scope.collection(collectionName);
-        bucket.waitUntilReady(Duration.ofSeconds(30));
     }
 
     private void disconnect() {
         //release shared resources and close all open buckets
         cluster.disconnect();
+
+        //also release the environment since we created it ourselves (notice this is an async operation so we block on it)
+        env.shutdownAsync();
     }
 
     public void execute() {
@@ -77,6 +84,6 @@ public class ConnectionBase {
     }
 
     public static void main(String[] args) {
-        new ConnectionBase().execute();
+        new ConnectingSsl().execute();
     }
 }

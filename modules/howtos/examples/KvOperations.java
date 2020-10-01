@@ -35,9 +35,9 @@ class KvOperations {
 
 Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");
 
-Bucket bucket = cluster.bucket("bucket-name");
-Scope scope = bucket.scope("scope-name");
-Collection collection = scope.collection("collection-name");
+Bucket bucket = cluster.bucket("default");
+Scope scope = bucket.scope("_default");
+Collection collection = scope.collection("_default");
 
 JsonObject json = JsonObject.create()
   .put("title", "My Blog Post")
@@ -51,7 +51,7 @@ ReactiveCollection reactiveCollection = collection.reactive();
 
 {
 // #tag::upsert[]
-JsonObject content = JsonObject.create().put("author", "mike");
+JsonObject content = JsonObject.create().put("author", "mike").put("title","My Blog Post 1");
 
 MutationResult result = collection.upsert("document-key", content);
 // #end::upsert[]
@@ -60,7 +60,7 @@ MutationResult result = collection.upsert("document-key", content);
 {
 // #tag::insert[]
 try {
-  JsonObject content = JsonObject.create().put("title", "My Blog Post");
+  JsonObject content = JsonObject.create().put("title", "My Blog Post 2");
   MutationResult insertResult = collection.insert("document-key", content);
 } catch (DocumentExistsException ex) {
   System.err.println("The document already exists!");
@@ -135,23 +135,36 @@ try {
 }
 
 {
+  try {
 // #tag::durability[]
-collection.upsert(
-  "my-document",
-  JsonObject.create().put("doc", true),
-  upsertOptions().durability(DurabilityLevel.MAJORITY)
-);
+    collection.upsert(
+        "my-document",
+        JsonObject.create()
+            .put("doc",
+                true),
+        upsertOptions().durability(DurabilityLevel.MAJORITY)
+    );
 // #end::durability[]
+  } catch(DurabilityImpossibleException di) {
+    System.out.println(di);
+  }
 }
 
 {
+  try {
 // #tag::durability-observed[]
-collection.upsert(
-  "my-document",
-  JsonObject.create().put("doc", true),
-  upsertOptions().durability(PersistTo.NONE, ReplicateTo.TWO)
-);
+    collection.upsert(
+        "my-document",
+        JsonObject.create()
+            .put("doc",
+                true),
+        upsertOptions().durability(PersistTo.NONE,
+            ReplicateTo.TWO)
+    );
 // #end::durability-observed[]
+  } catch(ReplicaNotConfiguredException rnc){
+    System.out.println(rnc);
+  }
 }
 
 {

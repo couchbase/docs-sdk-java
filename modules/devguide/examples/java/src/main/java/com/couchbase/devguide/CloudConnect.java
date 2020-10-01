@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+package com.couchbase.devguide;
+
 import com.couchbase.client.core.deps.io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import com.couchbase.client.core.env.IoConfig;
 import com.couchbase.client.core.env.SecurityConfig;
@@ -30,7 +32,7 @@ import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 
 import java.time.Duration;
 
-public class Example {
+public class CloudConnect {
     public static void main(String... args) {
         // Update this to your cluster
         String endpoint = "cb.<your endpoint address>.dp.cloud.couchbase.com";
