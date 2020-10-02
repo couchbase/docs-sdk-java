@@ -82,7 +82,7 @@ public class Views {
 
   }
 
-  // #tag::view_row_structure[]
+  // tag::view_rows_structure[]
   public class ViewRowExample {
 
     public Optional<String> id() { Optional<String> result = null; /*  */ return result;}
@@ -95,7 +95,7 @@ public class Views {
 
     public <T> Optional<T> valueAs(TypeRef<T> target) { Optional<T>  result=null; /*  */ return result;}
   }
-  // #end::view_row_structure[]
+  // end::view_rows_structure[]
 
 
 }
