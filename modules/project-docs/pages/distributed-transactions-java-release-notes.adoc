@@ -13,6 +13,7 @@ The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Tran
 
 
 == Distributed Transactions Java 1.1.1 (2 October 2020)
+
 This is the fourth release of Couchbase Distributed ACID Transactions for Java.
 It includes 2 bug-fixes.
 
@@ -21,8 +22,10 @@ https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.1.1/[JavaDocs]
 === Bug Fixes
 * https://issues.couchbase.com/browse/TXNJ-261[TXNJ-261]:
 The PerTransactionConfig durability setting was not being used.
+It should now be passed through from the builder to the build.
 * https://issues.couchbase.com/browse/TXNJ-259[TXNJ-259]:
 In the very unlikely case of eternally repeated errors while setting ATR to ROLLED_BACK, the logic would repeat indefinitely and not check transaction expiry.
+The logic has been tweaked to ensure that this cannot happen. 
 
 == Distributed Transactions Java 1.1.0 (12 August 2020)
 This is the third release of Couchbase Distributed ACID Transactions for Java.
