@@ -235,7 +235,7 @@ If you suspect based on profiling and benchmarking that the socket is saturated 
 This might be especially helpful if you need to push large documents through it.
 The recommendation is keeping it at 1 unless there is other evidence.
 +
-NOTE: xref:concept-docs:durability-replication-failure-considerations.adoc#synchronous-writes[Durable Write] operations with Couchbase Server 6.5 and above require up to 16 KV Endpoints per node, for most efficient operation, unless the environment dictates something a little lower.
+NOTE: xref:concept-docs:durability-replication-failure-considerations.adoc#synchronous-writes[Durable Write] operations with Couchbase Server 6.5 and above require up to 16 kvEndpoints per node, for most efficient operation, unless the environment dictates something a little lower.
 
 Name: *Max HTTP Endpoints per Service per Node*::
 Builder Method: `IoConfig.maxHttpConnections(int)`
@@ -327,6 +327,7 @@ rollingWindow::
 Default: `1m`
 +
 How long the window is in which the number of failed ops are tracked in a rolling fashion.
+
 
 == Timeout Options
 
