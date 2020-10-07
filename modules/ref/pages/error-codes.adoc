@@ -83,7 +83,7 @@ Raised when:
 
 === # 10 BucketNotFound
 
-Raised whena request is made but the current bucket is not found.
+Raised when a request is made but the current bucket is not found.
 
 === # 11 CollectionNotFound
 
