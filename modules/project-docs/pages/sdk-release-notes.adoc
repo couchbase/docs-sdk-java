@@ -28,12 +28,78 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.8</version>
+        <version>3.0.9</version>
     </dependency>
 </dependencies>
 ----
 
-== Version 3.0.8 (31) August 2020)
+== Version 3.0.9 (7 October 2020)
+
+Version 3.0.9 is a bugfix release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
+
+http://packages.couchbase.com/clients/java/3.0.9/Couchbase-Java-Client-3.0.9.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.9/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.10/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.0**
+* com.couchbase.client:**core-io:2.0.10**
+* io.projectreactor:**reactor-core:3.3.9.RELEASE**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== API Affecting
+* https://issues.couchbase.com/browse/JCBC-1716[JCBC-1716]: The Analytics getPendingMutations API had a return value (`Map<String, Long>`) that did not reflect what was returned from the server.
+The return value has been changed to `Map<String, Map<String, Long>>` accordingly.
+As the getPendingMutations method was previously uncallable due to the resulting deserialization failure, we believe this API change - though technically breaking - will not impact any users, and we have kept the API version at 3.x.
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/JCBC-1713[JCBC-1713]: 
+Improve LDAP auth failure handling.
+* https://issues.couchbase.com/browse/JCBC-1718[JCBC-1718]: 
+`Expery` fixed for `touch` and `getAndTouch` methods.
+* https://issues.couchbase.com/browse/JVMCBC-885[JVMCBC-885]: 
+Allow overriding of `BestEffortRetryStrategy`.
+* https://issues.couchbase.com/browse/JVMCBC-889[JVMCBC-889]: 
+Make sure WaitUntilReady always times out.
+* https://issues.couchbase.com/browse/JVMCBC-890[JVMCBC-890]: 
+Enforce only negotiate PLAIN when using TLS with PasswordAuthenticator.
+* https://issues.couchbase.com/browse/JVMCBC-892[JVMCBC-892]: 
+Service pool idle time check must happen more often.
+* https://issues.couchbase.com/browse/JVMCBC-894[JVMCBC-894]: 
+BatchHelper: handle success case with no body gracefully.
+* https://issues.couchbase.com/browse/JVMCBC-872[JVMCBC-872]: 
+Subdoc 'no access' error code is now reported correctly.
+This helps users to identify and fix permissions errors for system XATTRs.
+
+=== Enhancements
+* https://issues.couchbase.com/browse/JCBC-1651[JCBC-1651]: 
+Geopolygon search support.
+* https://issues.couchbase.com/browse/JCBC-1652[JCBC-1652]: 
+Added Options To Use FTS Hints (Flex Index).
+* https://issues.couchbase.com/browse/JCBC-1695[JCBC-1695]: 
+Added support to pass Score as FTS parameter.
+* https://issues.couchbase.com/browse/JCBC-1707[JCBC-1707]: 
+Retrofited Geo Search Queries to allow Coordinate Usage.
+* https://issues.couchbase.com/browse/JCBC-1709[JCBC-1709]: 
+Allow to access ReactiveScope from Scope.
+* https://issues.couchbase.com/browse/JCBC-1712[JCBC-1712]: 
+Clarified Javadoc lockTime on getAndLock.
+* https://issues.couchbase.com/browse/JCBC-1715[JCBC-1715]: 
+Allow to provide custom http headers for the `RawManager`.
+* https://issues.couchbase.com/browse/JCBC-1717[JCBC-1717]: 
+Support for targeting requests to a given node.
+This allows to always send QueryRequests related to a given transaction to the same query node.
+* https://issues.couchbase.com/browse/JVMCBC-888[JVMCBC-888], 
+https://issues.couchbase.com/browse/JVMCBC-893[JVMCBC-893]: 
+Dependency bumps: Netty to 4.1.52.Final, OpenTelemetry to 0.8.
+* https://issues.couchbase.com/browse/JVMCBC-886[JVMCBC-886]: 
+Improve LDAP auth failure handling.
+* https://issues.couchbase.com/browse/JVMCBC-896[JVMCBC-896]: 
+Fast dispatch pooled requests.
+
+
+== Version 3.0.8 (31 August 2020)
 
 Version 3.0.8 is a bugfix release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
