@@ -5,174 +5,399 @@
 :source-language: java
 :lang: java
 
-Errors are inevitable.
-The developer’s job is to be prepared for whatever is likely to come up -- and to try and be prepared for anything that conceivably could come up.
-Couchbase gives you a lot of flexibility, but it is recommended that you equip yourself with an understanding of the possibilities.
+Errors are inevitable. That's why the SDK has very extensive error handling and retry capabilties which are focussed on one goal: keeping your application available as best as possible even in the face of (transient) failures. 
 
+Unfortunately, the SDK alone can't make all the decisions needed since it lacks the understanding of your application domain. In most cases transparent retry is the best choice, but maybe sometimes you need to fail quickly and switch over to an alternate data source. In the next chapters you will learn about basic and advanced error handling mechanisms, as well as the fundamentals that hold them all together.
 
-As covered xref:concurrent-async-apis.adoc[here], the Java SDK ships with three different APIs, allowing you to structure your application the way you want.
-That guide also covers how errors are actually returned (e.g. via `Try`, `Future`, or `Mono`) and handled, so this document will focus instead on specific errors, along with a broader look at error handling strategies.
+== Error Handling Fundamentals
 
-== Key-Value Errors
+The following fundamentals help you understand how the SDK makes retry decisions and how errors are surfaced. Later chapters will cover how you can influence this behavior.
 
-The KV Service exposes several common errors that can be encountered - both during development, and to be handled by the production app. Here we will cover some of the most common errors.
+=== The Request Lifecycle
 
-If a particular key cannot be found it is raised as an `DocumentNotFoundException`:
-////
-[source,scala]
+The following image shows the high-level phases during a request lifecycle:
+
+image::request-lifecycle.png[Request Lifecycle]
+
+ - *Pre-Dispatch:* This is the initial phase of the request lifecycle. The request is created and the SDK is trying to find the right socket/endpoint to dispatch the operation into.
+ - *Dispatch:* The SDK puts the operation onto the network and waits for a response. This is a critical point in the lifecycle because the retryability depends on the idempotence of the request (discussed later).
+ - *Response Arrived:* Once a response arrives from the server, the SDK decides what to do with it (in the best case, complete the operation successfully).
+
+All the specifics are discussed below, but a broad categorization of exceptions can be outlined already:
+
+ 1. If a response arrived and it indicates non-success and the SDK determines that it cannot be retried the operation will fail with an explicit exception. So for example if you perform an `insert` operation and the document already exists, the SDK will fail the operation with a `DocumentExistsException`.
+ 2. Failures in all other cases, especially during pre-dispatch and dispatch will result in either a `TimeoutException` or a `RequestCanceledException`.
+
+=== The Ubiquitous TimeoutException
+
+The one exception that you are inevitably going to hit is the `TimeoutException`, or more specifically its child implementations the `UnambiguousTimeoutException` and the `AmbiguousTimeoutException`.
+
+It is very important to establish a mindset that a timeout is never the cause of a problem, but always the symptom. A timeout is your friend, because otherwise your thread will just end up being blocked for a long time instead. A timeout gives you control over what should happen when it hits, and it provides a safety net and last resort if the operation cannot be completed for whatever reason.
+
+The SDK will raise always raise a `AmbiguousTimeoutException` unless it can be sure that it did not cause any side effect on the server side (for example if an idempotent operation timed out, which is covered in the next chapter). Most of the time it is enough to just handle the generic `TimeoutException`.
+
+Since the timeout is never the cause, always the symptom, it is important to provide contextual information on what might have caused it in the first place. In this newest generation of the SDK, we introduced the concept of an `ErrorContext` which helps with exactly that.
+
+The `ErrorContext` is available as a method on the `TimeoutException` through the `context()` getter, but most importantly it is automatically attached to the exception output when printed in the logs. Here is an example output of such a `TimeoutException` with the attached context.
+
+[source]
 ----
-include::example$ErrorHandling.scala[tag=key-not-found,indent=0]
-----
-
-[source,scala]
-----
-include::example$ErrorHandling.scala[tag=get,indent=0]
-----
-////
-On the other hand if the key already exists and should not (e.g. on an insert) then it is raised as a `DocumentExistsException`:
-////
-[source,scala]
-----
-include::example$ErrorHandling.scala[tag=key-exists,indent=0]
-----
-////
-=== Concurrency
-Couchbase provides optimistic concurrency using CAS.
-Each document gets a CAS value on the server, which is changed on each mutation.
-When you get a document you automatically receive its CAS value, and when replacing the document, if you provide that CAS the server can check that the document has not been concurrently modified by another agent in-between.  If it has, it returns `CasMismatchException`, and the most appropriate response is to simply retry it:
-////
-[source,scala]
-----
-include::example$ErrorHandling.scala[tag=cas,indent=0]
-----
-////
-=== Ambiguity
-There are situations with any distributed system in which it is simply impossible to know for sure if the operation completed successfully or not.
-Take this as an example: your application requests that a new document be created on Couchbase Server.  This completes, but, just before the server can notify the client that it was successful, a network switch dies and the application's connection to the server is lost.  The client will timeout waiting for a response and will raise a `TimeoutException`, but it's ambiguous to the app whether the operation succeeded or not.
-
-So `TimeoutException` is one ambiguous error, another is `DurabilityAmbiguousException`, which can returned when performing a durable operation.  This similarly indicates that the operation may or may not have succeeded: though when using durability you are guaranteed that the operation will either have been applied to all replicas, or none.
-
-Given the inevitability of ambiguity, how is the application supposed to handle this?
-
-It really needs to be considered case-by-case, but the general strategy is to become certain if the operation succeeded or not, and to retry it if required.
-
-For instance, for inserts, they can simply be retried to see if they fail on `DocumentExistsException`, in which case the operation was successful:
-////
-[source,scala]
-----
-include::example$ErrorHandling.scala[tag=insert,indent=0]
+Exception in thread "main" com.couchbase.client.core.error.UnambiguousTimeoutException: GetRequest, Reason: TIMEOUT {"cancelled":true,"completed":true,"coreId":"0x5b36b0db00000001","idempotent":true,"reason":"TIMEOUT","requestId":22,"requestType":"GetRequest","retried":14,"retryReasons":["ENDPOINT_NOT_AVAILABLE"],"service":{"bucket":"travel-sample","collection":"_default","documentId":"airline_10226","opaque":"0x24","scope":"_default","type":"kv"},"timeoutMs":2500,"timings":{"totalMicros":2509049}}
+	at com.couchbase.client.java.AsyncUtils.block(AsyncUtils.java:51)
+   ... (rest of stack omitted) ...
 ----
 
-That example is much closer to what an application will want to be doing.  Let's flesh it out further.
-////
+The full reference for the `ErrorContext` can be found at the bottom of this document, but just by looking at it we can observe the following information:
 
-////
-=== Real-World Error Handling
-The application can write wrappers so that it can easily do operations without having to duplicate the error handling each time.  Something like this:
+ - A `GetRequest` timed out after `2500` ms
+ - The document in question had the id `airline_10226` and we used the `travel-sample` bucket
+ - It has been retried 15 times and the reason was always `ENDPOINT_NOT_AVAILABLE`
 
-[source,scala]
+We'll discuss retry reasons later in this document, but `ENDPOINT_NOT_AVAILABLE` signals that we could not send the operation over the socket because it was not connected/available. Since we now know that the socket had issues, we can inspect the logs to see if we find anything related:
+
+[source]
 ----
-include::example$ErrorHandling.scala[tag=insert-real,indent=0]
-----
-
-This will make a 'best effort' to do the insert (though its retry strategy is rather naive, and applications may want to implement a more sophisticated approach involving exponential backoff and circuit breaking.)
-
-If that best effort fails, and the `doInsert` call still returns a `Failure`, then it's highly context-dependent how to handle that.  Examples would include displaying a "please try again later" error to a user, if there is one, and logging it for manual human review.  The application must make a suitable call for each case.
-
-The application can write similar wrappers for the other operations - replace, upsert et al.
-Note that the logic is a little different in each case: for inserts, we confirm if the operation has already been successful on an ambiguous result by checking for `DocumentExistsException`.  But this wouldn't make sense for an upsert.
-////
-=== Non-Idempotent Operations
-Idempotent operations are those that can be applied multiple times and only have one effect.  Repeatedly setting an email field is idempotent - increasing a counter by one is not.
-
-Some operations we can view as idempotent as they will fail with no effect after the first success - such as inserts.
-
-Idempotent operations are much easier to handle, as on ambiguous error results (`DurabilityAmbiguousException` and `TimeoutException`) the operation can simply be retried.
-
-Most key-value operations are idempotent.  For those that aren't, such as a Sub-Document `arrayAppend` call, or a counter increment, the application should, on an ambiguous result, first read the document to see if that change was applied.
-
-////
-== Query and Analytics Errors
-A N1QL query either returns results or `QueryError`, like so:
-
-[source,scala]
-----
-include::example$ErrorHandling.scala[tag=query,indent=0]
+2020-10-16T10:28:48.717+0200 WARN  endpoint:523 - [com.couchbase.endpoint][EndpointConnectionFailedEvent][2691us] Connect attempt 7 failed because of AnnotatedConnectException: finishConnect(..) failed: Connection refused: /127.0.0.1:11210 {"bucket":"travel-sample","channelId":"5B36B0DB00000001/000000006C7CDB48","circuitBreaker":"DISABLED","coreId":"0x5b36b0db00000001","local":"127.0.0.1:49895","remote":"127.0.0.1:11210","type":"KV"}
+com.couchbase.client.core.deps.io.netty.channel.AbstractChannel$AnnotatedConnectException: finishConnect(..) failed: Connection refused: /127.0.0.1:11210
+Caused by: java.net.ConnectException: finishConnect(..) failed: Connection refused
+	at com.couchbase.client.core.deps.io.netty.channel.unix.Errors.throwConnectException(Errors.java:124)
+	... (rest of stack omitted) ...
 ----
 
-Analytics works in an identical fashion, raising an `AnalyticsError`.
-////
+Looks like we tried to connect to the server, but the connection got refused. Next step would be to triage the socket issue on the server side, but in this case it's not needed since I just stopped the server for this experiment. Time to start it up again and jump to the next chapter!
+
+=== Request Cancellations
+
+Since we've covered timeouts already, the other remaining special exception is the `RequestCanceledException`. It will be thrown in the following cases:
+
+ - The `RetryStrategy` determined that the `RetryReason` must not be retried (covered later)
+ - Too many requests are being stuck waiting to be retried (signaling backpressure)
+ - The SDK is already shutdown when an operation is performed
+
+There are potentially other reasons as well, but where it originates is not as important as the information it conveys. If you get a `RequestCanceledException`, it means the SDK is not able to further retry the operation and it is terminated before the timeout interval.
+
+Transparently retrying should only be done if the `RetryStrategy` has been customized and you are sure that the retried operation hasn't performed any side-effects on the server that can lead to dataloss. Most of the time the logs need to be inspected after the fact to figure out what went wrong.
+
+To aid with debugging after the fact, the `RequestCanceledException` also contains an `ErrorContext`, very similar to what has been discussed in the timeout section above.
+
+=== Idempotent vs. Non-Idempotent Requests
+
+Operations flowing through the SDK are either idempotent or non-idempotent. If an operation is idempotent, it can be sent to the server multiple times without changing the result more than once.
+
+This distinction is important when the SDK sends the operation to the server and the socket gets closed before it receives a response. If it is not idempotent the SDK cannot be sure if it caused a side-effect on the server side and needs to cancel it. In this case, the application will receive a `RequestCanceledException`.
+
+If it is idempotent though, the SDK will transparently retry the operation since it has a chance of succeeding eventually. Depending on the type of request, it might be able to send it to another node or the socket connection is reestablished before the operation times out.
+
+If the operation needs to be retried before it is sent onto the network or after the SDK received a response, the idempotency doesn't matter and other factors are taken into account. The following picture illustrates when idempotency is important in the request lifecycle:
+
+image::request-lifecycle-idempotent.png[Request Lifecycle With Idempotence]
 
 
-// temporary borrowed content from migration guide, until sme time available
+The SDK is very conservative on which operations are considered idempotent, because it really wants to avoid accidential data loss. Imagine a situation where a mutating operation is applied twice by accident but another application server changed it in the meantime. That change is lost without a chance to potentially recover it. The following operations are considered idempotent out of the box (aside specific internal requests that are not covered):
+
+ - Cluster: `search`, `ping`, `waitUntilReady`
+ - Bucket: `view`, `ping`, `waitUntilReady`
+ - Collection: `get`, `lookupIn`, `getAnyReplica`, `getAllReplicas`, `exists`
+ - Management commands that only retrieve information
+
+Both `query` and `analyticsQuery` commands are not in the list because the SDK does not inspect the `statement` string to check if you are actually performing a mutating operation or not. If you are certain that you are only selecting data you can manually tell the client about it and benefit from idempotent retries:
+
+[source,java]
+----
+include::example$ErrorHandling.java[tag=readonly,indent=0]
+----
+
+=== The RetryStrategy and RetryReasons
+
+The `RetryStrategy` decides whether or not a request should be retried based on the `RetryReason`. By default, the SDK ships with a `BestEffortRetryStrategy` which, when faced with a retryable error, retries the request until it either succeeds or the timeout expires.
+
+IMPORTANT: SDK 2 ships with a `FailFastRetryStrategy` which is intended to be used by an application. SDK 3 also ships with one, but it is marked as `@Internal`. We recommend extending and customizing the `BestEffortRetryStrategy` as described in <<Customizing the RetryStrategy>>.
+
+The `RetryReasons` are good to look at (see the reference section), because they give insight into why an operation got retried. The `ErrorContext` described in the previous chapters exposes the reasons as a list, since it is certainly possible that a request gets retried more than once because of different reasons. So a request might be retried because the socket went down during dispatch and then another time because the response indicated a temporary failure.
+
+See <<Customizing the RetryStrategy>> for more information on how to tailor the default behavior to your needs.
 
 == Exception Handling
 
-How to _handle_ exceptions is unchanged from SDK 2. 
-You should still use `try/catch` on the blocking APIs and the corresponding reactive/async methods on the other APIs. 
-There have been changes made in the following areas:
+In java, all exceptions derive from a base `CouchbaseException`. It acts as both a grouping mechanism and as a "catch all" possibility in case you need one. Also, it defines a `ErrorContext context()` getter, which in some exception cases might be null. If it is available, it will be automatically included in the exception log output as mentioned above. Also, the `CouchbaseException` extends the `RuntimeException`, so no checked exceptions are defined throughout the SDK.
 
-- Exception hierachy and naming.
-- Proactive retry where possible.
+With the SDK retrying all transparently retryable exceptions already (unless you tune the `RetryStrategy`), you are only left with terminal exceptions that are not retryable at all or where the SDK does not have enough context to decide on its own.
 
+=== Handling Exceptions in the blocking API
 
-=== Exception hierachy
+Let's consider one of the simpler examples - loading a document via Key/Value - to illustrate different `try/catch` strategies.
 
-The exception hierachy is now flat and unified under a `CouchbaseException`. 
-Each `CouchbaseException` has an associated `ErrorContext` which is populated with as much information as possible and then dumped alongside the stack trace if an error happens.
+First, if you do not anticipate the document to not be present, it is likely that you are treating a `DocumentNotFoundException` as an error that is fatal. In this case you can either propagate the `CouchbaseException` up your call stack, or rethrow it with a custom exception (here we define an arbitrary `DatabaseException`):
 
-Here is an example of the error context if a N1QL query is performed with an invalid syntax (i.e. `select 1= from`):
-
-[source]
+[source,java]
 ----
-Exception in thread "main" com.couchbase.client.core.error.ParsingFailedException: Parsing of the input failed {"completed":true,"coreId":1,"errors":[{"code":3000,"message":"syntax error - at from"}],"idempotent":false,"lastDispatchedFrom":"127.0.0.1:62253","lastDispatchedTo":"127.0.0.1:8093","requestId":3,"requestType":"QueryRequest","retried":11,"retryReasons":["ENDPOINT_TEMPORARILY_NOT_AVAILABLE","BUCKET_OPEN_IN_PROGRESS"],"service":{"operationId":"9111b961-e585-42f2-9cab-e1501da7a40b","statement":"select 1= from","type":"query"},"timeoutMs":75000,"timings":{"dispatchMicros":15599,"totalMicros":1641134}}
+include::example$ErrorHandling.java[tag=getfetch,indent=0]
 ----
 
-The expectation is that the application catches the `CouchbaseException` and deals with it as an unexpected error
-(e.g. logging with subsequent bubbling up of the exception or failing).
-In addition to that, each method exposes exceptions that can be caught separately if needed. 
-As an example, consider the javadoc for the `Collection.get` API:
+In a different case, a document not being present might be an indication that you need to create it. In this case you can catch it explicitly and handle it, while rethrowing all others:
 
-[source]
+[source,java]
 ----
-   * @throws DocumentNotFoundException the given document id is not found in the collection.
-   * @throws TimeoutException if the operation times out before getting a result.
-   * @throws CouchbaseException for all other error reasons (acts as a base type and catch-all).
+include::example$ErrorHandling.java[tag=getcatch,indent=0]
 ----
 
-These exceptions extend `CouchbaseException`, but both the `TimeoutException` and the `DocumentNotFoundException` can be caught individually if specific logic should be executed to handle them.
+Please refer to each individual method (javadoc) for more information about which exceptions are thrown on top of the `TimeoutException` and `RequestCanceledException`.
 
-=== Proactive Retry
+Now that we've covered falling back to another method or propagating the error, we also need to touch on retrying. As mentioned previously, the SDK will retry as much as it can, but in some cases it cannot know if an operation is retryable or not without the additional context you have as an application developer. 
 
-One reason why the APIs do not expose a long list of exceptions is that the SDK now retries as many operations as it can if it can do so safely.
-This depends on the type of operation (idempotent or not), in which state of processing it is (already dispatched or not), and what the actual response code is if it arrived already. 
-As a result, many transient cases -- such as locked documents, or temporary failure -- are now retried by default and should less often impact applications.
-It also means, when migrating to the new SDK API, you may observe a longer period of time until an error is returned by default.
+As an example, in your application you know that a particular document is only ever written by one app, so there is no harm in retrying an upsert operation in case of failure:
 
-NOTE: Operations are retried by default as described above with the default `BestEffortRetryStrategy`.
-Like in SDK 2 you can configure fail-fast retry strategies to not retry certain or all operations. 
-The `RetryStrategy` interface has been extended heavily in SDK 3 -- please see the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/CommonOptions.html#retryStrategy-com.couchbase.client.core.retry.RetryStrategy-[API documentation].
+[source,java]
+----
+include::example$ErrorHandling.java[tag=tryupsert,indent=0]
+----
 
-////
-When migrating your SDK 2 exception handling code to SDK 3, make sure to wrap every call with a catch for `CouchbaseException` (or let it bubble up immediately).
-You can likely remove your user-level retry code for temporary failures, backpressure exception, and so on. 
-One notable exception from this is the `CasMismatchException`, which is still thrown since it requires more app-level code to handle (most likely identical to SDK 2).
-////
+This code tries to upsert the document with a maximum of 10 times. While this code can be improved in various ways, it highlights an issue in general with blocking retries: usually you expect a single timeout for the operation which represents your upper limit. But in this case individual timeouts might add up to way more than a single operation timeout, since you are always issuing new timeouts.
+
+Of course there are ways to keep track of the remaining timeout and set it to a lower value when you perform the retry, but if you have sophisticated retry needs we recommend looking at reactive retry instead which is covered in the next chapter.
+
+=== Reactive Exception Handling
+
+Handling errors in the reactive API is very powerful, although a little more complex to understand at first. If you are new to reactive programming in general (or with the reactor library specifically), we recommend checking out https://projectreactor.io/docs/core/release/reference/#getting-started[The Reference Documentation] first.
+
+Similar to blocking code, if an operation fails there are usually three avenues to go down:
+
+ - Bubble up the error to the caller
+ - Try a different method/API as a fallback
+ - Retry the original operation
+
+Of course, these methods can also be combined to achieve staged functionality depending on the use case.
+
+In reactor, errors are terminating signals which move through up the operator chain all the way to the subscriber unless they are handled specifically.
+
+[source,java]
+----
+include::example$ErrorHandling.java[tag=reactivesub,indent=0]
+----
+
+If `.block()` is called (instead of `.subscribe()`) at the end, the error will be thrown and can be caught with `try/catch`.
+
+Usually though you either want to perform corrective action at some point or retry the operation. The former can be achieved through the various reactor methods that start with `onError*(...)`.
+
+NOTE: Do not confuse `onError*(...)` with `doOnError(...)`. The former actively changes the operator sequence while the latter should only be used to perform side effects (like logging) and does not alter the sequence at all.
+
+The following example performs a get operation and switches to a fallback method called `createDocumentReactive` if the document does not exist. Note that because `get` and `upsert` have different return types, we unify the API on the document content as a `JsonObject` which in this example will be returned to the user:
+
+[source,java]
+----
+include::example$ErrorHandling.java[tag=reactivefallback,indent=0]
+----
+
+If you want to perform a retry action, the reactor API allows you to do this very elegantly through the `retryWhen(Retry retrySpec)` API. The retry spec is a builder-like API which allows you to define properties when, how and how often to retry.
+
+The following code retries (only) a `DocumentNotFoundException` for a maximum of 5 times before giving up and propagating the error downstream.
+
+[source,java]
+----
+include::example$ErrorHandling.java[tag=reactiveretry,indent=0]
+----
+
+There are many more options available on the `Retry` builder, please consult the official reactor documentation for more information.
+
+NOTE: We always recommend using the `Retry` class from the `reactor.util.retry` package. Do not confuse it with the `Retry` class in the `com.couchbase.client.core.retry.reactor` package, which is deprecated and should not be used for this purpose.
+
+== Customizing the RetryStrategy
+
+A custom `RetryStrategy` can be provided both at the environment (so it will take effect globally):
+
+[source,java]
+----
+include::example$ErrorHandling.java[tag=customglobal,indent=0]
+----
+
+Or it can be applied on a per-request basis:
+
+[source,java]
+----
+include::example$ErrorHandling.java[tag=customreq,indent=0]
+----
+
+Both approaches are valid, although we recommend for most use cases to stick with the defaults and only to override it on a per requests basis.
+
+If you find yourself overriding every request with the same different strategy, it can make sense to apply it locally in order to DRY it up a bit. There are no performance differences with both approaches, but make sure that even if you pass in a custom one on every request that you do not create a new one each time but rather share it across calls.
+
+While it is possible to implement the `RetryStrategy` from scratch, we *strongly recommend* that instead the `BestEffortRetryStrategy` is extended and only the specifiy `RetryReasons` that need to be customized are handled. In practice, it should look something like this:
+
+[source,java]
+----
+include::example$ErrorHandling.java[tag=customclass,indent=0]
+----
+
+Importantly, do not omit the `return super.shouldRetry(request, reason);` as a fallback so that all other cases are handled for you.
+
+Implementing a concrete example, there is a chance that you are using a `CircuitBreaker` configuration and want to fail-fast on an open circuit:
 
 
-// end temporary borrowed content 
+[source,java]
+----
+include::example$ErrorHandling.java[tag=failfastcircuit,indent=0]
+----
 
+One important rule is that you should never block inside `shouldRetry`, since it is called on the hot code path and can considerably impact performance if done so. This is why the return type is enclosed in a `CompletableFuture`, indicating an async response type.
 
-== Additional Resources
-Errors & Exception handling is an expansive topic.
-Here, we have covered examples of the kinds of exception scenarios that you are most likely to face.
-More fundamentally, you also need to weigh up xref:concept-docs:durability-replication-failure-considerations.adoc[concepts of durability].
+If you need to call out to third party systems over the network or the file system to make retry decisions, we recommend that you do this from a different thread and communicate i.e. via atomics so that the hot code path only needs to do cheap lookups.
 
-Diagnostic methods are available to check on the xref:health-check.adoc[health of the cluster].
-// , and the xref:tracing-from-the-sdk.adoc[health of the network].
+The `RetryAction` indicates what should be done with the request: if you return a `RetryAction.noRetry()`, the orchestrator will cancel the request, resulting in a `RequestCanceledException`. The other option is to call it through `RetryAction withDuration(Duration duration)`, indicating the duration when the request should be retried next. This allows you to customize not only if a request should be retried, but also when.
 
-Logging methods are dependent upon the platform and SDK used.
-We offer xref:collecting-information-and-logging.adoc[recommendations and practical examples].
+IMPORTANT: Not retrying operations is considered safe from a data-loss perspective. If you are changing the retry strategy of individual requests keep the semantics discussed in <<Idempotent vs. Non-Idempotent Requests>> in mind. You can check if a request is idempotent through the `idempotent()` getter, and also check if the `RetryReason` allows for non-idempotent retry through the `allowsNonIdempotentRetry()` getter. If in doubt, check the implementation of the `BestEffortRetryStrategy` for guidance.
 
-// We have a xref:ref:error-codes.adoc[listing of error messages], with some pointers to what to do when you encounter them.
+== Reference
 
+=== RetryReasons
+
+The following table describes the *user visible* `RetryReasons` and indicate when they might occur.
+
+The `Non-Idempotent Retry` gives an indication if non-idempotent operations also qualify for retry in this case.
+
+Please also note that at this point in time the `RetryReason` enum is marked as *volatile*, so we do not provide stability guarantees for it.
+
+.RetryReason Reference
+|===
+|Name | Non-Idempotent Retry | Description
+
+| NODE_NOT_AVAILABLE
+| true
+| At the time of dispatch there was no node available to dispatch to.
+
+| SERVICE_NOT_AVAILABLE
+| true
+| At the time of dispatch there was no service available to dispatch to.
+
+| ENDPOINT_NOT_AVAILABLE
+| true
+| At the time of dispatch there was no endpoint available to dispatch to.
+
+| ENDPOINT_CIRCUIT_OPEN
+| true
+| The configured circuit breaker on the endpoint is open.
+
+| ENDPOINT_NOT_WRITABLE
+| true
+| The endpoint is connected, but not writable at the moment.
+
+| KV_ERROR_MAP_INDICATED
+| true
+| The Key/Value error map indicated a retry action on an unknown response code.
+
+| KV_LOCKED
+| true
+| The server response indicates a locked document.
+
+| KV_TEMPORARY_FAILURE
+| true
+| The server response indicates a temporary failure.
+
+| KV_SYNC_WRITE_IN_PROGRESS
+| true
+| The server response indicates a sync write is in progress on the document.
+
+| KV_SYNC_WRITE_RE_COMMIT_IN_PROGRESS
+| true
+| The server response indicates a sync write re-commit is in progress on the document.
+
+| CHANNEL_CLOSED_WHILE_IN_FLIGHT
+| false
+| The underlying channel on the endpoint closed while this operation was still in-flight.
+
+| BUCKET_NOT_AVAILABLE
+| true
+| The needed bucket for this document is currently not available in the SDK.
+
+| BUCKET_OPEN_IN_PROGRESS
+| true
+| There is currently a bucket open action in progress.
+
+| GLOBAL_CONFIG_LOAD_IN_PROGRESS
+| true
+| A concurrent global config loading is currently in progress.
+
+| COLLECTION_MAP_REFRESH_IN_PROGRESS
+| true
+| A collection map refresh is currently in progress.
+
+| VIEWS_TEMPORARY_FAILURE
+| true
+| The server view engine result indicates a temporary failure.
+
+| SEARCH_TOO_MANY_REQUESTS
+| true
+| The server search engine result indicates it needs to handle too many requests.
+
+| QUERY_PREPARED_STATEMENT_FAILURE
+| true
+| The server query engine indicates that the prepared statement failed and is retryable.
+
+| QUERY_INDEX_NOT_FOUND
+| true
+| The server query engine indicates that the query index has not been found.
+
+| ANALYTICS_TEMPORARY_FAILURE
+| true
+| The analytics query engine indicates that a temporary failure occured.
+
+|===
+
+=== ErrorContext
+
+Depending on the operation the `ErrorContext` can be very different, and it also changes over time as we adjust settings to be more user-friendly and improve debugability.
+
+The following table provides best-effort guidance explanation to most of the fields you'll find in practice. Please note that we do not provide any stability guarantees on the names and values at this point (consider it *volatile*):
+
+.ErrorContext Reference
+|===
+|Name | Description
+
+| status
+| The generic response status code which indicates sucess or why the operation failed (based on the server response). Correlates with the `ResponseStatus` enum usually.
+
+| requestId
+| A unique ID for each request which is assigned automatically.
+
+| idempotent
+| If the request is considered idempotent.
+
+| requestType
+| The type of request, derived from the class name.
+
+| retried
+| The number of times the request has been retried already.
+
+| retryReasons
+| Holds the different reasons why a request has been retried already (one entry per reason).
+
+| completed
+| If the request is already completed (might be success or failure).
+
+| timeoutMs
+| The timeout for this request, in milliseconds.
+
+| cancelled
+| Set to true if the operation is cancelled, why see `reason`
+
+| reason
+| If the request is cancelled, contains the `CancellationReason`
+
+| clientContext
+| Contains the clientContext set by the user in the request options.
+
+| service
+| Contains a map of service-specific properties (i.e. the opaque for key value, the statement for a N1QL query etc)
+
+| timings
+| Contains information like how long encoding, dispatch, total time etc. took in microseconds.
+
+| lastDispatchedTo
+| If already sent to a node contains the host and port where it got sent to.
+
+| lastDispatchedFrom
+| If already sent to a node contains the host and port where it got sent from.
+
+| lastChannelId
+| If already sent to a node contains the channel ID that can be used to correlate with the server logs.
+
+|===
