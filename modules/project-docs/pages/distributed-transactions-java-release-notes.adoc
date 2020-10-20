@@ -16,7 +16,7 @@ The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Tran
 
 This release of Couchbase Distributed ACID Transactions for Java includes multiple bug-fixes and improvements.
 
-https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.1.2/[JavaDocs]
+// https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.1.2/[JavaDocs]
 
 === Bug Fixes
 
@@ -53,7 +53,7 @@ Increase client record safety margin from 2 to 20 seconds.
 This is the fourth release of Couchbase Distributed ACID Transactions for Java.
 It includes 2 bug-fixes.
 
-https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.1.1/[JavaDocs]
+// https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.1.1/[JavaDocs]
 
 === Bug Fixes
 
