@@ -64,6 +64,6 @@ WARNING: [com.couchbase.core][DnsSrvLookupFailedEvent][86ms] DNS SRV lookup fail
 == Further Reading
 
 * Our practical look at xref:howtos:error-handling.adoc[error handling with the SDK].
-// * xref:howtos:health-check.adoc#diagnostics[Diagnostics] with Health Check.
+* xref:howtos:health-check.adoc#diagnostics[Diagnostics] with Health Check.
 * xref:concept-docs:errors.adoc[Discussion document] on handling exceptions.
 * Further reference material in the https://docs.couchbase.com/sdk-api/couchbase-java-client/index.html[API Guide].
