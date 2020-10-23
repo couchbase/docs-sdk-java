@@ -26,4 +26,4 @@ include::6.5@sdk:shared:partial$durability-replication-failure-considerations.ad
 
 == Further Reading
 
-For now, much of the discussion (concept-level documentation) can still be found interleaved in the xref:howtos:error-handling.html#exception-handling[practical error handling howto doc].
+For now, much of the discussion (concept-level documentation) can still be found interleaved in the xref:howtos:error-handling.adoc#exception-handling[practical error handling howto doc].
