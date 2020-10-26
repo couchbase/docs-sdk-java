@@ -22,7 +22,7 @@ include::example$N1qlQueryExample.java[tag=n1ql_query_1,indent=0]
 
 == Indexes
 
-The Couchbase query service makes use of xref:6.5@server:learn:services-and-indexes/indexes/indexes.adoc[_indexes_] in order to do its work.
+The Couchbase Query Service makes use of xref:6.5@server:learn:services-and-indexes/indexes/indexes.adoc[_indexes_] in order to do its work.
 Indexes replicate subsets of documents from data nodes over to index nodes, 
 allowing specific data (for example, specific document properties) to be retrieved quickly, 
 and to distribute load away from data nodes in xref:6.5@server:learn:services-and-indexes/services/services.adoc[MDS] topologies.
@@ -109,7 +109,7 @@ include::example$N1qlQueryExample.java[tag=n1ql_query_4,indent=0]
 ----
 
 The above query may not return the newly inserted document because it has not yet been indexed.
-The query is issued immediately after document creation, and in this case the query engine may process the query before the index has been updated.
+The query is issued immediately after document creation, and in this case the Query Engine may process the query before the index has been updated.
 
 If the above code is modified to use _REQUEST_PLUS_, query processing will wait until all updates have been processed and recalculated into the index from the point in time the query was received:
 
