@@ -18,7 +18,7 @@ Some of the supported query-types include simple queries like Match and Term que
 
 == Getting Started
 
-After familiarizing yourself with how to create and query a search index in the UI you can query it from the SDK. 
+After familiarizing yourself with how to create and query a Search index in the UI you can query it from the SDK. 
 Intentionally the API itself is very similar to the query and analytics ones, the main difference being that you cannot cast the resulting rows into a domain object directly but rather get a `SearchRow` returned. 
 The reason for this is that a search row ("hit") has more metadata associated with it than you potentially want to look at.
 
@@ -28,7 +28,7 @@ include::example$Search.java[tag=simple,indent=0]
 ----
 
 Let's break it down. 
-A search query is always performed at the `Cluster` level, using the `searchQuery` method. 
+A Search query is always performed at the `Cluster` level, using the `searchQuery` method. 
 It takes the name of the index and the type of query  as required arguments and then allows to provide additional options if needed 
 (in the example above, no options are specified).
 
@@ -81,7 +81,7 @@ You can combine them with `conjuncts` and `disjuncts` respectively.
 
 == The Search Result
 
-Once the search query is executed successfully, the server starts sending back the resultant hits.
+Once the Search query is executed successfully, the server starts sending back the resultant hits.
 
 [source,java]
 ----
@@ -104,13 +104,13 @@ The `SearchRow` contains the following methods:
 |====
 
 Note that the `SearchMetaData` also contains potential `errors`, because the SDK will keep streaming results if the initial response came back successfully. 
-This makes sure that even with partial data usually search results are useable,
+This makes sure that even with partial data usually Search results are useable,
 so if you absolutely need to check if all partitions are present in the result double check the error 
 (and not only catch an exception on the query itself).
 
 == Search Options
 
-The search service provides an array of options to customize your query. The following table lists them all:
+The Search Service provides an array of options to customize your query. The following table lists them all:
 
 .Available Search Options
 [options="header"]
@@ -141,7 +141,7 @@ include::example$Search.java[tag=limit,indent=0]
 
 === ScanConsistency and ConsistentWith
 
-By default, all search queries will return the data from whatever is in the index at the time of query. 
+By default, all Search queries will return the data from whatever is in the index at the time of query. 
 These semantics can be tuned if needed so that the hits returned include the most recently performed mutations, at the cost of slightly higher latency since the index needs to be updated first.
 
 There are two ways to control consistency: either by supplying a custom `SearchScanConsistency` or using `consistentWith`.
@@ -166,7 +166,7 @@ include::example$Search.java[tag=highlight,indent=0]
 
 === Sort
 
-By default the search engine will sort the results in descending order by score. 
+By default the Search Engine will sort the results in descending order by score. 
 This behavior can be modified by providing a different sorting order which can also be nested.
 
 [source,java]
@@ -175,7 +175,7 @@ include::example$Search.java[tag=sort,indent=0]
 ----
 
 Facets are aggregate information collected on a result set and are useful when it comes to categorization of result data. 
-The SDK allows you to provide many different facet configurations to the search engine, the following example shows how to create a facet based on a term. 
+The SDK allows you to provide many different facet configurations to the Search Engine, the following example shows how to create a facet based on a term. 
 Other possible facets include numeric and date ranges.
 
 === Facets
@@ -187,7 +187,7 @@ include::example$Search.java[tag=facets,indent=0]
 
 === Fields
 
-You can tell the search engine to include the full content of a certain number of indexed fields in the response.
+You can tell the Search Engine to include the full content of a certain number of indexed fields in the response.
 
 [source,java]
 ----
@@ -200,7 +200,7 @@ As with all JSON APIs, it is possible to customize the JSON serializer.
 You can plug in your own library (like GSON) or custom configure mappings on your own Jackson serializer. 
 This in turn makes it possible to serialize rows into POJOs or other structures that your application defines, and which the SDK has no idea about.
 
-Please see the documentation on transcoding and serialization for more information.
+Please see the xref:transcoders-nonjson.adoc[documentation on transcoding and serialization] for more information.
 
 == Reactive And Async APIs
 
@@ -225,7 +225,7 @@ A simple reactive query is similar to the blocking one:
 include::example$Search.java[tag=simplereactive,indent=0]
 ----
 
-This search query will stream all rows as they become available form the server. 
+This Search query will stream all rows as they become available form the server. 
 If you want to manually control the data flow (which is important if you are streaming a lot of rows which could cause a potential out of memory situation) you can do this by using explicit `request()` calls.
 
 [source,java]
