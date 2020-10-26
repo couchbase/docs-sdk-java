@@ -82,6 +82,7 @@ Please make sure you run on one of the latest patch releases, since they provide
 == Couchbase Feature Availability Matrix
 
 .Couchbase Server and SDK Supported Version Matrix
+[.table-merge-cells] 
 |===
 | | Server 5.0, 5.1, & 5.5 | Server 6.0 | Server 6.5 & 6.6
 
