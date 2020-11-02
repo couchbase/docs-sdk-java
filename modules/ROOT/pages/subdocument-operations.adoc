@@ -283,7 +283,7 @@ Attempting to perform such an operation would result in an error.
 
 By default the automatic creation of parents is disabled, as a simple typo in application code can result in a rather confusing document structure.
 Sometimes it is necessary to have the server create the hierarchy however.
-In this case, the _createPath_ option may be used.
+In this case, the _createPath_ option may be used, as part of the `SubDocOptionsBuilder`.
 
 [source,java]
 ----
