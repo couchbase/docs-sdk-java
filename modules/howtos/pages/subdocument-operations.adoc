@@ -3,7 +3,7 @@
 :page-topic-type: howto
 include::partial$attributes.adoc[]
 :lang: Java
-:version: 3.0.9
+:version: 3.0.10
 :page-aliases: ROOT:sdk-xattr-example.adoc
 
 
