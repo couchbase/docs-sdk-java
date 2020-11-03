@@ -28,10 +28,33 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.9</version>
+        <version>3.0.10</version>
     </dependency>
 </dependencies>
 ----
+
+== Version 3.0.10 (3 November 2020)
+
+Version 3.0.10 is a maintenance release, bringing enhancements over the last stable release.
+
+http://packages.couchbase.com/clients/java/3.0.10/Couchbase-Java-Client-3.0.10.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.10/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.11/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.0.10**
+* com.couchbase.client:**core-io:2.0.11**
+* io.projectreactor:**reactor-core:3.3.9.RELEASE**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== Enhancements
+
+* https://issues.couchbase.com/browse/JVMCBC-898[JVMCBC-898]:
+Added fallback for lastDispatchedTo in context, to improve debuggability.
+* https://issues.couchbase.com/browse/JVMCBC-899[JVMCBC-899]:
+Updated OpenTelemetry to 0.9.1.
+
 
 == Version 3.0.9 (7 October 2020)
 
@@ -43,7 +66,7 @@ http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.10/[Core API Reference]
 
 The supported and tested dependencies for this release are:
 
-* com.couchbase.client:**java-client:3.0.0**
+* com.couchbase.client:**java-client:3.0.9**
 * com.couchbase.client:**core-io:2.0.10**
 * io.projectreactor:**reactor-core:3.3.9.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.3**
