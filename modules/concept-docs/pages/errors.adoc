@@ -17,6 +17,8 @@ include::6.5@sdk:shared:partial$errors.adoc[tag=durability]
 
 include::6.5@sdk:shared:partial$errors.adoc[tag=diag]
 
+// include::6.5@sdk:shared:partial$errors.adoc[tag=threshold]
+
 // until opentelemetry release for link below, could add note on API to expose own tracing features?
 // include::6.5@sdk:shared:partial$errors.adoc[tag=rto]
 
