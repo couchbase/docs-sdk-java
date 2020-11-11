@@ -122,3 +122,110 @@ The .NET SDK can be combined with many other projects in the broader .NET ecosys
 </div>
 ++++
  
+
+
+// Java-ified bits:
+////
+= Couchbase .NET SDK 3.0
+:page-type: landing-page
+:page-layout: landing-page-sdk
+:page-role: tiles
+:!sectids:
+
+
+++++
+<div class="card-row">
+++++
+
+
+[.column]
+====== {empty}
+[.content]
+The Couchbase .NET client allows applications to connect to Couchbase Server using any Common Language Runtime (CLR) language, including C#, F#, and VB.NET. The SDK is written in C#, and some of its idiomatic patterns reflect that choice.
+
+++++
+</div>
+++++
+
+[.column]
+====== {empty}
+
+== Couchbase .NET SDK 3.0
+
+++++
+<div class="card-row two-column-row">
+++++
+
+
+[.column]
+====== {empty}
+.Java SDK
+
+[.content]
+The Java SDK forms the cornerstone of our JVM clients.
+It allows Java applications to access a Couchbase Server cluster.
+The Java SDK offers traditional synchronous APIs as well as scalable asynchronous APIs to maximize performance.
+[]
+xref:3.0@java-sdk:hello-world:start-using-sdk.adoc[Java SDK 3.0]
+
+[.column]
+====== {empty}
+.Java SDK
+
+[.content]
+The Java SDK forms the cornerstone of our JVM clients.
+It allows Java applications to access a Couchbase Server cluster.
+The Java SDK offers traditional synchronous APIs as well as scalable asynchronous APIs to maximize performance.
+[]
+xref:3.0@java-sdk:hello-world:start-using-sdk.adoc[Java SDK 3.0]
+
+[.column]
+====== {empty}
+.Java SDK
+
+[.content]
+The Java SDK forms the cornerstone of our JVM clients.
+It allows Java applications to access a Couchbase Server cluster.
+The Java SDK offers traditional synchronous APIs as well as scalable asynchronous APIs to maximize performance.
+[]
+xref:3.0@java-sdk:hello-world:start-using-sdk.adoc[Java SDK 3.0]
+
+
+[.column]
+====== {empty}
+.Java SDK
+
+[.content]
+The Java SDK forms the cornerstone of our JVM clients.
+It allows Java applications to access a Couchbase Server cluster.
+The Java SDK offers traditional synchronous APIs as well as scalable asynchronous APIs to maximize performance.
+[]
+xref:3.0@java-sdk:hello-world:start-using-sdk.adoc[Java SDK 3.0]
+
+[.column]
+====== {empty}
+.Java SDK
+
+[.content]
+The Java SDK forms the cornerstone of our JVM clients.
+It allows Java applications to access a Couchbase Server cluster.
+The Java SDK offers traditional synchronous APIs as well as scalable asynchronous APIs to maximize performance.
+[]
+xref:3.0@java-sdk:hello-world:start-using-sdk.adoc[Java SDK 3.0]
+
+[.column]
+====== {empty}
+.Java SDK
+
+[.content]
+The Java SDK forms the cornerstone of our JVM clients.
+It allows Java applications to access a Couchbase Server cluster.
+The Java SDK offers traditional synchronous APIs as well as scalable asynchronous APIs to maximize performance.
+[]
+xref:3.0@java-sdk:hello-world:start-using-sdk.adoc[Java SDK 3.0]
+
+
+++++
+</div>
+++++
+////
