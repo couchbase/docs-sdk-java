@@ -1,0 +1,124 @@
+= Couchbase .NET SDK 3.0
+:page-type: landing-page
+:page-layout: landing-page-top-level-sdk
+:page-role: tiles
+:!sectids:
+:page-aliases: ROOT:dotnet-sdk.sdoc
+
+
+++++
+<div class="card-row two-column-row">
+++++
+
+
+[.column]
+====== {empty}
+[.content]
+The Couchbase .NET client allows applications to connect to Couchbase Server using any Common Language Runtime (CLR) language, including C#, F#, and VB.NET. The SDK is written in C#, and some of its idiomatic patterns reflect that choice.
+
+[.column]
+[.content]
+[source,c#]
+----
+try
+{
+    var result = await _transactions.RunAsync(async (ctx) =>
+    {
+        var docB = await ctx.GetAsync(_collection, "doc-b").ConfigureAwait(false);
+        var content = docB.ContentAs<dynamic>();
+        content.put("transactions", "are awesome");
+        await ctx.ReplaceAsync(docB, content);
+
+        await ctx.CommitAsync().ConfigureAwait(false);
+    }).ConfigureAwait(false);
+}
+----
+
+++++
+</div>
+++++
+
+
+
+[.column]
+====== {empty}
+
+== Couchbase .NET SDK 3.0
+
+++++
+<div class="card-row three-column-row">
+++++
+
+
+[.column]
+====== {empty}
+.Getting Started
+
+[.content]
+Dive right in with a xref:start-using-sdk.adoc[quick install and Hello World].
+// Try out our xref:sample-application.adoc[Travel Sample Application].
+// And take a look at the xref:howtos:working-with-collections.adoc[developer preview of Collections].
+
+
+[.column]
+====== {empty}
+.Practical Howto Docs
+
+[.content]
+Connect to our services -- xref:howtos:kv-operations.adoc[data (KV)]; 
+xref:howtos:n1ql-queries-with-sdk.adoc[Query]; 
+xref:howtos:full-text-searching-with-sdk.adoc[Search]; 
+xref:howtos:analytics-using-sdk.adoc[Analytics]; 
+xref:howtos:view-queries-with-sdk.adoc[Views] -- 
+and the xref:howtos:subdocument-operations.adoc[Sub-Document API].
+
+[.column]
+====== {empty}
+.Reference Guides
+
+[.content]
+The documentation supplements the practical Howto docs with references and xref:concept-docs:concepts.adoc[concept guides], for those who prefer a broader understanding before diving in and coding.
+[]
+https://docs.couchbase.com/sdk-api/couchbase-net-client[API Docs^]
+
+
+[.column]
+====== {empty}
+.What's Hot?
+
+[.content]
+The Couchbase .NET SDK 3.0 is a complete rewrite of the API, reducing the number of overloads to present a simplified surface area.
+In following Microsoft recommendations on .NET, the API has also been changed to surface many of the APIs as async using Tasks.
+// Dependency Injection
+// LINQ2
+
+* xref:concept-docs:collections.adoc[Works with our Collections Developer Preview]
+* xref:concept-docs:durability-replication-failure-considerations.adoc[New Synchronous Write Durability]
+
+
+
+[.column]
+====== {empty}
+.About
+
+[.content]
+Those useful nuts-and-bolts guides to 
+xref:project-docs:compatibility.adoc[compatibility tables]; 
+xref:project-docs:sdk-release-notes.adoc[release notes]; 
+xref:project-docs:get-involved.adoc[contribution guide]; and the 
+xref:project-docs:migrating-sdk-code-to-3.n.adoc[migration guide] for moving to the 3.0 API.
+
+[.column]
+====== {empty}
+.Community
+
+[.content]
+For community help, visit the https://forums.couchbase.com/c/net-sdk/6[Couchbase forums^].
+The .NET SDK can be combined with many other projects in the broader .NET ecosystem and beyond.
+// Such as?
+//  -- in the https://blog.couchbase.com/[Couchbase Blog^] there are examples covering everything from ????
+
+++++
+</div>
+++++
+ 
