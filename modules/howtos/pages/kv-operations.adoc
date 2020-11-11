@@ -202,11 +202,20 @@ and the default level of safety provided by Couchbase will be reasonable for the
 Couchbase Server includes an option to have particular documents automatically expire after a set time. 
 This can be useful for some use-cases, such as user sessions, caches, or other temporary documents.
 
-You can set an expiry value when creating a document:
+You can set an expiry value from a `Duration` when creating a document:
 
 [source,java]
 ----
 include::example$KvOperations.java[tag=expiry-insert]
+----
+
+We recommend using a relative duration only if the provided value is less than 30 days. The reasonn is that the server will assume any value larger than that to be an absolute unix timestamp. The SDK tries its best to coerce it into sane values, but to avoid any unexpected behavior please stick to the less than 30 days as a relative duration.
+
+For longer expiry values, use an `Instant` instead:
+
+[source,java]
+----
+include::example$KvOperations.java[tag=expiry-insert-instant]
 ----
 
 When getting a document, the expiry is not provided automatically by Couchbase Server but it can be requested:
@@ -215,6 +224,8 @@ When getting a document, the expiry is not provided automatically by Couchbase S
 ----
 include::example$KvOperations.java[tag=expiry-get]
 ----
+
+If the document has an expiry, `expiry()` returns the length of time between the start of the epoch and the point in time when the loaded document expires. In other words, the number of seconds in the returned duration is equal to the epoch second when the document expires. Alternatively, you can get the absolute epoch expiry time through the `expiryTime()` method.
 
 Note that when updating the document, special care must be taken to avoid resetting the expiry to zero. 
 Here's how:

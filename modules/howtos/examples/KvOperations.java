@@ -22,6 +22,8 @@ import com.couchbase.client.java.json.*;
 import com.couchbase.client.java.kv.*;
 
 import java.time.Duration;
+import java.time.Instant;
+import java.time.Period;
 
 import static com.couchbase.client.java.kv.GetOptions.getOptions;
 import static com.couchbase.client.java.kv.InsertOptions.insertOptions;
@@ -178,6 +180,16 @@ MutationResult insertResult = collection.insert(
 }
 
 {
+// #tag::expiry-insert-instant[]
+MutationResult insertResult = collection.insert(
+  "my-document",
+  json,
+  insertOptions().expiry(Instant.now().plus(Period.ofMonths(2)))
+);
+// #end::expiry-insert-instant[]
+}
+
+{
 // #tag::expiry-get[]
 GetResult found = collection.get("my-document", getOptions().withExpiry(true));
 System.out.println("Expiry of found doc: " + found.expiry());
@@ -191,7 +203,7 @@ GetResult found = collection.get("my-document", getOptions().withExpiry(true));
 collection.replace(
   "my-document",
   json,
-  replaceOptions().expiry(found.expiry().get())
+  replaceOptions().expiry(found.expiryTime().get())
 );
 // #end::expiry-replace[]
 }
