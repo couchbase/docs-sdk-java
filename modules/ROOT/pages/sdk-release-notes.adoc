@@ -45,8 +45,8 @@ The supported and tested dependencies for this release are:
 === Enhancements
 
 * http://issues.couchbase.com/browse/JVMCBC-900[JVMCBC-900]:
-Changed the default HTTP idle timeout to 4 seconds (from 30) to make sure that, when running with Couchbase Server 6.6 and later, sockets are not closed by the server prematurely. 
-This happens because with 6.6 and later, for security reasons, the HTTP idle time has been reduced and the server will close those connections after 5 seconds.
+Changed the default HTTP idle timeout to 4 seconds (from 30) to make sure that, when running with Couchbase Server 6.0.4 and later, sockets are not closed by the server prematurely. 
+This happens for security reasons, because the HTTP idle time has been reduced and the server will close those connections after 5 seconds.
 
 * http://issues.couchbase.com/browse/JVMCBC-868[JVMCBC-868]:
 The log message for keep alive failures has been improved.
