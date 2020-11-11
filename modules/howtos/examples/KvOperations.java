@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// #tag::imports[]
+// tag::imports[]
 import com.couchbase.client.core.error.*;
 import com.couchbase.client.core.msg.kv.DurabilityLevel;
 import com.couchbase.client.java.*;
@@ -29,7 +29,7 @@ import static com.couchbase.client.java.kv.GetOptions.getOptions;
 import static com.couchbase.client.java.kv.InsertOptions.insertOptions;
 import static com.couchbase.client.java.kv.ReplaceOptions.replaceOptions;
 import static com.couchbase.client.java.kv.UpsertOptions.upsertOptions;
-// #end::imports[]
+// end::imports[]
 
 class KvOperations {
 
@@ -46,21 +46,21 @@ JsonObject json = JsonObject.create()
   .put("author", "mike");
 
 
-// #tag::apis[]
+// tag::apis[]
 AsyncCollection asyncCollection = collection.async();
 ReactiveCollection reactiveCollection = collection.reactive();
-// #end::apis[]
+// end::apis[]
 
 {
-// #tag::upsert[]
+// tag::upsert[]
 JsonObject content = JsonObject.create().put("author", "mike").put("title","My Blog Post 1");
 
 MutationResult result = collection.upsert("document-key", content);
-// #end::upsert[]
+// end::upsert[]
 }
 
 {
-// #tag::insert[]
+// tag::insert[]
 try {
   JsonObject content = JsonObject.create().put("title", "My Blog Post 2");
   MutationResult insertResult = collection.insert("document-key", content);
@@ -69,11 +69,11 @@ try {
 } catch (CouchbaseException ex) {
   System.err.println("Something else happened: " + ex);
 }
-// #end::insert[]
+// end::insert[]
 }
 
 {
-// #tag::get-simple[]
+// tag::get-simple[]
 try {
   GetResult getResult = collection.get("document-key"); 
   String title = getResult.contentAsObject().getString("title");
@@ -81,11 +81,11 @@ try {
 } catch (DocumentNotFoundException ex) {
   System.out.println("Document not found!");
 }
-// #end::get-simple[]
+// end::get-simple[]
 }
 
 {
-// #tag::get[]
+// tag::get[]
 GetResult found = collection.get("document-key");
 JsonObject content = found.contentAsObject();
 if (content.getString("author").equals("mike")) {
@@ -97,18 +97,18 @@ if (content.getString("author").equals("mike")) {
 }
 
 {
-// #tag::replace[]
+// tag::replace[]
 collection.upsert("my-document", JsonObject.create().put("initial", true));
 
 GetResult result = collection.get("my-document");
 JsonObject content = result.contentAsObject();
 content.put("modified", true).put("initial", false);
 collection.replace("my-document", content, replaceOptions().cas(result.cas()));
-// #end::replace[]
+// end::replace[]
 }
 
 {
-// #tag::replace-retry[]
+// tag::replace-retry[]
 String id = "my-document";
 collection.upsert(id, JsonObject.create().put("initial", true));
 
@@ -123,22 +123,22 @@ while (true) {
         // don't do anything, we'll retry the loop
     }
 }
-// #end::replace-retry[]
+// end::replace-retry[]
 }
 
 {
-// #tag::remove[]
+// tag::remove[]
 try {
   collection.remove("my-document");
 } catch (DocumentNotFoundException ex) {
   System.out.println("Document did not exist when trying to remove");
 }
-// #end::remove[]
+// end::remove[]
 }
 
 {
   try {
-// #tag::durability[]
+// tag::durability[]
     collection.upsert(
         "my-document",
         JsonObject.create()
@@ -146,7 +146,7 @@ try {
                 true),
         upsertOptions().durability(DurabilityLevel.MAJORITY)
     );
-// #end::durability[]
+// end::durability[]
   } catch(DurabilityImpossibleException di) {
     System.out.println(di);
   }
@@ -154,7 +154,7 @@ try {
 
 {
   try {
-// #tag::durability-observed[]
+// tag::durability-observed[]
     collection.upsert(
         "my-document",
         JsonObject.create()
@@ -163,41 +163,41 @@ try {
         upsertOptions().durability(PersistTo.NONE,
             ReplicateTo.TWO)
     );
-// #end::durability-observed[]
+// end::durability-observed[]
   } catch(ReplicaNotConfiguredException rnc){
     System.out.println(rnc);
   }
 }
 
 {
-// #tag::expiry-insert[]
+// tag::expiry-insert[]
 MutationResult insertResult = collection.insert(
   "my-document",
   json,
   insertOptions().expiry(Duration.ofHours(2))
 );
-// #end::expiry-insert[]
+// end::expiry-insert[]
 }
 
 {
-// #tag::expiry-insert-instant[]
+// tag::expiry-insert-instant[]
 MutationResult insertResult = collection.insert(
   "my-document",
   json,
   insertOptions().expiry(Instant.now().plus(Period.ofMonths(2)))
 );
-// #end::expiry-insert-instant[]
+// end::expiry-insert-instant[]
 }
 
 {
-// #tag::expiry-get[]
+// tag::expiry-get[]
 GetResult found = collection.get("my-document", getOptions().withExpiry(true));
 System.out.println("Expiry of found doc: " + found.expiry());
-// #end::expiry-get[]
+// end::expiry-get[]
 }
 
 {
-// #tag::expiry-replace[]
+// tag::expiry-replace[]
 GetResult found = collection.get("my-document", getOptions().withExpiry(true));
 
 collection.replace(
@@ -205,13 +205,13 @@ collection.replace(
   json,
   replaceOptions().expiry(found.expiryTime().get())
 );
-// #end::expiry-replace[]
+// end::expiry-replace[]
 }
 
 {
-// #tag::expiry-touch[]
+// tag::expiry-touch[]
 collection.getAndTouch("my-document", Duration.ofDays(1));
-// #end::expiry-touch[]
+// end::expiry-touch[]
 }
 
   }
