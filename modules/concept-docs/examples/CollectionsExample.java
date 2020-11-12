@@ -42,17 +42,17 @@ public class CollectionsExample {
     collection = bucket.defaultCollection();
   }
 
+    // tag::collections_1[]
   public void collections_1() throws Exception {
-    // #tag::collections_1[]
     collection = bucket.collection("flights"); // in default scope
-    // #end::collections_1[];
   }
+    // end::collections_1[]
 
+    // tag::collections_2[]
   public void collections_2() throws Exception {
-    // #tag::collections_2[]
     collection = bucket.scope("marlowe_agency").collection("flights");
-    // #end::collections_2[];
   }
+    // end::collections_2[]
 
   public static void main(String[] args) throws Exception {
     CollectionsExample obj = new CollectionsExample();
