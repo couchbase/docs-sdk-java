@@ -25,5 +25,8 @@ And for  a non-default scope:
 include::example$CollectionsExample.java[tag=collections_2,indent=0]
 ----
 
+
+== Further Reading  
+
 * Please see the xref:6.5@server:developer-preview:collections/collections-overview.adoc[Collections Overview documents] in the Server docs.
-*  To see Collections in action, take a look at our xref:howtos:working-with-collections.adoc[Collections-enabled Travel Sample page].
+* To see Collections in action, take a look at our xref:howtos:working-with-collections.adoc[Collections-enabled Travel Sample page].
