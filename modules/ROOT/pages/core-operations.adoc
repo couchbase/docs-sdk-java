@@ -245,7 +245,7 @@ You can also use xref:subdocument-operations.adoc#ul_fp2_2yw_mv[sub-document cou
 
 The SDK provides a high-level abstraction over the simple `incr()`/`decr()` of Couchbase Server's memcached binary protocol. 
 This enables you to work with counters using `get()` and `upsert()` operations -- allowing, _inter alia_, the use of durability options with the operations.
-You will find several ways of working with counters https://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.17/com/couchbase/client/java/Bucket.html#counter(java.lang.String,long)[in the API docs].
+You will find several ways of working with counters https://docs.couchbase.com/sdk-api/couchbase-java-client-2.7.18/com/couchbase/client/java/Bucket.html#counter(java.lang.String,long)[in the API docs].
 
 The example below shows a counter being initialised, then being replaced using a `bucket.upsert()`:
 
