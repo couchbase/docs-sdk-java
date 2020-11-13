@@ -42,7 +42,7 @@ Code examples for Java can be found in xref:start-using-sdk.adoc[Getting Started
 
 The last pre-RBAC version of the Java SDK was 2.4.3.
 The first RBAC-enabled version was 2.4.4.
-See the SDK link:https://docs.couchbase.com/java-sdk/current/project-docs/sdk-release-notes.html[Release Notes] for more information.
+See the SDK xref:sdk-release-notes.adoc#version-2-4-4-4-april-2017[Release Notes] for more information.
 
 With the most recent versions of the SDK, the legacy authentication interface and the new, optimized authentication interface can both be used: each supports access to buckets on Couchbase Servers whose version is either 5.0 and beyond, or pre-5.0.
 
