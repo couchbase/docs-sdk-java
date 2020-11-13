@@ -44,10 +44,14 @@ The supported and tested dependencies for this release are:
 === Bug Fixes
 
 * http://issues.couchbase.com/browse/JVMCBC-902[JVMCBC-902]:
-Fixed an issue which surfaced with 2.7.17 where connections over slower networks (i.e. over WAN) would be prematurely cleaned up, causing HTTP-based operations to time out. Note that only 2.7.17 is affected, because earlier releases had a higher check interval where the relevant code path would not come into effect.
+Fixed an issue which surfaced with 2.7.17 where connections over slower networks (i.e. over WAN) would be prematurely cleaned up, causing HTTP-based operations to time out. 
+Note that only 2.7.17 is affected, because earlier releases had a higher check interval where the relevant code path would not come into effect.
 
 
 == Version 2.7.17 (9th November 2020)
+
+*PLEASE NOTE:* This version contains a defect which may cause timeouts on slower networks or connections over WAN. 
+We recommend to skipping this version and going straight to 2.7.18.
 
 Version 2.7.17 is a bugfix release of the 2.7 series, bringing enhancements over the last stable release.
 
@@ -60,7 +64,11 @@ The supported and tested dependencies for this release are:
 * io.reactivex:**rxjava:1.3.8**
 * io.opentracing:**opentracing-api:0.31.0**
 
-**Please note**: This version contains a defect which may cause timeouts on slower networks or connections over WAN. We recommend to skip this version and go straight to 2.7.18.
+=== Known Issues
+
+* http://issues.couchbase.com/browse/JVMCBC-902[JVMCBC-902]:
+This version contains a regression which may cause timeouts on slower networks or connections over WAN. 
+We recommend skipping this version and going straight to 2.7.18.
 
 === Enhancements
 
