@@ -22,8 +22,12 @@ import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.ReactiveCollection;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
+import com.couchbase.client.java.query.QueryOptions;
+import com.couchbase.client.java.query.QueryProfile;
+import com.couchbase.client.java.query.QueryResult;
 import com.couchbase.transactions.TransactionDurabilityLevel;
 import com.couchbase.transactions.TransactionGetResult;
+import com.couchbase.transactions.TransactionQueryOptions;
 import com.couchbase.transactions.TransactionResult;
 import com.couchbase.transactions.Transactions;
 import com.couchbase.transactions.config.TransactionConfigBuilder;
@@ -110,7 +114,7 @@ public class TransactionsExample {
                 System.err.println(err.toString());
             }
         }
-        // #tag::logging[]
+        // #end::logging[]
         // #end::create[]
     }
 
@@ -622,7 +626,7 @@ public class TransactionsExample {
                 // Operations with non-transactional actors will want
                 // unstagingComplete() to be true.
                 cluster.query(" ... N1QL ... ",
-                        queryOptions()
+                        QueryOptions.queryOptions()
                                 .consistentWith(result.mutationState()));
 
                 String documentKey = "a document key involved in the transaction";
@@ -666,9 +670,6 @@ public class TransactionsExample {
             // The transaction may or may not have reached commit point
             LOGGER.info("Transaction returned TransactionCommitAmbiguous and" +
                     " may have succeeded, logs:");
-
-            // Of course, the application will want to use its own logging rather
-            // than System.err
             err.result().log().logs().forEach(log -> LOGGER.info(log.toString()));
         }
         catch (TransactionFailed err) {
@@ -677,6 +678,53 @@ public class TransactionsExample {
             err.result().log().logs().forEach(log -> LOGGER.info(log.toString()));
         }
         // #end::full-logging[]
+    }
+
+    static void queryInsert() {
+        // #tag::queryInsert[]
+        transactions.run((ctx) -> {
+            ctx.query("INSERT INTO `default` VALUES ('doc', {'hello':'world'})");
+
+            String st = "SELECT `default`.* FROM `default` WHERE META().id = 'doc'";
+            QueryResult qr = ctx.query(st);
+            qr.rowsAsObject().forEach(row -> {
+                System.out.println(row);
+            });
+        });
+        // #end::queryInsert[]
+    }
+
+    static void queryRyow() {
+        // #tag::queryRyow[]
+        transactions.run((ctx) -> {
+            ctx.insert(collection, "doc", JsonObject.create().put("hello", "world"));
+
+            String st = "SELECT `default`.* FROM `default` WHERE META().id = 'doc'";
+            QueryResult qr = ctx.query(st);
+            qr.rowsAsObject().forEach(row -> {
+                System.out.println(row);
+            });
+        });
+        // #end::queryRyow[]
+    }
+
+    static void queryOptions() {
+        // #tag::queryOptions[]
+        transactions.run((ctx) -> {
+            ctx.query("INSERT INTO `default` VALUES ('doc', {'hello':'world'})",
+                    TransactionQueryOptions.queryOptions().profile(QueryProfile.TIMINGS));
+        });
+        // #end::queryOptions[]
+    }
+
+    static void customMetadata() {
+        Collection metadataCollection = null;
+
+        // #tag::custom-metadata[]
+        Transactions transactions = Transactions.create(cluster,
+                TransactionConfigBuilder.create()
+                        .metadataCollection(metadataCollection));
+        // #end::custom-metadata[]
     }
 
 }
