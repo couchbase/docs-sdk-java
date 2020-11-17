@@ -100,7 +100,11 @@ Please make sure you run on one of the latest patch releases, since they provide
 
 | Distributed ACID Transactions
 2+| Not Supported
-2+| Since 3.0
+2+| Since 3.0footnote:[3.0.7 or more recent recommended; preferably, follow the transitive dependency for the transactions library in Maven.]
+
+| N1QL Queries inside the Transaction Lambda
+3+| Not Supported
+| Since 3.0.7footnote:[With xref:howtos:distributed-acid-transactions-from-the-sdk.adoc#n1ql-queries[Java Transactions Library 1.1.3].]
 
 | Collections
 2+| Not Supported
