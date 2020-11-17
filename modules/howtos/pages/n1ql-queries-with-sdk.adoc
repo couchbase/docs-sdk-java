@@ -237,7 +237,7 @@ A complete list of `QueryOptions` can be found in the https://docs.couchbase.com
 
 [source,java]
 ----
-QueryResult result = cluster.query(
+QueryResult result = scope.query(
   "select * from `airline` limit 10"
 );
 for (JsonObject row : result.rowsAsObject()) {
