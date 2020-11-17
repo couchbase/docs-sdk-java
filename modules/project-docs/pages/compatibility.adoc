@@ -104,7 +104,7 @@ Please make sure you run on one of the latest patch releases, since they provide
 
 | N1QL Queries inside the Transaction Lambda
 3+| Not Supported
-| Since 3.0.7footnote:[With xref:howtos:distributed-acid-transactions-from-the-sdk.adoc#n1ql-queries[Java Transactions Library 1.1.3].]
+| Since 3.0.7footnote:[With Java Transactions Library 1.1.3.]
 
 | Collections
 2+| Not Supported
