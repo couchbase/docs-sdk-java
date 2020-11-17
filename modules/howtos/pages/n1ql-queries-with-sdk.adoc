@@ -224,7 +224,7 @@ Please note that if your `process()` method equivalent is blocking, like always 
 As always we recommend not blocking in the first place in reactive code.
 
 
-== Querying at Scope level
+== Querying at Scope Level
 
 From version 3.0.8 of the Java SDK, it is possible to query off the xref:7.0@server:learn:data/scopes-and-collections.adoc[`Scope` level] _with the beta version of the next Couchbase Server release, 7.0β_,
 using the `scope.query()` method.
