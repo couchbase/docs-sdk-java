@@ -29,14 +29,14 @@ include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
 
 Couchbase transactions require no additional components or services to be configured. 
 Simply add the transactions library into your project.
-The latest version, as of October 2020, is 1.1.2.
+The latest version, as of November 2020, is 1.1.3.
 
 With Gradle this can be accomplished by modifying these sections of your build.gradle file like so:
 
 [source,gradle]
 ----
 dependencies {
-    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.1.2'
+    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.1.3'
 }
 ----
 
@@ -189,6 +189,39 @@ Gets will 'read your own writes', e.g. this will succeed:
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=getReadOwnWrites,indent=0]
+----
+
+== N1QL Queries
+With Couchbase Server 7.0 beta and the 1.1.3 release of this library, comes support for using N1QL queries inside the transaction lambda.
+
+NOTE: Support for queries in 1.1.3 is at beta level and is marked as @Stability.Volatile, which means the API may need to change as we gather feedback during the Couchbase Server 7.0 beta period.
+The feature should not be used in any production deployment while it is at beta level.
+Please take this opportunity to provide feedback on this feature, via either support or our forums.
+
+If you have used N1QL queries from the regular Java SDK, then you already know how to use queries inside the lambda, as the syntax is almost identical:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=queryInsert,indent=0]
+----
+
+Note that we are performing queries on the `ctx` object.
+This is very important: queries performed on a `Cluster` or `Scope` object inside the lambda will just act like a normal query and will not be part of the transaction.
+
+Key-Value operations and queries can be freely intermixed, and will 'see' each other as you would expect:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=queryRyow,indent=0]
+----
+
+For performance reasons it's recommended to put Key-Value operations before the first query in the lambda if possible, as after that point they incur a small translation cost.
+
+Query options can be provided via `TransactionsQueryOptions`, which provides a subset of the options in the Java SDK's `QueryOptions`:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=queryOptions,indent=0]
 ----
 
 == Committing
@@ -363,6 +396,34 @@ These rules are demonstrated here:
 include::example$TransactionsExample.java[tag=concurrentOps,indent=0]
 ----
 
+== Custom Metadata Collections
+As described above, transactions create and use metadata documents, that are created in the bucket of the first mutated document in the transaction.
+
+With Couchbase Server 7.0 beta comes support for scopes and collections, providing a more granular way of organising documents.
+
+You can now, completely optionally, use a collection to store the metadata documents, using a new configuration parameter:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=custom-metadata,indent=0]
+----
+
+When specified:
+
+* Any transactions created from this `Transactions` object, will create and use metadata in that collection.
+* The asynchronous cleanup started by this `Transactions` object will be looking for expired transactions only in this collection.
+
+Most users will not need to use custom metadata collections, and can continue to use the existing 'out-of-the-box' behaviour.
+They are provided for these use-cases:
+
+* The metadata documents contain, for documents involved in each transaction, the document's key and the name of the bucket, scope and collection it exists on.
+Some deployments may not want to potentially 'leak' this data across buckets, scopes and collections.
+In which case a metadata collection can be created, with appropriate RBAC permissions to control visibility.
+* If the user wants to remove the default collection entirely.
+
+NOTE: Support for custom metadata collections in 1.1.3 is at beta level and is marked as @Stability.Volatile, which means the API may need to change as we gather feedback during the Couchbase Server 7.0 beta period.
+The feature should not be used in any production deployment while it is at beta level.
+Please take this opportunity to provide feedback on this feature, via either support or our forums.
 
 == Deferred Commits
 

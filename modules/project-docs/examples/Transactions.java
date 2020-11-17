@@ -20,22 +20,26 @@ import com.couchbase.client.java.Collection;
 
 // #tag::imports[]
 // Imports required by this sample
+import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.transactions.TransactionResult;
 import com.couchbase.transactions.Transactions;
+import com.couchbase.transactions.config.TransactionConfigBuilder;
 import com.couchbase.transactions.error.TransactionCommitAmbiguous;
 import com.couchbase.transactions.error.TransactionFailed;
+
+import java.util.logging.Logger;
 
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 // #end::imports[]
 
 class TransactionsDemo {
-    void demo_1_0_1_changes() {
-        Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
-        Bucket bucket = cluster.bucket("default");
-        Collection collection = bucket.defaultCollection();
-        Transactions transactions = Transactions.create(cluster);
+    private static final Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
+    private static final Bucket bucket = cluster.bucket("default");
+    private static final Collection collection = bucket.defaultCollection();
+    private static final Transactions transactions = Transactions.create(cluster);
 
+    void demo_1_0_1_changes() {
         // #tag::demo_1_0_1[]
         try {
             TransactionResult result = transactions.run((ctx) -> {
@@ -81,5 +85,30 @@ class TransactionsDemo {
 
 
         cluster.disconnect();
+    }
+
+    static void query() {
+        JsonObject aContent = JsonObject.create();
+        JsonObject bContent = JsonObject.create();
+        JsonObject cContent = JsonObject.create();
+        final Logger LOGGER = Logger.getLogger("transactions");
+
+        // #tag::query-basic[]
+        TransactionResult result = transactions.run((ctx) -> {
+            ctx.insert(collection, "doc-a", aContent);
+            ctx.query("INSERT INTO `default` VALUES ('doc-b', " + bContent + ")");
+            ctx.insert(collection, "doc-c", cContent);
+        });
+        // #end::query-basic[]
+    }
+
+    static void customMetadata() {
+        Collection metadataCollection = null;
+
+        // #tag::custom-metadata[]
+        Transactions transactions = Transactions.create(cluster,
+                TransactionConfigBuilder.create()
+                        .metadataCollection(metadataCollection));
+        // #end::custom-metadata[]
     }
 }
