@@ -224,7 +224,6 @@ Please note that if your `process()` method equivalent is blocking, like always 
 As always we recommend not blocking in the first place in reactive code.
 
 
-////
 == Querying at Scope level
 
 From version 3.0.7 of the Ruby SDK, it is possible to query off the xref:7.0@server:learn:data/scopes-and-collections.adoc[`Scope` level] _with the beta version of the next Couchbase Server release, 7.0β_,
@@ -235,9 +234,16 @@ CAUTION: This feature is marked xref:project-docs:compatibility.adoc#interface-s
 Expect a promotion to _Committed_ API in the next minor release (3.1).
 
 A complete list of `QueryOptions` can be found in the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/AsyncScope.html#query-java.lang.String-[API docs].
-////
 
-
+[source,java]
+----
+QueryResult result = cluster.query(
+  "select * from `travel-sample` limit 10"
+);
+for (JsonObject row : result.rowsAsObject()) {
+  System.out.println("Found row: " + row);
+}
+----
 
 == Additional Resources
 
