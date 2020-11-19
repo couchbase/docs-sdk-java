@@ -52,7 +52,7 @@ public class UserManagementExample {
   }
 
   public void usermanagement_1() throws Exception {
-    // #tag::usermanagement_1[]
+    // tag::usermanagement_1[]
     User user = new User(testUsername).password(testPassword).displayName("Constance Lambert");
     user.roles(
         // Roles required for the reading of data from the bucket
@@ -66,14 +66,14 @@ public class UserManagementExample {
         new Role("query_manage_index", bucketName));
 
     cluster.users().upsertUser(user);
-    // #end::usermanagement_1[];
+    // end::usermanagement_1[]
   }
 
   public void usermanagement_2() throws Exception {
 
     // List current users.
     System.out.println("Listing current users.");
-    // #tag::usermanagement_2[]
+    // tag::usermanagement_2[]
     List<UserAndMetadata> listOfUsers = cluster.users().getAllUsers();
     for (int j = 0; j < listOfUsers.size(); j++) {
       UserAndMetadata currentUser = listOfUsers.get(j);
@@ -83,7 +83,7 @@ public class UserManagementExample {
         System.out.println("   User has the role: " + role.name() + ", applicable to bucket " + role.bucket() );
       }
     }
-    // #end::usermanagement_2[];
+    // end::usermanagement_2[]
   }
 
   public void usermanagement_3() throws Exception {
@@ -91,7 +91,7 @@ public class UserManagementExample {
     // Access the cluster that is running on the local host, specifying
     // the username and password already assigned by the administrator
 
-    // #tag::usermanagement_3[]
+    // tag::usermanagement_3[]
     ClusterEnvironment environment = ClusterEnvironment.builder().build();
     Cluster userCluster = Cluster.connect(connectionString,
         ClusterOptions.clusterOptions(testUsername, testPassword).environment(environment));
@@ -113,7 +113,7 @@ public class UserManagementExample {
     QueryResult result = userCluster.query("SELECT * FROM `travel-sample` LIMIT 5");
 
     userCluster.disconnect();
-    // #tag::usermanagement_3[]
+    // end::usermanagement_3[]
     System.out.println("get -> "+returnedAirline11Doc);
     System.out.println("query -> ");
     for(JsonObject airline:result.rowsAsObject()){
@@ -123,9 +123,9 @@ public class UserManagementExample {
 
   public void usermanagement_4() throws Exception {
     System.out.println("Removing user " + testUsername);
-    // #tag::usermanagement_4[]
+    // tag::usermanagement_4[]
     cluster.users().dropUser(testUsername);
-    // #tag::usermanagement_4[]
+    // end::usermanagement_4[]
     cluster.disconnect();
   }
 
