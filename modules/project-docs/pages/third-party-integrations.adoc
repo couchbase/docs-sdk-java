@@ -34,3 +34,50 @@ The philosophy of the project claims to "strongly favors simplicity and conventi
 
 In CouchMove you write your migrations in N1QL, while in https://github.com/couchbaselabs/CouchVersion[CouchVersion] you can write them using the Java SDK, which essentially allow you to create more complex migrations.
 CouchVersion provides a new approach for adding changes (change sets) based on Java classes and methods with appropriate annotations.
+
+
+
+// old doc:
+////
+= Third-Party Integrations
+:navtitle: 3rd Party Integrations
+:page-topic-type: project-doc
+
+[abstract]
+The rich Java and JVM ecosystem provides plenty of opportunity to plug Couchbase into other tools and a heterogeneous data environment.
+
+IMPORTANT: Unless otherwise stated, these third-party products are supported by the other party, _not_ by Couchbase Support.
+
+== Spring Boot
+
+
+== Spring Data
+
+
+
+
+== Community Integrations
+
+Although unsupported by Couchbase, we list these third-party products here for their benefit in certain set-ups, where you may already be using the tools that they integrate:
+
+* [https://github.com/rfmvlc/spark-loader]
+
+* [https://doc.akka.io/docs/alpakka/current/couchbase.html]
+
+* [https://github.com/apache/nifi/tree/master/nifi-nar-bundles/nifi-couchbase-bundle]
+
+
+== Connectors
+
+Our xref:[Connectors Pages] give more details on Connectors to a wider data ecosystem, whose use is independent of whichever SDK you use for your applications.
+*
+*
+*
+*
+*
+
+=== Community Connectors
+
+// Although unsupported by Couchbase, we list these third-party products here for their benefit in certain set-ups, where you may already be using the tools that they integrate:
+
+////
