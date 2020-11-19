@@ -28,9 +28,9 @@ Why not make development easier, and use https://blog.couchbase.com/create-a-zep
 
 include::6.5@sdk:shared:partial$integrations.adoc[tag=other]
 
-https://github.com/differentway/couchmove [Couchmove] is an open-source Java migration tool for Couchbase, inspired by Flyway.
+https://github.com/differentway/couchmove[Couchmove] is an open-source Java migration tool for Couchbase, inspired by Flyway.
 It can help you "track, manage and apply changes, in your Couchbase buckets."
-The philosophy of the project claims to "strongly favors simplicity and convention over configuration".
+The philosophy of the project claims to "strongly favor simplicity and convention over configuration".
 
 In CouchMove you write your migrations in N1QL, while in https://github.com/couchbaselabs/CouchVersion[CouchVersion] you can write them using the Java SDK, which essentially allow you to create more complex migrations.
 CouchVersion provides a new approach for adding changes (change sets) based on Java classes and methods with appropriate annotations.
