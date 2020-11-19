@@ -18,28 +18,14 @@ and details of all options in the https://docs.couchbase.com/sdk-api/couchbase-j
 .Creating Users
 [source,java]
 ----
-
+include::example$UserManagementExample.java[tag=usermanagement_1,indent=0]
 ----
-
-// Something on assigning roles...
-
-[source,java]
-----
-
-----
-
-
-[source,java]
-----
-
-----
-
 
 // Listing  users...
 
 [source,java]
 ----
-
+include::example$UserManagementExample.java[tag=usermanagement_2,indent=0]
 ----
 
 // Example of listing users by particular role(s).
@@ -49,6 +35,12 @@ and details of all options in the https://docs.couchbase.com/sdk-api/couchbase-j
 
 ----
 
+// Using a user created in the SDK to access data
+
+[source,java]
+----
+include::example$UserManagementExample.java[tag=usermanagement_3,indent=0]
+----
 
 == Further Reading
 
