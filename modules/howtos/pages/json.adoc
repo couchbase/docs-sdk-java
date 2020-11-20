@@ -1,0 +1,8 @@
+= Choosing & Using a JSON Library
+:page-topic-type: howto
+
+
+Third-party JSON libraries are rarely necessary for most use cases with the Couchbase SDKs, and the default library will give you everything that you are likely to need.
+Just xref:hello-world:start-using-sdk.html#hello-couchbase[get started] on your application and see.
+
+NOTE: The xref:1.0@scala-sdk:howtos:json.adoc[Scala SDK supports multiple options for working with JSON], and has its own page covering this topic.
