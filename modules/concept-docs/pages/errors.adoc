@@ -11,13 +11,14 @@ When the unexpected happens, take a step-by-step approach. .
 
 include::6.5@sdk:shared:partial$errors.adoc[tag=exception]
 
-// include::6.5@sdk:shared:partial$errors.adoc[tag=ref]
+include::6.5@sdk:shared:partial$errors.adoc[tag=ref]
 
 include::6.5@sdk:shared:partial$errors.adoc[tag=durability]
 
 include::6.5@sdk:shared:partial$errors.adoc[tag=diag]
 
-// include::6.5@sdk:shared:partial$errors.adoc[tag=observability]
+// Slow Operations Logging
+include::6.5@sdk:shared:partial$errors.adoc[tag=observability]
 
 // until opentelemetry release for link below, could add note on API to expose own tracing features?
 // include::6.5@sdk:shared:partial$errors.adoc[tag=rto]
@@ -25,3 +26,4 @@ include::6.5@sdk:shared:partial$errors.adoc[tag=diag]
 == ACID Transactions
 
 For a discussion of errors affecting multi-document ACID transactions, see xref:howtos:distributed-acid-transactions-from-the-sdk.adoc#error-handling[our documentation on transactions from the Java SDK].
+
