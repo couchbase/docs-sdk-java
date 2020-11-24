@@ -30,8 +30,9 @@ Metrics fall into the following categories:
 
 == Configuring Logging
 
-The information logged can be configured, although configurability does vary slightly betreen SDKs.
-
+The information logged can be configured, although configurability does vary slightly between SDKs.
+// Please add the settings info that users need here for your SDK  :)
+ 
 Advanced users can build their own implementations of the interface:
 
 [source,java]
