@@ -1,9 +1,9 @@
-= Couchbase .NET SDK 3.0
+= Couchbase Java SDK 3.0
 :page-type: landing-page
 :page-layout: landing-page-top-level-sdk
 :page-role: tiles
 :!sectids:
-:page-aliases: ROOT:dotnet-sdk.sdoc
+// :page-aliases: ROOT:dotjavanet-sdk.sdoc
 
 
 ++++
@@ -14,24 +14,20 @@
 [.column]
 ====== {empty}
 [.content]
-The Couchbase .NET client allows applications to connect to Couchbase Server using any Common Language Runtime (CLR) language, including C#, F#, and VB.NET. The SDK is written in C#, and some of its idiomatic patterns reflect that choice.
+The Couchbase Java client allow Java applications to access a Couchbase cluster. 
+It offers synchronous APIs as well as reactive and asynchronous equivalents to maximize flexibility and performance.
 
 [.column]
 [.content]
-[source,c#]
+[source,xml]
 ----
-try
-{
-    var result = await _transactions.RunAsync(async (ctx) =>
-    {
-        var docB = await ctx.GetAsync(_collection, "doc-b").ConfigureAwait(false);
-        var content = docB.ContentAs<dynamic>();
-        content.put("transactions", "are awesome");
-        await ctx.ReplaceAsync(docB, content);
-
-        await ctx.CommitAsync().ConfigureAwait(false);
-    }).ConfigureAwait(false);
-}
+<dependencies>
+    <dependency>
+        <groupId>com.couchbase.client</groupId>
+        <artifactId>java-client</artifactId>
+        <version>3.0.10</version>
+    </dependency>
+</dependencies>
 ----
 
 ++++
@@ -43,7 +39,7 @@ try
 [.column]
 ====== {empty}
 
-== Couchbase .NET SDK 3.0
+== Couchbase Java SDK 3.0
 
 ++++
 <div class="card-row three-column-row">
@@ -56,8 +52,8 @@ try
 
 [.content]
 Dive right in with a xref:start-using-sdk.adoc[quick install and Hello World].
-// Try out our xref:sample-application.adoc[Travel Sample Application].
-// And take a look at the xref:howtos:working-with-collections.adoc[developer preview of Collections].
+Try out our xref:sample-application.adoc[Travel Sample Application].
+And take a look at the xref:howtos:working-with-collections.adoc[developer preview of Collections].
 
 
 [.column]
@@ -79,7 +75,7 @@ and the xref:howtos:subdocument-operations.adoc[Sub-Document API].
 [.content]
 The documentation supplements the practical Howto docs with references and xref:concept-docs:concepts.adoc[concept guides], for those who prefer a broader understanding before diving in and coding.
 []
-https://docs.couchbase.com/sdk-api/couchbase-net-client[API Docs^]
+https://docs.couchbase.com/sdk-api/couchbase-java-client/[API Docs^]
 
 
 [.column]
@@ -87,15 +83,10 @@ https://docs.couchbase.com/sdk-api/couchbase-net-client[API Docs^]
 .What's Hot?
 
 [.content]
-The Couchbase .NET SDK 3.0 is a complete rewrite of the API, reducing the number of overloads to present a simplified surface area.
-In following Microsoft recommendations on .NET, the API has also been changed to surface many of the APIs as async using Tasks.
-// Dependency Injection
-// LINQ2
+The Couchbase Java SDK 3.0 is a complete rewrite of the 2.x API, providing a simpler surface area and adding support for future Couchbase Server features like Collections and Scopes (available in Couchbase Server 6.5 and 6.6 as a developer preview). 
+The (reactive) API also migrated from RxJava to Reactor, along with other improvements to performance, logging, debugging and timeout troubleshooting.
 
-* xref:concept-docs:collections.adoc[Works with our Collections Developer Preview]
-* xref:concept-docs:durability-replication-failure-considerations.adoc[New Synchronous Write Durability]
-
-
+Introducing xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed ACID Transactions from the .NET SDK].
 
 [.column]
 ====== {empty}
@@ -113,119 +104,11 @@ xref:project-docs:migrating-sdk-code-to-3.n.adoc[migration guide] for moving to 
 .Community
 
 [.content]
-For community help, visit the https://forums.couchbase.com/c/net-sdk/6[Couchbase forums^].
-The .NET SDK can be combined with many other projects in the broader .NET ecosystem and beyond.
-// Such as?
+For community help, visit the https://forums.couchbase.com/c/java-sdk/5[Couchbase forums^].
+The Java SDK can be combined with many other projects in the broader Java and JVM ecosystem and beyond.
+This includes xref:project-docs:compatibility.adoc#spring-compat[Spring Data] and xref:spark-connector::getting-started.adoc[Spark].
 //  -- in the https://blog.couchbase.com/[Couchbase Blog^] there are examples covering everything from ????
 
 ++++
 </div>
 ++++
- 
-
-
-// Java-ified bits:
-////
-= Couchbase .NET SDK 3.0
-:page-type: landing-page
-:page-layout: landing-page-sdk
-:page-role: tiles
-:!sectids:
-
-
-++++
-<div class="card-row">
-++++
-
-
-[.column]
-====== {empty}
-[.content]
-The Couchbase .NET client allows applications to connect to Couchbase Server using any Common Language Runtime (CLR) language, including C#, F#, and VB.NET. The SDK is written in C#, and some of its idiomatic patterns reflect that choice.
-
-++++
-</div>
-++++
-
-[.column]
-====== {empty}
-
-== Couchbase .NET SDK 3.0
-
-++++
-<div class="card-row two-column-row">
-++++
-
-
-[.column]
-====== {empty}
-.Java SDK
-
-[.content]
-The Java SDK forms the cornerstone of our JVM clients.
-It allows Java applications to access a Couchbase Server cluster.
-The Java SDK offers traditional synchronous APIs as well as scalable asynchronous APIs to maximize performance.
-[]
-xref:3.0@java-sdk:hello-world:start-using-sdk.adoc[Java SDK 3.0]
-
-[.column]
-====== {empty}
-.Java SDK
-
-[.content]
-The Java SDK forms the cornerstone of our JVM clients.
-It allows Java applications to access a Couchbase Server cluster.
-The Java SDK offers traditional synchronous APIs as well as scalable asynchronous APIs to maximize performance.
-[]
-xref:3.0@java-sdk:hello-world:start-using-sdk.adoc[Java SDK 3.0]
-
-[.column]
-====== {empty}
-.Java SDK
-
-[.content]
-The Java SDK forms the cornerstone of our JVM clients.
-It allows Java applications to access a Couchbase Server cluster.
-The Java SDK offers traditional synchronous APIs as well as scalable asynchronous APIs to maximize performance.
-[]
-xref:3.0@java-sdk:hello-world:start-using-sdk.adoc[Java SDK 3.0]
-
-
-[.column]
-====== {empty}
-.Java SDK
-
-[.content]
-The Java SDK forms the cornerstone of our JVM clients.
-It allows Java applications to access a Couchbase Server cluster.
-The Java SDK offers traditional synchronous APIs as well as scalable asynchronous APIs to maximize performance.
-[]
-xref:3.0@java-sdk:hello-world:start-using-sdk.adoc[Java SDK 3.0]
-
-[.column]
-====== {empty}
-.Java SDK
-
-[.content]
-The Java SDK forms the cornerstone of our JVM clients.
-It allows Java applications to access a Couchbase Server cluster.
-The Java SDK offers traditional synchronous APIs as well as scalable asynchronous APIs to maximize performance.
-[]
-xref:3.0@java-sdk:hello-world:start-using-sdk.adoc[Java SDK 3.0]
-
-[.column]
-====== {empty}
-.Java SDK
-
-[.content]
-The Java SDK forms the cornerstone of our JVM clients.
-It allows Java applications to access a Couchbase Server cluster.
-The Java SDK offers traditional synchronous APIs as well as scalable asynchronous APIs to maximize performance.
-[]
-xref:3.0@java-sdk:hello-world:start-using-sdk.adoc[Java SDK 3.0]
-
-
-++++
-</div>
-++++
-////
