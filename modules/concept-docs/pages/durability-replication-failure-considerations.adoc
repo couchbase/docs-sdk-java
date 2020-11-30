@@ -1,7 +1,7 @@
 = Durability & Failure
 :page-topic-type: concept
 // :page-aliases: ROOT:failure-considerations,ROOT:durability,ROOT:enhanced-durability
-:page-aliases: 6.0@server:sdk:durability.adoc, 6.5@server:sdk:durability.adoc, 6.6@server:sdk:durability.adoc
+// :page-aliases: 6.6@server:sdk:durability.adoc
 
 
 [abstract]
