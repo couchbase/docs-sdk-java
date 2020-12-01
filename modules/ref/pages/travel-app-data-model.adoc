@@ -1,5 +1,0 @@
-= Travel App Data Model
-:page-topic-type: reference
-// :page-aliases: server:travel-app:travel-app-data-model
-
-include::6.5@sdk:pages:partial$travel-app-data-model.adoc[tag=model]
