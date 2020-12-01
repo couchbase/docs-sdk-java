@@ -3,7 +3,7 @@
 :page-edition: Enterprise Edition
 :page-aliases: ROOT:encryption.adoc
 :page-status: Developer Preview
-include::partial$attributes.adoc[]
+include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 Fields within a document can be securely encrypted by the SDK, to support FIPS-140-2 compliance.

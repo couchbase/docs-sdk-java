@@ -1,7 +1,7 @@
 = Sub-Document Operations with the Java SDK
 :navtitle: Sub-Doc Operations
 :page-topic-type: howto
-include::partial$attributes.adoc[]
+include::project-docs:partial$attributes.adoc[]
 :lang: Java
 :version: 3.0.10
 :page-aliases: ROOT:sdk-xattr-example.adoc
