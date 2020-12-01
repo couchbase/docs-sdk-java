@@ -1,7 +1,7 @@
 = Full Text Search using the SDK
 :navtitle: Full Text Search using the SDK
 :page-topic-type: howto
-:page-aliases: ROOT:search-query, 6.6@server:sdk:full-text-search-overview.adoc
+:page-aliases: ROOT:search-query
 :lang: Java
 :version: 3.0.0
 :example-source: 3.0@java-sdk:howtos:example$Search.java
