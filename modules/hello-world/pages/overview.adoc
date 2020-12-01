@@ -1,4 +1,4 @@
-= Couchbase Java SDK 3.0
+= Couchbase Java SDK 3.1
 :page-type: landing-page
 :page-layout: landing-page-top-level-sdk
 :page-role: tiles
@@ -19,15 +19,13 @@ It offers synchronous APIs as well as reactive and asynchronous equivalents to m
 
 [.column]
 [.content]
-[source,xml]
+[source,java]
 ----
-<dependencies>
-    <dependency>
-        <groupId>com.couchbase.client</groupId>
-        <artifactId>java-client</artifactId>
-        <version>3.0.10</version>
-    </dependency>
-</dependencies>
+MutationResult result = collection.mutateIn(
+    "airport_1254",
+    Collections.singletonList(MutateInSpec.upsert("foo", "bar")),
+    mutateInOptions().durability(DurabilityLevel.MAJORITY)
+);
 ----
 
 ++++
@@ -39,7 +37,7 @@ It offers synchronous APIs as well as reactive and asynchronous equivalents to m
 [.column]
 ====== {empty}
 
-== Couchbase Java SDK 3.0
+== Couchbase Java SDK 3.1
 
 ++++
 <div class="card-row three-column-row">
@@ -54,7 +52,17 @@ It offers synchronous APIs as well as reactive and asynchronous equivalents to m
 Dive right in with a xref:start-using-sdk.adoc[quick install and Hello World].
 Try out our xref:sample-application.adoc[Travel Sample Application].
 And take a look at the xref:howtos:working-with-collections.adoc[developer preview of Collections].
-
+[]
+[source,xml]
+----
+<dependencies>
+    <dependency>
+        <groupId>com.couchbase.client</groupId>
+        <artifactId>java-client</artifactId>
+        <version>3.1.0</version>
+    </dependency>
+</dependencies>
+----
 
 [.column]
 ====== {empty}
@@ -108,6 +116,8 @@ For community help, visit the https://forums.couchbase.com/c/java-sdk/5[Couchbas
 The Java SDK can be combined with many other projects in the broader Java and JVM ecosystem and beyond.
 This includes xref:project-docs:compatibility.adoc#spring-compat[Spring Data] and xref:spark-connector::getting-started.adoc[Spark].
 //  -- in the https://blog.couchbase.com/[Couchbase Blog^] there are examples covering everything from ????
+[]
+xref:project-docs:third-party-integrations.adoc[Integrations & Ecosystem]; 
 
 ++++
 </div>
