@@ -7,12 +7,12 @@
 [abstract]
 Discover how to program interactions with the Couchbase Server via the data, Query, and search services -- using the Travel Sample Application with the built-in Travel Sample data Bucket.
 
-include::6.5@sdk:shared:partial$sample-application.adoc[tag=prereq]
+include::6.6@sdk:shared:partial$sample-application.adoc[tag=prereq]
 
 
 == Preparation
 
-As well as the xref:start-using-sdk.adoc[Java SDK 3.0] and Couchbase Server, 
+As well as the xref:start-using-sdk.adoc[Java SDK 3.1] and Couchbase Server, 
 set up as described above, you will need `git` to fetch the travel sample application code:
 
 [source,console]
