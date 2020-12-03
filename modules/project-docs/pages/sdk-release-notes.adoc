@@ -8,7 +8,7 @@
 [abstract]
 Release notes, installation instructions, and download archive for the Couchbase Java Client.
 
-These pages cover the 3_x_0 versions of the Couchbase Java SDK. 
+These pages cover the 3_x_ versions of the Couchbase Java SDK. 
 For release notes, download links, and installation methods for 2.7 and earlier releases of the Couchbase Java Client, which will not work with Distributed Transactions, please see the xref:2.7@java-sdk::sdk-release-notes.adoc[2.x Java Release Notes & Download Archive].
 
 Transactions is available as a separate library for the Java SDK.
