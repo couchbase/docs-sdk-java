@@ -4,8 +4,8 @@
 :page-aliases: analytics-query
 :page-edition: Enterprise Edition
 :lang: Java
-:version: 3.0.0
-:example-source: 3.0@java-sdk:howtos:example$Analytics.java
+:version: 3.1.0
+:example-source: 3.1@java-sdk:howtos:example$Analytics.java
 :example-source-lang: java
 
 [abstract]
@@ -17,7 +17,7 @@ The analytics service is available in Couchbase Data Platform 6.0 and later.
 
 == Getting Started
 
-After familiarizing yourself with our xref:6.5@server:analytics:primer-beer.adoc[introductory primer],
+After familiarizing yourself with our xref:6.6@server:analytics:primer-beer.adoc[introductory primer],
 in particular creating a dataset and linking it to a bucket, try Couchbase Analytics using the Java SDK.
 Intentionally, the API for analytics is nearly identical to that of the query service.
 

@@ -7,7 +7,7 @@
 [abstract]
 Release notes, installation instructions, and download archive for the Couchbase Java Client.
 
-These pages cover the 3.0 versions of the Couchbase Java SDK. 
+These pages cover the 3_x_0 versions of the Couchbase Java SDK. 
 For release notes, download links, and installation methods for 2.7 and earlier releases of the Couchbase Java Client, which will not work with Distributed Transactions, please see the xref:2.7@java-sdk::sdk-release-notes.adoc[2.x Java Release Notes & Download Archive].
 
 Transactions is available as a separate library for the Java SDK.
@@ -28,10 +28,47 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.0.10</version>
+        <version>3.1.0</version>
     </dependency>
 </dependencies>
 ----
+
+
+== Version 3.1.0 (2 December 2020)
+
+Version 3.1.0 is the first GA release of the 3.1 series, bringing stabilizations and enhancements over 3.0.10 and the 3.0 SDK, and adding features to support Couchbase Server 6.6 and 7.0β.
+
+http://packages.couchbase.com/clients/java/3.1.0/Couchbase-Java-Client-3.1.0.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.0/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.0/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.1.0**
+* com.couchbase.client:**core-io:2.1.0**
+* io.projectreactor:**reactor-core:3.4.0**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== Enhancements
+
+* https://issues.couchbase.com/browse/JCBC-1731[JCBC-1731]:
+Experimental support for Metrics (`Meter`) and the internals have been reworked around the `RequestTracer`. The new metrics implementation is disabled by default but will be enabled in the future. We encourage you to try it out and provide feedback, please see the documentation section on tracing and metrics for further information.
+* https://issues.couchbase.com/browse/JCBC-1646[JCBC-1646]:
+The minimum durability level can now be configured on the `BucketManager`.
+* https://issues.couchbase.com/browse/JVMCBC-904[JVMCBC-904]:
+Internal and external dependencies have been updated, including project reactor to `3.4.0`.
+* https://issues.couchbase.com/browse/JVMCBC-905[JVMCBC-905]:
+It is now possible to disable TLS hostname verification as part of the `SecurityConfig`.
+* https://issues.couchbase.com/browse/JVMCBC-901[JVMCBC-901]:
+Support for transactions with N1QL queries has been added to the core subsystem so that the upper transaction dependency can make use of it.
+
+In addition to the tickets outlined below, different interfaces have been elevated from `Uncomitted` or `Volatile` to `Comitted`. These include:
+
+* Expiry Key/Value read and write APIs that take an `Instant`.
+* Geo-Polygon Search
+* Search Flex-Index Option
+* Search Disable-Scoring Option
+
 
 == Version 3.0.10 (3 November 2020)
 
