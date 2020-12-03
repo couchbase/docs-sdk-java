@@ -45,7 +45,7 @@ If you are using a cluster older than Couchbase Server 6.5, it is required that 
 ====
 
 
-== Paramerterized Queries
+== Parameterized Queries
 
 Supplying parameters as individual arguments to the query allows the query engine to optimize the parsing and planning of the query. 
 You can either supply these parameters by name or by position.
