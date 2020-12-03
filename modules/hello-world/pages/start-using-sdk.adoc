@@ -7,7 +7,7 @@
 
 The Couchbase Java SDK allows Java applications to access a Couchbase cluster. It offers synchronous APIs as well as reactive and asynchronous equivalents to maximize flexibility and performance.
 
-The Couchbase Java SDK 3.0 is a complete rewrite of the 2.x API, providing a simpler surface area and adding support for future Couchbase Server features like Collections and Scopes (available in Couchbase Server 6.5 as a xref:concept-docs:collections.adoc[developer preview]).
+The Couchbase Java SDK 3._x_ is a complete rewrite of the 2.x API, providing a simpler surface area and adding support for future Couchbase Server features like Collections and Scopes (available in Couchbase Server 6.5 as a xref:concept-docs:collections.adoc[developer preview]).
 The (reactive) API also migrated from `RxJava` to `Reactor`, along with other improvements to performance, logging, debugging and timeout troubleshooting.
 If you're upgrading your application from Java SDK 2.x, please read our xref:project-docs:migrating-sdk-code-to-3.n.adoc[Migrating 2.x code to SDK 3.0 Guide].
 
