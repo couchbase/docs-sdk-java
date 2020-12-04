@@ -4,20 +4,20 @@
 :page-topic-type: howto
 
 [abstract]
-Collections is introduced as a Developer Preview feature in Couchbase Server 6.5.
+Collections is introduced as a Developer Preview feature in Couchbase Server 6.5 & 6.6, and part of the forthcoming Server 7.0.
 The 3.0 API SDKs all work with Collections and Scopes.
 As a practical demonstration, we have a collections-enabled version of the Travel Sample application.
 
 The Developer Preview of the upcoming Collections feature in Couchbase Server is fully implemented in the 3.0 API versions of the Couchbase SDKs.
 When working with other server versions, the default collection is used from the SDK.
-Here we show how to access individual collections in the Developer Preview version of Couchbase Server 6.5, with a collections-enabled version of our xref:hello-world:sample-application.adoc[Travel Sample application].
+Here we show how to access individual collections in the Developer Preview version of Couchbase Server 6.6, with a collections-enabled version of our xref:hello-world:sample-application.adoc[Travel Sample application].
 User documents and flight documents are split into user and flight collections.
 Something that previously had to be done with key-value references to different types or categories of data.
 
 
 == Travel Sample app -- with Collections
 
-include::6.5@sdk:shared:partial$sample-application.adoc[tag=prereq]
+include::6.6@sdk:shared:partial$sample-application.adoc[tag=prereq]
 
 [WARNING]
 ====
@@ -28,7 +28,7 @@ there is no upgrade path available from a DP-enabled Couchbase Server.
 
 == Preparation
 
-Along with the xref:hello-world:start-using-sdk.adoc[Java SDK 3.0] and Couchbase Server, 
+Along with the xref:hello-world:start-using-sdk.adoc[Java SDK 3.1] and Couchbase Server, 
 set up as described above, you will need `git` to fetch the travel sample application code:
 
 [source,console]
