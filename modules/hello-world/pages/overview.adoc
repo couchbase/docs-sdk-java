@@ -94,7 +94,7 @@ https://docs.couchbase.com/sdk-api/couchbase-java-client/[API Docs^]
 The Couchbase Java SDK 3.0 is a complete rewrite of the 2.x API, providing a simpler surface area and adding support for future Couchbase Server features like Collections and Scopes (available in Couchbase Server 6.5 and 6.6 as a developer preview). 
 The (reactive) API also migrated from RxJava to Reactor, along with other improvements to performance, logging, debugging and timeout troubleshooting.
 
-Introducing xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed ACID Transactions from the .NET SDK].
+Introducing xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed ACID Transactions from the Java SDK].
 
 [.column]
 ====== {empty}
