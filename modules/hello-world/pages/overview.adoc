@@ -53,7 +53,6 @@ Dive right in with a xref:start-using-sdk.adoc[quick install and Hello World].
 Try out our xref:sample-application.adoc[Travel Sample Application].
 And take a look at the xref:howtos:working-with-collections.adoc[developer preview of Collections].
 []
-====
 [source,xml]
 ----
 <dependencies>
@@ -64,7 +63,6 @@ And take a look at the xref:howtos:working-with-collections.adoc[developer previ
     </dependency>
 </dependencies>
 ----
-====
 
 [.column]
 ====== {empty}
@@ -84,7 +82,7 @@ and the xref:howtos:subdocument-operations.adoc[Sub-Document API].
 
 [.content]
 The documentation supplements the practical Howto docs with references and xref:concept-docs:concepts.adoc[concept guides], for those who prefer a broader understanding before diving in and coding.
-[]
+
 https://docs.couchbase.com/sdk-api/couchbase-java-client/[API Docs^]
 
 
