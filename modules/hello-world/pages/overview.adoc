@@ -49,9 +49,9 @@ MutationResult result = collection.mutateIn(
 .Getting Started
 
 [.content]
-Dive right in with a xref:start-using-sdk.adoc[quick install and Hello World].
-Try out our xref:sample-application.adoc[Travel Sample Application].
-And take a look at the xref:howtos:working-with-collections.adoc[developer preview of Collections].
+* Dive right in with a xref:start-using-sdk.adoc[quick install and Hello World].
+* Try out our xref:sample-application.adoc[Travel Sample Application].
+* Take a look at the xref:howtos:working-with-collections.adoc[developer preview of Collections].
 []
 [source,xml]
 ----
