@@ -253,7 +253,7 @@ include::6.5@sdk:shared:partial$documents.adoc[tag=exp-note]
 
 == Atomic Counters
 
-The value of a document can be increased or decreased atomically using `Binary.Increment()` and `Binary.Decrement()`.
+The value of a document can be increased or decreased atomically using `CounterResult increment()` and `CounterResult decrement()` -- more details in https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/BinaryCollection.html[BinaryCollection] in the API guide.
 ////
 .Increment
 [source,csharp]
