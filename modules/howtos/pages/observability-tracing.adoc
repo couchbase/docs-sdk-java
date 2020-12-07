@@ -1,0 +1,152 @@
+= Request Tracing
+:page-topic-type: howto
+
+Collecting information about an individual request and its response is an essential feature of every observability stack. 
+
+To give insight into a request/response flow, the SDK provides a `RequestTracer` interface and ships with both a default implementation as well as modules that can be plugged into feed the traces to external systems (including OpenTelemetry).
+
+== The Default ThresholdRequestTracer
+
+By default, the SDK will emit information about requests that are over a configurable threshold every 10 seconds. 
+Note that if no requests are over the threshold no event / log will be emitted.
+
+It is possible to customize this behavior by modifying the configuration:
+
+[source,java]
+----
+include::example$Tracing.java[tag=tracing-configure,indent=0]
+----
+
+In this case the emit interval is one minute and Key/Value requests will only be considered if their latency is greater or equal than two seconds.
+
+The JSON blob emitted looks similar to the following (prettified here for readability):
+
+[source,json]
+----
+[
+   {
+      "top":[
+         {
+            "operation_name":"GetRequest",
+            "server_us":2,
+            "last_local_id":"E64FED2600000001/00000000EA6B514E",
+            "last_local_address":"127.0.0.1:51807",
+            "last_remote_address":"127.0.0.1:11210",
+            "last_dispatch_us":2748,
+            "last_operation_id":"0x9",
+            "total_us":324653
+         },
+         {
+            "operation_name":"GetRequest",
+            "server_us":0,
+            "last_local_id":"E64FED2600000001/00000000EA6B514E",
+            "last_local_address":"127.0.0.1:51807",
+            "last_remote_address":"127.0.0.1:11210",
+            "last_dispatch_us":1916,
+            "last_operation_id":"0x1b692",
+            "total_us":2007
+         }
+      ],
+      "service":"kv",
+      "count":2
+   }
+]
+----
+
+For each service (i.e. Key/Value or Query) an entry exists in the outer JSON array. 
+The top N (10 bydefault) slowest operations are collected and displayed, sorted by the total duration. 
+This allows to get quick visibility into the "worst offenders" and continue troubleshooting.
+
+Please note that in future releases this format is planned to change for easier readability, so we do not provide any stability guarantees on the logging output format and it might change between minor versions.
+
+A new, yet to be stabilized, format can be enabled by setting the `com.couchbase.thresholdRequestTracerNewOutputFormat` system property to `true`. 
+More information will be provided as we get closer to stabilization.
+
+== OpenTelemetry Integration
+[.status]#Developer Preview#
+
+The built-in tracer is great if you do not have a centralized monitoring system, but if you already plug into the OpenTelemetry ecosystem we want to make sure to provide first-class support.
+
+The first thing you need to do is include an andditional dependency which provides the interoperability code:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.couchbase.client</groupId>
+    <artifactId>tracing-opentelemetry</artifactId>
+    <version>0.3.0</version>
+</dependency>
+----
+
+You also need to include your downstream exporter of choice, in the following example we'll use Jaeger tracing:
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.opentelemetry</groupId>
+    <artifactId>opentelemetry-exporter-jaeger</artifactId>
+    <version>0.11.0</version>
+</dependency>
+<dependency>
+    <groupId>io.grpc</groupId>
+    <artifactId>grpc-protobuf</artifactId>
+    <version>1.28.0</version>
+</dependency>
+<dependency>
+    <groupId>io.grpc</groupId>
+    <artifactId>grpc-netty-shaded</artifactId>
+    <version>1.28.0</version>
+</dependency>
+----
+
+Next up, initialize the jaeger tracer:
+
+[source,java]
+----
+include::example$Tracing.java[tag=otel-configure,indent=0]
+----
+
+Once the exporter is set up, it can be wrapped into the `OpenTelemetryRequestTracer` and passed into the environment.
+
+[source,java]
+----
+include::example$Tracing.java[tag=otel-configure-setup,indent=0]
+----
+
+At this point, all traces will be sent into the OpenTelemetry exporter. 
+If you want to set a parent for a SDK request, you can do it in the respective `*Options`:
+
+[source,java]
+----
+GetResult result = collection.get(
+    "my-doc", 
+    getOptions().parentSpan(OpenTelemetryRequestSpan.wrap(parentSpan))
+)
+----
+
+== OpenTracing Integration
+[.status]#Developer Preview#
+
+In addition to OpenTelemetry, we also provide support for OpenTracing for legacy systems which have not yet migrated to OpenTelemetry. 
+Note that we still recommend to migrate eventually since OpenTracing has been sunset.
+
+You need to include the `tracing-opentracing` module:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.couchbase.client</groupId>
+    <artifactId>tracing-opentracing</artifactId>
+    <version>0.3.0</version>
+</dependency>
+----
+
+And then wrap the Tracer:
+
+[source,java]
+----
+ClusterEnvironment environment = ClusterEnvironment
+    .builder()
+    .requestTracer(OpenTracingRequestTracer.wrap(tracer))
+    .build();
+----

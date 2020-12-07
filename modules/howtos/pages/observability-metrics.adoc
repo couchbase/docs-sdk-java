@@ -1,0 +1,167 @@
+= Observability Metrics Reporting
+:page-status: Developer Preview
+:page-topic-type: howto
+
+Individual request tracing presents a very specific (though isolated) view of the system.
+In addition, it also makes sense to capture information that aggregates request data (i.e. requests per second), 
+but also data which is not tied to a specific request at all (i.e. resource utilization).
+
+The deployment situation itself is similar to the request tracer: either applications already have a metrics infrastructure in place or they don’t. 
+The difference is that exposing some kind of metrics is much more common than request based tracing, 
+because most production deployments at least monitor CPU and memory usage (i.e. through JMX).
+
+Metrics broadly fall into the following categories:
+
+* Request/Response Metrics (such as requests per second).
+* SDK Metrics (such as how many open collections, various queue lengths).
+* System Metrics (such as cpu usage or garbage collection performance).
+
+Right now only the first category is implemented by the SDK, more are planned.
+
+== The Default AggregatingMeter
+[.status]#Developer Preview#
+
+The default implementation aggregates and logs request and response metrics.
+Since the feature is in developer preview, you need to manually enable it on the environment:
+
+[source,java]
+----
+include::example$Metrics.java[tag=metrics-enable,indent=0]
+----
+
+By default the metrics will be emitted every 10 minutes, but you can customize the emit interval as well:
+
+[source,java]
+----
+include::example$Metrics.java[tag=metrics-enable-custom,indent=0]
+----
+
+Once enabled, there is no further configuration needed. The `AggregatingMeter` will emit the collected request statistics every interval. 
+A possible report looks like this (prettified for better readability):
+
+[source,json]
+----
+{
+   "meta":{
+      "emit_interval_s":10
+   },
+   "query":{
+      "127.0.0.1":{
+         "total_count":9411,
+         "percentiles_us":{
+            "50.0":544.767,
+            "90.0":905.215,
+            "99.0":1589.247,
+            "99.9":4095.999,
+            "100.0":100663.295
+         }
+      }
+   },
+   "kv":{
+      "127.0.0.1":{
+         "total_count":9414,
+         "percentiles_us":{
+            "50.0":155.647,
+            "90.0":274.431,
+            "99.0":544.767,
+            "99.9":1867.775,
+            "100.0":574619.647
+         }
+      }
+   }
+}
+----
+
+Each report contains one object for each service that got used and is further separated on a per-node basis so they can be analyzed in isolation.
+
+For each service / host combination, a total amount of recorded requests is reported, as well as percentiles from a histogram in microseconds. 
+The meta section on top contains information such as the emit interval in seconds so tooling can later calculate numbers like requests per second.
+
+The `AggregatingMeter` can be configured on the environment as shown above.
+The following table shows the currently available properties:
+
+.AggregatingMeterConfig Properties 
+[options="header"]
+|====
+| Property       | Default | Description
+| `enabled`   | false | If the `AggregatingMeter` should be enabled.
+| `emitInterval` | 600 seconds | The interval where found orphans are emitted.
+|====
+
+== OpenTelemetry Integration
+[.status]#Developer Preview#
+
+The SDK supports plugging in any `OpenTelemetry` metrics consumer instead of using the default `AggregatingMeter`.
+To do this, first you need to add an additional dependency to your application:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.couchbase.client</groupId>
+    <artifactId>metrics-opentelemetry</artifactId>
+    <version>0.1.0</version>
+</dependency>
+----
+
+In addition, you need to add the OpenTelemetry exporter of your choice. 
+As an example this could be the Prometheus exporter:
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.opentelemetry</groupId>
+    <artifactId>opentelemetry-exporter-prometheus</artifactId>
+    <version>0.11.0</version>
+</dependency>
+<dependency>
+    <groupId>io.prometheus</groupId>
+    <artifactId>simpleclient_httpserver</artifactId>
+    <version>0.9.0</version>
+</dependency>
+----
+
+Next, you need to initialize your OpenTelemetry `Meter`. Again, the following example uses prometheus:
+
+[source,java]
+----
+include::example$Metrics.java[tag=metrics-otel-prometheus,indent=0]
+----
+
+Once your meter is initialized, it needs to be wrapped and supplied to the environment:
+
+[source,java]
+----
+include::example$Metrics.java[tag=metrics-otel-env,indent=0]
+----
+
+At this point the SDK is hooked up with the OpenTelemetry metrics and will emit them to the exporter. 
+The specific output format is still evolving, but look out for metrics with the `cb.` prefix: `cb.requests` and `cb.responses`. 
+The `cb.requests` is a counter while the `cb.responses` is a `ValueRecorder` which also collects latency information for each request. 
+Each metric contains tags that allow you to group them in different ways, including the service type (i.e. `query`) or the server hostname.
+
+== Micrometer Integration
+[.status]#Developer Preview#
+
+In addition to OpenTelemetry, we also provide a module so you can hook up the SDK metrics to Micrometer. 
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.couchbase.client</groupId>
+    <artifactId>metrics-micrometer</artifactId>
+    <version>0.1.0</version>
+</dependency>
+----
+
+In addition to the facade you also need to include your micrometer implementation of choice. 
+Once you've created the a Micrometer `MeterRegistry`, you need to wrap it and pass it into the environment:
+
+[source,java]
+----
+ClusterEnvironment environment = ClusterEnvironment
+    .builder()
+    .meter(MicrometerMeter.wrap(meterRegistry))
+    .build();
+----
+
+At this point the metrics are hooked up to Micrometer and will be reported as `cb.requests` (as a `Counter`) and `cb.responses` (as a `DistributionSummary`).
