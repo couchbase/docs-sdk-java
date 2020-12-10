@@ -53,7 +53,7 @@ public class ClientSettingsExample {
   }
 
   public void client_settings_1() throws Exception {
-    // #tag::client_settings_1[]
+    // tag::client_settings_1[]
     ClusterEnvironment env = ClusterEnvironment.builder()
         // [Customize client settings here]
         .build();
@@ -68,66 +68,66 @@ public class ClientSettingsExample {
     // Shut down gracefully.
     cluster.disconnect();
     env.shutdown();
-    // #end::client_settings_1[];
+    // end::client_settings_1[]
   }
 
   public void client_settings_2() throws Exception {
-    // #tag::client_settings_2[]
+    // tag::client_settings_2[]
     ClusterEnvironment env = ClusterEnvironment.builder()
         .timeoutConfig(TimeoutConfig
             .kvTimeout(Duration.ofSeconds(5))
             .queryTimeout(Duration.ofSeconds(10)))
         .build();
-    // #end::client_settings_2[];
+    // end::client_settings_2[]
   }
 
   public void client_settings_3() throws Exception {
-    // #tag::client_settings_3[]
+    // tag::client_settings_3[]
     ClusterEnvironment.Builder envBuilder = ClusterEnvironment.builder();
     envBuilder.timeoutConfig() // returns a TimeoutConfig.Builder
         .kvTimeout(Duration.ofSeconds(5))
         .queryTimeout(Duration.ofSeconds(10));
     ClusterEnvironment env = envBuilder.build();
-    // #end::client_settings_3[];
+    // end::client_settings_3[]
   }
 
   public void client_settings_4() throws Exception {
-    // #tag::client_settings_4[]
+    // tag::client_settings_4[]
     System.setProperty("com.couchbase.env.timeout.kvTimeout", "10s"); // <1>
     System.setProperty("com.couchbase.env.timeout.queryTimeout", "15s");
 
     ClusterEnvironment environment = ClusterEnvironment.builder()
         .timeoutConfig(TimeoutConfig.kvTimeout(Duration.ofSeconds(5))) // <2>
         .build();
-    // #end::client_settings_4[];
+    // end::client_settings_4[]
   }
 
   public void client_settings_5() throws Exception {
     try {
-      // #tag::client_settings_5[]
+      // tag::client_settings_5[]
       ClusterEnvironment env = ClusterEnvironment.builder()
           .securityConfig(SecurityConfig
               .enableTls(true)
           )
           .build();
-      // #end::client_settings_5[];
+      // end::client_settings_5[]
     } catch (InvalidArgumentException e) {
       System.err.println(e);
     }
   }
 
   public void client_settings_6() throws Exception {
-    // #tag::client_settings_6[]
+    // tag::client_settings_6[]
     ClusterEnvironment env = ClusterEnvironment.builder()
         .ioConfig(IoConfig
             .networkResolution(NetworkResolution.AUTO)
         )
         .build();
-    // #end::client_settings_6[];
+    // end::client_settings_6[]
   }
 
   public void client_settings_7() throws Exception {
-    // #tag::client_settings_7[]
+    // tag::client_settings_7[]
     ClusterEnvironment env = ClusterEnvironment.builder()
         .ioConfig(IoConfig.
             kvCircuitBreakerConfig(CircuitBreakerConfig.builder()
@@ -138,34 +138,34 @@ public class ClientSettingsExample {
                 .rollingWindow(Duration.ofMinutes(2))
             ))
         .build();
-    // #end::client_settings_7[];
+    // end::client_settings_7[]
   }
 
   public void client_settings_8() throws Exception {
-    // #tag::client_settings_8[]
+    // tag::client_settings_8[]
     ClusterEnvironment env = ClusterEnvironment.builder()
         .timeoutConfig(TimeoutConfig
             .kvTimeout(Duration.ofMillis(2500))
         )
         .build();
-    // #end::client_settings_8[];
+    // end::client_settings_8[]
   }
 
   public void client_settings_9() throws Exception {
-    // #tag::client_settings_9[]
+    // tag::client_settings_9[]
     ClusterEnvironment env = ClusterEnvironment.builder()
         .compressionConfig(CompressionConfig.create().enable(true))
         .build();
-    // #end::client_settings_9[];
+    // end::client_settings_9[]
   }
 
   public void client_settings_10() throws Exception {
-    // #tag::client_settings_10[]
+    // tag::client_settings_10[]
     ClusterEnvironment env = ClusterEnvironment.builder()
         .retryStrategy(BestEffortRetryStrategy.INSTANCE)
 
         .build();
-    // #end::client_settings_10[];
+    // end::client_settings_10[]
   }
 
   public static void main(String[] args) throws Exception {
