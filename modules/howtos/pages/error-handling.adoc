@@ -285,7 +285,8 @@ include::example$ErrorHandling.java[tag=customclass,indent=0]
 
 Importantly, do not omit the `return super.shouldRetry(request, reason);` as a fallback so that all other cases are handled for you.
 
-WARNING: You will need to upgrade to at least Couchbase Java SDK 3.0.9, if you are on an earlier version, to successfully override `BestEffortRetryStrategy`.
+WARNING: You will need to upgrade to at least xref:project-docs:sdk-release-notes.adoc#version-3-0-9-7-october-2020[Couchbase Java SDK 3.0.9], 
+if you are on an earlier version, to successfully override `BestEffortRetryStrategy`.
 
 Implementing a concrete example, there is a chance that you are using a `CircuitBreaker` configuration and want to fail-fast on an open circuit:
 
