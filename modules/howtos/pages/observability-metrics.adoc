@@ -8,7 +8,7 @@ but also data which is not tied to a specific request at all (i.e. resource util
 
 The deployment situation itself is similar to the request tracer: either applications already have a metrics infrastructure in place or they don’t. 
 The difference is that exposing some kind of metrics is much more common than request based tracing, 
-because most production deployments at least monitor CPU and memory usage (i.e. through JMX).
+because most production deployments at least monitor CPU and memory usage (e.g. through JMX).
 
 Metrics broadly fall into the following categories:
 
@@ -17,6 +17,7 @@ Metrics broadly fall into the following categories:
 * System Metrics (such as cpu usage or garbage collection performance).
 
 Right now only the first category is implemented by the SDK, more are planned.
+
 
 == The Default AggregatingMeter
 [.status]#Developer Preview#
@@ -88,6 +89,7 @@ The following table shows the currently available properties:
 | `emitInterval` | 600 seconds | The interval where found orphans are emitted.
 |====
 
+
 == OpenTelemetry Integration
 [.status]#Developer Preview#
 
@@ -137,7 +139,8 @@ include::example$Metrics.java[tag=metrics-otel-env,indent=0]
 At this point the SDK is hooked up with the OpenTelemetry metrics and will emit them to the exporter. 
 The specific output format is still evolving, but look out for metrics with the `cb.` prefix: `cb.requests` and `cb.responses`. 
 The `cb.requests` is a counter while the `cb.responses` is a `ValueRecorder` which also collects latency information for each request. 
-Each metric contains tags that allow you to group them in different ways, including the service type (i.e. `query`) or the server hostname.
+Each metric contains tags that allow you to group them in different ways, including the service type (e.g. `query`) or the server hostname.
+
 
 == Micrometer Integration
 [.status]#Developer Preview#
