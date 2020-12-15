@@ -5,6 +5,7 @@ Collecting information about an individual request and its response is an essent
 
 To give insight into a request/response flow, the SDK provides a `RequestTracer` interface and ships with both a default implementation as well as modules that can be plugged into feed the traces to external systems (including OpenTelemetry).
 
+
 == The Default ThresholdRequestTracer
 
 By default, the SDK will emit information about requests that are over a configurable threshold every 10 seconds. 
@@ -53,14 +54,16 @@ The JSON blob emitted looks similar to the following (prettified here for readab
 ]
 ----
 
-For each service (i.e. Key/Value or Query) an entry exists in the outer JSON array. 
-The top N (10 bydefault) slowest operations are collected and displayed, sorted by the total duration. 
-This allows to get quick visibility into the "worst offenders" and continue troubleshooting.
+For each service (e.g. Key/Value or Query) an entry exists in the outer JSON array. 
+The top N (10 by default) slowest operations are collected and displayed, sorted by the total duration. 
+This promotes quick visibility of the "worst offenders" and more efficient troubleshooting.
 
-Please note that in future releases this format is planned to change for easier readability, so we do not provide any stability guarantees on the logging output format and it might change between minor versions.
+Please note that in future releases this format is planned to change for easier readability, 
+so we do not provide any stability guarantees on the logging output format and it might change between minor versions.
 
 A new, yet to be stabilized, format can be enabled by setting the `com.couchbase.thresholdRequestTracerNewOutputFormat` system property to `true`. 
 More information will be provided as we get closer to stabilization.
+
 
 == OpenTelemetry Integration
 [.status]#Developer Preview#
@@ -124,11 +127,12 @@ GetResult result = collection.get(
 )
 ----
 
+
 == OpenTracing Integration
 [.status]#Developer Preview#
 
 In addition to OpenTelemetry, we also provide support for OpenTracing for legacy systems which have not yet migrated to OpenTelemetry. 
-Note that we still recommend to migrate eventually since OpenTracing has been sunset.
+Note that we still recommend to migrate eventually since OpenTracing has been sunsetted.
 
 You need to include the `tracing-opentracing` module:
 
