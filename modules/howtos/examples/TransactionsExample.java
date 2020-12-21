@@ -625,6 +625,8 @@ public class TransactionsExample {
             if (result.unstagingComplete()) {
                 // Operations with non-transactional actors will want
                 // unstagingComplete() to be true.
+                // Note that result.mutationState() is only available if the
+                // transaction exclusively involves KV operations (no N1QL queries).
                 cluster.query(" ... N1QL ... ",
                         QueryOptions.queryOptions()
                                 .consistentWith(result.mutationState()));
