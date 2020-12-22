@@ -59,3 +59,5 @@ include::6.5@sdk:shared:partial$auth-overview.adoc[tag=ldap]
 ----
 include::example$Auth.java[tag=rbac-pwd,indent=0]
 ----
+
+Note that `.onlyEnablePlainSaslMechanism()` requires SDK 3.0.9 or newer.
