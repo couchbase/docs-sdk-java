@@ -48,7 +48,7 @@ public class Auth {
         .username("username")
         .password("password")
         // enables only the PLAIN authentication mechanism, used with LDAP
-        .allowedSaslMechanisms(EnumSet.of(SaslMechanism.PLAIN))
+        .onlyEnablePlainSaslMechanism()
         .build();
 
       Cluster cluster = Cluster.connect("127.0.0.1", clusterOptions(authenticator));
