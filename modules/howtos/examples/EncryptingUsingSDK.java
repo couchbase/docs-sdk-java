@@ -39,6 +39,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.KeyStore;
 import java.security.SecureRandom;
+import java.util.Collections;
 
 public class EncryptingUsingSDK {
 
@@ -132,6 +133,27 @@ public class EncryptingUsingSDK {
 
     System.out.println(readItBack.isReplicant());
     // #end::encrypting_using_sdk_5[]
+  }
+
+  public void legacy_decrypters() throws Exception {
+    Keyring keyring = Keyring.fromMap(Collections.emptyMap());
+
+    // #tag::legacy_decrypters[]
+    CryptoManager cryptoManager = DefaultCryptoManager.builder()
+        .legacyAesDecrypters(keyring, encryptionKeyName -> "MySigningKeyName")
+        .legacyRsaDecrypter(keyring, publicKeyName -> "MyPrivateKeyName")
+        // other config...
+        .build();
+    // #end::legacy_decrypters[]
+  }
+
+  public void legacy_field_name_prefix() throws Exception {
+    // #tag::legacy_field_name_prefix[]
+    CryptoManager cryptoManager = DefaultCryptoManager.builder()
+        .encryptedFieldNamePrefix("__crypt_")
+        // other config...
+        .build();
+    // #end::legacy_field_name_prefix[]
   }
 
   public void encrypting_using_sdk_6() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 173

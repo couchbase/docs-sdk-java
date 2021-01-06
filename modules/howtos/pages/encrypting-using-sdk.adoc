@@ -7,7 +7,7 @@
 [abstract]
 The Field Level Encryption library enables encryption and decryption of JSON fields.
 
-CAUTION: The Field-Level Encryption library for Couchbase Java SDK is currently a _pre-release_. 
+CAUTION: The Field-Level Encryption library for Couchbase Java SDK is currently a _pre-release_.
 It is not supported, but is available for development and experiment.
 It is planned that a supported, full release version will be available later this year.
 Refer to the https://github.com/couchbase/java-couchbase-encryption[GitHub repo] for the latest updates.
@@ -18,15 +18,13 @@ Refer to the https://github.com/couchbase/java-couchbase-encryption[GitHub repo]
 The Couchbase Java SDK uses the https://github.com/couchbase/java-couchbase-encryption[java-couchbase-encryption^] library to provide support for encryption and decryption of JSON fields.
 It includes cryptographic algorithms and keyrings you can use out of the box, and provides a framework for implementing your own crypto components.
 
-NOTE: This separation of the encryption library ensures that the SDK does not have a dependency upon an encryption library in general use -- 
-but it does mean you have to explicitly include this external dependency in your project configuration. 
+NOTE: This separation of the encryption library ensures that the SDK does not have a dependency upon an encryption library in general use --
+but it does mean you have to explicitly include this external dependency in your project configuration.
 Refer to the xref:#maven-coordinates[dependencies section].
-
-The Couchbase Java Field Level Encryption (FLE) uses entity annotations/`JsonObject` methods to specify which field(s) to apply encryption and which algorithm to use.
 
 Version `3.0.0-pre.1` of this library requires Couchbase Java SDK version `3.0.5` or later.
 
-
+[#maven-coordinates]
 == Maven Coordinates
 
 [source,xml]
@@ -40,10 +38,10 @@ Version `3.0.0-pre.1` of this library requires Couchbase Java SDK version `3.0.5
 
 === Optional Dependencies
 
-To reduce the footprint of this library, some of its dependencies are optional. 
+To reduce the footprint of this library, some of its dependencies are optional.
 Using certain features requires adding additional dependencies to your project.
 
-HashiCorp Vault Transit integration requires [Spring Vault](https://docs.spring.io/spring-vault/docs/current/reference/html/):
+HashiCorp Vault Transit integration requires https://docs.spring.io/spring-vault/docs/current/reference/html/[Spring Vault]:
 
 [source,xml]
 ----
@@ -67,7 +65,7 @@ include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_1,indent=0]
 
 == Usage
 
-Two modes of operation are available: 
+Two modes of operation are available:
 
 * Transparent encryption/decryption during Jackson data binding.
 * Manual field editing using `JsonObjectCrypto`.
@@ -120,10 +118,10 @@ This prints `true`.
 
 ==== Using a custom ObjectMapper
 
-The code that enables encryption/decryption during data binding is packaged as a Jackson module called `EncryptionModule`. 
+The code that enables encryption/decryption during data binding is packaged as a Jackson module called `EncryptionModule`.
 You can register this module with any Jackson `ObjectMapper`.
 
-You'll need to do this if you want to supply your own customized ObjectMapper for the Java SDK to use when serializing documents. 
+You'll need to do this if you want to supply your own customized ObjectMapper for the Java SDK to use when serializing documents.
 Here's how to configure the cluster environment to use a custom JSON serializer backed by your own ObjectMapper with support for Field-Level Encryption:
 
 [source,java]
@@ -133,7 +131,7 @@ include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_6,indent=0]
 
 === JsonObjectCrypto
 
-If you need more control of which fields get decrypted, or if you prefer working with the Couchbase `JsonObject` tree model, 
+If you need more control of which fields get decrypted, or if you prefer working with the Couchbase `JsonObject` tree model,
 you can use a `JsonObjectCrypto` instance to read and write encrypted field values of a `JsonObject`.
 
 [source,java]
@@ -144,7 +142,7 @@ include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_7,indent=0]
 
 == Creating Encryption Keys
 
-The AEAD_AES_256_CBC_HMAC_SHA512 algortihm included in this library uses encryption keys that are 64 bytes long.
+The AEAD_AES_256_CBC_HMAC_SHA512 algorithm included in this library uses encryption keys that are 64 bytes long.
 
 Here's an example that shows how to create a Java key store file containing a suitable encryption key:
 
@@ -159,3 +157,46 @@ And here's how to use that file to create a `Keyring` for use with Couchbase Fie
 ----
 include::example$EncryptingUsingSDK.java[tag=encrypting_using_sdk_9,indent=0]
 ----
+
+
+[#migration-from-sdk2]
+== Migrating from SDK 2
+
+If you were previously using Field-Level Encryption with Java SDK 2, a few extra configuration steps are required.
+
+
+[#configure-field-name-prefix]
+=== Changing the field name prefix
+
+In SDK 2, the default prefix for encrypted field names was `\__crypt_`.
+This caused problems for Couchbase Sync Gateway, which does not like field names to begin with an underscore.
+In SDK 3, the default prefix is `encrypted$`.
+
+In order to decrypt fields written by SDK 2, you can configure the `CryptoManager` to use the old `\__crypt_` prefix:
+
+[source,java]
+----
+include::example$EncryptingUsingSDK.java[tag=legacy_field_name_prefix,indent=0]
+----
+
+Alternatively, you can https://forums.couchbase.com/t/replacing-field-name-prefix/28786[rename the existing fields using a N1QL statement].
+
+WARNING: In SDK 2, only top-level fields could be encrypted.
+SDK 3 allows encrypting fields at any depth.
+If you decide to rename the existing fields, make sure to do so _before_ writing any encrypted fields below the top level, otherwise it may be difficult to rename the nested fields using a generic N1QL statement.
+
+
+[#configure-legacy-decrypters]
+=== Enabling decrypters for legacy algorithms
+
+The encryption algorithms used by SDK 2 are deprecated, and are no longer used for encrypting new data.
+To decrypt fields written by SDK 2, enable the legacy decrypters when configuring the `CryptoManager`:
+
+[source,java]
+----
+include::example$EncryptingUsingSDK.java[tag=legacy_decrypters,indent=0]
+----
+
+NOTE: The legacy decrypters require a mapping function.
+For AES, this function accepts an encryption key name and returns the corresponding signing key name.
+For RSA, this function accepts a public key name and returns the corresponding private key name.
