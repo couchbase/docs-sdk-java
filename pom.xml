@@ -175,6 +175,7 @@
                                 <source>modules/project-docs/examples/</source>
                                 <source>modules/ref/examples/</source>
                                 <source>modules/concept-docs/examples/</source>
+                                <source>modules/devguide/examples/java/src/main/java</source>
                             </sources>
                         </configuration>
                     </execution>

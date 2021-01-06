@@ -714,7 +714,7 @@ public class TransactionsExample {
         // #tag::queryOptions[]
         transactions.run((ctx) -> {
             ctx.query("INSERT INTO `default` VALUES ('doc', {'hello':'world'})",
-                    TransactionQueryOptions.queryOptions().profile(QueryProfile.TIMINGS));
+                (TransactionQueryOptions) TransactionQueryOptions.queryOptions().profile(QueryProfile.TIMINGS));
         });
         // #end::queryOptions[]
     }
