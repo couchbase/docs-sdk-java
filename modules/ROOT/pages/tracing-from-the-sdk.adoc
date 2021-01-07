@@ -113,8 +113,9 @@ WARNING: Operations over threshold: [ {
 For each service (only kv-based on this workload), the threshold log reporter will show you the total number of recorded ops (through count), and give you the top slowest ops sorted by their latency.
 Since only airline_10 exists in the bucket you will see five document fetches but only one mutation.
 
+
 [#threshold_log_reporter_output_fields]
-== Output fields in detail.
+== Output fields in detail
 
 Let's highlight a single operation, and explain each field in a little more detail:
 
@@ -146,8 +147,9 @@ Useful to figure out which node is affected.
 
 You can see that if the thresholds are set the right way based on production requirements, without much effort slow operations can be logged and pinpointed more easily than before.
 
+
 [#timeout_visibility]
-== Timeout Visibility.
+== Timeout Visibility
 
 Previously, when an operation takes longer than the timeout specified allows, a `TimeoutException` is thrown.
 It usually looks like this:.
