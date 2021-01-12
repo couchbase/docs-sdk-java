@@ -14,6 +14,7 @@ For release notes, download links, and installation methods for 2.7 and earlier 
 Transactions is available as a separate library for the Java SDK.
 Please see the xref:distributed-transactions-java-release-notes.adoc[Transaction Release Notes page].
 
+
 == Installation
 
 // tag::jdk-version[]
@@ -29,10 +30,56 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.1</version>
     </dependency>
 </dependencies>
 ----
+
+
+== Version 3.1.1 (12 January 2021)
+
+Version 3.1.1 is the second release of the 3.1 series, bringing stabilizations and enhancements over 3.1.0.
+
+http://packages.couchbase.com/clients/java/3.1.1/Couchbase-Java-Client-3.1.1.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.1/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.1/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.1.1**
+* com.couchbase.client:**core-io:2.1.1**
+* io.projectreactor:**reactor-core:3.4.1**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== API Affecting
+* https://issues.couchbase.com/browse/JVMCBC-906[JVMCBC-906]:
+Removed Tracer as a _mandatory_ argument from `OpenTelemetrySpan`.
+(The OpenTelemetry module is marked `@Stability.Volatile`, indicating that there may be API-breaking changes.
+The volatility arises from the underlying `OpenTelemetry` library itself being at a beta/volatile level.)
+
+=== Bugs
+* https://issues.couchbase.com/browse/JVMCBC-909[JVMCBC-909]:
+Retry opening the bucket until timeout when it is not found, to allow for it not yet being created.
+* https://issues.couchbase.com/browse/JVMCBC-910[JVMCBC-910]:
+WaitUntilReady will now wait if bucket not present yet, before it starts to time out.
+* https://issues.couchbase.com/browse/JVMCBC-911[JVMCBC-911],
+https://issues.couchbase.com/browse/JCBC-1728[JCBC-1728]:
+Certain collection-related error codes have changed.
+* https://issues.couchbase.com/browse/JCBC-1730[JCBC-1730]:
+Support for collections added to `BatchHelper`.
+* https://issues.couchbase.com/browse/JCBC-1747[JCBC-1747]:
+Prepared non-adhoc queries on scopes were failing, as query_context was not being passed to the individual prepare and/or execute statements.
+This has now been fixed, and scope-level queries are working as expected. 
+
+=== Enhancements
+* https://issues.couchbase.com/browse/JVMCBC-907[JVMCBC-907]:
+The Orphan Reporter can now be disabled.
+* https://issues.couchbase.com/browse/JVMCBC-908[JVMCBC-908]:
+Updated OpenTelemetry to 0.13.
+* https://issues.couchbase.com/browse/JCBC-1749[JCBC-1749]:
+Escape the scope for scope-level queries now enabled, as a fix in the server means that this works.
+* https://issues.couchbase.com/browse/JCBC-1746[JCBC-1746]:
+Expose partition information from the query management API on `QueryIndex` class.
 
 
 == Version 3.1.0 (2 December 2020)
