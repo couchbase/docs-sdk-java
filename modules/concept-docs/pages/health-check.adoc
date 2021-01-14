@@ -9,7 +9,7 @@ Health Check provides ping() and diagnostics() tests for the health of the netwo
 
 include::6.5@sdk:pages:partial$health-check.adoc[tag="intro"]
 
-include::6.5@sdk:pages:partial$health-check.adoc[tag="users"]
+include::6.5@sdk:pages:partial$health-check.adoc[tag="uses"]
 
 == Ping
 A call to `ping` actively sends requests to the different services on the target cluster, measuring the latency and returning any errors as part of the report.
