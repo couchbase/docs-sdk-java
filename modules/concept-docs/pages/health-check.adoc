@@ -14,7 +14,7 @@ include::6.5@sdk:pages:partial$health-check.adoc[tag="users"]
 == Ping
 A call to `ping` actively sends requests to the different services on the target cluster, measuring the latency and returning any errors as part of the report.
 
-A `ping` can be performed either at the `Cluster` or at the `Bucket` level. They are very similar, altough at the `Bucket` level also the Key/Value and View connections for the specific bucket are taken into account.
+A `ping` can be performed either at the `Cluster` or at the `Bucket` level. They are very similar, although at the `Bucket` level also the Key/Value and View connections for the specific bucket are taken into account.
 
 The report can either be analyzed in code or can be turned into JSON and printed:
 
