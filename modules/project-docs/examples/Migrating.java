@@ -57,17 +57,17 @@ import static com.couchbase.client.java.view.ViewOptions.viewOptions;
 public class Migrating {
   public static void main(String... args) {
     {
-      // #tag::timeoutbuilder[]
+      // tag::timeoutbuilder[]
       // SDK 3 equivalent
       ClusterEnvironment env = ClusterEnvironment
         .builder()
         .timeoutConfig(TimeoutConfig.kvTimeout(Duration.ofSeconds(5)))
         .build();
-      // #end::timeoutbuilder[]
+      // end::timeoutbuilder[]
     }
 
     {
-      // #tag::shutdown[]
+      // tag::shutdown[]
       ClusterEnvironment env = ClusterEnvironment.create();
       Cluster cluster = Cluster.connect(
         "127.0.0.1",
@@ -78,11 +78,11 @@ public class Migrating {
       // first disconnect, then shutdown the environment
       cluster.disconnect();
       env.shutdown();
-      // #end::shutdown[]
+      // end::shutdown[]
     }
 
     {
-      // #tag::sysprops[]
+      // tag::sysprops[]
       // Will set the max http connections to 23
       System.setProperty("com.couchbase.env.io.maxHttpConnections", "23");
       Cluster.connect("127.0.0.1", "user", "pass");
@@ -92,11 +92,11 @@ public class Migrating {
         .builder()
         .ioConfig(IoConfig.maxHttpConnections(23))
         .build();
-      // #end::sysprops[]
+      // end::sysprops[]
     }
 
     {
-      // #tag::connstr[]
+      // tag::connstr[]
       // Will set the max http connections to 23
       Cluster.connect(
         "127.0.0.1?com.couchbase.env.io.maxHttpConnections=23",
@@ -109,35 +109,35 @@ public class Migrating {
         .builder()
         .ioConfig(IoConfig.maxHttpConnections(23))
         .build();
-      // #end::connstr[]
+      // end::connstr[]
     }
 
     {
-      // #tag::rbac[]
+      // tag::rbac[]
       Cluster.connect("127.0.0.1", "username", "password");
-      // #end::rbac[]
+      // end::rbac[]
     }
 
     {
-      // #tag::rbac-full[]
+      // tag::rbac-full[]
       Cluster.connect(
         "127.0.0.1",
         clusterOptions(PasswordAuthenticator.create("username", "password"))
       );
-      // #end::rbac-full[]
+      // end::rbac-full[]
     }
 
     {
-      // #tag::certauth[]
+      // tag::certauth[]
       KeyManagerFactory keyManagerFactory = null;  // configure certificates per documentation
       Cluster.connect("127.0.0.1", clusterOptions(
         CertificateAuthenticator.fromKeyManagerFactory(() -> keyManagerFactory)
       ));
-      // #end::certauth[]
+      // end::certauth[]
     }
 
     {
-      // #tag::simpleget[]
+      // tag::simpleget[]
       Cluster cluster = Cluster.connect("127.0.0.1", "user", "pass");
       Bucket bucket = cluster.bucket("travel-sample");
       Collection collection = bucket.defaultCollection();
@@ -145,7 +145,7 @@ public class Migrating {
       GetResult getResult = collection.get("airline_10");
 
       cluster.disconnect();
-      // #end::simpleget[]
+      // end::simpleget[]
     }
 
     Cluster cluster = Cluster.connect("127.0.0.1", "user", "pass");
@@ -153,45 +153,45 @@ public class Migrating {
     Collection collection = bucket.defaultCollection();
 
     {
-      // #tag::upsertandget[]
+      // tag::upsertandget[]
       MutationResult upsertResult = collection.upsert("mydoc-id", JsonObject.create());
       GetResult getResult = collection.get("mydoc-id");
-      // #end::upsertandget[]
+      // end::upsertandget[]
     }
 
     {
-      // #tag::rawjson[]
+      // tag::rawjson[]
       byte[] content = "{}".getBytes(StandardCharsets.UTF_8);
       MutationResult upsertResult = collection.upsert(
         "mydoc-id",
         content,
         upsertOptions().transcoder(RawJsonTranscoder.INSTANCE)
       );
-      // #end::rawjson[]
+      // end::rawjson[]
     }
 
     {
-      // #tag::customtimeout[]
+      // tag::customtimeout[]
       // SDK 3 custom timeout
       GetResult getResult = collection.get(
         "mydoc-id",
         getOptions().timeout(Duration.ofSeconds(5))
       );
-      // #end::customtimeout[]
+      // end::customtimeout[]
     }
 
     {
-      // #tag::querysimple[]
+      // tag::querysimple[]
       // SDK 3 simple query
       QueryResult queryResult = cluster.query("select * from `travel-sample` limit 10");
       for (JsonObject value : queryResult.rowsAsObject()) {
         // ...
       }
-      // #end::querysimple[]
+      // end::querysimple[]
     }
 
     {
-      // #tag::queryparameterized[]
+      // tag::queryparameterized[]
       // SDK 3 named parameters
       cluster.query(
         "select * from bucket where type = $type",
@@ -203,21 +203,21 @@ public class Migrating {
         "select * from bucket where type = $1",
         queryOptions().parameters(JsonArray.from("airport"))
       );
-      // #end::queryparameterized[]
+      // end::queryparameterized[]
     }
 
     {
-      // #tag::analyticssimple[]
+      // tag::analyticssimple[]
       // SDK 3 simple analytics query
       AnalyticsResult analyticsResult = cluster.analyticsQuery("select * from dataset");
       for (JsonObject value : analyticsResult.rowsAsObject()) {
         // ...
       }
-      // #end::analyticssimple[]
+      // end::analyticssimple[]
     }
 
     {
-      // #tag::analyticsparameterized[]
+      // tag::analyticsparameterized[]
       // SDK 3 named parameters for analytics
       cluster.analyticsQuery(
         "select * from dataset where type = $type",
@@ -229,11 +229,11 @@ public class Migrating {
         "select * from dataset where type = $1",
         analyticsOptions().parameters(JsonArray.from("airport"))
       );
-      // #end::analyticsparameterized[]
+      // end::analyticsparameterized[]
     }
 
     {
-      // #tag::searchsimple[]
+      // tag::searchsimple[]
       // SDK 3 search query
       SearchResult searchResult = cluster.searchQuery(
         "indexname",
@@ -246,11 +246,11 @@ public class Migrating {
       for (SearchRow row : searchResult.rows()) {
         // ...
       }
-      // #end::searchsimple[]
+      // end::searchsimple[]
     }
 
     {
-      // #tag::searchcheck[]
+      // tag::searchcheck[]
       SearchResult searchResult = cluster.searchQuery(
         "myindex",
         SearchQuery.queryString("searchstring")
@@ -258,11 +258,11 @@ public class Migrating {
       if (searchResult.metaData().errors().isEmpty()) {
         // no errors present, so full data got returned
       }
-      // #end::searchcheck[]
+      // end::searchcheck[]
     }
 
     {
-      // #tag::viewquery[]
+      // tag::viewquery[]
       // SDK 3 view query
       ViewResult viewResult = bucket.viewQuery(
         "design",
@@ -272,7 +272,7 @@ public class Migrating {
       for (ViewRow row : viewResult.rows()) {
         // ...
       }
-      // #end::viewquery[]
+      // end::viewquery[]
     }
   }
 }

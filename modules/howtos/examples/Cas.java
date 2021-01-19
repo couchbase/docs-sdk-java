@@ -32,7 +32,7 @@ public class Cas {
     Collection collection = null;
 
     {
-      // #tag::handlingerrors[]
+      // tag::handlingerrors[]
       int maxRetries = 10;
 
       for (int i = 0; i < maxRetries; i++) {
@@ -52,11 +52,11 @@ public class Cas {
           // note that any other exception will be raised and break the loop as well
         }
       }
-      // #end::handlingerrors[]
+      // end::handlingerrors[]
     }
 
     {
-      // #tag::locking[]
+      // tag::locking[]
       GetResult getAndLockResult = collection.getAndLock("key", Duration.ofSeconds(2));
 
       long lockedCas = getAndLockResult.cas();
@@ -66,7 +66,7 @@ public class Cas {
        */
 
       collection.replace("key", "new value", replaceOptions().cas(lockedCas));
-      // #end::locking[]
+      // end::locking[]
     }
   }
 

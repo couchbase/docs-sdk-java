@@ -45,9 +45,9 @@ public class DataModelExample {
   }
 
   public void data_model_1() throws Exception {
-    // #tag::data_model_1[]
+    // tag::data_model_1[]
     Map<String, String> myMap = collection.map("name", String.class);
-    // #end::data_model_1[];
+    // end::data_model_1[];
   }
 
   public static void main(String[] args) throws Exception {

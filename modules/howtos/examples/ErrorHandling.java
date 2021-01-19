@@ -37,7 +37,7 @@ public class ErrorHandling {
     Collection collection = bucket.collection("travel-sample");
 
 
-    // #tag::readonly[]
+    // tag::readonly[]
     QueryResult queryResult = cluster.query(
       "SELECT * FROM bucket",
       queryOptions().readonly(true)
@@ -47,10 +47,10 @@ public class ErrorHandling {
       "SELECT * FROM dataset",
       analyticsOptions().readonly(true)
     );
-    // #end::readonly[]
+    // end::readonly[]
 
     {
-      // #tag::getfetch[]
+      // tag::getfetch[]
       // This will raise a `CouchbaseException` and propagate it
       GetResult result = collection.get("my-document-id");
 
@@ -60,11 +60,11 @@ public class ErrorHandling {
       } catch (CouchbaseException ex) {
         throw new DatabaseException("Couchbase lookup failed", ex);
       }
-      // #end::getfetch[]
+      // end::getfetch[]
     }
 
     {
-      // #tag::getcatch[]
+      // tag::getcatch[]
       try {
         collection.get("my-document-id");
       } catch (DocumentNotFoundException ex) {
@@ -72,11 +72,11 @@ public class ErrorHandling {
       } catch (CouchbaseException ex) {
         throw new DatabaseException("Couchbase lookup failed", ex);
       }
-      // #end::getcatch[]
+      // end::getcatch[]
     }
 
     {
-      // #tag::tryupsert[]
+      // tag::tryupsert[]
       for (int i = 0; i < 10; i++) {
         try {
           collection.upsert("docid", JsonObject.create().put("my", "value"));
@@ -89,29 +89,29 @@ public class ErrorHandling {
           // don't break, so retry
         }
       }
-      // #end::tryupsert[]
+      // end::tryupsert[]
     }
 
     {
       RetryStrategy myCustomStrategy = null;
-      // #tag::customglobal[]
+      // tag::customglobal[]
       ClusterEnvironment environment = ClusterEnvironment
         .builder()
         .retryStrategy(myCustomStrategy)
         .build();
-      // #end::customglobal[]
+      // end::customglobal[]
       environment.shutdown();
     }
 
     {
       RetryStrategy myCustomStrategy = null;
-      // #tag::customreq[]
+      // tag::customreq[]
       collection.get("doc-id", getOptions().retryStrategy(myCustomStrategy));
-      // #end::customreq[]
+      // end::customreq[]
     }
 
     {
-      // #tag::reactivesub[]
+      // tag::reactivesub[]
       collection.reactive()
         .get("this-doc-does-not-exist")
         .subscribe(new Subscriber<GetResult>() {
@@ -130,11 +130,11 @@ public class ErrorHandling {
           @Override
           public void onComplete() { }
         });
-      // #end::reactivesub[]
+      // end::reactivesub[]
     }
 
     {
-      // #tag::reactivefallback[]
+      // tag::reactivefallback[]
       Mono<JsonObject> documentContent = collection.reactive()
         .get("my-doc-id")
         .map(GetResult::contentAsObject)
@@ -142,17 +142,17 @@ public class ErrorHandling {
           DocumentNotFoundException.class,
           e -> createDocumentReactive("my-doc-id")
         );
-      // #end::reactivefallback[]
+      // end::reactivefallback[]
     }
 
     {
-      // #tag::reactiveretry[]
+      // tag::reactiveretry[]
       collection.reactive()
         .get("my-doc-id")
         .retryWhen(
           Retry.max(5).filter(t -> t instanceof DocumentNotFoundException)
         );
-      // #end::reactiveretry[]
+      // end::reactiveretry[]
     }
   }
 
@@ -164,7 +164,7 @@ public class ErrorHandling {
     return Mono.empty();
   }
 
-  // #tag::customclass[]
+  // tag::customclass[]
   class MyCustomRetryStrategy extends BestEffortRetryStrategy {
 
     @Override
@@ -177,9 +177,9 @@ public class ErrorHandling {
       return super.shouldRetry(request, reason);
     }
   }
-  // #end::customclass[]
+  // end::customclass[]
 
-  // #tag::failfastcircuit[]
+  // tag::failfastcircuit[]
   class MyCustomRetryStrategy2 extends BestEffortRetryStrategy {
     @Override
     public CompletableFuture<RetryAction> shouldRetry(Request<? extends Response> request, RetryReason reason) {
@@ -190,7 +190,7 @@ public class ErrorHandling {
       return super.shouldRetry(request, reason);
     }
   }
-  // #end::failfastcircuit[]
+  // end::failfastcircuit[]
 
   static class DatabaseException extends RuntimeException {
     public DatabaseException(String message, Throwable cause) {

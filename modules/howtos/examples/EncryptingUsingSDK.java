@@ -53,16 +53,16 @@ public class EncryptingUsingSDK {
   Collection collection;
 
   private void init() {
-    // #tag::connection_1[];
+    // tag::connection_1[];
     ClusterEnvironment environment = ClusterEnvironment.builder().build();
     cluster = Cluster.connect(connectionString, ClusterOptions.clusterOptions(username, password).environment(environment));
     bucket = cluster.bucket("travel-sample");
     scope = bucket.defaultScope();
-    collection = bucket.defaultCollection();    // #end::connection_1[];
+    collection = bucket.defaultCollection();    // end::connection_1[];
   }
 
   public void encrypting_using_sdk_1() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 60
-    // #tag::encrypting_using_sdk_1[]
+    // tag::encrypting_using_sdk_1[]
     KeyStore javaKeyStore = KeyStore.getInstance("MyKeyStoreType");
     FileInputStream fis = new java.io.FileInputStream("keyStoreName");
     char[] password = {'a', 'b', 'c'};
@@ -86,11 +86,11 @@ public class EncryptingUsingSDK {
     Cluster cluster = Cluster.connect("localhost",
         ClusterOptions.clusterOptions("username", "password")
             .environment(env));
-    // #end::encrypting_using_sdk_1[]
+    // end::encrypting_using_sdk_1[]
   }
 
   // file: howtos/pages/encrypting-using-sdk.adoc line: 97
-  // #tag::encrypting_using_sdk_2[]
+  // tag::encrypting_using_sdk_2[]
   public class Employee {
     @Encrypted
     private boolean replicant;
@@ -105,59 +105,59 @@ public class EncryptingUsingSDK {
     }
   }
 
-  // #end::encrypting_using_sdk_2[]
+  // end::encrypting_using_sdk_2[]
   public void encrypting_using_sdk_3() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 116
-    // #tag::encrypting_using_sdk_3[]
+    // tag::encrypting_using_sdk_3[]
     Collection collection = cluster.bucket("myBucket")
         .defaultCollection();
 
     Employee employee = new Employee();
     employee.setReplicant(true);
     collection.upsert("employee:1234", employee);
-    // #end::encrypting_using_sdk_3[]
+    // end::encrypting_using_sdk_3[]
   }
 
   public void encrypting_using_sdk_4() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 128
-    // #tag::encrypting_using_sdk_4[]
+    // tag::encrypting_using_sdk_4[]
     JsonObject encrypted = collection.get("employee:1234")
         .contentAsObject();
 
     System.out.println(encrypted);
-    // #end::encrypting_using_sdk_4[]
+    // end::encrypting_using_sdk_4[]
   }
 
   public void encrypting_using_sdk_5() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 152
-    // #tag::encrypting_using_sdk_5[]
+    // tag::encrypting_using_sdk_5[]
     Employee readItBack = collection.get("employee:1234")
         .contentAs(Employee.class);
 
     System.out.println(readItBack.isReplicant());
-    // #end::encrypting_using_sdk_5[]
+    // end::encrypting_using_sdk_5[]
   }
 
   public void legacy_decrypters() throws Exception {
     Keyring keyring = Keyring.fromMap(Collections.emptyMap());
 
-    // #tag::legacy_decrypters[]
+    // tag::legacy_decrypters[]
     CryptoManager cryptoManager = DefaultCryptoManager.builder()
         .legacyAesDecrypters(keyring, encryptionKeyName -> "MySigningKeyName")
         .legacyRsaDecrypter(keyring, publicKeyName -> "MyPrivateKeyName")
         // other config...
         .build();
-    // #end::legacy_decrypters[]
+    // end::legacy_decrypters[]
   }
 
   public void legacy_field_name_prefix() throws Exception {
-    // #tag::legacy_field_name_prefix[]
+    // tag::legacy_field_name_prefix[]
     CryptoManager cryptoManager = DefaultCryptoManager.builder()
         .encryptedFieldNamePrefix("__crypt_")
         // other config...
         .build();
-    // #end::legacy_field_name_prefix[]
+    // end::legacy_field_name_prefix[]
   }
 
   public void encrypting_using_sdk_6() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 173
-    // #tag::encrypting_using_sdk_6[]
+    // tag::encrypting_using_sdk_6[]
     // CryptoManager cryptoManager = createMyCryptoManager();
     KeyStore javaKeyStore = KeyStore.getInstance("MyKeyStoreType");
     FileInputStream fis = new java.io.FileInputStream("keyStoreName");
@@ -188,11 +188,11 @@ public class EncryptingUsingSDK {
     Cluster cluster = Cluster.connect(connectionString,
         ClusterOptions.clusterOptions(username, password)
             .environment(env));
-    // #end::encrypting_using_sdk_6[]
+    // end::encrypting_using_sdk_6[]
   }
 
   public void encrypting_using_sdk_7() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 204
-    // #tag::encrypting_using_sdk_7[]
+    // tag::encrypting_using_sdk_7[]
     Collection collection = cluster.bucket("myBucket").defaultCollection();
 
     JsonObject document = JsonObject.create();
@@ -208,11 +208,11 @@ public class EncryptingUsingSDK {
     JsonObject readItBack = collection.get("treasureMap").contentAsObject();
     JsonObjectCrypto readItBackCrypto = crypto.withObject(readItBack);
     System.out.println(readItBackCrypto.getString("locationOfBuriedTreasure"));
-    // #end::encrypting_using_sdk_7[]
+    // end::encrypting_using_sdk_7[]
   }
 
   public void encrypting_using_sdk_8() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 231
-    // #tag::encrypting_using_sdk_8[]
+    // tag::encrypting_using_sdk_8[]
     KeyStore keyStore = KeyStore.getInstance("JCEKS");
     keyStore.load(null); // initialize new empty key store
 
@@ -229,11 +229,11 @@ public class EncryptingUsingSDK {
     try (OutputStream os = new FileOutputStream("MyKeystoreFile.jceks")) {
       keyStore.store(os, "integrity-password".toCharArray());
     }
-    // #end::encrypting_using_sdk_8[]
+    // end::encrypting_using_sdk_8[]
   }
 
   public void encrypting_using_sdk_9() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 253
-    // #tag::encrypting_using_sdk_9[]
+    // tag::encrypting_using_sdk_9[]
     KeyStore keyStore = KeyStore.getInstance("JCEKS");
     try (InputStream is = new FileInputStream("MyKeystoreFile.jceks")) {
       keyStore.load(is, "integrity-password".toCharArray());
@@ -241,7 +241,7 @@ public class EncryptingUsingSDK {
 
     KeyStoreKeyring keyring = new KeyStoreKeyring(
         keyStore, keyName -> "protection-password");
-    // #end::encrypting_using_sdk_9[]
+    // end::encrypting_using_sdk_9[]
   }
 
   public static void main(String[] args) throws Exception {

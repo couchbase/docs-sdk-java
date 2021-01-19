@@ -33,7 +33,7 @@ public class Views {
   public static void main(String... args) {
 
     {
-      // #tag::views-simple[]
+      // tag::views-simple[]
       Cluster cluster = Cluster.connect("127.0.0.1", "username", "password");
       Bucket bucket = cluster.bucket("bucket-name");
 
@@ -41,24 +41,24 @@ public class Views {
       for (ViewRow row : viewResult.rows()) {
         System.out.println("Found row: " + row);
       }
-      // #end::views-simple[]
+      // end::views-simple[]
     }
 
     Cluster cluster = Cluster.connect("127.0.0.1", "username", "password");
     Bucket bucket = cluster.bucket("bucket-name");
 
     {
-      // #tag::views-dev[]
+      // tag::views-dev[]
       ViewResult viewResult = bucket.viewQuery(
         "ddoc",
         "view",
         viewOptions().namespace(DesignDocumentNamespace.DEVELOPMENT)
       );
-      // #end::views-dev[]
+      // end::views-dev[]
     }
 
     {
-      // #tag::views-opts[]
+      // tag::views-opts[]
       ViewResult viewResult = bucket.viewQuery(
         "ddoc",
         "view",
@@ -67,17 +67,17 @@ public class Views {
           .limit(5)
           .inclusiveEnd(true)
       );
-      // #end::views-opts[]
+      // end::views-opts[]
     }
 
     {
-      // #tag::views-meta[]
+      // tag::views-meta[]
       ViewResult viewResult = bucket.viewQuery("ddoc", "view", viewOptions().debug(true));
 
       ViewMetaData viewMeta = viewResult.metaData();
       System.out.println("Got total rows: " + viewMeta.totalRows());
       viewMeta.debug().ifPresent(debug -> System.out.println("Got debug info as well: " + debug));
-      // #end::views-meta[]
+      // end::views-meta[]
     }
 
   }

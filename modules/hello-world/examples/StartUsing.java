@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-// #tag::imports[]
+// tag::imports[]
 import com.couchbase.client.java.*;
 import com.couchbase.client.java.kv.*;
 import com.couchbase.client.java.json.*;
 import com.couchbase.client.java.query.*;
-// #end::imports[]
+// end::imports[]
 
 class StartUsing {
 
@@ -29,7 +29,7 @@ class StartUsing {
   static String bucketName = "travel-sample";
 
   public static void local(String... args) {
-    // #tag::connect_local[]
+    // tag::connect_local[]
     Cluster cluster = Cluster.connect(connectionString, username, password);
     Bucket bucket = cluster.bucket(bucketName);
     Collection collection = bucket.defaultCollection();
@@ -42,25 +42,25 @@ class StartUsing {
     System.out.println(name); // name == "mike"
     QueryResult result = cluster.query("select \"Hello World\" as greeting");
     System.out.println(result.rowsAsObject());
-    // #end::connect_local[]
+    // end::connect_local[]
   }
 
   public static void main(String... args) {
-    // #tag::connect[]
+    // tag::connect[]
     Cluster cluster = Cluster.connect(connectionString, username, password);
-    // #end::connect[]
+    // end::connect[]
 
-    // #tag::bucket[]
+    // tag::bucket[]
     // get a bucket reference
     Bucket bucket = cluster.bucket(bucketName);
-    // #end::bucket[]
+    // end::bucket[]
 
-    // #tag::collection[]
+    // tag::collection[]
     // get a collection reference
     Collection collection = bucket.defaultCollection();
-    // #end::collection[]
+    // end::collection[]
 
-    // #tag::upsert-get[]
+    // tag::upsert-get[]
     // Upsert Document
     MutationResult upsertResult = collection.upsert(
         "my-document",
@@ -71,12 +71,12 @@ class StartUsing {
     GetResult getResult = collection.get("my-document");
     String name = getResult.contentAsObject().getString("name");
     System.out.println(name); // name == "mike"
-    // #end::upsert-get[]
+    // end::upsert-get[]
 
-    // #tag::n1ql-query[]
+    // tag::n1ql-query[]
     QueryResult result = cluster.query("select \"Hello World\" as greeting");
     System.out.println(result.rowsAsObject());
-    // #end::n1ql-query[]
+    // end::n1ql-query[]
 
   }
 
