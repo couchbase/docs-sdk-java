@@ -113,14 +113,14 @@ public class EncryptingUsingSDK {
 
     Employee employee = new Employee();
     employee.setReplicant(true);
-    collection.upsert("employee:1234", employee);
+    collection.upsert("employee:1234", employee); // encrypts the "replicant" field
     // end::encrypting_using_sdk_3[]
   }
 
   public void encrypting_using_sdk_4() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 128
     // tag::encrypting_using_sdk_4[]
     JsonObject encrypted = collection.get("employee:1234")
-        .contentAsObject();
+        .contentAsObject(); // does not decrypt anything
 
     System.out.println(encrypted);
     // end::encrypting_using_sdk_4[]
@@ -129,7 +129,7 @@ public class EncryptingUsingSDK {
   public void encrypting_using_sdk_5() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 152
     // tag::encrypting_using_sdk_5[]
     Employee readItBack = collection.get("employee:1234")
-        .contentAs(Employee.class);
+        .contentAs(Employee.class); // decrypts the "replicant" field
 
     System.out.println(readItBack.isReplicant());
     // end::encrypting_using_sdk_5[]
