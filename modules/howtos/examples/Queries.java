@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// #tag::imports[]
+// tag::imports[]
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.*;
 import com.couchbase.client.java.json.*;
@@ -28,7 +28,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
-// #end::imports[]
+// end::imports[]
 
 
 class Queries {
@@ -37,7 +37,7 @@ class Queries {
 
   public static void main(String... args) {
     {
-      // #tag::simple[]
+      // tag::simple[]
       try {
         final QueryResult result = cluster
           .query("select * from `travel-sample` limit 10", queryOptions().metrics(true));
@@ -51,91 +51,91 @@ class Queries {
       } catch (CouchbaseException ex) {
         ex.printStackTrace();
       }
-      // #end::simple[]
+      // end::simple[]
     }
 
     {
-      // #tag::named[]
+      // tag::named[]
       QueryResult result = cluster.query(
         "select count(*) from `travel-sample` where type = \"airport\" and country = $country",
         queryOptions().parameters(JsonObject.create().put("country", "France"))
       );
-      // #end::named[]
+      // end::named[]
     }
 
 
     {
-      // #tag::positional[]
+      // tag::positional[]
       QueryResult result = cluster.query(
         "select count(*) from `travel-sample` where type = \"airport\" and country = ?",
         queryOptions().parameters(JsonArray.from("France"))
       );
-      // #end::positional[]
+      // end::positional[]
     }
 
     {
-      // #tag::scanconsistency[]
+      // tag::scanconsistency[]
       QueryResult result = cluster.query(
         "select ...",
         queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS)
       );
-      // #end::scanconsistency[]
+      // end::scanconsistency[]
     }
 
     {
-      // #tag::scanconsistency_with[]
+      // tag::scanconsistency_with[]
       Bucket bucket = cluster.bucket("travel-sample");
       Collection collection = bucket.defaultCollection();
       MutationResult mr = collection.upsert("someDoc",JsonObject.create().put("name", "roi"));
       MutationState mutationState = MutationState.from(mr.mutationToken().get());
-    
-      QueryOptions qo = QueryOptions.queryOptions().consistentWith(mutationState); 
+
+      QueryOptions qo = QueryOptions.queryOptions().consistentWith(mutationState);
       QueryResult result = cluster.query(
         "select raw meta().id from `bucket1` limit 100;",qo
       );
-      // #end::scanconsistency_with[]
+      // end::scanconsistency_with[]
     }
 
     {
-      // #tag::clientcontextid[]
+      // tag::clientcontextid[]
       QueryResult result = cluster.query(
         "select ...",
         queryOptions().clientContextId("user-44" + UUID.randomUUID())
       );
-      // #end::clientcontextid[]
+      // end::clientcontextid[]
     }
 
     {
-      // #tag::readonly[]
+      // tag::readonly[]
       QueryResult result = cluster.query(
         "select ...",
         queryOptions().readonly(true)
       );
-      // #end::readonly[]
+      // end::readonly[]
     }
 
     {
-      // #tag::printmetrics[]
+      // tag::printmetrics[]
       QueryResult result = cluster.query("select 1=1", queryOptions().metrics(true));
       System.err.println(
         "Execution time: " + result.metaData().metrics().get().executionTime()
       );
-      // #end::printmetrics[]
+      // end::printmetrics[]
     }
 
     {
-      // #tag::rowsasobject[]
+      // tag::rowsasobject[]
       QueryResult result = cluster.query(
         "select * from `travel-sample` limit 10"
       );
       for (JsonObject row : result.rowsAsObject()) {
         System.out.println("Found row: " + row);
       }
-      // #end::rowsasobject[]
+      // end::rowsasobject[]
     }
 
     {
-      // #tag::simplereactive[]
+      // tag::simplereactive[]
       Mono<ReactiveQueryResult> result = cluster
         .reactive()
         .query("select 1=1");
@@ -143,11 +143,11 @@ class Queries {
       result
         .flatMapMany(ReactiveQueryResult::rowsAsObject)
         .subscribe(row -> System.out.println("Found row: " + row));
-      // #end::simplereactive[]
+      // end::simplereactive[]
     }
 
     {
-      // #tag::backpressure[]
+      // tag::backpressure[]
       Mono<ReactiveQueryResult> result = cluster
         .reactive()
         .query("select * from hugeBucket");
@@ -172,7 +172,7 @@ class Queries {
             }
           }
         });
-      // #end::backpressure[]
+      // end::backpressure[]
     }
 
   }

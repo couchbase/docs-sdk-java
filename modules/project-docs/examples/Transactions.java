@@ -18,7 +18,7 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
 
-// #tag::imports[]
+// tag::imports[]
 // Imports required by this sample
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
@@ -31,7 +31,7 @@ import com.couchbase.transactions.error.TransactionFailed;
 import java.util.logging.Logger;
 
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
-// #end::imports[]
+// end::imports[]
 
 class TransactionsDemo {
     private static final Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
@@ -40,7 +40,7 @@ class TransactionsDemo {
     private static final Transactions transactions = Transactions.create(cluster);
 
     void demo_1_0_1_changes() {
-        // #tag::demo_1_0_1[]
+        // tag::demo_1_0_1[]
         try {
             TransactionResult result = transactions.run((ctx) -> {
                 // ... transactional code here ...
@@ -81,7 +81,7 @@ class TransactionsDemo {
             System.err.println("Transaction failed with TransactionFailed, logs:");
             err.result().log().logs().forEach(log -> System.err.println(log.toString()));
         }
-        // #end::demo_1_0_1[]
+        // end::demo_1_0_1[]
 
 
         cluster.disconnect();
@@ -93,22 +93,22 @@ class TransactionsDemo {
         JsonObject cContent = JsonObject.create();
         final Logger LOGGER = Logger.getLogger("transactions");
 
-        // #tag::query-basic[]
+        // tag::query-basic[]
         TransactionResult result = transactions.run((ctx) -> {
             ctx.insert(collection, "doc-a", aContent);
             ctx.query("INSERT INTO `default` VALUES ('doc-b', " + bContent + ")");
             ctx.insert(collection, "doc-c", cContent);
         });
-        // #end::query-basic[]
+        // end::query-basic[]
     }
 
     static void customMetadata() {
         Collection metadataCollection = null;
 
-        // #tag::custom-metadata[]
+        // tag::custom-metadata[]
         Transactions transactions = Transactions.create(cluster,
                 TransactionConfigBuilder.create()
                         .metadataCollection(metadataCollection));
-        // #end::custom-metadata[]
+        // end::custom-metadata[]
     }
 }

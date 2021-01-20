@@ -40,7 +40,7 @@ public class HealthCheck {
     Collection collection = scope.collection("collection-name");
 
     {
-// #tag::ping-basic[]
+// tag::ping-basic[]
 PingResult pingResult = cluster.ping();
 
 for (Map.Entry<ServiceType, List<EndpointPingReport>> service : pingResult.endpoints().entrySet()) {
@@ -50,27 +50,27 @@ for (Map.Entry<ServiceType, List<EndpointPingReport>> service : pingResult.endpo
     );
   }
 }
-// #end::ping-basic[]
+// end::ping-basic[]
     }
 
     {
-// #tag::ping-json-export[]
+// tag::ping-json-export[]
 PingResult pingResult = cluster.ping();
 
 System.out.println(pingResult.exportToJson());
-// #end::ping-json-export[]
+// end::ping-json-export[]
     }
 
     {
-// #tag::ping-options[]
+// tag::ping-options[]
 PingResult pingResult = cluster.ping(pingOptions().serviceTypes(EnumSet.of(ServiceType.QUERY)));
 
 System.out.println(pingResult.exportToJson());
-// #end::ping-options[]
+// end::ping-options[]
     }
 
     {
-// #tag::diagnostics-basic[]
+// tag::diagnostics-basic[]
 DiagnosticsResult diagnosticsResult = cluster.diagnostics();
 
 for (Map.Entry<ServiceType, List<EndpointDiagnostics>> service : diagnosticsResult.endpoints().entrySet()) {
@@ -80,15 +80,15 @@ for (Map.Entry<ServiceType, List<EndpointDiagnostics>> service : diagnosticsResu
     );
   }
 }
-// #end::diagnostics-basic[]
+// end::diagnostics-basic[]
     }
 
     {
-// #tag::diagnostics-options[]
+// tag::diagnostics-options[]
 DiagnosticsResult diagnosticsResult = cluster.diagnostics();
 
 System.out.println(diagnosticsResult.exportToJson());
-// #end::diagnostics-options[]
+// end::diagnostics-options[]
     }
   }
 

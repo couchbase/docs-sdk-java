@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// #tag::imports[]
+// tag::imports[]
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.analytics.AnalyticsResult;
@@ -30,7 +30,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.couchbase.client.java.analytics.AnalyticsOptions.analyticsOptions;
-// #end::imports[]
+// end::imports[]
 
 public class Analytics {
 
@@ -38,7 +38,7 @@ public class Analytics {
 
   public static void main(String... args) {
     {
-      // #tag::simple[]
+      // tag::simple[]
       try {
         final AnalyticsResult result = cluster
           .analyticsQuery("select \"hello\" as greeting");
@@ -52,86 +52,86 @@ public class Analytics {
       } catch (CouchbaseException ex) {
         ex.printStackTrace();
       }
-      // #end::simple[]
+      // end::simple[]
     }
 
     {
-      // #tag::named[]
+      // tag::named[]
       AnalyticsResult result = cluster.analyticsQuery(
         "select count(*) from airports where country = $country",
         analyticsOptions().parameters(JsonObject.create().put("country", "France"))
       );
-      // #end::named[]
+      // end::named[]
     }
 
 
     {
-      // #tag::positional[]
+      // tag::positional[]
       AnalyticsResult result = cluster.analyticsQuery(
         "select count(*) from airports where country = ?",
         analyticsOptions().parameters(JsonArray.from("France"))
       );
-      // #end::positional[]
+      // end::positional[]
     }
 
     {
-      // #tag::scanconsistency[]
+      // tag::scanconsistency[]
       AnalyticsResult result = cluster.analyticsQuery(
         "select ...",
         analyticsOptions().scanConsistency(AnalyticsScanConsistency.REQUEST_PLUS)
       );
-      // #end::scanconsistency[]
+      // end::scanconsistency[]
     }
 
     {
-      // #tag::clientcontextid[]
+      // tag::clientcontextid[]
       AnalyticsResult result = cluster.analyticsQuery(
         "select ...",
         analyticsOptions().clientContextId("user-44" + UUID.randomUUID())
       );
-      // #end::clientcontextid[]
+      // end::clientcontextid[]
     }
 
     {
-      // #tag::priority[]
+      // tag::priority[]
       AnalyticsResult result = cluster.analyticsQuery(
         "select ...",
         analyticsOptions().priority(true)
       );
-      // #end::priority[]
+      // end::priority[]
     }
 
     {
-      // #tag::readonly[]
+      // tag::readonly[]
       AnalyticsResult result = cluster.analyticsQuery(
         "select ...",
         analyticsOptions().readonly(true)
       );
-      // #end::readonly[]
+      // end::readonly[]
     }
 
     {
-      // #tag::printmetrics[]
+      // tag::printmetrics[]
       AnalyticsResult result = cluster.analyticsQuery("select 1=1");
       System.err.println(
         "Execution time: " + result.metaData().metrics().executionTime()
       );
-      // #end::printmetrics[]
+      // end::printmetrics[]
     }
 
     {
-      // #tag::rowsasobject[]
+      // tag::rowsasobject[]
       AnalyticsResult result = cluster.analyticsQuery(
         "select * from `travel-sample` limit 10"
       );
       for (JsonObject row : result.rowsAsObject()) {
         System.out.println("Found row: " + row);
       }
-      // #end::rowsasobject[]
+      // end::rowsasobject[]
     }
 
     {
-      // #tag::simplereactive[]
+      // tag::simplereactive[]
       Mono<ReactiveAnalyticsResult> result = cluster
         .reactive()
         .analyticsQuery("select 1=1");
@@ -139,11 +139,11 @@ public class Analytics {
       result
         .flatMapMany(ReactiveAnalyticsResult::rowsAsObject)
         .subscribe(row -> System.out.println("Found row: " + row));
-      // #end::simplereactive[]
+      // end::simplereactive[]
     }
 
     {
-      // #tag::backpressure[]
+      // tag::backpressure[]
       Mono<ReactiveAnalyticsResult> result = cluster
         .reactive()
         .analyticsQuery("select * from hugeDataset");
@@ -169,7 +169,7 @@ public class Analytics {
             }
           }
       });
-      // #end::backpressure[]
+      // end::backpressure[]
     }
 
   }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// #tag::imports[]
+// tag::imports[]
 
 import com.couchbase.client.core.error.CasMismatchException;
 import com.couchbase.client.core.error.DurabilityImpossibleException;
@@ -54,7 +54,7 @@ import static com.couchbase.client.java.kv.MutateInSpec.increment;
 import static com.couchbase.client.java.kv.MutateInSpec.insert;
 import static com.couchbase.client.java.kv.MutateInSpec.remove;
 import static com.couchbase.client.java.kv.MutateInSpec.upsert;
-// #end::imports[]
+// end::imports[]
 
 class SubDocument {
   static Collection collection;
@@ -95,7 +95,7 @@ class SubDocument {
   }
 
   static void getFunc() {
-    // #tag::get[]
+    // tag::get[]
     LookupInResult result = collection.lookupIn(
         "airport_1254",
         Collections.singletonList(get("geo.alt"))
@@ -103,12 +103,12 @@ class SubDocument {
 
     String str = result.contentAs(0, String.class);
     System.out.println("getFunc: Altitude = " + str);
-    // #end::get[]
+    // end::get[]
   }
 
   static void existsFunc() {
 
-    // #tag::exists[]
+    // tag::exists[]
     try {
       LookupInResult result = collection.lookupIn(
           "airport_1254",
@@ -117,11 +117,11 @@ class SubDocument {
     } catch (PathNotFoundException e) {
       System.out.println("existsFunc: " + e);
     }
-    // #end::exists[]
+    // end::exists[]
   }
 
   static void combine() {
-    // #tag::combine[]
+    // tag::combine[]
     try {
       LookupInResult result = collection.lookupIn(
           "airport_1254",
@@ -133,11 +133,11 @@ class SubDocument {
     } catch (PathNotFoundException e) {
       System.out.println("combine: " + e);
     }
-    // #end::combine[]
+    // end::combine[]
   }
 
   static void future() {
-    // #tag::get-future[]
+    // tag::get-future[]
     CompletableFuture<LookupInResult> future = collection.async().lookupIn(
         "airport_1254",
         Collections.singletonList(get("geo.alt"))
@@ -150,11 +150,11 @@ class SubDocument {
       e.printStackTrace();
     }
 
-    // #end::get-future[]
+    // end::get-future[]
   }
 
   static void reactive() {
-    // #tag::get-reactive[]
+    // tag::get-reactive[]
     Mono<LookupInResult> mono = collection.reactive().lookupIn(
         "airport_1254",
         Collections.singletonList(get("geo.alt"))
@@ -162,21 +162,21 @@ class SubDocument {
 
     // Just for example, block on the result - this is not best practice
     LookupInResult result = mono.block();
-    // #end::get-reactive[]
+    // end::get-reactive[]
     System.out.println("reactive: Altitude: " + result.contentAs(0, Number.class));
   }
 
   static void upsertFunc() {
-    // #tag::upsert[]
+    // tag::upsert[]
     collection.mutateIn("airport_1254", Arrays.asList(
         upsert("email", "dougr96@hotmail.com")
     ));
-    // #end::upsert[]
+    // end::upsert[]
     System.out.println("upsertFunc: airport_1254 email");
   }
 
   static void insertFunc() {
-    // #tag::insert[]
+    // tag::insert[]
     try {
       collection.mutateIn("airport_1254", Collections.singletonList(
           insert("email", "dougr96@hotmail.com")
@@ -184,7 +184,7 @@ class SubDocument {
     } catch (PathExistsException err) {
       System.out.println("insertFunc: exception caught, path already exists");
     }
-    // #end::insert[]
+    // end::insert[]
   }
 
   static void multiFunc() {
@@ -200,12 +200,12 @@ class SubDocument {
       ));
     } catch (PathNotFoundException e) {
     }
-    // #tag::multi[]
+    // tag::multi[]
     collection.mutateIn("airport_1254", Arrays.asList(
         remove("tz"),
         insert("email", "fredk84@hotmail.com")
     ));
-    // #end::multi[]
+    // end::multi[]
     System.out.println("upsertFunc: airport_1254 email");
   }
 
@@ -216,21 +216,21 @@ class SubDocument {
     docContent.put("flight", "DL999");
     docContent.put("utc", "11:59:59");
 
-    // #tag::array-appendobj[]
+    // tag::array-appendobj[]
     collection.mutateIn("route_21254", Collections.singletonList(
         arrayAppend("schedule", Collections.singletonList(docContent))
     ));
-    // #end::array-appendobj[]
+    // end::array-appendobj[]
     System.out.println("arrayAppendObjFunc: route_21254 schedule");
   }
 
   static void arrayAppendFunc() {
-    // #tag::array-append[]
+    // tag::array-append[]
     MutationResult result = collection.mutateIn("customer123", Collections.singletonList(
         arrayAppend("purchases.complete", Collections.singletonList(777))
     ));
     // purchases.complete is now [339, 976, 442, 666, 777]
-    // #end::array-append[]
+    // end::array-append[]
   }
 
   static void arrayPrependObjFunc() {
@@ -238,55 +238,55 @@ class SubDocument {
     docContent.put("day", 0);
     docContent.put("flight", "DL000");
     docContent.put("utc", "00:00:00");
-    // #tag::array-prependobj[]
+    // tag::array-prependobj[]
     collection.mutateIn("route_21254", Collections.singletonList(
         arrayPrepend("schedule", Collections.singletonList(docContent))
     ));
-    // #end::array-prependobj[]
+    // end::array-prependobj[]
     System.out.println("arrayAppendObjFunc: route_21254 schedule");
   }
 
   static void arrayPrependFunc() {
-    // #tag::array-prepend[]
+    // tag::array-prepend[]
     MutationResult result = collection.mutateIn("customer123", Collections.singletonList(
         arrayPrepend("purchases.abandoned", Collections.singletonList(18))
     ));
 
     // purchases.abandoned is now [18, 157, 49, 999]
-    // #end::array-prepend[]
+    // end::array-prepend[]
   }
 
   static void full_doc_replaceFunc() {
-    // #tag::full_doc_replace[]
+    // tag::full_doc_replace[]
     JsonObject docContent = JsonObject.create().put("body", "value");
     collection.mutateIn("airport_1255", Arrays.asList(
         MutateInSpec.upsert("foo", "bar").xattr().createPath(),
         MutateInSpec.replace("", docContent))
     );
-    // #end::full_doc_replace[]
+    // end::full_doc_replace[]
     System.out.println("full_doc_replaceFunc: airport_1255 foo");
 
   }
 
     static void createAndPopulateArrays() {
-    // #tag::array-create[]
+    // tag::array-create[]
     collection.upsert("my_array", JsonArray.create());
 
     collection.mutateIn("my_array", Collections.singletonList(
         arrayAppend("", Collections.singletonList("some element"))
     ));
     // the document my_array is now ["some element"]
-    // #end::array-create[]
+    // end::array-create[]
     System.out.println("createAndPopulateArrays: my_array some element");
 
   }
 
   static void arrayCreate() {
-    // #tag::array-upsert[]
+    // tag::array-upsert[]
     MutateInResult result = collection.mutateIn("airport_1256", Collections.singletonList(
         arrayAppend("some.array", Collections.singletonList("hello world")).createPath()
     ));
-    // #end::array-upsert[]
+    // end::array-upsert[]
     System.out.println("arrayCreate: airport_1256 some.array " + result);
 
   }
@@ -295,7 +295,7 @@ class SubDocument {
     collection.mutateIn("airport_1257", Arrays.asList(
         MutateInSpec.upsert("unique", Collections.singletonList(88))
     ));
-    // #tag::array-unique[]
+    // tag::array-unique[]
     collection.mutateIn("airport_1257", Collections.singletonList(
         arrayAddUnique("unique", 95)
     ));
@@ -308,18 +308,18 @@ class SubDocument {
     } catch (PathExistsException err) {
       System.out.println("arrayUnique: caught exception, path already exists");
     }
-    // #end::array-unique[]
+    // end::array-unique[]
   }
 
   static void arrayInsertFunc() {
     collection.mutateIn("airport_1258", Arrays.asList(
         MutateInSpec.upsert("foo", Collections.singletonList(88))
     ));
-    // #tag::array-insert[]
+    // tag::array-insert[]
     MutateInResult result = collection.mutateIn("airport_1258", Collections.singletonList(
         arrayInsert("foo[1]", Collections.singletonList("cruel"))
     ));
-    // #end::array-insert[]
+    // end::array-insert[]
     System.out.println("arrayInsertFunc: airport_1258 foo " + result);
 
   }
@@ -328,14 +328,14 @@ class SubDocument {
     collection.mutateIn("airport_1254", Arrays.asList(
         MutateInSpec.upsert("logins", 1)
     ));
-    // #tag::counter-inc[]
+    // tag::counter-inc[]
     MutateInResult result = collection.mutateIn("airport_1254", Collections.singletonList(
         increment("logins", 1)
     ));
 
     // Counter operations return the updated count
     Long count = result.contentAs(0, Long.class);
-    // #end::counter-inc[]
+    // end::counter-inc[]
     System.out.println("counterInc: airport_1254 logins " + count);
 
   }
@@ -344,20 +344,20 @@ class SubDocument {
     collection.mutateIn("airport_1254", Arrays.asList(
         MutateInSpec.upsert("logouts", 1000)
     ));
-    // #tag::counter-dec[]
+    // tag::counter-dec[]
 
     MutateInResult result = collection.mutateIn("airport_1254", Collections.singletonList(
         decrement("logouts", 150)
     ));
     // Counter operations return the updated count
     Long count = result.contentAs(0, Long.class);
-    // #end::counter-dec[]
+    // end::counter-dec[]
     System.out.println("counterDec: airport_1254 logouts " + count);
 
   }
 
   static void createPath() {
-    // #tag::create-path[]
+    // tag::create-path[]
     MutateInResult result = collection.mutateIn("airport_1254", Collections.singletonList(
         upsert("level_0.level_1.foo.bar.phone",
             JsonObject.create()
@@ -365,12 +365,12 @@ class SubDocument {
                 .put("ext", 16))
             .createPath()
     ));
-    // #end::create-path[]
+    // end::create-path[]
     System.out.println("createPath: airport_1254 " + result);
   }
 
   static void concurrent() {
-    // #tag::concurrent[]
+    // tag::concurrent[]
     Thread thread1 = new Thread() {
       public void run() {
         collection.mutateIn("airport_1258", Collections.singletonList(
@@ -388,7 +388,7 @@ class SubDocument {
     };
     thread1.start();
     thread2.start();
-    // #end::concurrent[]
+    // end::concurrent[]
     try {
       thread1.join();
     } catch (InterruptedException e) {
@@ -405,19 +405,19 @@ class SubDocument {
   }
 
   static void cas() {
-    // #tag::cas[]
+    // tag::cas[]
     GetResult doc = collection.get("airport_1254");
     MutationResult result = collection.mutateIn(
         "airport_1254",
         Collections.singletonList(decrement("logouts", 150)),
         mutateInOptions().cas(doc.cas())
     );
-    // #end::cas[]
+    // end::cas[]
     System.out.println("cas: airport_1258 " + doc);
   }
 
   static void cas_fail() {
-    // #tag::cas_fail[]
+    // tag::cas_fail[]
     GetResult doc = collection.get("airport_1254");
     try {
       MutationResult result = collection.mutateIn(
@@ -428,18 +428,18 @@ class SubDocument {
     } catch (CasMismatchException e) {
       System.out.println("cas_fail: " + e);
     }
-    // #end::cas_fail[]
+    // end::cas_fail[]
   }
 
   static void oldDurability() {
     try {
-      // #tag::old-durability[]
+      // tag::old-durability[]
       MutationResult result = collection.mutateIn(
           "airport_1254",
           Collections.singletonList(MutateInSpec.upsert("foo", "bar")),
           mutateInOptions().durability(PersistTo.ACTIVE, ReplicateTo.ONE)
       );
-      // #end::old-durability[]
+      // end::old-durability[]
       System.out.println("oldDurability: " + result);
     } catch (RuntimeException e) {
       System.out.println("oldDurability: replication not possible: " + e);
@@ -448,13 +448,13 @@ class SubDocument {
 
   static void newDurability() {
     try {
-      // #tag::new-durability[]
+      // tag::new-durability[]
       MutationResult result = collection.mutateIn(
           "airport_1254",
           Collections.singletonList(MutateInSpec.upsert("foo", "bar")),
           mutateInOptions().durability(DurabilityLevel.MAJORITY)
       );
-      // #end::new-durability[]
+      // end::new-durability[]
       System.out.println("newDurability: " + result);
     } catch (DurabilityImpossibleException e) {
       System.out.println("newDurability: replication not possible: " + e);

@@ -35,7 +35,7 @@ public class ManagingConnections {
   public static void main(String... args) {
 
     {
-      // #tag::simpleconnect[]
+      // tag::simpleconnect[]
       Cluster cluster = Cluster.connect("127.0.0.1", "username", "password");
       Bucket bucket = cluster.bucket("travel-sample");
       Collection collection = bucket.defaultCollection();
@@ -50,18 +50,18 @@ public class ManagingConnections {
 
       // For a graceful shutdown, disconnect from the cluster when the program ends.
       cluster.disconnect();
-      // #end::simpleconnect[]
+      // end::simpleconnect[]
     }
 
     {
-      // #tag::multinodeconnect[]
+      // tag::multinodeconnect[]
       Cluster cluster = Cluster.connect("192.168.56.101,192.168.56.102", "username", "password");
-      // #end::multinodeconnect[]
+      // end::multinodeconnect[]
     }
 
 
     {
-      // #tag::customenv[]
+      // tag::customenv[]
       ClusterEnvironment env = ClusterEnvironment.builder()
           // Customize client settings by calling methods on the builder
           .build();
@@ -75,11 +75,11 @@ public class ManagingConnections {
       // after all associated clusters are disconnected.
       cluster.disconnect();
       env.shutdown();
-      // #end::customenv[]
+      // end::customenv[]
     }
 
     {
-      // #tag::shareclusterenvironment[]
+      // tag::shareclusterenvironment[]
       ClusterEnvironment env = ClusterEnvironment.builder()
           .timeoutConfig(TimeoutConfig.kvTimeout(Duration.ofSeconds(5)))
           .build();
@@ -101,12 +101,12 @@ public class ManagingConnections {
       clusterA.disconnect();
       clusterB.disconnect();
       env.shutdown();
-      // #end::shareclusterenvironment[]
+      // end::shareclusterenvironment[]
     }
 
     // todo use this example when beta 2 is released.
 //    {
-//      // #tag::seednodes[]
+//      // tag::seednodes[]
 //      int customKvPort = 12345;
 //      int customManagerPort = 23456;
 //      Set<SeedNode> seedNodes = new HashSet<>(Arrays.asList(
@@ -116,18 +116,18 @@ public class ManagingConnections {
 //
 
 //      Cluster cluster = Cluster.connect(seedNodes, "username", "password");
-//      // #end::customconnect[]
+//      // end::customconnect[]
 //    }
 
     {
-      // #tag::connectionstringparams[]
+      // tag::connectionstringparams[]
       Cluster cluster = Cluster.connect(
           "127.0.0.1?io.maxHttpConnections=23&io.networkResolution=external", "username", "password");
-      // #end::connectionstringparams[]
+      // end::connectionstringparams[]
     }
 
     {
-      // #tag::blockingtoasync[]
+      // tag::blockingtoasync[]
       Cluster cluster = Cluster.connect("127.0.0.1", "username", "password");
       Bucket bucket = cluster.bucket("travel-sample");
 
@@ -138,11 +138,11 @@ public class ManagingConnections {
       ReactiveBucket reactiveBucket = bucket.reactive();
 
       cluster.disconnect();
-      // #end::blockingtoasync[]
+      // end::blockingtoasync[]
     }
 
     {
-      // #tag::reactivecluster[]
+      // tag::reactivecluster[]
       ReactiveCluster cluster = ReactiveCluster.connect("127.0.0.1", "username", "password");
       ReactiveBucket bucket = cluster.bucket("travel-sample");
 
@@ -150,11 +150,11 @@ public class ManagingConnections {
       // Nothing actually happens until you subscribe to the Mono.
       // The simplest way to subscribe is to await completion by calling call `block()`.
       cluster.disconnect().block();
-      // #end::reactivecluster[]
+      // end::reactivecluster[]
     }
 
     {
-      // #tag::asynccluster[]
+      // tag::asynccluster[]
       AsyncCluster cluster = AsyncCluster.connect("127.0.0.1", "username", "password");
       AsyncBucket bucket = cluster.bucket("travel-sample");
 
@@ -162,25 +162,25 @@ public class ManagingConnections {
       // The disconnection starts as soon as you call disconnect().
       // The simplest way to wait for the disconnect to complete is to call `join()`.
       cluster.disconnect().join();
-      // #end::asynccluster[]
+      // end::asynccluster[]
     }
 
 
     {
-      // #tag::tls[]
+      // tag::tls[]
       ClusterEnvironment env = ClusterEnvironment.builder()
           .securityConfig(SecurityConfig.enableTls(true)
               .trustCertificate(Paths.get("/path/to/cluster.cert")))
           .build();
-      // #end::tls[]
+      // end::tls[]
     }
 
     {
-      // #tag::dnssrv[]
+      // tag::dnssrv[]
       ClusterEnvironment env = ClusterEnvironment.builder()
           .ioConfig(IoConfig.enableDnsSrv(true))
           .build();
-      // #end::dnssrv[]
+      // end::dnssrv[]
     }
   }
 }

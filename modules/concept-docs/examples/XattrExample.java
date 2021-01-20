@@ -47,13 +47,13 @@ public class XattrExample {
   }
 
   public void xattr_1() throws Exception {
-    // #tag::xattr_1[]
+    // tag::xattr_1[]
     collection.lookupIn(
         "airport_1254",
         Collections.singletonList(
             LookupInSpec.get(LookupInMacro.EXPIRY_TIME).xattr())
     );
-    // #end::xattr_1[];
+    // end::xattr_1[];
   }
 
   public static void main(String[] args) throws Exception {

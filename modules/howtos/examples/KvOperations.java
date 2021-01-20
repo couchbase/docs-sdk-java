@@ -75,7 +75,7 @@ try {
 {
 // tag::get-simple[]
 try {
-  GetResult getResult = collection.get("document-key"); 
+  GetResult getResult = collection.get("document-key");
   String title = getResult.contentAsObject().getString("title");
   System.out.println(title); // title == "My Blog Post"
 } catch (DocumentNotFoundException ex) {
@@ -93,7 +93,7 @@ if (content.getString("author").equals("mike")) {
 } else {
     // do something else
 }
-// #end::get[]
+// end::get[]
 }
 
 {

@@ -49,7 +49,7 @@ public class Search {
   public static void main(String... args) {
 
     {
-      // #tag::simple[]
+      // tag::simple[]
       try {
         final SearchResult result = cluster
           .searchQuery("index", SearchQuery.queryString("query"));
@@ -63,11 +63,11 @@ public class Search {
       } catch (CouchbaseException ex) {
         ex.printStackTrace();
       }
-      // #end::simple[]
+      // end::simple[]
     }
 
     {
-      // #tag::squery[]
+      // tag::squery[]
       final SearchResult result = cluster
         .searchQuery("my-index-name", SearchQuery.prefix("airports-"), searchOptions().fields("field-1"));
 
@@ -78,21 +78,21 @@ public class Search {
         // Also print fields that are included in the query
         System.out.println(row.fieldsAs(JsonObject.class));
       }
-      // #end::squery[]
+      // end::squery[]
     }
 
     {
-      // #tag::limit[]
+      // tag::limit[]
       SearchResult result = cluster.searchQuery(
         "index",
         SearchQuery.queryString("query"),
         searchOptions().skip(3).limit(4)
       );
-      // #end::limit[]
+      // end::limit[]
     }
 
     {
-      // #tag::ryow[]
+      // tag::ryow[]
       MutationResult mutationResult = collection.upsert("key", JsonObject.create());
       MutationState mutationState = MutationState.from(mutationResult.mutationToken().get());
 
@@ -101,31 +101,31 @@ public class Search {
         SearchQuery.queryString("query"),
         searchOptions().consistentWith(mutationState)
       );
-      // #end::ryow[]
+      // end::ryow[]
     }
 
     {
-      // #tag::highlight[]
+      // tag::highlight[]
       SearchResult result = cluster.searchQuery(
         "index",
         SearchQuery.queryString("query"),
         searchOptions().highlight(HighlightStyle.HTML, "field1", "field2")
       );
-      // #end::highlight[]
+      // end::highlight[]
     }
 
     {
-      // #tag::sort[]
+      // tag::sort[]
       SearchResult result = cluster.searchQuery(
         "index",
         SearchQuery.queryString("query"),
         searchOptions().sort(SearchSort.byScore(), SearchSort.byField("field"))
       );
-      // #end::sort[]
+      // end::sort[]
     }
 
     {
-      // #tag::facets[]
+      // tag::facets[]
       Map<String, SearchFacet> facets = new HashMap<>();
       facets.put("categories", SearchFacet.term("category", 5));
 
@@ -134,21 +134,21 @@ public class Search {
         SearchQuery.queryString("query"),
         searchOptions().facets(facets)
       );
-      // #end::facets[]
+      // end::facets[]
     }
 
     {
-      // #tag::fields[]
+      // tag::fields[]
       SearchResult result = cluster.searchQuery(
         "index",
         SearchQuery.queryString("query"),
         searchOptions().fields("field1", "field2")
       );
-      // #end::fields[]
+      // end::fields[]
     }
 
     {
-      // #tag::simplereactive[]
+      // tag::simplereactive[]
       Mono<ReactiveSearchResult> result = cluster
         .reactive()
         .searchQuery("index", SearchQuery.queryString("query"));
@@ -156,11 +156,11 @@ public class Search {
       result
         .flatMapMany(ReactiveSearchResult::rows)
         .subscribe(row -> System.out.println("Found row: " + row));
-      // #end::simplereactive[]
+      // end::simplereactive[]
     }
 
     {
-      // #tag::backpressure[]
+      // tag::backpressure[]
       Mono<ReactiveSearchResult> result = cluster
         .reactive()
         .searchQuery("index", SearchQuery.queryString("query"));
@@ -185,7 +185,7 @@ public class Search {
             }
           }
         });
-      // #end::backpressure[]
+      // end::backpressure[]
     }
   }
 
