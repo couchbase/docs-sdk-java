@@ -6,31 +6,32 @@
 include::project-docs:partial$attributes.adoc[]
 
 [abstract]
-Fields within a document can be securely encrypted by the SDK, to support FIPS 140-2 compliance.
-
-
-CAUTION: This is a developer preview release of Field Level Encryption for the 3.0 API version of Couchbase Java SDK.
-As such, it is unsupported, and this documentation may lag behind development changes.
-Refer to the https://github.com/couchbase/java-couchbase-encryption[GitHub repo^] for the latest updates.
+A high-level overview of Field-Level Encryption concepts.
+For a practical guide, see xref:howtos:encrypting-using-sdk.adoc[].
 
 [#architecture]
 == Overview
 
-.Actors & Responsibilities in Field Level Encryption
-[#field_level_encryption--architecture]
-image::{incimagesdir}/field_level_encryption-architecture.png[]
+Fields within a JSON document can be securely encrypted by the SDK to support FIPS 140-2 compliance.
 
-This is a client-side implementation, with key management and initialization of data encryption done during configuration of the SDK, which then exposes the API during runtime, for normal read/write operations.
+This is a client-side implementation, with encryption and decryption handled by the Couchbase client SDK.
 
 [#algorithm]
 == Algorithm and Key Store
 
-From Couchbase Server 5.5, AES-256, AES-128, and RSA were all supported in earlier versions of the SDK's Field Level Encryption library -- these encryption algorithms are now deprecated, but decryption of data encrypted under earlier versions continues to be supported.
-SDK 3 uses a new algorithm, AEAD_AES_256_CBC_HMAC_SHA_512, which bundles the auth key and the encryption key into a single 64-byte "fat key".
-The key materials used by the AES and HMAC algorithms are distinct, but the keys can be managed as a single unit.
+SDK 3 uses the `AEAD_AES_256_CBC_HMAC_SHA_512` algorithm to provide authenticated symmetric encryption of sensitive JSON fields.
+This algorithm uses a 64-byte key (known affectionately as a "fat key", since it's really two 32-byte keys joined together).
+The key materials for the AES and HMAC steps are distinct, but are managed as a single unit.
 
-Native Keystores (including Java Key Store and Windows Certificate Store) are supported, as well as an in-memory keystore for development and testing.
-More options for key stores and encryption algorithms may appear in future SDK releases.
+NOTE: Previous versions of the Field-Level Encryption library used a variation of this algorithm that managed the AES and HMAC keys separately.
+This was an obstacle to key rotation, so those algorithms are deprecated in SDK 3 and are no longer used for encryption.
+Existing data encrypted with the old algorithm can still be read by SDK 3, although additional configuration is required to enable backwards compatibility.
+
+Developers may also plug in custom encryption algorithms.
+
+A `Keyring` provides access to encryption keys.
+Implementations are provided for native key stores (including Java Key Store and Windows Certificate Store).
+Developers may provide custom implementations for integration with external key management systems, or to implement key rotation.
 
 [#format]
 == Field Encryption Format
@@ -66,4 +67,4 @@ This means you can install the relevant SDK without being dependant upon a suite
 [#fips-140-2]
 == FIPS 140-2
 
-The standard AEAD_AES_256_CBC_HMAC_SHA512 encryption algorithm is composed of FIPS 140-2 "Approved Security Functions."
+The standard `AEAD_AES_256_CBC_HMAC_SHA512` encryption algorithm is composed of FIPS 140-2 "Approved Security Functions."
