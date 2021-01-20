@@ -166,7 +166,7 @@ WARNING: SDK 2 cannot read fields encrypted by SDK 3.
 
 It's inadvisable to have both the old and new versions of your application active at the same time.
 The simplest way to migrate is to do an offline upgrade during a scheduled a maintenance window.
-For an online upgrade without downtime, consider a https://en.wikipedia.org/wiki/Blue-green_deployment[blue-green deployment].
+For an online upgrade without downtime, consider a https://en.wikipedia.org/wiki/Blue-green_deployment[blue-green deployment^].
 
 SDK 3 requires additional configuration to read fields encrypted by SDK 2.
 The rest of this section describes how to configure Field-Level Encryption in SDK 3 for backwards compatibility with SDK 2.
