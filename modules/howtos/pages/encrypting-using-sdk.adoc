@@ -5,24 +5,24 @@
 // :page-aliases: ROOT:encrypting-using-sdk.adoc
 
 [abstract]
-The Field Level Encryption library enables encryption and decryption of JSON fields.
+A practical guide for getting started with Field-Level Encryption, showing how to encrypt and decrypt JSON fields using the Java SDK.
 
-CAUTION: The Field-Level Encryption library for Couchbase Java SDK is currently a _pre-release_.
-It is not supported, but is available for development and experiment.
-It is planned that a supported, full release version will be available later this year.
-Refer to the https://github.com/couchbase/java-couchbase-encryption[GitHub repo] for the latest updates.
+For a high-level overview of this feature, see xref:concept-docs:encryption.adoc[].
 
 [#package]
 == Packaging
 
-The Couchbase Java SDK uses the https://github.com/couchbase/java-couchbase-encryption[java-couchbase-encryption^] library to provide support for encryption and decryption of JSON fields.
-It includes cryptographic algorithms and keyrings you can use out of the box, and provides a framework for implementing your own crypto components.
+The Couchbase Java SDK works together with the https://github.com/couchbase/java-couchbase-encryption[Java Couchbase Encryption^] library to provide support for encryption and decryption of JSON fields.
+This library includes cryptographic algorithms and keyrings you can use out of the box, and provides a framework for implementing your own crypto components.
 
-NOTE: This separation of the encryption library ensures that the SDK does not have a dependency upon an encryption library in general use --
-but it does mean you have to explicitly include this external dependency in your project configuration.
+NOTE: The encryption code is packaged as an optional library because it is released under a https://github.com/couchbase/java-couchbase-encryption/blob/master/LICENSE.md[different license^] than the Couchbase Java SDK.
+To use the encryption library, you have to explicitly include this dependency in your project configuration.
 Refer to the xref:#maven-coordinates[dependencies section].
 
-Version `3.0.0-pre.1` of this library requires Couchbase Java SDK version `3.0.5` or later.
+[#requirements]
+== Requirements
+* Couchbase Java SDK version `3.0.5` or later.
+* Java Couchbase Encryption version `3.0.0` or later.
 
 [#maven-coordinates]
 == Maven Coordinates
@@ -35,6 +35,8 @@ Version `3.0.0-pre.1` of this library requires Couchbase Java SDK version `3.0.5
     <version>${version}</version>
 </dependency>
 ----
+
+See the https://github.com/couchbase/java-couchbase-encryption/tags[GitHub repository tags^] for the latest version.
 
 === Optional Dependencies
 
@@ -55,7 +57,7 @@ HashiCorp Vault Transit integration requires https://docs.spring.io/spring-vault
 
 == Configuration
 
-To enable Field-Level Encryption, supply a `CryptoManager` when configuring the Java SDK's `ClusterEnvironment`.
+To enable Field-Level Encryption, supply a `CryptoManager` when configuring the Java SDK's xref:managing-connections.adoc#cluster-environment[`ClusterEnvironment`].
 
 [source,java]
 ----
