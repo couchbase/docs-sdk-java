@@ -7,6 +7,7 @@ include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 A high-level overview of Field-Level Encryption concepts.
+
 For a practical guide, see xref:howtos:encrypting-using-sdk.adoc[].
 
 [#architecture]
