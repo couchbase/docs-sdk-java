@@ -2,7 +2,6 @@
 :page-topic-type: concept
 :page-edition: Enterprise Edition
 :page-aliases: ROOT:encryption.adoc
-:page-status: Developer Preview
 include::project-docs:partial$attributes.adoc[]
 
 [abstract]
