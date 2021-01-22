@@ -1,7 +1,6 @@
 = Field Level Encryption from the Java SDK
 :page-topic-type: howto
 :page-edition: Enterprise Edition
-:page-status: Developer Preview
 // :page-aliases: ROOT:encrypting-using-sdk.adoc
 
 [abstract]
