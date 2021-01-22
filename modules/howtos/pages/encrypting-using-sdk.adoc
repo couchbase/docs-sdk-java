@@ -56,7 +56,7 @@ HashiCorp Vault Transit integration requires https://docs.spring.io/spring-vault
 
 == Configuration
 
-To enable Field-Level Encryption, supply a `CryptoManager` when configuring the Java SDK's xref:managing-connections.adoc#cluster-environment[`ClusterEnvironment`].
+To enable Field-Level Encryption, supply a `CryptoManager` when xref:managing-connections.adoc#cluster-environment[configuring the Java SDK's `ClusterEnvironment`].
 
 [source,java]
 ----
