@@ -30,12 +30,40 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.1.1</version>
+        <version>3.1.2</version>
     </dependency>
 </dependencies>
 ----
 
 
+== Version 3.1.2 (2 February 2021)
+
+Version 3.1.2 is the third release of the 3.1 series, bringing stabilizations and enhancements over 3.1.1.
+
+http://packages.couchbase.com/clients/java/3.1.2/Couchbase-Java-Client-3.1.2.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.2/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.2/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.1.2**
+* com.couchbase.client:**core-io:2.1.2**
+* io.projectreactor:**reactor-core:3.4.1**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== API Affecting
+* https://issues.couchbase.com/browse/JCBC-1763[JCBC-1763]:
+CollectionManager::getScope is now deprecated, in favour of using getAllScopes.
+
+=== Enhancements
+* https://issues.couchbase.com/browse/JVMCBC-915[JVMCBC-915]:
+As a performance optimization, loading a collection now only fetches the information required for that collection, rather than the full collection manifest.
+* https://issues.couchbase.com/browse/JVMCBC-916[JVMCBC-916]:
+Any send HTTP request will send a hostname if hostnames are used, rather than IP, leading to consistent hostname use across the system.
+
+	Assignee	Status	Development
+Major	Improvement	JVMCBC-915	Load CID for collection only, not whole manifest	Michael Nitschinger	RESOLVED	1 commit
+Major	Improvement	JVMCBC-916	Use hostname from config for HTTP host header
 == Version 3.1.1 (12 January 2021)
 
 Version 3.1.1 is the second release of the 3.1 series, bringing stabilizations and enhancements over 3.1.0.
@@ -69,7 +97,7 @@ Certain collection-related error codes have changed.
 Support for collections added to `BatchHelper`.
 * https://issues.couchbase.com/browse/JCBC-1747[JCBC-1747]:
 Prepared non-adhoc queries on scopes were failing, as query_context was not being passed to the individual prepare and/or execute statements.
-This has now been fixed, and scope-level queries are working as expected. 
+This has now been fixed, and scope-level queries are working as expected.
 
 === Enhancements
 * https://issues.couchbase.com/browse/JVMCBC-907[JVMCBC-907]:
