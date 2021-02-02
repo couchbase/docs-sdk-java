@@ -61,9 +61,6 @@ As a performance optimization, loading a collection now only fetches the informa
 * https://issues.couchbase.com/browse/JVMCBC-916[JVMCBC-916]:
 Any send HTTP request will send a hostname if hostnames are used, rather than IP, leading to consistent hostname use across the system.
 
-	Assignee	Status	Development
-Major	Improvement	JVMCBC-915	Load CID for collection only, not whole manifest	Michael Nitschinger	RESOLVED	1 commit
-Major	Improvement	JVMCBC-916	Use hostname from config for HTTP host header
 == Version 3.1.1 (12 January 2021)
 
 Version 3.1.1 is the second release of the 3.1 series, bringing stabilizations and enhancements over 3.1.0.
@@ -97,7 +94,7 @@ Certain collection-related error codes have changed.
 Support for collections added to `BatchHelper`.
 * https://issues.couchbase.com/browse/JCBC-1747[JCBC-1747]:
 Prepared non-adhoc queries on scopes were failing, as query_context was not being passed to the individual prepare and/or execute statements.
-This has now been fixed, and scope-level queries are working as expected.
+This has now been fixed, and scope-level queries are working as expected. 
 
 === Enhancements
 * https://issues.couchbase.com/browse/JVMCBC-907[JVMCBC-907]:
