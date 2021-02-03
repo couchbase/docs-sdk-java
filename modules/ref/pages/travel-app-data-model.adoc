@@ -1,8 +1,4 @@
 = Travel App Data Model
 :page-topic-type: reference
-<<<<<<< HEAD
-// :page-aliases: server:travel-app:travel-app-data-model
-=======
->>>>>>> 3ea45658d48aed539306bec7a220798a1051a9c7
 
 include::6.5@sdk:pages:partial$travel-app-data-model.adoc[tag=model]
