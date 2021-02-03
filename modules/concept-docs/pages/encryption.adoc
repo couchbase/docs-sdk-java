@@ -17,7 +17,7 @@ Fields within a JSON document can be securely encrypted by the SDK to support FI
 This is a client-side implementation, with encryption and decryption handled by the Couchbase client SDK.
 
 .Encrypting & decrypting via the FLE library
-image::fle-concept.png
+image::fle-concept.png[FLE in app]
 
 [#algorithm]
 == Algorithm and Key Store
