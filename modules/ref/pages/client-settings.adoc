@@ -250,7 +250,7 @@ This setting puts an upper bound on the number of HTTP connections in each pool.
 Name: *Idle HTTP Connection Timeout*::
 Builder Method: `IoConfig.idleHttpConnectionTimeout(Duration)`
 +
-Default:  `30s`
+Default:  `4.5s`
 +
 System Property: `com.couchbase.env.io.idleHttpConnectionTimeout`
 +
