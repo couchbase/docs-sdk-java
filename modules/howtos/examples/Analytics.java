@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
+ /*
+  * You need the following datasets created:
+  *
+  *  CREATE DATASET `airports` ON `travel-sample` where type = "airport";
+  *  CREATE DATASET `huge-dataset` ON `travel-sample`;
+  *
+  */
+
 // tag::imports[]
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.Cluster;
@@ -36,6 +44,20 @@ public class Analytics {
 
   static Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
 
+  public static void show(String description, AnalyticsResult result) {
+    System.out.println(description);
+
+    for (JsonObject row : result.rowsAsObject()) {
+      System.out.println("Found row: " + row);
+    }
+
+    System.out.println("Reported execution time: "
+      + result.metaData().metrics().executionTime());
+
+      System.out.println();
+  }
+
+
   public static void main(String... args) {
     {
       // tag::simple[]
@@ -49,6 +71,9 @@ public class Analytics {
 
         System.out.println("Reported execution time: "
           + result.metaData().metrics().executionTime());
+
+        System.out.println();
+
       } catch (CouchbaseException ex) {
         ex.printStackTrace();
       }
@@ -59,11 +84,10 @@ public class Analytics {
       // tag::named[]
       AnalyticsResult result = cluster.analyticsQuery(
         "select count(*) from airports where country = $country",
-        analyticsOptions().parameters(JsonObject.create().put("country", "France"))
-      );
+        analyticsOptions().parameters(JsonObject.create().put("country", "France")));
       // end::named[]
+      show("named", result);
     }
-
 
     {
       // tag::positional[]
@@ -72,42 +96,47 @@ public class Analytics {
         analyticsOptions().parameters(JsonArray.from("France"))
       );
       // end::positional[]
+      show("positional", result);
     }
 
     {
       // tag::scanconsistency[]
       AnalyticsResult result = cluster.analyticsQuery(
-        "select ...",
+        "select count(*) from airports where country = 'France'",
         analyticsOptions().scanConsistency(AnalyticsScanConsistency.REQUEST_PLUS)
       );
       // end::scanconsistency[]
+      show("scanconsistency", result);
     }
 
     {
       // tag::clientcontextid[]
       AnalyticsResult result = cluster.analyticsQuery(
-        "select ...",
+        "select count(*) from airports where country = 'France'",
         analyticsOptions().clientContextId("user-44" + UUID.randomUUID())
       );
       // end::clientcontextid[]
+      show("clientcontextid", result);
     }
 
     {
       // tag::priority[]
       AnalyticsResult result = cluster.analyticsQuery(
-        "select ...",
+        "select count(*) from airports where country = 'France'",
         analyticsOptions().priority(true)
       );
       // end::priority[]
+      show("priority", result);
     }
 
     {
       // tag::readonly[]
       AnalyticsResult result = cluster.analyticsQuery(
-        "select ...",
+        "select count(*) from airports where country = 'France'",
         analyticsOptions().readonly(true)
       );
       // end::readonly[]
+      show("readonly", result);
     }
 
     {
@@ -122,50 +151,59 @@ public class Analytics {
     {
       // tag::rowsasobject[]
       AnalyticsResult result = cluster.analyticsQuery(
-        "select * from `travel-sample` limit 10"
+        "select * from airports limit 3"
       );
       for (JsonObject row : result.rowsAsObject()) {
         System.out.println("Found row: " + row);
       }
       // end::rowsasobject[]
+      System.out.println();
     }
 
-    {
-      // tag::simplereactive[]
-      Mono<ReactiveAnalyticsResult> result = cluster
-        .reactive()
-        .analyticsQuery("select 1=1");
 
-      result
-        .flatMapMany(ReactiveAnalyticsResult::rowsAsObject)
-        .subscribe(row -> System.out.println("Found row: " + row));
-      // end::simplereactive[]
-    }
+    System.out.println("Disconnecting...");
+    cluster.disconnect();
+  }
 
+  public static void asyncExamples(String... args) {
     {
+      {
+        System.out.println("simplereactive");
+        // tag::simplereactive[]
+        Mono<ReactiveAnalyticsResult> result = cluster
+          .reactive()
+          .analyticsQuery("select 1=1");
+
+        result
+          .flatMapMany(ReactiveAnalyticsResult::rowsAsObject)
+          .subscribe(row -> System.out.println("Found row: " + row));
+        // end::simplereactive[]
+      }
+
+      System.out.println("backpressure");
       // tag::backpressure[]
       Mono<ReactiveAnalyticsResult> result = cluster
         .reactive()
-        .analyticsQuery("select * from hugeDataset");
+        .analyticsQuery("select * from `huge-dataset`");
 
       result
         .flatMapMany(ReactiveAnalyticsResult::rowsAsObject)
         .subscribe(new BaseSubscriber<JsonObject>() {
           // Number of outstanding requests
-          final AtomicInteger oustanding = new AtomicInteger(0);
+          final AtomicInteger outstanding = new AtomicInteger(0);
 
           @Override
           protected void hookOnSubscribe(Subscription subscription) {
             request(10); // initially request to rows
-            oustanding.set(10);
+            outstanding.set(10);
           }
 
           @Override
           protected void hookOnNext(JsonObject value) {
             process(value);
-            if (oustanding.decrementAndGet() == 0) {
+            if (outstanding.decrementAndGet() == 0) {
               request(10);
-              oustanding.set(10);
+              outstanding.set(10);
             }
           }
       });
