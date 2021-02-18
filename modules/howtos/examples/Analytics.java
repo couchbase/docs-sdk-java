@@ -19,11 +19,15 @@
   *
   *  CREATE DATASET `airports` ON `travel-sample` where type = "airport";
   *  CREATE DATASET `huge-dataset` ON `travel-sample`;
-  *
+  *  CREATE DATAVERSE `travel-sample.inventory`;
+  *  USE `travel-sample.inventory`;
+  *  CREATE DATASET `airports-collection` ON `travel-sample`.inventory.airport;
   */
 
 // tag::imports[]
 import com.couchbase.client.core.error.CouchbaseException;
+import com.couchbase.client.java.Scope;
+import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.analytics.AnalyticsResult;
 import com.couchbase.client.java.analytics.AnalyticsScanConsistency;
@@ -160,6 +164,23 @@ public class Analytics {
       System.out.println();
     }
 
+    {
+      // tag::handle-collection[]
+      AnalyticsResult result = cluster.analyticsQuery(
+        "SELECT airportname, country FROM `airports-collection` WHERE country='France' LIMIT 3");
+      // end::handle-collection[]
+      show("handle-collection", result);
+    }
+
+    {
+      // tag::handle-scope[]
+      Bucket bucket = cluster.bucket("travel-sample");
+      Scope scope = bucket.scope("inventory");
+      AnalyticsResult result = scope.analyticsQuery(
+        "SELECT airportname, country FROM `airports-collection` WHERE country='France' LIMIT 4");
+      // end::handle-scope[]
+      show("handle-scope", result);
+    }
 
     System.out.println("Disconnecting...");
     cluster.disconnect();
