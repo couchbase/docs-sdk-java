@@ -33,7 +33,7 @@ https://issues.couchbase.com/browse/TXNJ-373[TXNJ-373]:
 The Java SDK's configured JsonSerializer is no longer used for internal JSON serialization tasks.
 * https://issues.couchbase.com/browse/TXNJ-301[TXNJ-301]:
 Previously cleanup of 'lost' transactions was only happening on buckets that the application had opened.
-Now, it will happen on all bucket in the cluster, as intended.
+Now, it will happen on all buckets in the cluster, as intended.
 * https://issues.couchbase.com/browse/TXNJ-345[TXNJ-345]:
 Transaction B is allowed to overwrite staged changes from Transaction A in some situations.
 B was previously allowed to insert a document over a staged replace or remove from A, this has now been patched: B should not be able to insert a doc that already exists.
@@ -47,9 +47,12 @@ Lost transactions involves polling of ATR documents, and this is now correctly r
 * https://issues.couchbase.com/browse/TXNJ-353[TXNJ-353]:
 Documents with staged data may now have that data overwritten if their Active Transaction Records (ATRs) have been deleted, providing some protection against accidental user modification of the ATRs.
 (A reminder that ATRs should not be modified by the user, they are managed automatically by the transactions libraries.)
-* https://issues.couchbase.com/browse/TXNJ-313[TXNJ-313], https://issues.couchbase.com/browse/TXNJ-334[TXNJ-334],https://issues.couchbase.com/browse/TXNJ-354[TXNJ-354]:
+* https://issues.couchbase.com/browse/TXNJ-313[TXNJ-313], 
+https://issues.couchbase.com/browse/TXNJ-334[TXNJ-334],
+https://issues.couchbase.com/browse/TXNJ-354[TXNJ-354]:
 Further refinements for query support.
 This support remains at beta-level while Couchbase Server 7.0 is in beta.
+
 
 == Distributed Transactions Java 1.1.4 (21 December 2020)
 
