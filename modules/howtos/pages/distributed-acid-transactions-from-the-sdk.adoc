@@ -29,14 +29,14 @@ include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
 
 Couchbase transactions require no additional components or services to be configured. 
 Simply add the transactions library into your project.
-The latest version, as of December 2020, is 1.1.4.
+The latest version, as of February 2021, is 1.1.5.
 
 With Gradle this can be accomplished by modifying these sections of your build.gradle file like so:
 
 [source,gradle]
 ----
 dependencies {
-    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.1.4'
+    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.1.5'
 }
 ----
 
