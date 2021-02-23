@@ -237,12 +237,7 @@ A complete list of `QueryOptions` can be found in the https://docs.couchbase.com
 
 [source,java]
 ----
-QueryResult result = scope.query(
-  "select * from `airline` limit 10"
-);
-for (JsonObject row : result.rowsAsObject()) {
-  System.out.println("Found row: " + row);
-}
+include::example$Queries.java[tag=inventory-scope-query]
 ----
 
 == Additional Resources
