@@ -245,7 +245,7 @@ It can be used like this:
 include::example$KvOperations.java[tag=expiry-touch]
 ----
 
-include::6.6@sdk:shared:partial$documents.adoc[tag=exp-note]
+// include::6.6@sdk:shared:partial$documents.adoc[tag=exp-note]
 
 
 
@@ -278,6 +278,19 @@ include::example$KvOperations.cs[tag=binarydecrementwithoptions,indent=0]
 ----
 ////
 NOTE: Increment & Decrement are considered part of the ‘binary’ API and as such may still be subject to change
+
+== Scoped KV Operations
+
+From version 3.0.0 of the Java SDK it is possible to perform scoped key value operations on named xref:7.0@server:learn:data/scopes-and-collections.adoc[`Collections`] _with the beta version of the next Couchbase Server release, 7.0β_.
+
+See the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Collection.html[API docs] for more information.
+
+Here is an example showing an upsert in the `airports` collection, which lives in the `inventory` scope within `travel-sample` bucket:
+
+[source,java]
+----
+include::example$ScopedKvOperations.java[tag=upsert]
+----
 
 
 == Additional resources
