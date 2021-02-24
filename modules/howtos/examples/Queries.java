@@ -46,6 +46,7 @@ public class Queries {
 
   public static void main(String... args) {
     {
+      System.out.println("Example: [simple]");
       // tag::simple[]
       try {
         final QueryResult result = cluster.query("select * from `travel-sample` limit 10",
@@ -63,6 +64,7 @@ public class Queries {
     }
 
     {
+      System.out.println("\nExample: [named]");
       // tag::named[]
       QueryResult result = cluster.query(
           "select count(*) from `travel-sample` where type = \"airport\" and country = $country",
@@ -71,6 +73,7 @@ public class Queries {
     }
 
     {
+      System.out.println("\nExample: [positional]");
       // tag::positional[]
       QueryResult result = cluster.query(
           "select count(*) from `travel-sample` where type = \"airport\" and country = ?",
@@ -79,6 +82,7 @@ public class Queries {
     }
 
     {
+      System.out.println("\nExample: [scanconsistency]");
       // tag::scanconsistency[]
       QueryResult result = cluster.query(
           "select count(*) from `travel-sample` where type = \"airport\" and country = 'France'",
@@ -87,6 +91,7 @@ public class Queries {
     }
 
     {
+      System.out.println("\nExample: [scanconsistency_with]");
       // tag::scanconsistency_with[]
       Bucket bucket = cluster.bucket("travel-sample");
       Collection collection = bucket.defaultCollection();
@@ -99,6 +104,7 @@ public class Queries {
     }
 
     {
+      System.out.println("\nExample: [clientcontextid]");
       // tag::clientcontextid[]
       QueryResult result = cluster.query(
           "select count(*) from `travel-sample` where type = \"airport\" and country = 'France'",
@@ -107,6 +113,7 @@ public class Queries {
     }
 
     {
+      System.out.println("\nExample: [readonly]");
       // tag::readonly[]
       QueryResult result = cluster.query(
           "select count(*) from `travel-sample` where type = \"airport\" and country = 'France'",
@@ -115,6 +122,7 @@ public class Queries {
     }
 
     {
+      System.out.println("\nExample: [printmetrics]");
       // tag::printmetrics[]
       QueryResult result = cluster.query("select 1=1", queryOptions().metrics(true));
       System.err.println("Execution time: " + result.metaData().metrics().get().executionTime());
@@ -122,6 +130,7 @@ public class Queries {
     }
 
     {
+      System.out.println("\nExample: [rowsasobject]");
       // tag::rowsasobject[]
       QueryResult result = cluster.query("select * from `travel-sample` limit 10");
       for (JsonObject row : result.rowsAsObject()) {
@@ -131,6 +140,7 @@ public class Queries {
     }
 
     {
+      System.out.println("\nExample: [simplereactive]");
       // tag::simplereactive[]
       Mono<ReactiveQueryResult> result = cluster.reactive().query("select 1=1");
 
@@ -139,6 +149,7 @@ public class Queries {
     }
 
     {
+      System.out.println("\nExample: [backpressure]");
       // tag::backpressure[]
       Mono<ReactiveQueryResult> result = cluster.reactive().query("select * from `travel-sample`");
 
@@ -164,7 +175,8 @@ public class Queries {
     }
 
     {
-      // tag::inventory-scope-query[]
+      System.out.println("\nExample: [scope-level-query]");
+      // tag::scope-level-query[]
       Bucket bucket = cluster.bucket("travel-sample");
       Scope scope = bucket.scope("inventory");
 
@@ -174,7 +186,7 @@ public class Queries {
       for (JsonObject row : result.rowsAsObject()) {
         System.out.println("Found row: " + row);
       }
-      // end::inventory-scope-query[]
+      // end::scope-level-query[]
     }
 
   }

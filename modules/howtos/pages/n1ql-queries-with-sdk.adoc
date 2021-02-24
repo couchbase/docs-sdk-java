@@ -4,7 +4,7 @@
 :page-aliases: n1ql-query,ROOT:querying-n1ql
 :lang: Java
 :version: 3.1.2
-:example-source: 3.1@java-sdk:howtos:example$Queries.java
+:example-source: 3.2@java-sdk:howtos:example$Queries.java
 :example-source-lang: java
 
 [abstract]
@@ -237,7 +237,7 @@ A complete list of `QueryOptions` can be found in the https://docs.couchbase.com
 
 [source,java]
 ----
-include::example$Queries.java[tag=inventory-scope-query]
+include::example$Queries.java[tag=scope-level-query]
 ----
 
 == Additional Resources
