@@ -15,27 +15,40 @@
  */
 
 // tag::imports[]
-import com.couchbase.client.core.error.*;
-import com.couchbase.client.core.msg.kv.DurabilityLevel;
-import com.couchbase.client.java.*;
-import com.couchbase.client.java.json.*;
-import com.couchbase.client.java.kv.*;
+import static com.couchbase.client.java.kv.GetOptions.getOptions;
+import static com.couchbase.client.java.kv.InsertOptions.insertOptions;
+import static com.couchbase.client.java.kv.ReplaceOptions.replaceOptions;
+import static com.couchbase.client.java.kv.UpsertOptions.upsertOptions;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.time.Period;
 
-import static com.couchbase.client.java.kv.GetOptions.getOptions;
-import static com.couchbase.client.java.kv.InsertOptions.insertOptions;
-import static com.couchbase.client.java.kv.ReplaceOptions.replaceOptions;
-import static com.couchbase.client.java.kv.UpsertOptions.upsertOptions;
+import com.couchbase.client.core.error.CasMismatchException;
+import com.couchbase.client.core.error.CouchbaseException;
+import com.couchbase.client.core.error.DocumentExistsException;
+import com.couchbase.client.core.error.DocumentNotFoundException;
+import com.couchbase.client.core.error.DurabilityImpossibleException;
+import com.couchbase.client.core.error.ReplicaNotConfiguredException;
+import com.couchbase.client.core.msg.kv.DurabilityLevel;
+import com.couchbase.client.java.AsyncCollection;
+import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.ReactiveCollection;
+import com.couchbase.client.java.Scope;
+import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.kv.GetResult;
+import com.couchbase.client.java.kv.MutationResult;
+import com.couchbase.client.java.kv.PersistTo;
+import com.couchbase.client.java.kv.ReplicateTo;
 // end::imports[]
 
 public class KvOperations {
 
   public static void main(String... args) {
 
-    Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");
+    Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
 
     Bucket bucket = cluster.bucket("travel-sample");
     Scope scope = bucket.scope("_default");
@@ -49,6 +62,7 @@ public class KvOperations {
     // end::apis[]
 
     {
+      System.out.println("\nExample: [upsert]");
       // tag::upsert[]
       JsonObject content = JsonObject.create().put("author", "mike").put("title", "My Blog Post 1");
 
@@ -57,6 +71,7 @@ public class KvOperations {
     }
 
     {
+      System.out.println("\nExample: [insert]");
       // tag::insert[]
       try {
         JsonObject content = JsonObject.create().put("title", "My Blog Post 2");
@@ -70,6 +85,7 @@ public class KvOperations {
     }
 
     {
+      System.out.println("\nExample: [get-simple]");
       // tag::get-simple[]
       try {
         GetResult getResult = collection.get("document-key");
@@ -82,6 +98,7 @@ public class KvOperations {
     }
 
     {
+      System.out.println("\nExample: [get]");
       // tag::get[]
       GetResult found = collection.get("document-key");
       JsonObject content = found.contentAsObject();
@@ -94,6 +111,7 @@ public class KvOperations {
     }
 
     {
+      System.out.println("\nExample: [replace]");
       // tag::replace[]
       collection.upsert("my-document", JsonObject.create().put("initial", true));
 
@@ -105,6 +123,7 @@ public class KvOperations {
     }
 
     {
+      System.out.println("\nExample: [replace-retry]");
       // tag::replace-retry[]
       String id = "my-document";
       collection.upsert(id, JsonObject.create().put("initial", true));
@@ -124,6 +143,7 @@ public class KvOperations {
     }
 
     {
+      System.out.println("\nExample: [remove]");
       // tag::remove[]
       try {
         collection.remove("my-document");
@@ -134,6 +154,7 @@ public class KvOperations {
     }
 
     {
+      System.out.println("\nExample: [durability]");
       try {
         // tag::durability[]
         collection.upsert("my-document", JsonObject.create().put("doc", true),
@@ -145,6 +166,7 @@ public class KvOperations {
     }
 
     {
+      System.out.println("\nExample: [durability-observed]");
       try {
         // tag::durability-observed[]
         collection.upsert("my-document", JsonObject.create().put("doc", true),
@@ -156,6 +178,7 @@ public class KvOperations {
     }
 
     {
+      System.out.println("\nExample: [expiry-insert]");
       // tag::expiry-insert[]
       MutationResult insertResult = collection.insert("my-document2", json,
           insertOptions().expiry(Duration.ofHours(2)));
@@ -163,6 +186,7 @@ public class KvOperations {
     }
 
     {
+      System.out.println("\nExample: [expiry-insert-instant]");
       // tag::expiry-insert-instant[]
       MutationResult insertResult = collection.insert("my-document3", json,
           insertOptions().expiry(Instant.now().plus(Period.ofDays(62))));
@@ -170,38 +194,51 @@ public class KvOperations {
     }
 
     {
+      System.out.println("\nExample: [expiry-get]");
       // tag::expiry-get[]
-      GetResult found = collection.get("my-document3", getOptions().withExpiry(true));
-      System.out.println("Expiry of found doc: " + found.expiry());
+      GetResult result = collection.get("my-document3", getOptions().withExpiry(true));
+      System.out.println("Expiry of found doc: " + result.expiry());
       // end::expiry-get[]
+
+      System.out.println("cas value: " + result.cas());
     }
 
     {
+      System.out.println("\nExample: [expiry-replace]");
       // tag::expiry-replace[]
       GetResult found = collection.get("my-document3", getOptions().withExpiry(true));
 
-      collection.replace("my-document3", json, replaceOptions().expiry(found.expiryTime().get()));
+      MutationResult result = collection.replace("my-document3", json,
+          replaceOptions().expiry(found.expiryTime().get()));
       // end::expiry-replace[]
+
+      System.out.println("cas value: " + result.cas());
     }
 
     {
+      System.out.println("\nExample: [expiry-touch]");
       // tag::expiry-touch[]
-      collection.getAndTouch("my-document3", Duration.ofDays(1));
+      GetResult result = collection.getAndTouch("my-document3", Duration.ofDays(1));
       // end::expiry-touch[]
+
+      System.out.println("cas value: " + result.cas());
     }
 
     {
+      System.out.println("\nExample: [named-collection-upsert]");
       // tag::named-collection-upsert[]
-      Scope inventoryScope = bucket.scope("inventory");
-      Collection airportCollection = inventoryScope.collection("airport");
+      Scope agentScope = bucket.scope("tenant_agent_00");
+      Collection usersCollection = agentScope.collection("users");
 
-      JsonObject content = JsonObject.create().put("airportname", "Aeroporto D'Abruzzo").put("country", "Italy");
-      MutationResult result = airportCollection.upsert("airport-doc-key", content);
+      JsonObject content = JsonObject.create().put("name", "John Doe").put("preferred_email",
+          "johndoe111@test123.test");
+      MutationResult result = usersCollection.upsert("user-key", content);
       // end::named-collection-upsert[]
-      System.out.println("namedCollectionUpsert, cas value: " + result.cas());
+
+      System.out.println("cas value: " + result.cas());
     }
 
-    // Cleans up example data from _default collection
+    // Cleans up example data from the _default collection
     // to avoid errors when running the sample code (mainly for `insert` examples).
     cleanupData(collection);
   }
