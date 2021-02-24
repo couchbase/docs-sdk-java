@@ -58,7 +58,7 @@ public class EncryptingUsingSDK {
     cluster = Cluster.connect(connectionString, ClusterOptions.clusterOptions(username, password).environment(environment));
     bucket = cluster.bucket("travel-sample");
     scope = bucket.defaultScope();
-    collection = bucket.defaultCollection();    // end::connection_1[];
+    collection = bucket.defaultCollection();    // end::connection_1[]
   }
 
   public void encrypting_using_sdk_1() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 60
