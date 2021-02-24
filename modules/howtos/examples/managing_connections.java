@@ -47,7 +47,7 @@ public class managing_connections {
 		cluster = Cluster.connect(connectionString, ClusterOptions.clusterOptions(username, password).environment(environment));
 		bucket = cluster.bucket("travel-sample");
 		scope = bucket.defaultScope();
-		collection = bucket.defaultCollection();    // end::connection_1[];
+		collection = bucket.defaultCollection();    // end::connection_1[]
 	}
 
 	public void managing_connections_5() throws Exception { // file: howtos/pages/managing-connections.adoc line: 125
@@ -62,7 +62,7 @@ public class managing_connections {
 		Authenticator authenticator = PasswordAuthenticator.create(username, password);
 		ClusterOptions options = ClusterOptions.clusterOptions(authenticator);
 		Cluster cluster = Cluster.connect(seedNodes, options);
-		// end::managing_connections_5[];
+		// end::managing_connections_5[]
 	}
 
 	public void managing_connections_8() throws Exception { // file: howtos/pages/managing-connections.adoc line: 242
@@ -71,7 +71,7 @@ public class managing_connections {
 		cluster.waitUntilReady(Duration.ofSeconds(10));
 		Bucket bucket = cluster.bucket("travel-sample");
 		Collection collection = bucket.defaultCollection();
-		// end::managing_connections_8[];
+		// end::managing_connections_8[]
 	}
 
 	public void managing_connections_9() throws Exception { // file: howtos/pages/managing-connections.adoc line: 252
@@ -80,7 +80,7 @@ public class managing_connections {
 		cluster.waitUntilReady(Duration.ofSeconds(10));
 		Bucket bucket = cluster.bucket("travel-sample");
 		Collection collection = bucket.defaultCollection();
-		// end::managing_connections_9[];
+		// end::managing_connections_9[]
 	}
 
 	public static void main(String[] args) throws Exception {

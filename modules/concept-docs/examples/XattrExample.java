@@ -53,7 +53,7 @@ public class XattrExample {
         Collections.singletonList(
             LookupInSpec.get(LookupInMacro.EXPIRY_TIME).xattr())
     );
-    // end::xattr_1[];
+    // end::xattr_1[]
   }
 
   public static void main(String[] args) throws Exception {
