@@ -49,7 +49,7 @@ public class CollectingInformationAndLogging {
     bucket = cluster.bucket(bucketName);
     scope = bucket.defaultScope();
     collection = bucket.defaultCollection();
-    // end::connection_1[];
+    // end::connection_1[]
   }
   public void collecting_information_and_logging_1() throws Exception { // file: howtos/pages/collecting-information-and-logging.adoc line: 114
     // tag::collecting_information_and_logging_1[]
@@ -60,7 +60,7 @@ public class CollectingInformationAndLogging {
         	h.setLevel(Level.FINE);
     	}
     }
-    // end::collecting_information_and_logging_1[];
+    // end::collecting_information_and_logging_1[]
   }
 
   public void collecting_information_and_logging_2() throws Exception { // file: howtos/pages/collecting-information-and-logging.adoc line: 131
@@ -72,7 +72,7 @@ public class CollectingInformationAndLogging {
         .disableSlf4J(true)
       )
       .build();
-    // end::collecting_information_and_logging_2[];
+    // end::collecting_information_and_logging_2[]
   }
 
   public void collecting_information_and_logging_3() throws Exception { // file: howtos/pages/collecting-information-and-logging.adoc line: 163
@@ -92,13 +92,13 @@ public class CollectingInformationAndLogging {
     );
 
     Bucket bucket = cluster.bucket(bucketName);
-    // end::collecting_information_and_logging_3[];
+    // end::collecting_information_and_logging_3[]
   }
 
   public void collecting_information_and_logging_4() throws Exception { // file: howtos/pages/collecting-information-and-logging.adoc line: 206
     // tag::collecting_information_and_logging_4[]
     LogRedaction.setRedactionLevel(RedactionLevel.FULL);
-    // end::collecting_information_and_logging_4[];
+    // end::collecting_information_and_logging_4[]
   }
 
   public static void main(String[] args) throws Exception{

@@ -63,7 +63,7 @@ public class N1qlQueryExample {
         "select count(*) from `travel-sample` where type = \"airports\" and country = ?",
         QueryOptions.queryOptions().adhoc(false).parameters(JsonArray.from("France"))
     );
-    // end::n1ql_query_1[];
+    // end::n1ql_query_1[]
   }
 
   public void n1ql_query_2() throws Exception {
@@ -73,7 +73,7 @@ public class N1qlQueryExample {
       indexManager.createPrimaryIndex(bucketName);
       indexManager.createIndex(bucketName, "ix_name", Collections.singletonList("name"));
       indexManager.createIndex(bucketName, "ix_email", Collections.singletonList("email"));
-      // end::n1ql_query_2[];
+      // end::n1ql_query_2[]
     } catch (IndexExistsException e) {
       System.err.println(e);
     }
@@ -91,7 +91,7 @@ public class N1qlQueryExample {
           CreateQueryIndexOptions.createQueryIndexOptions().deferred(true));
       indexManager.buildDeferredIndexes(bucketName);
       indexManager.watchIndexes(bucketName, Arrays.asList("ix_name", "ix_email"), Duration.ofMinutes(5));
-      // end::n1ql_query_3[];
+      // end::n1ql_query_3[]
     } catch (IndexExistsException e) {
       System.err.println(e);
     }
@@ -110,7 +110,7 @@ public class N1qlQueryExample {
         QueryOptions.queryOptions()
             .parameters(JsonObject.create().put("id", id))
     );
-    // end::n1ql_query_4[];
+    // end::n1ql_query_4[]
   }
 
   public void n1ql_query_5() throws Exception {
@@ -121,7 +121,7 @@ public class N1qlQueryExample {
             .parameters(JsonObject.create().put("id", id))
             .scanConsistency(QueryScanConsistency.REQUEST_PLUS)
     );
-    // end::n1ql_query_5[];
+    // end::n1ql_query_5[]
   }
 
   public static void main(String[] args) throws Exception {
