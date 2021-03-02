@@ -2,10 +2,8 @@
 :navtitle: KV Operations
 :page-topic-type: howto
 :page-aliases: document-operations.adoc,ROOT:documents-creating,ROOT:documents-updating,ROOT:documents-retrieving,ROOT:documents-deleting
-:lang: Java
-:version: 3.1.2
 :example-source: 3.2@java-sdk:howtos:example$Queries.java
-:example-source-lang: java
+include::howtos:partial$attributes.adoc[]
 
 [abstract]
 Key Value (KV) or data service offers the simplest way to retrieve or mutate data where the key is known.
