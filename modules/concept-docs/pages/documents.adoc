@@ -2,7 +2,7 @@
 :nav-title: Documents & Doc Ops
 :page-topic-type: concept
 //:page-aliases: ROOT:core-operations.adoc
-:page-aliases: ROOT:documents.adoc,ROOT:documents-basics.adoc,ROOT:documents-atomic.adoc,6.6@server:developer-guide:expiry.adoc,6.6@server:developer-guide:creating-documents.adoc
+:page-aliases: ROOT:documents.adoc,ROOT:documents-basics.adoc,ROOT:documents-atomic.adoc
 
 [abstract]
 Couchbase supports CRUD operations, various data structures, and binary documents.
