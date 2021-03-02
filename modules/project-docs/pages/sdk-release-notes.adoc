@@ -30,10 +30,59 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.1.2</version>
+        <version>3.1.3</version>
     </dependency>
 </dependencies>
 ----
+
+== Version 3.1.3 (2 March 2021)
+
+Version 3.1.3 is the fourth release of the 3.1 series, bringing stabilizations and enhancements over 3.1.2.
+
+http://packages.couchbase.com/clients/java/3.1.3/Couchbase-Java-Client-3.1.3.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.3/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.3/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.1.3**
+* com.couchbase.client:**core-io:2.1.3**
+* io.projectreactor:**reactor-core:3.4.3**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== Improvements
+* https://issues.couchbase.com/browse/JCBC-1776[JCBC-1776],
+https://issues.couchbase.com/browse/JVMCBC-924[JVMCBC-924],
+https://issues.couchbase.com/browse/JVMCBC-925[JVMCBC-925]:
+Updated dependencies: OpenTelemetry to 1.0.0, Netty dependency to 4.1.59, netty-tcnative-boringssl-static to 2.0.36, Reactor to 2.4.3, Jackson to 2.12.1.
+* https://issues.couchbase.com/browse/JCBC-1774[JCBC-1774]:
+Added pre-flight sanity check before using a JacksonJsonSerializer found on the classpath.
+* https://issues.couchbase.com/browse/JVMCBC-919[JVMCBC-919]:
+Support for Project Reactor BlockHound integration.
+* https://issues.couchbase.com/browse/JVMCBC-926[JVMCBC-926]:
+Performance: Replace new byte[] full copies with ByteBufUtil.getBytes.
+* https://issues.couchbase.com/browse/JVMCBC-927[JVMCBC-927]:
+Performance: Improve performance of metrics hot code path.
+
+=== Bugs
+* https://issues.couchbase.com/browse/JVMCBC-930[JVMCBC-930]:
+Threshold and Orphan Reporting now report the correct time units.
+* https://issues.couchbase.com/browse/JVMCBC-932[JVMCBC-932]:
+Fixed a memory leak when OrphanReporter is disabled.
+* https://issues.couchbase.com/browse/JVMCBC-933[JVMCBC-933]:
+ThresholdRequestTracer and OrphanReporter now use bounded queues.
+
+=== Internal Improvements
+* https://issues.couchbase.com/browse/JVMCBC-912[JVMCBC-912]:
+Refactor property loading.
+* https://issues.couchbase.com/browse/JVMCBC-918[JVMCBC-918]:
+Move ProjectionsApplier into core.
+* https://issues.couchbase.com/browse/JVMCBC-920[JVMCBC-920]:
+Move MutationState logic to core.
+* https://issues.couchbase.com/browse/JVMCBC-921[JVMCBC-921]:
+Add OpenTelemetry attributes for spans.
+* https://issues.couchbase.com/browse/JVMCBC-929[JVMCBC-929]:
+Retain stability annotations at runtime.
 
 
 == Version 3.1.2 (2 February 2021)
