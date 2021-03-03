@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+ // NB: This example requires the `travel-sample` bucket to be installed.
+
 // tag::imports[]
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.*;
@@ -31,11 +33,11 @@ import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 // end::imports[]
 
 
-class Queries {
+public class Queries {
 
   static Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
 
-  public static void main(String... args) {
+  public static void main(String[] args) throws Exception {
     {
       // tag::simple[]
       try {
@@ -76,7 +78,7 @@ class Queries {
     {
       // tag::scanconsistency[]
       QueryResult result = cluster.query(
-        "select ...",
+        "select count(*) from `travel-sample`",
         queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS)
       );
       // end::scanconsistency[]
@@ -91,7 +93,7 @@ class Queries {
 
       QueryOptions qo = QueryOptions.queryOptions().consistentWith(mutationState);
       QueryResult result = cluster.query(
-        "select raw meta().id from `bucket1` limit 100;",qo
+        "select raw meta().id from `travel-sample` limit 100;", qo
       );
       // end::scanconsistency_with[]
     }
@@ -99,7 +101,7 @@ class Queries {
     {
       // tag::clientcontextid[]
       QueryResult result = cluster.query(
-        "select ...",
+        "select count(*) from `travel-sample`",
         queryOptions().clientContextId("user-44" + UUID.randomUUID())
       );
       // end::clientcontextid[]
@@ -108,7 +110,7 @@ class Queries {
     {
       // tag::readonly[]
       QueryResult result = cluster.query(
-        "select ...",
+        "select count(*) from `travel-sample`",
         queryOptions().readonly(true)
       );
       // end::readonly[]

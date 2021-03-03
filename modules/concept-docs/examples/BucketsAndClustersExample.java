@@ -50,7 +50,7 @@ public class BucketsAndClustersExample {
     BucketManager manager = cluster.buckets();
     bucketSettings = BucketSettings.create("myBucket");
     manager.createBucket(bucketSettings);
-    // end::buckets_and_clusters_1[];
+    // end::buckets_and_clusters_1[]
   }
 
   public static void main(String[] args) throws Exception {

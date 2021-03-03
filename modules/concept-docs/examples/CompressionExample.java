@@ -50,7 +50,7 @@ public class CompressionExample {
         // start compressing at 1024 bytes
         .compressionConfig(CompressionConfig.minSize(1024))
         .build();
-    // end::compression_1[];
+    // end::compression_1[]
   }
 
   public static void main(String[] args) throws Exception {

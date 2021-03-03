@@ -75,7 +75,7 @@ Note that you cannot use parameters in all positions. If you put it in an unsupp
 
 When performing an analytics query, the response you receive is an `AnalyticsResult`. If no exception gets raised the request succeeded and provides access to both the rows returned and also associated `AnalyticsMetaData`.
 
-Rows can be consumed either through a `JsonObject` directly, turned into a java collection instance (like a `Map`) or into your POJO of choice mapping directly to your domain logic. 
+Rows can be consumed either through a `JsonObject` directly, turned into a java collection instance (like a `Map`) or into your POJO of choice mapping directly to your domain logic.
 
 [source,java]
 ----
@@ -193,8 +193,43 @@ This query will stream all rows as they become available form the server. If you
 include::example$Analytics.java[tag=backpressure,indent=0]
 ----
 
-In this example we initially request a batch size of 10 rows (so streaming can begin). 
-Then as each row gets streamed it is written to a `process()` method which does whatever it needs to do to process. 
-Then a counter is decremented, and once all of the 10 outstanding rows are processed another batch is loaded. 
-Please note that with reactive code, if your `process()` method equivalent is blocking, you *must* move it onto another scheduler so that the I/O threads are not stalled. 
+In this example we initially request a batch size of 10 rows (so streaming can begin).
+Then as each row gets streamed it is written to a `process()` method which does whatever it needs to do to process.
+Then a counter is decremented, and once all of the 10 outstanding rows are processed another batch is loaded.
+Please note that with reactive code, if your `process()` method equivalent is blocking, you *must* move it onto another scheduler so that the I/O threads are not stalled.
 We always recommend not blocking in the first place in reactive code.
+
+== Scoped Queries on Named Collections
+
+In addition to creating a dataset with a WHERE clause to filter the results to documents with certain characteristics, SDK 3.1 now allows you to create a dataset against a named collection, for example:
+
+[source,n1ql]
+----
+CREATE DATASET `airports-collection` ON `travel-sample`.inventory.airport;
+-- compare with:
+-- CREATE DATASET airports ON `travel-sample` WHERE `type` = "airport";
+----
+
+You run the query in exactly the same way as usual:
+
+[source,java]
+----
+include::../examples/Analytics.java[tag=handle-collection,indent=0]
+----
+
+Analytics supports Scopes too, by looking for a Dataverse with the name `bucket.scope`
+For example:
+
+[source,n1ql]
+----
+CREATE DATAVERSE `travel-sample.inventory`;
+USE `travel-sample.inventory`;
+CREATE DATASET `airports-collection` ON `travel-sample`.inventory.airport;
+----
+
+Once we have an appropriately named Dataverse and a Dataset created inside it, we can query it as follows:
+
+[source,java]
+----
+include::../examples/Analytics.java[tag=handle-scope,indent=0]
+----
