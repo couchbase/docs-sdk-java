@@ -125,14 +125,16 @@ and allows optimization on a case-by-case basis.
 
 From the _beta version of the next Couchbase Server release, 7.0β_ the xref:7.0@server:learn:data/scopes-and-collections.adoc[Collections] feature lets you logically group similar documents into Collections.
 
-You can query collections in N1QL, by referring to an fully qualified keyspace. For example, to list the documents in the `airline` collection in the `inventory` scope:
+You can query collections in N1QL, by referring to an fully qualified keyspace.
+For example, to list the documents in the `airline` collection in the `inventory` scope:
 
 [source,n1ql]
 ----
 SELECT * FROM `travel-sample`.inventory.airline;
 ----
 
-As a convenience, you can also query a partial keyspace from the xref:7.0@server:n1ql:n1ql-intro:sysinfo.adoc#query-context[Query Context] of a specific Scope. For example, from the context of `{backtick}travel-sample{backtick}.inventory`, you could abbreviate the previous query to:
+As a convenience, you can also query a partial keyspace from the xref:7.0@server:n1ql:n1ql-intro:sysinfo.adoc#query-context[Query Context] of a specific Scope. 
+For example, from the context of `{backtick}travel-sample{backtick}.inventory`, you could abbreviate the previous query to:
 
 [source,n1ql]
 ----
