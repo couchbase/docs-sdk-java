@@ -205,31 +205,26 @@ In addition to creating a dataset with a WHERE clause to filter the results to d
 
 [source,n1ql]
 ----
-CREATE DATASET `airports-collection` ON `travel-sample`.inventory.airport;
--- compare with:
--- CREATE DATASET airports ON `travel-sample` WHERE `type` = "airport";
+ALTER COLLECTION `travel-sample`.inventory.airport ENABLE ANALYTICS;
+
+-- NB: this is more or less equivalent to:
+CREATE DATAVERSE `travel-sample`.inventory;
+CREATE DATASET `travel-sample`.inventory.airport ON `travel-sample`.inventory.airport;
 ----
 
-You run the query in exactly the same way as usual:
+We can then query the Dataset as normal, using the fully qualified keyspace:
 
 [source,java]
 ----
 include::../examples/Analytics.java[tag=handle-collection,indent=0]
 ----
 
-Analytics supports Scopes too, by looking for a Dataverse with the name `bucket.scope`
-For example:
-
-[source,n1ql]
-----
-CREATE DATAVERSE `travel-sample.inventory`;
-USE `travel-sample.inventory`;
-CREATE DATASET `airports-collection` ON `travel-sample`.inventory.airport;
-----
-
-Once we have an appropriately named Dataverse and a Dataset created inside it, we can query it as follows:
+////
+Note that using the `CREATE DATASET` syntax we could choose any Dataset name in any Dataverse, including the default.
+However the SDK supports this standard convention, allowing us to query from the Scope object:
 
 [source,java]
 ----
 include::../examples/Analytics.java[tag=handle-scope,indent=0]
 ----
+////
