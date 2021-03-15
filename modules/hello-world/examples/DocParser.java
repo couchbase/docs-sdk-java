@@ -291,7 +291,7 @@ public class DocParser {
               methodLines.add("    " + line); // remaining lines
               continued = line.contains("// continued"); // don't close-out this method.
             } // while content between ---- and ---- of [source,java]
-            methodLines.add("    // end::" + javaName + "_" + sourceSection + "[]")
+            methodLines.add("    // end::" + javaName + "_" + sourceSection + "[]");
             if (!dontEncapsulate && !continued) { // close off the method
               methodLines.add("  }\n");
             }
