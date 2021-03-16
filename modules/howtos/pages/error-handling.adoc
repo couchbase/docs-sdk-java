@@ -45,7 +45,7 @@ It is important to establish a mindset that a timeout is never the cause of a pr
 A timeout is your friend, because otherwise your thread will just end up being blocked for a long time instead. 
 A timeout gives you control over what should happen when it occurs, and it provides a safety net and last resort if the operation cannot be completed for whatever reason.
 
-The SDK will raise always raise an `AmbiguousTimeoutException` unless it can be sure that it did not cause any side effect on the server side (for example if an idempotent operation timed out, which is covered in the next section). 
+The SDK will raise an `AmbiguousTimeoutException` unless it can be sure that it did not cause any side effect on the server side (for example if an idempotent operation timed out, which is covered in the next section). 
 Most of the time it is enough to just handle the generic `TimeoutException`.
 
 Since the timeout is never the cause, always the symptom, it is important to provide contextual information on what might have caused it in the first place. 
