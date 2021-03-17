@@ -171,15 +171,15 @@ public class Analytics {
       show("handle-collection", result);
     }
 
-    // {
-    //   // tag::handle-scope[]
-    //   Bucket bucket = cluster.bucket("travel-sample");
-    //   Scope scope = bucket.scope("inventory");
-    //   AnalyticsResult result = scope.analyticsQuery(
-    //     "SELECT airportname, country FROM `airport` WHERE country='France' LIMIT 4");
-    //   // end::handle-scope[]
-    //   show("handle-scope", result);
-    // }
+    {
+      // tag::handle-scope[]
+      Bucket bucket = cluster.bucket("travel-sample");
+      Scope scope = bucket.scope("inventory");
+      AnalyticsResult result = scope.analyticsQuery(
+        "SELECT airportname, country FROM `airport` WHERE country='France' LIMIT 4");
+      // end::handle-scope[]
+      show("handle-scope", result);
+    }
 
     System.out.println("Disconnecting...");
     cluster.disconnect();

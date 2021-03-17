@@ -219,7 +219,6 @@ We can then query the Dataset as normal, using the fully qualified keyspace:
 include::../examples/Analytics.java[tag=handle-collection,indent=0]
 ----
 
-////
 Note that using the `CREATE DATASET` syntax we could choose any Dataset name in any Dataverse, including the default.
 However the SDK supports this standard convention, allowing us to query from the Scope object:
 
@@ -227,4 +226,3 @@ However the SDK supports this standard convention, allowing us to query from the
 ----
 include::../examples/Analytics.java[tag=handle-scope,indent=0]
 ----
-////
