@@ -2,14 +2,14 @@
 :navtitle: KV Operations
 :page-topic-type: howto
 :page-aliases: document-operations.adoc,ROOT:documents-creating,ROOT:documents-updating,ROOT:documents-retrieving,ROOT:documents-deleting
-:example-source: 3.2@java-sdk:howtos:example$Queries.java
+:example-source: 3.1@java-sdk:howtos:example$Queries.java
 include::howtos:partial$attributes.adoc[]
 
 [abstract]
 Key Value (KV) or data service offers the simplest way to retrieve or mutate data where the key is known.
 Here we cover CRUD operations, document expiration, and optimistic locking with CAS.
 
-The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/blob/release/3.2/modules/howtos/examples/KvOperations.java[here].
+The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/blob/release/3.1/modules/howtos/examples/KvOperations.java[here].
 
 At its heart Couchbase Server is a high-performance key-value store, and the key-value interface outlined below is the fastest and best method to perform operations involving single documents.
 
