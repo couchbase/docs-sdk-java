@@ -17,11 +17,10 @@
  /*
   * You need the following datasets created:
   *
-  *  CREATE DATASET `airports` ON `travel-sample` where type = "airport";
+  *  CREATE DATASET `airports` ON `travel-sample` where `type` = "airport";
   *  CREATE DATASET `huge-dataset` ON `travel-sample`;
-  *  CREATE DATAVERSE `travel-sample.inventory`;
-  *  USE `travel-sample.inventory`;
-  *  CREATE DATASET `airports-collection` ON `travel-sample`.inventory.airport;
+  *  ALTER COLLECTION `travel-sample`.`inventory`.`airport` ENABLE ANALYTICS;
+  *  CONNECT LINK Local;
   */
 
 // tag::imports[]
@@ -167,7 +166,7 @@ public class Analytics {
     {
       // tag::handle-collection[]
       AnalyticsResult result = cluster.analyticsQuery(
-        "SELECT airportname, country FROM `airports-collection` WHERE country='France' LIMIT 3");
+        "SELECT airportname, country FROM `travel-sample`.inventory.airport WHERE country='France' LIMIT 3");
       // end::handle-collection[]
       show("handle-collection", result);
     }
@@ -177,7 +176,7 @@ public class Analytics {
       Bucket bucket = cluster.bucket("travel-sample");
       Scope scope = bucket.scope("inventory");
       AnalyticsResult result = scope.analyticsQuery(
-        "SELECT airportname, country FROM `airports-collection` WHERE country='France' LIMIT 4");
+        "SELECT airportname, country FROM `airport` WHERE country='France' LIMIT 4");
       // end::handle-scope[]
       show("handle-scope", result);
     }
