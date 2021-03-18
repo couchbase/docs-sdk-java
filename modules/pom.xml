@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.couchbase.client</groupId>
@@ -116,9 +114,9 @@
 
     <repositories>
         <repository>
-        <id>couchbase</id>
-        <name>Couchbase Preview Repository</name>
-        <url>http://files.couchbase.com/maven2</url>
+            <id>couchbase</id>
+            <name>Couchbase Preview Repository</name>
+            <url>http://files.couchbase.com/maven2</url>
         </repository>
 
         <repository>
@@ -170,11 +168,11 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>modules/howtos/examples/</source>
-                                <source>modules/hello-world/examples/</source>
-                                <source>modules/project-docs/examples/</source>
-                                <source>modules/ref/examples/</source>
-                                <source>modules/concept-docs/examples/</source>
+                                <source>howtos/examples/</source>
+                                <source>hello-world/examples/</source>
+                                <source>project-docs/examples/</source>
+                                <source>ref/examples/</source>
+                                <source>concept-docs/examples/</source>
                             </sources>
                         </configuration>
                     </execution>

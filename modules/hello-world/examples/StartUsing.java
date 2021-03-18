@@ -21,7 +21,7 @@ import com.couchbase.client.java.json.*;
 import com.couchbase.client.java.query.*;
 // end::imports[]
 
-class StartUsing {
+public class StartUsing {
 
   static String connectionString = "localhost";
   static String username = "Administrator";
