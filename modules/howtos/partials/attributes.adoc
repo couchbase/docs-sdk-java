@@ -1,3 +1,0 @@
-:lang: Java
-:version: 3.1.2
-:example-source-lang: java
