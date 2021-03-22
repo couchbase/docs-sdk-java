@@ -26,6 +26,10 @@ See the xref:howtos:distributed-acid-transactions-from-the-sdk.adoc#tracing[docu
 Reducing the amount of metadata writes required for each transaction attempt, from four to three.
 This should give a significant improvement in performance, particularly in latency on smaller transactions, and throughput generally.
 
+=== Improvements
+* https://issues.couchbase.com/browse/TXNJ-358[TXNJ-358]:
+Allow all valid combinations of multiple serial Key-Value operations on the same document.
+
 === Forward Compatibility
 * https://issues.couchbase.com/browse/TXNJ-363[TXNJ-362]:
 Future-proofing the protocol to handle currently unknown transaction states.
