@@ -379,7 +379,10 @@ For those starting from scratch here is a complete example using the basic `java
 include::example$TransactionsExample.java[tag=full-logging,indent=0]
 ----
 
+
 == Tracing
+[.status]#Developer Preview#
+
 The 1.1.6 release introduces support, at a Developer Preview level, for OpenTelemetry and OpenTracing.
 
 If the underlying Couchbase Java SDK is configured for OpenTelemetry or OpenTracing, then transaction spans will now be output automatically.
@@ -390,10 +393,12 @@ Essentially the application creates a Couchbase `RequestTracer`, wrapping a Open
 The transactions library will then automatically use this tracer for its own spans.
 
 === Parent Spans
-While the above is sufficient to use and output transaction spans, the application may wish to indicate that the transaction is part of a larger span - for instance, a user request.
+
+While the above is sufficient to use and output transaction spans, the application may wish to indicate that the transaction is part of a larger span -- for instance, a user request.
 It can do this by passing that as a parent span.
 
 If you have an existing OpenTelemetry span you can easily convert it to a Couchbase `RequestSpan` and pass it to the transactions library:
+
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=tracing-wrapped,indent=0]
@@ -405,6 +410,7 @@ Alternatively if you don't already have a span, you can create one using the Cou
 ----
 include::example$TransactionsExample.java[tag=tracing,indent=0]
 ----
+
 
 == Concurrent Operations with the Async API
 
