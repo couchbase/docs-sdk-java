@@ -16,6 +16,7 @@
 
 // #tag::imports[]
 import com.couchbase.client.core.cnc.Event;
+import com.couchbase.client.core.cnc.RequestSpan;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
@@ -25,11 +26,13 @@ import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryProfile;
 import com.couchbase.client.java.query.QueryResult;
+import com.couchbase.client.tracing.opentelemetry.OpenTelemetryRequestSpan;
 import com.couchbase.transactions.TransactionDurabilityLevel;
 import com.couchbase.transactions.TransactionGetResult;
 import com.couchbase.transactions.TransactionQueryOptions;
 import com.couchbase.transactions.TransactionResult;
 import com.couchbase.transactions.Transactions;
+import com.couchbase.transactions.config.PerTransactionConfigBuilder;
 import com.couchbase.transactions.config.TransactionConfigBuilder;
 import com.couchbase.transactions.deferred.TransactionSerializedContext;
 import com.couchbase.transactions.error.TransactionCommitAmbiguous;
@@ -727,6 +730,28 @@ public class TransactionsExample {
                 TransactionConfigBuilder.create()
                         .metadataCollection(metadataCollection));
         // #end::custom-metadata[]
+    }
+
+    static void tracing() {
+        // #tag::tracing[]
+        RequestSpan span = cluster.environment().requestTracer()
+                .requestSpan("your-span-name", null);
+
+        transactions.run((ctx) -> {
+            // your transaction
+        }, PerTransactionConfigBuilder.create().parentSpan(span).build());
+        // #end::tracing[]
+    }
+
+    static void tracingWrapped() {
+        // #tag::tracing-wrapped[]
+        io.opentelemetry.api.trace.Span span; // created by your code earlier
+        RequestSpan wrapped = OpenTelemetryRequestSpan.wrap(span);
+
+        transactions.run((ctx) -> {
+            // your transaction
+        }, PerTransactionConfigBuilder.create().parentSpan(wrapped).build());
+        // #end::tracing-wrapped[]
     }
 
 }

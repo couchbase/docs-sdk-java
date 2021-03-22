@@ -11,6 +11,24 @@ This page features the release notes for that library -- for release notes, down
 See the xref:6.5@server:learn:data/transactions.adoc[Distributed ACID Transactions concept doc] in the server documentation for details of how Couchbase implements transactions.
 The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Transactions HOWTO doc] walks you through all aspects of working with Distributed Transactions.
 
+== Distributed Transactions Java 1.1.6 (22 March 2021)
+This release has been tested with Couchbase Java SDK version 3.1.3 and requires version 3.1.0 at a minimum.
+
+https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.1.6/[JavaDocs]
+
+=== New Features
+* https://issues.couchbase.com/browse/TXNJ-262[TXNJ-262]:
+Support for OpenTelemetry and OpenTracing, at Developer Preview level, providing transparency and visibility of both transactional operation and performance.
+See the xref:howtos:distributed-acid-transactions-from-the-sdk.adoc#tracing[documentation] for further details.
+
+=== Performance
+* https://issues.couchbase.com/browse/TXNJ-375[TXNJ-375]:
+Reducing the amount of metadata writes required for each transaction attempt, from four to three.
+This should give a significant improvement in performance, particularly in latency on smaller transactions, and throughput generally.
+
+=== Forward Compatibility
+* https://issues.couchbase.com/browse/TXNJ-363[TXNJ-362]:
+Future-proofing the protocol to handle currently unknown transaction states.
 
 == Distributed Transactions Java 1.1.5 (22 February 2021)
 
