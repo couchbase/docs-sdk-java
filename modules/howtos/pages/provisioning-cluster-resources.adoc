@@ -96,7 +96,9 @@ include::devguide:example$go/provisioning-resources-buckets.go[tag=flushBucket]
 The `Flush` operation may fail if the bucket does not have flush enabled, in that case it will return an `ErrBucketNotFlushable`.
 ////
 
+
 == Collection Management
+[.status]#Developer Preview#
 
 The CollectionManager interface may be used to create and delete scopes and collections from the Couchbase cluster.
 It is instantiated through the `Bucket.collections()` method.
