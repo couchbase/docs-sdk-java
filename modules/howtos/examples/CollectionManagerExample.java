@@ -74,9 +74,6 @@ public class CollectionManagerExample {
         catch (ScopeExistsException e) {
           System.out.println("Scope already exists");
         }
-        catch (AuthenticationFailureException e) {
-          System.out.println("User doesn't have required privileges to administer bucket");
-        }
         // end::create-scope[]
       }
 
