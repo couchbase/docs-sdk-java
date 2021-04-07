@@ -287,7 +287,7 @@ As the getPendingMutations method was previously uncallable due to the resulting
 * https://issues.couchbase.com/browse/JCBC-1713[JCBC-1713]: 
 Improve LDAP auth failure handling.
 * https://issues.couchbase.com/browse/JCBC-1718[JCBC-1718]: 
-`Expery` fixed for `touch` and `getAndTouch` methods.
+`Expiry` fixed for `touch` and `getAndTouch` methods.
 * https://issues.couchbase.com/browse/JVMCBC-885[JVMCBC-885]: 
 Allow overriding of `BestEffortRetryStrategy`.
 * https://issues.couchbase.com/browse/JVMCBC-889[JVMCBC-889]: 

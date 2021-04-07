@@ -2,6 +2,8 @@
 :navtitle: KV Operations
 :page-topic-type: howto
 :page-aliases: document-operations.adoc,ROOT:documents-creating,ROOT:documents-updating,ROOT:documents-retrieving,ROOT:documents-deleting
+:example-source: 3.1@java-sdk:howtos:example$Queries.java
+include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 Key Value (KV) or data service offers the simplest way to retrieve or mutate data where the key is known.
@@ -209,11 +211,9 @@ You can set an expiry value from a `Duration` when creating a document:
 include::example$KvOperations.java[tag=expiry-insert]
 ----
 
-We recommend using a relative duration only if the provided value is less than 30 days. 
-The reason is that the server will assume any value larger than that to be an absolute Unix timestamp. 
-The SDK tries its best to coerce it into sane values, but to avoid any unexpected behavior please stick with relative duration for durations of less than 30 days.
+We recommend using a `Duration` only if the provided value is less than 50 years.
 
-For longer expiry values, use an `Instant` instead:
+For expiration more than 50 years in the future, or if you have already calculated when a document should expire, you can specify the expiry as an `Instant`:
 
 [source,java]
 ----
@@ -280,6 +280,21 @@ include::example$KvOperations.cs[tag=binarydecrementwithoptions,indent=0]
 ----
 ////
 NOTE: Increment & Decrement are considered part of the ‘binary’ API and as such may still be subject to change
+
+== Scoped KV Operations
+
+From version 3.0.0 of the Java SDK, it is possible to perform scoped key-value operations on named xref:7.0@server:learn:data/scopes-and-collections.adoc[`Collections`] _with the beta version of the next Couchbase Server release, 7.0β_.
+See the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Collection.html[API docs] for more information.
+
+CAUTION: This feature is marked xref:project-docs:compatibility.adoc#interface-stability[_Uncommitted_].
+Expect a promotion to _Committed_ API in a future minor release.
+
+Here is an example showing an upsert in the `users` collection, which lives in the `travel-sample.tenant_agent_00` keyspace:
+
+[source,java]
+----
+include::example$KvOperations.java[tag=named-collection-upsert]
+----
 
 
 == Additional resources

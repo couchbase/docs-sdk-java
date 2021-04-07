@@ -5,7 +5,7 @@
 :lang: Java
 :version: 3.1.4
 :example-source: 3.1@java-sdk:howtos:example$Queries.java
-:example-source-lang: java
+include::howtos:partial$attributes.adoc[]
 
 [abstract]
 You can query for documents in Couchbase using the N1QL query language, a language based on SQL, but designed for structured and flexible JSON documents.
@@ -47,7 +47,7 @@ If you are using a cluster older than Couchbase Server 6.5, it is required that 
 
 == Parameterized Queries
 
-Supplying parameters as individual arguments to the query allows the query engine to optimize the parsing and planning of the query. 
+Supplying parameters as individual arguments to the query allows the query engine to optimize the parsing and planning of the query.
 You can either supply these parameters by name or by position.
 
 The first example shows how to provide them by name:
@@ -70,7 +70,7 @@ Note that you cannot use parameters in all positions. If you put it in an unsupp
 
 == The Query Result
 
-When performing a query, the response you receive is a `QueryResult`. 
+When performing a query, the response you receive is a `QueryResult`.
 If no exception gets raised the request succeeded and provides access to both the rows returned and also associated `QueryMetaData`.
 
 Rows can be consumed either through a `JsonObject` directly, turned into a java collection instance (like a `Map`) or into your POJO of choice mapping directly to your domain logic.
@@ -130,8 +130,8 @@ The query service provides an array of options to customize your query. The foll
 
 == Scan Consistency
 
-By default, the query engine will return whatever is currently in the index at the time of query (this mode is also called `QueryScanConsistency.NOT_BOUNDED`). 
-If you need to include everything that has just been written, a different scan consistency must be chosen. 
+By default, the query engine will return whatever is currently in the index at the time of query (this mode is also called `QueryScanConsistency.NOT_BOUNDED`).
+If you need to include everything that has just been written, a different scan consistency must be chosen.
 If `QueryScanConsistency.REQUEST_PLUS` is chosen, it will likely take a bit longer to return the results but the query engine will make sure that it is as up-to-date as possible.
 
 [source,java]
@@ -139,8 +139,8 @@ If `QueryScanConsistency.REQUEST_PLUS` is chosen, it will likely take a bit long
 include::example$Queries.java[tag=scanconsistency,indent=0]
 ----
 
-You can also use `consistentWith(MutationState)` for a more narrowed-down scan consistency. 
-Construct the `MutationState` from individual `MutationToken`s that are returned from KV `MutationResult`s to make sure at least those mutations are visible. 
+You can also use `consistentWith(MutationState)` for a more narrowed-down scan consistency.
+Construct the `MutationState` from individual `MutationToken`s that are returned from KV `MutationResult`s to make sure at least those mutations are visible.
 Depending on the index update rate this might provide a speedier response.
 
 [source,java]
@@ -148,16 +148,16 @@ Depending on the index update rate this might provide a speedier response.
 include::example$Queries.java[tag=scanconsistency_with,indent=0]
 ----
 
-Note that you cannot use this method and `scanConsistency(QueryScanConsistency)` at the same time, since they are mutually exclusive. 
-As a rule of thumb, if you only care about being consistent with the mutation you just wrote on the same thread or app, use this method. 
+Note that you cannot use this method and `scanConsistency(QueryScanConsistency)` at the same time, since they are mutually exclusive.
+As a rule of thumb, if you only care about being consistent with the mutation you just wrote on the same thread or app, use this method.
 If you need "global" scan consistency, use `QueryScanConsistency.REQUEST_PLUS` on `scanConsistency(QueryScanConsistency)`.
 
 
 === Client Context Id
 
-The SDK will always send a client context ID with each query, even if none is provided by the user. 
-By default a UUID will be generated that is mirrored back from the query engine and can be used for debugging purposes. 
-A custom string can always be provided if you want to introduce application-specific semantics into it (so that for example in a network dump it shows up with a certain identifier). 
+The SDK will always send a client context ID with each query, even if none is provided by the user.
+By default a UUID will be generated that is mirrored back from the query engine and can be used for debugging purposes.
+A custom string can always be provided if you want to introduce application-specific semantics into it (so that for example in a network dump it shows up with a certain identifier).
 Whatever is chosen, we recommend making sure it is unique so different queries can be distinguished during debugging or monitoring.
 
 [source,java]
@@ -167,8 +167,8 @@ include::example$Queries.java[tag=clientcontextid,indent=0]
 
 === Readonly
 
-If the query is marked as readonly, both the server and the SDK can improve processing of the operation. 
-On the client side, the SDK can be more liberal with retries because it can be sure that there are no state-mutating side-effects happening. 
+If the query is marked as readonly, both the server and the SDK can improve processing of the operation.
+On the client side, the SDK can be more liberal with retries because it can be sure that there are no state-mutating side-effects happening.
 The query engine will ensure that actually no data is mutated when parsing and planning the query.
 
 [source,java]
@@ -178,8 +178,8 @@ include::example$Queries.java[tag=readonly,indent=0]
 
 === Custom JSON Serializer
 
-Like with all JSON apis, it is possible to customize the JSON serializer. 
-It allows to plug in your own library (like GSON) or custom configured mappings on your own Jackson serializer. 
+Like with all JSON apis, it is possible to customize the JSON serializer.
+It allows to plug in your own library (like GSON) or custom configured mappings on your own Jackson serializer.
 This in turn makes it possible to serialize rows into POJOs or other structures that your application defines and the SDK has no idea about.
 
 Please see the xref:transcoders-nonjson.adoc[documentation on transcoding and serialization] for more information.
@@ -187,12 +187,12 @@ Please see the xref:transcoders-nonjson.adoc[documentation on transcoding and se
 
 == Reactive And Async APIs
 
-In addition to the blocking API on `Cluster`, the SDK provides reactive and async APIs on `ReactiveCluster` or `AsyncCluster` respectively. 
-If you are in doubt of which API to use, we recommend looking at the reactive first. 
-It builds on top of reactor, a powerful library that allows you to compose reactive computations and deal with error handling and other related concerns (like retry) in an elegant manner. 
+In addition to the blocking API on `Cluster`, the SDK provides reactive and async APIs on `ReactiveCluster` or `AsyncCluster` respectively.
+If you are in doubt of which API to use, we recommend looking at the reactive first.
+It builds on top of reactor, a powerful library that allows you to compose reactive computations and deal with error handling and other related concerns (like retry) in an elegant manner.
 The async API on the other hand exposes a `CompletableFuture` and is more meant for lower level integration into other libraries or if you need the last drop of performance.
 
-Also, there is another reason you want to use the reactive API: streaming large results with backpressure from the application side. 
+Also, there is another reason you want to use the reactive API: streaming large results with backpressure from the application side.
 Both the blocking and async APIs have no means of signalling backpressure in a good way, so if you need it the reactive API is your best option.
 
 [TIP]
@@ -209,7 +209,7 @@ A simple reactive query is similar to the blocking one:
 include::example$Queries.java[tag=simplereactive,indent=0]
 ----
 
-This query will stream all rows as they become available form the server. 
+This query will stream all rows as they become available form the server.
 If you want to manually control the data flow (which is important if you are streaming a lot of rows which could cause a potential out of memory situation) you can do this by using explicit `request()` calls.
 
 [source,java]
@@ -217,16 +217,18 @@ If you want to manually control the data flow (which is important if you are str
 include::example$Queries.java[tag=backpressure,indent=0]
 ----
 
-In this example we initially request a batch size of 10 rows (so streaming can begin). 
-Then as each row gets streamed it is written to a `process()` method which does whatever it needs to do to process. 
-Then a counter is decremented and once all of the 10 outstanding rows are processed another batch is loaded. 
-Please note that if your `process()` method equivalent is blocking, like always with reactive code, you *must* move it onto another scheduler so that the I/O threads are not stalled. 
+In this example we initially request a batch size of 10 rows (so streaming can begin).
+Then as each row gets streamed it is written to a `process()` method which does whatever it needs to do to process.
+Then a counter is decremented and once all of the 10 outstanding rows are processed another batch is loaded.
+Please note that if your `process()` method equivalent is blocking, like always with reactive code, you *must* move it onto another scheduler so that the I/O threads are not stalled.
 As always we recommend not blocking in the first place in reactive code.
 
 
 == Querying at Scope Level
 
-From version 3.0.8 of the Java SDK, it is possible to query off the xref:7.0@server:learn:data/scopes-and-collections.adoc[`Scope` level] _with the beta version of the next Couchbase Server release, 7.0β_,
+From version 3.0.8 of the Java SDK, it is possible to query off the
+xref:concept-docs:n1ql-query.adoc#collections-and-scopes-and-the-query-context[`Scope` level]
+_with the beta version of the next Couchbase Server release, 7.0β_,
 using the `scope.query()` method.
 It takes the statement as a required argument, and then allows additional options if needed.
 
@@ -237,12 +239,7 @@ A complete list of `QueryOptions` can be found in the https://docs.couchbase.com
 
 [source,java]
 ----
-QueryResult result = scope.query(
-  "select * from `airline` limit 10"
-);
-for (JsonObject row : result.rowsAsObject()) {
-  System.out.println("Found row: " + row);
-}
+include::example$Queries.java[tag=scope-level-query]
 ----
 
 == Additional Resources

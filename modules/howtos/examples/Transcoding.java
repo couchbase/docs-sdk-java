@@ -54,7 +54,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // TODO: remove TypeRef overload when JCBC-1588 done
-// #tag::gson-serializer[]
+// tag::gson-serializer[]
 class GsonSerializer implements JsonSerializer {
     private final Gson gson = new Gson();
 
@@ -76,10 +76,10 @@ class GsonSerializer implements JsonSerializer {
         return gson.fromJson(str, target.type());
     }
 }
-// #end::gson-serializer[]
+// end::gson-serializer[]
 
 // TODO: remove TypeRef overload when JCBC-1588 done
-// #tag::msgpack-serializer[]
+// tag::msgpack-serializer[]
 class MsgPackSerializer implements JsonSerializer {
     private final MessagePack msgpack = new MessagePack();
 
@@ -106,9 +106,9 @@ class MsgPackSerializer implements JsonSerializer {
         throw new DecodingFailureException("Does not support decoding via TypeRef.");
     }
 }
-// #end::msgpack-serializer[]
+// end::msgpack-serializer[]
 
-// #tag::msgpack-transcoder[]
+// tag::msgpack-transcoder[]
 class MsgPackTranscoder implements Transcoder {
     private final MsgPackSerializer serializer = new MsgPackSerializer();
 
@@ -123,7 +123,7 @@ class MsgPackTranscoder implements Transcoder {
         return serializer.deserialize(target, input);
     }
 }
-// #end::msgpack-transcoder[]
+// end::msgpack-transcoder[]
 
 class User {
     private final String name;
@@ -175,7 +175,7 @@ public class Transcoding {
 
     @Test
     void gson() {
-        // #tag::gson-encode[]
+        // tag::gson-encode[]
         // User is a simple POJO
         User user = new User("John Smith", 27);
 
@@ -184,15 +184,15 @@ public class Transcoding {
 
         collection.upsert("john-smith", json,
             UpsertOptions.upsertOptions().transcoder(RawJsonTranscoder.INSTANCE));
-        // #end::gson-encode[]
+        // end::gson-encode[]
 
-        // #tag::gson-decode[]
+        // tag::gson-decode[]
         GetResult result = collection.get("john-smith",
             GetOptions.getOptions().transcoder(RawJsonTranscoder.INSTANCE));
 
         String returnedJson = result.contentAs(String.class);
         User returnedUser = gson.fromJson(returnedJson, User.class);
-        // #end::gson-decode[]
+        // end::gson-decode[]
 
         assertEquals(json, returnedJson);
         assertEquals(user, returnedUser);
@@ -200,7 +200,7 @@ public class Transcoding {
 
     @Test
     void gsonCustom() {
-        // #tag::gson-custom-encode[]
+        // tag::gson-custom-encode[]
         GsonSerializer serializer = new GsonSerializer();
         JsonTranscoder transcoder = JsonTranscoder.create(serializer);
 
@@ -208,27 +208,27 @@ public class Transcoding {
 
         collection.upsert("john-smith", user,
             UpsertOptions.upsertOptions().transcoder(transcoder));
-        // #end::gson-custom-encode[]
+        // end::gson-custom-encode[]
 
-        // #tag::gson-custom-decode[]
+        // tag::gson-custom-decode[]
         GetResult result = collection.get("john-smith",
             GetOptions.getOptions().transcoder(transcoder));
 
         User returnedUser = result.contentAs(User.class);
 
         assertEquals(user, returnedUser);
-        // #end::gson-custom-decode[]
+        // end::gson-custom-decode[]
     }
 
     @Test
     void gsonRegister() {
-        // #tag::gson-register-1[]
+        // tag::gson-register-1[]
         GsonSerializer serializer = new GsonSerializer();
 
         ClusterEnvironment env = ClusterEnvironment.builder()
             .jsonSerializer(serializer)
             .build();
-        // #end::gson-register-1[]
+        // end::gson-register-1[]
 
         Cluster cluster = Cluster.connect("localhost",
             ClusterOptions.clusterOptions("Administrator", "password")
@@ -236,7 +236,7 @@ public class Transcoding {
 
         Collection coll = cluster.bucket("default").defaultCollection();
 
-        // #tag::gson-register-2[]
+        // tag::gson-register-2[]
         User user = new User("John Smith", 27);
 
         coll.upsert("john-smith", user);
@@ -244,7 +244,7 @@ public class Transcoding {
         GetResult result = coll.get("john-smith");
 
         User returnedUser = result.contentAs(User.class);
-        // #end::gson-register-2[]
+        // end::gson-register-2[]
 
         assertEquals(user, returnedUser);
 
@@ -264,7 +264,7 @@ public class Transcoding {
 
     @Test
     void msgpack() {
-        // #tag::msgpack-encode[]
+        // tag::msgpack-encode[]
         MsgPackTranscoder transcoder = new MsgPackTranscoder();
 
         String input = "hello world!";
@@ -276,7 +276,7 @@ public class Transcoding {
             GetOptions.getOptions().transcoder(transcoder));
 
         String output = result.contentAs(String.class);
-        // #end::msgpack-encode[]
+        // end::msgpack-encode[]
 
         assertEquals(input, output);
     }
@@ -284,7 +284,7 @@ public class Transcoding {
     @Test
     void string() {
         String docId = "doc";
-        // #tag::string[]
+        // tag::string[]
         collection.upsert(docId, "hello world",
             UpsertOptions.upsertOptions().transcoder(RawStringTranscoder.INSTANCE));
 
@@ -292,14 +292,14 @@ public class Transcoding {
             GetOptions.getOptions().transcoder(RawStringTranscoder.INSTANCE));
 
         String returned = result.contentAs(String.class);
-        // #end::string[]
+        // end::string[]
         assertEquals(returned, "hello world");
     }
 
     @Test
     void binary() {
         String docId = "doc";
-        // #tag::binary[]
+        // tag::binary[]
         String input = "hello world";
         byte[] bytes = input.getBytes(StandardCharsets.UTF_8);
 
@@ -310,9 +310,9 @@ public class Transcoding {
             GetOptions.getOptions().transcoder(RawBinaryTranscoder.INSTANCE));
 
         byte[] returned = result.contentAs(byte[].class);
-        // #end::binary[]
+        // end::binary[]
         assertTrue(Arrays.equals(returned, bytes));
     }
 }
 
-  
+

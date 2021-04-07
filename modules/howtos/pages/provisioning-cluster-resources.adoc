@@ -13,7 +13,7 @@ The Java SDK also comes with some convenience functionality for common Couchbase
 Management operations in the SDK may be performed through several interfaces depending on the object:
 
 * BucketManager -- `Cluster.Buckets()`
-* UserManager -- `Cluster.Users()` 
+* UserManager -- `Cluster.Users()`
 * QueryIndexManager -- `Cluster.QueryIndexes()`
 * AnalyticsIndexManager -- `Cluster.AnalyticsIndexes()`
 * SearchIndexManager -- `Cluster.SearchIndexes()`
@@ -27,8 +27,8 @@ NOTE: When using a Couchbase version earlier than 6.5, you must create a valid B
 
 The `ClusterManager` interface may be used to create and delete buckets from the Couchbase cluster.
 It is instantiated through the `Cluster.Buckets()` method.
-Refer to https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Bucket.html[the API `Bucket` documentation] -- 
-and to its https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/AsyncBucket.html[Async counterpart] -- 
+Refer to https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Bucket.html[the API `Bucket` documentation] --
+and to its https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/AsyncBucket.html[Async counterpart] --
 for further details.
 
 ////
@@ -63,7 +63,7 @@ The following example creates a "hello" bucket:
 
 [source,golang,indent=0]
 ----
-include::devguide:example$go/provisioning-resources-buckets.go[tag=createBucket]	
+include::devguide:example$go/provisioning-resources-buckets.go[tag=createBucket]
 ----
 
 We can now get this bucket and update it to enable Flush:
@@ -96,10 +96,55 @@ include::devguide:example$go/provisioning-resources-buckets.go[tag=flushBucket]
 The `Flush` operation may fail if the bucket does not have flush enabled, in that case it will return an `ErrBucketNotFlushable`.
 ////
 
+
 == Collection Management
+[.status]#Developer Preview#
 
-This is a xref:6.5@server:developer-preview:collections/collections-overview.adoc[Developer Preview feature], see the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/manager/collection/CollectionManager.html[API doc].
+The CollectionManager interface may be used to create and delete scopes and collections from the Couchbase cluster.
+It is instantiated through the `Bucket.collections()` method.
+Refer to the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/manager/collection/CollectionManager.html[`CollectionManager` API documentation] --
+and to its https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/manager/collection/AsyncCollectionManager.html[Async counterpart] --
+for further details.
 
+[source,java]
+----
+include::example$CollectionManagerExample.java[tag=create-collection-manager,indent=0]
+----
+
+You can create a scope:
+
+[source,java]
+----
+include::example$CollectionManagerExample.java[tag=create-scope,indent=0]
+----
+
+You can then create a collection within that scope:
+
+[source,java]
+----
+include::example$CollectionManagerExample.java[tag=create-collection,indent=0]
+----
+
+Finally, you can drop unneeded collections and scopes:
+
+[source,java]
+----
+include::example$CollectionManagerExample.java[tag=drop-collection,indent=0]
+
+include::example$CollectionManagerExample.java[tag=drop-scope,indent=0]
+----
+
+Note that you require at least the https://docs.couchbase.com/server/7.0/learn/security/roles.html#bucket-admin[Bucket Admin] privilege to create or drop a Scope.
+The same role also lets you manage Collections, though a more minimal set of privileges is https://docs.couchbase.com/server/7.0/learn/security/roles.html#manage-collections-in-scope[Manage Collections in Scope] along with https://docs.couchbase.com/server/7.0/learn/security/roles.html#data-reader[Data Reader].
+
+You can create users with the appropriate RBAC programmatically:
+
+[source,java]
+----
+include::example$CollectionManagerExample.java[tag=bucketAdmin, indent=0]
+
+include::example$CollectionManagerExample.java[tag=scopeAdmin, indent=0]
+----
 
 == Index Management
 

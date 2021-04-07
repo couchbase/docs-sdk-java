@@ -2,127 +2,72 @@
 :page-topic-type: concept
 :page-edition: Enterprise Edition
 :page-aliases: ROOT:encryption.adoc
-:page-status: Developer Preview
 include::project-docs:partial$attributes.adoc[]
 
 [abstract]
-Fields within a document can be securely encrypted by the SDK, to support FIPS-140-2 compliance.
+A high-level overview of Field-Level Encryption concepts.
 
-
-CAUTION: This is a developer preview release of Field Level Encryption for the 3.0 API version of Couchbase Java SDK.
-As such, it is unsupported, and this documentation may lag behind development changes.
-Refer to the https://github.com/couchbase/java-couchbase-encryption[GitHub repo^] for the latest updates.
+For a practical guide, see xref:howtos:encrypting-using-sdk.adoc[].
 
 [#architecture]
 == Overview
 
-.Actors & Responsibilities in Field Level Encryption
-[#field_level_encryption--architecture]
-image::{incimagesdir}/field_level_encryption-architecture.png[]
+Fields within a JSON document can be securely encrypted by the SDK to support FIPS 140-2 compliance.
 
-This is a client-side implementation, with key management and initialization of data encryption done during configuration of the SDK, which then exposes the API during runtime, for normal read/write operations.
+This is a client-side implementation, with encryption and decryption handled by the Couchbase client SDK.
+
+.Encrypting & decrypting via the FLE library
+image::fle-concept.png[FLE in app]
 
 [#algorithm]
 == Algorithm and Key Store
 
-From Couchbase Server 5.5, AES-256, AES-128, and RSA were all supported in earlier versions of the SDK's Field Level Encryption library -- these encryption algorithms are now deprecated, but decryption of data encrypted under earlier versions continues to be supported.
-SDK 3 uses a new algorithm, AEAD_AES_256_CBC_HMAC_SHA_512, which bundles the auth key and the encryption key into a single 64-byte "fat key". 
-The key materials used by the AES and HMAC algorithms are distinct, but the keys can be managed as a single unit.
+SDK 3 uses the `AEAD_AES_256_CBC_HMAC_SHA_512` algorithm to provide authenticated symmetric encryption of sensitive JSON fields.
+This algorithm uses a 64-byte key (known affectionately as a "fat key", since it's really two 32-byte keys joined together).
+The key materials for the AES and HMAC steps are distinct, but are managed as a single unit.
 
+NOTE: Previous versions of the Field-Level Encryption library used a variation of this algorithm that managed the AES and HMAC keys separately.
+This was an obstacle to key rotation, so those algorithms are deprecated in SDK 3 and are no longer used for encryption.
+Existing data encrypted with the old algorithm can still be read by SDK 3, although additional configuration is required to enable backwards compatibility.
 
-Native Keystores (including Java Key Store and Windows Certificate Store) are supported, as well as an in-memory keystore for development and testing.
-More options for key stores and encryption algorithms may appear in future SDK releases.
+Developers may also plug in custom encryption algorithms.
 
-Here is an example of an in-memory store for development and testing called the “InsecureKeyStore”, to reflect its lack of security:
-
-----
-public class InsecureKeyProvider : IKeyProvider
-{
-    private readonly Dictionary<string, string> _keys = new Dictionary<string, string>();
-
-    public string GetKey(string keyname)
-    {
-        return _keys[keyname];
-    }
-
-    public void StoreKey(string keyname, string key)
-    {
-        _keys[keyname] = key;
-    }
-}
-----
-
-The keys are stored by name in a dictionary and retrieved using the same name.
-See the xref:howtos:encrypting-using-sdk.adoc[sample code page] for more secure code.
+A `Keyring` provides access to encryption keys.
+Implementations are provided for native key stores (including Java Key Store and Windows Certificate Store).
+Developers may provide custom implementations for integration with external key management systems, or to implement key rotation.
 
 [#format]
 == Field Encryption Format
 
-Behind the API, the following format is used internally to encompass both the temporary field name used to hold the encrypted value, plus the additional metadata associated with the algorithm used and the public key:
+Here’s a document that illustrates how an encrypted field is stored in Couchbase.
+The document has a normal field called "foo", and an encrypted field called "bar".
+Note that the name of the "bar" field is mangled to indicate it holds an encrypted value:
 
 ----
-__[PREFIX]_[FIELDNAME]” : {
-	“kid” : “[KEY_IDENTIFIER]”,
-	“alg”: “[ALGORITHM”],
-	“ciphertext”: “[BASE64_ENCRYPTED_DATA]”,
-	“sig”: “[BASE64_HMAC_SIGNATURE]”,
-	“Iv” : [“INITIALIZATION_VECTOR”]
+{
+  "foo": "I am not a secret",
+  "encrypted$bar": {
+    "alg": "AEAD_AES_256_CBC_HMAC_SHA512",
+    "kid": "my-secret-key-name",
+    "ciphertext": "<base64-encoded-ciphertext>"
+  }
 }
 ----
 
-This is how Couchbase stores the JSON internally, but it is exposed to the developer as a public API.
-For your preferred SDK, an API reference is available, linked from xref:start-using-sdk.adoc[Install and Start Using the Java SDK with Couchbase Server] as well as xref:encrypting-using-sdk.adoc[sample code].
-
-[#field-types]
-== Field Types
-
-The encryption _payload_ can be any JSON type.
-
-.Supported Field Types
-[#sprtd-field-types,cols="1,4,3"]
-|===
-| Type | Example | Payload
-
-| _string_
-| `"magicWord":"xyzzy"`
-| `"xyzzy"`
-
-| _object_
-| `"score":{"dance":10,"presentation":3}`
-| `{"dance":10,"presentation":3}`
-
-| _numeric_
-| `"myint":10`
-| `10`
-
-| _null_
-| `"isnull":null`
-| `null`
-
-| _array_
-| `"myFruityArray":['Apple', 'Banana', 'Olive']`
-| `['Apple', 'Banana', 'Olive']`
-
-| _boolean_
-| `"dues_paid":true`
-| `true`
-|===
-
-[#auditing]
-== Auditing
-
-For auditing purposes, the encrypted fields must be discoverable, for example via N1QL.
+See the xref:howtos:encrypting-using-sdk.adoc[sample code page] for examples of reading & writing encrypted fields.
 
 [#error]
 == Data Safeguards
 
-Under error conditions, to prevent data loss, an error in decryption or encryption in any part of an operation will cause the whole operation to fail with an exception, to prevent unnoticed loss of data.
-
-It's important that encrypted fields be treated as “special” fields and not mutated by APIs other than through the Field Level Encryption (FLE) API.
-For example, for AES-HMAC-SHA256 the entire temporary field is signed; if any changes are made to any fields (“alg”, “kid”, “ciphertext”, “sig” or “iv”) then the decryption will fail because the signature has changed.
+To prevent data loss under error conditions, an error in decryption or encryption in any part of an operation will cause the whole operation to fail with an exception.
 
 [#packaging]
 == Packaging
 
 Field Level Encryption for all SDKs is a separate package from the Couchbase SDK itself; the APIs are extensions of the SDK, but the SDK does not have a dependency on FLE.
-This means you can install the relevant SDK without being dependant upon a suite of crypto libraries.
+This means you can install the relevant SDK without being dependent upon a suite of crypto libraries.
+
+[#fips-140-2]
+== FIPS 140-2
+
+The standard `AEAD_AES_256_CBC_HMAC_SHA512` encryption algorithm is composed of FIPS 140-2 "Approved Security Functions."

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// #tag::imports[]
+// tag::imports[]
 import com.couchbase.client.core.cnc.Event;
 import com.couchbase.client.core.cnc.RequestSpan;
 import com.couchbase.client.java.Bucket;
@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
-// #end::imports[]
+// end::imports[]
 
 public class TransactionsExample {
     static Cluster cluster;
@@ -60,7 +60,7 @@ public class TransactionsExample {
     static Transactions transactions;
 
     public static void main(String... args) {
-        // #tag::init[]
+        // tag::init[]
         // Initialize the Couchbase cluster
         Cluster cluster = Cluster.connect("localhost", "transactor", "mypass");
         Bucket bucket = cluster.bucket("transact");
@@ -68,7 +68,7 @@ public class TransactionsExample {
 
         // Create the single Transactions object
         Transactions transactions = Transactions.create(cluster);
-        // #end::init[]
+        // end::init[]
 
         TransactionsExample.cluster = cluster;
         TransactionsExample.collection = collection;
@@ -76,19 +76,19 @@ public class TransactionsExample {
     }
 
     static void config() {
-        // #tag::config[]
+        // tag::config[]
         Transactions transactions = Transactions.create(cluster,
                 TransactionConfigBuilder.create()
                         .durabilityLevel(TransactionDurabilityLevel.PERSIST_TO_MAJORITY)
-                        // #tag::config_warn[]
+                        // tag::config_warn[]
                         .logOnFailure(true, Event.Severity.WARN)
-                        // #end::config_warn[]
+                        // end::config_warn[]
                     .build());
-        // #end::config[]
+        // end::config[]
     }
 
     static void create() {
-        // #tag::create[]
+        // tag::create[]
         try {
             transactions.run((ctx) -> {
                 // 'ctx' is an AttemptContext, which permits getting, inserting,
@@ -101,7 +101,7 @@ public class TransactionsExample {
                 // will be committed anyway.
                 ctx.commit();
             });
-        // #tag::logging[]
+        // tag::logging[]
         } catch (TransactionCommitAmbiguous e) {
             // The application will of course want to use its own logging rather
             // than System.err
@@ -117,12 +117,12 @@ public class TransactionsExample {
                 System.err.println(err.toString());
             }
         }
-        // #end::logging[]
-        // #end::create[]
+        // end::logging[]
+        // end::create[]
     }
 
     static void createReactive() {
-        // #tag::createReactive[]
+        // tag::createReactive[]
         Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
             // 'ctx' is an AttemptContextReactive, providing asynchronous versions of the AttemptContext methods
 
@@ -135,7 +135,7 @@ public class TransactionsExample {
                             // The commit call is optional - if you leave it off,
                             // the transaction will be committed anyway.
                             .then(ctx.commit());
-        // #tag::async_logging[]
+        // tag::async_logging[]
         }).doOnError(err -> {
             if (err instanceof TransactionCommitAmbiguous) {
                 System.err.println("Transaction possibly committed: ");
@@ -149,17 +149,17 @@ public class TransactionsExample {
                 System.err.println(err.toString());
             }
         });
-        // #end::async_logging[]
+        // end::async_logging[]
 
 
         // Normally you will chain this result further and ultimately subscribe.  For simplicity, here we just block
         // on the result.
         TransactionResult finalResult = result.block();
-        // #end::createReactive[]
+        // end::createReactive[]
     }
 
     static void examples() {
-        // #tag::examples[]
+        // tag::examples[]
         try {
             TransactionResult result = transactions.run((ctx) -> {
                 // Inserting a doc:
@@ -199,11 +199,11 @@ public class TransactionsExample {
                 System.err.println(err.toString());
             }
         }
-        // #end::examples[]
+        // end::examples[]
     }
 
     static void examplesReactive() {
-        // #tag::examplesReactive[]
+        // tag::examplesReactive[]
         Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
             return
                     // Inserting a doc:
@@ -241,42 +241,42 @@ public class TransactionsExample {
         // Normally you will chain this result further and ultimately subscribe.
         // For simplicity, here we just block on the result.
         result.block();
-        // #end::examplesReactive[]
+        // end::examplesReactive[]
 
     }
 
     static void insert() {
-        // #tag::insert[]
+        // tag::insert[]
         transactions.reactive().run((ctx) -> {
             return ctx.insert(collection.reactive(), "docId", JsonObject.create()).then();
         }).block();
-        // #end::insert[]
+        // end::insert[]
     }
 
     static void insertReactive() {
-        // #tag::insertReactive[]
+        // tag::insertReactive[]
         transactions.run((ctx) -> {
             String docId = "docId";
 
             ctx.insert(collection, docId, JsonObject.create());
 
         });
-        // #end::insertReactive[]
+        // end::insertReactive[]
     }
 
     static void get() {
-        // #tag::get[]
+        // tag::get[]
         transactions.run((ctx) -> {
             String docId = "a-doc";
 
             Optional<TransactionGetResult> docOpt = ctx.getOptional(collection, docId);
             TransactionGetResult doc = ctx.get(collection, docId);
         });
-        // #end::get[]
+        // end::get[]
     }
 
     static void getReadOwnWrites() {
-        // #tag::getReadOwnWrites[]
+        // tag::getReadOwnWrites[]
         transactions.run((ctx) -> {
             String docId = "docId";
 
@@ -286,22 +286,22 @@ public class TransactionsExample {
 
             assert (doc.isPresent());
         });
-        // #end::getReadOwnWrites[]
+        // end::getReadOwnWrites[]
     }
 
     static void replace() {
-        // #tag::replace[]
+        // tag::replace[]
         transactions.run((ctx) -> {
             TransactionGetResult anotherDoc = ctx.get(collection, "anotherDoc");
             JsonObject content = anotherDoc.contentAs(JsonObject.class);
             content.put("transactions", "are awesome");
             ctx.replace(anotherDoc, content);
         });
-        // #end::replace[]
+        // end::replace[]
     }
 
     static void replaceReactive() {
-        // #tag::replaceReactive[]
+        // tag::replaceReactive[]
         transactions.reactive().run((ctx) -> {
             return ctx.get(collection.reactive(), "anotherDoc")
                     .flatMap(doc -> {
@@ -311,29 +311,29 @@ public class TransactionsExample {
                     })
                     .then(ctx.commit());
         });
-        // #end::replaceReactive[]
+        // end::replaceReactive[]
     }
 
     static void remove() {
-        // #tag::remove[]
+        // tag::remove[]
         transactions.run((ctx) -> {
             TransactionGetResult anotherDoc = ctx.get(collection, "anotherDoc");
             ctx.remove(anotherDoc);
         });
-        // #end::remove[]
+        // end::remove[]
     }
 
     static void removeReactive() {
-        // #tag::removeReactive[]
+        // tag::removeReactive[]
         transactions.reactive().run((ctx) -> {
             return ctx.get(collection.reactive(), "anotherDoc")
                     .flatMap(doc -> ctx.remove(doc));
         });
-        // #end::removeReactive[]
+        // end::removeReactive[]
     }
 
     static void commit() {
-        // #tag::commit[]
+        // tag::commit[]
         Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
             return ctx.get(collection.reactive(), "anotherDoc")
                     .flatMap(doc -> {
@@ -343,7 +343,7 @@ public class TransactionsExample {
                     })
                     .then();
         });
-        // #end::commit[]
+        // end::commit[]
     }
 
     static Transactions getTransactions() {
@@ -354,7 +354,7 @@ public class TransactionsExample {
         return experience / 10;
     }
 
-    // #tag::full[]
+    // tag::full[]
     public void playerHitsMonster(int damage, String playerId, String monsterId) {
         Transactions transactions = getTransactions();
 
@@ -401,33 +401,33 @@ public class TransactionsExample {
             // prolonged node failure.
         }
     }
-    // #end::full[]
+    // end::full[]
 
     static void concurrency() {
-        // #tag::concurrency[]
+        // tag::concurrency[]
         cluster.environment().eventBus().subscribe(event -> {
             if (event instanceof IllegalDocumentState) {
                 // log this event for review
             }
         });
-        // #end::concurrency[]
+        // end::concurrency[]
     }
 
     static void cleanupEvents() {
-        // #tag::cleanup-events[]
+        // tag::cleanup-events[]
         cluster.environment().eventBus().subscribe(event -> {
             if (event instanceof TransactionCleanupAttempt
                     || event instanceof TransactionCleanupEndRunEvent) {
                 // log this event
             }
         });
-        // #end::cleanup-events[]
+        // end::cleanup-events[]
     }
 
     static void rollback() {
         final int costOfItem = 10;
 
-        // #tag::rollback[]
+        // tag::rollback[]
         transactions.run((ctx) -> {
             TransactionGetResult customer = ctx.get(collection, "customer-name");
 
@@ -436,13 +436,13 @@ public class TransactionsExample {
             }
             // else continue transaction
         });
-        // #end::rollback[]
+        // end::rollback[]
     }
 
     static void rollbackCause() {
         final int costOfItem = 10;
 
-        // #tag::rollback-cause[]
+        // tag::rollback-cause[]
         class BalanceInsufficient extends RuntimeException {}
 
         try {
@@ -475,12 +475,12 @@ public class TransactionsExample {
                 }
             }
         }
-        // #end::rollback-cause[]
+        // end::rollback-cause[]
     }
 
     static void deferredCommit1() {
 
-        // #tag::defer1[]
+        // tag::defer1[]
         try {
             TransactionResult result = transactions.run((ctx) -> {
                 JsonObject initial = JsonObject.create().put("val", 1);
@@ -506,11 +506,11 @@ public class TransactionsExample {
                 System.err.println(err.toString());
             }
         }
-        // #end::defer1[]
+        // end::defer1[]
     }
 
     static void deferredCommit2(byte[] encoded) {
-        // #tag::defer2[]
+        // tag::defer2[]
         TransactionSerializedContext serialized = TransactionSerializedContext.createFrom(encoded);
 
         try {
@@ -524,11 +524,11 @@ public class TransactionsExample {
                 System.err.println(err.toString());
             }
         }
-        // #end::defer2[]
+        // end::defer2[]
     }
 
     static void deferredRollback(byte[] encoded) {
-        // #tag::defer3[]
+        // tag::defer3[]
         TransactionSerializedContext serialized = TransactionSerializedContext.createFrom(encoded);
 
         try {
@@ -542,29 +542,29 @@ public class TransactionsExample {
                 System.err.println(err.toString());
             }
         }
-        // #end::defer3[]
+        // end::defer3[]
     }
 
     static void configExpiration(byte[] encoded) {
-        // #tag::config-expiration[]
+        // tag::config-expiration[]
         Transactions transactions = Transactions.create(cluster, TransactionConfigBuilder.create()
                 .expirationTime(Duration.ofSeconds(120))
                 .build());
-        // #end::config-expiration[]
+        // end::config-expiration[]
     }
 
     static void configCleanup(byte[] encoded) {
-        // #tag::config-cleanup[]
+        // tag::config-cleanup[]
         Transactions transactions = Transactions.create(cluster, TransactionConfigBuilder.create()
                 .cleanupClientAttempts(false)
                 .cleanupLostAttempts(false)
                 .cleanupWindow(Duration.ofSeconds(120))
                 .build());
-        // #end::config-cleanup[]
+        // end::config-cleanup[]
     }
 
     static void concurrentOps() {
-        // #tag::concurrentOps[]
+        // tag::concurrentOps[]
         List<String> docIds = Arrays.asList("doc1", "doc2", "doc3", "doc4", "doc5");
 
         ReactiveCollection coll = collection.reactive();
@@ -612,11 +612,11 @@ public class TransactionsExample {
                         }
                     }));
         }).block();
-        // #end::concurrentOps[]
+        // end::concurrentOps[]
     }
 
     static void completeErrorHandling() {
-        // #tag::full-error-handling[]
+        // tag::full-error-handling[]
         try {
             TransactionResult result = transactions.run((ctx) -> {
                 // ... transactional code here ...
@@ -659,11 +659,11 @@ public class TransactionsExample {
             System.err.println("Transaction failed with TransactionFailed, logs:");
             err.result().log().logs().forEach(log -> System.err.println(log.toString()));
         }
-        // #end::full-error-handling[]
+        // end::full-error-handling[]
     }
 
     static void completeLogging() {
-        // #tag::full-logging[]
+        // tag::full-logging[]
         final Logger LOGGER = Logger.getLogger("transactions");
 
         try {
@@ -682,11 +682,11 @@ public class TransactionsExample {
             LOGGER.info("Transaction failed with TransactionFailed, logs:");
             err.result().log().logs().forEach(log -> LOGGER.info(log.toString()));
         }
-        // #end::full-logging[]
+        // end::full-logging[]
     }
 
     static void queryInsert() {
-        // #tag::queryInsert[]
+        // tag::queryInsert[]
         transactions.run((ctx) -> {
             ctx.query("INSERT INTO `default` VALUES ('doc', {'hello':'world'})");
 
@@ -696,11 +696,11 @@ public class TransactionsExample {
                 System.out.println(row);
             });
         });
-        // #end::queryInsert[]
+        // end::queryInsert[]
     }
 
     static void queryRyow() {
-        // #tag::queryRyow[]
+        // tag::queryRyow[]
         transactions.run((ctx) -> {
             ctx.insert(collection, "doc", JsonObject.create().put("hello", "world"));
 
@@ -710,26 +710,26 @@ public class TransactionsExample {
                 System.out.println(row);
             });
         });
-        // #end::queryRyow[]
+        // end::queryRyow[]
     }
 
     static void queryOptions() {
-        // #tag::queryOptions[]
+        // tag::queryOptions[]
         transactions.run((ctx) -> {
             ctx.query("INSERT INTO `default` VALUES ('doc', {'hello':'world'})",
                     TransactionQueryOptions.queryOptions().profile(QueryProfile.TIMINGS));
         });
-        // #end::queryOptions[]
+        // end::queryOptions[]
     }
 
     static void customMetadata() {
         Collection metadataCollection = null;
 
-        // #tag::custom-metadata[]
+        // tag::custom-metadata[]
         Transactions transactions = Transactions.create(cluster,
                 TransactionConfigBuilder.create()
                         .metadataCollection(metadataCollection));
-        // #end::custom-metadata[]
+        // end::custom-metadata[]
     }
 
     static void tracing() {

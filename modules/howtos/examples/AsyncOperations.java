@@ -43,7 +43,7 @@ public class AsyncOperations {
 
   public static void main(String... args) {
 
-// #tag::access[]
+// tag::access[]
 Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");
 ReactiveCluster reactiveCluster = cluster.reactive();
 
@@ -52,26 +52,26 @@ ReactiveBucket reactiveBucket = bucket.reactive();
 
 Collection collection = bucket.defaultCollection();
 ReactiveCollection reactiveCollection = collection.reactive();
-// #end::access[]
+// end::access[]
 
-// #tag::access-async[]
+// tag::access-async[]
 AsyncCluster asyncCluster = cluster.async();
 AsyncBucket asyncBucket = bucket.async();
 AsyncCollection asyncCollection = collection.async();
-// #end::access-async[]
+// end::access-async[]
 
 
-// #tag::simple-get[]
+// tag::simple-get[]
 reactiveCollection
   .get("my-doc")
   .subscribe(System.out::println, System.err::println);
-// #end::simple-get[]
+// end::simple-get[]
 
-// #tag::non-used-upsert[]
+// tag::non-used-upsert[]
 reactiveCollection.upsert("my-doc", JsonObject.create());
-// #end::non-used-upsert[]
+// end::non-used-upsert[]
 
-// #tag::verbose-query[]
+// tag::verbose-query[]
 reactiveCluster
   .query("select * from `travel-sample`")
   .flux()
@@ -81,33 +81,33 @@ reactiveCluster
   }).subscribe(row -> {
     System.out.println("Found row: " + row);
   });
-// #end::verbose-query[]
+// end::verbose-query[]
 
     {
-// #tag::simple-bulk[]
+// tag::simple-bulk[]
 List<String> docsToFetch = Arrays.asList("key1", "key2", "key3");
 List<GetResult> results = Flux
   .fromIterable(docsToFetch)
   .flatMap(reactiveCollection::get)
   .collectList()
   .block();
-// #end::simple-bulk[]
+// end::simple-bulk[]
     }
 
     {
-// #tag::ignore-bulk[]
+// tag::ignore-bulk[]
 List<String> docsToFetch = Arrays.asList("key1", "key2", "key3");
 List<GetResult> results = Flux
   .fromIterable(docsToFetch)
   .flatMap(key -> reactiveCollection.get(key).onErrorResume(e -> Mono.empty()))
   .collectList()
   .block();
-// #end::ignore-bulk[]
+// end::ignore-bulk[]
     }
 
 
     {
-// #tag::split-bulk[]
+// tag::split-bulk[]
 List<String> docsToFetch = Arrays.asList("key1", "key2", "key3");
 
 List<GetResult> successfulResults =
@@ -124,12 +124,12 @@ Flux
   .doOnNext(successfulResults::add)
   .last()
   .block();
-// #end::split-bulk[]
+// end::split-bulk[]
     }
 
 
     {
-// #tag::retry-bulk[]
+// tag::retry-bulk[]
 List<String> docsToFetch = Arrays.asList("key1", "key2", "key3");
 
 List<GetResult> results = Flux
@@ -139,12 +139,12 @@ List<GetResult> results = Flux
     .retryBackoff(10, Duration.ofMillis(10)))
   .collectList()
   .block();
-// #end::retry-bulk[]
+// end::retry-bulk[]
     }
 
-// #tag::rs-conversion[]
+// tag::rs-conversion[]
 Single<GetResult> rxSingleResult = monoToSingle(reactiveCollection.get("my-doc"));
-// #end::rs-conversion[]
+// end::rs-conversion[]
 
   }
 }

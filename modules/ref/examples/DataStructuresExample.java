@@ -58,106 +58,106 @@ public class DataStructuresExample {
     bucket = cluster.bucket(bucketName);
     scope = bucket.defaultScope();
     collection = bucket.defaultCollection();
-    // #tag::data_structures_0[]
+    // tag::data_structures_0[]
     map = new CouchbaseMap("mapId", collection, String.class, MapOptions.mapOptions());
     arrayList = new CouchbaseArrayList("arrayListId", collection, String.class, ArrayListOptions.arrayListOptions());
     arraySet = new CouchbaseArraySet("arraySetId", collection, String.class, ArraySetOptions.arraySetOptions());
     queue = new CouchbaseQueue("queueId", collection, String.class, QueueOptions.queueOptions());
-    // #end::data_structures_0[];
+    // end::data_structures_0[]
   }
 
   public void data_structures_1() throws Exception {
-    // #tag::data_structures_1[]
+    // tag::data_structures_1[]
     map.put("some_key", "value");
-    // #end::data_structures_1[];
+    // end::data_structures_1[]
   }
 
   public void data_structures_2() throws Exception {
-    // #tag::data_structures_2[]
+    // tag::data_structures_2[]
     map.remove("some_key");
-    // #end::data_structures_2[];
+    // end::data_structures_2[]
   }
 
   public void data_structures_3() throws Exception {
-    // #tag::data_structures_3[]
+    // tag::data_structures_3[]
     map.get("some_key"); //=> value
-    // #end::data_structures_3[];
+    // end::data_structures_3[]
   }
 
   public void data_structures_4() throws Exception {
-    // #tag::data_structures_4[]
+    // tag::data_structures_4[]
     arrayList.add(1234);
-    // #end::data_structures_4[];
+    // end::data_structures_4[]
   }
 
   public void data_structures_5() throws Exception {
-    // #tag::data_structures_5[]
+    // tag::data_structures_5[]
     arrayList.add(0, "hello world");
-    // #end::data_structures_5[];
+    // end::data_structures_5[]
   }
 
   public void data_structures_6() throws Exception {
-    // #tag::data_structures_6[]
+    // tag::data_structures_6[]
     arrayList.remove(1);
-    // #end::data_structures_6[];
+    // end::data_structures_6[]
   }
 
   public void data_structures_7() throws Exception {
-    // #tag::data_structures_7[]
+    // tag::data_structures_7[]
     arrayList.set(0, "first value");
-    // #end::data_structures_7[];
+    // end::data_structures_7[]
   }
 
   public void data_structures_8() throws Exception {
-    // #tag::data_structures_8[]
+    // tag::data_structures_8[]
     arrayList.get(0);
-    // #end::data_structures_8[];
+    // end::data_structures_8[]
   }
 
   public void data_structures_9() throws Exception {
-    // #tag::data_structures_9[]
+    // tag::data_structures_9[]
     arraySet.add("some_value");
-    // #end::data_structures_9[];
+    // end::data_structures_9[]
   }
 
   public void data_structures_10() throws Exception {
-    // #tag::data_structures_10[]
+    // tag::data_structures_10[]
     Set set = arraySet;
-    // #end::data_structures_10[];
+    // end::data_structures_10[]
   }
 
   public void data_structures_11() throws Exception {
-    // #tag::data_structures_11[]
+    // tag::data_structures_11[]
     arraySet.contains("value");
-    // #end::data_structures_11[];
+    // end::data_structures_11[]
   }
 
   public void data_structures_12() throws Exception {
-    // #tag::data_structures_12[]
+    // tag::data_structures_12[]
     arraySet.remove("some_value");
-    // #end::data_structures_12[];
+    // end::data_structures_12[]
   }
 
   public void data_structures_13() throws Exception {
-    // #tag::data_structures_13[]
+    // tag::data_structures_13[]
     queue.add("job123");
-    // #end::data_structures_13[];
+    // end::data_structures_13[]
   }
 
   public void data_structures_14() throws Exception {
-    // #tag::data_structures_14[]
+    // tag::data_structures_14[]
     Object item = queue.poll(); //=> "job123"
-    // #end::data_structures_14[];
+    // end::data_structures_14[]
   }
 
   public void data_structures_15() throws Exception {
-    // #tag::data_structures_15[]
+    // tag::data_structures_15[]
     int len = arrayList.size(); //=> 42
-    // #end::data_structures_15[];
+    // end::data_structures_15[]
   }
 
   public void data_structures_16() throws Exception {
-    // #tag::data_structures_16[]
+    // tag::data_structures_16[]
     Map<String, String> favorites = new CouchbaseMap<String>("mapDocId", collection, String.class, MapOptions.mapOptions());
     favorites.put("color", "Blue");
     favorites.put("flavor", "Chocolate");
@@ -167,11 +167,11 @@ public class DataStructuresExample {
     // What does the JSON document look like?
     System.out.println(collection.get("mapDocId").contentAsObject());
     //=> {"flavor":"Chocolate","color":"Blue"}
-    // #end::data_structures_16[];
+    // end::data_structures_16[]
   }
 
   public void data_structures_17() throws Exception {
-    // #tag::data_structures_17[]
+    // tag::data_structures_17[]
     List<String> names = new CouchbaseArrayList<String>("listDocId", collection, String.class, ArrayListOptions.arrayListOptions());
     names.add("Alice");
     names.add("Bob");
@@ -182,11 +182,11 @@ public class DataStructuresExample {
     // What does the JSON document look like?
     System.out.println(collection.get("listDocId").contentAsArray());
     //=> ["Alice","Bob","Alice"]
-    // #end::data_structures_17[];
+    // end::data_structures_17[]
   }
 
   public void data_structures_18() throws Exception {
-    // #tag::data_structures_18[]
+    // tag::data_structures_18[]
     Set<String> uniqueNames = new CouchbaseArraySet<String>("setDocId", collection, String.class, ArraySetOptions.arraySetOptions());
     uniqueNames.add("Alice");
     uniqueNames.add("Bob");
@@ -197,11 +197,11 @@ public class DataStructuresExample {
     // What does the JSON document look like?
     System.out.println(collection.get("setDocId").contentAsArray());
     //=> ["Alice","Bob"]
-    // #end::data_structures_18[];
+    // end::data_structures_18[]
   }
 
   public void data_structures_19() throws Exception {
-    // #tag::data_structures_19[]
+    // tag::data_structures_19[]
     Queue<String> shoppingList = new CouchbaseQueue<String>("queueDocId", collection, String.class, QueueOptions.queueOptions());
     shoppingList.add("loaf of bread");
     shoppingList.add("container of milk");
@@ -222,7 +222,7 @@ public class DataStructuresExample {
     // What does the JSON document look like after draining the queue?
     System.out.println(collection.get("queueDocId").contentAsArray());
     //=> []
-    // #end::data_structures_19[];
+    // end::data_structures_19[]
   }
 
   public static void main(String[] args) throws Exception {

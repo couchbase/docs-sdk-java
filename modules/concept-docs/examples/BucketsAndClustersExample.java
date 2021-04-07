@@ -46,11 +46,11 @@ public class BucketsAndClustersExample {
   }
 
   public void buckets_and_clusters_1() throws Exception {
-    // #tag::buckets_and_clusters_1[]
+    // tag::buckets_and_clusters_1[]
     BucketManager manager = cluster.buckets();
     bucketSettings = BucketSettings.create("myBucket");
     manager.createBucket(bucketSettings);
-    // #end::buckets_and_clusters_1[];
+    // end::buckets_and_clusters_1[]
   }
 
   public static void main(String[] args) throws Exception {

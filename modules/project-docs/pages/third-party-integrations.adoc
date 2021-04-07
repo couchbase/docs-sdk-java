@@ -8,17 +8,17 @@
 The Couchbase Java SDK is often used with unofficial and third party tools and applications to integrate into broader language and platform ecosystems, and across data lakes in heterogeneous environments.
 
 
-include::6.5@sdk:shared:partial$integrations.adoc[tag=intro]
+include::6.6@sdk:shared:partial$integrations.adoc[tag=intro]
 
 
-include::6.5@sdk:shared:partial$integrations.adoc[tag=official]
+include::6.6@sdk:shared:partial$integrations.adoc[tag=official]
 
 The Couchbase Java SDK is a first class citizen in the https://spring.io/projects/spring-data-couchbase[Spring Data] world, and there are many examples of using the SDK with https://blog.couchbase.com/couchbase-spring-boot-spring-data/[Spring Boot] and Spring Data (and Spring Data JPA).
 
-Couchbase also supports integrating with xref:24@spark-connector:java-api.adoc[Spark].
+Couchbase also supports integrating with xref:2.4@spark-connector:ROOT:java-api.adoc[Spark].
 
 
-include::6.5@sdk:shared:partial$integrations.adoc[tag=important]
+include::6.6@sdk:shared:partial$integrations.adoc[tag=important]
 
 Many dataflow tools integrate with Couchbase, including https://github.com/apache/nifi/tree/main/nifi-nar-bundles/nifi-couchbase-bundle[Apache NiFi], 
 https://wildfly-extras.github.io/wildfly-camel/#_camel_couchbase[Apache Camel],
@@ -26,7 +26,7 @@ and https://github.com/couchbaselabs/flink-connector-couchbase[Apache Flink].
 Why not make development easier, and use https://blog.couchbase.com/create-a-zeppelin-interpreter-for-couchbase/[Apache Zeppelin]?
 
 
-include::6.5@sdk:shared:partial$integrations.adoc[tag=other]
+include::6.6@sdk:shared:partial$integrations.adoc[tag=other]
 
 https://github.com/differentway/couchmove[Couchmove] is an open-source Java migration tool for Couchbase, inspired by Flyway.
 It can help you "track, manage and apply changes, in your Couchbase buckets."
@@ -34,50 +34,3 @@ The philosophy of the project claims to "strongly favor simplicity and conventio
 
 In CouchMove you write your migrations in N1QL, while in https://github.com/couchbaselabs/CouchVersion[CouchVersion] you can write them using the Java SDK, which essentially allow you to create more complex migrations.
 CouchVersion provides a new approach for adding changes (change sets) based on Java classes and methods with appropriate annotations.
-
-
-
-// old doc:
-////
-= Third-Party Integrations
-:navtitle: 3rd Party Integrations
-:page-topic-type: project-doc
-
-[abstract]
-The rich Java and JVM ecosystem provides plenty of opportunity to plug Couchbase into other tools and a heterogeneous data environment.
-
-IMPORTANT: Unless otherwise stated, these third-party products are supported by the other party, _not_ by Couchbase Support.
-
-== Spring Boot
-
-
-== Spring Data
-
-
-
-
-== Community Integrations
-
-Although unsupported by Couchbase, we list these third-party products here for their benefit in certain set-ups, where you may already be using the tools that they integrate:
-
-* [https://github.com/rfmvlc/spark-loader]
-
-* [https://doc.akka.io/docs/alpakka/current/couchbase.html]
-
-* [https://github.com/apache/nifi/tree/master/nifi-nar-bundles/nifi-couchbase-bundle]
-
-
-== Connectors
-
-Our xref:[Connectors Pages] give more details on Connectors to a wider data ecosystem, whose use is independent of whichever SDK you use for your applications.
-*
-*
-*
-*
-*
-
-=== Community Connectors
-
-// Although unsupported by Couchbase, we list these third-party products here for their benefit in certain set-ups, where you may already be using the tools that they integrate:
-
-////

@@ -51,17 +51,17 @@ public class HealthCheck extends ConnectionBase {
 //                .put("baz", "qux");
 //
 //
-//// #tag::apis[]
+//// tag::apis[]
 //        AsyncCollection asyncCollection = collection.async();
 //        ReactiveCollection reactiveCollection = collection.reactive();
-//// #end::apis[]
+//// end::apis[]
 //
 //        JsonObject content = JsonObject.create().put("foo", "bar");
 ////        MutationResult result = collection.upsert("document-key", content);
 //
-//// #tag::apis[]
+//// tag::apis[]
 //        PingResult ping = bucket.ping();
-//// #end::apis[]
+//// end::apis[]
     @Override
     protected void doWork() {
 
@@ -73,7 +73,7 @@ public class HealthCheck extends ConnectionBase {
 
         MutationResult result = collection.upsert("document-key", content);
 
-// #tag::ping[]
+// tag::ping[]
         // Ping a specified bucket to look at the state of all associated endpoints
         PingResult pingResult = bucket.ping();
         // Look at the KV endpoints and warn if their state is not OK
@@ -87,9 +87,9 @@ public class HealthCheck extends ConnectionBase {
                 LOGGER.info(String.format("Node %s at remote %s is OK.", pingEndpoint.id(), pingEndpoint.remote()));
             }
         }
-// #end::ping[]
+// end::ping[]
 
-// #tag::diagnostics[]
+// tag::diagnostics[]
         // Get all diagnostics associated with a given cluster, passively
         DiagnosticsResult diagnosticsResult = cluster.diagnostics();
         Map<ServiceType, List<EndpointDiagnostics>> diagEndpoints = diagnosticsResult.endpoints();
@@ -106,7 +106,7 @@ public class HealthCheck extends ConnectionBase {
                 }
             }
         }
-// #end::diagnostics[]
+// end::diagnostics[]
     }
 
     public static void main(String[] args) {

@@ -30,39 +30,39 @@ public class Auth {
   public static void main(String... args) {
 
     {
-      // #tag::rbac-simple[]
+      // tag::rbac-simple[]
       Cluster cluster = Cluster.connect("127.0.0.1", "username", "password");
-      // #end::rbac-simple[]
+      // end::rbac-simple[]
     }
 
     {
-      // #tag::rbac-clusteroptions[]
+      // tag::rbac-clusteroptions[]
       Cluster cluster = Cluster.connect("127.0.0.1", clusterOptions("username", "password"));
-      // #end::rbac-clusteroptions[]
+      // end::rbac-clusteroptions[]
     }
 
     {
-      // #tag::rbac-pwd[]
+      // tag::rbac-pwd[]
       PasswordAuthenticator authenticator = PasswordAuthenticator
         .builder()
         .username("username")
         .password("password")
         // enables only the PLAIN authentication mechanism, used with LDAP
-        .allowedSaslMechanisms(EnumSet.of(SaslMechanism.PLAIN))
+        .onlyEnablePlainSaslMechanism()
         .build();
 
       Cluster cluster = Cluster.connect("127.0.0.1", clusterOptions(authenticator));
-      // #end::rbac-pwd[]
+      // end::rbac-pwd[]
     }
 
     {
-      // #tag::certauth[]
+      // tag::certauth[]
       // should be replaced with your actual KeyStore
       KeyStore keyStore = loadKeyStore();
 
       CertificateAuthenticator authenticator = CertificateAuthenticator.fromKeyStore(keyStore, "keyStorePassword");
       Cluster cluster = Cluster.connect("127.0.0.1", clusterOptions(authenticator));
-      // #end::certauth[]
+      // end::certauth[]
     }
   }
 
