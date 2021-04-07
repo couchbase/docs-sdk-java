@@ -60,7 +60,7 @@ MutationResult result = collection.mutateIn(
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.1.3</version>
+        <version>3.1.4</version>
     </dependency>
 </dependencies>
 ----
