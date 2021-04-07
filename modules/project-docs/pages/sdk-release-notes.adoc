@@ -30,10 +30,58 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.1.3</version>
+        <version>3.1.4</version>
     </dependency>
 </dependencies>
 ----
+
+
+== Version 3.1.4 (7 April 2021)
+http://packages.couchbase.com/clients/java/3.1.4/Couchbase-Java-Client-3.1.4.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.4/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.4/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.1.4**
+* com.couchbase.client:**core-io:2.1.4**
+* io.projectreactor:**reactor-core:3.4.4**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/JCBC-1798[JCBC-1798]:
+Fixes ViewResult.metaData() throwing Exception when debug=true.
+* https://issues.couchbase.com/browse/JVMCBC-940[JVMCBC-940]:
+Better error handling of collection ID fetch failures.
+* https://issues.couchbase.com/browse/JVMCBC-948[JVMCBC-948]:
+CAS is only usable with Sub-Document when using StoreSemantics.REPLACE.
+This server-side restriction is now also checked client-side, and a `InvalidArgumentException` raised.
+* https://issues.couchbase.com/browse/JVMCBC-950[JVMCBC-950]:
+waitUntilReady is now more resilient to just-created buckets.
+* https://issues.couchbase.com/browse/JVMCBC-954[JVMCBC-954]:
+More resilient handling of rebalances.
+
+=== Improvements
+* https://issues.couchbase.com/browse/JCBC-1786[JCBC-1786]:
+Transcoders now allow contentAs(Object.class).
+Java Map and List collections are used to represent JSON objects and arrays.
+* https://issues.couchbase.com/browse/JCBC-1795[JCBC-1795]:
+Allow `MutateInSpec.remove("")`, which removes the entire document.
+* https://issues.couchbase.com/browse/JVMCBC-936[JVMCBC-936]:
+Allow customizing TLS cipher list.
+* https://issues.couchbase.com/browse/JVMCBC-941[JVMCBC-941]:
+Support modified protocol for collections in Couchbase Server 7.0 (in beta).
+* https://issues.couchbase.com/browse/JVMCBC-943[JVMCBC-943]:
+Apply OpenTelemetry best practices.
+* https://issues.couchbase.com/browse/JVMCBC-944[JVMCBC-944]:
+Add implementation version to OpenTelemetry APIs.
+* https://issues.couchbase.com/browse/JVMCBC-947[JVMCBC-947]:
+Remove request counter metric.
+* https://issues.couchbase.com/browse/JVMCBC-951[JVMCBC-951]:
+Move GetAny/AllReplicas into core.
+* https://issues.couchbase.com/browse/JVMCBC-955[JVMCBC-955]:
+Distinguish between CAS mismatch and DML failure on query error.
+
 
 == Version 3.1.3 (2 March 2021)
 
