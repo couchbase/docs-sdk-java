@@ -42,8 +42,7 @@ public class Tracing {
 
         // tag::otel-configure-setup[]
         // Wrap Tracer
-        RequestTracer tracer = OpenTelemetryRequestTracer
-            .wrap(OpenTelemetry.getGlobalTracer("com.couchbase.OpenTelemetryTracingSample"));
+        RequestTracer tracer = OpenTelemetryRequestTracer.wrap(OpenTelemetry.get());
 
         ClusterEnvironment environment = ClusterEnvironment.builder().requestTracer(tracer).build();
         // end::otel-configure-setup[]
