@@ -45,7 +45,7 @@ The supported and tested dependencies for this release are:
 
 * http://issues.couchbase.com/browse/JVMCBC-952[JVMCBC-952]:
 Update the internal Netty dependency to 4.1.63.Final.
-* http://issues.couchbase.com/browse/JVMCBC-952[JVMCBC-953]:
+* http://issues.couchbase.com/browse/JVMCBC-953[JVMCBC-953]:
 Improve the "not my vbucket" transient partition movement during rebalance.
 * http://issues.couchbase.com/browse/JVMCBC-945[JVMCBC-945]:
 Explicitly handle an UnknownHostException during a failed connect attempt.
