@@ -1,0 +1,41 @@
+name: Build Code Samples 
+
+on:
+  push:
+    branches: [release/3.1]
+    paths:
+      - 'modules/test/*'
+      - 'modules/Makefile'
+      - '**/*.java'
+      - '**/pom.xml'
+  pull_request:
+    branches: [release/3.1]
+    paths:
+      - 'modules/test/*'
+      - 'modules/Makefile'
+      - '**/*.java'
+      - '**/pom.xml'
+env:
+  JAVA_VERSION: 15
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      working-directory:
+        ./modules
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ env.JAVA_VERSION }} # The JDK version to make available on the path.
+          java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
+          architecture: x64 # (x64 or x86) - defaults to x64
+
+      - name: Build code samples
+        run: make build
+        working-directory: ${{ env.working-directory }}

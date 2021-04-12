@@ -15,6 +15,13 @@
  */
 
 // tag::imports[]
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
+
 import com.couchbase.client.core.cnc.Event;
 import com.couchbase.client.core.cnc.RequestSpan;
 import com.couchbase.client.java.Bucket;
@@ -41,17 +48,11 @@ import com.couchbase.transactions.log.IllegalDocumentState;
 import com.couchbase.transactions.log.LogDefer;
 import com.couchbase.transactions.log.TransactionCleanupAttempt;
 import com.couchbase.transactions.log.TransactionCleanupEndRunEvent;
+
+import io.opentelemetry.api.trace.Span;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Logger;
-
-import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 // end::imports[]
 
 public class TransactionsExample {
@@ -78,12 +79,11 @@ public class TransactionsExample {
     static void config() {
         // tag::config[]
         Transactions transactions = Transactions.create(cluster,
-                TransactionConfigBuilder.create()
-                        .durabilityLevel(TransactionDurabilityLevel.PERSIST_TO_MAJORITY)
+                TransactionConfigBuilder.create().durabilityLevel(TransactionDurabilityLevel.PERSIST_TO_MAJORITY)
                         // tag::config_warn[]
                         .logOnFailure(true, Event.Severity.WARN)
                         // end::config_warn[]
-                    .build());
+                        .build());
         // end::config[]
     }
 
@@ -101,7 +101,7 @@ public class TransactionsExample {
                 // will be committed anyway.
                 ctx.commit();
             });
-        // tag::logging[]
+            // tag::logging[]
         } catch (TransactionCommitAmbiguous e) {
             // The application will of course want to use its own logging rather
             // than System.err
@@ -124,23 +124,22 @@ public class TransactionsExample {
     static void createReactive() {
         // tag::createReactive[]
         Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
-            // 'ctx' is an AttemptContextReactive, providing asynchronous versions of the AttemptContext methods
+            // 'ctx' is an AttemptContextReactive, providing asynchronous versions of the
+            // AttemptContext methods
 
             return
 
-                    // Your transaction logic here: as an example, get and remove a doc
-                    ctx.get(collection.reactive(), "document-id")
-                            .flatMap(doc -> ctx.remove(doc))
+            // Your transaction logic here: as an example, get and remove a doc
+            ctx.get(collection.reactive(), "document-id").flatMap(doc -> ctx.remove(doc))
 
-                            // The commit call is optional - if you leave it off,
-                            // the transaction will be committed anyway.
-                            .then(ctx.commit());
-        // tag::async_logging[]
+                    // The commit call is optional - if you leave it off,
+                    // the transaction will be committed anyway.
+                    .then(ctx.commit());
+            // tag::async_logging[]
         }).doOnError(err -> {
             if (err instanceof TransactionCommitAmbiguous) {
                 System.err.println("Transaction possibly committed: ");
-            }
-            else {
+            } else {
                 System.err.println("Transaction failed: ");
             }
 
@@ -151,8 +150,8 @@ public class TransactionsExample {
         });
         // end::async_logging[]
 
-
-        // Normally you will chain this result further and ultimately subscribe.  For simplicity, here we just block
+        // Normally you will chain this result further and ultimately subscribe. For
+        // simplicity, here we just block
         // on the result.
         TransactionResult finalResult = result.block();
         // end::createReactive[]
@@ -167,8 +166,7 @@ public class TransactionsExample {
 
                 // Getting documents:
                 // Use ctx.getOptional if the document may or may not exist
-                Optional<TransactionGetResult> docOpt =
-                        ctx.getOptional(collection, "doc-a");
+                Optional<TransactionGetResult> docOpt = ctx.getOptional(collection, "doc-a");
 
                 // Use ctx.get if the document should exist, and the transaction
                 // will fail if it does not
@@ -206,29 +204,26 @@ public class TransactionsExample {
         // tag::examplesReactive[]
         Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
             return
-                    // Inserting a doc:
-                    ctx.insert(collection.reactive(), "doc-a", JsonObject.create())
+            // Inserting a doc:
+            ctx.insert(collection.reactive(), "doc-a", JsonObject.create())
 
-                            // Getting and replacing a doc:
-                            .then(ctx.get(collection.reactive(), "doc-b"))
-                            .flatMap(docB -> {
-                                JsonObject content = docB.contentAs(JsonObject.class);
-                                content.put("transactions", "are awesome");
-                                return ctx.replace(docB, content);
-                            })
+                    // Getting and replacing a doc:
+                    .then(ctx.get(collection.reactive(), "doc-b")).flatMap(docB -> {
+                        JsonObject content = docB.contentAs(JsonObject.class);
+                        content.put("transactions", "are awesome");
+                        return ctx.replace(docB, content);
+                    })
 
-                            // Getting and removing a doc:
-                            .then(ctx.get(collection.reactive(), "doc-c"))
-                            .flatMap(doc -> ctx.remove(doc))
+                    // Getting and removing a doc:
+                    .then(ctx.get(collection.reactive(), "doc-c")).flatMap(doc -> ctx.remove(doc))
 
-                            // Committing:
-                            .then(ctx.commit());
+                    // Committing:
+                    .then(ctx.commit());
 
         }).doOnError(err -> {
             if (err instanceof TransactionCommitAmbiguous) {
                 System.err.println("Transaction possibly committed: ");
-            }
-            else {
+            } else {
                 System.err.println("Transaction failed: ");
             }
 
@@ -303,13 +298,11 @@ public class TransactionsExample {
     static void replaceReactive() {
         // tag::replaceReactive[]
         transactions.reactive().run((ctx) -> {
-            return ctx.get(collection.reactive(), "anotherDoc")
-                    .flatMap(doc -> {
-                        JsonObject content = doc.contentAs(JsonObject.class);
-                        content.put("transactions", "are awesome");
-                        return ctx.replace(doc, content);
-                    })
-                    .then(ctx.commit());
+            return ctx.get(collection.reactive(), "anotherDoc").flatMap(doc -> {
+                JsonObject content = doc.contentAs(JsonObject.class);
+                content.put("transactions", "are awesome");
+                return ctx.replace(doc, content);
+            }).then(ctx.commit());
         });
         // end::replaceReactive[]
     }
@@ -326,8 +319,7 @@ public class TransactionsExample {
     static void removeReactive() {
         // tag::removeReactive[]
         transactions.reactive().run((ctx) -> {
-            return ctx.get(collection.reactive(), "anotherDoc")
-                    .flatMap(doc -> ctx.remove(doc));
+            return ctx.get(collection.reactive(), "anotherDoc").flatMap(doc -> ctx.remove(doc));
         });
         // end::removeReactive[]
     }
@@ -335,13 +327,11 @@ public class TransactionsExample {
     static void commit() {
         // tag::commit[]
         Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
-            return ctx.get(collection.reactive(), "anotherDoc")
-                    .flatMap(doc -> {
-                        JsonObject content = doc.contentAs(JsonObject.class);
-                        content.put("transactions", "are awesome");
-                        return ctx.replace(doc, content);
-                    })
-                    .then();
+            return ctx.get(collection.reactive(), "anotherDoc").flatMap(doc -> {
+                JsonObject content = doc.contentAs(JsonObject.class);
+                content.put("transactions", "are awesome");
+                return ctx.replace(doc, content);
+            }).then();
         });
         // end::commit[]
     }
@@ -367,13 +357,14 @@ public class TransactionsExample {
                 int monsterNewHitpoints = monsterHitpoints - damage;
 
                 if (monsterNewHitpoints <= 0) {
-                    // Monster is killed.  The remove is just for demoing, and a more realistic example would set a
+                    // Monster is killed. The remove is just for demoing, and a more realistic
+                    // example would set a
                     // "dead" flag or similar.
                     ctx.remove(monsterDoc);
 
                     // The player earns experience for killing the monster
-                    int experienceForKillingMonster = monsterDoc.contentAs(JsonObject.class).getInt(
-                            "experienceWhenKilled");
+                    int experienceForKillingMonster = monsterDoc.contentAs(JsonObject.class)
+                            .getInt("experienceWhenKilled");
                     int playerExperience = playerDoc.contentAs(JsonObject.class).getInt("experience");
                     int playerNewExperience = playerExperience + experienceForKillingMonster;
                     int playerNewLevel = calculateLevelForExperience(playerNewExperience);
@@ -393,7 +384,7 @@ public class TransactionsExample {
                 }
             });
         } catch (TransactionFailed e) {
-            // The operation failed.   Both the monster and the player will be untouched.
+            // The operation failed. Both the monster and the player will be untouched.
 
             // Situations that can cause this would include either the monster
             // or player not existing (as get is used), or a persistent
@@ -416,8 +407,7 @@ public class TransactionsExample {
     static void cleanupEvents() {
         // tag::cleanup-events[]
         cluster.environment().eventBus().subscribe(event -> {
-            if (event instanceof TransactionCleanupAttempt
-                    || event instanceof TransactionCleanupEndRunEvent) {
+            if (event instanceof TransactionCleanupAttempt || event instanceof TransactionCleanupEndRunEvent) {
                 // log this event
             }
         });
@@ -443,7 +433,8 @@ public class TransactionsExample {
         final int costOfItem = 10;
 
         // tag::rollback-cause[]
-        class BalanceInsufficient extends RuntimeException {}
+        class BalanceInsufficient extends RuntimeException {
+        }
 
         try {
             transactions.run((ctx) -> {
@@ -466,8 +457,7 @@ public class TransactionsExample {
             if (e.getCause() instanceof BalanceInsufficient) {
                 // Re-raise the error
                 throw (RuntimeException) e.getCause();
-            }
-            else {
+            } else {
                 System.err.println("Transaction did not reach commit point");
 
                 for (LogDefer err : e.result().log().logs()) {
@@ -486,7 +476,8 @@ public class TransactionsExample {
                 JsonObject initial = JsonObject.create().put("val", 1);
                 ctx.insert(collection, "a-doc-id", initial);
 
-                // Defer means don't do a commit right now.  `serialized` in the result will be present.
+                // Defer means don't do a commit right now. `serialized` in the result will be
+                // present.
                 ctx.defer();
             });
 
@@ -547,19 +538,16 @@ public class TransactionsExample {
 
     static void configExpiration(byte[] encoded) {
         // tag::config-expiration[]
-        Transactions transactions = Transactions.create(cluster, TransactionConfigBuilder.create()
-                .expirationTime(Duration.ofSeconds(120))
-                .build());
+        Transactions transactions = Transactions.create(cluster,
+                TransactionConfigBuilder.create().expirationTime(Duration.ofSeconds(120)).build());
         // end::config-expiration[]
     }
 
     static void configCleanup(byte[] encoded) {
         // tag::config-cleanup[]
-        Transactions transactions = Transactions.create(cluster, TransactionConfigBuilder.create()
-                .cleanupClientAttempts(false)
-                .cleanupLostAttempts(false)
-                .cleanupWindow(Duration.ofSeconds(120))
-                .build());
+        Transactions transactions = Transactions.create(cluster,
+                TransactionConfigBuilder.create().cleanupClientAttempts(false).cleanupLostAttempts(false)
+                        .cleanupWindow(Duration.ofSeconds(120)).build());
         // end::config-cleanup[]
     }
 
@@ -574,43 +562,41 @@ public class TransactionsExample {
             // Tracks whether all operations were successful
             AtomicBoolean allOpsSucceeded = new AtomicBoolean(true);
 
-            // The first mutation must be done in serial, as it also creates a metadata entry
-            return ctx.get(coll, docIds.get(0))
-                    .flatMap(doc -> {
-                        JsonObject content = doc.contentAsObject();
-                        content.put("value", "updated");
-                        return ctx.replace(doc, content);
-                    })
+            // The first mutation must be done in serial, as it also creates a metadata
+            // entry
+            return ctx.get(coll, docIds.get(0)).flatMap(doc -> {
+                JsonObject content = doc.contentAsObject();
+                content.put("value", "updated");
+                return ctx.replace(doc, content);
+            })
 
                     // Do all other docs in parallel
                     .thenMany(Flux.fromIterable(docIds.subList(1, docIds.size()))
-                            .flatMap(docId -> ctx.get(coll, docId)
-                                            .flatMap(doc -> {
-                                                JsonObject content = doc.contentAsObject();
-                                                content.put("value", "updated");
-                                                return ctx.replace(doc, content);
-                                            })
-                                            .onErrorResume(err -> {
-                                                allOpsSucceeded.set(false);
-                                                // App should replace this with logging
-                                                err.printStackTrace();
+                            .flatMap(docId -> ctx.get(coll, docId).flatMap(doc -> {
+                                JsonObject content = doc.contentAsObject();
+                                content.put("value", "updated");
+                                return ctx.replace(doc, content);
+                            }).onErrorResume(err -> {
+                                allOpsSucceeded.set(false);
+                                // App should replace this with logging
+                                err.printStackTrace();
 
-                                                // Allow other ops to finish
-                                                return Mono.empty();
-                                            }),
+                                // Allow other ops to finish
+                                return Mono.empty();
+                            }),
 
                                     // Run these in parallel
                                     docIds.size())
 
-                    // The commit or rollback must also be done in serial
-                    ).then(Mono.defer(() -> {
-                        // Commit iff all ops succeeded
-                        if (allOpsSucceeded.get()) {
-                            return ctx.commit();
-                        } else {
-                            throw new RuntimeException("Retry the transaction");
-                        }
-                    }));
+            // The commit or rollback must also be done in serial
+            ).then(Mono.defer(() -> {
+                // Commit iff all ops succeeded
+                if (allOpsSucceeded.get()) {
+                    return ctx.commit();
+                } else {
+                    throw new RuntimeException("Retry the transaction");
+                }
+            }));
         }).block();
         // end::concurrentOps[]
     }
@@ -630,31 +616,25 @@ public class TransactionsExample {
                 // unstagingComplete() to be true.
                 // Note that result.mutationState() is only available if the
                 // transaction exclusively involves KV operations (no N1QL queries).
-                cluster.query(" ... N1QL ... ",
-                        QueryOptions.queryOptions()
-                                .consistentWith(result.mutationState()));
+                cluster.query(" ... N1QL ... ", QueryOptions.queryOptions().consistentWith(result.mutationState()));
 
                 String documentKey = "a document key involved in the transaction";
                 GetResult getResult = collection.get(documentKey);
-            }
-            else {
-                // This step is completely application-dependent.  It may
+            } else {
+                // This step is completely application-dependent. It may
                 // need to throw its own exception, if it is crucial that
                 // result.unstagingComplete() is true at this point.
                 // (Recall that the asynchronous cleanup process will
                 // complete the unstaging later on).
             }
-        }
-        catch (TransactionCommitAmbiguous err) {
+        } catch (TransactionCommitAmbiguous err) {
             // The transaction may or may not have reached commit point
-            System.err.println("Transaction returned TransactionCommitAmbiguous and" +
-                    " may have succeeded, logs:");
+            System.err.println("Transaction returned TransactionCommitAmbiguous and" + " may have succeeded, logs:");
 
             // Of course, the application will want to use its own logging rather
             // than System.err
             err.result().log().logs().forEach(log -> System.err.println(log.toString()));
-        }
-        catch (TransactionFailed err) {
+        } catch (TransactionFailed err) {
             // The transaction definitely did not reach commit point
             System.err.println("Transaction failed with TransactionFailed, logs:");
             err.result().log().logs().forEach(log -> System.err.println(log.toString()));
@@ -670,14 +650,11 @@ public class TransactionsExample {
             TransactionResult result = transactions.run((ctx) -> {
                 // ... transactional code here ...
             });
-        }
-        catch (TransactionCommitAmbiguous err) {
+        } catch (TransactionCommitAmbiguous err) {
             // The transaction may or may not have reached commit point
-            LOGGER.info("Transaction returned TransactionCommitAmbiguous and" +
-                    " may have succeeded, logs:");
+            LOGGER.info("Transaction returned TransactionCommitAmbiguous and" + " may have succeeded, logs:");
             err.result().log().logs().forEach(log -> LOGGER.info(log.toString()));
-        }
-        catch (TransactionFailed err) {
+        } catch (TransactionFailed err) {
             // The transaction definitely did not reach commit point
             LOGGER.info("Transaction failed with TransactionFailed, logs:");
             err.result().log().logs().forEach(log -> LOGGER.info(log.toString()));
@@ -727,15 +704,13 @@ public class TransactionsExample {
 
         // tag::custom-metadata[]
         Transactions transactions = Transactions.create(cluster,
-                TransactionConfigBuilder.create()
-                        .metadataCollection(metadataCollection));
+                TransactionConfigBuilder.create().metadataCollection(metadataCollection));
         // end::custom-metadata[]
     }
 
     static void tracing() {
         // #tag::tracing[]
-        RequestSpan span = cluster.environment().requestTracer()
-                .requestSpan("your-span-name", null);
+        RequestSpan span = cluster.environment().requestTracer().requestSpan("your-span-name", null);
 
         transactions.run((ctx) -> {
             // your transaction
@@ -745,8 +720,8 @@ public class TransactionsExample {
 
     static void tracingWrapped() {
         // #tag::tracing-wrapped[]
-        io.opentelemetry.api.trace.Span span; // created by your code earlier
-        RequestSpan wrapped = OpenTelemetryRequestSpan.wrap(span);
+        Span dummySpan = Span.current(); // (this is a dummy span) created by your code earlier
+        RequestSpan wrapped = OpenTelemetryRequestSpan.wrap(dummySpan);
 
         transactions.run((ctx) -> {
             // your transaction
@@ -755,6 +730,3 @@ public class TransactionsExample {
     }
 
 }
-
-
-
