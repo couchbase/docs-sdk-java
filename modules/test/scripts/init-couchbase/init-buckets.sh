@@ -32,18 +32,38 @@ echo "cbimport travel-sample..."
     -b travel-sample \
     -d file:///opt/couchbase/samples/travel-sample.zip
 
-echo "create ariports dataset"
+echo "create airports dataset"
 curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
     "statement": "CREATE DATASET airports ON `travel-sample` WHERE `type`=\"airport\";",
     "pretty":true,
     "client_context_id":"test"
 }' http://localhost:8095/analytics/service
 
+echo "create scoped airport dataset"
+curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
+    "statement": "ALTER COLLECTION `travel-sample`.`inventory`.`airport` ENABLE ANALYTICS;",
+    "pretty":true,
+    "client_context_id":"test"
+}' http://localhost:8095/analytics/service
+
+curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
+    "statement": "CONNECT LINK Local;",
+    "pretty":true,
+    "client_context_id":"test"
+}' http://localhost:8095/analytics/service
+
+echo "create huge-dataset dataset"
+curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
+        "statement": "CREATE DATASET `huge-dataset` ON `travel-sample`;",
+        "pretty":true,
+        "client_context_id":"test"
+}' http://localhost:8095/analytics/service
+
 echo "sleep 10 to allow stabilization..."
 sleep 10
 
 echo "create travel-sample-index"
-curl --fail -v -u Administrator:password -X PUT \
+curl --fail -v -u ${CB_USER}:${CB_PSWD} -X PUT \
     http://localhost:8094/api/index/travel-sample-index \
     -H 'cache-control: no-cache' \
     -H 'content-type: application/json' \
@@ -65,6 +85,21 @@ curl --fail -v -u Administrator:password -X PUT \
                     "dynamic": false,
                     "enabled": true,
                     "properties": {
+                        "country": {
+                            "enabled": true,
+                            "dynamic": false,
+                            "fields": [
+                                {
+                                    "docvalues": true,
+                                    "include_in_all": true,
+                                    "include_term_vectors": true,
+                                    "index": true,
+                                    "name": "country",
+                                    "store": true,
+                                    "type": "text"
+                                }
+                            ]
+                        },
                         "description": {
                             "enabled": true,
                             "dynamic": false,
