@@ -66,7 +66,7 @@ public class managing_connections {
 
 	public void managing_connections_8() throws Exception { // file: howtos/pages/managing-connections.adoc line: 242
 		// tag::managing_connections_8[]
-		Cluster cluster = Cluster.connect("127.0.0.1", "username", "password");
+		Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");
 		cluster.waitUntilReady(Duration.ofSeconds(10));
 		Bucket bucket = cluster.bucket("travel-sample");
 		Collection collection = bucket.defaultCollection();
@@ -75,7 +75,7 @@ public class managing_connections {
 
 	public void managing_connections_9() throws Exception { // file: howtos/pages/managing-connections.adoc line: 252
 		// tag::managing_connections_9[]
-		Cluster cluster = Cluster.connect("127.0.0.1", "username", "password");
+		Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");
 		cluster.waitUntilReady(Duration.ofSeconds(10));
 		Bucket bucket = cluster.bucket("travel-sample");
 		Collection collection = bucket.defaultCollection();

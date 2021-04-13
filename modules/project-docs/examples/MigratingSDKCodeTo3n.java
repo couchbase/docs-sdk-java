@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+import static com.couchbase.client.java.kv.GetOptions.getOptions;
+import static com.couchbase.client.java.query.QueryOptions.queryOptions;
+
+import java.time.Duration;
+
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
@@ -22,11 +27,6 @@ import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.env.ClusterEnvironment;
 import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.client.java.query.QueryResult;
-
-import java.time.Duration;
-
-import static com.couchbase.client.java.kv.GetOptions.getOptions;
-import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 
 public class MigratingSDKCodeTo3n {
 
@@ -48,19 +48,25 @@ public class MigratingSDKCodeTo3n {
     collection = bucket.defaultCollection();
   }
 
-  public void migrating_sdk_code_to_3_n_1() throws Exception { // file: project-docs/pages/migrating-sdk-code-to-3.n.adoc line: 23
+  public void migrating_sdk_code_to_3_n_1() throws Exception { // file:
+                                                               // project-docs/pages/migrating-sdk-code-to-3.n.adoc
+                                                               // line: 23
     // tag::migrating_sdk_code_to_3_n_1[]
-    GetResult getResult = collection.get("key", getOptions().timeout(Duration.ofSeconds(3)));
+    GetResult getResult = collection.get("airline_10", getOptions().timeout(Duration.ofSeconds(3)));
     // end::migrating_sdk_code_to_3_n_1[]
   }
 
-  public void migrating_sdk_code_to_3_n_2() throws Exception { // file: project-docs/pages/migrating-sdk-code-to-3.n.adoc line: 30
+  public void migrating_sdk_code_to_3_n_2() throws Exception { // file:
+                                                               // project-docs/pages/migrating-sdk-code-to-3.n.adoc
+                                                               // line: 30
     // tag::migrating_sdk_code_to_3_n_2[]
     QueryResult queryResult = cluster.query("select 1=1", queryOptions().timeout(Duration.ofSeconds(3)));
     // end::migrating_sdk_code_to_3_n_2[]
   }
 
-  public void migrating_sdk_code_to_3_n_11() throws Exception { // file: project-docs/pages/migrating-sdk-code-to-3.n.adoc line: 160
+  public void migrating_sdk_code_to_3_n_11() throws Exception { // file:
+                                                                // project-docs/pages/migrating-sdk-code-to-3.n.adoc
+                                                                // line: 160
     // tag::migrating_sdk_code_to_3_n_11[]
     Cluster cluster = Cluster.connect(connectionString, username, password);
 
@@ -72,7 +78,9 @@ public class MigratingSDKCodeTo3n {
     // end::migrating_sdk_code_to_3_n_11[]
   }
 
-  public void migrating_sdk_code_to_3_n_22() throws Exception { // file: project-docs/pages/migrating-sdk-code-to-3.n.adoc line: 492
+  public void migrating_sdk_code_to_3_n_22() throws Exception { // file:
+                                                                // project-docs/pages/migrating-sdk-code-to-3.n.adoc
+                                                                // line: 492
     // tag::migrating_sdk_code_to_3_n_22[]
     QueryResult queryResult = cluster.query("select 1=");
     if (!queryResult.metaData().warnings().isEmpty()) {
@@ -80,7 +88,6 @@ public class MigratingSDKCodeTo3n {
     }
     // end::migrating_sdk_code_to_3_n_22[]
   }
-
 
   public static void main(String[] args) throws Exception {
     MigratingSDKCodeTo3n obj = new MigratingSDKCodeTo3n();

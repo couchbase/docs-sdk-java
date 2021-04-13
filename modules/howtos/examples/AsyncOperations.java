@@ -62,11 +62,11 @@ public class AsyncOperations {
     // end::access-async[]
 
     // tag::simple-get[]
-    reactiveCollection.get("my-doc").subscribe(System.out::println, System.err::println);
+    reactiveCollection.get("airline_10").subscribe(System.out::println, System.err::println);
     // end::simple-get[]
 
     // tag::non-used-upsert[]
-    reactiveCollection.upsert("my-doc", JsonObject.create());
+    reactiveCollection.upsert("airline_10", JsonObject.create());
     // end::non-used-upsert[]
 
     // tag::verbose-query[]
@@ -80,14 +80,14 @@ public class AsyncOperations {
 
     {
       // tag::simple-bulk[]
-      List<String> docsToFetch = Arrays.asList("key1", "key2", "key3");
+      List<String> docsToFetch = Arrays.asList("airline_10123", "airline_10226", "airline_10642");
       List<GetResult> results = Flux.fromIterable(docsToFetch).flatMap(reactiveCollection::get).collectList().block();
       // end::simple-bulk[]
     }
 
     {
       // tag::ignore-bulk[]
-      List<String> docsToFetch = Arrays.asList("key1", "key2", "key3");
+      List<String> docsToFetch = Arrays.asList("airline_10748", "airline_10765", "airline_109");
       List<GetResult> results = Flux.fromIterable(docsToFetch)
           .flatMap(key -> reactiveCollection.get(key).onErrorResume(e -> Mono.empty())).collectList().block();
       // end::ignore-bulk[]
@@ -95,7 +95,7 @@ public class AsyncOperations {
 
     {
       // tag::split-bulk[]
-      List<String> docsToFetch = Arrays.asList("key1", "key2", "key3");
+      List<String> docsToFetch = Arrays.asList("airline_112", "airline_1191", "airline_1203");
 
       List<GetResult> successfulResults = Collections.synchronizedList(new ArrayList<>());
       Map<String, Throwable> erroredResults = new ConcurrentHashMap<>();
@@ -109,7 +109,7 @@ public class AsyncOperations {
 
     {
       // tag::retry-bulk[]
-      List<String> docsToFetch = Arrays.asList("key1", "key2", "key3");
+      List<String> docsToFetch = Arrays.asList("airline_1316", "airline_13391", "airline_1355");
 
       List<GetResult> results = Flux.fromIterable(docsToFetch)
           .flatMap(key -> reactiveCollection.get(key).retryBackoff(10, Duration.ofMillis(10))).collectList().block();
@@ -117,7 +117,7 @@ public class AsyncOperations {
     }
 
     // tag::rs-conversion[]
-    Single<GetResult> rxSingleResult = monoToSingle(reactiveCollection.get("my-doc"));
+    Single<GetResult> rxSingleResult = monoToSingle(reactiveCollection.get("airline_10"));
     // end::rs-conversion[]
 
   }

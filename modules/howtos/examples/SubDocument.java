@@ -56,7 +56,7 @@ import com.couchbase.client.java.kv.ReplicateTo;
 import reactor.core.publisher.Mono;
 // end::imports[]
 
-class SubDocument {
+public class SubDocument {
   static Collection collection;
 
   public static void main(String... args) {

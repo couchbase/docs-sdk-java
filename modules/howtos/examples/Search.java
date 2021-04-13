@@ -40,6 +40,98 @@ import org.reactivestreams.Subscription;
 import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.Mono;
 
+// This example assumes an index called `travel-sample-index` exists, 
+// you can create it by running the curl command below:
+// curl -v -u Administrator:password -X PUT \
+//     http://localhost:8094/api/index/travel-sample-index \
+//     -H 'cache-control: no-cache' \
+//     -H 'content-type: application/json' \
+//     -d '{
+//         "name": "travel-sample-index",
+//         "type": "fulltext-index",
+//         "params": {
+//             "doc_config": {
+//                 "docid_prefix_delim": "",
+//                 "docid_regexp": "",
+//                 "mode": "type_field",
+//                 "type_field": "type"
+//             },
+//             "mapping": {
+//                 "default_analyzer": "standard",
+//                 "default_datetime_parser": "dateTimeOptional",
+//                 "default_field": "_all",
+//                 "default_mapping": {
+//                     "dynamic": false,
+//                     "enabled": true,
+//                     "properties": {
+//                         "country": {
+//                             "enabled": true,
+//                             "dynamic": false,
+//                             "fields": [
+//                                 {
+//                                     "docvalues": true,
+//                                     "include_in_all": true,
+//                                     "include_term_vectors": true,
+//                                     "index": true,
+//                                     "name": "country",
+//                                     "store": true,
+//                                     "type": "text"
+//                                 }
+//                             ]
+//                         },
+//                         "description": {
+//                             "enabled": true,
+//                             "dynamic": false,
+//                             "fields": [
+//                                 {
+//                                     "docvalues": true,
+//                                     "include_in_all": true,
+//                                     "include_term_vectors": true,
+//                                     "index": true,
+//                                     "name": "description",
+//                                     "store": true,
+//                                     "type": "text"
+//                                 }
+//                             ]
+//                         },
+//                         "type": {
+//                             "enabled": true,
+//                             "dynamic": false,
+//                             "fields": [
+//                                 {
+//                                     "docvalues": true,
+//                                     "include_in_all": true,
+//                                     "include_term_vectors": true,
+//                                     "index": true,
+//                                     "name": "type",
+//                                     "store": true,
+//                                     "type": "text"
+//                                 }
+//                             ]
+//                         }
+//                     }
+//                 },
+//                 "default_type": "_default",
+//                 "docvalues_dynamic": true,
+//                 "index_dynamic": true,
+//                 "store_dynamic": false,
+//                 "type_field": "_type"
+//             },
+//             "store": {
+//                 "indexType": "scorch",
+//                 "segmentVersion": 15
+//             }
+//         },
+//         "sourceType": "gocbcore",
+//         "sourceName": "travel-sample",
+//         "sourceParams": {},
+//         "planParams": {
+//             "maxPartitionsPerPIndex": 1024,
+//             "indexPartitions": 1,
+//             "numReplicas": 0
+//         }
+// }'
+
 public class Search {
 
   static Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
@@ -51,7 +143,7 @@ public class Search {
     {
       // tag::simple[]
       try {
-        final SearchResult result = cluster.searchQuery("index", SearchQuery.queryString("query"));
+        final SearchResult result = cluster.searchQuery("travel-sample-index", SearchQuery.queryString("swanky"));
 
         for (SearchRow row : result.rows()) {
           System.out.println("Found row: " + row);
@@ -66,8 +158,8 @@ public class Search {
 
     {
       // tag::squery[]
-      final SearchResult result = cluster.searchQuery("my-index-name", SearchQuery.prefix("airports-"),
-          searchOptions().fields("field-1"));
+      final SearchResult result = cluster.searchQuery("travel-sample-index", SearchQuery.prefix("swim"),
+          searchOptions().fields("description"));
 
       for (SearchRow row : result.rows()) {
         System.out.println("Score: " + row.score());
@@ -81,7 +173,7 @@ public class Search {
 
     {
       // tag::limit[]
-      SearchResult result = cluster.searchQuery("index", SearchQuery.queryString("query"),
+      SearchResult result = cluster.searchQuery("travel-sample-index", SearchQuery.queryString("swanky"),
           searchOptions().skip(3).limit(4));
       // end::limit[]
     }
@@ -91,53 +183,55 @@ public class Search {
       MutationResult mutationResult = collection.upsert("key", JsonObject.create());
       MutationState mutationState = MutationState.from(mutationResult.mutationToken().get());
 
-      SearchResult searchResult = cluster.searchQuery("index", SearchQuery.queryString("query"),
+      SearchResult searchResult = cluster.searchQuery("travel-sample-index", SearchQuery.queryString("swanky"),
           searchOptions().consistentWith(mutationState));
       // end::ryow[]
     }
 
     {
       // tag::highlight[]
-      SearchResult result = cluster.searchQuery("index", SearchQuery.queryString("query"),
-          searchOptions().highlight(HighlightStyle.HTML, "field1", "field2"));
+      SearchResult result = cluster.searchQuery("travel-sample-index", SearchQuery.queryString("swanky"),
+          searchOptions().highlight(HighlightStyle.HTML, "description", "type"));
       // end::highlight[]
     }
 
     {
       // tag::sort[]
-      SearchResult result = cluster.searchQuery("index", SearchQuery.queryString("query"),
-          searchOptions().sort(SearchSort.byScore(), SearchSort.byField("field")));
+      SearchResult result = cluster.searchQuery("travel-sample-index", SearchQuery.queryString("swanky"),
+          searchOptions().sort(SearchSort.byScore(), SearchSort.byField("description")));
       // end::sort[]
     }
 
     {
       // tag::facets[]
       Map<String, SearchFacet> facets = new HashMap<>();
-      facets.put("categories", SearchFacet.term("category", 5));
+      facets.put("types", SearchFacet.term("type", 5));
 
-      SearchResult result = cluster.searchQuery("index", SearchQuery.queryString("query"),
+      SearchResult result = cluster.searchQuery("travel-sample-index", SearchQuery.queryString("United States"),
           searchOptions().facets(facets));
       // end::facets[]
     }
 
     {
       // tag::fields[]
-      SearchResult result = cluster.searchQuery("index", SearchQuery.queryString("query"),
-          searchOptions().fields("field1", "field2"));
+      SearchResult result = cluster.searchQuery("travel-sample-index", SearchQuery.queryString("swanky"),
+          searchOptions().fields("description", "type"));
       // end::fields[]
     }
 
     {
       // tag::simplereactive[]
-      Mono<ReactiveSearchResult> result = cluster.reactive().searchQuery("index", SearchQuery.queryString("query"));
+      Mono<ReactiveSearchResult> result = cluster.reactive().searchQuery("travel-sample-index",
+          SearchQuery.queryString("swanky"));
 
-      result.flatMapMany(ReactiveSearchResult::rows).subscribe(row -> System.out.println("Found row: " + row));
+      result.flatMapMany(ReactiveSearchResult::rows).subscribe(row -> System.out.println("Found reactive row: " + row));
       // end::simplereactive[]
     }
 
     {
       // tag::backpressure[]
-      Mono<ReactiveSearchResult> result = cluster.reactive().searchQuery("index", SearchQuery.queryString("query"));
+      Mono<ReactiveSearchResult> result = cluster.reactive().searchQuery("travel-sample-index",
+          SearchQuery.queryString("swanky"));
 
       result.flatMapMany(ReactiveSearchResult::rows).subscribe(new BaseSubscriber<SearchRow>() {
         // Number of outstanding requests
