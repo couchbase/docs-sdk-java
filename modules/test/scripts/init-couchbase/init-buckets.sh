@@ -13,24 +13,24 @@ CB_BUCKET_RAMSIZE="${CB_BUCKET_RAMSIZE:-128}"
 
 echo "couchbase-cli bucket-create travel-sample..."
 /opt/couchbase/bin/couchbase-cli bucket-create \
--c localhost -u ${CB_USER} -p ${CB_PSWD} \
---bucket travel-sample \
---bucket-type couchbase \
---bucket-ramsize ${CB_BUCKET_RAMSIZE} \
---bucket-replica 0 \
---bucket-priority low \
---bucket-eviction-policy fullEviction \
---enable-flush 1 \
---enable-index-replica 0 \
---wait
+    -c localhost -u ${CB_USER} -p ${CB_PSWD} \
+    --bucket travel-sample \
+    --bucket-type couchbase \
+    --bucket-ramsize ${CB_BUCKET_RAMSIZE} \
+    --bucket-replica 0 \
+    --bucket-priority low \
+    --bucket-eviction-policy fullEviction \
+    --enable-flush 1 \
+    --enable-index-replica 0 \
+    --wait
 
 sleep 5
 
 echo "cbimport travel-sample..."
 /opt/couchbase/bin/cbimport json --format sample --verbose \
--c localhost -u ${CB_USER} -p ${CB_PSWD} \
--b travel-sample \
--d file:///opt/couchbase/samples/travel-sample.zip
+    -c localhost -u ${CB_USER} -p ${CB_PSWD} \
+    -b travel-sample \
+    -d file:///opt/couchbase/samples/travel-sample.zip
 
 echo "create ariports dataset"
 curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
@@ -44,10 +44,10 @@ sleep 10
 
 echo "create travel-sample-index"
 curl --fail -v -u Administrator:password -X PUT \
-http://localhost:8094/api/index/travel-sample-index \
--H 'cache-control: no-cache' \
--H 'content-type: application/json' \
--d '{
+    http://localhost:8094/api/index/travel-sample-index \
+    -H 'cache-control: no-cache' \
+    -H 'content-type: application/json' \
+    -d '{
         "name": "travel-sample-index",
         "type": "fulltext-index",
         "params": {
