@@ -72,7 +72,7 @@ CONTAINER ID   IMAGE                          COMMAND                  CREATED  
 6fe1830a205a   couchbase:cb7-sdk3-java-ub20   "/entrypoint.sh couc…"   About an hour ago   Up About an hour   11207/tcp, 11210-11211/tcp, 0.0.0.0:8091-8096->8091-8096/tcp, 18091-18096/tcp   cb-test
 ```
 
-- Once the container is up you can run `make TEST_NAME="StartUsing" single-test` to run an individual test.
+- Once the container is up you can run `make TEST_NAME="StartUsing.java" single-test` to run an individual test.
 
 - You should expect to see the following output in your shell:
 ```
