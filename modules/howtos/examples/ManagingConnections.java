@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+import java.nio.file.Paths;
+import java.time.Duration;
+
 import com.couchbase.client.core.env.IoConfig;
 import com.couchbase.client.core.env.SecurityConfig;
 import com.couchbase.client.core.env.TimeoutConfig;
@@ -27,9 +30,6 @@ import com.couchbase.client.java.ReactiveBucket;
 import com.couchbase.client.java.ReactiveCluster;
 import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.env.ClusterEnvironment;
-
-import java.nio.file.Paths;
-import java.time.Duration;
 
 public class ManagingConnections {
   public static void main(String... args) {
@@ -59,7 +59,6 @@ public class ManagingConnections {
       // end::multinodeconnect[]
     }
 
-
     {
       // tag::customenv[]
       ClusterEnvironment env = ClusterEnvironment.builder()
@@ -67,9 +66,8 @@ public class ManagingConnections {
           .build();
 
       // Create a cluster using the environment's custom client settings.
-      Cluster cluster = Cluster.connect("127.0.0.1", ClusterOptions
-          .clusterOptions("username", "password")
-          .environment(env));
+      Cluster cluster = Cluster.connect("127.0.0.1",
+          ClusterOptions.clusterOptions("username", "password").environment(env));
 
       // Shut down gracefully. Shut down the environment
       // after all associated clusters are disconnected.
@@ -81,18 +79,13 @@ public class ManagingConnections {
     {
       // tag::shareclusterenvironment[]
       ClusterEnvironment env = ClusterEnvironment.builder()
-          .timeoutConfig(TimeoutConfig.kvTimeout(Duration.ofSeconds(5)))
-          .build();
+          .timeoutConfig(TimeoutConfig.kvTimeout(Duration.ofSeconds(5))).build();
 
-      Cluster clusterA = Cluster.connect(
-          "clusterA.example.com",
-          ClusterOptions.clusterOptions("username", "password")
-              .environment(env));
+      Cluster clusterA = Cluster.connect("clusterA.example.com",
+          ClusterOptions.clusterOptions("username", "password").environment(env));
 
-      Cluster clusterB = Cluster.connect(
-          "clusterB.example.com",
-          ClusterOptions.clusterOptions("username", "password")
-              .environment(env));
+      Cluster clusterB = Cluster.connect("clusterB.example.com",
+          ClusterOptions.clusterOptions("username", "password").environment(env));
 
       // ...
 
@@ -105,24 +98,24 @@ public class ManagingConnections {
     }
 
     // todo use this example when beta 2 is released.
-//    {
-//      // tag::seednodes[]
-//      int customKvPort = 12345;
-//      int customManagerPort = 23456;
-//      Set<SeedNode> seedNodes = new HashSet<>(Arrays.asList(
-//          SeedNode.create("127.0.0.1",
-//              Optional.of(customKvPort),
-//              Optional.of(customManagerPort))));
-//
+    // {
+    // // tag::seednodes[]
+    // int customKvPort = 12345;
+    // int customManagerPort = 23456;
+    // Set<SeedNode> seedNodes = new HashSet<>(Arrays.asList(
+    // SeedNode.create("127.0.0.1",
+    // Optional.of(customKvPort),
+    // Optional.of(customManagerPort))));
+    //
 
-//      Cluster cluster = Cluster.connect(seedNodes, "username", "password");
-//      // end::customconnect[]
-//    }
+    // Cluster cluster = Cluster.connect(seedNodes, "username", "password");
+    // // end::customconnect[]
+    // }
 
     {
       // tag::connectionstringparams[]
-      Cluster cluster = Cluster.connect(
-          "127.0.0.1?io.maxHttpConnections=23&io.networkResolution=external", "username", "password");
+      Cluster cluster = Cluster.connect("127.0.0.1?io.maxHttpConnections=23&io.networkResolution=external", "username",
+          "password");
       // end::connectionstringparams[]
     }
 
@@ -148,7 +141,8 @@ public class ManagingConnections {
 
       // A reactive cluster's disconnect methods returns a Mono<Void>.
       // Nothing actually happens until you subscribe to the Mono.
-      // The simplest way to subscribe is to await completion by calling call `block()`.
+      // The simplest way to subscribe is to await completion by calling call
+      // `block()`.
       cluster.disconnect().block();
       // end::reactivecluster[]
     }
@@ -165,21 +159,16 @@ public class ManagingConnections {
       // end::asynccluster[]
     }
 
-
     {
       // tag::tls[]
       ClusterEnvironment env = ClusterEnvironment.builder()
-          .securityConfig(SecurityConfig.enableTls(true)
-              .trustCertificate(Paths.get("/path/to/cluster.cert")))
-          .build();
+          .securityConfig(SecurityConfig.enableTls(true).trustCertificate(Paths.get("/path/to/cluster.cert"))).build();
       // end::tls[]
     }
 
     {
       // tag::dnssrv[]
-      ClusterEnvironment env = ClusterEnvironment.builder()
-          .ioConfig(IoConfig.enableDnsSrv(true))
-          .build();
+      ClusterEnvironment env = ClusterEnvironment.builder().ioConfig(IoConfig.enableDnsSrv(true)).build();
       // end::dnssrv[]
     }
   }

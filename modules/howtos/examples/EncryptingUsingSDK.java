@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.util.Collections;
+
 import com.couchbase.client.core.encryption.CryptoManager;
 import com.couchbase.client.encryption.AeadAes256CbcHmacSha512Provider;
 import com.couchbase.client.encryption.DefaultCryptoManager;
@@ -33,14 +41,6 @@ import com.couchbase.client.java.json.JsonObjectCrypto;
 import com.couchbase.client.java.json.JsonValueModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.KeyStore;
-import java.security.SecureRandom;
-import java.util.Collections;
-
 public class EncryptingUsingSDK {
 
   String connectionString = "localhost";
@@ -55,37 +55,31 @@ public class EncryptingUsingSDK {
   private void init() {
     // tag::connection_1[];
     ClusterEnvironment environment = ClusterEnvironment.builder().build();
-    cluster = Cluster.connect(connectionString, ClusterOptions.clusterOptions(username, password).environment(environment));
+    cluster = Cluster.connect(connectionString,
+        ClusterOptions.clusterOptions(username, password).environment(environment));
     bucket = cluster.bucket("travel-sample");
     scope = bucket.defaultScope();
-    collection = bucket.defaultCollection();    // end::connection_1[]
+    collection = bucket.defaultCollection(); // end::connection_1[]
   }
 
   public void encrypting_using_sdk_1() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 60
     // tag::encrypting_using_sdk_1[]
     KeyStore javaKeyStore = KeyStore.getInstance("MyKeyStoreType");
     FileInputStream fis = new java.io.FileInputStream("keyStoreName");
-    char[] password = {'a', 'b', 'c'};
+    char[] password = { 'a', 'b', 'c' };
     javaKeyStore.load(fis, password);
     Keyring keyring = new KeyStoreKeyring(javaKeyStore, keyName -> "swordfish");
 
     // AES-256 authenticated with HMAC SHA-512. Requires a 64-byte key.
-    AeadAes256CbcHmacSha512Provider provider = AeadAes256CbcHmacSha512Provider.builder()
-        .keyring(keyring)
-        .build();
+    AeadAes256CbcHmacSha512Provider provider = AeadAes256CbcHmacSha512Provider.builder().keyring(keyring).build();
 
-    CryptoManager cryptoManager = DefaultCryptoManager.builder()
-        .decrypter(provider.decrypter())
-        .defaultEncrypter(provider.encrypterForKey("myKey"))
-        .build();
+    CryptoManager cryptoManager = DefaultCryptoManager.builder().decrypter(provider.decrypter())
+        .defaultEncrypter(provider.encrypterForKey("myKey")).build();
 
-    ClusterEnvironment env = ClusterEnvironment.builder()
-        .cryptoManager(cryptoManager)
-        .build();
+    ClusterEnvironment env = ClusterEnvironment.builder().cryptoManager(cryptoManager).build();
 
     Cluster cluster = Cluster.connect("localhost",
-        ClusterOptions.clusterOptions("username", "password")
-            .environment(env));
+        ClusterOptions.clusterOptions("username", "password").environment(env));
     // end::encrypting_using_sdk_1[]
   }
 
@@ -108,8 +102,7 @@ public class EncryptingUsingSDK {
   // end::encrypting_using_sdk_2[]
   public void encrypting_using_sdk_3() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 116
     // tag::encrypting_using_sdk_3[]
-    Collection collection = cluster.bucket("myBucket")
-        .defaultCollection();
+    Collection collection = cluster.bucket("myBucket").defaultCollection();
 
     Employee employee = new Employee();
     employee.setReplicant(true);
@@ -119,8 +112,7 @@ public class EncryptingUsingSDK {
 
   public void encrypting_using_sdk_4() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 128
     // tag::encrypting_using_sdk_4[]
-    JsonObject encrypted = collection.get("employee:1234")
-        .contentAsObject(); // does not decrypt anything
+    JsonObject encrypted = collection.get("employee:1234").contentAsObject(); // does not decrypt anything
 
     System.out.println(encrypted);
     // end::encrypting_using_sdk_4[]
@@ -128,8 +120,7 @@ public class EncryptingUsingSDK {
 
   public void encrypting_using_sdk_5() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 152
     // tag::encrypting_using_sdk_5[]
-    Employee readItBack = collection.get("employee:1234")
-        .contentAs(Employee.class); // decrypts the "replicant" field
+    Employee readItBack = collection.get("employee:1234").contentAs(Employee.class); // decrypts the "replicant" field
 
     System.out.println(readItBack.isReplicant());
     // end::encrypting_using_sdk_5[]
@@ -149,8 +140,7 @@ public class EncryptingUsingSDK {
 
   public void legacy_field_name_prefix() throws Exception {
     // tag::legacy_field_name_prefix[]
-    CryptoManager cryptoManager = DefaultCryptoManager.builder()
-        .encryptedFieldNamePrefix("__crypt_")
+    CryptoManager cryptoManager = DefaultCryptoManager.builder().encryptedFieldNamePrefix("__crypt_")
         // other config...
         .build();
     // end::legacy_field_name_prefix[]
@@ -161,18 +151,14 @@ public class EncryptingUsingSDK {
     // CryptoManager cryptoManager = createMyCryptoManager();
     KeyStore javaKeyStore = KeyStore.getInstance("MyKeyStoreType");
     FileInputStream fis = new java.io.FileInputStream("keyStoreName");
-    char[] ksPassword = {'a', 'b', 'c'};
+    char[] ksPassword = { 'a', 'b', 'c' };
     javaKeyStore.load(fis, ksPassword);
     Keyring keyring = new KeyStoreKeyring(javaKeyStore, keyName -> "swordfish");
 
     // AES-256 authenticated with HMAC SHA-512. Requires a 64-byte key.
-    AeadAes256CbcHmacSha512Provider provider = AeadAes256CbcHmacSha512Provider.builder()
-        .keyring(keyring)
-        .build();
-    CryptoManager cryptoManager = DefaultCryptoManager.builder()
-        .decrypter(provider.decrypter())
-        .defaultEncrypter(provider.encrypterForKey("myKey"))
-        .build();
+    AeadAes256CbcHmacSha512Provider provider = AeadAes256CbcHmacSha512Provider.builder().keyring(keyring).build();
+    CryptoManager cryptoManager = DefaultCryptoManager.builder().decrypter(provider.decrypter())
+        .defaultEncrypter(provider.encrypterForKey("myKey")).build();
 
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JsonValueModule()); // for JsonObject
@@ -180,14 +166,11 @@ public class EncryptingUsingSDK {
 
     // Here you can register more modules, add mixins, enable features, etc.
 
-    ClusterEnvironment env = ClusterEnvironment.builder()
-        .cryptoManager(cryptoManager)
-        .jsonSerializer(JacksonJsonSerializer.create(mapper))
-        .build();
+    ClusterEnvironment env = ClusterEnvironment.builder().cryptoManager(cryptoManager)
+        .jsonSerializer(JacksonJsonSerializer.create(mapper)).build();
 
     Cluster cluster = Cluster.connect(connectionString,
-        ClusterOptions.clusterOptions(username, password)
-            .environment(env));
+        ClusterOptions.clusterOptions(username, password).environment(env));
     // end::encrypting_using_sdk_6[]
   }
 
@@ -222,8 +205,7 @@ public class EncryptingUsingSDK {
     random.nextBytes(keyBytes);
 
     // Add a new key called "my-key" to the key store
-    KeyStoreKeyring.setSecretKey(keyStore, "my-key", keyBytes,
-        "protection-password".toCharArray());
+    KeyStoreKeyring.setSecretKey(keyStore, "my-key", keyBytes, "protection-password".toCharArray());
 
     // Write the key store to disk
     try (OutputStream os = new FileOutputStream("MyKeystoreFile.jceks")) {
@@ -239,8 +221,7 @@ public class EncryptingUsingSDK {
       keyStore.load(is, "integrity-password".toCharArray());
     }
 
-    KeyStoreKeyring keyring = new KeyStoreKeyring(
-        keyStore, keyName -> "protection-password");
+    KeyStoreKeyring keyring = new KeyStoreKeyring(keyStore, keyName -> "protection-password");
     // end::encrypting_using_sdk_9[]
   }
 

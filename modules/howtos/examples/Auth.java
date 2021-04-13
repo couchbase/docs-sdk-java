@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-import com.couchbase.client.core.env.CertificateAuthenticator;
-import com.couchbase.client.core.env.PasswordAuthenticator;
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.ClusterOptions;
-import java.util.EnumSet;
-import com.couchbase.client.core.env.SaslMechanism;
+import static com.couchbase.client.java.ClusterOptions.clusterOptions;
 
 import java.security.KeyStore;
 
-import static com.couchbase.client.java.ClusterOptions.clusterOptions;
+import com.couchbase.client.core.env.CertificateAuthenticator;
+import com.couchbase.client.core.env.PasswordAuthenticator;
+import com.couchbase.client.java.Cluster;
 
 public class Auth {
 
@@ -43,13 +40,9 @@ public class Auth {
 
     {
       // tag::rbac-pwd[]
-      PasswordAuthenticator authenticator = PasswordAuthenticator
-        .builder()
-        .username("username")
-        .password("password")
-        // enables only the PLAIN authentication mechanism, used with LDAP
-        .onlyEnablePlainSaslMechanism()
-        .build();
+      PasswordAuthenticator authenticator = PasswordAuthenticator.builder().username("username").password("password")
+          // enables only the PLAIN authentication mechanism, used with LDAP
+          .onlyEnablePlainSaslMechanism().build();
 
       Cluster cluster = Cluster.connect("127.0.0.1", clusterOptions(authenticator));
       // end::rbac-pwd[]

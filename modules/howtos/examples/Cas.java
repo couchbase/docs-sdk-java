@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
+import static com.couchbase.client.java.kv.ReplaceOptions.replaceOptions;
+
+import java.time.Duration;
+
 import com.couchbase.client.core.error.CasMismatchException;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
-import com.couchbase.client.java.kv.ReplaceOptions;
-
-import java.time.Duration;
-
-import static com.couchbase.client.java.kv.ReplaceOptions.replaceOptions;
 
 public class Cas {
 
   public static void main(String... args) {
-
 
     Collection collection = null;
 
@@ -61,8 +59,9 @@ public class Cas {
 
       long lockedCas = getAndLockResult.cas();
 
-      /* an example of simply unlocking the document:
-      collection.unlock("key", lockedCas);
+      /*
+       * an example of simply unlocking the document: collection.unlock("key",
+       * lockedCas);
        */
 
       collection.replace("key", "new value", replaceOptions().cas(lockedCas));

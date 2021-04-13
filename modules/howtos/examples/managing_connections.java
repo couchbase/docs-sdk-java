@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
 import com.couchbase.client.core.env.Authenticator;
 import com.couchbase.client.core.env.PasswordAuthenticator;
 import com.couchbase.client.core.env.SeedNode;
@@ -23,12 +29,6 @@ import com.couchbase.client.java.ClusterOptions;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.env.ClusterEnvironment;
-
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
 
 public class managing_connections {
 
@@ -44,20 +44,19 @@ public class managing_connections {
 	private void init() {
 		// tag::connection_1[];
 		ClusterEnvironment environment = ClusterEnvironment.builder().build();
-		cluster = Cluster.connect(connectionString, ClusterOptions.clusterOptions(username, password).environment(environment));
+		cluster = Cluster.connect(connectionString,
+				ClusterOptions.clusterOptions(username, password).environment(environment));
 		bucket = cluster.bucket("travel-sample");
 		scope = bucket.defaultScope();
-		collection = bucket.defaultCollection();    // end::connection_1[]
+		collection = bucket.defaultCollection(); // end::connection_1[]
 	}
 
 	public void managing_connections_5() throws Exception { // file: howtos/pages/managing-connections.adoc line: 125
 		// tag::managing_connections_5[]
 		int customKvPort = 1234;
 		int customManagerPort = 2345;
-		Set<SeedNode> seedNodes = new HashSet<>(Arrays.asList(
-				SeedNode.create("127.0.0.1",
-						Optional.of(customKvPort),
-						Optional.of(customManagerPort))));
+		Set<SeedNode> seedNodes = new HashSet<>(
+				Arrays.asList(SeedNode.create("127.0.0.1", Optional.of(customKvPort), Optional.of(customManagerPort))));
 
 		Authenticator authenticator = PasswordAuthenticator.create(username, password);
 		ClusterOptions options = ClusterOptions.clusterOptions(authenticator);
