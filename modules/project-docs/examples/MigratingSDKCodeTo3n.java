@@ -48,25 +48,19 @@ public class MigratingSDKCodeTo3n {
     collection = bucket.defaultCollection();
   }
 
-  public void migrating_sdk_code_to_3_n_1() throws Exception { // file:
-                                                               // project-docs/pages/migrating-sdk-code-to-3.n.adoc
-                                                               // line: 23
+  public void migrating_sdk_code_to_3_n_1() throws Exception {
     // tag::migrating_sdk_code_to_3_n_1[]
     GetResult getResult = collection.get("airline_10", getOptions().timeout(Duration.ofSeconds(3)));
     // end::migrating_sdk_code_to_3_n_1[]
   }
 
-  public void migrating_sdk_code_to_3_n_2() throws Exception { // file:
-                                                               // project-docs/pages/migrating-sdk-code-to-3.n.adoc
-                                                               // line: 30
+  public void migrating_sdk_code_to_3_n_2() throws Exception {
     // tag::migrating_sdk_code_to_3_n_2[]
     QueryResult queryResult = cluster.query("select 1=1", queryOptions().timeout(Duration.ofSeconds(3)));
     // end::migrating_sdk_code_to_3_n_2[]
   }
 
-  public void migrating_sdk_code_to_3_n_11() throws Exception { // file:
-                                                                // project-docs/pages/migrating-sdk-code-to-3.n.adoc
-                                                                // line: 160
+  public void migrating_sdk_code_to_3_n_11() throws Exception {
     // tag::migrating_sdk_code_to_3_n_11[]
     Cluster cluster = Cluster.connect(connectionString, username, password);
 
@@ -78,9 +72,7 @@ public class MigratingSDKCodeTo3n {
     // end::migrating_sdk_code_to_3_n_11[]
   }
 
-  public void migrating_sdk_code_to_3_n_22() throws Exception { // file:
-                                                                // project-docs/pages/migrating-sdk-code-to-3.n.adoc
-                                                                // line: 492
+  public void migrating_sdk_code_to_3_n_22() throws Exception {
     // tag::migrating_sdk_code_to_3_n_22[]
     QueryResult queryResult = cluster.query("select 1=");
     if (!queryResult.metaData().warnings().isEmpty()) {
