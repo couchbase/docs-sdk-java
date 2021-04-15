@@ -1,3 +1,9 @@
+import static com.couchbase.client.java.analytics.AnalyticsOptions.analyticsOptions;
+import static com.couchbase.client.java.kv.GetOptions.getOptions;
+import static com.couchbase.client.java.query.QueryOptions.queryOptions;
+
+import java.util.concurrent.CompletableFuture;
+
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.core.error.TimeoutException;
@@ -10,24 +16,17 @@ import com.couchbase.client.core.retry.RetryStrategy;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.analytics.AnalyticsOptions;
 import com.couchbase.client.java.analytics.AnalyticsResult;
 import com.couchbase.client.java.env.ClusterEnvironment;
 import com.couchbase.client.java.json.JsonObject;
-import com.couchbase.client.java.kv.GetOptions;
 import com.couchbase.client.java.kv.GetResult;
-import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryResult;
+
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
+
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
-
-import java.util.concurrent.CompletableFuture;
-
-import static com.couchbase.client.java.analytics.AnalyticsOptions.analyticsOptions;
-import static com.couchbase.client.java.kv.GetOptions.getOptions;
-import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 
 public class ErrorHandling {
 
@@ -36,17 +35,11 @@ public class ErrorHandling {
     Bucket bucket = cluster.bucket("travel-sample");
     Collection collection = bucket.collection("travel-sample");
 
-
     // tag::readonly[]
-    QueryResult queryResult = cluster.query(
-      "SELECT * FROM bucket",
-      queryOptions().readonly(true)
-    );
+    QueryResult queryResult = cluster.query("SELECT * FROM bucket", queryOptions().readonly(true));
 
-    AnalyticsResult analyticsResult = cluster.analyticsQuery(
-      "SELECT * FROM dataset",
-      analyticsOptions().readonly(true)
-    );
+    AnalyticsResult analyticsResult = cluster.analyticsQuery("SELECT * FROM dataset",
+        analyticsOptions().readonly(true));
     // end::readonly[]
 
     {
@@ -95,10 +88,7 @@ public class ErrorHandling {
     {
       RetryStrategy myCustomStrategy = null;
       // tag::customglobal[]
-      ClusterEnvironment environment = ClusterEnvironment
-        .builder()
-        .retryStrategy(myCustomStrategy)
-        .build();
+      ClusterEnvironment environment = ClusterEnvironment.builder().retryStrategy(myCustomStrategy).build();
       // end::customglobal[]
       environment.shutdown();
     }
@@ -112,46 +102,39 @@ public class ErrorHandling {
 
     {
       // tag::reactivesub[]
-      collection.reactive()
-        .get("this-doc-does-not-exist")
-        .subscribe(new Subscriber<GetResult>() {
+      collection.reactive().get("this-doc-does-not-exist").subscribe(new Subscriber<GetResult>() {
 
-          @Override
-          public void onError(Throwable throwable) {
-            // This method will be called with a DocumentNotFoundException
-          }
+        @Override
+        public void onError(Throwable throwable) {
+          // This method will be called with a DocumentNotFoundException
+        }
 
-          @Override
-          public void onSubscribe(Subscription subscription) { }
+        @Override
+        public void onSubscribe(Subscription subscription) {
+        }
 
-          @Override
-          public void onNext(GetResult getResult) { }
+        @Override
+        public void onNext(GetResult getResult) {
+        }
 
-          @Override
-          public void onComplete() { }
-        });
+        @Override
+        public void onComplete() {
+        }
+      });
       // end::reactivesub[]
     }
 
     {
       // tag::reactivefallback[]
-      Mono<JsonObject> documentContent = collection.reactive()
-        .get("my-doc-id")
-        .map(GetResult::contentAsObject)
-        .onErrorResume(
-          DocumentNotFoundException.class,
-          e -> createDocumentReactive("my-doc-id")
-        );
+      Mono<JsonObject> documentContent = collection.reactive().get("my-doc-id").map(GetResult::contentAsObject)
+          .onErrorResume(DocumentNotFoundException.class, e -> createDocumentReactive("my-doc-id"));
       // end::reactivefallback[]
     }
 
     {
       // tag::reactiveretry[]
-      collection.reactive()
-        .get("my-doc-id")
-        .retryWhen(
-          Retry.max(5).filter(t -> t instanceof DocumentNotFoundException)
-        );
+      collection.reactive().get("my-doc-id")
+          .retryWhen(Retry.max(5).filter(t -> t instanceof DocumentNotFoundException));
       // end::reactiveretry[]
     }
   }

@@ -63,8 +63,8 @@ public class TransactionsExample {
     public static void main(String... args) {
         // tag::init[]
         // Initialize the Couchbase cluster
-        Cluster cluster = Cluster.connect("localhost", "transactor", "mypass");
-        Bucket bucket = cluster.bucket("transact");
+        Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
+        Bucket bucket = cluster.bucket("travel-sample");
         Collection collection = bucket.defaultCollection();
 
         // Create the single Transactions object

@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.Objects;
+
 import com.couchbase.client.core.error.DecodingFailureException;
-import com.couchbase.client.core.error.InvalidArgumentException;
 import com.couchbase.client.core.msg.kv.CodecFlags;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
 import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.codec.JacksonJsonSerializer;
 import com.couchbase.client.java.codec.JsonSerializer;
 import com.couchbase.client.java.codec.JsonTranscoder;
 import com.couchbase.client.java.codec.RawBinaryTranscoder;
@@ -30,28 +37,14 @@ import com.couchbase.client.java.codec.RawStringTranscoder;
 import com.couchbase.client.java.codec.Transcoder;
 import com.couchbase.client.java.codec.TypeRef;
 import com.couchbase.client.java.env.ClusterEnvironment;
-import com.couchbase.client.java.json.JsonValueModule;
 import com.couchbase.client.java.kv.GetOptions;
 import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.client.java.kv.UpsertOptions;
 import com.google.gson.Gson;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.msgpack.MessagePack;
-import org.msgpack.template.Templates;
-import org.msgpack.type.Value;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // TODO: remove TypeRef overload when JCBC-1588 done
 // tag::gson-serializer[]
@@ -151,8 +144,7 @@ class User {
             return false;
         }
         User user = (User) o;
-        return age == user.age &&
-            Objects.equals(name, user.name);
+        return age == user.age && Objects.equals(name, user.name);
     }
 
     @Override
@@ -182,13 +174,11 @@ public class Transcoding {
         Gson gson = new Gson();
         String json = gson.toJson(user);
 
-        collection.upsert("john-smith", json,
-            UpsertOptions.upsertOptions().transcoder(RawJsonTranscoder.INSTANCE));
+        collection.upsert("john-smith", json, UpsertOptions.upsertOptions().transcoder(RawJsonTranscoder.INSTANCE));
         // end::gson-encode[]
 
         // tag::gson-decode[]
-        GetResult result = collection.get("john-smith",
-            GetOptions.getOptions().transcoder(RawJsonTranscoder.INSTANCE));
+        GetResult result = collection.get("john-smith", GetOptions.getOptions().transcoder(RawJsonTranscoder.INSTANCE));
 
         String returnedJson = result.contentAs(String.class);
         User returnedUser = gson.fromJson(returnedJson, User.class);
@@ -206,13 +196,11 @@ public class Transcoding {
 
         User user = new User("John Smith", 27);
 
-        collection.upsert("john-smith", user,
-            UpsertOptions.upsertOptions().transcoder(transcoder));
+        collection.upsert("john-smith", user, UpsertOptions.upsertOptions().transcoder(transcoder));
         // end::gson-custom-encode[]
 
         // tag::gson-custom-decode[]
-        GetResult result = collection.get("john-smith",
-            GetOptions.getOptions().transcoder(transcoder));
+        GetResult result = collection.get("john-smith", GetOptions.getOptions().transcoder(transcoder));
 
         User returnedUser = result.contentAs(User.class);
 
@@ -225,14 +213,11 @@ public class Transcoding {
         // tag::gson-register-1[]
         GsonSerializer serializer = new GsonSerializer();
 
-        ClusterEnvironment env = ClusterEnvironment.builder()
-            .jsonSerializer(serializer)
-            .build();
+        ClusterEnvironment env = ClusterEnvironment.builder().jsonSerializer(serializer).build();
         // end::gson-register-1[]
 
         Cluster cluster = Cluster.connect("localhost",
-            ClusterOptions.clusterOptions("Administrator", "password")
-                .environment(env));
+                ClusterOptions.clusterOptions("Administrator", "password").environment(env));
 
         Collection coll = cluster.bucket("default").defaultCollection();
 
@@ -269,11 +254,9 @@ public class Transcoding {
 
         String input = "hello world!";
 
-        collection.upsert("msgpack-doc", input,
-            UpsertOptions.upsertOptions().transcoder(transcoder));
+        collection.upsert("msgpack-doc", input, UpsertOptions.upsertOptions().transcoder(transcoder));
 
-        GetResult result = collection.get("msgpack-doc",
-            GetOptions.getOptions().transcoder(transcoder));
+        GetResult result = collection.get("msgpack-doc", GetOptions.getOptions().transcoder(transcoder));
 
         String output = result.contentAs(String.class);
         // end::msgpack-encode[]
@@ -285,11 +268,9 @@ public class Transcoding {
     void string() {
         String docId = "doc";
         // tag::string[]
-        collection.upsert(docId, "hello world",
-            UpsertOptions.upsertOptions().transcoder(RawStringTranscoder.INSTANCE));
+        collection.upsert(docId, "hello world", UpsertOptions.upsertOptions().transcoder(RawStringTranscoder.INSTANCE));
 
-        GetResult result = collection.get(docId,
-            GetOptions.getOptions().transcoder(RawStringTranscoder.INSTANCE));
+        GetResult result = collection.get(docId, GetOptions.getOptions().transcoder(RawStringTranscoder.INSTANCE));
 
         String returned = result.contentAs(String.class);
         // end::string[]
@@ -303,16 +284,12 @@ public class Transcoding {
         String input = "hello world";
         byte[] bytes = input.getBytes(StandardCharsets.UTF_8);
 
-        collection.upsert(docId, bytes,
-            UpsertOptions.upsertOptions().transcoder(RawBinaryTranscoder.INSTANCE));
+        collection.upsert(docId, bytes, UpsertOptions.upsertOptions().transcoder(RawBinaryTranscoder.INSTANCE));
 
-        GetResult result = collection.get(docId,
-            GetOptions.getOptions().transcoder(RawBinaryTranscoder.INSTANCE));
+        GetResult result = collection.get(docId, GetOptions.getOptions().transcoder(RawBinaryTranscoder.INSTANCE));
 
         byte[] returned = result.contentAs(byte[].class);
         // end::binary[]
         assertTrue(Arrays.equals(returned, bytes));
     }
 }
-
-

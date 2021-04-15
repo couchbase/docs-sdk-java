@@ -14,22 +14,25 @@
  * limitations under the License.
  */
 
-import com.couchbase.client.core.error.CasMismatchException;
-import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.json.JsonObject;
-import com.couchbase.client.java.kv.GetResult;
-import com.couchbase.client.java.kv.ReplaceOptions;
+import static com.couchbase.client.java.kv.ReplaceOptions.replaceOptions;
 
 import java.time.Duration;
 
-import static com.couchbase.client.java.kv.ReplaceOptions.replaceOptions;
+import com.couchbase.client.core.error.CasMismatchException;
+import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.kv.GetResult;
 
 public class Cas {
 
   public static void main(String... args) {
 
+    Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
 
-    Collection collection = null;
+    Bucket bucket = cluster.bucket("travel-sample");
+    Collection collection = bucket.defaultCollection();
 
     {
       // tag::handlingerrors[]
@@ -37,15 +40,15 @@ public class Cas {
 
       for (int i = 0; i < maxRetries; i++) {
         // Get the current document contents
-        GetResult getResult = collection.get("user-id");
+        GetResult getResult = collection.get("airline_10");
 
-        // Increment a count on the user
+        // Increment id on the airline
         JsonObject content = getResult.contentAsObject();
-        content.put("visitCount", content.getLong("visitCount") + 1);
+        content.put("id", content.getLong("id") + 1);
 
         try {
           // Attempt to replace the document with cas
-          collection.replace("user-id", content, replaceOptions().cas(getResult.cas()));
+          collection.replace("airline_10", content, replaceOptions().cas(getResult.cas()));
           break;
         } catch (CasMismatchException ex) {
           // continue the loop on cas mismatch to try again
@@ -57,15 +60,16 @@ public class Cas {
 
     {
       // tag::locking[]
-      GetResult getAndLockResult = collection.getAndLock("key", Duration.ofSeconds(2));
+      GetResult getAndLockResult = collection.getAndLock("airline_1191", Duration.ofSeconds(2));
 
       long lockedCas = getAndLockResult.cas();
 
-      /* an example of simply unlocking the document:
-      collection.unlock("key", lockedCas);
+      /*
+       * an example of simply unlocking the document: collection.unlock("key",
+       * lockedCas);
        */
 
-      collection.replace("key", "new value", replaceOptions().cas(lockedCas));
+      collection.replace("airline_1191", "new value", replaceOptions().cas(lockedCas));
       // end::locking[]
     }
   }

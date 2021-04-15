@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
+// tag::imports[]
+// Imports required by this sample
+import static com.couchbase.client.java.query.QueryOptions.queryOptions;
+
+import java.util.logging.Logger;
+
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
-
-// tag::imports[]
-// Imports required by this sample
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.transactions.TransactionResult;
@@ -27,10 +30,6 @@ import com.couchbase.transactions.Transactions;
 import com.couchbase.transactions.config.TransactionConfigBuilder;
 import com.couchbase.transactions.error.TransactionCommitAmbiguous;
 import com.couchbase.transactions.error.TransactionFailed;
-
-import java.util.logging.Logger;
-
-import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 // end::imports[]
 
 class TransactionsDemo {
@@ -52,37 +51,30 @@ class TransactionsDemo {
             if (result.unstagingComplete()) {
                 // Operations with non-transactional actors will want
                 // unstagingComplete() to be true.
-                cluster.query(" ... N1QL ... ",
-                        queryOptions()
-                                .consistentWith(result.mutationState()));
+                cluster.query(" ... N1QL ... ", queryOptions().consistentWith(result.mutationState()));
 
                 String documentKey = "a document key involved in the transaction";
                 GetResult getResult = collection.get(documentKey);
-            }
-            else {
-                // This step is completely application-dependent.  It may
+            } else {
+                // This step is completely application-dependent. It may
                 // need to throw its own exception, if it is crucial that
                 // result.unstagingComplete() is true at this point.
                 // (Recall that the asynchronous cleanup process will
                 // complete the unstaging later on).
             }
-        }
-        catch (TransactionCommitAmbiguous err) {
+        } catch (TransactionCommitAmbiguous err) {
             // The transaction may or may not have reached commit point
-            System.err.println("Transaction returned TransactionCommitAmbiguous and" +
-                    " may have succeeded, logs:");
+            System.err.println("Transaction returned TransactionCommitAmbiguous and" + " may have succeeded, logs:");
 
             // Of course, the application will want to use its own logging rather
             // than System.err
             err.result().log().logs().forEach(log -> System.err.println(log.toString()));
-        }
-        catch (TransactionFailed err) {
+        } catch (TransactionFailed err) {
             // The transaction definitely did not reach commit point
             System.err.println("Transaction failed with TransactionFailed, logs:");
             err.result().log().logs().forEach(log -> System.err.println(log.toString()));
         }
         // end::demo_1_0_1[]
-
 
         cluster.disconnect();
     }
@@ -107,8 +99,7 @@ class TransactionsDemo {
 
         // tag::custom-metadata[]
         Transactions transactions = Transactions.create(cluster,
-                TransactionConfigBuilder.create()
-                        .metadataCollection(metadataCollection));
+                TransactionConfigBuilder.create().metadataCollection(metadataCollection));
         // end::custom-metadata[]
     }
 }
