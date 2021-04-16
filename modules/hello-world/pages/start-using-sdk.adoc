@@ -121,6 +121,9 @@ Couchbase Cloud Sample::
 +
 --
 If you are connecting to https://docs.couchbase.com/cloud/index.html[Couchbase Cloud], be sure to get the correct endpoint as well as user, password, and `couchbasecloudbucket`  -- and see the <<cloud-connections, Cloud section>>, below.
+During development, you may wish to use `.securityConfig(SecurityConfig.enableTls(true)` (commented out in the code sample below), 
+for production use you will want to work with Certificate Authentication -- 
+see the xref:cloud:get-started:configure-cluster-access.adoc#allow-ip-address[downloading the certificate] section of the cloud connecting docs.
 
 [source,java]
 ----
