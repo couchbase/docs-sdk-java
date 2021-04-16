@@ -16,7 +16,7 @@
 
 package com.couchbase.devguide;
 
-import com.couchbase.client.core.deps.io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+// import com.couchbase.client.core.deps.io.netty.handler.ssl.util.InsecureTrustManagerFactory; // use in testing if you use .trustManagerFactory(InsecureTrustManagerFactory.INSTANCE)) instead of Cert Auth
 import com.couchbase.client.core.env.IoConfig;
 import com.couchbase.client.core.env.SecurityConfig;
 import com.couchbase.client.java.Bucket;
@@ -43,7 +43,8 @@ public class CloudConnect {
 
         ClusterEnvironment env = ClusterEnvironment.builder()
                 .securityConfig(SecurityConfig.enableTls(true)
-                        .trustManagerFactory(InsecureTrustManagerFactory.INSTANCE))
+                        // .trustManagerFactory(InsecureTrustManagerFactory.INSTANCE))  // use in testing if you use .trustManagerFactory(InsecureTrustManagerFactory.INSTANCE)) instead of Cert Auth (below)
+                        .trustCertificate(Paths.get("/path/to/cluster.cert")));
                 .ioConfig(IoConfig.enableDnsSrv(true))
                 .build();
 
