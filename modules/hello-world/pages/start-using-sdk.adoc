@@ -1,11 +1,12 @@
 = Install and Start Using the Java SDK with Couchbase Server
+:description: The Couchbase Java SDK allows Java applications to access a Couchbase cluster.
 :navtitle: Start Using the SDK
 :page-partial:
 :page-aliases: ROOT:getting-started,ROOT:start-using,ROOT:hello-couchbase,ROOT:start-using-sdk,ROOT:java-intro,ROOT:tutorial
 
 [abstract]
 
-The Couchbase Java SDK allows Java applications to access a Couchbase cluster. It offers synchronous APIs as well as reactive and asynchronous equivalents to maximize flexibility and performance.
+{description} It offers synchronous APIs as well as reactive and asynchronous equivalents to maximize flexibility and performance.
 
 The Couchbase Java SDK 3._x_ is a complete rewrite of the 2.x API, providing a simpler surface area and adding support for future Couchbase Server features like Collections and Scopes (available in Couchbase Server 6.5 as a xref:concept-docs:collections.adoc[developer preview]).
 The (reactive) API also migrated from `RxJava` to `Reactor`, along with other improvements to performance, logging, debugging and timeout troubleshooting.

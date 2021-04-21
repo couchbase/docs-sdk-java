@@ -1,11 +1,12 @@
 = Field Level Encryption
+:description: A high-level overview of Field-Level Encryption concepts.
 :page-topic-type: concept
 :page-edition: Enterprise Edition
 :page-aliases: ROOT:encryption.adoc
 include::project-docs:partial$attributes.adoc[]
 
 [abstract]
-A high-level overview of Field-Level Encryption concepts.
+{description}
 
 For a practical guide, see xref:howtos:encrypting-using-sdk.adoc[].
 

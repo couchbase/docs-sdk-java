@@ -1,8 +1,9 @@
 = Data Structures Reference
+:description: You can use complex data structures such as dictionaries and lists in Couchbase.
 :page-aliases: 
 
 [abstract]
-You can use complex data structures such as dictionaries and lists in Couchbase.
+{description}
 
 Data structures in Couchbase are similar in concept to data structures in the Java Collections Framework:
 

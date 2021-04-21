@@ -1,4 +1,5 @@
 = Sub-Document Operations with the Java SDK
+:description: Sub-Document operations can be used to efficiently access and change parts of documents.
 :navtitle: Sub-Doc Operations
 :page-topic-type: howto
 include::project-docs:partial$attributes.adoc[]
@@ -8,7 +9,7 @@ include::project-docs:partial$attributes.adoc[]
 
 
 [abstract]
-Sub-Document operations can be used to efficiently access and change parts of documents.
+{description}
 
 Sub-Document operations may be quicker and more network-efficient than _full-document_ operations such as _upsert_, _replace_ and _get_ because they only transmit the accessed sections of the document over the network.
 

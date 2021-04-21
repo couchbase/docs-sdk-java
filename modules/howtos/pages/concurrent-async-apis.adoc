@@ -1,10 +1,11 @@
 = Choosing an API
+:description: The Java SDK offers efficient, non-blocking alternatives to the regular blocking API.
 :navtitle: Choosing an API
 :page-topic-type: howto
 :page-aliases: ROOT:async-programming,ROOT:batching-operations,multiple-apis,ROOT:documents-bulk,ROOT:observables
 
 [abstract]
-The Java SDK offers efficient, non-blocking alternatives to the regular blocking API. This page outlines the different options with their drawbacks and benefits.
+{description} This page outlines the different options with their drawbacks and benefits.
 
 == Reactive Programming with Reactor
 You want to consider an asynchronous, reactive API if the blocking API does not suit your needs anymore. There are plenty of reasons why this might be the case, like more effective resource utilization, non-blocking error handling or batching together various operations. We recommend using the reactive API over the `CompletableFuture` counterpart because it provides all the bells and whistles you need to build scalable asynchronous stacks.

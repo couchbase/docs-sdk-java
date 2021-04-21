@@ -1,10 +1,11 @@
 = Managing Connections using the Java SDK with Couchbase Server
+:description: This section describes how to connect the Java SDK to a Couchbase cluster.
 :navtitle: Managing Connections
 :page-topic-type: howto
 :page-aliases: ROOT:managing-connections,howtos:multi-network,ROOT:connecting,ROOT:connection-advanced
 
 [abstract]
-This section describes how to connect the Java SDK to a Couchbase cluster.
+{description}
 It contains best practices as well as information on TLS/SSL and other advanced connection options.
 
 == Connecting to a Cluster

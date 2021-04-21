@@ -1,9 +1,10 @@
 = Collecting Information & Logging
+:description: Configuring logging; working with the event bus; and log redaction for data security.
 :page-topic-type: howto
 :page-aliases: ROOT:logging
 
 [abstract]
-Configuring logging; working with the event bus; and log redaction for data security.
+{description}
 
 
 The Java SDK logs events and also provides an event bus that transmits information about the behavior of your database system, including system and metric events.
