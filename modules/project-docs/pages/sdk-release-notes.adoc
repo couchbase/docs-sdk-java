@@ -48,6 +48,8 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.4.4**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
+WARNING: Due to protocol level changes, Java SDK 3.1.4 and later are not compatible with pre-release versions of Couchbase Server 7.0.
+
 === Bug Fixes
 * https://issues.couchbase.com/browse/JCBC-1798[JCBC-1798]:
 Fixes ViewResult.metaData() throwing Exception when debug=true.
