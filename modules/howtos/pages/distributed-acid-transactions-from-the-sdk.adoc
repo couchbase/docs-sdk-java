@@ -1,6 +1,7 @@
 = Distributed Transactions from the Java SDK
 :description: A practical guide to using Couchbase’s distributed ACID transactions, via the Java API.
 :navtitle: ACID Transactions
+:page-partial:
 :page-topic-type: howto
 :page-aliases: acid-transactions
 
