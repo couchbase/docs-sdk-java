@@ -1,9 +1,12 @@
 = Couchbase Distributed ACID Transactions for Java SDK Release Notes
+:description: Couchbase Distributed ACID Transactions is distributed as a separate library for the Java SDK.
 :navtitle: Transactions Release Notes
 :page-topic-type: project-doc
 :page-aliases: transactions-release-notes
 
-Couchbase Distributed ACID Transactions is distributed as a separate library for the Java SDK.
+[abstract]
+{description}
+
 This page features the release notes for that library -- for release notes, download links, and installation methods for the latest 3.x Java SDK releases, see xref:sdk-release-notes.adoc[the current Release Notes page].
 
 

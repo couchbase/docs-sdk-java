@@ -1,9 +1,10 @@
 = Concepts Guides
+:description: A discursive look at the features exposed by the Couchbase Java SDK.
 :navtitle: Concepts
 :page-topic-type: landing-page
 
 [abstract]
-A discursive look at the features exposed by the Couchbase Java SDK.
+{description}
 
 include::6.5@sdk:shared:partial$concepts.adoc[tag=concepts]
 

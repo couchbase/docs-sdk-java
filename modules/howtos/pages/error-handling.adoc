@@ -1,12 +1,14 @@
 = Handling Errors
+:description: Errors are inevitable. That's why the SDK has very extensive error handling and retry capabilties
 :navtitle: Handling Errors
 :page-topic-type: howto
 :page-aliases: ROOT:handling-error-conditions,handling-error-conditions,errors,handling-errors
 :source-language: java
 :lang: java
 
-Errors are inevitable. That's why the SDK has very extensive error handling and retry capabilties which are focussed on one goal: 
-keeping your application available as best as possible even in the face of (transient) failures. 
+[abstract]
+{description} which are focussed on one goal:
+keeping your application available as best as possible even in the face of (transient) failures.
 
 Unfortunately, the SDK alone can't make all the decisions needed since it lacks the understanding of your application domain. 
 In most cases transparent retry is the best choice, but maybe sometimes you need to fail quickly and switch over to an alternate data source. 
