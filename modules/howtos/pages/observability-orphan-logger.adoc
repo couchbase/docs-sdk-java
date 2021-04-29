@@ -2,7 +2,9 @@
 :description: In addition to request tracing and metrics reporting, logging orphaned requests provides additional insight into why an operation might have timed out (or got cancelled for a different reason).
 :page-topic-type: howto
 
+[abstract]
 {description}
+
 While tracing and metrics can also be consumed through external interfaces, getting information about orphaned requests only works through the built-in mechanisms.
 
 The way it works is that every time a response is in the process of being completed, when the SDK detects that the original caller is not listening anymore (likely because of a timeout), it will send this "orphaned" response to a reporting utility which aggregates all responses and in regular intervals logs them in a specific format.

@@ -2,6 +2,7 @@
 :description: Collecting information about an individual request and its response is an essential feature of every observability stack.
 :page-topic-type: howto
 
+[abstract]
 {description}
 
 To give insight into a request/response flow, the SDK provides a `RequestTracer` interface and ships with both a default implementation as well as modules that can be plugged into feed the traces to external systems (including OpenTelemetry).

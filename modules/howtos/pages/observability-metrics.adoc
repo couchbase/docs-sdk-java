@@ -3,6 +3,7 @@
 :page-status: Developer Preview
 :page-topic-type: howto
 
+[abstract]
 {description}
 In addition, it also makes sense to capture information that aggregates request data (i.e. requests per second),
 but also data which is not tied to a specific request at all (i.e. resource utilization).
