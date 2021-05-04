@@ -15,7 +15,6 @@ For release notes, download links, and installation methods for 2.7 and earlier 
 Transactions is available as a separate library for the Java SDK.
 Please see the xref:distributed-transactions-java-release-notes.adoc[Transaction Release Notes page].
 
-
 == Installation
 
 // tag::jdk-version[]
@@ -31,11 +30,47 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.1.4</version>
+        <version>3.1.5</version>
     </dependency>
 </dependencies>
 ----
 
+== Version 3.1.5 (6 May 2021)
+http://packages.couchbase.com/clients/java/3.1.5/Couchbase-Java-Client-3.1.5.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.5/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.5/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.1.5**
+* com.couchbase.client:**core-io:2.1.5**
+* io.projectreactor:**reactor-core:3.4.5**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/JCBC-1804[JCBC-1804]:
+Ensure `contentAsObject/Array()` works with a custom JsonSerializer.
+* https://issues.couchbase.com/browse/JVMCBC-965[JVMCBC-965]:
+Better error logging during bucket failures, which helps with troubleshooting.
+* https://issues.couchbase.com/browse/JVMCBC-963[JVMCBC-963]:
+Add better retry handling for local and global bucket config fetch failures, making it more resilient.
+* https://issues.couchbase.com/browse/JVMCBC-967[JVMCBC-967]:
+Work around and fix a OverflowException with PersistTo/ReplicateTo, caused by Reactor.
+
+=== Improvements
+
+* https://issues.couchbase.com/browse/JVMCBC-958[JVMCBC-958]:
+Improve the performance of individual collection ID fetches, speeding up the time of bootstrap whan a lot of collections are opened.
+* https://issues.couchbase.com/browse/JCBC-1756[JCBC-1756]:
+Adds volatile support for preserving the expiry on certain mutation operations.
+* https://issues.couchbase.com/browse/JVMCBC-959[JVMCBC-959]:
+Allow `IoEnvironment` config to be overridden by system properties.
+* https://issues.couchbase.com/browse/JCBC-1801[JCBC-1801]:
+Allow to create a SearchIndex from a JSON definition.
+* https://issues.couchbase.com/browse/JVMCBC-962[JVMCBC-962]:
+Add (internal, volatile) request callback functionality.
+* https://issues.couchbase.com/browse/JCBC-1733[JCBC-1733]:
+Add support for collections to `SearchOptions`.
 
 == Version 3.1.4 (7 April 2021)
 http://packages.couchbase.com/clients/java/3.1.4/Couchbase-Java-Client-3.1.4.zip[Download] |
