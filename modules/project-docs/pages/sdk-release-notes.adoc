@@ -35,7 +35,11 @@ Java 11 has various enhancements like lambda local variable type inference, prof
 </dependencies>
 ----
 
+
 == Version 3.1.5 (6 May 2021)
+
+Version 3.1.5 is the sixth release of the 3.1 series, bringing stabilizations and enhancements over 3.1.4.
+
 http://packages.couchbase.com/clients/java/3.1.5/Couchbase-Java-Client-3.1.5.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.5/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.5/[Core API Reference]
@@ -48,6 +52,7 @@ The supported and tested dependencies for this release are:
 * org.reactivestreams:**reactive-streams:1.0.3**
 
 === Bug Fixes
+
 * https://issues.couchbase.com/browse/JCBC-1804[JCBC-1804]:
 Ensure `contentAsObject/Array()` works with a custom JsonSerializer.
 * https://issues.couchbase.com/browse/JVMCBC-965[JVMCBC-965]:
@@ -55,7 +60,7 @@ Better error logging during bucket failures, which helps with troubleshooting.
 * https://issues.couchbase.com/browse/JVMCBC-963[JVMCBC-963]:
 Add better retry handling for local and global bucket config fetch failures, making it more resilient.
 * https://issues.couchbase.com/browse/JVMCBC-967[JVMCBC-967]:
-Work around and fix a OverflowException with PersistTo/ReplicateTo, caused by Reactor.
+Work around and fix a `OverflowException` with `PersistTo`/`ReplicateTo`, caused by Reactor.
 
 === Improvements
 
@@ -66,13 +71,16 @@ Adds volatile support for preserving the expiry on certain mutation operations.
 * https://issues.couchbase.com/browse/JVMCBC-959[JVMCBC-959]:
 Allow `IoEnvironment` config to be overridden by system properties.
 * https://issues.couchbase.com/browse/JCBC-1801[JCBC-1801]:
-Allow to create a SearchIndex from a JSON definition.
+Allow to create a `SearchIndex` from a JSON definition.
 * https://issues.couchbase.com/browse/JVMCBC-962[JVMCBC-962]:
 Add (internal, volatile) request callback functionality.
 * https://issues.couchbase.com/browse/JCBC-1733[JCBC-1733]:
 Add support for collections to `SearchOptions`.
 
 == Version 3.1.4 (7 April 2021)
+
+Version 3.1.4 is the fifth release of the 3.1 series, bringing stabilizations and enhancements over 3.1.3.
+
 http://packages.couchbase.com/clients/java/3.1.4/Couchbase-Java-Client-3.1.4.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.4/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.4/[Core API Reference]
@@ -87,6 +95,7 @@ The supported and tested dependencies for this release are:
 WARNING: Due to protocol level changes, Java SDK 3.1.4 and later are not compatible with _pre-release_ versions of Couchbase Server 7.0.
 
 === Bug Fixes
+
 * https://issues.couchbase.com/browse/JCBC-1798[JCBC-1798]:
 Fixes ViewResult.metaData() throwing Exception when debug=true.
 * https://issues.couchbase.com/browse/JVMCBC-940[JVMCBC-940]:
@@ -100,6 +109,7 @@ waitUntilReady is now more resilient to just-created buckets.
 More resilient handling of rebalances.
 
 === Improvements
+
 * https://issues.couchbase.com/browse/JCBC-1786[JCBC-1786]:
 Transcoders now allow contentAs(Object.class).
 Java Map and List collections are used to represent JSON objects and arrays.
@@ -137,6 +147,7 @@ The supported and tested dependencies for this release are:
 * org.reactivestreams:**reactive-streams:1.0.3**
 
 === Improvements
+
 * https://issues.couchbase.com/browse/JCBC-1776[JCBC-1776],
 https://issues.couchbase.com/browse/JVMCBC-924[JVMCBC-924],
 https://issues.couchbase.com/browse/JVMCBC-925[JVMCBC-925]:
@@ -151,6 +162,7 @@ Performance: Replace new byte[] full copies with ByteBufUtil.getBytes.
 Performance: Improve performance of metrics hot code path.
 
 === Bugs
+
 * https://issues.couchbase.com/browse/JVMCBC-930[JVMCBC-930]:
 Threshold and Orphan Reporting now report the correct time units.
 * https://issues.couchbase.com/browse/JVMCBC-932[JVMCBC-932]:
@@ -159,6 +171,7 @@ Fixed a memory leak when OrphanReporter is disabled.
 ThresholdRequestTracer and OrphanReporter now use bounded queues.
 
 === Internal Improvements
+
 * https://issues.couchbase.com/browse/JVMCBC-912[JVMCBC-912]:
 Refactor property loading.
 * https://issues.couchbase.com/browse/JVMCBC-918[JVMCBC-918]:
@@ -187,14 +200,17 @@ The supported and tested dependencies for this release are:
 * org.reactivestreams:**reactive-streams:1.0.3**
 
 === API Affecting
+
 * https://issues.couchbase.com/browse/JCBC-1763[JCBC-1763]:
 CollectionManager::getScope is now deprecated, in favour of using getAllScopes.
 
 === Enhancements
+
 * https://issues.couchbase.com/browse/JVMCBC-915[JVMCBC-915]:
 As a performance optimization, loading a collection now only fetches the information required for that collection, rather than the full collection manifest.
 * https://issues.couchbase.com/browse/JVMCBC-916[JVMCBC-916]:
 Any send HTTP request will send a hostname if hostnames are used, rather than IP, leading to consistent hostname use across the system.
+
 
 == Version 3.1.1 (12 January 2021)
 
@@ -212,12 +228,14 @@ The supported and tested dependencies for this release are:
 * org.reactivestreams:**reactive-streams:1.0.3**
 
 === API Affecting
+
 * https://issues.couchbase.com/browse/JVMCBC-906[JVMCBC-906]:
 Removed Tracer as a _mandatory_ argument from `OpenTelemetrySpan`.
 (The OpenTelemetry module is marked `@Stability.Volatile`, indicating that there may be API-breaking changes.
 The volatility arises from the underlying `OpenTelemetry` library itself being at a beta/volatile level.)
 
 === Bugs
+
 * https://issues.couchbase.com/browse/JVMCBC-909[JVMCBC-909]:
 Retry opening the bucket until timeout when it is not found, to allow for it not yet being created.
 * https://issues.couchbase.com/browse/JVMCBC-910[JVMCBC-910]:
@@ -232,6 +250,7 @@ Prepared non-adhoc queries on scopes were failing, as query_context was not bein
 This has now been fixed, and scope-level queries are working as expected. 
 
 === Enhancements
+
 * https://issues.couchbase.com/browse/JVMCBC-907[JVMCBC-907]:
 The Orphan Reporter can now be disabled.
 * https://issues.couchbase.com/browse/JVMCBC-908[JVMCBC-908]:
