@@ -39,6 +39,7 @@ import com.couchbase.client.java.kv.GetResult;
 import io.reactivex.Single;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 public class AsyncOperations {
 
@@ -112,7 +113,8 @@ public class AsyncOperations {
       List<String> docsToFetch = Arrays.asList("airline_1316", "airline_13391", "airline_1355");
 
       List<GetResult> results = Flux.fromIterable(docsToFetch)
-          .flatMap(key -> reactiveCollection.get(key).retryBackoff(10, Duration.ofMillis(10))).collectList().block();
+          .flatMap(key -> reactiveCollection.get(key).retryWhen(Retry.backoff(10, Duration.ofMillis(10)))).collectList()
+          .block();
       // end::retry-bulk[]
     }
 
