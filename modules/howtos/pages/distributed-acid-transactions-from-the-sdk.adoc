@@ -431,8 +431,11 @@ These rules are demonstrated here:
 include::example$TransactionsExample.java[tag=concurrentOps,indent=0]
 ----
 
+
 # tag::custom-metadata[]
 == Custom Metadata Collections
+
+
 As described above, transactions create and use metadata documents, that are created in the bucket of the first mutated document in the transaction.
 
 With Couchbase Server 7.0 beta comes support for scopes and collections, providing a more granular way of organising documents.
