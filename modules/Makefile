@@ -22,7 +22,7 @@ cb-build:
 # Run couchbase server+sdk container. Note that this runs with the `-rm` option, 
 # which will ensure the container is deleted when stopped.
 cb-start:
-	@docker run -t --rm -v ${PWD}:/modules -d --name cb-test -p 8091-8096:8091-8096 ${LOCAL_IMAGE_NAME}}
+	@docker run -t --rm -v ${PWD}:/modules -d --name cb-test -p 8091-8096:8091-8096 ${LOCAL_IMAGE_NAME}
 	@docker exec -t cb-test bin/bash -c "/init-couchbase/init.sh"
 	@docker exec -t cb-test bin/bash -c "/init-couchbase/init-buckets.sh"
 
