@@ -20,6 +20,7 @@ It is designed to apply the builder arguments in a fluent fashion and then creat
 include::example$ClientSettingsExample.java[tag=client_settings_1,indent=0]
 ----
 
+
 == Config Builders
 
 Environment settings are grouped into categories, with one builder class per category.
@@ -450,6 +451,7 @@ System Property: `com.couchbase.env.timeout.managementTimeout`
 The management timeout is used on all cluster management APIs (BucketManager, UserManager, CollectionManager, QueryIndexManager, etc.) if not overridden by a custom timeout.
 The default is quite high because some operations (such as flushing a bucket, for example) might take a long time.
 
+
 == Compression Options
 
 The client can optionally compress documents before sending them to Couchbase Server.
@@ -468,7 +470,7 @@ Builder Method: `CompressionConfig.enabled`
 +
 Default: `true`
 +
-System Property: `com.couchbase.env.CompressionExample.enabled(boolean)`
+System Property: `com.couchbase.env.Compression.enabled(boolean)`
 +
 If enabled, the client will compress documents before they are sent to Couchbase Server.
 If this is set to `false`, the other CompressionExample settings have no effect.
