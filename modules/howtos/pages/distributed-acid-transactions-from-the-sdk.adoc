@@ -432,7 +432,7 @@ include::example$TransactionsExample.java[tag=concurrentOps,indent=0]
 ----
 
 
-# tag::custom-metadata[]
+// tag::custom-metadata[]
 == Custom Metadata Collections
 
 
@@ -463,7 +463,7 @@ In which case a metadata collection can be created, with appropriate RBAC permis
 NOTE: Support for custom metadata collections in 1.1.3 is at beta level and is marked as @Stability.Volatile, which means the API may need to change as we gather feedback during the Couchbase Server 7.0 beta period.
 The feature should not be used in any production deployment while it is at beta level.
 Please take this opportunity to provide feedback on this feature, via either support or our forums.
-# end::custom-metadata[]
+// end::custom-metadata[]
 
 == Deferred Commits
 
