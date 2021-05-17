@@ -33,7 +33,7 @@ import com.couchbase.client.java.env.ClusterEnvironment;
  * https://developer.couchbase.com/documentation/server/current/security/security-x509certsintro.html
  */
 public class ConnectingCertAuth {
-    static String connectstring = "127.0.0.1";
+    static String connectstring = "localhost";
     static String username = "Administrator";
     static String password = "password";
 
@@ -54,11 +54,11 @@ public class ConnectingCertAuth {
                 ClusterOptions.clusterOptions(username, password).environment(env));
         // IMPORTANT: do NOT call cluster.authenticate() since this is part of the cert
         // auth
-        Bucket bucket = cluster.bucket("default");
+        Bucket bucket = cluster.bucket("travel-sample");
 
         // perform operations here...
         try {
-            bucket.defaultCollection().get("mydoc");
+            bucket.defaultCollection().get("airport_1254");
         } catch (DocumentNotFoundException dnf) {
             System.out.println(dnf);
         }

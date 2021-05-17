@@ -31,7 +31,7 @@ public class QueryPrepared extends ConnectionBase {
         // the placeholder values can be provided as a JSON array (if using $1 syntax)
         // or map-like JSON object (if using $name syntax)
         JsonObject placeholderValues = JsonObject.create().put("city", city);
-        return cluster.query("SELECT airportname FROM `travel-sample` WHERE city=$1 AND type=\"airport\"",
+        return cluster.query("SELECT airportname FROM `travel-sample` WHERE city=$city AND type=\"airport\"",
                 QueryOptions.queryOptions().parameters(placeholderValues)).rowsAsObject();
     }
 

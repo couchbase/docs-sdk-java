@@ -35,7 +35,7 @@ public class QueryCriteria extends ConnectionBase {
 
         bucket.defaultCollection().upsert("1", airport);
 
-        String statement = "SELECT airportname, city, country FROM `default` WHERE type=\"airport\" AND city=\"Reno\"";
+        String statement = "SELECT airportname, city, country FROM `travel-sample` WHERE type=\"airport\" AND city=\"Reno\"";
 
         LOGGER.info("Results from a simple statement:");
         LOGGER.info(statement);

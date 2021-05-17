@@ -40,7 +40,7 @@ public class ConnectionBase {
     public static final String collectionName = "_default";
     public static final String userName = "Administrator";
     public static final String userPass = "password";
-    public static final String seedNode = "127.0.0.1";
+    public static final String seedNode = "localhost";
 
     public ConnectionBase() {
         // connect deferred to the cluster by hitting one of the given nodes

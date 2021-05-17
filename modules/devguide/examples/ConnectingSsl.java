@@ -33,8 +33,8 @@ public class ConnectingSsl {
     protected final ClusterEnvironment env;
 
     // === EDIT THESE TO ADAPT TO YOUR COUCHBASE INSTALLATION ===
-    public static final String bucketName = "default";
-    static String connectstring = "127.0.0.1";
+    public static final String bucketName = "travel-sample";
+    static String connectstring = "localhost";
     static String username = "Administrator";
     static String password = "password";
 

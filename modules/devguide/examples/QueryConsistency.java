@@ -46,7 +46,7 @@ public class QueryConsistency extends ConnectionBase {
 
         LOGGER.info("Expecting random: " + randomNumber);
         QueryResult result = cluster.query(
-                "select name, email, random, META(default).id " + " from default where $1 in name",
+                "select name, email, random, META(default).id " + " from `travel-sample` where $1 in name",
                 QueryOptions.queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS)
                         .parameters(JsonArray.from("Brass")));
         if (!result.metaData().status().equals(QueryStatus.SUCCESS)) {
