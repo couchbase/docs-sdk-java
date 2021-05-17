@@ -1,19 +1,17 @@
 #!/bin/bash
 
-# expand variables and print commands
-set -o xtrace
-
 # exit immediately if a command fails or if there are unset vars
 set -euo pipefail
 
 CB_USER="${CB_USER:-Administrator}"
 CB_PSWD="${CB_PSWD:-password}"
+CB_HOST=localhost
 
 CB_BUCKET_RAMSIZE="${CB_BUCKET_RAMSIZE:-128}"
 
 echo "couchbase-cli bucket-create travel-sample..."
 /opt/couchbase/bin/couchbase-cli bucket-create \
-    -c localhost -u ${CB_USER} -p ${CB_PSWD} \
+    -c ${CB_HOST} -u ${CB_USER} -p ${CB_PSWD} \
     --bucket travel-sample \
     --bucket-type couchbase \
     --bucket-ramsize ${CB_BUCKET_RAMSIZE} \
@@ -28,7 +26,7 @@ sleep 5
 
 echo "cbimport travel-sample..."
 /opt/couchbase/bin/cbimport json --format sample --verbose \
-    -c localhost -u ${CB_USER} -p ${CB_PSWD} \
+    -c ${CB_HOST} -u ${CB_USER} -p ${CB_PSWD} \
     -b travel-sample \
     -d file:///opt/couchbase/samples/travel-sample.zip
 
@@ -37,121 +35,45 @@ curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '
     "statement": "CREATE DATASET airports ON `travel-sample` WHERE `type`=\"airport\";",
     "pretty":true,
     "client_context_id":"test"
-}' http://localhost:8095/analytics/service
+}' http://${CB_HOST}:8095/analytics/service
 
 echo "create scoped airport dataset"
 curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
     "statement": "ALTER COLLECTION `travel-sample`.`inventory`.`airport` ENABLE ANALYTICS;",
     "pretty":true,
     "client_context_id":"test"
-}' http://localhost:8095/analytics/service
+}' http://${CB_HOST}:8095/analytics/service
 
 curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
     "statement": "CONNECT LINK Local;",
     "pretty":true,
     "client_context_id":"test"
-}' http://localhost:8095/analytics/service
+}' http://${CB_HOST}:8095/analytics/service
 
 echo "create huge-dataset dataset"
 curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
         "statement": "CREATE DATASET `huge-dataset` ON `travel-sample`;",
         "pretty":true,
         "client_context_id":"test"
-}' http://localhost:8095/analytics/service
+}' http://${CB_HOST}:8095/analytics/service
 
 echo "sleep 10 to allow stabilization..."
 sleep 10
 
+echo
 echo "create travel-sample-index"
-curl --fail -v -u ${CB_USER}:${CB_PSWD} -X PUT \
-    http://localhost:8094/api/index/travel-sample-index \
+curl --fail -s -u ${CB_USER}:${CB_PSWD} -X PUT \
+    http://${CB_HOST}:8094/api/index/travel-sample-index \
     -H 'cache-control: no-cache' \
     -H 'content-type: application/json' \
-    -d '{
-        "name": "travel-sample-index",
-        "type": "fulltext-index",
-        "params": {
-            "doc_config": {
-                "docid_prefix_delim": "",
-                "docid_regexp": "",
-                "mode": "type_field",
-                "type_field": "type"
-            },
-            "mapping": {
-                "default_analyzer": "standard",
-                "default_datetime_parser": "dateTimeOptional",
-                "default_field": "_all",
-                "default_mapping": {
-                    "dynamic": false,
-                    "enabled": true,
-                    "properties": {
-                        "country": {
-                            "enabled": true,
-                            "dynamic": false,
-                            "fields": [
-                                {
-                                    "docvalues": true,
-                                    "include_in_all": true,
-                                    "include_term_vectors": true,
-                                    "index": true,
-                                    "name": "country",
-                                    "store": true,
-                                    "type": "text"
-                                }
-                            ]
-                        },
-                        "description": {
-                            "enabled": true,
-                            "dynamic": false,
-                            "fields": [
-                                {
-                                    "docvalues": true,
-                                    "include_in_all": true,
-                                    "include_term_vectors": true,
-                                    "index": true,
-                                    "name": "description",
-                                    "store": true,
-                                    "type": "text"
-                                }
-                            ]
-                        },
-                        "type": {
-                            "enabled": true,
-                            "dynamic": false,
-                            "fields": [
-                                {
-                                    "docvalues": true,
-                                    "include_in_all": true,
-                                    "include_term_vectors": true,
-                                    "index": true,
-                                    "name": "type",
-                                    "store": true,
-                                    "type": "text"
-                                }
-                            ]
-                        }
-                    }
-                },
-                "default_type": "_default",
-                "docvalues_dynamic": true,
-                "index_dynamic": true,
-                "store_dynamic": false,
-                "type_field": "_type"
-            },
-            "store": {
-                "indexType": "scorch",
-                "segmentVersion": 15
-            }
-        },
-        "sourceType": "gocbcore",
-        "sourceName": "travel-sample",
-        "sourceParams": {},
-        "planParams": {
-            "maxPartitionsPerPIndex": 1024,
-            "indexPartitions": 1,
-            "numReplicas": 0
-        }
-}'
+    -d @/init-couchbase/travel-sample-index.json
 
-echo "sleep 20 to allow search index to load..."
-sleep 20
+echo
+echo "Waiting for travel-sample-index to be ready..."
+until curl --fail -s -u ${CB_USER}:${CB_PSWD} http://${CB_HOST}:8094/api/index/travel-sample-index/count |
+    jq -e '.count' | grep 31591 >/dev/null; do # there are 31591 docs to be processed in this index...
+    echo "Waiting for travel-sample-index to be ready. Trying again in 10 seconds."
+    sleep 10
+done
+
+echo "Done."

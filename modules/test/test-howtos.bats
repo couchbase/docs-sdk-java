@@ -52,15 +52,6 @@ load 'test/test_helper.bash'
 }
 
 @test "[howtos] - KvOperations.java" {
-    # The example with tag `named-collection-upsert` fails when running against Couchbase Server 7.0.0-beta(4602) docker
-    # image with the following error:
-    #
-    # com.couchbase.client.core.error.AmbiguousTimeoutException: UpsertRequest, Reason: TIMEOUT
-
-    # Seems to be fixed when testing against Couchbase Server build `4933` locally(using vagrant), 
-    # but we have no way of running against internal builds at this point in time. 
-    skip "TODO: Example requires latest build of Couchbase Server 7.0"
-
     runExample KvOperations 
     assert_success
 }
