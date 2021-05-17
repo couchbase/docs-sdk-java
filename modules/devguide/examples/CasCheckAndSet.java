@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-package com.couchbase.devguide;
+import java.util.concurrent.CountDownLatch;
 
 import com.couchbase.client.java.json.JsonArray;
-import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.client.java.kv.ReplaceOptions;
 
-import java.util.concurrent.CountDownLatch;
-
-
 /**
- * Example of Cas (Check and Set) handling in Java for the Couchbase Developer Guide.
- * TODO: not tested
+ * Example of Cas (Check and Set) handling in Java for the Couchbase Developer
+ * Guide. TODO: not tested
  */
-public class Cas extends ConnectionBase {
+public class CasCheckAndSet extends ConnectionBase {
 
     private static final int PARALLEL = 10;
     private static final String KEY = "javaDevguideExampleCas";
@@ -48,9 +44,9 @@ public class Cas extends ConnectionBase {
         }
 
         // Reset the list again
-        bucket.defaultCollection().upsert(KEY,initialDoc);
+        bucket.defaultCollection().upsert(KEY, initialDoc);
 
-        //The same as above, but using CAS
+        // The same as above, but using CAS
         LOGGER.info("Will attempt concurrent modifications using CAS");
         parallel(true);
 
@@ -62,9 +58,9 @@ public class Cas extends ConnectionBase {
     }
 
     public void iterationWithoutCAS(int idx, CountDownLatch latch) {
-        //this code plainly ignores the CAS by creating a new document (CAS O)
+        // this code plainly ignores the CAS by creating a new document (CAS O)
         JsonArray l = bucket.defaultCollection().get(KEY).contentAsArray();
-        l.add("value_"+idx);
+        l.add("value_" + idx);
         bucket.defaultCollection().replace(KEY, l);
         latch.countDown();
     }
@@ -72,22 +68,23 @@ public class Cas extends ConnectionBase {
     public void iterationWithCAS(int idx, CountDownLatch latch) {
         String item = "item_" + idx;
 
-        while(true) {
-            //GetResult current = bucket.defaultCollection().get(KEY);
-            //JsonArray l = bucket.defaultCollection().get(KEY).contentAsArray();
-            //l.add( "value_"+idx);
+        while (true) {
+            // GetResult current = bucket.defaultCollection().get(KEY);
+            // JsonArray l = bucket.defaultCollection().get(KEY).contentAsArray();
+            // l.add( "value_"+idx);
 
-            //we mutated the content of the document, and the SDK injected the CAS value in there as well
+            // we mutated the content of the document, and the SDK injected the CAS value in
+            // there as well
             // so we can use it directly
             try {
                 GetResult current = bucket.defaultCollection().get(KEY);
                 JsonArray l = current.contentAsArray();
-                l.add( "value_"+idx);
-                bucket.defaultCollection().replace(KEY,l, ReplaceOptions.replaceOptions().cas(current.cas()));
-                break; //success! stop the loop
+                l.add("value_" + idx);
+                bucket.defaultCollection().replace(KEY, l, ReplaceOptions.replaceOptions().cas(current.cas()));
+                break; // success! stop the loop
             } catch (RuntimeException e) {
-                //in case a parallel execution already updated the document, continue trying
-                LOGGER.info(e+" Cas mismatch for item " + item);
+                // in case a parallel execution already updated the document, continue trying
+                LOGGER.info(e + " Cas mismatch for item " + item);
             }
         }
         latch.countDown();
@@ -116,6 +113,6 @@ public class Cas extends ConnectionBase {
     }
 
     public static void main(String[] args) {
-        new Cas().execute();
+        new CasCheckAndSet().execute();
     }
 }

@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-package com.couchbase.devguide;
-
 import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.java.kv.CounterResult;
 import com.couchbase.client.java.kv.DecrementOptions;
@@ -33,18 +31,20 @@ public class Counter extends ConnectionBase {
         try {
             bucket.defaultCollection().remove(key);
         } catch (DocumentNotFoundException e) {
-            //do nothing, the document is already not here
+            // do nothing, the document is already not here
         }
 
         try {
-            bucket.defaultCollection().binary().increment(key, IncrementOptions.incrementOptions().delta(20).initial(100));
+            bucket.defaultCollection().binary().increment(key,
+                    IncrementOptions.incrementOptions().delta(20).initial(100));
         } catch (DocumentNotFoundException e) {
-            LOGGER.info("The counter method failed because the counter doesn't exist yet and no initial value was provided");
+            LOGGER.info(
+                    "The counter method failed because the counter doesn't exist yet and no initial value was provided");
         }
 
-        CounterResult rv = bucket.defaultCollection().binary().increment(key, IncrementOptions.incrementOptions().initial(20));
+        CounterResult rv = bucket.defaultCollection().binary().increment(key,
+                IncrementOptions.incrementOptions().initial(20));
         LOGGER.info("increment Delta=20, Initial=100. Current value is: " + rv.content());
-
 
         rv = bucket.defaultCollection().binary().increment(key, IncrementOptions.incrementOptions().delta(1));
         LOGGER.info("increment Delta=1. Current value is: " + rv.content());

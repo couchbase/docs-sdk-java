@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.couchbase.devguide;
-
 import com.couchbase.client.java.ReactiveCollection;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.MutationResult;
+
 import reactor.core.publisher.Flux;
 
 /**
@@ -35,12 +34,12 @@ public class BulkInsert extends ConnectionBase {
 
         // Describe what we want to do asynchronously using RxJava Observables:
 
-      ReactiveCollection reactiveCollection = collection.reactive();
-      Flux<MutationResult> resultFlux = Flux.range(0, 10)
-          .map(index ->  {return key + "_" + index; }  )
-          .flatMap( k -> reactiveCollection.upsert(k, content));
+        ReactiveCollection reactiveCollection = collection.reactive();
+        Flux<MutationResult> resultFlux = Flux.range(0, 10).map(index -> {
+            return key + "_" + index;
+        }).flatMap(k -> reactiveCollection.upsert(k, content));
 
-      resultFlux.subscribe(System.out::println);
+        resultFlux.subscribe(System.out::println);
 
     }
 

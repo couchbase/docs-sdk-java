@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package com.couchbase.devguide;
+import java.time.Duration;
 
 import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.client.java.kv.UpsertOptions;
-
-import java.time.Duration;
 
 /**
  * Example of Expiry/TTL in Java for the Couchbase Developer Guide.
@@ -31,7 +29,7 @@ public class Expiration extends ConnectionBase {
     @Override
     protected void doWork() {
         String key = "javaDevguideExampleExpiration";
-        //create content
+        // create content
         JsonObject content = JsonObject.create().put("some", "value");
 
         LOGGER.info("Storing with an expiration of 2 seconds");
@@ -43,14 +41,13 @@ public class Expiration extends ConnectionBase {
         LOGGER.info("Sleeping for 4 seconds...");
         sleepSeconds(4);
         LOGGER.info("Getting key again (should fail)");
-        
-        //get returns null if the key doesn't exist
+
+        // get returns null if the key doesn't exist
         try {
-            if (bucket.defaultCollection()
-                .get(key) == null) {
+            if (bucket.defaultCollection().get(key) == null) {
                 LOGGER.info("Get failed because item has expired");
             }
-        } catch (DocumentNotFoundException dnf){
+        } catch (DocumentNotFoundException dnf) {
             LOGGER.info("Get failed because item has expired");
         }
 
@@ -65,11 +62,10 @@ public class Expiration extends ConnectionBase {
         sleepSeconds(4);
         LOGGER.info("Getting key again (should fail)");
         try {
-            if (bucket.defaultCollection()
-                .get(key) == null) {
+            if (bucket.defaultCollection().get(key) == null) {
                 LOGGER.info("Get failed because item has expired");
             }
-        } catch (DocumentNotFoundException dnf){
+        } catch (DocumentNotFoundException dnf) {
             LOGGER.info("Get failed because item has expired");
         }
 
@@ -82,11 +78,10 @@ public class Expiration extends ConnectionBase {
         sleepSeconds(4);
         LOGGER.info("Will try to get item again (should fail)");
         try {
-            if (bucket.defaultCollection()
-                .get(key) == null) {
+            if (bucket.defaultCollection().get(key) == null) {
                 LOGGER.info("Get failed because item has expired");
             }
-        } catch (DocumentNotFoundException dnf){
+        } catch (DocumentNotFoundException dnf) {
             LOGGER.info("Get failed because item has expired");
         }
     }
