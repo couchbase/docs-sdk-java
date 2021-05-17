@@ -31,7 +31,7 @@ tests:
 	@cd test && npm install
 	@docker exec -t cb-test bin/bash -c "cd modules && bats -T ./test"
 
-# Run a single test.
+# Run a single test
 # i.e make TEST_NAME="Analytics.java" single-test
 single-test:
 	@cd test && npm install
