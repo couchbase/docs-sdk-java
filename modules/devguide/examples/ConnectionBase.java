@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package com.couchbase.devguide;
+import java.time.Duration;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
-import org.apache.log4j.Logger;
 
-import java.time.Duration;
+import org.apache.log4j.Logger;
 
 public class ConnectionBase {
 
@@ -35,10 +34,10 @@ public class ConnectionBase {
     protected final Scope namedScope;
     protected final Collection namedCollection;
 
-    //=== EDIT THESE TO ADAPT TO YOUR COUCHBASE INSTALLATION ===
-    public static final String bucketName = "default";
-    public static final String scopeName = "scope-name";
-    public static final String collectionName = "collection-name";
+    // === EDIT THESE TO ADAPT TO YOUR COUCHBASE INSTALLATION ===
+    public static final String bucketName = "travel-sample";
+    public static final String scopeName = "_default";
+    public static final String collectionName = "_default";
     public static final String userName = "Administrator";
     public static final String userPass = "password";
     public static final String seedNode = "127.0.0.1";
@@ -57,22 +56,22 @@ public class ConnectionBase {
     }
 
     private void disconnect() {
-        //release shared resources and close all open buckets
+        // release shared resources and close all open buckets
         cluster.disconnect();
     }
 
     public void execute() {
-        //connection has been done in the constructor
+        // connection has been done in the constructor
         doWork();
         disconnect();
     }
 
     /**
-     * Override this method to showcase specific examples.
-     * Make them executable by adding a main method calling new ExampleClass().execute();
+     * Override this method to showcase specific examples. Make them executable by
+     * adding a main method calling new ExampleClass().execute();
      */
     protected void doWork() {
-        //this one just showcases connection methods, see constructor and shutdown()
+        // this one just showcases connection methods, see constructor and shutdown()
         LOGGER.info("Connected to the cluster, opened bucket " + bucketName);
     }
 
