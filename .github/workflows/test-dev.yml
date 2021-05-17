@@ -33,7 +33,7 @@ jobs:
           password: ${{ secrets.DOCKER_PSWD }}
 
       - name: Build Couchbase Docker image
-        run: make cb-build
+        run: CB_EDITION=${{ env.REGISTRY }}:${{ env.CB_EDITION }} CB_BUILD=${{ env.CB_BUILD }} make cb-build
         working-directory: ${{ env.working-directory }}
 
       - name: Run Couchbase Server+SDK container
