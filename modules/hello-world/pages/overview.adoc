@@ -1,8 +1,8 @@
 = Couchbase Java SDK 3.1
 :page-type: landing-page
-:page-layout: landing-page-top-level-sdk
 :page-role: tiles
 :!sectids:
+// :page-layout: landing-page-top-level-sdk
 // :page-aliases: ROOT:dotjavanet-sdk.sdoc
 
 
