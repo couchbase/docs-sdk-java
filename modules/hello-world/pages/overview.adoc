@@ -5,11 +5,6 @@
 // :page-layout: landing-page-top-level-sdk
 // :page-aliases: ROOT:dotjavanet-sdk.sdoc
 
-////
-++++
-<div class="card-row two-column-row">
-++++
-////
 
 [.column]
 ====== {empty}
@@ -27,11 +22,6 @@ MutationResult result = collection.mutateIn(
     mutateInOptions().durability(DurabilityLevel.MAJORITY)
 );
 ----
-////
-++++
-</div>
-++++
-////
 
 
 [.column]
