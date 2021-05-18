@@ -1,9 +1,14 @@
 = Couchbase Java SDK 3.1
 :page-type: landing-page
+:page-layout: landing-page-top-level-sdk
 :page-role: tiles
 :!sectids:
-// :page-layout: landing-page-top-level-sdk
 // :page-aliases: ROOT:dotjavanet-sdk.sdoc
+
+
+++++
+<div class="card-row two-column-row">
+++++
 
 
 [.column]
@@ -23,6 +28,11 @@ MutationResult result = collection.mutateIn(
 );
 ----
 
+++++
+</div>
+++++
+
+
 
 [.column]
 ====== {empty}
@@ -30,7 +40,7 @@ MutationResult result = collection.mutateIn(
 == Couchbase Java SDK 3.1
 
 ++++
-<div class="card-row two-column-row">
+<div class="card-row three-column-row">
 ++++
 
 
@@ -50,7 +60,7 @@ MutationResult result = collection.mutateIn(
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.1.4</version>
+        <version>3.1.5</version>
     </dependency>
 </dependencies>
 ----
