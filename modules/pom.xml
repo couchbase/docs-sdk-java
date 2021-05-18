@@ -142,7 +142,7 @@
     <build>
         <resources>
             <resource>
-                <directory>modules/resources</directory>
+                <directory>./resources</directory>
             </resource>
         </resources>
         <plugins>
