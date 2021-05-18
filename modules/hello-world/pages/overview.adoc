@@ -5,11 +5,11 @@
 // :page-layout: landing-page-top-level-sdk
 // :page-aliases: ROOT:dotjavanet-sdk.sdoc
 
-
+////
 ++++
 <div class="card-row two-column-row">
 ++++
-
+////
 
 [.column]
 ====== {empty}
@@ -27,11 +27,11 @@ MutationResult result = collection.mutateIn(
     mutateInOptions().durability(DurabilityLevel.MAJORITY)
 );
 ----
-
+////
 ++++
 </div>
 ++++
-
+////
 
 
 [.column]
@@ -40,7 +40,7 @@ MutationResult result = collection.mutateIn(
 == Couchbase Java SDK 3.1
 
 ++++
-<div class="card-row three-column-row">
+<div class="card-row two-column-row">
 ++++
 
 
