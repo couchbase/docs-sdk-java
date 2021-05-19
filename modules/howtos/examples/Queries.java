@@ -88,8 +88,8 @@ class Queries {
       Collection collection = bucket.defaultCollection();
       MutationResult mr = collection.upsert("someDoc",JsonObject.create().put("name", "roi"));
       MutationState mutationState = MutationState.from(mr.mutationToken().get());
-    
-      QueryOptions qo = QueryOptions.queryOptions().consistentWith(mutationState); 
+
+      QueryOptions qo = QueryOptions.queryOptions().consistentWith(mutationState);
       QueryResult result = cluster.query(
         "select raw meta().id from `bucket1` limit 100;",qo
       );
