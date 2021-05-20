@@ -165,7 +165,7 @@ This means that compatible cleanup clients can use the same durability level to 
 
 === Bug Fixes
 * https://issues.couchbase.com/browse/TXNJ-335[TXNJ-335]:
-Fetching a document's ATR entry now correctly uses that that ATR's collection.
+Fetching a document's ATR entry now correctly uses that ATR's collection.
 * https://issues.couchbase.com/browse/TXNJ-337[TXNJ-337]:
 Consistently applied log redaction.
 
