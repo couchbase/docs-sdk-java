@@ -15,6 +15,33 @@ This page features the release notes for that library -- for release notes, down
 See the xref:6.5@server:learn:data/transactions.adoc[Distributed ACID Transactions concept doc] in the server documentation for details of how Couchbase implements transactions.
 The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Transactions HOWTO doc] walks you through all aspects of working with Distributed Transactions.
 
+== Distributed Transactions Java 1.1.8 (26 May 2021)
+
+This release has been tested with Couchbase Java SDK version 3.1.5 and requires that version as a minimum.
+
+https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.1.8/[JavaDocs]
+
+=== Improvements
+* https://issues.couchbase.com/browse/TXNJ-339[TXNJ-339],
+https://issues.couchbase.com/browse/TXNJ-370[TXNJ-370],
+https://issues.couchbase.com/browse/TXNJ-388[TXNJ-388],
+https://issues.couchbase.com/browse/TXNJ-400[TXNJ-400],
+https://issues.couchbase.com/browse/TXNJ-404[TXNJ-404]:
+Continuing improvements to the beta-level support for query.
+* https://issues.couchbase.com/browse/TXNJ-399[TXNJ-399]:
+Include the version of the transactions library in the logging.
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/TXNJ-347[TXNJ-347]:
+Solves a potential rare data race issue where a transaction that expires immediately after beginning the commit phase, could in theory have its staged changes overwritten by another transaction.
+* https://issues.couchbase.com/browse/TXNJ-413[TXNJ-413]:
+After `Transactions::close` was called, cleanup threads could continue to be created.
+* https://issues.couchbase.com/browse/TXNJ-382[TXNJ-382],
+https://issues.couchbase.com/browse/TXNJ-402[TXNJ-402]:
+If the cleanup window was set to an aggressive value (less than 10 seconds), then cleanup could both happen more quickly than the configured cleanup window, and in some cases, skip some ATRs due to backpressure.
+* https://issues.couchbase.com/browse/TXNJ-405[TXNJ-405]:
+If T2 is blocked writing to a document because it is involved in T1, but T1's ATR has been deleted, then permit T2 to continue.
+
 == Distributed Transactions Java 1.1.7 (27 April 2021)
 
 This release has been tested with Couchbase Java SDK version 3.1.4 and requires that version as a minimum.
