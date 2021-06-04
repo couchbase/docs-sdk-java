@@ -30,11 +30,47 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.1.5</version>
+        <version>3.1.6</version>
     </dependency>
 </dependencies>
 ----
 
+== Version 3.1.6 (4 June 2021)
+
+Version 3.1.6 is the seventh release of the 3.1 series, bringing stabilizations and enhancements over 3.1.5.
+
+http://packages.couchbase.com/clients/java/3.1.6/Couchbase-Java-Client-3.1.6.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.6/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.6/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.1.6**
+* com.couchbase.client:**core-io:2.1.6**
+* io.projectreactor:**reactor-core:3.4.6**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/JCBC-1676[JCBC-1676]:
+Bucket creation now succeeds against Community Edition 6.5 and above.
+* https://issues.couchbase.com/browse/JVMCBC-972[JVMCBC-972]:
+Only open one GCCCP connection per node.
+
+=== Improvements
+* https://issues.couchbase.com/browse/JCBC-1808[JCBC-1808]:
+Updated tracing and metrics module dependencies.
+* https://issues.couchbase.com/browse/JCBC-1649[JCBC-1649]:
+Update analytics management API to support compound dataverse names.
+* https://issues.couchbase.com/browse/JCBC-1815[JCBC-1815]:
+Improve error context for BatchHelper.
+* https://issues.couchbase.com/browse/JVMCBC-939[JVMCBC-939]:
+Improve no collection access handling.
+* https://issues.couchbase.com/browse/JVMCBC-974[JVMCBC-974]:
+Restructure AggregatingMeter output format.
+* https://issues.couchbase.com/browse/JVMCBC-975[JVMCBC-975]:
+Further improve wait until ready diagnostics.
+* https://issues.couchbase.com/browse/JVMCBC-977[JVMCBC-977]:
+Improve bucket configuration handling (revEpoch).
 
 == Version 3.1.5 (6 May 2021)
 
