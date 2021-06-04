@@ -19,7 +19,7 @@ see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section f
 We recommend running the latest Java LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
 
 Couchbase publishes all stable artifacts to https://search.maven.org/search?q=com.couchbase.client[Maven Central].
-The latest version (as of May 2021) is https://search.maven.org/artifact/com.couchbase.client/java-client/3.1.5/jar[3.1.5].
+The latest version (as of June 2021) is https://search.maven.org/artifact/com.couchbase.client/java-client/3.1.6/jar[3.1.6].
 
 You can use your favorite dependency management tool to install the SDK.
 The following snippet shows how to do it with https://maven.apache.org/[maven].
@@ -30,7 +30,7 @@ The following snippet shows how to do it with https://maven.apache.org/[maven].
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.1.5</version>
+        <version>3.1.6</version>
     </dependency>
 </dependencies>
 ----
@@ -39,7 +39,7 @@ For https://gradle.org/[gradle], you can use:
 
 [source,groovy]
 ----
-implementation 'com.couchbase.client:java-client:3.1.5'
+implementation 'com.couchbase.client:java-client:3.1.6'
 ----
 
 Alternatively, we provide a zip file with all the dependencies bundled if you wish to manually include the `jar` files in your classpath. Refer to the xref:project-docs:sdk-release-notes.adoc[Release Notes] for further details. You can also find links to the hosted javadocs there.

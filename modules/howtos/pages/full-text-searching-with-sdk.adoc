@@ -4,7 +4,7 @@
 :page-topic-type: howto
 :page-aliases: ROOT:search-query
 :lang: Java
-:version: 3.1.5
+:version: 3.1.6
 :example-source: 3.1@java-sdk:howtos:example$Search.java
 :example-source-lang: java
 
