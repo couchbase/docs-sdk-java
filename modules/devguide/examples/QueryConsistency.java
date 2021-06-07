@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.couchbase.devguide;
+import java.util.Random;
 
 import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.json.JsonObject;
@@ -23,8 +23,6 @@ import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryResult;
 import com.couchbase.client.java.query.QueryScanConsistency;
 import com.couchbase.client.java.query.QueryStatus;
-
-import java.util.Random;
 
 /**
  * Example of N1QL Query Consistency in Java for the Couchbase Developer Guide.
@@ -35,23 +33,25 @@ public class QueryConsistency extends ConnectionBase {
     protected void doWork() {
         String key = "javaDevguideExampleQueryConsistency";
 
-        cluster.queryIndexes().createPrimaryIndex(bucketName, CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions().ignoreIfExists(true));
+        cluster.queryIndexes().createPrimaryIndex(bucketName,
+                CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions().ignoreIfExists(true));
         Random random = new Random();
         int randomNumber = random.nextInt(10000000);
 
-        //prepare the random user
+        // prepare the random user
         JsonObject user = JsonObject.create()
                 .put("name", JsonArray.from("Brass", "Doorknob"))
                 .put("email", "brass.doorknob@juno.com")
                 .put("random", randomNumber);
-        //upsert it with the corresponding random key
+        // upsert it with the corresponding random key
         bucket.defaultCollection().upsert(key, user);
 
         LOGGER.info("Expecting random: " + randomNumber);
-        QueryResult result = cluster.query("select name, email, random, META(default).id " +
-            " from default where $1 in name",
-            QueryOptions.queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS).parameters(JsonArray.from("Brass")));
-        if (!result.metaData().status().equals(QueryStatus.SUCCESS) ) {
+        QueryResult result = cluster.query(
+                "select name, email, random, META(default).id " + " from `travel-sample` where $1 in name",
+                QueryOptions.queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS)
+                        .parameters(JsonArray.from("Brass")));
+        if (!result.metaData().status().equals(QueryStatus.SUCCESS)) {
             LOGGER.warn("No result/errors: " + result.metaData().warnings());
         }
 
@@ -59,8 +59,8 @@ public class QueryConsistency extends ConnectionBase {
             int rowRandom = row.getInt("random");
             String rowId = row.getString("id");
 
-            LOGGER.info("Doc Id: " + rowId  + ", Name: " + row.getArray("name") + ", Email: " + row.getString("email")
-                + ", Random: " + rowRandom);
+            LOGGER.info("Doc Id: " + rowId + ", Name: " + row.getArray("name") + ", Email: " + row.getString("email")
+                    + ", Random: " + rowRandom);
 
             if (rowRandom == randomNumber) {
                 LOGGER.info("!!! Found our newly inserted document !!!");

@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-package com.couchbase.devguide;
+import java.io.FileInputStream;
+import java.security.KeyStore;
 
 import com.couchbase.client.core.encryption.CryptoManager;
 import com.couchbase.client.encryption.AeadAes256CbcHmacSha512Provider;
@@ -27,10 +28,6 @@ import com.couchbase.client.java.ClusterOptions;
 import com.couchbase.client.java.encryption.annotation.Encrypted;
 import com.couchbase.client.java.env.ClusterEnvironment;
 
-import java.io.FileInputStream;
-import java.security.KeyStore;
-
-
 public class FieldEncryptionAES extends ConnectionBase {
 
     @Override
@@ -39,32 +36,28 @@ public class FieldEncryptionAES extends ConnectionBase {
         try {
             KeyStore javaKeyStore = KeyStore.getInstance("MyKeyStoreType");
             FileInputStream fis = new java.io.FileInputStream("keyStoreName");
-            char[] password = {'a', 'b', 'c'};
-            javaKeyStore.load(fis,
-                password);
-            Keyring keyring = new KeyStoreKeyring(javaKeyStore,
-                keyName -> "swordfish");
+            char[] password = { 'a', 'b', 'c' };
+            javaKeyStore.load(fis, password);
+            Keyring keyring = new KeyStoreKeyring(javaKeyStore, keyName -> "swordfish");
 
             // AES-256 authenticated with HMAC SHA-512. Requires a 64-byte key.
             AeadAes256CbcHmacSha512Provider provider = AeadAes256CbcHmacSha512Provider.builder()
-                .keyring(keyring)
-                .build();
+                    .keyring(keyring)
+                    .build();
 
             CryptoManager cryptoManager = DefaultCryptoManager.builder()
-                .decrypter(provider.decrypter())
-                .defaultEncrypter(provider.encrypterForKey("myKey"))
-                .build();
+                    .decrypter(provider.decrypter())
+                    .defaultEncrypter(provider.encrypterForKey("myKey"))
+                    .build();
 
             ClusterEnvironment env = ClusterEnvironment.builder()
-                .cryptoManager(cryptoManager)
-                .build();
+                    .cryptoManager(cryptoManager)
+                    .build();
 
             cluster = Cluster.connect("localhost",
-                ClusterOptions.clusterOptions("username",
-                    "password")
-                    .environment(env));
-        } catch (Exception e){
-           throw new RuntimeException(e);
+                    ClusterOptions.clusterOptions("username", "password").environment(env));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
         Bucket myBucket = cluster.bucket(bucketName);
@@ -89,7 +82,7 @@ public class FieldEncryptionAES extends ConnectionBase {
         @Encrypted
         public String password;
 
-        //The rest will be transported and stored unencrypted
+        // The rest will be transported and stored unencrypted
         public String firstName;
         public String lastName;
         public String userName;

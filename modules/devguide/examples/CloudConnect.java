@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.couchbase.devguide;
+import static com.couchbase.client.java.query.QueryOptions.queryOptions;
+
+import java.time.Duration;
 
 import com.couchbase.client.core.deps.io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import com.couchbase.client.core.env.IoConfig;
@@ -28,9 +30,6 @@ import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import com.couchbase.client.java.query.QueryResult;
-import static com.couchbase.client.java.query.QueryOptions.queryOptions;
-
-import java.time.Duration;
 
 public class CloudConnect {
     public static void main(String... args) {
@@ -42,19 +41,19 @@ public class CloudConnect {
         // User Input ends here.
 
         ClusterEnvironment env = ClusterEnvironment.builder()
-                .securityConfig(SecurityConfig.enableTls(true)
-                        .trustManagerFactory(InsecureTrustManagerFactory.INSTANCE))
+                .securityConfig(
+                        SecurityConfig.enableTls(true).trustManagerFactory(InsecureTrustManagerFactory.INSTANCE))
                 .ioConfig(IoConfig.enableDnsSrv(true))
                 .build();
 
         // Initialize the Connection
-        Cluster cluster = Cluster.connect(endpoint,
-                ClusterOptions.clusterOptions(username, password).environment(env));
+        Cluster cluster = Cluster.connect(endpoint, ClusterOptions.clusterOptions(username, password).environment(env));
         Bucket bucket = cluster.bucket(bucketName);
         bucket.waitUntilReady(Duration.parse("PT10S"));
         Collection collection = bucket.defaultCollection();
 
-        cluster.queryIndexes().createPrimaryIndex(bucketName, CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions().ignoreIfExists(true));
+        cluster.queryIndexes().createPrimaryIndex(bucketName,
+                CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions().ignoreIfExists(true));
 
         // Create a JSON Document
         JsonObject arthur = JsonObject.create()
@@ -63,10 +62,7 @@ public class CloudConnect {
                 .put("interests", JsonArray.from("Holy Grail", "African Swallows"));
 
         // Store the Document
-        collection.upsert(
-                "u:king_arthur",
-                arthur
-        );
+        collection.upsert("u:king_arthur", arthur);
 
         // Load the Document and print it
         // Prints Content and Metadata of the stored Document

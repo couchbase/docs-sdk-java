@@ -142,7 +142,7 @@
     <build>
         <resources>
             <resource>
-                <directory>modules/resources</directory>
+                <directory>./resources</directory>
             </resource>
         </resources>
         <plugins>
@@ -173,6 +173,7 @@
                                 <source>project-docs/examples/</source>
                                 <source>ref/examples/</source>
                                 <source>concept-docs/examples/</source>
+                                <source>devguide/examples/</source>
                             </sources>
                         </configuration>
                     </execution>

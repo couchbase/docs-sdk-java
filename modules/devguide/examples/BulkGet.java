@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.couchbase.devguide;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import com.couchbase.client.java.ReactiveCollection;
 import com.couchbase.client.java.json.JsonObject;
+
 import reactor.core.publisher.Flux;
 
 /**
@@ -46,15 +45,14 @@ public class BulkGet extends ConnectionBase {
             collection.upsert(id, content);
         }
 
-        JsonObject jo = collection.get(key+"_1").contentAsObject();
+        JsonObject jo = collection.get(key + "_1").contentAsObject();
         System.out.println(jo);
         // Describe what we want to do asynchronously using RxJava Observables:
 
-
         ReactiveCollection reactiveCollection = collection.reactive();
         Flux<Object> resultFlux = Flux.range(0, 10)
-            .map(index ->  {return key + "_" + index; }  )
-            .flatMap( k -> reactiveCollection.get(k));
+                .map(index -> { return key + "_" + index; })
+                .flatMap(k -> reactiveCollection.get(k));
 
         resultFlux.subscribe(System.out::println);
 

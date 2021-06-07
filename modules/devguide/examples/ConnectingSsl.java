@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-package com.couchbase.devguide;
-
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
@@ -35,41 +32,42 @@ public class ConnectingSsl {
     protected final Bucket bucket;
     protected final ClusterEnvironment env;
 
-    //=== EDIT THESE TO ADAPT TO YOUR COUCHBASE INSTALLATION ===
-    public static final String bucketName = "default";
-    static String connectstring = "127.0.0.1";
-    static String username="Administrator";
-    static String password="password";
+    // === EDIT THESE TO ADAPT TO YOUR COUCHBASE INSTALLATION ===
+    public static final String bucketName = "travel-sample";
+    static String connectstring = "localhost";
+    static String username = "Administrator";
+    static String password = "password";
 
-    //=== You need to correctly set up your JVM keystore first! ===
-    //see instructions in http://developer.couchbase.com/documentation/server/4.0/sdks/java-2.2/managing-connections.html#story-h2-5
+    // === You need to correctly set up your JVM keystore first! ===
+    // see instructions in
+    // http://developer.couchbase.com/documentation/server/4.0/sdks/java-2.2/managing-connections.html#story-h2-5
 
     protected ConnectingSsl() {
-        //configure the SDK to use SSL and point it to the keystore
+        // configure the SDK to use SSL and point it to the keystore
 
-        env = ClusterEnvironment.builder()
-                .securityConfig(SecurityConfig.enableTls(true)
-                    .trustStore(Paths.get("/path/tokeystore"),"password", Optional.empty()))
+        env = ClusterEnvironment.builder().securityConfig(
+                SecurityConfig.enableTls(true).trustStore(Paths.get("/path/tokeystore"), "password", Optional.empty()))
                 .build();
 
-        //connect to the cluster using the SSL configuration, by hitting one of the given nodes
-        cluster = Cluster.connect(connectstring,
-            ClusterOptions.clusterOptions(username, password).environment(env));
+        // connect to the cluster using the SSL configuration, by hitting one of the
+        // given nodes
+        cluster = Cluster.connect(connectstring, ClusterOptions.clusterOptions(username, password).environment(env));
 
-        //get a Bucket reference from the cluster to the configured bucket
+        // get a Bucket reference from the cluster to the configured bucket
         bucket = cluster.bucket(bucketName);
     }
 
     private void disconnect() {
-        //release shared resources and close all open buckets
+        // release shared resources and close all open buckets
         cluster.disconnect();
 
-        //also release the environment since we created it ourselves (notice this is an async operation so we block on it)
+        // also release the environment since we created it ourselves (notice this is an
+        // async operation so we block on it)
         env.shutdownAsync();
     }
 
     public void execute() {
-        //connection has been done in the constructor
+        // connection has been done in the constructor
         doWork();
         disconnect();
     }
@@ -79,7 +77,7 @@ public class ConnectingSsl {
      * Make them executable by adding a main method calling new ExampleClass().execute();
      */
     protected void doWork() {
-        //this one just showcases connection methods, see constructor and shutdown()
+        // this one just showcases connection methods, see constructor and shutdown()
         LOGGER.info("Connected to the cluster, opened bucket " + bucketName);
     }
 

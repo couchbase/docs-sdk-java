@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-package com.couchbase.devguide;
-
 import com.couchbase.client.core.deps.io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import com.couchbase.client.core.env.IoConfig;
 import com.couchbase.client.core.env.SecurityConfig;
@@ -35,35 +33,33 @@ import com.couchbase.client.java.env.ClusterEnvironment;
  * https://developer.couchbase.com/documentation/server/current/security/security-x509certsintro.html
  */
 public class ConnectingCertAuth {
-    static String connectstring = "127.0.0.1";
-    static String username="Administrator";
-    static String password="password";
+    static String connectstring = "localhost";
+    static String username = "Administrator";
+    static String password = "password";
 
     public static void main(String... args) {
         ClusterEnvironment env = ClusterEnvironment.builder()
-            .securityConfig(SecurityConfig.enableTls(true)
-            .trustManagerFactory(InsecureTrustManagerFactory.INSTANCE))
-            .ioConfig(IoConfig.enableDnsSrv(true))
-            /*
-            .sslEnabled(true)
-            .certAuthEnabled(true)
-            .sslKeystoreFile("/path/to/keystore")
-            .sslKeystorePassword("password")
-            .sslTruststoreFile("/path/to/truststore") // you can also pack it all in just the keystore
-            .sslTruststorePassword("password")
-                */
-            .build();
+                .securityConfig(
+                        SecurityConfig.enableTls(true).trustManagerFactory(InsecureTrustManagerFactory.INSTANCE))
+                .ioConfig(IoConfig.enableDnsSrv(true))
+                /*
+                 * .sslEnabled(true) .certAuthEnabled(true)
+                 * .sslKeystoreFile("/path/to/keystore") .sslKeystorePassword("password")
+                 * .sslTruststoreFile("/path/to/truststore") // you can also pack it all in just
+                 * the keystore .sslTruststorePassword("password")
+                 */
+                .build();
 
-        Cluster cluster =  Cluster.connect(connectstring,
-            ClusterOptions.clusterOptions(username, password).environment(env));
-        // IMPORTANT: do NOT call cluster.authenticate() since this is part of the cert auth
-        Bucket bucket = cluster.bucket("default");
+        Cluster cluster = Cluster.connect(connectstring,
+                ClusterOptions.clusterOptions(username, password).environment(env));
+        // IMPORTANT: do NOT call cluster.authenticate() since this is part of the cert
+        // auth
+        Bucket bucket = cluster.bucket("travel-sample");
 
         // perform operations here...
         try {
-            bucket.defaultCollection()
-                .get("mydoc");
-        } catch (DocumentNotFoundException dnf){
+            bucket.defaultCollection().get("airport_1254");
+        } catch (DocumentNotFoundException dnf) {
             System.out.println(dnf);
         }
     }

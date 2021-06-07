@@ -14,26 +14,25 @@
  * limitations under the License.
  */
 
-package com.couchbase.devguide;
+import java.util.List;
 
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.query.QueryOptions;
 
-import java.util.List;
-
 /**
- * Example of Querying using placeholders with N1QL in Java for the Couchbase Developer Guide.
+ * Example of Querying using placeholders with N1QL in Java for the Couchbase
+ * Developer Guide.
  */
 public class QueryPrepared extends ConnectionBase {
 
     private static final String PLACEHOLDER_STATEMENT = "SELECT airportname FROM `travel-sample` WHERE city=$1 AND type=\"airport\"";
 
     private List<JsonObject> queryCity(String city) {
-        //the placeholder values can be provided as a JSON array (if using $1 syntax)
+        // the placeholder values can be provided as a JSON array (if using $1 syntax)
         // or map-like JSON object (if using $name syntax)
-        JsonObject placeholderValues = JsonObject.create().put("city",city);
-        return cluster.query("SELECT airportname FROM `travel-sample` WHERE city=$1 AND type=\"airport\"",
-            QueryOptions.queryOptions().parameters(placeholderValues)).rowsAsObject();
+        JsonObject placeholderValues = JsonObject.create().put("city", city);
+        return cluster.query("SELECT airportname FROM `travel-sample` WHERE city=$city AND type=\"airport\"",
+                QueryOptions.queryOptions().parameters(placeholderValues)).rowsAsObject();
     }
 
     @Override
@@ -41,34 +40,34 @@ public class QueryPrepared extends ConnectionBase {
         JsonObject airport;
 
         airport = JsonObject.create()
-            .put( "type", "airport")
-            .put("airportname", "Reno International Airport")
-            .put("city", "Reno")
-            .put("country", "United States");
+                .put("type", "airport")
+                .put("airportname", "Reno International Airport")
+                .put("city", "Reno")
+                .put("country", "United States");
 
         bucket.defaultCollection().upsert("1", airport);
 
         airport = JsonObject.create()
-            .put( "type", "airport")
-            .put("airportname", "Los Angeles International Airport")
-            .put("city", "Los Angeles")
-            .put("country", "United States");
+                .put("type", "airport")
+                .put("airportname", "Los Angeles International Airport")
+                .put("city", "Los Angeles")
+                .put("country", "United States");
 
         bucket.defaultCollection().upsert("2", airport);
 
         airport = JsonObject.create()
-            .put( "type", "airport")
-            .put("airportname", "Culver City Airport")
-            .put("city", "Los Angeles")
-            .put("country", "United States");
+                .put("type", "airport")
+                .put("airportname", "Culver City Airport")
+                .put("city", "Los Angeles")
+                .put("country", "United States");
 
         bucket.defaultCollection().upsert("3", airport);
 
         airport = JsonObject.create()
-            .put( "type", "airport")
-            .put("airportname", "Dallas International Airport")
-            .put("city", "Dallas")
-            .put("country", "United States");
+                .put("type", "airport")
+                .put("airportname", "Dallas International Airport")
+                .put("city", "Dallas")
+                .put("country", "United States");
 
         bucket.defaultCollection().upsert("4", airport);
 
@@ -89,6 +88,6 @@ public class QueryPrepared extends ConnectionBase {
     }
 
     public static void main(String[] args) {
-        new QueryPlaceholders().execute();
+        new QueryPrepared().execute();
     }
 }

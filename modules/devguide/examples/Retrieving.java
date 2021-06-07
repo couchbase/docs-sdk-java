@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-package com.couchbase.devguide;
-
 import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
@@ -30,18 +28,17 @@ public class Retrieving extends ConnectionBase {
         String key = "javaDevguideExampleRetrieving";
         LOGGER.info("Getting non-existent key. Should fail..");
         try {
-            GetResult nonExistentDocument = bucket.defaultCollection()
-                .get("non-exist-document");
+            GetResult nonExistentDocument = bucket.defaultCollection().get("non-exist-document");
             if (nonExistentDocument == null) {
                 LOGGER.info("Got null for missing document, it doesn't exist!");
             }
-        } catch (DocumentNotFoundException dnf){
+        } catch (DocumentNotFoundException dnf) {
             System.out.println(dnf);
         }
 
         LOGGER.info("Upserting...");
         JsonObject document = JsonObject.create().put("foo", "bar");
-        bucket.defaultCollection().upsert(key,document);
+        bucket.defaultCollection().upsert(key, document);
         LOGGER.info("Getting...");
         LOGGER.info(bucket.defaultCollection().get(key));
     }
