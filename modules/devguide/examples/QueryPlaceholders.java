@@ -42,23 +42,35 @@ public class QueryPlaceholders extends ConnectionBase {
 
         JsonObject airport;
 
-        airport = JsonObject.create().put("type", "airport").put("airportname", "Reno International Airport")
-                .put("city", "Reno").put("country", "United States");
+        airport = JsonObject.create()
+                .put("type", "airport")
+                .put("airportname", "Reno International Airport")
+                .put("city", "Reno")
+                .put("country", "United States");
 
         bucket.defaultCollection().upsert("1", airport);
 
-        airport = JsonObject.create().put("type", "airport").put("airportname", "Los Angeles International Airport")
-                .put("city", "Los Angeles").put("country", "United States");
+        airport = JsonObject.create()
+                .put("type", "airport")
+                .put("airportname", "Los Angeles International Airport")
+                .put("city", "Los Angeles")
+                .put("country", "United States");
 
         bucket.defaultCollection().upsert("2", airport);
 
-        airport = JsonObject.create().put("type", "airport").put("airportname", "Culver City Airport")
-                .put("city", "Los Angeles").put("country", "United States");
+        airport = JsonObject.create()
+                .put("type", "airport")
+                .put("airportname", "Culver City Airport")
+                .put("city", "Los Angeles")
+                .put("country", "United States");
 
         bucket.defaultCollection().upsert("3", airport);
 
-        airport = JsonObject.create().put("type", "airport").put("airportname", "Dallas International Airport")
-                .put("city", "Dallas").put("country", "United States");
+        airport = JsonObject.create()
+                .put("type", "airport")
+                .put("airportname", "Dallas International Airport")
+                .put("city", "Dallas")
+                .put("country", "United States");
 
         bucket.defaultCollection().upsert("4", airport);
 

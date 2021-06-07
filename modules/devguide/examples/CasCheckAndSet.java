@@ -22,7 +22,7 @@ import com.couchbase.client.java.kv.ReplaceOptions;
 
 /**
  * Example of Cas (Check and Set) handling in Java for the Couchbase Developer
- * Guide. TODO: not tested
+ * Guide.
  */
 public class CasCheckAndSet extends ConnectionBase {
 

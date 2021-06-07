@@ -42,8 +42,7 @@ import com.couchbase.client.java.query.QueryResult;
 
 /**
  * Example of Cas (Check and Set) handling in Java for the Couchbase Developer
- * Guide. TODO: not tested | ported from 2.x, but not tested. See
- * CloudConnect.java for 3.x
+ * Guide ported from 2.x. See CloudConnect.java for 3.x.
  */
 
 public class Cloud {
@@ -82,7 +81,8 @@ public class Cloud {
         ClusterEnvironment env = ClusterEnvironment.builder()
                 .securityConfig(
                         SecurityConfig.enableTls(true).trustManagerFactory(InsecureTrustManagerFactory.INSTANCE))
-                .ioConfig(IoConfig.enableDnsSrv(true)).build();
+                .ioConfig(IoConfig.enableDnsSrv(true))
+                .build();
 
         // Initialize the Connection
         Cluster cluster = Cluster.connect(endpoint, ClusterOptions.clusterOptions(username, password).environment(env));
@@ -95,7 +95,9 @@ public class Cloud {
                 CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions().ignoreIfExists(true));
 
         // Create a JSON Document
-        JsonObject arthur = JsonObject.create().put("name", "Arthur").put("email", "kingarthur@couchbase.com")
+        JsonObject arthur = JsonObject.create()
+                .put("name", "Arthur")
+                .put("email", "kingarthur@couchbase.com")
                 .put("interests", JsonArray.from("Holy Grail", "African Swallows"));
 
         // Store the Document
@@ -106,9 +108,10 @@ public class Cloud {
         System.out.println(collection.get("u:king_arthur"));
 
         // Perform a N1QL Query
-        // Perform a N1QL Query
-        QueryResult result = cluster.query(String.format("SELECT name FROM `%s` WHERE $1 IN interests", bucketName),
-                queryOptions().parameters(JsonArray.from("African Swallows")));
+        QueryResult result = cluster.query(
+                String.format("SELECT name FROM `%s` WHERE $1 IN interests", bucketName),
+                queryOptions().parameters(JsonArray.from("African Swallows"))
+        );
 
         // Print each found Row
         for (JsonObject row : result.rowsAsObject()) {
@@ -125,8 +128,9 @@ public class Cloud {
         }
         return certificates.stream().map(c -> {
             try {
-                return (X509Certificate) cf
-                        .generateCertificate(new ByteArrayInputStream(c.getBytes(StandardCharsets.UTF_8)));
+                return (X509Certificate) cf.generateCertificate(
+                        new ByteArrayInputStream(c.getBytes(StandardCharsets.UTF_8))
+                );
             } catch (CertificateException e) {
                 throw new RuntimeException(e);
             }

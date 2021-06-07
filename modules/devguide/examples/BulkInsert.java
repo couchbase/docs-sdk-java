@@ -35,9 +35,9 @@ public class BulkInsert extends ConnectionBase {
         // Describe what we want to do asynchronously using RxJava Observables:
 
         ReactiveCollection reactiveCollection = collection.reactive();
-        Flux<MutationResult> resultFlux = Flux.range(0, 10).map(index -> {
-            return key + "_" + index;
-        }).flatMap(k -> reactiveCollection.upsert(k, content));
+        Flux<MutationResult> resultFlux = Flux.range(0, 10)
+                .map(index -> { return key + "_" + index; })
+                .flatMap(k -> reactiveCollection.upsert(k, content));
 
         resultFlux.subscribe(System.out::println);
 

@@ -39,8 +39,10 @@ public class QueryConsistency extends ConnectionBase {
         int randomNumber = random.nextInt(10000000);
 
         // prepare the random user
-        JsonObject user = JsonObject.create().put("name", JsonArray.from("Brass", "Doorknob"))
-                .put("email", "brass.doorknob@juno.com").put("random", randomNumber);
+        JsonObject user = JsonObject.create()
+                .put("name", JsonArray.from("Brass", "Doorknob"))
+                .put("email", "brass.doorknob@juno.com")
+                .put("random", randomNumber);
         // upsert it with the corresponding random key
         bucket.defaultCollection().upsert(key, user);
 

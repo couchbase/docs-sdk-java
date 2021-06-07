@@ -63,7 +63,9 @@ public class HealthCheckExample extends ConnectionBase {
 
         bucket.waitUntilReady(Duration.ofSeconds(5));
 
-        JsonObject content = JsonObject.create().put("foo", "bar").put("baz", "qux");
+        JsonObject content = JsonObject.create()
+                .put("foo", "bar")
+                .put("baz", "qux");
 
         MutationResult result = collection.upsert("document-key", content);
 

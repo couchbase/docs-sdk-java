@@ -26,8 +26,7 @@ import com.couchbase.client.java.kv.ReplicateTo;
 import com.couchbase.client.java.kv.UpsertOptions;
 
 /**
- * Example of Durability in Java for the Couchbase Developer Guide. TODO: not
- * tested
+ * Example of Durability in Java for the Couchbase Developer Guide.
  */
 public class Durability extends ConnectionBase {
 

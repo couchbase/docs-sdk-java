@@ -73,8 +73,8 @@ public class ConnectingSsl {
     }
 
     /**
-     * Override this method to showcase specific examples. Make them executable by
-     * adding a main method calling new ExampleClass().execute();
+     * Override this method to showcase specific examples.
+     * Make them executable by adding a main method calling new ExampleClass().execute();
      */
     protected void doWork() {
         // this one just showcases connection methods, see constructor and shutdown()

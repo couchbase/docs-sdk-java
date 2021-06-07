@@ -50,9 +50,9 @@ public class BulkGet extends ConnectionBase {
         // Describe what we want to do asynchronously using RxJava Observables:
 
         ReactiveCollection reactiveCollection = collection.reactive();
-        Flux<Object> resultFlux = Flux.range(0, 10).map(index -> {
-            return key + "_" + index;
-        }).flatMap(k -> reactiveCollection.get(k));
+        Flux<Object> resultFlux = Flux.range(0, 10)
+                .map(index -> { return key + "_" + index; })
+                .flatMap(k -> reactiveCollection.get(k));
 
         resultFlux.subscribe(System.out::println);
 

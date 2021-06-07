@@ -43,7 +43,8 @@ public class CloudConnect {
         ClusterEnvironment env = ClusterEnvironment.builder()
                 .securityConfig(
                         SecurityConfig.enableTls(true).trustManagerFactory(InsecureTrustManagerFactory.INSTANCE))
-                .ioConfig(IoConfig.enableDnsSrv(true)).build();
+                .ioConfig(IoConfig.enableDnsSrv(true))
+                .build();
 
         // Initialize the Connection
         Cluster cluster = Cluster.connect(endpoint, ClusterOptions.clusterOptions(username, password).environment(env));
@@ -55,7 +56,9 @@ public class CloudConnect {
                 CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions().ignoreIfExists(true));
 
         // Create a JSON Document
-        JsonObject arthur = JsonObject.create().put("name", "Arthur").put("email", "kingarthur@couchbase.com")
+        JsonObject arthur = JsonObject.create()
+                .put("name", "Arthur")
+                .put("email", "kingarthur@couchbase.com")
                 .put("interests", JsonArray.from("Holy Grail", "African Swallows"));
 
         // Store the Document
@@ -66,8 +69,10 @@ public class CloudConnect {
         System.out.println(collection.get("u:king_arthur"));
 
         // Perform a N1QL Query
-        QueryResult result = cluster.query(String.format("SELECT name FROM `%s` WHERE $1 IN interests", bucketName),
-                queryOptions().parameters(JsonArray.from("African Swallows")));
+        QueryResult result = cluster.query(
+                String.format("SELECT name FROM `%s` WHERE $1 IN interests", bucketName),
+                queryOptions().parameters(JsonArray.from("African Swallows"))
+        );
 
         // Print each found Row
         for (JsonObject row : result.rowsAsObject()) {

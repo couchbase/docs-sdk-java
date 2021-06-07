@@ -30,8 +30,11 @@ public class QueryCriteria extends ConnectionBase {
     @Override
     protected void doWork() {
 
-        JsonObject airport = JsonObject.create().put("type", "airport").put("airportname", "Reno International Airport")
-                .put("city", "Reno").put("country", "United States");
+        JsonObject airport = JsonObject.create()
+                .put("type", "airport")
+                .put("airportname", "Reno International Airport")
+                .put("city", "Reno")
+                .put("country", "United States");
 
         bucket.defaultCollection().upsert("1", airport);
 

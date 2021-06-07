@@ -41,13 +41,18 @@ public class FieldEncryptionAES extends ConnectionBase {
             Keyring keyring = new KeyStoreKeyring(javaKeyStore, keyName -> "swordfish");
 
             // AES-256 authenticated with HMAC SHA-512. Requires a 64-byte key.
-            AeadAes256CbcHmacSha512Provider provider = AeadAes256CbcHmacSha512Provider.builder().keyring(keyring)
+            AeadAes256CbcHmacSha512Provider provider = AeadAes256CbcHmacSha512Provider.builder()
+                    .keyring(keyring)
                     .build();
 
-            CryptoManager cryptoManager = DefaultCryptoManager.builder().decrypter(provider.decrypter())
-                    .defaultEncrypter(provider.encrypterForKey("myKey")).build();
+            CryptoManager cryptoManager = DefaultCryptoManager.builder()
+                    .decrypter(provider.decrypter())
+                    .defaultEncrypter(provider.encrypterForKey("myKey"))
+                    .build();
 
-            ClusterEnvironment env = ClusterEnvironment.builder().cryptoManager(cryptoManager).build();
+            ClusterEnvironment env = ClusterEnvironment.builder()
+                    .cryptoManager(cryptoManager)
+                    .build();
 
             cluster = Cluster.connect("localhost",
                     ClusterOptions.clusterOptions("username", "password").environment(env));
