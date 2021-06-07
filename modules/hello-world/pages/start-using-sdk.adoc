@@ -125,7 +125,7 @@ If you are connecting to https://docs.couchbase.com/cloud/index.html[Couchbase C
 
 [source,java]
 ----
-include::devguide:example$java/src/main/java/com/couchbase/devguide/CloudConnect.java[]
+include::devguide:example$CloudConnect.java[]
 ----
 --
 ====
