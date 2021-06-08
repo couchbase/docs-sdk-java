@@ -37,7 +37,7 @@ MutationResult result = collection.mutateIn(
 [.column]
 ====== {empty}
 
-== Couchbase Java SDK 3.1
+== Couchbase Java SDK 3.2
 
 ++++
 <div class="card-row three-column-row">
