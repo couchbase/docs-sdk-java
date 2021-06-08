@@ -25,6 +25,7 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.env.ClusterEnvironment;
 import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.json.JsonObject;
@@ -50,7 +51,8 @@ public class CloudConnect {
         Cluster cluster = Cluster.connect(endpoint, ClusterOptions.clusterOptions(username, password).environment(env));
         Bucket bucket = cluster.bucket(bucketName);
         bucket.waitUntilReady(Duration.parse("PT10S"));
-        Collection collection = bucket.defaultCollection();
+        Scope scope = bucket.scope("travel_agent_00");
+        Collection collection = scope.collection("users");
 
         cluster.queryIndexes().createPrimaryIndex(bucketName,
                 CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions().ignoreIfExists(true));

@@ -28,23 +28,6 @@ public class StartUsing {
   static String password = "password";
   static String bucketName = "travel-sample";
 
-  public static void local(String... args) {
-    // tag::connect_local[]
-    Cluster cluster = Cluster.connect(connectionString, username, password);
-    Bucket bucket = cluster.bucket(bucketName);
-    Collection collection = bucket.defaultCollection();
-    MutationResult upsertResult = collection.upsert(
-        "my-document",
-        JsonObject.create().put("name", "mike")
-    );
-    GetResult getResult = collection.get("my-document");
-    String name = getResult.contentAsObject().getString("name");
-    System.out.println(name); // name == "mike"
-    QueryResult result = cluster.query("select \"Hello World\" as greeting");
-    System.out.println(result.rowsAsObject());
-    // end::connect_local[]
-  }
-
   public static void main(String... args) {
     // tag::connect[]
     Cluster cluster = Cluster.connect(connectionString, username, password);
@@ -56,28 +39,45 @@ public class StartUsing {
     // end::bucket[]
 
     // tag::collection[]
-    // get a collection reference
-    Collection collection = bucket.defaultCollection();
+    // get a user defined collection reference
+    Scope scope = bucket.scope("tenant_agent_00");
+    Collection collection = scope.collection("users");
     // end::collection[]
 
-    // tag::upsert-get[]
-    // Upsert Document
-    MutationResult upsertResult = collection.upsert(
-        "my-document",
-        JsonObject.create().put("name", "mike")
-    );
+    {
+      // tag::upsert[]
+      MutationResult upsertResult = collection.upsert(
+              "my-document",
+              JsonObject.create().put("name", "mike")
+      );
 
-    // Get Document
-    GetResult getResult = collection.get("my-document");
-    String name = getResult.contentAsObject().getString("name");
-    System.out.println(name); // name == "mike"
-    // end::upsert-get[]
+      GetResult getResult = collection.get("my-document");
+      String name = getResult.contentAsObject().getString("name");
+      System.out.println(name); // name == "mike"
+      QueryResult result = cluster.query("select \"Hello World\" as greeting");
+      System.out.println(result.rowsAsObject());
+      // end::upsert[]
+    }
 
-    // tag::n1ql-query[]
-    QueryResult result = cluster.query("select \"Hello World\" as greeting");
-    System.out.println(result.rowsAsObject());
-    // end::n1ql-query[]
+    {
+      // tag::upsert-get[]
+      // Upsert Document
+      MutationResult upsertResult = collection.upsert(
+              "my-document",
+              JsonObject.create().put("name", "mike")
+      );
 
+      // Get Document
+      GetResult getResult = collection.get("my-document");
+      String name = getResult.contentAsObject().getString("name");
+      System.out.println(name); // name == "mike"
+      // end::upsert-get[]
+
+      // tag::n1ql-query[]
+      QueryResult result = cluster.query("select \"Hello World\" as greeting");
+      System.out.println(result.rowsAsObject());
+      // end::n1ql-query[]
+    }
   }
 
 }
