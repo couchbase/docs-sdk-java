@@ -16,6 +16,7 @@ import com.couchbase.client.core.retry.RetryStrategy;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.analytics.AnalyticsResult;
 import com.couchbase.client.java.env.ClusterEnvironment;
 import com.couchbase.client.java.json.JsonObject;
@@ -33,12 +34,13 @@ public class ErrorHandling {
   public static void main(String... args) {
     Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");
     Bucket bucket = cluster.bucket("travel-sample");
-    Collection collection = bucket.collection("travel-sample");
+    Scope scope = bucket.scope("inventory");
+    Collection collection = bucket.collection("airport");
 
     // tag::readonly[]
-    QueryResult queryResult = cluster.query("SELECT * FROM bucket", queryOptions().readonly(true));
+    QueryResult queryResult = cluster.query("SELECT * FROM `travel-sample`", queryOptions().readonly(true));
 
-    AnalyticsResult analyticsResult = cluster.analyticsQuery("SELECT * FROM dataset",
+    AnalyticsResult analyticsResult = cluster.analyticsQuery("SELECT * FROM `travel-sample`.inventory.airport",
         analyticsOptions().readonly(true));
     // end::readonly[]
 

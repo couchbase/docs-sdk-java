@@ -58,8 +58,9 @@ public class EncryptingUsingSDK {
     cluster = Cluster.connect(connectionString,
         ClusterOptions.clusterOptions(username, password).environment(environment));
     bucket = cluster.bucket("travel-sample");
-    scope = bucket.defaultScope();
-    collection = bucket.defaultCollection(); // end::connection_1[]
+    scope = bucket.scope("tenant_agent_00");
+    collection = scope.collection("users");
+    // end::connection_1[]
   }
 
   public void encrypting_using_sdk_1() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 60
@@ -100,10 +101,9 @@ public class EncryptingUsingSDK {
   }
 
   // end::encrypting_using_sdk_2[]
+
   public void encrypting_using_sdk_3() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 116
     // tag::encrypting_using_sdk_3[]
-    Collection collection = cluster.bucket("myBucket").defaultCollection();
-
     Employee employee = new Employee();
     employee.setReplicant(true);
     collection.upsert("employee:1234", employee); // encrypts the "replicant" field
@@ -176,8 +176,6 @@ public class EncryptingUsingSDK {
 
   public void encrypting_using_sdk_7() throws Exception { // file: howtos/pages/encrypting-using-sdk.adoc line: 204
     // tag::encrypting_using_sdk_7[]
-    Collection collection = cluster.bucket("myBucket").defaultCollection();
-
     JsonObject document = JsonObject.create();
     JsonObjectCrypto crypto = document.crypto(collection);
 

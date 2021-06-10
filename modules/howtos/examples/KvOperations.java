@@ -51,8 +51,10 @@ public class KvOperations {
     Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
 
     Bucket bucket = cluster.bucket("travel-sample");
-    Scope scope = bucket.scope("_default");
-    Collection collection = scope.collection("_default");
+    // tag::named-scope-and-collection[]
+    Scope scope = bucket.scope("tenant_agent_00");
+    Collection collection = scope.collection("users");
+    // end::named-scope-and-collection[]
 
     JsonObject json = JsonObject.create().put("title", "My Blog Post").put("author", "mike");
 
@@ -227,12 +229,9 @@ public class KvOperations {
     {
       System.out.println("\nExample: [named-collection-upsert]");
       // tag::named-collection-upsert[]
-      Scope agentScope = bucket.scope("tenant_agent_00");
-      Collection usersCollection = agentScope.collection("users");
-
       JsonObject content = JsonObject.create().put("name", "John Doe").put("preferred_email",
           "johndoe111@test123.test");
-      MutationResult result = usersCollection.upsert("user-key", content);
+      MutationResult result = collection.upsert("user-key", content);
       // end::named-collection-upsert[]
 
       System.out.println("cas value: " + result.cas());

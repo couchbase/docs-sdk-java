@@ -36,9 +36,9 @@ include::example$Auth.java[tag=rbac-pwd,indent=0]
 
 In this example, the `PLAIN` authentication mechanism is enabled as well, which is needed if LDAP is enabled on the server side and no TLS encrypted connection is used.
 
-include::6.5@sdk:shared:partial$auth-overview.adoc[tag=rbac]
+include::7.0@sdk:shared:partial$auth-overview.adoc[tag=rbac]
 
-include::6.5@sdk:shared:partial$auth-overview.adoc[tag=cert-auth]
+include::7.0@sdk:shared:partial$auth-overview.adoc[tag=cert-auth]
 
 
 == Authenticating the Java Client by Certificate
@@ -54,7 +54,7 @@ include::example$Auth.java[tag=certauth,indent=0]
 
 In addition to providing the initialized `KeyStore` directly, the `CertificateAuthenticator` can also be initialized from a key store path, a key directly or a `KeyManagerFactory` for maximum flexibility. Please see the API documentation for the `CertificateAuthenticator` for more details.
 
-include::6.5@sdk:shared:partial$auth-overview.adoc[tag=ldap]
+include::7.0@sdk:shared:partial$auth-overview.adoc[tag=ldap]
 
 [source,java]
 ----

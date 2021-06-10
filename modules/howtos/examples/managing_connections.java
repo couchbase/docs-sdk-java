@@ -47,8 +47,8 @@ public class managing_connections {
 		cluster = Cluster.connect(connectionString,
 				ClusterOptions.clusterOptions(username, password).environment(environment));
 		bucket = cluster.bucket("travel-sample");
-		scope = bucket.defaultScope();
-		collection = bucket.defaultCollection(); // end::connection_1[]
+		scope = bucket.scope("inventory");
+		collection = scope.collection("airport"); // end::connection_1[]
 	}
 
 	public void managing_connections_5() throws Exception { // file: howtos/pages/managing-connections.adoc line: 125

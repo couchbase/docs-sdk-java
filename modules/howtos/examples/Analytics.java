@@ -86,7 +86,7 @@ public class Analytics {
     {
       // tag::named[]
       AnalyticsResult result = cluster.analyticsQuery(
-        "select count(*) from airports where country = $country",
+        "select count(*) from `travel-sample`.inventory.airport where country = $country",
         analyticsOptions().parameters(JsonObject.create().put("country", "France")));
       // end::named[]
       show("named", result);
@@ -95,7 +95,7 @@ public class Analytics {
     {
       // tag::positional[]
       AnalyticsResult result = cluster.analyticsQuery(
-        "select count(*) from airports where country = ?",
+        "select count(*) from `travel-sample`.inventory.airport where country = ?",
         analyticsOptions().parameters(JsonArray.from("France"))
       );
       // end::positional[]
@@ -105,7 +105,7 @@ public class Analytics {
     {
       // tag::scanconsistency[]
       AnalyticsResult result = cluster.analyticsQuery(
-        "select count(*) from airports where country = 'France'",
+        "select count(*) from `travel-sample`.inventory.airport where country = 'France'",
         analyticsOptions().scanConsistency(AnalyticsScanConsistency.REQUEST_PLUS)
       );
       // end::scanconsistency[]
@@ -115,7 +115,7 @@ public class Analytics {
     {
       // tag::clientcontextid[]
       AnalyticsResult result = cluster.analyticsQuery(
-        "select count(*) from airports where country = 'France'",
+        "select count(*) from `travel-sample`.inventory.airport where country = 'France'",
         analyticsOptions().clientContextId("user-44" + UUID.randomUUID())
       );
       // end::clientcontextid[]
@@ -125,7 +125,7 @@ public class Analytics {
     {
       // tag::priority[]
       AnalyticsResult result = cluster.analyticsQuery(
-        "select count(*) from airports where country = 'France'",
+        "select count(*) from `travel-sample`.inventory.airport where country = 'France'",
         analyticsOptions().priority(true)
       );
       // end::priority[]
@@ -135,7 +135,7 @@ public class Analytics {
     {
       // tag::readonly[]
       AnalyticsResult result = cluster.analyticsQuery(
-        "select count(*) from airports where country = 'France'",
+        "select count(*) from `travel-sample`.inventory.airport where country = 'France'",
         analyticsOptions().readonly(true)
       );
       // end::readonly[]
@@ -154,7 +154,7 @@ public class Analytics {
     {
       // tag::rowsasobject[]
       AnalyticsResult result = cluster.analyticsQuery(
-        "select * from airports limit 3"
+        "select * from `travel-sample`.inventory.airport limit 3"
       );
       for (JsonObject row : result.rowsAsObject()) {
         System.out.println("Found row: " + row);

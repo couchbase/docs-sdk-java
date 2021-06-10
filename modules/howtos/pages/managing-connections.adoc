@@ -20,7 +20,7 @@ include::example$ManagingConnections.java[tag=simpleconnect,indent=0]
 ----
 
 NOTE: If you are connecting to a version of Couchbase Server older than 6.5, it will be more efficient if the addresses are those of data (KV) nodes.
-You will in any case, with 6.0 and earlier, need to open a ``Bucket` instance before connecting to any other HTTP services (such as _Query_ or _Search_.
+You will in any case, with 7.0 and earlier, need to open a ``Bucket` instance before connecting to any other HTTP services (such as _Query_ or _Search_.
 
 In a production environment, your connection string should include the addresses of multiple server nodes in case some are currently unavailable.
 Multiple addresses may be specified in a connection string by delimiting them with commas:
@@ -114,7 +114,7 @@ Both the client and server require special configuration in this case.
 On the server side, each server node must be configured to advertise its external address as well as any custom port mapping.
 This is done with the `setting-alternate-address` CLI command introduced in Couchbase Server 6.5.
 A node configured in this way will advertise two addresses: one for connecting from the same network, and another for connecting from an external network.
-// todo link to https://docs.couchbase.com/server/6.5/cli/cbcli/couchbase-cli-setting-alternate-address.html
+// todo link to https://docs.couchbase.com/server/7.0/cli/cbcli/couchbase-cli-setting-alternate-address.html
 
 On the client side, the externally visible ports must be used when connecting.
 If the external ports are not the default, you can specify custom ports using the overloaded `Cluster.connect()` method that takes a set of `SeedNode` objects instead of a connection string.
@@ -198,7 +198,7 @@ E.....@.@.............+....Z.'yZ..#........
 .%v.....4....m*...A.2I.1.&.*,6+..#..#.5
 ----
 
-include::6.0@sdk:shared:partial$dnssrv-pars.adoc[tag=dnssrv]
+include::7.0@sdk:shared:partial$dnssrv-pars.adoc[tag=dnssrv]
 
 DNS SRV bootstrapping is available in the Java SDK from version 2.1.0.
 In order to make the SDK actually use the SRV records, you need to enable DNS SRV on the environment and pass in the host name from your records (here `example.com`):
@@ -251,7 +251,7 @@ _plus_ it waits for the K-V (data) sockets to be ready.
 Other timeout issues may occur when using the SDK located geographically separately from the Couchbase Server cluster -- this is xref:project-docs:compatibility#network-requirements[not recommended].
 See the xref:#working-in-the-cloud[Cloud section] below for some suggestions of settings adjustments.
 
-include::6.5@sdk:shared:partial$managing-connections.adoc[tag=cloud]
+include::7.0@sdk:shared:partial$managing-connections.adoc[tag=cloud]
 
 
 == Async and Reactive APIs

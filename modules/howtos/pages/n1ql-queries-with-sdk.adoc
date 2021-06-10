@@ -4,8 +4,8 @@
 :page-topic-type: howto
 :page-aliases: n1ql-query,ROOT:querying-n1ql
 :lang: Java
-:version: 3.1.6
-:example-source: 3.1@java-sdk:howtos:example$Queries.java
+:version: 3.2.0
+:example-source: 3.2@java-sdk:howtos:example$Queries.java
 include::howtos:partial$attributes.adoc[]
 
 [abstract]
@@ -146,6 +146,7 @@ Depending on the index update rate this might provide a speedier response.
 
 [source,java]
 ----
+include::example$Queries.java[tag=connect-bucket-and-scope,indent=0]
 include::example$Queries.java[tag=scanconsistency_with,indent=0]
 ----
 
@@ -227,19 +228,15 @@ As always we recommend not blocking in the first place in reactive code.
 
 == Querying at Scope Level
 
-From version 3.0.8 of the Java SDK, it is possible to query off the
-xref:concept-docs:n1ql-query.adoc#collections-and-scopes-and-the-query-context[`Scope` level]
-_with the beta version of the next Couchbase Server release, 7.0β_,
-using the `scope.query()` method.
+It is possible to query off the xref:concept-docs:n1ql-query.adoc#collections-and-scopes-and-the-query-context[`Scope` level],
+_with Couchbase Server release 7.0_, using the `scope.query()` method.
 It takes the statement as a required argument, and then allows additional options if needed.
-
-CAUTION: This feature is marked xref:project-docs:compatibility.adoc#interface-stability[_Uncommitted_].
-Expect a promotion to _Committed_ API in a future minor release.
 
 A complete list of `QueryOptions` can be found in the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/AsyncScope.html#query-java.lang.String-[API docs].
 
 [source,java]
 ----
+include::example$Queries.java[tag=connect-bucket-and-scope]
 include::example$Queries.java[tag=scope-level-query]
 ----
 
@@ -249,7 +246,7 @@ NOTE: N1QL is not the only query option in Couchbase.
 Be sure to check that xref:concept-docs:data-services.adoc[your use case fits your selection of query service].
 
 * For a deeper dive into N1QL from the SDK, refer to our xref:concept-docs:n1ql-query.adoc[N1QL SDK concept doc].
-* The xref:6.6@server:n1ql:n1ql-language-reference/index.adoc[Server doc N1QL intro] introduces a complete guide to the N1QL language, including all of the latest additions.
+* The xref:7.0@server:n1ql:n1ql-language-reference/index.adoc[Server doc N1QL intro] introduces a complete guide to the N1QL language, including all of the latest additions.
 * The http://query.pub.couchbase.com/tutorial/#1[N1QL interactive tutorial] is a good introduction to the basics of N1QL use.
-* For scaling up queries, be sure to xref:6.6@server:learn:services-and-indexes/indexes/index-replication.adoc[read up on Indexes].
+* For scaling up queries, be sure to xref:7.0@server:learn:services-and-indexes/indexes/index-replication.adoc[read up on Indexes].
 * N1QL is for operational queries; for analytical workloads, read more on xref:concept-docs:http-services.adoc#long-running-queries-big-data[when to choose Analytics], our implementation of SQL++ available in the Enterprise Edition.

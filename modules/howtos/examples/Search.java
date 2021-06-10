@@ -24,6 +24,7 @@ import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.MutationResult;
 import com.couchbase.client.java.kv.MutationState;
@@ -48,7 +49,8 @@ public class Search {
 
   static Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
   static Bucket bucket = cluster.bucket("travel-sample");
-  static Collection collection = bucket.defaultCollection();
+  static Scope scope = bucket.scope("inventory");
+  static Collection collection = scope.collection("hotel");
 
   public static void main(String... args) {
 
@@ -92,7 +94,7 @@ public class Search {
 
     {
       // tag::ryow[]
-      MutationResult mutationResult = collection.upsert("key", JsonObject.create());
+      MutationResult mutationResult = collection.upsert("key", JsonObject.create().put("description", "swanky"));
       MutationState mutationState = MutationState.from(mutationResult.mutationToken().get());
 
       SearchResult searchResult = cluster.searchQuery("travel-sample-index", SearchQuery.queryString("swanky"),
@@ -129,6 +131,13 @@ public class Search {
       SearchResult result = cluster.searchQuery("travel-sample-index", SearchQuery.queryString("swanky"),
           searchOptions().fields("description", "type"));
       // end::fields[]
+    }
+
+    {
+      // tag::collections[]
+      SearchResult result = cluster.searchQuery("travel-sample-index", SearchQuery.queryString("San Francisco"),
+          searchOptions().collections("landmark", "airport"));
+      // end::collections[]
     }
 
     {

@@ -29,6 +29,7 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.codec.JsonSerializer;
 import com.couchbase.client.java.codec.JsonTranscoder;
 import com.couchbase.client.java.codec.RawBinaryTranscoder;
@@ -159,10 +160,10 @@ public class Transcoding {
     @BeforeAll
     public static void BeforeAll() {
         Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");
-
-        Bucket bucket = cluster.bucket("default");
+        Bucket bucket = cluster.bucket("travel-sample");
         bucket.waitUntilReady(Duration.ofSeconds(30));
-        collection = bucket.defaultCollection();
+        Scope scope = bucket.scope("tenant_agent_00");
+        collection = scope.collection("users");
     }
 
     @Test

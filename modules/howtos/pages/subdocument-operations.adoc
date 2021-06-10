@@ -4,7 +4,7 @@
 :page-topic-type: howto
 include::project-docs:partial$attributes.adoc[]
 :lang: Java
-:version: 3.0.10
+:version: 3.2.0
 :page-aliases: ROOT:sdk-xattr-example.adoc
 
 
@@ -28,36 +28,45 @@ In order to use Sub-Document operations you need to specify a _path_ indicating 
 The _path_ follows xref:#path-syntax[Path syntax].
 Considering the document:
 
-.customer123.json
+.hotel_1368.json
 [source,json]
 ----
 {
-  "name": "Douglas Reynholm",
-  "email": "douglas@reynholmindustries.com",
-  "addresses": {
-    "billing": {
-      "line1": "123 Any Street",
-      "line2": "Anytown",
-      "country": "United Kingdom"
-    },
-    "delivery": {
-      "line1": "123 Any Street",
-      "line2": "Anytown",
-      "country": "United Kingdom"
-    }
+  "title": "Ayr (Scotland)",
+  "name": "Enterkine House Hotel",
+  "address": "by Annbank. Ayrshire",
+  "directions": "5 miles off A77, follow B742 to Mossblown then Annbank",
+  "phone": "+44 1292 520580",
+  "tollfree": null,
+  "email": null,
+  "fax": null,
+  "url": "http://www.enterkine.com",
+  "checkin": "2.00pm",
+  "checkout": "11am",
+  "price": "from £100",
+  "geo": {
+    "lat": 55.48034590743372,
+    "lon": -4.51612114906311,
+    "accuracy": "ROOFTOP"
   },
-  "purchases": {
-    "complete": [
-      339, 976, 442, 666
-    ],
-    "abandoned": [
-      157, 42, 999
-    ]
-  }
+  "type": "hotel",
+  "id": 1368,
+  "country": "United Kingdom",
+  "city": "South Ayrshire",
+  "state": null,
+  "reviews": [],
+  "public_likes": ["Georgette Rutherford V", "Ms. Devante Bruen", "Anderson Schmidt", "Mr. Kareem Harvey", "Tessie Shields", "Floyd Bradtke III", "Maurice McDermott", "Michel Franecki", "Laila Ernser"],
+  "vacancy": true,
+  "description": "four star country house hotel situated in 350 acres of woodland estate yet only 10 mins from Prestwick ,Ayr and Troon. Award winning food by Paul Moffat and team",
+  "alias": null,
+  "pets_ok": false,
+  "free_breakfast": true,
+  "free_internet": false,
+  "free_parking": false
 }
 ----
 
-The paths `name`, `addresses.billing.country` and `purchases.complete[0]` are all valid paths.
+The paths `name`, `geo.lat` and `public_likes[0]` are all valid paths.
 
 == Retrieving
 
@@ -310,14 +319,14 @@ include::example$SubDocument.java[tag=cas,indent=0]
 
 == Durability
 
-Couchbase’s xref:concept-docs:durability-replication-failure-considerations.adoc#older-server-versions[traditional 'client verified' durability], using `PersistTo` and `ReplicateTo`, is still available, particularly for talking to Couchbase Server 6.0 and earlier:
+Couchbase’s xref:concept-docs:durability-replication-failure-considerations.adoc#older-server-versions[traditional 'client verified' durability], using `PersistTo` and `ReplicateTo`, is still available, particularly for talking to Couchbase Server 7.0 and earlier:
 
 [source,java]
 ----
 include::example$SubDocument.java[tag=old-durability,indent=0]
 ----
 
-In Couchbase Server 6.5 and up, this is built upon with xref:concept-docs:durability-replication-failure-considerations.adoc#durable-writes[Durable Writes], which uses the concept of majority to indicate the number of configured Data Service nodes to which commitment is required:
+In Couchbase Server 7.0 and up, this is built upon with xref:concept-docs:durability-replication-failure-considerations.adoc#durable-writes[Durable Writes], which uses the concept of majority to indicate the number of configured Data Service nodes to which commitment is required:
 
 [source,java]
 ----
@@ -397,7 +406,7 @@ NOTE: Currently, paths cannot exceed 1024 characters, and cannot be more than 32
 DJSON documents with more than 32 nested layers cannot be parsed, atttempting to do so will result in a`DocumentTooDeepException` exception.
 
 
-include::6.6@sdk:shared:partial$sdk-xattr-overview.adoc[tag=extended_attributes]
+include::7.0@sdk:shared:partial$sdk-xattr-overview.adoc[tag=extended_attributes]
 
 
 [source,java]
