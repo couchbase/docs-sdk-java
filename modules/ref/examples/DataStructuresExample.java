@@ -56,8 +56,8 @@ public class DataStructuresExample {
     cluster = Cluster.connect(connectionString,
         ClusterOptions.clusterOptions(username, password).environment(environment));
     bucket = cluster.bucket(bucketName);
-    scope = bucket.defaultScope();
-    collection = bucket.defaultCollection();
+    scope = bucket.scope("tenant_agent_00");
+    collection = scope.collection("users");
     // tag::data_structures_0[]
     map = new CouchbaseMap("mapId", collection, String.class, MapOptions.mapOptions());
     arrayList = new CouchbaseArrayList("arrayListId", collection, String.class, ArrayListOptions.arrayListOptions());
