@@ -1,9 +1,8 @@
-= Working with the  Collections Developer Preview
+= Working with Collections
 :description: Collections is introduced as a Developer Preview feature in Couchbase Server 6.5 & 6.6, and fully supported in Server 7.0.
-:nav-title: Collections DP
+:nav-title: Collections
 :content-type: howto
 :page-topic-type: howto
-:page-aliases: ROOT:working-with-collections.adoc
 
 [abstract]
 {description}

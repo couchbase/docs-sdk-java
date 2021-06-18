@@ -1,7 +1,7 @@
 = Request Tracing
 :description: Collecting information about an individual request and its response is an essential feature of every observability stack.
 :page-topic-type: howto
-:page-aliases: ROOT:observability-tracing.adoc
+:page-aliases: ROOT:tracing-from-the-sdk.adoc
 
 [abstract]
 {description}
