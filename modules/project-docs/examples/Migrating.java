@@ -37,6 +37,7 @@ import com.couchbase.client.core.error.InvalidArgumentException;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.analytics.AnalyticsResult;
 import com.couchbase.client.java.codec.RawJsonTranscoder;
 import com.couchbase.client.java.env.ClusterEnvironment;
@@ -133,7 +134,8 @@ public class Migrating {
       // tag::simpleget[]
       Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");
       Bucket bucket = cluster.bucket("travel-sample");
-      Collection collection = bucket.defaultCollection();
+      Scope scope = bucket.scope("inventory");
+      Collection collection = scope.collection("airline");
 
       GetResult getResult = collection.get("airline_10");
 
@@ -143,7 +145,8 @@ public class Migrating {
 
     Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");
     Bucket bucket = cluster.bucket("travel-sample");
-    Collection collection = bucket.defaultCollection();
+    Scope scope = bucket.scope("inventory");
+    Collection collection = scope.collection("airport");
 
     {
       // tag::upsertandget[]
@@ -170,7 +173,7 @@ public class Migrating {
     {
       // tag::querysimple[]
       // SDK 3 simple query
-      QueryResult queryResult = cluster.query("select * from `travel-sample` limit 10");
+      QueryResult queryResult = cluster.query("select * from `travel-sample`.inventory.airport limit 10");
       for (JsonObject value : queryResult.rowsAsObject()) {
         // ...
       }
@@ -180,19 +183,19 @@ public class Migrating {
     {
       // tag::queryparameterized[]
       // SDK 3 named parameters
-      cluster.query("select * from `travel-sample` where type = $type",
-          queryOptions().parameters(JsonObject.create().put("type", "airport")));
+      cluster.query("select * from `travel-sample`.inventory.airport where airportname = $name",
+          queryOptions().parameters(JsonObject.create().put("name", "Calais Dunkerque")));
 
       // SDK 3 positional parameters
-      cluster.query("select * from `travel-sample` where type = $1",
-          queryOptions().parameters(JsonArray.from("airport")));
+      cluster.query("select * from `travel-sample`.inventory.airport where airportname = $1",
+          queryOptions().parameters(JsonArray.from("Calais Dunkerque")));
       // end::queryparameterized[]
     }
 
     {
       // tag::analyticssimple[]
       // SDK 3 simple analytics query
-      AnalyticsResult analyticsResult = cluster.analyticsQuery("select * from airports limit 10");
+      AnalyticsResult analyticsResult = cluster.analyticsQuery("select * from `travel-sample`.inventory.airport limit 10");
       for (JsonObject value : analyticsResult.rowsAsObject()) {
         // ...
       }
@@ -202,12 +205,12 @@ public class Migrating {
     {
       // tag::analyticsparameterized[]
       // SDK 3 named parameters for analytics
-      cluster.analyticsQuery("select * from `huge-dataset` where `type` = $type",
-          analyticsOptions().parameters(JsonObject.create().put("type", "airport")));
+      cluster.analyticsQuery("select * from `travel-sample`.inventory.airport where airportname = $name",
+          analyticsOptions().parameters(JsonObject.create().put("name", "Calais Dunkerque")));
 
       // SDK 3 positional parameters for analytics
-      cluster.analyticsQuery("select * from `huge-dataset` where `type` = $1",
-          analyticsOptions().parameters(JsonArray.from("airport")));
+      cluster.analyticsQuery("select * from `travel-sample`.inventory.airport where airportname = $1",
+          analyticsOptions().parameters(JsonArray.from("Calais Dunkerque")));
       // end::analyticsparameterized[]
     }
 
@@ -215,7 +218,7 @@ public class Migrating {
       // tag::searchsimple[]
       // SDK 3 search query
       SearchResult searchResult = cluster.searchQuery("travel-sample-index", SearchQuery.queryString("swanky"),
-          searchOptions().timeout(Duration.ofSeconds(2)).limit(5).fields("description", "type", "country"));
+          searchOptions().timeout(Duration.ofSeconds(2)).limit(5).fields("description", "type", "city"));
       for (SearchRow row : searchResult.rows()) {
         // ...
       }

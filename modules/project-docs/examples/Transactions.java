@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.transactions.TransactionResult;
@@ -34,8 +35,9 @@ import com.couchbase.transactions.error.TransactionFailed;
 
 class TransactionsDemo {
     private static final Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
-    private static final Bucket bucket = cluster.bucket("default");
-    private static final Collection collection = bucket.defaultCollection();
+    private static final Bucket bucket = cluster.bucket("travel-sample");
+    private static final Scope scope = bucket.scope("inventory");
+    private static final Collection collection = scope.collection("airport");
     private static final Transactions transactions = Transactions.create(cluster);
 
     void demo_1_0_1_changes() {
@@ -88,7 +90,7 @@ class TransactionsDemo {
         // tag::query-basic[]
         TransactionResult result = transactions.run((ctx) -> {
             ctx.insert(collection, "doc-a", aContent);
-            ctx.query("INSERT INTO `default` VALUES ('doc-b', " + bContent + ")");
+            ctx.query("INSERT INTO `travel-sample`.inventory.airport VALUES ('doc-b', " + bContent + ")");
             ctx.insert(collection, "doc-c", cContent);
         });
         // end::query-basic[]
