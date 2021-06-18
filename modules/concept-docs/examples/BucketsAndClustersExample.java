@@ -32,8 +32,6 @@ public class BucketsAndClustersExample {
 
   Cluster cluster;
   Bucket bucket;
-  Scope scope;
-  Collection collection;
   BucketSettings bucketSettings;
 
   private void init() {
@@ -41,8 +39,6 @@ public class BucketsAndClustersExample {
     cluster = Cluster.connect(connectionString,
         ClusterOptions.clusterOptions(username, password).environment(environment));
     bucket = cluster.bucket(bucketName);
-    scope = bucket.defaultScope();
-    collection = bucket.defaultCollection();
   }
 
   public void buckets_and_clusters_1() throws Exception {

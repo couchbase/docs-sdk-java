@@ -42,8 +42,8 @@ public class XattrExample {
     cluster = Cluster.connect(connectionString,
         ClusterOptions.clusterOptions(username, password).environment(environment));
     bucket = cluster.bucket(bucketName);
-    scope = bucket.defaultScope();
-    collection = bucket.defaultCollection();
+    scope = bucket.scope("inventory");
+    collection = scope.collection("airport");
   }
 
   public void xattr_1() throws Exception {

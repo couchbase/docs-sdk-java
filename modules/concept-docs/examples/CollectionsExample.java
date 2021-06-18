@@ -18,8 +18,9 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
 import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.env.ClusterEnvironment;
+import com.couchbase.client.java.manager.collection.CollectionManager;
+import com.couchbase.client.java.manager.collection.CollectionSpec;
 
 public class CollectionsExample {
 
@@ -30,29 +31,37 @@ public class CollectionsExample {
 
   Cluster cluster;
   Bucket bucket;
-  Scope scope;
   Collection collection;
+  CollectionManager collectionMgr;
 
   private void init() {
     ClusterEnvironment environment = ClusterEnvironment.builder().build();
     cluster = Cluster.connect(connectionString,
         ClusterOptions.clusterOptions(username, password).environment(environment));
     bucket = cluster.bucket(bucketName);
-    scope = bucket.defaultScope();
-    collection = bucket.defaultCollection();
+
+    createCollection("bookings");
   }
 
-    // tag::collections_1[]
+  private void createCollection(String name) {
+    collectionMgr = bucket.collections();
+
+    // create flights collection in default scope
+    CollectionSpec spec1 = CollectionSpec.create(name, "_default");
+    collectionMgr.createCollection(spec1);
+  }
+
   public void collections_1() throws Exception {
-    collection = bucket.collection("flights"); // in default scope
-  }
+    // tag::collections_1[]
+    collection = bucket.collection("bookings"); // in default scope
     // end::collections_1[]
-
-    // tag::collections_2[]
-  public void collections_2() throws Exception {
-    collection = bucket.scope("marlowe_agency").collection("flights");
   }
+
+  public void collections_2() throws Exception {
+    // tag::collections_2[]
+    collection = bucket.scope("tenant_agent_00").collection("bookings");
     // end::collections_2[]
+  }
 
   public static void main(String[] args) throws Exception {
     CollectionsExample obj = new CollectionsExample();
