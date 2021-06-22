@@ -44,14 +44,18 @@ import reactor.core.publisher.Mono;
 
 public class Queries {
 
-  static Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
-
   public static void main(String[] args) throws Exception {
+    Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
+    // tag::connect-bucket-and-scope[]
+    Bucket bucket = cluster.bucket("travel-sample");
+    Scope scope = bucket.scope("inventory");
+    // end::connect-bucket-and-scope[]
+
     {
       System.out.println("Example: [simple]");
       // tag::simple[]
       try {
-        final QueryResult result = cluster.query("select * from `travel-sample` limit 10",
+        final QueryResult result = cluster.query("select * from `travel-sample`.inventory.airline limit 100",
             queryOptions().metrics(true));
 
         for (JsonObject row : result.rowsAsObject()) {
@@ -69,7 +73,7 @@ public class Queries {
       System.out.println("\nExample: [named]");
       // tag::named[]
       QueryResult result = cluster.query(
-          "select count(*) from `travel-sample` where type = \"airport\" and country = $country",
+          "select count(*) from `travel-sample`.inventory.airline where country = $country",
           queryOptions().parameters(JsonObject.create().put("country", "France")));
       // end::named[]
     }
@@ -78,7 +82,7 @@ public class Queries {
       System.out.println("\nExample: [positional]");
       // tag::positional[]
       QueryResult result = cluster.query(
-          "select count(*) from `travel-sample` where type = \"airport\" and country = ?",
+          "select count(*) from `travel-sample`.inventory.airline where country = ?",
           queryOptions().parameters(JsonArray.from("France")));
       // end::positional[]
     }
@@ -87,29 +91,31 @@ public class Queries {
       System.out.println("\nExample: [scanconsistency]");
       // tag::scanconsistency[]
       QueryResult result = cluster.query(
-          "select count(*) from `travel-sample` where type = \"airport\" and country = 'France'",
+          "select count(*) from `travel-sample`.inventory.airline where country = 'France'",
           queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS));
       // end::scanconsistency[]
     }
 
-    {
-      System.out.println("\nExample: [scanconsistency_with]");
-      // tag::scanconsistency_with[]
-      Bucket bucket = cluster.bucket("travel-sample");
-      Collection collection = bucket.defaultCollection();
-      MutationResult mr = collection.upsert("someDoc", JsonObject.create().put("name", "roi"));
-      MutationState mutationState = MutationState.from(mr.mutationToken().get());
-
-      QueryOptions qo = QueryOptions.queryOptions().consistentWith(mutationState);
-      QueryResult result = cluster.query("select raw meta().id from `travel-sample` limit 100;", qo);
-      // end::scanconsistency_with[]
-    }
+    // NOTE: This currently fails with Couchbase Internal Server error.
+    // Server issue tracked here: https://issues.couchbase.com/browse/MB-46876
+    // Add back in once Couchbase Server 7.0.1 is available, which will fix this issue.
+//    {
+//      System.out.println("\nExample: [scanconsistency_with]");
+//      // tag::scanconsistency_with[]
+//      Collection collection = scope.collection("airport");
+//      MutationResult mr = collection.upsert("someDoc", JsonObject.create().put("name", "roi"));
+//      MutationState mutationState = MutationState.from(mr.mutationToken().get());
+//
+//      QueryOptions qo = QueryOptions.queryOptions().consistentWith(mutationState);
+//      QueryResult result = cluster.query("select raw meta().id from `travel-sample`.inventory.airport limit 100", qo);
+//      // end::scanconsistency_with[]
+//    }
 
     {
       System.out.println("\nExample: [clientcontextid]");
       // tag::clientcontextid[]
       QueryResult result = cluster.query(
-          "select count(*) from `travel-sample` where type = \"airport\" and country = 'France'",
+          "select count(*) from `travel-sample`.inventory.airline where country = 'France'",
           queryOptions().clientContextId("user-44" + UUID.randomUUID()));
       // end::clientcontextid[]
     }
@@ -118,7 +124,7 @@ public class Queries {
       System.out.println("\nExample: [readonly]");
       // tag::readonly[]
       QueryResult result = cluster.query(
-          "select count(*) from `travel-sample` where type = \"airport\" and country = 'France'",
+          "select count(*) from `travel-sample`.inventory.airline where country = 'France'",
           queryOptions().readonly(true));
       // end::readonly[]
     }
@@ -134,7 +140,7 @@ public class Queries {
     {
       System.out.println("\nExample: [rowsasobject]");
       // tag::rowsasobject[]
-      QueryResult result = cluster.query("select * from `travel-sample` limit 10");
+      QueryResult result = cluster.query("select * from `travel-sample`.inventory.airline limit 10");
       for (JsonObject row : result.rowsAsObject()) {
         System.out.println("Found row: " + row);
       }
@@ -153,7 +159,7 @@ public class Queries {
     {
       System.out.println("\nExample: [backpressure]");
       // tag::backpressure[]
-      Mono<ReactiveQueryResult> result = cluster.reactive().query("select * from `travel-sample`");
+      Mono<ReactiveQueryResult> result = cluster.reactive().query("select * from `travel-sample`.inventory.route");
 
       result.flatMapMany(ReactiveQueryResult::rowsAsObject).subscribe(new BaseSubscriber<JsonObject>() {
         // Number of outstanding requests
@@ -179,9 +185,6 @@ public class Queries {
     {
       System.out.println("\nExample: [scope-level-query]");
       // tag::scope-level-query[]
-      Bucket bucket = cluster.bucket("travel-sample");
-      Scope scope = bucket.scope("inventory");
-
       QueryResult result = scope.query("select * from `airline` where country = $country LIMIT 10",
           queryOptions().parameters(JsonObject.create().put("country", "France")));
 

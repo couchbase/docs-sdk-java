@@ -3,14 +3,14 @@
 :navtitle: KV Operations
 :page-topic-type: howto
 :page-aliases: document-operations.adoc,ROOT:documents-creating,ROOT:documents-updating,ROOT:documents-retrieving,ROOT:documents-deleting
-:example-source: 3.1@java-sdk:howtos:example$Queries.java
+:example-source: 3.2@java-sdk:howtos:example$Queries.java
 include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 {description}
 Here we cover CRUD operations, document expiration, and optimistic locking with CAS.
 
-The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/blob/release/3.1/modules/howtos/examples/KvOperations.java[here].
+The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/blob/release/3.2/modules/howtos/examples/KvOperations.java[here].
 
 At its heart Couchbase Server is a high-performance key-value store, and the key-value interface outlined below is the fastest and best method to perform operations involving single documents.
 
@@ -248,7 +248,7 @@ It can be used like this:
 include::example$KvOperations.java[tag=expiry-touch]
 ----
 
-include::6.6@sdk:shared:partial$documents.adoc[tag=exp-note]
+include::7.0@sdk:shared:partial$documents.adoc[tag=exp-note]
 
 
 
@@ -284,11 +284,8 @@ NOTE: Increment & Decrement are considered part of the ‘binary’ API and as s
 
 == Scoped KV Operations
 
-From version 3.0.0 of the Java SDK, it is possible to perform scoped key-value operations on named xref:7.0@server:learn:data/scopes-and-collections.adoc[`Collections`] _with the beta version of the next Couchbase Server release, 7.0β_.
+It is possible to perform scoped key-value operations on named xref:7.0@server:learn:data/scopes-and-collections.adoc[`Collections`] _with Couchbase Server release 7.0_.
 See the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Collection.html[API docs] for more information.
-
-CAUTION: This feature is marked xref:project-docs:compatibility.adoc#interface-stability[_Uncommitted_].
-Expect a promotion to _Committed_ API in a future minor release.
 
 Here is an example showing an upsert in the `users` collection, which lives in the `travel-sample.tenant_agent_00` keyspace:
 

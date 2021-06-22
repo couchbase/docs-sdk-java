@@ -44,8 +44,8 @@ public class MigratingSDKCodeTo3n {
     cluster = Cluster.connect(connectionString,
         ClusterOptions.clusterOptions(username, password).environment(environment));
     bucket = cluster.bucket(bucketName);
-    scope = bucket.defaultScope();
-    collection = bucket.defaultCollection();
+    scope = bucket.scope("inventory");
+    collection = scope.collection("airline");
   }
 
   public void migrating_sdk_code_to_3_n_1() throws Exception {

@@ -10,7 +10,7 @@
 {description}
 
 
-include::6.6@sdk:shared:partial$acid-transactions.adoc[tag=intro]
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=intro]
 
 
 Below we show you how to create Transactions, step-by-step.
@@ -24,7 +24,7 @@ Javadocs are available https://docs.couchbase.com/sdk-api/couchbase-transactions
 
 * Couchbase Server 6.6.1 or above.
 * Couchbase Java client 3.1.5 or above.  It is recommended to follow the transitive dependency for the transactions library from Maven.
-include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
 
 
 == Getting Started
@@ -85,10 +85,10 @@ Transactions can optionally be configured at the point of creating the `Transact
 include::example$TransactionsExample.java[tag=config,indent=0]
 ----
 
-include::6.6@sdk:shared:partial$acid-transactions.adoc[tag=config]
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=config]
 
 
-include::6.6@sdk:shared:partial$acid-transactions.adoc[tag=creating]
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=creating]
 
 As with the Couchbase Java Client, you can use the library in either synchronous mode (the exceptions will be explained later in <<Error Handling>>):
 
@@ -133,7 +133,7 @@ include::example$TransactionsExample.java[tag=examplesReactive,indent=0]
 ----
 
 
-include::6.6@sdk:shared:partial$acid-transactions.adoc[tag=mechanics]
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=mechanics]
 
 
 == Mutating Documents
@@ -257,7 +257,7 @@ An asynchronous cleanup process ensures that once the transaction reaches the co
 
 
 // == A Full Transaction Example
-include::6.6@sdk:shared:partial$acid-transactions.adoc[tag=example]
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=example]
 
 A complete version of this example is available on our https://github.com/couchbaselabs/couchbase-transactions-java-examples[GitHub transactions examples page].
 
@@ -268,7 +268,7 @@ include::example$TransactionsExample.java[tag=full,indent=0]
 
 
 // concurrency
-include::6.6@sdk:shared:partial$acid-transactions.adoc[tag=concurrency]
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=concurrency]
 
 [source,java]
 ----
@@ -307,19 +307,19 @@ After a transaction is rolled back, it cannot be committed, no further operation
 
 
 //  Error Handling
-include::6.6@sdk:shared:partial$acid-transactions.adoc[tag=error]
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=error]
 
 
 
 //  txnfailed
-include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=txnfailed]
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=txnfailed]
 
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=config-expiration,indent=0]
 ----
 
-include::6.5@sdk:shared:partial$acid-transactions.adoc[tag=txnfailed1]
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=txnfailed1]
 
 
 === Full Error Handling Example
@@ -332,7 +332,7 @@ include::example$TransactionsExample.java[tag=full-error-handling,indent=0]
 ----
 
 
-include::6.6@sdk:shared:partial$acid-transactions.adoc[tag=cleanup]
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=cleanup]
 
 === Monitoring Cleanup
 
@@ -510,4 +510,4 @@ The transaction expiry timer (which is configurable) will begin ticking once the
 
 
 
-include::6.6@sdk:shared:partial$acid-transactions.adoc[tag=further]
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=further]

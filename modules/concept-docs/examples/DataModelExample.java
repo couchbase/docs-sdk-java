@@ -40,8 +40,8 @@ public class DataModelExample {
     cluster = Cluster.connect(connectionString,
         ClusterOptions.clusterOptions(username, password).environment(environment));
     bucket = cluster.bucket(bucketName);
-    scope = bucket.defaultScope();
-    collection = bucket.defaultCollection();
+    scope = bucket.scope("tenant_agent_00");
+    collection = scope.collection("users");
   }
 
   public void data_model_1() throws Exception {

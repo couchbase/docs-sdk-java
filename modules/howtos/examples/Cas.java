@@ -22,6 +22,7 @@ import com.couchbase.client.core.error.CasMismatchException;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
 
@@ -32,7 +33,8 @@ public class Cas {
     Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
 
     Bucket bucket = cluster.bucket("travel-sample");
-    Collection collection = bucket.defaultCollection();
+    Scope scope = bucket.scope("inventory");
+    Collection collection = scope.collection("airline");
 
     {
       // tag::handlingerrors[]

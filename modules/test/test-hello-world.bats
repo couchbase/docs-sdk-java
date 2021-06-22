@@ -13,3 +13,9 @@ load 'test/test_helper.bash'
     assert_output --partial "mike"
     assert_output --partial "[{\"greeting\":\"Hello World\"}]"
 }
+
+@test "[hello-world] - Overview.java" {
+    runExample Overview
+    assert_success
+    assert_output --partial "RESULT: bar"
+}

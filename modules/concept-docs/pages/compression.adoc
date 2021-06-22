@@ -14,7 +14,7 @@ Documents may already be stored compressed with Snappy on the server.
 New documents may be passed from client applications to the server in compressed form, saving around 40% in bandwidth (depending on the document content and size), and also transmission time.
 These operations take place automatically, after the SDK negotiates the capability with the server, and do not require any changes on the client side.
 
-For SDKs with Snappy compression enabled, documents will be automatically compressed if the xref:6.5@server:learn:buckets-memory-and-storage/compression.adoc#compression-modes[Couchbase Server] is not set to `Off` for Compression see xref:#minimum-size[see below].
+For SDKs with Snappy compression enabled, documents will be automatically compressed if the xref:7.0@server:learn:buckets-memory-and-storage/compression.adoc#compression-modes[Couchbase Server] is not set to `Off` for Compression see xref:#minimum-size[see below].
 Instructions to disable compression can be found at xref:#threshold[the bottom of the page].
 
 == Limits
@@ -24,7 +24,7 @@ Compression is only available in the Enterprise Edition of Couchbase Data Platfo
 
 [TIP]
 ====
-This size limit is enforced by Couchbase Server (6.5 and earlier); in practice it will affect very few users, as most JSON documents are considerably smaller.
+This size limit is enforced by Couchbase Server (7.0 and earlier); in practice it will affect very few users, as most JSON documents are considerably smaller.
 A compressed doument of just under 20MB, which is greater than 20,971,520 bytes (20 MiB) when uncompressed, will be rejected by the server as follows:
 
 * Couchbase Server decompresses the document to check that it is valid JSON, and is correctly compressed with _Snappy_, and at this point measures it against `max data size` (20 MiB).

@@ -8,7 +8,7 @@
 The Couchbase Java SDK allows Java applications to access a Couchbase cluster.
 It offers synchronous APIs as well as reactive and asynchronous equivalents to maximize flexibility and performance.
 
-The Couchbase Java SDK 3._x_ is a complete rewrite of the 2.x API, providing a simpler surface area and adding support for future Couchbase Server features like Collections and Scopes (available in Couchbase Server 6.5 as a xref:concept-docs:collections.adoc[developer preview]).
+The Couchbase Java SDK 3._x_ is a complete rewrite of the 2.x API, providing a simpler surface area and adding support for Couchbase Server features like xref:concept-docs:collections.adoc[Collections and Scopes] (available in Couchbase Server 7.0).
 The (reactive) API also migrated from `RxJava` to `Reactor`, along with other improvements to performance, logging, debugging and timeout troubleshooting.
 If you're upgrading your application from Java SDK 2.x, please read our xref:project-docs:migrating-sdk-code-to-3.n.adoc[Migrating 2.x code to SDK 3.0 Guide].
 
@@ -22,7 +22,7 @@ Couchbase publishes all stable artifacts to https://search.maven.org/search?q=co
 The latest version (as of June 2021) is https://search.maven.org/artifact/com.couchbase.client/java-client/3.1.6/jar[3.1.6].
 
 You can use your favorite dependency management tool to install the SDK.
-The following snippet shows how to do it with https://maven.apache.org/[maven].
+The following snippet shows how to do it with https://maven.apache.org/[Maven].
 
 [source,xml]
 ----
@@ -35,7 +35,7 @@ The following snippet shows how to do it with https://maven.apache.org/[maven].
 </dependencies>
 ----
 
-For https://gradle.org/[gradle], you can use:
+For https://gradle.org/[Gradle], you can use:
 
 [source,groovy]
 ----
@@ -53,14 +53,14 @@ Once you have the Java client installed, open your IDE, and try out the followin
 include::example$StartUsing.java[tag=connect,indent=0]
 ----
 
-Couchbase uses xref:6.5@server:learn:security/roles.adoc[Role Based Access Control (RBAC)] to control access to resources.
+Couchbase uses xref:7.0@server:learn:security/roles.adoc[Role Based Access Control (RBAC)] to control access to resources.
 Here we will use the _Full Admin_ role created during installation of the Couchbase Data Platform.
 For production client code, you will want to use more appropriate, restrictive settings -- but here we want to get you up and running quickly.
 If you're developing client code on the same VM or machine as the Couchbase Server, your connection string can be just `localhost`.
 
 The `Cluster` provides access to cluster-level operations like N1Ql queries, analytics or full-text search. You will also find different management APIs on it.
 
-If you are not using an IDE or are new to java, the following imports are necessary to build the following snippets:
+If you are not using an IDE or are new to Java, the following imports are necessary to build the following snippets:
 
 [source,java]
 ----
@@ -74,11 +74,11 @@ To access the KV (Key/Value) API or to query views, you need to open a `Bucket`:
 include::example$StartUsing.java[tag=bucket,indent=0]
 ----
 
-If you installed the travel-sample` data bucket, substitute _travel-sample_ for _bucket-name_.
+If you installed the `travel-sample` data bucket, substitute _travel-sample_ for _bucket-name_.
 
-The 3.0 SDK is ready for the introduction of xref:concept-docs:collections.adoc[Collections] in an upcoming release of the Couchbase Data Platform.
-The latest release, Couchbase Server 6.5, brings a limited _Developer Preview_ of Collections, allowing Documents to be grouped by purpose or theme, according to specified _Scope_.
-Here we will use the `defaultCollection`, which covers the whole Bucket and _must be used when connecting to a 6.5 cluster or earlier_.
+The 3.2 SDK supports full integration with the xref:concept-docs:collections.adoc[Collections] feature in the latest release of the Couchbase Data Platform, Couchbase Server 7.0.
+This brings complete support of Collections, allowing Documents to be grouped by purpose or theme, according to a specified _Scope_.
+Here we will use the `users` collection within the `tenant_agent_00` scope from `travel-sample` bucket as an example.
 
 [source,java]
 ----
@@ -114,7 +114,10 @@ Local Couchbase Server::
 -- 
 [source,java]
 ----
-include::example$StartUsing.java[tag=connect_local,indent=0]
+include::example$StartUsing.java[tag=connect,indent=0]
+include::example$StartUsing.java[tag=bucket,indent=0]
+include::example$StartUsing.java[tag=collection,indent=0]
+include::example$StartUsing.java[tag=upsert,indent=0]
 ----
 --
 

@@ -7,7 +7,7 @@
 {description}
 Common use cases are outlined here, more recherché use cases are covered in the https://pkg.go.dev/github.com/couchbase/gocb/v2?tab=doc[API docs].
 
-include::6.5@sdk:shared:partial$flush-info-pars.adoc[tag=management-intro]
+include::7.0@sdk:shared:partial$flush-info-pars.adoc[tag=management-intro]
 
 The Java SDK also comes with some convenience functionality for common Couchbase management requests.
 
@@ -41,7 +41,7 @@ include::devguide:example$go/provisioning-resources-buckets.go[tag=creatingbucke
 
 The `CreateBucketSettings` and `BucketSettings` structs are used for creating and updating buckets, `BucketSettings` is also used for exposing information about existing buckets.
 
-include::6.5@sdk:shared:partial$flush-info-pars.adoc[tag=update-bucket-warning]
+include::7.0@sdk:shared:partial$flush-info-pars.adoc[tag=update-bucket-warning]
 
 ////
 Here is the list of parameters available:
@@ -85,7 +85,7 @@ include::devguide:example$go/provisioning-resources-buckets.go[tag=removeBucket]
 [#go-flushing]
 == Flushing Buckets
 
-include::6.5@sdk:shared:partial$flush-info-pars.adoc[tag=flush-intro]
+include::7.0@sdk:shared:partial$flush-info-pars.adoc[tag=flush-intro]
 
 You can flush a bucket in the SDK by using the `FlushBucketOptions` -- see the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/manager/bucket/FlushBucketOptions.html[API docs].
 ////
@@ -163,7 +163,7 @@ For those occasions when you do, please see the relevant API docs:
 
 == View Management
 
-include::6.5@sdk:shared:partial$flush-info-pars.adoc[tag=view-management]
+include::7.0@sdk:shared:partial$flush-info-pars.adoc[tag=view-management]
 
 In the SDK, design documents are represented by the `DesignDocument` and `View` structs.
 All operations on design documents are performed on the `ViewIndexManager` instance:
@@ -181,7 +181,7 @@ The following example upserts a design document with two views:
 include::devguide:example$go/provisioning-resources-views.go[tag=createView]
 ----
 
-include::6.5@sdk:shared:partial$flush-info-pars.adoc[tag=one-view-update-warning]
+include::7.0@sdk:shared:partial$flush-info-pars.adoc[tag=one-view-update-warning]
 
 Note the use of `DesignDocumentNamespaceDevelopment`, the other option is `DesignDocumentNamespaceProduction`.
 This parameter specifies whether the design document should be created as development, or as production -- with the former running over only a small fraction of the documents.

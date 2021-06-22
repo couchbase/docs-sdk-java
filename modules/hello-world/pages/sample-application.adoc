@@ -8,12 +8,12 @@
 [abstract]
 {description}
 
-include::6.6@sdk:shared:partial$sample-application.adoc[tag=prereq]
+include::7.0@sdk:shared:partial$sample-application.adoc[tag=prereq]
 
 
 == Preparation
 
-As well as the xref:start-using-sdk.adoc[Java SDK 3.1] and Couchbase Server, 
+As well as the xref:start-using-sdk.adoc[Java SDK 3.2] and Couchbase Server,
 set up as described above, you will need `git` to fetch the travel sample application code:
 
 [source,console]
@@ -25,7 +25,7 @@ Change directory into your cloned repository, and check out the latest branch (t
 
 [source,console]
 ----
-$ git checkout 6.5
+$ git checkout 7.0
 ----
 
 

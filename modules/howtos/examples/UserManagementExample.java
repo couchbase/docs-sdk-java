@@ -18,6 +18,7 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.env.ClusterEnvironment;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
@@ -96,21 +97,22 @@ public class UserManagementExample {
     Cluster userCluster = Cluster.connect(connectionString,
         ClusterOptions.clusterOptions(testUsername, testPassword).environment(environment));
     Bucket userBucket = userCluster.bucket(bucketName);
-    Collection userCollection = userBucket.defaultCollection();
+    Scope scope = userBucket.scope("inventory");
+    Collection collection = scope.collection("airline");
 
     cluster.queryIndexes().createPrimaryIndex(bucketName, // create index if needed
         CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions().ignoreIfExists(true));
 
-    JsonObject returnedAirline10doc = userCollection.get("airline_10").contentAsObject();
+    JsonObject returnedAirline10doc = collection.get("airline_10").contentAsObject();
 
     JsonObject airline11Object = JsonObject.create().put("callsign", "MILE-AIR").put("iata", "Q5").put("icao", "MLA")
         .put("id", 11).put("name", "40-Mile Air").put("type", "airline");
 
-    userCollection.upsert("airline_11", airline11Object);
+    collection.upsert("airline_11", airline11Object);
 
-    JsonObject returnedAirline11Doc = userCollection.get("airline_11").contentAsObject();
+    JsonObject returnedAirline11Doc = collection.get("airline_11").contentAsObject();
 
-    QueryResult result = userCluster.query("SELECT * FROM `travel-sample` LIMIT 5");
+    QueryResult result = userCluster.query("SELECT * FROM `travel-sample`.inventory.airline LIMIT 5");
 
     userCluster.disconnect();
     // end::usermanagement_3[]

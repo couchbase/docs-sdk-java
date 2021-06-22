@@ -1,7 +1,7 @@
 = Migrating from SDK2 to SDK3 API
-:description: The 3.0 API breaks the existing 2.0 APIs in order to provide a number of improvements. \
+:description: The 3.x API breaks the existing 2.x APIs in order to provide a number of improvements. \
 Collections and Scopes are introduced.
-:nav-title: Migrating to Java SDK 3.0 API
+:nav-title: Migrating to Java SDK 3.x API
 :page-topic-type: concept
 :page-aliases: ROOT:migrate
 
@@ -12,10 +12,10 @@ Retry behaviour is more proactive, and lazy bootstrapping moves all error handli
 Individual behavior changes across services are explained here.
 
 
-include::6.5@sdk:shared:partial$migration.adoc[tag=intro]
+include::7.0@sdk:shared:partial$migration.adoc[tag=intro]
 
 
-include::6.5@sdk:shared:partial$migration.adoc[tag=terms]
+include::7.0@sdk:shared:partial$migration.adoc[tag=terms]
 
 As an example here is a KeyValue document fetch:
 
@@ -31,13 +31,13 @@ Compare this to a N1QL query:
 include::example$MigratingSDKCodeTo3n.java[tag=migrating_sdk_code_to_3_n_2,indent=0]
 ----
 
-include::6.5@sdk:shared:partial$migration.adoc[tag=terms2]
+include::7.0@sdk:shared:partial$migration.adoc[tag=terms2]
 
 
-include::6.5@sdk:shared:partial$migration.adoc[tag=new]
+include::7.0@sdk:shared:partial$migration.adoc[tag=new]
 
 
-include::6.5@sdk:shared:partial$migration.adoc[tag=lang]
+include::7.0@sdk:shared:partial$migration.adoc[tag=lang]
 
 ==  Installation and Configuration
 
@@ -168,7 +168,7 @@ Here is the SDK 3 equivalent:
 include::example$Migrating.java[tag=simpleget,indent=0]
 ----
 
-`Collections` will be generally available with an upcoming Couchbase Server release, but the SDK already encodes it in its API to be future-proof.
+`Collections` are generally available from Couchbase Server version 7.0, which the SDK is already compatible with.
 If you are using a Couchbase Server version which does not support `Collections`, always use the `defaultCollection()` method to access the KV API; it will map to the full bucket.
 
 IMPORTANT: You'll notice that `bucket(String)` returns immediately, even if the bucket resources are not completely opened. 
@@ -179,7 +179,7 @@ Please check the logs to see the cause of the timeout (in this case, you'll see 
 
 Also note, you will now find Query, Search, and Analytics at the `Cluster` level.
 This is where they logically belong.
-If you are using Couchbase Server 6.5 or later, you will be able to perform cluster-level queries even if no bucket is open. 
+If you are using Couchbase Server 6.5 or later, you will be able to perform cluster-level queries even if no bucket is open.
 If you are using an earlier version of the cluster you must open at least one bucket, otherwise cluster-level queries will fail.
 
 
@@ -500,8 +500,8 @@ Not only does it throw a `CouchbaseException`, it also tries to map it to a spec
 
 ==== DSL Deprecation
 
-The fluent API feature in SDK 2 was found not to scale well for larger queries, nor for SQL++.
-For these reasons it is not amongst the features carried over to SDK 3.0.
+The fluent API feature in SDK 2.x was found not to scale well for larger queries, nor for SQL++.
+For these reasons it is not amongst the features carried over to SDK 3.x.
 
 In most cases, a simple string statement is the best replacement.
 

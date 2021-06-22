@@ -30,9 +30,11 @@ import com.couchbase.client.java.AsyncCollection;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.ReactiveBucket;
 import com.couchbase.client.java.ReactiveCluster;
 import com.couchbase.client.java.ReactiveCollection;
+import com.couchbase.client.java.ReactiveScope;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
 
@@ -52,7 +54,10 @@ public class AsyncOperations {
     Bucket bucket = cluster.bucket("travel-sample");
     ReactiveBucket reactiveBucket = bucket.reactive();
 
-    Collection collection = bucket.defaultCollection();
+    Scope scope = bucket.scope("inventory");
+    ReactiveScope reactiveScope = scope.reactive();
+
+    Collection collection = scope.collection("airline");
     ReactiveCollection reactiveCollection = collection.reactive();
     // end::access[]
 
@@ -71,7 +76,7 @@ public class AsyncOperations {
     // end::non-used-upsert[]
 
     // tag::verbose-query[]
-    reactiveCluster.query("select * from `travel-sample`").flux().flatMap(result -> {
+    reactiveCluster.query("select * from `travel-sample`.inventory.airline").flux().flatMap(result -> {
       Flux<JsonObject> rows = result.rowsAs(JsonObject.class);
       return rows;
     }).subscribe(row -> {

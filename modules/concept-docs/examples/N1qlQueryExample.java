@@ -15,6 +15,7 @@
  */
 
 import com.couchbase.client.core.error.IndexExistsException;
+import com.couchbase.client.core.error.IndexNotFoundException;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
@@ -53,14 +54,14 @@ public class N1qlQueryExample {
     cluster = Cluster.connect(connectionString,
         ClusterOptions.clusterOptions(username, password).environment(environment));
     bucket = cluster.bucket(bucketName);
-    scope = bucket.defaultScope();
-    collection = bucket.defaultCollection();
+    scope = bucket.scope("inventory");
+    collection = scope.collection("airport");
   }
 
   public void n1ql_query_1() throws Exception {
     // tag::n1ql_query_1[]
     QueryResult result = cluster.query(
-        "select count(*) from `travel-sample` where type = \"airports\" and country = ?",
+        "select count(*) from `travel-sample`.inventory.airport where country = ?",
         QueryOptions.queryOptions().adhoc(false).parameters(JsonArray.from("France"))
     );
     // end::n1ql_query_1[]
@@ -74,7 +75,7 @@ public class N1qlQueryExample {
 
       indexManager.createPrimaryIndex(bucketName);
       indexManager.createIndex(bucketName, "ix_name", Collections.singletonList("name"));
-      indexManager.createIndex(bucketName, "ix_email", Collections.singletonList("email"));
+      indexManager.createIndex(bucketName, "ix_email", Collections.singletonList("preferred_email"));
       // end::n1ql_query_2[]
     } catch (IndexExistsException e) {
       System.err.println(e);
@@ -91,7 +92,7 @@ public class N1qlQueryExample {
           CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions().deferred(true));
       indexManager.createIndex(bucketName, "ix_name", Collections.singletonList("name"),
           CreateQueryIndexOptions.createQueryIndexOptions().deferred(true));
-      indexManager.createIndex(bucketName, "ix_email", Collections.singletonList("email"),
+      indexManager.createIndex(bucketName, "ix_email", Collections.singletonList("preferred_email"),
           CreateQueryIndexOptions.createQueryIndexOptions().deferred(true));
       indexManager.buildDeferredIndexes(bucketName);
       indexManager.watchIndexes(bucketName, Arrays.asList("ix_name", "ix_email"), Duration.ofMinutes(5));
@@ -110,7 +111,7 @@ public class N1qlQueryExample {
     );
 
     cluster.query(
-        "select * from `" + bucketName + "` where META().id = $id",
+        "select * from `" + bucketName + "`.inventory.airport where META().id = $id",
         QueryOptions.queryOptions()
             .parameters(JsonObject.create().put("id", id))
     );
@@ -120,7 +121,7 @@ public class N1qlQueryExample {
   public void n1ql_query_5() throws Exception {
     // tag::n1ql_query_5[]
     cluster.query(
-        "select * from `" + bucketName + "` where META().id = $id",
+        "select * from `" + bucketName + "`.inventory.airport where META().id = $id",
         QueryOptions.queryOptions()
             .parameters(JsonObject.create().put("id", id))
             .scanConsistency(QueryScanConsistency.REQUEST_PLUS)
@@ -129,10 +130,14 @@ public class N1qlQueryExample {
   }
 
   private void setup_dropIndexes() {
-    QueryIndexManager indexManager = cluster.queryIndexes();
-    indexManager.dropPrimaryIndex(bucketName);
-    indexManager.dropIndex(bucketName, "ix_name");
-    indexManager.dropIndex(bucketName, "ix_email");
+    try {
+      QueryIndexManager indexManager = cluster.queryIndexes();
+      indexManager.dropPrimaryIndex(bucketName);
+      indexManager.dropIndex(bucketName, "ix_name");
+      indexManager.dropIndex(bucketName, "ix_email");
+    } catch (IndexNotFoundException e) {
+      System.out.println("No index to drop, carrying on...");
+    }
   }
 
   public static void main(String[] args) throws Exception {

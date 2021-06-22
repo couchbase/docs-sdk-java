@@ -1,35 +1,28 @@
-= Working with the  Collections Developer Preview
-:description: Collections is introduced as a Developer Preview feature in Couchbase Server 6.5 & 6.6, and part of the forthcoming Server 7.0.
-:nav-title: Collections DP
+= Working with Collections
+:description: Collections is introduced as a Developer Preview feature in Couchbase Server 6.5 & 6.6, and fully supported in Server 7.0.
+:nav-title: Collections
 :content-type: howto
 :page-topic-type: howto
 
 [abstract]
 {description}
-The 3.0 API SDKs all work with Collections and Scopes.
+The 3.2 SDK will work with all features of Collections and Scopes.
 As a practical demonstration, we have a collections-enabled version of the Travel Sample application.
 
-The Developer Preview of the upcoming Collections feature in Couchbase Server is fully implemented in the 3.0 API versions of the Couchbase SDKs.
+The Collections feature in Couchbase Server 7.0 is fully implemented in the 3.2 API version of the Couchbase SDK.
 When working with other server versions, the default collection is used from the SDK.
-Here we show how to access individual collections in the Developer Preview version of Couchbase Server 6.6, with a collections-enabled version of our xref:hello-world:sample-application.adoc[Travel Sample application].
-User documents and flight documents are split into user and flight collections.
+Here we show how to access individual collections in Couchbase Server 7.0, with a collections-enabled version of our xref:hello-world:sample-application.adoc[Travel Sample application].
+User and flight documents are split into user and booking collections.
 Something that previously had to be done with key-value references to different types or categories of data.
 
 
 == Travel Sample app -- with Collections
 
-include::6.6@sdk:shared:partial$sample-application.adoc[tag=prereq]
-
-[WARNING]
-====
-Enabling Developer Preview should only be done on a development machine; 
-there is no upgrade path available from a DP-enabled Couchbase Server.
-====
-
+include::7.0@sdk:shared:partial$sample-application.adoc[tag=prereq]
 
 == Preparation
 
-Along with the xref:hello-world:start-using-sdk.adoc[Java SDK 3.1] and Couchbase Server, 
+Along with the xref:hello-world:start-using-sdk.adoc[Java SDK 3.2] and Couchbase Server,
 set up as described above, you will need `git` to fetch the travel sample application code:
 
 [source,console]

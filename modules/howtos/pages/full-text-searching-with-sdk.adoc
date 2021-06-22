@@ -2,10 +2,10 @@
 :description: You can use the Full Text Search service (FTS) to create queryable full-text indexes in Couchbase Server.
 :navtitle: Full Text Search using the SDK
 :page-topic-type: howto
-:page-aliases: ROOT:search-query
+:page-aliases: ROOT:search-query, ROOT:full-text-searching-with-sdk.adoc
 :lang: Java
-:version: 3.1.6
-:example-source: 3.1@java-sdk:howtos:example$Search.java
+:version: 3.2.0
+:example-source: 3.2@java-sdk:howtos:example$Search.java
 :example-source-lang: java
 
 
@@ -44,7 +44,7 @@ Exception in thread "main" com.couchbase.client.core.error.IndexNotFoundExceptio
 [NOTE]
 .Open Buckets and Cluster-Level Queries
 ====
-If you are using a cluster older than Couchbase Server 6.5, it is required that there is at least one bucket open before performing a cluster-level query. 
+If you are using a cluster older than Couchbase Server 6.5, it is required that there is at least one bucket open before performing a cluster-level query.
 If you fail to do so, the SDK will return a `FeatureNotAvailableException` with a descriptive error message asking you to open one.
 ====
 
@@ -128,6 +128,7 @@ The Search Service provides an array of options to customize your query. The fol
 | `fields(String...)` | Specifies fields to be included.
 | `serializer(JsonSerializer)` | Allows to use a different serializer for the decoding of the rows.
 | `raw(String, Object)` | Escape hatch to add arguments that are not covered by these options.
+| `collections(String...)` | Limits the search query to a specific list of collection names.
 |====
 
 === Limit and Skip
@@ -193,6 +194,17 @@ You can tell the Search Engine to include the full content of a certain number o
 [source,java]
 ----
 include::example$Search.java[tag=fields,indent=0]
+----
+
+=== Collections
+
+It is now possible to limit the search query to a specific list of collection names.
+
+Note that this feature is only supported with Couchbase Server 7.0 or later.
+
+[source,java]
+----
+include::example$Search.java[tag=collections,indent=0]
 ----
 
 === Custom JSON Serializer

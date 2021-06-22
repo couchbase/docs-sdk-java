@@ -2,14 +2,14 @@ name: Build Code Samples
 
 on:
   push:
-    branches: [release/3.1]
+    branches: [release/3.2]
     paths:
       - 'modules/test/*'
       - 'modules/Makefile'
       - '**/*.java'
       - '**/pom.xml'
   pull_request:
-    branches: [release/3.1]
+    branches: [release/3.2]
     paths:
       - 'modules/test/*'
       - 'modules/Makefile'

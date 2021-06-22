@@ -5,20 +5,20 @@
 :page-aliases: analytics-query
 :page-edition: Enterprise Edition
 :lang: Java
-:version: 3.1.6
-:example-source: 3.1@java-sdk:howtos:example$Analytics.java
+:version: 3.2.0
+:example-source: 3.2@java-sdk:howtos:example$Analytics.java
 :example-source-lang: java
 
 [abstract]
 {description}
 
-For complex and long-running queries, involving large ad hoc join, set, aggregation, and grouping operations, the Couchbase Data Platform offers the xref:6.5@server:analytics:introduction.adoc[Couchbase Analytics Service (CBAS)].
+For complex and long-running queries, involving large ad hoc join, set, aggregation, and grouping operations, the Couchbase Data Platform offers the xref:7.0@server:analytics:introduction.adoc[Couchbase Analytics Service (CBAS)].
 This is the analytic counterpart to our xref:n1ql-queries-with-sdk.adoc[operational data focussed Query Service].
 The analytics service is available in Couchbase Data Platform 6.0 and later.
 
 == Getting Started
 
-After familiarizing yourself with our xref:6.6@server:analytics:primer-beer.adoc[introductory primer],
+After familiarizing yourself with our xref:7.0@server:analytics:primer-beer.adoc[introductory primer],
 in particular creating a dataset and linking it to a bucket, try Couchbase Analytics using the Java SDK.
 Intentionally, the API for analytics is nearly identical to that of the query service.
 
@@ -187,7 +187,7 @@ A simple reactive query is similar to the blocking one:
 include::example$Analytics.java[tag=simplereactive,indent=0]
 ----
 
-This query will stream all rows as they become available form the server. If you want to manually control the data flow (which is important if you are streaming a lot of rows which could cause a potential out of memory situation) you can do this by using explicit `request()` calls.
+This query will stream all rows as they become available from the server. If you want to manually control the data flow (which is important if you are streaming a lot of rows which could cause a potential out of memory situation) you can do this by using explicit `request()` calls.
 
 [source,java]
 ----
@@ -202,7 +202,7 @@ We always recommend not blocking in the first place in reactive code.
 
 == Scoped Queries on Named Collections
 
-In addition to creating a dataset with a WHERE clause to filter the results to documents with certain characteristics, SDK 3.1 now allows you to create a dataset against a named collection, for example:
+In addition to creating a dataset with a WHERE clause to filter the results to documents with certain characteristics, SDK 3.2 now allows you to create a dataset against a named collection, for example:
 
 [source,n1ql]
 ----

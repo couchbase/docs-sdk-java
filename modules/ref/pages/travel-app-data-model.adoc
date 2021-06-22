@@ -1,4 +1,4 @@
 = Travel App Data Model
 :page-topic-type: reference
 
-include::6.5@sdk:pages:partial$travel-app-data-model.adoc[tag=model]
+include::7.0@sdk:pages:partial$travel-app-data-model.adoc[tag=model]

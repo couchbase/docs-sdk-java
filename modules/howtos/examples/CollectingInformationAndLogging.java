@@ -47,8 +47,8 @@ public class CollectingInformationAndLogging {
     ClusterEnvironment environment = ClusterEnvironment.builder().build();
     cluster = Cluster.connect(connectionString,      ClusterOptions.clusterOptions(username, password).environment(environment));
     bucket = cluster.bucket(bucketName);
-    scope = bucket.defaultScope();
-    collection = bucket.defaultCollection();
+    scope = bucket.scope("inventory");
+    collection = scope.collection("airport");
     // end::connection_1[]
   }
   public void collecting_information_and_logging_1() throws Exception { // file: howtos/pages/collecting-information-and-logging.adoc line: 114

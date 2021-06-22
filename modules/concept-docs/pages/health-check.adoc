@@ -2,15 +2,14 @@
 :description: Health Check provides ping() and diagnostics() tests for the health of the network and the cluster.
 :nav-title: Health Check
 :page-topic-type: concept
-:page-aliases: ROOT:health-check
 
 [abstract]
 {description}
 
 
-include::6.5@sdk:pages:partial$health-check.adoc[tag="intro"]
+include::7.0@sdk:pages:partial$health-check.adoc[tag="intro"]
 
-include::6.5@sdk:pages:partial$health-check.adoc[tag="uses"]
+include::7.0@sdk:pages:partial$health-check.adoc[tag="uses"]
 
 == Ping
 A call to `ping` actively sends requests to the different services on the target cluster, measuring the latency and returning any errors as part of the report.
