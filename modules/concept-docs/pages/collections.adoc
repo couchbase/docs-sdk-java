@@ -2,8 +2,6 @@
 :description: pass:q[Fully supported in Couchbase Server 7.0.]
 :page-topic-type: concept
 :nav-title: Collections
-:page-status: Developer Preview
-
 
 [abstract]
 {description}
@@ -11,7 +9,7 @@
 The Collections feature in Couchbase Server is fully implemented in the 3.2 API version of the Couchbase SDK.
 Information on _Collections_ can be found in the xref:7.0@server:developer-preview:collections/collections-overview.adoc[server docs].
 
-== Using Collections & Scope
+== Using Collections & Scopes
 
 Access a non-default collection, in the default scope, with:
 

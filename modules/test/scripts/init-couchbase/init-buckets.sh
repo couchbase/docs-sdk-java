@@ -30,6 +30,13 @@ echo "cbimport travel-sample..."
     -b travel-sample \
     -d file:///opt/couchbase/samples/travel-sample.zip
 
+echo "create airports dataset"
+curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
+    "statement": "CREATE DATASET airports ON `travel-sample` WHERE `type`=\"airport\";",
+    "pretty":true,
+    "client_context_id":"test"
+}' http://${CB_HOST}:8095/analytics/service
+
 echo "create scoped airport dataset"
 curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
     "statement": "ALTER COLLECTION `travel-sample`.`inventory`.`airport` ENABLE ANALYTICS;",

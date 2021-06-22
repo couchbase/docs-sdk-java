@@ -291,7 +291,6 @@ Here is an example showing an upsert in the `users` collection, which lives in t
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=named-scope-and-collection]
 include::example$KvOperations.java[tag=named-collection-upsert]
 ----
 

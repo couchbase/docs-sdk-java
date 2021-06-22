@@ -98,17 +98,18 @@ public class Queries {
 
     // NOTE: This currently fails with Couchbase Internal Server error.
     // Server issue tracked here: https://issues.couchbase.com/browse/MB-46876
-    {
-      System.out.println("\nExample: [scanconsistency_with]");
-      // tag::scanconsistency_with[]
-      Collection collection = scope.collection("airport");
-      MutationResult mr = collection.upsert("someDoc", JsonObject.create().put("name", "roi"));
-      MutationState mutationState = MutationState.from(mr.mutationToken().get());
-
-      QueryOptions qo = QueryOptions.queryOptions().consistentWith(mutationState);
-      QueryResult result = cluster.query("select raw meta().id from `travel-sample`.inventory.airport limit 100", qo);
-      // end::scanconsistency_with[]
-    }
+    // Add back in once Couchbase Server 7.0.1 is available, which will fix this issue.
+//    {
+//      System.out.println("\nExample: [scanconsistency_with]");
+//      // tag::scanconsistency_with[]
+//      Collection collection = scope.collection("airport");
+//      MutationResult mr = collection.upsert("someDoc", JsonObject.create().put("name", "roi"));
+//      MutationState mutationState = MutationState.from(mr.mutationToken().get());
+//
+//      QueryOptions qo = QueryOptions.queryOptions().consistentWith(mutationState);
+//      QueryResult result = cluster.query("select raw meta().id from `travel-sample`.inventory.airport limit 100", qo);
+//      // end::scanconsistency_with[]
+//    }
 
     {
       System.out.println("\nExample: [clientcontextid]");

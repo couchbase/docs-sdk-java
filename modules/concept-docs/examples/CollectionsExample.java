@@ -47,8 +47,8 @@ public class CollectionsExample {
     collectionMgr = bucket.collections();
 
     // create flights collection in default scope
-    CollectionSpec spec1 = CollectionSpec.create(name, "_default");
-    collectionMgr.createCollection(spec1);
+    CollectionSpec spec = CollectionSpec.create(name, "_default");
+    collectionMgr.createCollection(spec);
   }
 
   public void collections_1() throws Exception {

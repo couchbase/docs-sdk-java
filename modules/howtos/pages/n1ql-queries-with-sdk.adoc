@@ -140,19 +140,22 @@ If `QueryScanConsistency.REQUEST_PLUS` is chosen, it will likely take a bit long
 include::example$Queries.java[tag=scanconsistency,indent=0]
 ----
 
-You can also use `consistentWith(MutationState)` for a more narrowed-down scan consistency.
-Construct the `MutationState` from individual `MutationToken`s that are returned from KV `MutationResult`s to make sure at least those mutations are visible.
-Depending on the index update rate this might provide a speedier response.
-
-[source,java]
-----
-include::example$Queries.java[tag=connect-bucket-and-scope,indent=0]
-include::example$Queries.java[tag=scanconsistency_with,indent=0]
-----
-
-Note that you cannot use this method and `scanConsistency(QueryScanConsistency)` at the same time, since they are mutually exclusive.
-As a rule of thumb, if you only care about being consistent with the mutation you just wrote on the same thread or app, use this method.
-If you need "global" scan consistency, use `QueryScanConsistency.REQUEST_PLUS` on `scanConsistency(QueryScanConsistency)`.
+// Due to https://issues.couchbase.com/browse/MB-46876 this section won’t work with named scopes and collections,
+// we need to omit this information until Couchbase Server 7.0.1 is available, which will contain the fix for this bug.
+// We should avoid showing the user this information until then.
+//You can also use `consistentWith(MutationState)` for a more narrowed-down scan consistency.
+//Construct the `MutationState` from individual `MutationToken`s that are returned from KV `MutationResult`s to make sure at least those mutations are visible.
+//Depending on the index update rate this might provide a speedier response.
+//
+//[source,java]
+//----
+//include::example$Queries.java[tag=connect-bucket-and-scope,indent=0]
+//include::example$Queries.java[tag=scanconsistency_with,indent=0]
+//----
+//
+//Note that you cannot use this method and `scanConsistency(QueryScanConsistency)` at the same time, since they are mutually exclusive.
+//As a rule of thumb, if you only care about being consistent with the mutation you just wrote on the same thread or app, use this method.
+//If you need "global" scan consistency, use `QueryScanConsistency.REQUEST_PLUS` on `scanConsistency(QueryScanConsistency)`.
 
 
 === Client Context Id
