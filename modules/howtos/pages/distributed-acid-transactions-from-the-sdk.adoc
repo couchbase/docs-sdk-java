@@ -393,9 +393,8 @@ include::example$TransactionsExample.java[tag=full-logging,indent=0]
 
 
 == Tracing
-[.status]#Developer Preview#
 
-The 1.1.6 release introduces support, at a Developer Preview level, for OpenTelemetry and OpenTracing.
+The 1.1.6 release introduces support for OpenTelemetry and OpenTracing.
 
 If the underlying Couchbase Java SDK is configured for OpenTelemetry or OpenTracing, then transaction spans will now be output automatically.
 

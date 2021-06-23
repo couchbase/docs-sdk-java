@@ -1,6 +1,5 @@
 = Observability Metrics Reporting
 :description: Individual request tracing presents a very specific (though isolated) view of the system.
-:page-status: Developer Preview
 :page-topic-type: howto
 
 [abstract]
@@ -22,15 +21,8 @@ Right now only the first category is implemented by the SDK, more are planned.
 
 
 == The Default AggregatingMeter
-[.status]#Developer Preview#
 
 The default implementation aggregates and logs request and response metrics.
-Since the feature is in developer preview, you need to manually enable it on the environment:
-
-[source,java]
-----
-include::example$Metrics.java[tag=metrics-enable,indent=0]
-----
 
 By default the metrics will be emitted every 10 minutes, but you can customize the emit interval as well:
 
@@ -93,7 +85,6 @@ The following table shows the currently available properties:
 
 
 == OpenTelemetry Integration
-[.status]#Developer Preview#
 
 The SDK supports plugging in any `OpenTelemetry` metrics consumer instead of using the default `AggregatingMeter`.
 To do this, first you need to add an additional dependency to your application:
@@ -145,7 +136,6 @@ Each metric contains tags that allow you to group them in different ways, includ
 
 
 == Micrometer Integration
-[.status]#Developer Preview#
 
 In addition to OpenTelemetry, we also provide a module so you can hook up the SDK metrics to Micrometer. 
 
