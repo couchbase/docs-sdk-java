@@ -69,7 +69,6 @@ More information will be provided as we get closer to stabilization.
 
 
 == OpenTelemetry Integration
-[.status]#Developer Preview#
 
 The built-in tracer is great if you do not have a centralized monitoring system, but if you already plug into the OpenTelemetry ecosystem we want to make sure to provide first-class support.
 
@@ -132,7 +131,6 @@ GetResult result = collection.get(
 
 
 == OpenTracing Integration
-[.status]#Developer Preview#
 
 In addition to OpenTelemetry, we also provide support for OpenTracing for legacy systems which have not yet migrated to OpenTelemetry. 
 Note that we still recommend to migrate eventually since OpenTracing has been sunsetted.

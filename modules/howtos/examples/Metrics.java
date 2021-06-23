@@ -15,13 +15,6 @@ public class Metrics {
   public static void main(String... args) throws Exception {
 
     {
-      // tag::metrics-enable[]
-      CoreEnvironment environment = CoreEnvironment.builder()
-          .aggregatingMeterConfig(AggregatingMeterConfig.enabled(true)).build();
-      // end::metrics-enable[]
-    }
-
-    {
       // tag::metrics-enable-custom[]
       CoreEnvironment environment = CoreEnvironment.builder()
           .aggregatingMeterConfig(AggregatingMeterConfig.enabled(true).emitInterval(Duration.ofSeconds(30))).build();

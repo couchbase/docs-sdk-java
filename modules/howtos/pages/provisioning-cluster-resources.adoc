@@ -99,7 +99,6 @@ The `Flush` operation may fail if the bucket does not have flush enabled, in tha
 
 
 == Collection Management
-[.status]#Developer Preview#
 
 The CollectionManager interface may be used to create and delete scopes and collections from the Couchbase cluster.
 It is instantiated through the `Bucket.collections()` method.
