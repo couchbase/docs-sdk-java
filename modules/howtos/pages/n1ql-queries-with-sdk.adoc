@@ -239,8 +239,11 @@ A complete list of `QueryOptions` can be found in the https://docs.couchbase.com
 
 [source,java]
 ----
-include::example$Queries.java[tag=connect-bucket-and-scope]
-include::example$Queries.java[tag=scope-level-query]
+
+include::example$Queries.java[tag=connect-bucket-and-scope,indent=0]
+
+include::example$Queries.java[tag=scope-level-query,indent=0]
+
 ----
 
 == Additional Resources
