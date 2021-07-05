@@ -468,7 +468,7 @@ Builder Method: `CompressionConfig.enabled`
 +
 Default: `true`
 +
-System Property: `com.couchbase.env.CompressionExample.enabled(boolean)`
+System Property: `com.couchbase.env.compression.enable(boolean)`
 +
 If enabled, the client will compress documents before they are sent to Couchbase Server.
 If this is set to `false`, the other CompressionExample settings have no effect.
