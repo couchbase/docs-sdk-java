@@ -132,6 +132,7 @@ Finally, you can drop unneeded collections and scopes:
 include::example$CollectionManagerExample.java[tag=drop-collection,indent=0]
 
 include::example$CollectionManagerExample.java[tag=drop-scope,indent=0]
+
 ----
 
 Note that you require at least the https://docs.couchbase.com/server/7.0/learn/security/roles.html#bucket-admin[Bucket Admin] privilege to create or drop a Scope.
@@ -144,6 +145,7 @@ You can create users with the appropriate RBAC programmatically:
 include::example$CollectionManagerExample.java[tag=bucketAdmin, indent=0]
 
 include::example$CollectionManagerExample.java[tag=scopeAdmin, indent=0]
+
 ----
 
 == Index Management

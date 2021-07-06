@@ -7,7 +7,8 @@
 {description}
 
 The Collections feature in Couchbase Server is fully implemented in the 3.2 API version of the Couchbase SDK.
-Information on _Collections_ can be found in the xref:7.0@server:developer-preview:collections/collections-overview.adoc[server docs].
+
+Information on _Collections_ can be found in the xref:7.0@server:learn:data:scopes-and-collections.adoc[server docs].
 
 == Using Collections & Scopes
 
@@ -27,5 +28,4 @@ include::example$CollectionsExample.java[tag=collections_2,indent=0]
 
 == Further Reading  
 
-* Please see the xref:7.0@server:learn:data:scopes-and-collections.adoc[Collections Overview documents] in the Server docs.
-* To see Collections in action, take a look at our xref:howtos:working-with-collections.adoc[Collections-enabled Travel Sample page].
+To see Collections in action, take a look at our xref:howtos:working-with-collections.adoc[Collections-enabled Travel Sample page].
