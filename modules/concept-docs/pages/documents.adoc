@@ -2,8 +2,7 @@
 :description: Couchbase supports CRUD operations, various data structures, and binary documents.
 :nav-title: Documents & Doc Ops
 :page-topic-type: concept
-//:page-aliases: ROOT:core-operations.adoc
-:page-aliases: ROOT:documents.adoc,ROOT:documents-basics.adoc,ROOT:documents-atomic.adoc,7.0@server:developer-guide:expiry.adoc,7.0@server:developer-guide:creating-documents.adoc
+:page-aliases: ROOT:documents.adoc,ROOT:documents-basics.adoc,ROOT:documents-atomic.adoc,7.0@server:developer-guide:expiry.adoc,7.0@server:developer-guide:creating-documents.adoc,ROOT:core-operations.adoc
 
 [abstract]
 {description}
@@ -34,13 +33,13 @@ include::7.0@sdk:shared:partial$documents.adoc[tag=document]
 
 == Primitive Key-Value Operations
 
-[source,python]
+[source,java]
 ----
-upsert(docid, document)
-insert(docid, document)
-replace(docid, document)
-get(docid)
-remove(docid)
+upsert(String docid, Object document)
+insert(String docid, Object document)
+replace(String docid, Object document)
+get(String docid)
+remove(String docid)
 ----
 
 include::7.0@sdk:shared:partial$documents.adoc[tag=crud-overview]
@@ -51,16 +50,16 @@ include::7.0@sdk:shared:partial$documents.adoc[tag=store-update]
 ====
 If you wish to only modify certain parts of a document, you can use xref:subdocument-operations.adoc[sub-document] operations which operate on specific subsets of documents:
 
-[source,python]
+[source,java,indent=0]
 ----
-collection.mutate_in("customer123", [SD.upsert("fax", "311-555-0151")])
+include::example$DocumentsExample.java[tag=mutate-in]
 ----
 
 or xref:7.0@server:n1ql:n1ql-language-reference/update.adoc[N1QL UPDATE] to update documents based on specific query criteria:
 
 [source,sql]
 ----
-update `default` SET sale_price = msrp * 0.75 WHERE msrp < 19.95;
+update `travel-sample`.inventory.airline SET sale_price = msrp * 0.75 WHERE msrp < 19.95;
 ----
 ====
 
@@ -68,37 +67,30 @@ include::7.0@sdk:shared:partial$documents.adoc[tag=get_generic]
 
 [source,sql]
 ----
-SELECT * FROM default USE KEYS ["docid"];
+SELECT * FROM `travel-sample`.inventory.airport USE KEYS ["airport_1254"];
 ----
 
 or
 
 [source,sql]
 ----
-SELECT * FROM default WHERE META(default).id = "docid";
+SELECT * FROM `travel-sample`.inventory.airport WHERE META().id = "airport_1254";
 ----
 
 You can also retrieve _parts_ of documents using xref:subdocument-operations.adoc[sub-document operations], by specifying one or more sections of the document to be retrieved
 
-[source,python]
+[source,java,indent=0]
 ----
-name, email = cb.retrieve_in('user:kingarthur', 'contact.name', 'contact.email')
+include::example$DocumentsExample.java[tag=lookup-in]
 ----
 
 // Counters
 
 include::7.0@sdk:shared:partial$documents.adoc[tag=counters1]
 
-[source,java]
+[source,java,indent=0]
 ----
-String counterDocId = "counter-doc";
-// Increment by 1, creating doc if needed
-collection.binary().increment(counterDocId);
-// Decrement by 1
-collection.binary().decrement(counterDocId);
-// Decrement by 5
-collection.binary().decrement(counterDocId,
-DecrementOptions.decrementOptions().delta(5));
+include::example$DocumentsExample.java[tag=counters]
 ----
 
 You can simplify by importing `decrementOptions()` statically:
@@ -110,13 +102,9 @@ collection.binary().decrement(counterDocId, decrementOptions().delta(5));
 
 include::7.0@sdk:shared:partial$documents.adoc[tag=counters2]
 
-[source,python]
+[source,java,indent=0]
 ----
-# Python example:
-rv = cb.get('counter_id')
-value, cas = rv.value, rv.cas
-if should_increment_value(value):
-  cb.upsert('counter_id', value + increment_amount, cas=cas)
+include::example$DocumentsExample.java[tag=counter-increment]
 ----
 
 include::7.0@sdk:shared:partial$documents.adoc[tag=counters3]

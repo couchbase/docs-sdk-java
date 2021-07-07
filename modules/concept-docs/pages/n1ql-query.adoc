@@ -124,9 +124,9 @@ and allows optimization on a case-by-case basis.
 
 == Collections and Scopes, and the Query Context
 
-From the _beta version of the next Couchbase Server release, 7.0β_ the xref:7.0@server:learn:data/scopes-and-collections.adoc[Collections] feature lets you logically group similar documents into Collections.
+From Couchbase Server release 7.0 the xref:7.0@server:learn:data/scopes-and-collections.adoc[Collections] feature lets you logically group similar documents into Collections.
 
-You can query collections in N1QL, by referring to an fully qualified keyspace.
+You can query collections in N1QL, by referring to a fully qualified keyspace.
 For example, to list the documents in the `airline` collection in the `inventory` scope:
 
 [source,n1ql]

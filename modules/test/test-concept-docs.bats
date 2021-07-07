@@ -36,3 +36,8 @@ load 'test/test_helper.bash'
     runExample XattrExample
     assert_success
 }
+
+@test "[concept-docs] - DocumentsExample.java" {
+    runExample DocumentsExample
+    assert_success
+}
