@@ -539,12 +539,12 @@ Default:  _true_
 +
 System Property: `com.couchbase.unorderedExecutionEnabled`
 +
-From Couchbase 7.0, Out-of-Order returns prevent operations from being blocked by long-running KV requests, potentially improving performance for durable writes and multi-document ACID transactions.
+From Couchbase 7.0, Out-of-Order execution allows the server to concurrently handle multiple requests on the same connection, potentially improving performance for durable writes and multi-document ACID transactions.
 This means that tuning the number of connections (KV endpoints) is no longer necessary as a workaround where data not available in the cache is causing timeouts.
 +
 This is set to `true` by default.
-Server will handle any operations that are not safe to be executed out of order, and setting this to `false` is unlikely to ever be necessary.
-Note, changing the setting will only effect Server versions 7.0 onwards.
+// Server will handle any operations that are not safe to be executed out of order, and setting this to `false` is unlikely to ever be necessary.
+Note, changing the setting will only affect Server versions 7.0 onwards.
 
 Name: *JSON Serializer*::
 Builder Method: `jsonSerializer(JsonSerializer)`
