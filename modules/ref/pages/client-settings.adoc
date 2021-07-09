@@ -535,7 +535,7 @@ See the advanced section in the documentation on more specific information on re
 Name: *Unordered Execution*::
 Builder Method: `unorderedExecutionEnabled(boolean)`
 +
-Default:  _true_
+Default:  `true`
 +
 System Property: `com.couchbase.unorderedExecutionEnabled`
 +
