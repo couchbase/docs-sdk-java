@@ -18,7 +18,7 @@ The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Tran
 
 == Distributed Transactions Java 1.1.8 (26 May 2021)
 
-This release has been tested with Couchbase Java SDK version 3.1.5 and requires that version as a minimum.
+This release has been tested with Couchbase Java SDK version 3.1.5 and requires exactly that version (higher versions of the Java SDK are not compatible).
 
 https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.1.8/[JavaDocs]
 
