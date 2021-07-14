@@ -1,15 +1,11 @@
 = Request Tracing and Metrics
-:description: Tracing and Metrics provide fine-grained insight into how an application is performing and helps to diagnose when it is not.
+:description: Tracing and Metrics provide fine-grained insight into how an application is performing, and helps to diagnose when it is not.
 :nav-title: Request Tracing and Metrics
 :page-topic-type: concept
 
 [abstract]
 {description}
 
-include::7.0@sdk:shared:partial$rto.adoc[tag=placeholder]
+include::7.0@sdk:shared:partial$rto.adoc[tag=rto]
 
 
-== Additional Information
-
-For Threshold Logging and Orphan Logging, see the xref:errors.adoc#threshold-orphan-logging[notes],
-and the xref:howtos:slow-operations-logging.adoc[Slow Operations Logging] howto doc.
