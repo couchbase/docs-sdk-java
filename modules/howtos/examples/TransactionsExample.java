@@ -29,18 +29,24 @@ import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.ReactiveCollection;
+import com.couchbase.client.java.ReactiveScope;
+import com.couchbase.client.java.Scope;
+import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryProfile;
 import com.couchbase.client.java.query.QueryResult;
+import com.couchbase.client.java.query.QueryScanConsistency;
 import com.couchbase.client.tracing.opentelemetry.OpenTelemetryRequestSpan;
+import com.couchbase.transactions.SingleQueryTransactionResult;
 import com.couchbase.transactions.TransactionDurabilityLevel;
 import com.couchbase.transactions.TransactionGetResult;
 import com.couchbase.transactions.TransactionQueryOptions;
 import com.couchbase.transactions.TransactionResult;
 import com.couchbase.transactions.Transactions;
 import com.couchbase.transactions.config.PerTransactionConfigBuilder;
+import com.couchbase.transactions.config.SingleQueryTransactionConfigBuilder;
 import com.couchbase.transactions.config.TransactionConfigBuilder;
 import com.couchbase.transactions.deferred.TransactionSerializedContext;
 import com.couchbase.transactions.error.TransactionCommitAmbiguous;
@@ -64,7 +70,7 @@ public class TransactionsExample {
     public static void main(String... args) {
         // tag::init[]
         // Initialize the Couchbase cluster
-        Cluster cluster = Cluster.connect("localhost", "Administrator", "password");
+        Cluster cluster = Cluster.connect("localhost", "username", "password");
         Bucket bucket = cluster.bucket("travel-sample");
         Scope scope = bucket.scope("inventory");
         Collection collection = scope.collection("airport");
@@ -76,6 +82,8 @@ public class TransactionsExample {
         TransactionsExample.cluster = cluster;
         TransactionsExample.collection = collection;
         TransactionsExample.transactions = transactions;
+
+        queryExamples();
     }
 
     static void config() {
@@ -94,7 +102,7 @@ public class TransactionsExample {
         try {
             transactions.run((ctx) -> {
                 // 'ctx' is an AttemptContext, which permits getting, inserting,
-                // removing and replacing documents, along with committing and
+                // removing and replacing documents, performing N1QL queries, and committing or
                 // rolling back the transaction.
 
                 // ... Your transaction logic here ...
@@ -153,14 +161,15 @@ public class TransactionsExample {
         // end::async_logging[]
 
         // Normally you will chain this result further and ultimately subscribe. For
-        // simplicity, here we just block
-        // on the result.
+        // simplicity, here we just block on the result.
         TransactionResult finalResult = result.block();
         // end::createReactive[]
     }
 
     static void examples() {
         // tag::examples[]
+        Scope inventory = cluster.bucket("travel-sample").scope("inventory");
+
         try {
             TransactionResult result = transactions.run((ctx) -> {
                 // Inserting a doc:
@@ -184,6 +193,18 @@ public class TransactionsExample {
                 TransactionGetResult docC = ctx.get(collection, "doc-c");
                 ctx.remove(docC);
 
+                // Performing a SELECT N1QL query against a scope:
+                QueryResult qr = ctx.query(inventory, "SELECT * FROM hotel WHERE country = $1",
+                        TransactionQueryOptions.queryOptions()
+                                .parameters(JsonArray.from("United Kingdom")));
+                List<JsonObject> rows = qr.rowsAs(JsonObject.class);
+
+                // Performing an UPDATE N1QL query against a scope:
+                ctx.query(inventory, "UPDATE hotel SET price = $1 WHERE name = $2",
+                        TransactionQueryOptions.queryOptions()
+                                .parameters(JsonArray.from("from £89", "Glasgow Grand Central")));
+
+                // Committing (the ctx.commit() call is optional)
                 ctx.commit();
             });
         } catch (TransactionCommitAmbiguous e) {
@@ -204,6 +225,8 @@ public class TransactionsExample {
 
     static void examplesReactive() {
         // tag::examplesReactive[]
+        ReactiveScope inventory = cluster.bucket("travel-sample").scope("inventory").reactive();
+
         Mono<TransactionResult> result = transactions.reactive().run((ctx) -> {
             return
             // Inserting a doc:
@@ -217,9 +240,24 @@ public class TransactionsExample {
                     })
 
                     // Getting and removing a doc:
-                    .then(ctx.get(collection.reactive(), "doc-c")).flatMap(doc -> ctx.remove(doc))
+                    .then(ctx.get(collection.reactive(), "doc-c"))
+                        .flatMap(doc -> ctx.remove(doc))
 
-                    // Committing:
+                    // Performing a SELECT N1QL query against a scope:
+                    .then(ctx.query(inventory, "SELECT * FROM hotel WHERE country = $1",
+                            TransactionQueryOptions.queryOptions()
+                                    .parameters(JsonArray.from("United Kingdom"))))
+
+                    .doOnNext(queryResult -> queryResult.rowsAs(JsonObject.class)
+                            .doOnNext(row -> {
+                                // the application would do something with each row here
+                            }))
+
+                    // Performing an UPDATE N1QL query against a scope:
+                    .then(ctx.query(inventory, "UPDATE hotel SET price = $1 WHERE name = $2",
+                            TransactionQueryOptions.queryOptions()
+                                    .parameters(JsonArray.from("from £89", "Glasgow Grand Central"))))
+
                     .then(ctx.commit());
 
         }).doOnError(err -> {
@@ -289,10 +327,10 @@ public class TransactionsExample {
     static void replace() {
         // tag::replace[]
         transactions.run((ctx) -> {
-            TransactionGetResult anotherDoc = ctx.get(collection, "anotherDoc");
-            JsonObject content = anotherDoc.contentAs(JsonObject.class);
+            TransactionGetResult doc = ctx.get(collection, "doc-id");
+            JsonObject content = doc.contentAs(JsonObject.class);
             content.put("transactions", "are awesome");
-            ctx.replace(anotherDoc, content);
+            ctx.replace(doc, content);
         });
         // end::replace[]
     }
@@ -300,7 +338,7 @@ public class TransactionsExample {
     static void replaceReactive() {
         // tag::replaceReactive[]
         transactions.reactive().run((ctx) -> {
-            return ctx.get(collection.reactive(), "anotherDoc").flatMap(doc -> {
+            return ctx.get(collection.reactive(), "doc-id").flatMap(doc -> {
                 JsonObject content = doc.contentAs(JsonObject.class);
                 content.put("transactions", "are awesome");
                 return ctx.replace(doc, content);
@@ -312,8 +350,8 @@ public class TransactionsExample {
     static void remove() {
         // tag::remove[]
         transactions.run((ctx) -> {
-            TransactionGetResult anotherDoc = ctx.get(collection, "anotherDoc");
-            ctx.remove(anotherDoc);
+            TransactionGetResult doc = ctx.get(collection, "doc-id");
+            ctx.remove(doc);
         });
         // end::remove[]
     }
@@ -613,25 +651,15 @@ public class TransactionsExample {
             // The transaction definitely reached the commit point. Unstaging
             // the individual documents may or may not have completed
 
-            if (result.unstagingComplete()) {
-                // Operations with non-transactional actors will want
-                // unstagingComplete() to be true.
-                // Note that result.mutationState() is only available if the
-                // transaction exclusively involves KV operations (no N1QL queries).
-                cluster.query(" ... N1QL ... ", QueryOptions.queryOptions().consistentWith(result.mutationState()));
-
-                String documentKey = "a document key involved in the transaction";
-                GetResult getResult = collection.get(documentKey);
-            } else {
-                // This step is completely application-dependent. It may
-                // need to throw its own exception, if it is crucial that
-                // result.unstagingComplete() is true at this point.
-                // (Recall that the asynchronous cleanup process will
-                // complete the unstaging later on).
+            if (!result.unstagingComplete()) {
+                // In rare cases, the application may require the commit to have
+                // completed.  (Recall that the asynchronous cleanup process is
+                // still working to complete the commit.)
+                // The next step is application-dependent.
             }
         } catch (TransactionCommitAmbiguous err) {
             // The transaction may or may not have reached commit point
-            System.err.println("Transaction returned TransactionCommitAmbiguous and" + " may have succeeded, logs:");
+            System.err.println("Transaction returned TransactionCommitAmbiguous and may have succeeded, logs:");
 
             // Of course, the application will want to use its own logging rather
             // than System.err
@@ -664,30 +692,104 @@ public class TransactionsExample {
         // end::full-logging[]
     }
 
+    static void queryExamples() {
+        // tag::queryExamplesSelect[]
+        transactions.run((ctx) -> {
+            String st = "SELECT * FROM `travel-sample`.inventory.hotel WHERE country = $1";
+            QueryResult qr = ctx.query(st, TransactionQueryOptions.queryOptions()
+                    .parameters(JsonArray.from("United Kingdom")));
+            List<JsonObject> rows = qr.rowsAs(JsonObject.class);
+        });
+        // end::queryExamplesSelect[]
+
+        // tag::queryExamplesSelectScope[]
+        Bucket travelSample = cluster.bucket("travel-sample");
+        Scope inventory = travelSample.scope("inventory");
+
+        transactions.run((ctx) -> {
+            QueryResult qr = ctx.query(inventory, "SELECT * FROM hotel WHERE country = $1",
+                    TransactionQueryOptions.queryOptions()
+                            .parameters(JsonArray.from("United Kingdom")));
+            List<JsonObject> rows = qr.rowsAs(JsonObject.class);
+        });
+        // end::queryExamplesSelectScope[]
+
+        // tag::queryExamplesUpdate[]
+        transactions.run((ctx) -> {
+            QueryResult qr = ctx.query(inventory, "UPDATE hotel SET price = $1 WHERE name = $2",
+                    TransactionQueryOptions.queryOptions()
+                            .parameters(JsonArray.from("from £89", "Glasgow Grand Central")));
+            assert(qr.metaData().metrics().get().mutationCount() == 1);
+        });
+        // end::queryExamplesUpdate[]
+    }
+
     static void queryInsert() {
         // tag::queryInsert[]
         transactions.run((ctx) -> {
-            ctx.query("INSERT INTO `default` VALUES ('doc', {'hello':'world'})");
+            ctx.query("INSERT INTO `default` VALUES ('doc', {'hello':'world'})");  // <1>
 
-            String st = "SELECT `default`.* FROM `default` WHERE META().id = 'doc'";
+            // Performing a 'Read Your Own Write'
+            String st = "SELECT `default`.* FROM `default` WHERE META().id = 'doc'"; // <2>
             QueryResult qr = ctx.query(st);
-            qr.rowsAsObject().forEach(row -> {
-                System.out.println(row);
-            });
+            assert(qr.metaData().metrics().get().resultCount() == 1);
         });
         // end::queryInsert[]
+    }
+
+    static void querySingle() {
+        // tag::querySingle[]
+        String bulkLoadStatement; // a bulk-loading N1QL statement
+
+        try {
+            SingleQueryTransactionResult result = transactions.query(bulkLoadStatement);
+
+            QueryResult queryResult = result.queryResult();
+        } catch (TransactionCommitAmbiguous e) {
+            System.err.println("Transaction possibly committed");
+            for (LogDefer err : e.result().log().logs()) {
+                System.err.println(err.toString());
+            }
+        } catch (TransactionFailed e) {
+            System.err.println("Transaction did not reach commit point");
+            for (LogDefer err : e.result().log().logs()) {
+                System.err.println(err.toString());
+            }
+        }
+        // end::querySingle[]
+    }
+
+    static void querySingleScoped() {
+        String bulkLoadStatement;
+
+        // tag::querySingleScoped[]
+        Bucket travelSample = cluster.bucket("travel-sample");
+        Scope inventory = travelSample.scope("inventory");
+
+        transactions.query(inventory, bulkLoadStatement);
+        // end::querySingleScoped[]
+    }
+
+    static void querySingleConfigured() {
+        String bulkLoadStatement;
+
+        // tag::querySingleConfigured[]
+        transactions.query(bulkLoadStatement, SingleQueryTransactionConfigBuilder.create()
+            // Single query transactions will often want to increase the default timeout
+            .expirationTime(Duration.ofSeconds(360))
+            .build());
+        // end::querySingleConfigured[]
     }
 
     static void queryRyow() {
         // tag::queryRyow[]
         transactions.run((ctx) -> {
-            ctx.insert(collection, "doc", JsonObject.create().put("hello", "world"));
+            ctx.insert(collection, "doc", JsonObject.create().put("hello", "world")); // <1>>
 
-            String st = "SELECT `default`.* FROM `default` WHERE META().id = 'doc'";
+            // Performing a 'Read Your Own Write'
+            String st = "SELECT `default`.* FROM `default` WHERE META().id = 'doc'"; // <2>
             QueryResult qr = ctx.query(st);
-            qr.rowsAsObject().forEach(row -> {
-                System.out.println(row);
-            });
+            assert(qr.metaData().metrics().get().resultCount() == 1);
         });
         // end::queryRyow[]
     }
@@ -702,9 +804,8 @@ public class TransactionsExample {
     }
 
     static void customMetadata() {
-        Collection metadataCollection = null;
-
         // tag::custom-metadata[]
+        Collection metadataCollection = null; // this is a Collection opened by your code earlier
         Transactions transactions = Transactions.create(cluster,
                 TransactionConfigBuilder.create().metadataCollection(metadataCollection));
         // end::custom-metadata[]
@@ -722,8 +823,8 @@ public class TransactionsExample {
 
     static void tracingWrapped() {
         // #tag::tracing-wrapped[]
-        Span dummySpan = Span.current(); // (this is a dummy span) created by your code earlier
-        RequestSpan wrapped = OpenTelemetryRequestSpan.wrap(dummySpan);
+        Span span = Span.current(); // this is a span created by your code earlier
+        RequestSpan wrapped = OpenTelemetryRequestSpan.wrap(span);
 
         transactions.run((ctx) -> {
             // your transaction

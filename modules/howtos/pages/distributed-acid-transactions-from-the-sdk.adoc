@@ -9,11 +9,8 @@
 [abstract]
 {description}
 
-
 include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=intro]
 
-
-Below we show you how to create Transactions, step-by-step.
 You may also want to start with our https://github.com/couchbaselabs/couchbase-transactions-java-examples[transactions examples repository],
 which features useful downloadable examples of using Distributed Transactions.
 
@@ -23,7 +20,7 @@ Javadocs are available https://docs.couchbase.com/sdk-api/couchbase-transactions
 == Requirements
 
 * Couchbase Server 6.6.1 or above.
-* Couchbase Java client 3.1.5.  It is recommended to follow the transitive dependency for the transactions library from Maven.
+* Couchbase Java client 3.1.5 or above.  It is recommended to follow the transitive dependency for the transactions library from Maven.
 include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
 
 
@@ -31,7 +28,7 @@ include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
 
 Couchbase transactions require no additional components or services to be configured. 
 Simply add the transactions library into your project.
-The latest version, as of May 2021, is 1.1.8.
+The latest version, as of July 2021, is 1.1.8.
 
 With Gradle this can be accomplished by modifying these sections of your build.gradle file like so:
 
@@ -60,7 +57,7 @@ A complete simple gradle project is available on our https://github.com/couchbas
 
 == Initializing Transactions
 
-Here are all imports used by the following examples:
+To make it easy to use any of the following examples, here are all the imports used by them:
 
 [source,java]
 ----
@@ -78,7 +75,7 @@ include::example$TransactionsExample.java[tag=init,indent=0]
 
 == Configuration
 
-Transactions can optionally be configured at the point of creating the `Transactions` object:
+Transactions can optionally be globally configured at the point of creating the `Transactions` object:
 
 [source,java]
 ----
@@ -90,7 +87,7 @@ include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=config]
 
 include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=creating]
 
-As with the Couchbase Java Client, you can use the library in either synchronous mode (the exceptions will be explained later in <<Error Handling>>):
+As with the Couchbase Java Client, you can use the library in either synchronous mode:
 
 [source,java]
 ----
@@ -105,17 +102,12 @@ include::example$TransactionsExample.java[tag=createReactive,indent=0]
 ----
 
 The synchronous mode is the easiest to write and understand.
-The asynchronous API allows you to build your application in a reactive style, without large thread pools, which can help you scale with excellent efficiency.
+The asynchronous API allows you to build your application in a reactive style, which can help you scale with excellent efficiency.
 Those new to reactive programming may want to check out https://projectreactor.io/[the Project Reactor site] for more details on this powerful paradigm.
 
-NOTE: Some `AttemptContextReactive` methods, notably `remove`, return `Mono<Void>`.  
-Be careful to use `then` rather than `flatMap` or similar on these, 
-as `Mono<Void>` will only trigger a completion event, and not the next event, 
-so many methods including flatMap will not work as expected.
-
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=lambda-ctx]
 
 == Examples
-
 A code example is worth a thousand words, so here is a quick summary of the main transaction operations.
 They are described in more detail below. 
 
@@ -136,13 +128,14 @@ include::example$TransactionsExample.java[tag=examplesReactive,indent=0]
 include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=mechanics]
 
 
-== Mutating Documents
+== Key-Value Mutations
 
 === Replacing
 
 Replacing a document requires a `ctx.get()` call first.
-This is necessary to ensure that the document is not involved in another transaction.
-(If it is, then the transaction will handle this, generally by rolling back what has been done so far, and retrying the lambda.)
+This is necessary so that the transactions library can check that the document is not involved in another transaction.
+If it is, then the transactions library will handle this at the `ctx.replace()` point.  
+Generally, this involves rolling back what has been done so far, and retrying the lambda.
 
 .With the synchronous API:
 [source,java]
@@ -160,17 +153,22 @@ include::example$TransactionsExample.java[tag=replaceReactive,indent=0]
 
 As with replaces, removing a document requires a `ctx.get()` call first.
 
+.Synchronous API:
+[source,java]
+----
+include::example$TransactionsExample.java[tag=remove,indent=0]
+----
+
 .With the asynchronous API:
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=removeReactive,indent=0]
 ----
 
-.Synchronous API:
-[source,java]
-----
-include::example$TransactionsExample.java[tag=remove,indent=0]
-----
+NOTE: For those using the asynchronous API - some `ctx` methods, notably `ctx.remove()`, return `Mono<Void>`.
+There is a common 'gotcha' with `Mono<Void>` in that it does not trigger a 'next' reactive event - only a 'completion' event.
+This means that some reactive operators chained afterwards - including the common `flatMap` - will not trigger.
+Generally, you will to do `ctx.remove(...).then(...)` rather than `ctx.remove(...).flatMap(...)`.
 
 === Inserting
 
@@ -185,9 +183,9 @@ include::example$TransactionsExample.java[tag=insert,indent=0]
 include::example$TransactionsExample.java[tag=insertReactive,indent=0]
 ----
 
-== Getting Documents
+== Key-Value Reads
 
-There are two ways to get a document, `get` and `getOptional`:
+There are two ways to get a document with Key-Value, `get` and `getOptional`:
 
 [source,java]
 ----
@@ -204,37 +202,94 @@ Gets will 'read your own writes', e.g. this will succeed:
 include::example$TransactionsExample.java[tag=getReadOwnWrites,indent=0]
 ----
 
-== N1QL Queries
-With Couchbase Server 7.0 beta and the 1.1.3 release of this library, comes support for using N1QL queries inside the transaction lambda.
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=query-intro]
 
-NOTE: Support for queries in 1.1.3 is at beta level and is marked as @Stability.Volatile, which means the API may need to change as we gather feedback during the Couchbase Server 7.0 beta period.
-The feature should not be used in any production deployment while it is at beta level.
-Please take this opportunity to provide feedback on this feature, via either support or our forums.
+=== Using N1QL
+If you already use N1QL from the Java SDK, then its use in transactions is very similar.
+it returns the same `QueryResult` you are used to, and takes most of the same options.
 
-If you have used N1QL queries from the regular Java SDK, then you already know how to use queries inside the lambda, as the syntax is almost identical:
+You must take create to write `ctx.query()` inside the lambda however, rather than `cluster.query()` or `scope.query()`.
+
+An example of SELECTing some rows from the `travel-sample` bucket:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=queryExamplesSelect,indent=0]
+----
+
+Rather than specifying the full "`travel-sample`.inventory.hotel" name each time, it is easier to pass a reference to the inventory `Scope`:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=queryExamplesSelectScope,indent=0]
+----
+
+An example using a `Scope` for an UPDATE:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=queryExamplesUpdate,indent=0]
+----
+
+=== Read Your Own Writes
+As with Key-Value operations, N1QL queries support Read Your Own Writes.
+
+This example shows INSERTing a document and then SELECTing it again.
 
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=queryInsert,indent=0]
 ----
+<1> The inserted document is only staged at this point. as the transaction has not yet committed.
+Other transactions, and other non-transactional actors, will not be able to see this staged insert yet.
+<2> But the SELECT can, as we are reading a mutation staged inside the same transaction.
 
-Note that we are performing queries on the `ctx` object.
-This is very important: queries performed on a `Cluster` or `Scope` object inside the lambda will just act like a normal query and will not be part of the transaction.
+=== Mixing Key-Value and N1QL
+Key-Value operations and queries can be freely intermixed, and will interact with each other as you would expect.
 
-Key-Value operations and queries can be freely intermixed, and will 'see' each other as you would expect:
+In this example we insert a document with Key-Value, and read it with a SELECT.
+<1> As with the 'Read Your Own Writes' example, here the insert is only staged, and so it is not visible to other transactions or non-transactional actors.
+<2> But the SELECT can view it, as the insert was in the same transaction.
 
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=queryRyow,indent=0]
 ----
 
-For performance reasons it's recommended to put Key-Value operations before the first query in the lambda if possible, as after that point they incur a small translation cost.
 
-Query options can be provided via `TransactionsQueryOptions`, which provides a subset of the options in the Java SDK's `QueryOptions`:
+=== Query Options
+Query options can be provided via `TransactionsQueryOptions`, which provides a subset of the options in the Java SDK's `QueryOptions`.
 
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=queryOptions,indent=0]
+----
+
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=query-options]
+
+See the xref:howtos:n1ql-queries-with-sdk.adoc#query-options[QueryOptions documentation] for details on these.
+
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=query-perf]
+
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=query-single]
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=querySingle,indent=0]
+----
+
+You can also run a single query transaction against a particular `Scope` (these examples will exclude the full error handling for brevity):
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=querySingleScoped,indent=0]
+----
+
+and configure it:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=querySingleConfigured,indent=0]
 ----
 
 == Committing
@@ -248,7 +303,7 @@ With the asynchronous API, if you leave off the explicit call to `commit` then y
 include::example$TransactionsExample.java[tag=commit,indent=0]
 ----
 
-As described above, as soon as the transaction is committed, all its changes will be atomically visible to reads from other transactions.
+As soon as the transaction is committed, all its changes will be atomically visible to reads from other transactions.
 The changes will also be committed (or "unstaged") so they are visible to non-transactional actors, in an eventually consistent fashion.
 
 Commit is final: after the transaction is committed, it cannot be rolled back, and no further operations are allowed on it.
@@ -321,6 +376,7 @@ include::example$TransactionsExample.java[tag=config-expiration,indent=0]
 
 include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=txnfailed1]
 
+Similar to `TransactionResult`, `SingleQueryTransactionResult` also has an `unstagingComplete()` method.
 
 === Full Error Handling Example
 
@@ -393,15 +449,15 @@ include::example$TransactionsExample.java[tag=full-logging,indent=0]
 
 
 == Tracing
+[.status]#Developer Preview#
 
-The 1.1.6 release introduces support for OpenTelemetry and OpenTracing.
+The 1.1.6 release introduces support, at a Developer Preview level, for detailed tracing.
+This telemetry is particularly useful for monitoring performance.
 
-If the underlying Couchbase Java SDK is configured for OpenTelemetry or OpenTracing, then transaction spans will now be output automatically.
+Note: Developer Preview here means the feature works and is safe to use, but the naming of spans and attributes, and which spans are created, may change before this feature is generally available.
 
-See the xref:howtos:observability-tracing.adoc[Couchbase Java SDK Request Tracing documentation] for more guidance on configuring the Couchbase Java SDK appropriately.
-
-Essentially the application creates a Couchbase `RequestTracer`, wrapping a OpenTelemetry or OpenTracing tracer, and this is passed in at the point of creating a `Cluster` object.
-The transactions library will then automatically use this tracer for its own spans.
+If the underlying Couchbase Java SDK is configured for tracing, then no further work is required: transaction spans will be output automatically.
+See the xref:howtos:observability-tracing.adoc[Couchbase Java SDK Request Tracing documentation] for how to configure this.
 
 === Parent Spans
 
@@ -414,14 +470,6 @@ If you have an existing OpenTelemetry span you can easily convert it to a Couchb
 ----
 include::example$TransactionsExample.java[tag=tracing-wrapped,indent=0]
 ----
-
-Alternatively if you don't already have a span, you can create one using the Couchbase Tracer like so:
-
-[source,java]
-----
-include::example$TransactionsExample.java[tag=tracing,indent=0]
-----
-
 
 == Concurrent Operations with the Async API
 
@@ -441,38 +489,15 @@ include::example$TransactionsExample.java[tag=concurrentOps,indent=0]
 ----
 
 
-// tag::custom-metadata[]
-== Custom Metadata Collections
-
-
-As described above, transactions create and use metadata documents, that are created in the bucket of the first mutated document in the transaction.
-
-With Couchbase Server 7.0 beta comes support for scopes and collections, providing a more granular way of organising documents.
-
-You can now, completely optionally, use a collection to store the metadata documents, using a new configuration parameter:
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=custom-metadata-1]
 
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=custom-metadata,indent=0]
 ----
 
-When specified:
+include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=custom-metadata-2]
 
-* Any transactions created from this `Transactions` object, will create and use metadata in that collection.
-* The asynchronous cleanup started by this `Transactions` object will be looking for expired transactions only in this collection.
-
-Most users will not need to use custom metadata collections, and can continue to use the existing 'out-of-the-box' behaviour.
-They are provided for these use-cases:
-
-* The metadata documents contain, for documents involved in each transaction, the document's key and the name of the bucket, scope and collection it exists on.
-Some deployments may not want to potentially 'leak' this data across buckets, scopes and collections.
-In which case a metadata collection can be created, with appropriate RBAC permissions to control visibility.
-* If the user wants to remove the default collection entirely.
-
-NOTE: Support for custom metadata collections in 1.1.3 is at beta level and is marked as @Stability.Volatile, which means the API may need to change as we gather feedback during the Couchbase Server 7.0 beta period.
-The feature should not be used in any production deployment while it is at beta level.
-Please take this opportunity to provide feedback on this feature, via either support or our forums.
-// end::custom-metadata[]
 
 == Deferred Commits
 
