@@ -266,8 +266,7 @@ include::example$TransactionsExample.java[tag=queryOptions,indent=0]
 
 include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=query-options]
 
-// TODO test this link works
-See the xref:howtos:n1ql-queries-with-sdk.html#query-options[QueryOptions documentation] for details on these.
+See the xref:howtos:n1ql-queries-with-sdk.adoc#query-options[QueryOptions documentation] for details on these.
 
 include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=query-perf]
 
