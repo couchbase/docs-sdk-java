@@ -5,63 +5,23 @@
 :page-topic-type: tutorial
 :page-aliases: ROOT:sample-application,ROOT:tutorial4,ROOT:sample-app-backend
 
-[abstract]
-{description}
+:travel-sample-git-project: try-cb-java
 
-include::7.0@sdk:shared:partial$sample-application.adoc[tag=prereq]
+include::project-docs:partial$attributes.adoc[]
 
+include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=abstract]
 
-== Preparation
+include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=quick-start]
 
-As well as the xref:start-using-sdk.adoc[Java SDK 3.2] and Couchbase Server,
-set up as described above, you will need `git` to fetch the travel sample application code:
+include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=bring-your-own]
 
-[source,console]
-----
-$ git clone https://github.com/couchbaselabs/try-cb-java.git
-----
+include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=using]
 
-Change directory into your cloned repository, and check out the latest branch (this will most probably be enabled as the default branch).
-
-[source,console]
-----
-$ git checkout 7.0
-----
-
-
-== Running the Travel Sample Application
-
-Next, edit the `storage.host` field in src/main/resources/application.properties to the one for your containerised Couchbase Server (or localhost, 127.0.0.1, if appropriate), and any other local changes -- such as password.
-From here onwards, we'll assume the defaults.
-
-And run with
-
-[source,console]
-----
-$ mvn spring-boot:run
-----
-
-Most likely, you'll want to open up your preferred IDE for the `storage.host` step, 
-and stay there to build the app, rather than running Maven from the command line.
-
-After the build, you should see messages from `Tomcat` and `trycb.Application`, which tells you that you've been successful.
-With your Web browser of choice, head to port 8080 of the local machine.
-
-
-// *PIC -- screenshot
-
-
-
-== Using the Sample App
-
-Give yourself a username and password and click *Register*.
-
-Now try out a few queries, and see Search in action for the hotel finder feature..
 
 
 == Sample App Backend
 
-The backend code shows Couchbase Java SDK in action with Query and Search, 
+The backend code shows Couchbase Java SDK in action with Query and Search,
 but also how to plug together all of the elements and build an application with Couchbase Server and the Java SDK.
 Look at `User.java` to see some of the pieces necessary in most applications, such as the User `@Service`:
 
@@ -133,7 +93,6 @@ Here, the _flights_ array, containing the flight IDs, is converted to actual obj
 ----
 
 
-== Data Model
+include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=data-model]
 
-See the xref:ref:travel-app-data-model.adoc[Travel App Data Model] reference page for more information about the sample data set used.
-
+include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=rest-api]
