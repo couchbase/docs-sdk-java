@@ -134,7 +134,8 @@ include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=mechanics]
 
 Replacing a document requires a `ctx.get()` call first.
 This is necessary so that the transactions library can check that the document is not involved in another transaction.
-If it is, then the transactions library will handle this at the `ctx.replace()` point.  Generally this involves rolling back what has been done so far, and retrying the lambda.
+If it is, then the transactions library will handle this at the `ctx.replace()` point.  
+Generally, this involves rolling back what has been done so far, and retrying the lambda.
 
 .With the synchronous API:
 [source,java]
