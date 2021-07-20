@@ -35,6 +35,7 @@ Java 11 has various enhancements like lambda local variable type inference, prof
 </dependencies>
 ----
 
+
 == Version 3.2.0 (20 July 2021)
 
 Version 3.2.0 is the first release of the 3.2 series.
@@ -53,25 +54,25 @@ The supported and tested dependencies for this release are:
 
 === Bug Fixes
 * https://issues.couchbase.com/browse/JVMCBC-949[JVMCBC-949]:
-Opening a non-default collection on an memcached bucket now fails fsat.
+Opening a non-default collection on an memcached bucket now fails fast.
 * https://issues.couchbase.com/browse/JVMCBC-983[JVMCBC-983]:
 Ignore slow subscribers on certain Flux intervals.
 * https://issues.couchbase.com/browse/JCBC-1822[JCBC-1822]:
-BatchHelper now supports MDS deployments.
+`BatchHelper` now supports MDS deployments.
 
 === Interface Changes
-All interface changes are to interfaces that are currently in beta and marked @Stability.Volatile or @Stability.Uncommitted.
+All interface changes are to interfaces that are currently in beta and marked `@Stability.Volatile` or `@Stability.Uncommitted`.
 
 * https://issues.couchbase.com/browse/JVMCBC-978[JVMCBC-978]:
-Rename AggregatingMeter to LoggingMeter.
+Rename `AggregatingMeter` to `LoggingMeter`.
 * https://issues.couchbase.com/browse/JVMCBC-934[JVMCBC-934]:
 Threshold and Orphan output is now in new format.
 * https://issues.couchbase.com/browse/JVMCBC-979[JVMCBC-979]:
-Rename ThresholdRequestTracer to ThresholdLoggingTracer
+Rename `ThresholdRequestTracer` to `ThresholdLoggingTracer`.
 * https://issues.couchbase.com/browse/JCBC-1823[JCBC-1823]:
 Promote collection APIs from Volatile to Committed.
 * https://issues.couchbase.com/browse/JCBC-1844[JCBC-1844]:
-Promote BatchHelper from Volatile to Uncommitted.
+Promote `BatchHelper` from Volatile to Uncommitted.
 
 === Improvement
 * https://issues.couchbase.com/browse/JVMCBC-980[JVMCBC-980]:
@@ -79,7 +80,7 @@ Add exception wrappers to Tracers and Meters.
 * https://issues.couchbase.com/browse/JVMCBC-987[JVMCBC-987]:
 Allow supplying an SDK2-compatible memcached hashing strategy.
 * https://issues.couchbase.com/browse/JVMCBC-988[JVMCBC-988]:
-Map Query Error 13014 to AuthenticationException.
+Map Query Error 13014 to `AuthenticationException`.
 * https://issues.couchbase.com/browse/JVMCBC-989[JVMCBC-989]:
 Add timeout_ms to threshold logging tracer output.
 * https://issues.couchbase.com/browse/JVMCBC-991[JVMCBC-991]:
@@ -89,7 +90,7 @@ Cache NodeIdentifier in NodeInfo.
 * https://issues.couchbase.com/browse/JVMCBC-993[JVMCBC-993]:
 Optimize early discard of events which are not going to be logged.
 * https://issues.couchbase.com/browse/JVMCBC-996[JVMCBC-996]:
-Throw FeatureNotAvailableException if scope level queries are not available.
+Throw `FeatureNotAvailableException` if scope level queries are not available.
 * https://issues.couchbase.com/browse/JVMCBC-997[JVMCBC-997]:
 Duplicate attributes from dispatch_to_server to improve tracing.
 * https://issues.couchbase.com/browse/JVMCBC-998[JVMCBC-998]:
@@ -104,7 +105,7 @@ Add OSGi bundle.
 * https://issues.couchbase.com/browse/JCBC-1787[JCBC-1787]:
 Validate expiry instants.
 * https://issues.couchbase.com/browse/JCBC-1838[JCBC-1838]:
-Add support for SDK2-compatible LegacyTranscoder.
+Add support for SDK2-compatible `LegacyTranscoder`.
 * https://issues.couchbase.com/browse/JCBC-1841[JCBC-1841]:
 Update OpenTelemetry to 1.3.0.
 
