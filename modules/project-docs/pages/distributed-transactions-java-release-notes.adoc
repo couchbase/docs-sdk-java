@@ -15,6 +15,50 @@ This page features the release notes for that library -- for release notes, down
 See the xref:7.0@server:learn:data/transactions.adoc[Distributed ACID Transactions concept doc] in the server documentation for details of how Couchbase implements transactions.
 The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Transactions HOWTO doc] walks you through all aspects of working with Distributed Transactions.
 
+== Distributed Transactions Java 1.2.1 (21 July 2021)
+This release has been tested with Couchbase Java SDK version 3.2.0 and requires version 3.1.5 or higher.
+
+It promotes the beta-level support for using query statements in a transaction to fully committed, as well as the custom metadata collection feature.
+The exception to this is the newly-added support for single query transactions.
+As this feature is so new, it remains at @Stability.Uncommitted.
+
+https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.2.1/[JavaDocs]
+
+=== Interface Changes
+Some interfaces that were in @Stability.Volatile or @Stability.Uncommitted were modified:
+
+* https://issues.couchbase.com/browse/TXNJ-424[TXNJ-424]:
+The majority of the query API, and custom metadata collections, are promoted to @Stability.Committed.
+* https://issues.couchbase.com/browse/TXNJ-434[TXNJ-434]:
+Reactive query API now takes a `ReactiveScope` rather than `Scope`, for consistency with reactive operations.
+* https://issues.couchbase.com/browse/TXNJ-425[TXNJ-425], https://issues.couchbase.com/browse/TXNJ-433[TXNJ-433]:
+Timeout, parentSpan and retryStrategy were removed from TransactionQueryOptions.
+* https://issues.couchbase.com/browse/TXNJ-284[TXNJ-284]:
+The transaction expiration time, and key value timeout, can now be configured at the PerTransactionConfigBuilder level.
+
+=== Improvements
+
+
+* https://issues.couchbase.com/browse/TXNJ-409[TXNJ-409],
+https://issues.couchbase.com/browse/TXNJ-410[TXNJ-410],
+https://issues.couchbase.com/browse/TXNJ-408[TXNJ-408]:
+Improvements to the support for query, including OpenTelemetry.
+* https://issues.couchbase.com/browse/TXNJ-417[TXNJ-417]:
+The client record documents now contain additional diagnostic information.
+* https://issues.couchbase.com/browse/TXNJ-420[TXNJ-420]:
+OpenTelemetry spans now set a status if they have failed (required Java SDK 3.2.0).
+* https://issues.couchbase.com/browse/TXNJ-423[TXNJ-423],
+https://issues.couchbase.com/browse/TXNJ-431[TXNJ-431]:
+Support for single query statement transactions added at @Stability.Uncommitted level.
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/TXNJ-413[TXNJ-413]:
+Lost cleanup threads could restart after the `Transactions` object was shutdown.
+This issue is unlikely to affect applications.
+* https://issues.couchbase.com/browse/TXNJ-426[TXNJ-426]:
+Fix span.attribute binary compatibility with Java SDK, so this release is compatible with Java SDKs 3.1.5 to 3.2.0.
+
+
 
 == Distributed Transactions Java 1.1.8 (26 May 2021)
 
