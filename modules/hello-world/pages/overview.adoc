@@ -88,8 +88,9 @@ https://docs.couchbase.com/sdk-api/couchbase-java-client/[API Docs^]
 .What's Hot?
 
 [.content]
-The Couchbase Java SDK 3.x is a complete rewrite of the 2.x API, providing a simpler surface area and adding support for Couchbase Server features like Collections and Scopes (available in Couchbase Server 7.0).
-The (reactive) API also migrated from RxJava to Reactor, along with other improvements to performance, logging, debugging and timeout troubleshooting.
+Leverage the new Couchbase Server Scopes and Collection features to build multi-tenant micro-service application.
+Integrate with Open Telemetry API to instrument telemetry data for your mission critical workloads that will make troubleshooting and debugging of your applications easier than ever.
+Add an additional layer of security and protect your sensitive workloads using our Client Side Field Level Encryption capability. 
 
 Introducing xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed ACID Transactions from the Java SDK].
 
