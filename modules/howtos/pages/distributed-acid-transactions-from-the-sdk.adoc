@@ -20,7 +20,8 @@ Javadocs are available https://docs.couchbase.com/sdk-api/couchbase-transactions
 == Requirements
 
 * Couchbase Server 6.6.1 or above.
-* Couchbase Java client 3.1.5 or above.  It is recommended to follow the transitive dependency for the transactions library from Maven.
+* Couchbase Java client 3.1.5.
+It is recommended to follow the transitive dependency for the transactions library from Maven.
 include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
 
 
