@@ -4,5 +4,5 @@
 :page-partial:
 :page-aliases: relnotes-java-sdk,ROOT:sdk-release-notes,ROOT:relnotes-java-sdk,ROOT:release-notes,ROOT:download-links,server:sdks:java-2.2/download-links
 
-include::3.1@java-sdk:project-docs:page$sdk-release-notes.adoc[tag=all]
+include::3.2@java-sdk:project-docs:page$sdk-release-notes.adoc[tag=all]
  
