@@ -20,7 +20,7 @@ Javadocs are available https://docs.couchbase.com/sdk-api/couchbase-transactions
 == Requirements
 
 * Couchbase Server 6.6.1 or above.
-* Couchbase Java client 3.1.5.
+* Couchbase Java client 3.1.5 or above.
 It is recommended to follow the transitive dependency for the transactions library from Maven.
 include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
 
@@ -29,14 +29,14 @@ include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
 
 Couchbase transactions require no additional components or services to be configured. 
 Simply add the transactions library into your project.
-The latest version, as of July 2021, is 1.1.8.
+The latest version, as of July 2021, is 1.2.1.
 
 With Gradle this can be accomplished by modifying these sections of your build.gradle file like so:
 
 [source,gradle]
 ----
 dependencies {
-    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.1.8'
+    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.2.1'
 }
 ----
 
@@ -47,7 +47,7 @@ Or with Maven:
 <dependency>
     <groupId>com.couchbase.client</groupId>
     <artifactId>couchbase-transactions</artifactId>
-    <version>1.1.8</version>
+    <version>1.2.1</version>
 </dependency>
 ----
 

@@ -199,10 +199,10 @@ public class TransactionsExample {
                                 .parameters(JsonArray.from("United Kingdom")));
                 List<JsonObject> rows = qr.rowsAs(JsonObject.class);
 
-                // Performing an UPDATE N1QL query against a scope:
-                ctx.query(inventory, "UPDATE hotel SET price = $1 WHERE name = $2",
+                // Performing an UPDATE N1QL query on multiple documents, in the `inventory` scope:
+                ctx.query(inventory, "UPDATE route SET airlineid = $1 WHERE airline = $2",
                         TransactionQueryOptions.queryOptions()
-                                .parameters(JsonArray.from("from £89", "Glasgow Grand Central")));
+                                .parameters(JsonArray.from("airline_137", "AF")));
 
                 // Committing (the ctx.commit() call is optional)
                 ctx.commit();
@@ -243,7 +243,7 @@ public class TransactionsExample {
                     .then(ctx.get(collection.reactive(), "doc-c"))
                         .flatMap(doc -> ctx.remove(doc))
 
-                    // Performing a SELECT N1QL query against a scope:
+                    // Performing a SELECT N1QL query, in the `inventory` scope:
                     .then(ctx.query(inventory, "SELECT * FROM hotel WHERE country = $1",
                             TransactionQueryOptions.queryOptions()
                                     .parameters(JsonArray.from("United Kingdom"))))
@@ -253,10 +253,10 @@ public class TransactionsExample {
                                 // the application would do something with each row here
                             }))
 
-                    // Performing an UPDATE N1QL query against a scope:
-                    .then(ctx.query(inventory, "UPDATE hotel SET price = $1 WHERE name = $2",
+                    // Performing an UPDATE N1QL query on multiple documents, in the `inventory` scope:
+                    .then(ctx.query(inventory, "UPDATE route SET airlineid = $1 WHERE airline = $2",
                             TransactionQueryOptions.queryOptions()
-                                    .parameters(JsonArray.from("from £89", "Glasgow Grand Central"))))
+                                    .parameters(JsonArray.from("airline_137", "AF"))))
 
                     .then(ctx.commit());
 
