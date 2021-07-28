@@ -139,7 +139,7 @@ The following table provides an overview.
 |===
 | | SDC 3.x | SDC 4.0 - 4.2
 
-| _Status -->_
+| _Status ->_
 | _SDK 2.x only_
 | _New Features, Active Development_
 
