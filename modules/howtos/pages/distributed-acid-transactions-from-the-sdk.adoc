@@ -209,7 +209,7 @@ include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=query-intro]
 If you already use N1QL from the Java SDK, then its use in transactions is very similar.
 it returns the same `QueryResult` you are used to, and takes most of the same options.
 
-You must take create to write `ctx.query()` inside the lambda however, rather than `cluster.query()` or `scope.query()`.
+You must take care to write `ctx.query()` inside the lambda however, rather than `cluster.query()` or `scope.query()`.
 
 An example of SELECTing some rows from the `travel-sample` bucket:
 
