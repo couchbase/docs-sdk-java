@@ -1,0 +1,5 @@
+filters:
+  - 'modules/test/*'
+  - 'modules/Makefile'
+  - '**/*.java'
+  - '**/pom.xml'
