@@ -9,12 +9,12 @@ on:
       - '**/*.java'
       - '**/pom.xml'
   pull_request:
-    branches: [release/3.2]
-    paths:
-      - 'modules/test/*'
-      - 'modules/Makefile'
-      - '**/*.java'
-      - '**/pom.xml'
+    branches: [release/3.2,slack-notification]
+#    paths:
+#      - 'modules/test/*'
+#      - 'modules/Makefile'
+#      - '**/*.java'
+#      - '**/pom.xml''
 env:
   JAVA_VERSION: 15
 
@@ -38,4 +38,14 @@ jobs:
 
       - name: Build code samples
         run: make build
-        working-directory: ${{ env.working-directory }}
+        working-directory: ${{ env.working-directory }}}
+
+      - name: Notify slack fail
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
+          status: FAILED
+          color: danger
