@@ -6,7 +6,7 @@
 :lang: Java
 :version: 3.2.0
 :example-source: 3.2@java-sdk:howtos:example$Queries.java
-include::howtos:partial$attributes.adoc[]
+include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 {description}
@@ -252,7 +252,7 @@ NOTE: N1QL is not the only query option in Couchbase.
 Be sure to check that xref:concept-docs:data-services.adoc[your use case fits your selection of query service].
 
 * For a deeper dive into N1QL from the SDK, refer to our xref:concept-docs:n1ql-query.adoc[N1QL SDK concept doc].
-* The xref:7.0@server:n1ql:n1ql-language-reference/index.adoc[Server doc N1QL intro] introduces a complete guide to the N1QL language, including all of the latest additions.
+* The xref:{version-server}@server:n1ql:n1ql-language-reference/index.adoc[Server doc N1QL intro] introduces a complete guide to the N1QL language, including all of the latest additions.
 * The http://query.pub.couchbase.com/tutorial/#1[N1QL interactive tutorial] is a good introduction to the basics of N1QL use.
-* For scaling up queries, be sure to xref:7.0@server:learn:services-and-indexes/indexes/index-replication.adoc[read up on Indexes].
+* For scaling up queries, be sure to xref:{version-server}@server:learn:services-and-indexes/indexes/index-replication.adoc[read up on Indexes].
 * N1QL is for operational queries; for analytical workloads, read more on xref:concept-docs:http-services.adoc#long-running-queries-big-data[when to choose Analytics], our implementation of SQL++ available in the Enterprise Edition.
