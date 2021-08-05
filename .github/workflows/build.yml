@@ -49,7 +49,7 @@ jobs:
         # We run this step only on the default branch(release/3.2)
         # because secrets are not accessible on PRs from forks.
         # Therefore, this notification will only happen when a PR is merged.
-        if:  failure() && github.ref == 'refs/heads/test-branch'
+        if:  failure() && github.ref == 'refs/heads/release/3.2'
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
