@@ -17,7 +17,7 @@ public class Metrics {
     {
       // tag::metrics-enable-custom[]
       CoreEnvironment environment = CoreEnvironment.builder()
-          .loggingMeterConfig(LoggingMeterConfig.enabled(true).emitInterval(Duration.ofSeconds(30))).build();
+              .loggingMeterConfig(LoggingMeterConfig.enabled(true).emitInterval(Duration.ofSeconds(30))).build();
       // end::metrics-enable-custom[]
     }
 
