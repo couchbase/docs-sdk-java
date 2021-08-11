@@ -136,15 +136,13 @@ Ignore slow subscribers on certain Flux intervals.
 Ignore null values for attributed in OpenTelemetry and OpenTracing.
 * https://issues.couchbase.com/browse/JVMCBC-990[JVMCBC-990]:
 Gracefully handle cluster-level WaitUntilReady against clusters < 6.5.
-* https://issues.couchbase.com/browse/JCBC-1850[JCBC-1850]:
-Ignore null values for attributed in OpenTelemetry and OpenTracing.
 
 === Improvements
 
 * https://issues.couchbase.com/browse/JVMCBC-996[JVMCBC-996]:
 Throw `FeatureNotAvailableException` if scope level queries are not available.
 * https://issues.couchbase.com/browse/JVMCBC-988[JVMCBC-988]:
-Map Query Error 13014 to `AuthenticationException`.
+Query error code 13014 is now mapped to `AuthenticationException`.
 * https://issues.couchbase.com/browse/JCBC-1838[JCBC-1838]:
 Add support for SDK2-compatible `LegacyTranscoder`.
 * https://issues.couchbase.com/browse/JVMCBC-987[JVMCBC-987]:
