@@ -2,9 +2,9 @@ name: Build Code Samples
 
 on:
   push:
-    branches: [ "release/3.[1-9]" ]
+    branches: [ "release/3.*" ]
   pull_request:
-    branches: [ "release/3.[1-9]" ]
+    branches: [ "release/3.*" ]
 
 env:
   JAVA_VERSION: 15
@@ -55,7 +55,7 @@ jobs:
         # We run this step only on the default 3.1+ branch
         # because secrets are not accessible on PRs from forks.
         # Therefore, this notification will only happen when a PR is merged.
-        if: failure() && startsWith(github.ref, 'refs/heads/release/3.[1-9]') 
+        if: failure() && startsWith(github.ref, 'refs/heads/release/3.*') 
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}

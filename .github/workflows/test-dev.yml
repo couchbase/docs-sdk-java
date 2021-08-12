@@ -2,7 +2,7 @@ name: Test Code Samples (Dev)
 
 on:
   push:
-    branches: [ "release/3.[1-9]" ]
+    branches: [ "release/3.*" ]
 
 env:
   REGISTRY: registry.gitlab.com/cb-vanilla/server
