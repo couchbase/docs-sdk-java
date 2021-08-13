@@ -2,12 +2,32 @@ name: Test Code Samples (GA)
 
 on:
   push:
-    branches: [ release/3.* ]
+    branches: [ "release/3.*" ]
   pull_request:
-    branches: [ release/3.* ]
+    branches: [ "release/3.*" ]
 
 jobs:
+  # The pre_job uses a smart Github action that will check the provided path filters 
+  # to determine if subsequent jobs should be "skipped" when the filters don't apply.
+  # This ensures that our Github branch protection rules are still satisfied and users
+  # can merge their PRs with skipped status checks where appropriate.
+  # It also provides the ability to cancel outdated workflow runs after branch pushes.
+  # https://github.com/marketplace/actions/skip-duplicate-actions
+  pre_job:
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@master
+        with:
+          cancel_others: 'true' # cancel previous workflow runs when pushing a new commit.
+          paths: '["**/Makefile", "modules/test/**", "**/*.java", "**/pom.xml"]'
+
   test:
+    needs: pre_job
+    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
     env:
       working-directory:
@@ -17,47 +37,32 @@ jobs:
       - name: Checkout actions
         uses: actions/checkout@v2
 
-      # Because the job is a "required" status check, GitHub will block merging
-      # if the file filters don't apply to the changeset.
-      # We use this Github action to skip these steps when the changes made don't match the required
-      # file filters. By doing this the status check can be marked as "successful" and users can merge the PR.
-      # See https://github.community/t/feature-request-conditional-required-checks/16761/23 for some background.
-      - name: Check file changes
-        uses: getsentry/paths-filter@v2
-        id: changes
-        with:
-          token: ${{ github.token }}
-          filters: .github/workflows/file-filters.yml
-
       - name: Build Couchbase Docker image
-        if: steps.changes.outputs.filters == 'true'
         run: make cb-build
         working-directory: ${{ env.working-directory }}
 
       - name: Run Couchbase Server+SDK container
-        if: steps.changes.outputs.filters == 'true'
         run: make cb-start
         working-directory: ${{ env.working-directory }}
 
       - name: Test code samples
-        if: steps.changes.outputs.filters == 'true'
         run: make tests
         working-directory: ${{ env.working-directory }}
 
       - name: Cleanup
-        if: steps.changes.outputs.filters == 'true'
         run: make cb-stop
         working-directory: ${{ env.working-directory }}
 
       - name: Notify slack on failure
-        # We run this step only on the default branch(release/3.2)
+        # We run this step only on the default 3.1+ branch
         # because secrets are not accessible on PRs from forks.
         # Therefore, this notification will only happen when a PR is merged.
-        if: failure() && github.ref == 'refs/heads/release/3.2'
+        if: failure() && startsWith(github.ref, 'refs/heads/release/3.*') 
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          author_name: Docs Bot Automation
+          author_name: ":octocat: SDK Automation Failure"
+          text: ":no_entry: Oh noes! The commit has broken the build...please verify :paddlin:"
           fields: repo,workflow,job,commit,author
           mention: here
           if_mention: failure
