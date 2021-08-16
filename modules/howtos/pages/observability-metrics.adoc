@@ -19,8 +19,12 @@ Metrics broadly fall into the following categories:
 
 Right now only the first category is implemented by the SDK, more are planned.
 
+[NOTE]
+====
+The `AggregatingMeter`, which was previously available in SDK 3.1, has been renamed to `LoggingMeter` in the 3.2 release. 
+====
 
-== The Default AggregatingMeter
+== The Default LoggingMeter
 
 The default implementation aggregates and logs request and response metrics.
 
@@ -31,7 +35,7 @@ By default the metrics will be emitted every 10 minutes, but you can customize t
 include::example$Metrics.java[tag=metrics-enable-custom,indent=0]
 ----
 
-Once enabled, there is no further configuration needed. The `AggregatingMeter` will emit the collected request statistics every interval. 
+Once enabled, there is no further configuration needed. The `LoggingMeter` will emit the collected request statistics every interval.
 A possible report looks like this (prettified for better readability):
 
 [source,json]
@@ -72,21 +76,21 @@ Each report contains one object for each service that got used and is further se
 For each service / host combination, a total amount of recorded requests is reported, as well as percentiles from a histogram in microseconds. 
 The meta section on top contains information such as the emit interval in seconds so tooling can later calculate numbers like requests per second.
 
-The `AggregatingMeter` can be configured on the environment as shown above.
+The `LoggingMeter` can be configured on the environment as shown above.
 The following table shows the currently available properties:
 
-.AggregatingMeterConfig Properties 
+.LoggingMeterConfig Properties
 [options="header"]
 |====
 | Property       | Default | Description
-| `enabled`   | false | If the `AggregatingMeter` should be enabled.
+| `enabled`   | false | If the `LoggingMeter` should be enabled.
 | `emitInterval` | 600 seconds | The interval where found orphans are emitted.
 |====
 
 
 == OpenTelemetry Integration
 
-The SDK supports plugging in any `OpenTelemetry` metrics consumer instead of using the default `AggregatingMeter`.
+The SDK supports plugging in any `OpenTelemetry` metrics consumer instead of using the default `LoggingMeter`.
 To do this, first you need to add an additional dependency to your application:
 
 [source,xml]
