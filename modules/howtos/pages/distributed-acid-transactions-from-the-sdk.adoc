@@ -232,6 +232,15 @@ An example using a `Scope` for an UPDATE:
 include::example$TransactionsExample.java[tag=queryExamplesUpdate,indent=0]
 ----
 
+And an example combining SELECTs and UPDATEs.
+It's possible to call regular Java methods from the lambda, as shown here, permitting complex logic to be performed.
+Just remember that since the lambda may be called multiple times, so may the method.
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=queryExamplesComplex,indent=0]
+----
+
 === Read Your Own Writes
 As with Key-Value operations, N1QL queries support Read Your Own Writes.
 
@@ -249,14 +258,12 @@ Other transactions, and other non-transactional actors, will not be able to see 
 Key-Value operations and queries can be freely intermixed, and will interact with each other as you would expect.
 
 In this example we insert a document with Key-Value, and read it with a SELECT.
-<1> As with the 'Read Your Own Writes' example, here the insert is only staged, and so it is not visible to other transactions or non-transactional actors.
-<2> But the SELECT can view it, as the insert was in the same transaction.
-
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=queryRyow,indent=0]
 ----
-
+<1> As with the 'Read Your Own Writes' example, here the insert is only staged, and so it is not visible to other transactions or non-transactional actors.
+<2> But the SELECT can view it, as the insert was in the same transaction.
 
 === Query Options
 Query options can be provided via `TransactionsQueryOptions`, which provides a subset of the options in the Java SDK's `QueryOptions`.
