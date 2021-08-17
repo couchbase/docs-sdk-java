@@ -114,14 +114,7 @@ Local Couchbase Server::
 -- 
 [source,java]
 ----
-include::example$StartUsing.java[tag=connect,indent=0]
-
-include::example$StartUsing.java[tag=bucket,indent=0]
-
-include::example$StartUsing.java[tag=collection,indent=0]
-
-include::example$StartUsing.java[tag=upsert,indent=0]
-
+include::example$StartUsing.java[tags=**]
 ----
 --
 
