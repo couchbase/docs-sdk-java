@@ -114,7 +114,7 @@ Local Couchbase Server::
 -- 
 [source,java]
 ----
-include::example$StartUsing.java
+include::example$StartUsing.java[tags=**]
 ----
 --
 
