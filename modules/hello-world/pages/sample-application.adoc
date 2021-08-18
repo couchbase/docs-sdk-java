@@ -1,5 +1,6 @@
 = Sample Application
-:description: Discover how to program interactions with the Couchbase Server via the data, Query, and search services -- using the Travel Sample Application with the built-in Travel Sample data Bucket.
+:description: Discover how to program interactions with Couchbase Server via the Data, Query, and Search services \
+-- using the Travel Sample Application with the built-in Travel Sample data Bucket.
 :nav-title: Travel Sample App
 :content-type: tutorial
 :page-topic-type: tutorial
@@ -23,73 +24,75 @@ include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=using]
 
 The backend code shows Couchbase Java SDK in action with Query and Search,
 but also how to plug together all of the elements and build an application with Couchbase Server and the Java SDK.
-Look at `User.java` to see some of the pieces necessary in most applications, such as the User `@Service`:
+Look at `TenantUser.java` to see some of the pieces necessary in most applications, such as the TenantUser `@Service`:
 
 [source,java]
 ----
 @Service
-public class User {
+public class TenantUser {
 
     private final TokenService jwtService;
 
     @Autowired
-    public User(TokenService jwtService) {
+    public TenantUser(TokenService jwtService) {
         this.jwtService = jwtService;
     }
 
     static final String USERS_COLLECTION_NAME = "users";
-    static final String FLIGHTS_COLLECTION_NAME = "flights";
+    static final String BOOKINGS_COLLECTION_NAME = "bookings";
 ----
 
 Creating a user shows the typical security concerns, with salted password hashes, as well as the mundane but essential business of using the KV interface to `insert` the username into the database:
 
 [source,java]
 ----
-    public Result<Map<String, Object>> createLogin(final Bucket bucket, final String username, final String password,
-            DurabilityLevel expiry) {
-        String passHash = BCrypt.hashpw(password, BCrypt.gensalt());
-        JsonObject doc = JsonObject.create()
+public Result<Map<String, Object>> createLogin(final Bucket bucket, final String tenant, final String username,
+        final String password, DurabilityLevel expiry) {
+    String passHash = BCrypt.hashpw(password, BCrypt.gensalt());
+    JsonObject doc = JsonObject.create()
             .put("type", "user")
             .put("name", username)
             .put("password", passHash);
-        InsertOptions options = insertOptions();
-        if (expiry.ordinal() > 0) {
-            options.durability(expiry);
-        }
-        String narration = "User account created in document " + username + " in bucket " + bucket.name()
-                + (expiry.ordinal() > 0 ? ", with expiry of " + expiry.ordinal() + "s" : "");
-
-        try {
-            bucket.defaultCollection().insert(username, doc, options);
-            return Result.of(
-                    JsonObject.create().put("token", jwtService.buildToken(username)).toMap(),
-                    narration);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new AuthenticationServiceException("There was an error creating account");
-        }
+    InsertOptions options = insertOptions();
+    if (expiry.ordinal() > 0) {
+        options.durability(expiry);
     }
+
+    Scope scope = bucket.scope(tenant);
+    Collection collection = scope.collection(USERS_COLLECTION_NAME);
+    String queryType = String.format("KV insert - scoped to %s.users: document %s", scope.name(), username);
+    try {
+        collection.insert(username, doc, options);
+        Map<String, Object> data = JsonObject.create().put("token", jwtService.buildToken(username)).toMap();
+        return Result.of(data, queryType);
+    } catch (Exception e) {
+        e.printStackTrace();
+        throw new AuthenticationServiceException("There was an error creating account");
+    }
+}
 ----
 
 Here, the _flights_ array, containing the flight IDs, is converted to actual objects:
 
 [source,java]
 ----
-        Collection flightsCollection = bucket.defaultCollection();
-        List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < flights.size(); i++) {
-            String flightId = flights.getString(i);
-            GetResult res;
-            try {
-                res = flightsCollection.get(flightId);
-            } catch (DocumentNotFoundException ex) {
-                throw new RuntimeException("Unable to retrieve flight id " + flightId);
-            }
-            Map<String, Object> flight = res.contentAsObject().toMap();
-            results.add(flight);
+    List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
+    for (int i = 0; i < flights.size(); i++) {
+        String flightId = flights.getString(i);
+        GetResult res;
+        try {
+            res = bookingsCollection.get(flightId);
+        } catch (DocumentNotFoundException ex) {
+            throw new RuntimeException("Unable to retrieve flight id " + flightId);
         }
-        return results;
+        Map<String, Object> flight = res.contentAsObject().toMap();
+        results.add(flight);
     }
+
+    String queryType = String.format("KV get - scoped to %s.user: for %d bookings in document %s", scope.name(),
+            results.size(), username);
+    return Result.of(results, queryType);
+}
 ----
 
 

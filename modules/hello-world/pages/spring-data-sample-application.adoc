@@ -1,0 +1,109 @@
+= Spring Data Sample Application
+:description: Discover how to program interactions with Spring Data and Couchbase Server via the Data, Query, \
+and Search services -- using the Travel Sample Application with the built-in Travel Sample data Bucket.
+:nav-title: Spring Data Travel Sample App
+:content-type: tutorial
+:page-topic-type: tutorial
+
+:travel-sample-git-project: try-cb-spring
+
+include::project-docs:partial$attributes.adoc[]
+// override :name-sdk: from attributes.adoc
+:name-sdk: Java Spring Data
+
+include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=abstract]
+
+include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=quick-start]
+
+include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=bring-your-own]
+
+include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=using]
+
+
+== Sample App Backend
+
+The backend code shows Couchbase Java SDK in action with Query and Search, but also how to plug together all of the elements and build an application with Couchbase Server, the Java SDK and Spring Data.
+Look at `TenantUser.java` to see some of the pieces necessary in most applications, such as the TenantUser `@Service`:
+
+[source,java]
+----
+@Service
+public class TenantUser {
+
+  private final TokenService jwtService;
+  private final UserRepository userRepository;
+  private final BookingRepository bookingRepository;
+
+  public TenantUser(TokenService tokenService, UserRepository userRepository, BookingRepository bookingRepository) {
+    this.jwtService = tokenService;
+    this.userRepository = userRepository;
+    this.bookingRepository = bookingRepository;
+  }
+----
+
+You may have noticed that we make use of Spring Data Couchbase repositories in the `TenantUser` class.
+You can see an example of how a repository is defined in `UserRepository.java`:
+
+[source,java]
+----
+@Repository("userRepository")
+@Collection("users")
+@ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
+public interface UserRepository extends CouchbaseRepository<User, String>, DynamicProxyable<UserRepository> {
+
+}
+----
+
+Using the Spring Data Couchbase repository allows us to reduce boilerplate in our code and add a layer of abstraction to our
+database interactions.
+
+Creating a user shows the typical security concerns, with salted password hashes, as well as the advantages of using
+Spring Data Couchbase to `save` the username into the database using the `userRepository` we mentioned previously:
+
+[source,java]
+----
+public Result<Map<String, Object>> createLogin(final String tenant, final String username, final String password,
+		DurabilityLevel expiry) {
+	UserRepository userRepository = this.userRepository.withScope(tenant);
+	String passHash = BCrypt.hashpw(password, BCrypt.gensalt());
+	User user = new User(username, passHash);
+	UpsertOptions options = UpsertOptions.upsertOptions();
+	if (expiry.ordinal() > 0) {
+		options.durability(expiry);
+	}
+	String queryType = String.format("KV insert - scoped to %s.users: document %s", tenant, username);
+	try {
+		userRepository.withOptions(options).save(user);
+		Map<String, Object> data = JsonObject.create().put("token", jwtService.buildToken(username)).toMap();
+		return Result.of(data, queryType);
+	} catch (Exception e) {
+		throw new AuthenticationServiceException("There was an error creating account");
+	}
+}
+----
+
+Here, the _flights_ array, containing the flight IDs, is converted to actual objects:
+
+[source,java]
+----
+List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
+    for (String flightId : flights) {
+      Optional<Booking> res;
+      try {
+        res = bookingRepository.findById(flightId);
+      } catch (DocumentNotFoundException ex) {
+        throw new RuntimeException("Unable to retrieve flight id " + flightId);
+      }
+      Map<String, Object> flight = res.get().toMap();
+      results.add(flight);
+    }
+
+    String queryType = String.format("KV get - scoped to %s.user: for %d bookings in document %s", tenant,
+        results.size(), username);
+    return Result.of(results, queryType);
+  }
+----
+
+include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=data-model]
+
+include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=rest-api]
