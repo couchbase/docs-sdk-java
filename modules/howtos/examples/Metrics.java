@@ -1,7 +1,7 @@
 import java.time.Duration;
 
-import com.couchbase.client.core.env.AggregatingMeterConfig;
 import com.couchbase.client.core.env.CoreEnvironment;
+import com.couchbase.client.core.env.LoggingMeterConfig;
 import com.couchbase.client.java.env.ClusterEnvironment;
 import com.couchbase.client.metrics.opentelemetry.OpenTelemetryMeter;
 
@@ -17,7 +17,7 @@ public class Metrics {
     {
       // tag::metrics-enable-custom[]
       CoreEnvironment environment = CoreEnvironment.builder()
-          .aggregatingMeterConfig(AggregatingMeterConfig.enabled(true).emitInterval(Duration.ofSeconds(30))).build();
+              .loggingMeterConfig(LoggingMeterConfig.enabled(true).emitInterval(Duration.ofSeconds(30))).build();
       // end::metrics-enable-custom[]
     }
 

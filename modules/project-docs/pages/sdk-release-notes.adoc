@@ -109,6 +109,46 @@ Add support for SDK2-compatible `LegacyTranscoder`.
 * https://issues.couchbase.com/browse/JCBC-1841[JCBC-1841]:
 Update OpenTelemetry to 1.3.0.
 
+== Version 3.1.7 (11 August 2021)
+
+Version 3.1.7 is the eigth release of the 3.1 series, bringing stabilizations and enhancements over 3.1.6.
+
+http://packages.couchbase.com/clients/java/3.1.7/Couchbase-Java-Client-3.1.7.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.7/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.7/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.1.7**
+* com.couchbase.client:**core-io:2.1.7**
+* io.projectreactor:**reactor-core:3.4.6**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== Bug Fixes
+
+* https://issues.couchbase.com/browse/JVMCBC-949[JVMCBC-949]:
+Opening a non-default collection on an memcached bucket now fails fast.
+* https://issues.couchbase.com/browse/JVMCBC-983[JVMCBC-983]:
+Ignore slow subscribers on certain Flux intervals.
+* https://issues.couchbase.com/browse/JCBC-1822[JCBC-1822]:
+`BatchHelper` now supports MDS deployments.
+* https://issues.couchbase.com/browse/JCBC-1850[JCBC-1850]:
+Ignore null values for attributed in OpenTelemetry and OpenTracing.
+* https://issues.couchbase.com/browse/JVMCBC-990[JVMCBC-990]:
+Gracefully handle cluster-level WaitUntilReady against clusters < 6.5.
+
+=== Improvements
+
+* https://issues.couchbase.com/browse/JVMCBC-996[JVMCBC-996]:
+Throw `FeatureNotAvailableException` if scope level queries are not available.
+* https://issues.couchbase.com/browse/JVMCBC-988[JVMCBC-988]:
+Query error code 13014 is now mapped to `AuthenticationException`.
+* https://issues.couchbase.com/browse/JCBC-1838[JCBC-1838]:
+Add support for SDK2-compatible `LegacyTranscoder`.
+* https://issues.couchbase.com/browse/JVMCBC-987[JVMCBC-987]:
+Allow supplying an SDK2-compatible memcached hashing strategy.
+* https://issues.couchbase.com/browse/JVMCBC-999[JVMCBC-999]:
+Properly map server query timeout while streaming.
 
 == Version 3.1.6 (4 June 2021)
 

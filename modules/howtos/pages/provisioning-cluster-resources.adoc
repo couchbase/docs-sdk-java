@@ -5,7 +5,7 @@
 
 [abstract]
 {description}
-Common use cases are outlined here, more recherché use cases are covered in the https://pkg.go.dev/github.com/couchbase/gocb/v2?tab=doc[API docs].
+Common use cases are outlined here, less common use cases are covered in the https://pkg.go.dev/github.com/couchbase/gocb/v2?tab=doc[API docs].
 
 include::7.0@sdk:shared:partial$flush-info-pars.adoc[tag=management-intro]
 
@@ -135,15 +135,15 @@ include::example$CollectionManagerExample.java[tag=drop-scope,indent=0]
 
 ----
 
-Note that you require at least the https://docs.couchbase.com/server/7.0/learn/security/roles.html#bucket-admin[Bucket Admin] privilege to create or drop a Scope.
-The same role also lets you manage Collections, though a more minimal set of privileges is https://docs.couchbase.com/server/7.0/learn/security/roles.html#manage-collections-in-scope[Manage Collections in Scope] along with https://docs.couchbase.com/server/7.0/learn/security/roles.html#data-reader[Data Reader].
+Note that the most minimal permissions to create and drop a Scope or Collections is
+xref:server:learn:security/roles.adoc#manage-scopes[Manage Scopes]
+along with
+xref:server:learn:security/roles.adoc#data-reader[Data Reader]
 
 You can create users with the appropriate RBAC programmatically:
 
 [source,java]
 ----
-include::example$CollectionManagerExample.java[tag=bucketAdmin, indent=0]
-
 include::example$CollectionManagerExample.java[tag=scopeAdmin, indent=0]
 
 ----

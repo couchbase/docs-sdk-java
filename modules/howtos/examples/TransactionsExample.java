@@ -764,7 +764,7 @@ public class TransactionsExample {
 
     static void querySingle() {
         // tag::querySingle[]
-        String bulkLoadStatement; // a bulk-loading N1QL statement
+        String bulkLoadStatement = null; // a bulk-loading N1QL statement
 
         try {
             SingleQueryTransactionResult result = transactions.query(bulkLoadStatement);
@@ -785,7 +785,7 @@ public class TransactionsExample {
     }
 
     static void querySingleScoped() {
-        String bulkLoadStatement;
+        String bulkLoadStatement = null /* your statement here */;
 
         // tag::querySingleScoped[]
         Bucket travelSample = cluster.bucket("travel-sample");
@@ -796,7 +796,7 @@ public class TransactionsExample {
     }
 
     static void querySingleConfigured() {
-        String bulkLoadStatement;
+        String bulkLoadStatement = null; /* your statement here */
 
         // tag::querySingleConfigured[]
         transactions.query(bulkLoadStatement, SingleQueryTransactionConfigBuilder.create()
