@@ -709,19 +709,44 @@ public class TransactionsExample {
         transactions.run((ctx) -> {
             QueryResult qr = ctx.query(inventory, "SELECT * FROM hotel WHERE country = $1",
                     TransactionQueryOptions.queryOptions()
-                            .parameters(JsonArray.from("United Kingdom")));
+                            .parameters(JsonArray.from("United States")));
             List<JsonObject> rows = qr.rowsAs(JsonObject.class);
         });
         // end::queryExamplesSelectScope[]
 
         // tag::queryExamplesUpdate[]
+        String hotelChain = "http://marriot%";
+        String country = "United States";
+
         transactions.run((ctx) -> {
-            QueryResult qr = ctx.query(inventory, "UPDATE hotel SET price = $1 WHERE name = $2",
+            QueryResult qr = ctx.query(inventory, "UPDATE hotel SET price = $1 WHERE url LIKE $2 AND country = $3",
                     TransactionQueryOptions.queryOptions()
-                            .parameters(JsonArray.from("from £89", "Glasgow Grand Central")));
+                            .parameters(JsonArray.from(99.99, hotelChain, country)));
             assert(qr.metaData().metrics().get().mutationCount() == 1);
         });
         // end::queryExamplesUpdate[]
+
+        // tag::queryExamplesComplex[]
+        transactions.run((ctx) -> {
+            // Find all hotels of the chain
+            QueryResult qr = ctx.query(inventory, "SELECT reviews FROM hotel WHERE url LIKE $1 AND country = $2",
+                    TransactionQueryOptions.queryOptions()
+                            .parameters(JsonArray.from(hotelChain, country)));
+
+            // This function (not provided here) will use a trained machine learning model to provide a
+            // suitable price based on recent customer reviews.
+            double updatedPrice = priceFromRecentReviews(qr);
+
+            // Set the price of all hotels in the chain
+            ctx.query(inventory, "UPDATE hotel SET price = $1 WHERE url LIKE $2 AND country = $3",
+                    TransactionQueryOptions.queryOptions()
+                            .parameters(JsonArray.from(updatedPrice, hotelChain, country)));
+        });
+        // end::queryExamplesComplex[]
+    }
+
+    static double priceFromRecentReviews(QueryResult qr) {
+        return 1.0;
     }
 
     static void queryInsert() {
@@ -784,7 +809,7 @@ public class TransactionsExample {
     static void queryRyow() {
         // tag::queryRyow[]
         transactions.run((ctx) -> {
-            ctx.insert(collection, "doc", JsonObject.create().put("hello", "world")); // <1>>
+            ctx.insert(collection, "doc", JsonObject.create().put("hello", "world")); // <1>
 
             // Performing a 'Read Your Own Write'
             String st = "SELECT `default`.* FROM `default` WHERE META().id = 'doc'"; // <2>
