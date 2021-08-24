@@ -114,7 +114,7 @@ Couchbase Playground::
 -- 
 Run this example right here in your browser.
 
-[source,java]
+[source.try-it,java]
 ----
 include::example$StartUsing.java[tags=**]
 ----
