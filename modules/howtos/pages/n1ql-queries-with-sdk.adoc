@@ -4,7 +4,7 @@
 :page-topic-type: howto
 :page-aliases: n1ql-query,ROOT:querying-n1ql
 :lang: Java
-:version: 3.2.0
+:version: 3.2.1
 :example-source: 3.2@java-sdk:howtos:example$Queries.java
 include::project-docs:partial$attributes.adoc[]
 

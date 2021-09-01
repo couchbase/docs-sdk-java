@@ -55,7 +55,7 @@ include::hello-world:example$Overview.java[tag=overview,indent=0]
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.2.0</version>
+        <version>3.2.1</version>
     </dependency>
 </dependencies>
 ----
