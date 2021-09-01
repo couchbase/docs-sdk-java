@@ -77,7 +77,7 @@ Fixed `WaitUntilReady` timing out with 6.0.x and unhealthy seed nodes.
 * https://issues.couchbase.com/browse/JVMCBC-999[JVMCBC-999]:
 Properly map server query timeout while streaming.
 * https://issues.couchbase.com/browse/JVMCBC-1004[JVMCBC-1004]:
-Configure and apply default log level for ConsoleLogger.
+Configure and apply default log level for `ConsoleLogger`.
 * https://issues.couchbase.com/browse/JVMCBC-1005[JVMCBC-1005]:
 Allow to export Context as Map.
 * https://issues.couchbase.com/browse/JVMCBC-1006[JVMCBC-1006]:
