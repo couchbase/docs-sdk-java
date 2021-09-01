@@ -109,19 +109,32 @@ If you want to copy and paste to run the full example, here it is:
 
 [{tabs}] 
 ==== 
-Local Couchbase Server::
+Couchbase Playground::
 + 
 -- 
+Run this example right here in your browser.
+
+[source.try-it,java]
+----
+include::example$StartUsing.java[tags=**]
+----
+--
+
+Local Couchbase Server::
++ 
+--
+Copy and run this example into your local environment. Note that Couchbase Server and SDK must be installed and running before executing this example. 
+
 [source,java]
 ----
 include::example$StartUsing.java[tags=**]
 ----
 --
 
-Couchbase Cloud Sample::
+Couchbase Cloud::
 +
 --
-If you are connecting to https://docs.couchbase.com/cloud/index.html[Couchbase Cloud], be sure to get the correct endpoint as well as user, password, and `couchbasecloudbucket`  -- and see the <<cloud-connections, Cloud section>>, below.
+To connect to https://docs.couchbase.com/cloud/index.html[Couchbase Cloud], replace the variables in this example with the correct endpoint as well as user, password, and `couchbasecloudbucket` for your account. Also see the <<cloud-connections, Cloud section>> below for additional details.
 
 [source,java]
 ----
