@@ -4,7 +4,7 @@
 :page-topic-type: howto
 :page-aliases: ROOT:search-query, ROOT:full-text-searching-with-sdk.adoc
 :lang: Java
-:version: 3.2.0
+:version: 3.2.1
 :example-source: 3.2@java-sdk:howtos:example$Search.java
 :example-source-lang: java
 

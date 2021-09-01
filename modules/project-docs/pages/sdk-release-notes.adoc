@@ -30,10 +30,58 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.2.0</version>
+        <version>3.2.1</version>
     </dependency>
 </dependencies>
 ----
+
+
+== Version 3.2.1 (1 September 2021)
+
+Version 3.2.1 is the second release of the 3.2 series.
+
+http://packages.couchbase.com/clients/java/3.2.1/Couchbase-Java-Client-3.2.1.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.2.1/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.2.1/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.2.1**
+* com.couchbase.client:**core-io:2.2.1**
+* io.projectreactor:**reactor-core:3.4.9**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/JVMCBC-1002[JVMCBC-1002]:
+Default log level reverted to INFO.
+* https://issues.couchbase.com/browse/JVMCBC-1007[JVMCBC-1007]:
+`LoggingMeter` was incorrectly marked as Volatile in SDK 3.2 -- now fixed.
+* https://issues.couchbase.com/browse/JCBC-1850[JCBC-1850]:
+Fixed `NullPointerException` with `OpenTracing`.
+
+=== Improvements
+* https://issues.couchbase.com/browse/JCBC-1732[JCBC-1732]:
+Eventing Management API added.
+* https://issues.couchbase.com/browse/JCBC-1852[JCBC-1852]:
+FLE: Optionally read @Encrypted POJO properties from unencrypted JSON fields.
+* https://issues.couchbase.com/browse/JCBC-1858[JCBC-1858]:
+Added convenience method for getting raw JSON bytes from `LookupInResult`.
+* https://issues.couchbase.com/browse/JCBC-1859[JCBC-1859]:
+Allow to create `CollectionSpec` for default scope.
+* https://issues.couchbase.com/browse/JCBC-1868[JCBC-1868]:
+Make `JsonValueModule` compatible with Jackson < 2.8.
+* https://issues.couchbase.com/browse/JVMCBC-1010[JVMCBC-1010]:
+Maintenance dependency bump.
+* https://issues.couchbase.com/browse/JVMCBC-990[JVMCBC-990]:
+Fixed `WaitUntilReady` timing out with 6.0.x and unhealthy seed nodes.
+* https://issues.couchbase.com/browse/JVMCBC-999[JVMCBC-999]:
+Properly map server query timeout while streaming.
+* https://issues.couchbase.com/browse/JVMCBC-1004[JVMCBC-1004]:
+Configure and apply default log level for `ConsoleLogger`.
+* https://issues.couchbase.com/browse/JVMCBC-1005[JVMCBC-1005]:
+Allow to export Context as Map.
+* https://issues.couchbase.com/browse/JVMCBC-1006[JVMCBC-1006]:
+`ErrorContext` must be included in message.
 
 
 == Version 3.2.0 (20 July 2021)

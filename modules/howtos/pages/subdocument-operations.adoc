@@ -4,7 +4,7 @@
 :page-topic-type: howto
 include::project-docs:partial$attributes.adoc[]
 :lang: Java
-:version: 3.2.0
+:version: 3.2.1
 :page-aliases: ROOT:sdk-xattr-example.adoc
 
 
