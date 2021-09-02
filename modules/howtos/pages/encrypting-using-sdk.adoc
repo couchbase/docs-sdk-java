@@ -208,3 +208,19 @@ include::example$EncryptingUsingSDK.java[tag=legacy_decrypters,indent=0]
 NOTE: The legacy decrypters require a mapping function.
 For AES, this function accepts an encryption key name and returns the corresponding signing key name.
 For RSA, this function accepts a public key name and returns the corresponding private key name.
+
+=== Reading Unencrypted Fields
+
+From Java SDK 3.2.1, the `@Encrypted` annotation can now be used to migrate an existing field from unencrypted to encrypted. 
+If you annotate a field with:
+
+[source,java]
+----
+@Encrypted(migration = Encrypted.Migration.FROM_UNENCRYPTED)
+----
+
+then either encrypted or unencrypted values will be accepted during deserialization (without the latter causing error).
+See the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/encryption/annotation/Encrypted.html[API docs].
+
+[CAUTION] Encryption means that document fields have been authenticated.
+Enabling this feature bypasses that protection, and so this should only be used in strictly limited circumstances, such as migration.
