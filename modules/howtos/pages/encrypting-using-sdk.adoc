@@ -219,7 +219,7 @@ If you annotate a field with:
 @Encrypted(migration = Encrypted.Migration.FROM_UNENCRYPTED)
 ----
 
-then either encrypted or unencrypted values will be accepted during deserialization.
+then either encrypted or unencrypted values will be accepted during deserialization (without the latter causing error).
 See the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/encryption/annotation/Encrypted.html[API docs].
 
 [CAUTION] Encryption means that document fields have been authenticated.
