@@ -222,5 +222,5 @@ If you annotate a field with:
 then either encrypted or unencrypted values will be accepted during deserialization (without the latter causing error).
 See the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/encryption/annotation/Encrypted.html[API docs].
 
-[CAUTION] Encryption means that document fields have been authenticated.
+CAUTION: Encryption means that document fields have been authenticated.
 Enabling this feature bypasses that protection, and so this should only be used in strictly limited circumstances, such as migration.
