@@ -45,21 +45,6 @@ public class StartUsing {
     // end::collection[]
 
     {
-      // tag::upsert[]
-      MutationResult upsertResult = collection.upsert(
-              "my-document",
-              JsonObject.create().put("name", "mike")
-      );
-
-      GetResult getResult = collection.get("my-document");
-      String name = getResult.contentAsObject().getString("name");
-      System.out.println(name); // name == "mike"
-      QueryResult result = cluster.query("select \"Hello World\" as greeting");
-      System.out.println(result.rowsAsObject());
-      // end::upsert[]
-    }
-
-    {
       // tag::upsert-get[]
       // Upsert Document
       MutationResult upsertResult = collection.upsert(
