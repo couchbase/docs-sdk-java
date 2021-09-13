@@ -112,7 +112,7 @@ If you want to copy and paste to run the full example, here it is:
 Local Couchbase Server::
 + 
 -- 
-[source,java]
+[source.try-it,java]
 ----
 include::example$StartUsing.java[tags=**]
 ----
