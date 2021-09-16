@@ -65,7 +65,9 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 === Known Issues
 * https://issues.couchbase.com/browse/JVMCBC-1017[JVMCBC-1017]:
-The ThresholdLoggingTracer will not record any request and will not log them into the log file. If you rely on this functionality please use 3.1.7 as only 3.2.0 and 3.2.1 are affected. This issue will be addressed in 3.2.2.
+The `ThresholdLoggingTracer` will not record any request and will not log them into the log file. 
+If you rely on this functionality please use 3.1.7 as only 3.2.0 and 3.2.1 are affected. 
+This issue will be addressed in 3.2.2.
 
 === Bug Fixes
 * https://issues.couchbase.com/browse/JVMCBC-1002[JVMCBC-1002]:
@@ -130,7 +132,9 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 === Known Issues
 * https://issues.couchbase.com/browse/JVMCBC-1017[JVMCBC-1017]:
-The ThresholdLoggingTracer will not record any request and will not log them into the log file. If you rely on this functionality please use 3.1.7 as only 3.2.0 and 3.2.1 are affected. This issue will be addressed in 3.2.2.
+The `ThresholdLoggingTracer` will not record any request and will not log them into the log file. 
+If you rely on this functionality please use 3.1.7 as only 3.2.0 and 3.2.1 are affected. 
+This issue will be addressed in 3.2.2.
 
 === Bug Fixes
 * https://issues.couchbase.com/browse/JVMCBC-949[JVMCBC-949]:
