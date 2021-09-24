@@ -8,7 +8,7 @@
 
 The Collections feature in Couchbase Server is fully implemented in the 3.2 API version of the Couchbase SDK.
 
-Information on _Collections_ can be found in the xref:7.0@server:learn:data:scopes-and-collections.adoc[server docs].
+Information on _Collections_ can be found in the xref:7.0@server:learn:data/scopes-and-collections.adoc[server docs].
 
 == Using Collections & Scopes
 
