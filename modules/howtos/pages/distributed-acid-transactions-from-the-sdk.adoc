@@ -457,12 +457,8 @@ include::example$TransactionsExample.java[tag=full-logging,indent=0]
 
 
 == Tracing
-[.status]#Developer Preview#
 
-The 1.1.6 release introduces support, at a Developer Preview level, for detailed tracing.
 This telemetry is particularly useful for monitoring performance.
-
-Note: Developer Preview here means the feature works and is safe to use, but the naming of spans and attributes, and which spans are created, may change before this feature is generally available.
 
 If the underlying Couchbase Java SDK is configured for tracing, then no further work is required: transaction spans will be output automatically.
 See the xref:howtos:observability-tracing.adoc[Couchbase Java SDK Request Tracing documentation] for how to configure this.
