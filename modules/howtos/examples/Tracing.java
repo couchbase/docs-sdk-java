@@ -2,7 +2,7 @@ import java.time.Duration;
 
 import com.couchbase.client.core.cnc.RequestTracer;
 import com.couchbase.client.core.env.CoreEnvironment;
-import com.couchbase.client.core.env.ThresholdRequestTracerConfig;
+import com.couchbase.client.core.env.ThresholdLoggingTracerConfig;
 import com.couchbase.client.java.env.ClusterEnvironment;
 import com.couchbase.client.tracing.opentelemetry.OpenTelemetryRequestTracer;
 
@@ -19,10 +19,10 @@ public class Tracing {
     {
       {
         // tag::tracing-configure[]
-        ThresholdRequestTracerConfig.Builder config = ThresholdRequestTracerConfig.builder()
+        ThresholdLoggingTracerConfig.Builder config = ThresholdLoggingTracerConfig.builder()
             .emitInterval(Duration.ofMinutes(1)).kvThreshold(Duration.ofSeconds(2));
 
-        CoreEnvironment environment = CoreEnvironment.builder().thresholdRequestTracerConfig(config).build();
+        CoreEnvironment environment = CoreEnvironment.builder().thresholdLoggingTracerConfig(config).build();
         // end::tracing-configure[]
       }
 

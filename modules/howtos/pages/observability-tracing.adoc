@@ -9,7 +9,7 @@
 To give insight into a request/response flow, the SDK provides a `RequestTracer` interface and ships with both a default implementation as well as modules that can be plugged into feed the traces to external systems (including OpenTelemetry).
 
 
-== The Default ThresholdRequestTracer
+== The Default ThresholdLoggingTracer
 
 By default, the SDK will emit information about requests that are over a configurable threshold every 10 seconds. 
 Note that if no requests are over the threshold no event / log will be emitted.
