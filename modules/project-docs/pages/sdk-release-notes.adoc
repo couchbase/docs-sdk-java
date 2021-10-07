@@ -9,7 +9,7 @@
 [abstract]
 {description}
 
-These pages cover the 3_x_ versions of the Couchbase Java SDK. 
+These pages cover the 3._x_ versions of the Couchbase Java SDK. 
 For release notes, download links, and installation methods for 2.7 and earlier releases of the Couchbase Java Client, which will not work with Distributed Transactions, please see the xref:2.7@java-sdk::sdk-release-notes.adoc[2.x Java Release Notes & Download Archive].
 
 Transactions is available as a separate library for the Java SDK.
@@ -30,10 +30,60 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.2.1</version>
+        <version>3.2.2</version>
     </dependency>
 </dependencies>
 ----
+
+
+== Version 3.2.2 (6 October 2021)
+
+Version 3.2.2 is the third release of the 3.2 series.
+
+http://packages.couchbase.com/clients/java/3.2.2/Couchbase-Java-Client-3.2.2.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.2.2/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.2.2/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.2.2**
+* com.couchbase.client:**core-io:2.2.2**
+* io.projectreactor:**reactor-core:3.4.9**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Version | Built Against             | API Stability
+| `tracing-opentelemetry`   | 1.0.2   | OpenTelemetry 1.3.0       | Committed
+| `tracing-opentracing`     | 1.0.2   | OpenTracing 0.33.0        | Committed
+| `metrics-opentelemetry`   | 0.2.2   | OpenTelemetry 1.3.0-alpha | Volatile
+| `metrics-micrometer`      | 0.2.2   | Micrometer 1.7.0          | Volatile
+|=======================
+
+=== Improvements
+* https://issues.couchbase.com/browse/JCBC-1872[JCBC-1872]:
+Bring NodeLocatorHelper to SDK 3 from 2.
+* https://issues.couchbase.com/browse/JCBC-1875[JCBC-1875]:
+Document and polish Eventing Management API.
+* https://issues.couchbase.com/browse/JVMCBC-1015[JVMCBC-1015]:
+Improve client side error message when TLS is enforced on the server side.
+* https://issues.couchbase.com/browse/JVMCBC-1016[JVMCBC-1016]:
+Gracefully handle more invalid connection string cases.
+* https://issues.couchbase.com/browse/JVMCBC-1022[JVMCBC-1022]:
+Batch-Log messages in DefaultEventBus. Now events which
+are overflowing are not directly logged to stderr but rather
+batched up and logged at interval.
+Note that this implies some "loss of precision", as
+not all dropped events are logged - one event per type is preserved.
+
+=== Bugs
+* https://issues.couchbase.com/browse/JCBC-1873[JCBC-1873]:
+Rename EventingFunction validate_ssl_certificates to conform to spec.
+* https://issues.couchbase.com/browse/JVMCBC-1020[JVMCBC-1020]:
+If query request has target, honor it for prepare and execute, so they are both run on the same node. This fix adds `target` property to QueryRequest, and removes need for `TargetedQueryRequest`.
 
 
 == Version 3.2.1 (1 September 2021)
