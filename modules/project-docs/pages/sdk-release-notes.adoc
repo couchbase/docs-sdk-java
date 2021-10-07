@@ -30,10 +30,62 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.2.1</version>
+        <version>3.2.2</version>
     </dependency>
 </dependencies>
 ----
+
+
+== Version 3.2.2 (6 October 2021)
+
+Version 3.2.2 is the third release of the 3.2 series.
+
+http://packages.couchbase.com/clients/java/3.2.2/Couchbase-Java-Client-3.2.2.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.2.2/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.2.2/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.2.2**
+* com.couchbase.client:**core-io:2.2.2**
+* io.projectreactor:**reactor-core:3.4.9**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Version | Built Against             | API Stability
+| `tracing-opentelemetry`   | 1.0.2   | OpenTelemetry 1.3.0       | Committed
+| `tracing-opentracing`     | 1.0.2   | OpenTracing 0.33.0        | Committed
+| `metrics-opentelemetry`   | 0.2.2   | OpenTelemetry 1.3.0-alpha | Volatile
+| `metrics-micrometer`      | 0.2.2   | Micrometer 1.7.0          | Volatile
+|=======================
+
+=== Improvements
+* https://issues.couchbase.com/browse/JCBC-1872[JCBC-1872]:
+Bring NodeLocatorHelper to SDK 3 from 2.
+* https://issues.couchbase.com/browse/JCBC-1875[JCBC-1875]:
+Add Javadocs and polish Eventing Management API.
+* https://issues.couchbase.com/browse/JVMCBC-1013[JVMCBC-1013]:
+Move N1QL prepared statement cache into core-io.
+* https://issues.couchbase.com/browse/JVMCBC-1015[JVMCBC-1015]:
+Improve client side error message when TLS is enforced on the server side.
+* https://issues.couchbase.com/browse/JVMCBC-1016[JVMCBC-1016]:
+Gracefully handle more invalid connection string cases.
+* https://issues.couchbase.com/browse/JVMCBC-1022[JVMCBC-1022]:
+Batch-Log overflow messages in the DefaultEventBus.
+
+=== Bugs
+* https://issues.couchbase.com/browse/JCBC-1873[JCBC-1873]:
+EventingFunction validate_ssl_certificates field incorrectly named.
+* https://issues.couchbase.com/browse/JVMCBC-1017[JVMCBC-1017]:
+Threshold Logging Tracing not working due to context not being set.
+* https://issues.couchbase.com/browse/JVMCBC-1019[JVMCBC-1019]:
+CoreQueryAccessor issues redundant query requests.
+* https://issues.couchbase.com/browse/JVMCBC-1020[JVMCBC-1020]:
+If a TargetedQueryRequest is sent and enhancedPreparedEnabled is true, the PREPARE statement should be executed on the same node.
 
 
 == Version 3.2.1 (1 September 2021)
