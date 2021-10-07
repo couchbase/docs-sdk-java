@@ -9,7 +9,7 @@
 [abstract]
 {description}
 
-These pages cover the 3_x_ versions of the Couchbase Java SDK. 
+These pages cover the 3._x_ versions of the Couchbase Java SDK. 
 For release notes, download links, and installation methods for 2.7 and earlier releases of the Couchbase Java Client, which will not work with Distributed Transactions, please see the xref:2.7@java-sdk::sdk-release-notes.adoc[2.x Java Release Notes & Download Archive].
 
 Transactions is available as a separate library for the Java SDK.
@@ -67,25 +67,23 @@ Optional artifacts on top of this SDK version are tested for the following compa
 * https://issues.couchbase.com/browse/JCBC-1872[JCBC-1872]:
 Bring NodeLocatorHelper to SDK 3 from 2.
 * https://issues.couchbase.com/browse/JCBC-1875[JCBC-1875]:
-Add Javadocs and polish Eventing Management API.
-* https://issues.couchbase.com/browse/JVMCBC-1013[JVMCBC-1013]:
-Move N1QL prepared statement cache into core-io.
+Document and polish Eventing Management API.
 * https://issues.couchbase.com/browse/JVMCBC-1015[JVMCBC-1015]:
 Improve client side error message when TLS is enforced on the server side.
 * https://issues.couchbase.com/browse/JVMCBC-1016[JVMCBC-1016]:
 Gracefully handle more invalid connection string cases.
 * https://issues.couchbase.com/browse/JVMCBC-1022[JVMCBC-1022]:
-Batch-Log overflow messages in the DefaultEventBus.
+Batch-Log messages in DefaultEventBus. Now events which
+are overflowing are not directly logged to stderr but rather
+batched up and logged at interval.
+Note that this implies some "loss of precision", as
+not all dropped events are logged - one event per type is preserved.
 
 === Bugs
 * https://issues.couchbase.com/browse/JCBC-1873[JCBC-1873]:
-EventingFunction validate_ssl_certificates field incorrectly named.
-* https://issues.couchbase.com/browse/JVMCBC-1017[JVMCBC-1017]:
-Threshold Logging Tracing not working due to context not being set.
-* https://issues.couchbase.com/browse/JVMCBC-1019[JVMCBC-1019]:
-CoreQueryAccessor issues redundant query requests.
+Rename EventingFunction validate_ssl_certificates to conform to spec.
 * https://issues.couchbase.com/browse/JVMCBC-1020[JVMCBC-1020]:
-If a TargetedQueryRequest is sent and enhancedPreparedEnabled is true, the PREPARE statement should be executed on the same node.
+If query request has target, honor it for prepare and execute, so they are both run on the same node. This fix adds `target` property to QueryRequest, and removes need for `TargetedQueryRequest`.
 
 
 == Version 3.2.1 (1 September 2021)
