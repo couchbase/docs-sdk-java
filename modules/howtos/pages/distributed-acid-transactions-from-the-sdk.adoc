@@ -73,6 +73,11 @@ It is very important that the application ensures that only one of these is crea
 include::example$TransactionsExample.java[tag=init,indent=0]
 ----
 
+=== Multiple Transactions Objects
+Generally an application will need just one `Transactions` object, and in fact the library will usually warn if more are created.
+Each `Transactions` object uses some resources, including a thread-pool.
+
+There is one rare exception where an application may need to create multiple `Transactions` objects, which is covered in <<Custom Metadata Collections>>.
 
 == Configuration
 
@@ -502,6 +507,11 @@ include::example$TransactionsExample.java[tag=custom-metadata,indent=0]
 
 include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=custom-metadata-2]
 
+=== Multiple Transactions Objects
+Generally, an application requires only one `Transactions` object.
+But in some deployments, an application may need to access multiple custom metadata collections, and it is reasonable to create multiple `Transactions` objects as this is the only way to enable this.
+
+The library will not warn about multiple `Transactions` objects being created in this scenario.
 
 == Deferred Commits
 
