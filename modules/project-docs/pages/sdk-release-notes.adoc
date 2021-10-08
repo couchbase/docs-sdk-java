@@ -65,7 +65,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 === Improvements
 * https://issues.couchbase.com/browse/JCBC-1872[JCBC-1872]:
-Bring NodeLocatorHelper to SDK 3 from 2.
+Bring `NodeLocatorHelper` to SDK 3 from 2.
 * https://issues.couchbase.com/browse/JCBC-1875[JCBC-1875]:
 Document and polish Eventing Management API.
 * https://issues.couchbase.com/browse/JVMCBC-1015[JVMCBC-1015]:
@@ -73,17 +73,18 @@ Improve client side error message when TLS is enforced on the server side.
 * https://issues.couchbase.com/browse/JVMCBC-1016[JVMCBC-1016]:
 Gracefully handle more invalid connection string cases.
 * https://issues.couchbase.com/browse/JVMCBC-1022[JVMCBC-1022]:
-Batch-Log messages in DefaultEventBus. Now events which
-are overflowing are not directly logged to stderr but rather
-batched up and logged at interval.
-Note that this implies some "loss of precision", as
-not all dropped events are logged - one event per type is preserved.
+Batch-Log messages in DefaultEventBus. 
+Now events which are overflowing are not directly logged to stderr but rather batched up and logged at interval.
+Note that this implies some "loss of precision", as not all dropped events are logged - one event per type is preserved.
 
 === Bugs
+* https://issues.couchbase.com/browse/JVMCBC-1017[JVMCBC-1017]:
+Fixed issue with Threshold Logging Tracing not working due to `RequestContext` not being set.
 * https://issues.couchbase.com/browse/JCBC-1873[JCBC-1873]:
-Rename EventingFunction validate_ssl_certificates to conform to spec.
+Rename EventingFunction to `validate_ssl_certificates` to conform to spec.
 * https://issues.couchbase.com/browse/JVMCBC-1020[JVMCBC-1020]:
-If query request has target, honor it for prepare and execute, so they are both run on the same node. This fix adds `target` property to QueryRequest, and removes need for `TargetedQueryRequest`.
+Added `target` property to `QueryRequest` and ensured it is honored for prepare and execute, so they are both run on the same node. 
+This fix removes need for `TargetedQueryRequest`.
 
 
 == Version 3.2.1 (1 September 2021)
