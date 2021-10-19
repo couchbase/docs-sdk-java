@@ -69,7 +69,7 @@ public class Cloud {
     public static void main(String... args) throws Exception {
         // Update this to your cluster
         String endpoint = "cb.<your endpoint address>.dp.cloud.couchbase.com";
-        String bucketName = "couchbasecloudbucket";
+        String bucketName = "yourBucketName";
         String username = "user";
         String password = "password";
         // User Input ends here.

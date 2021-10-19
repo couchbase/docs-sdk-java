@@ -41,7 +41,7 @@ public class CloudConnect {
 
     public static void main(String... args) {
         // tag::cloud-connect[]
-        // Update these variables to point to your Cloud instance and credentials.
+        // Update these variables to point to your Couchbase Capella instance and credentials.
         String endpoint = "--your-instance--.dp.cloud.couchbase.com";
         String bucketname = "bucketname";
         String username = "username";
