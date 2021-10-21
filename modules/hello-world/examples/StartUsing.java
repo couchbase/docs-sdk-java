@@ -59,7 +59,10 @@ public class StartUsing {
       // end::upsert-get[]
 
       // tag::n1ql-query[]
+      // Call the query() function on the cluster object and store the result.
       QueryResult result = cluster.query("select \"Hello World\" as greeting");
+      
+      // Return the result rows with the rowsAsObject() function and print to the terminal.
       System.out.println(result.rowsAsObject());
       // end::n1ql-query[]
     }
