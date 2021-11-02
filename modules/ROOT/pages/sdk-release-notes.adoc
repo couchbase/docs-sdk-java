@@ -45,11 +45,13 @@ The supported and tested dependencies for this release are:
 === Bug Fixes
 
 * http://issues.couchbase.com/browse/JVMCBC-1028[JVMCBC-1028]:
-Updated the internal Netty dependency to 4.1.69.Final.
+Updated the internal `Netty` dependency to 4.1.69.Final`.
 * http://issues.couchbase.com/browse/JVMCBC-1029[JVMCBC-1029]:
-Updated the internal Jackson dependency to 2.12.5.
+Updated the internal `Jackson` dependency to `2.12.5`.
 * http://issues.couchbase.com/browse/JVMCBC-1030[JVMCBC-1030]:
-Make sure ping also send the user credentials. Previous behavior has not been identified as harmful (service ping endpoints must not be authenticated), but in some services (like query) this may lead to noisy log messages.
+Make sure `ping` also sends the user credentials. 
+Previous behavior has not been identified as harmful (service ping endpoints must not be authenticated), but in some services (like Query) this may lead to noisy log messages.
+
 
 == Version 2.7.21 (14th September 2021)
 
