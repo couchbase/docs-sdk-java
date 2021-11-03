@@ -15,7 +15,7 @@ public class InsertCourses {
         Bucket bucket = cluster.bucket("student-bucket");
         bucket.waitUntilReady(Duration.ofSeconds(10));
         Scope scope = bucket.scope("art-school-scope");
-        Collection course_records = scope.collection("course-record-collection");
+        Collection course_records = scope.collection("course-record-collection");    // <.>
 
         addCourse(course_records, "ART-HISTORY-000001", "art history", "fine art", 100);
         addCourse(course_records, "FINE-ART-000002", "fine art", "fine art", 50);

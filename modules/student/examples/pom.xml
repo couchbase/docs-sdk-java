@@ -4,10 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.couchbase.student</groupId>
-    <artifactId>couchbase-student</artifactId>
+    <groupId>org.example</groupId>
+    <artifactId>couchbase-java</artifactId>
     <version>1.0-SNAPSHOT</version>
-
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
@@ -19,11 +18,11 @@
         <archetype.encoding>${encoding}</archetype.encoding>
     </properties>
 
-    <dependencies>
+    <dependencies>    <!--1-->
         <dependency>
             <groupId>com.couchbase.client</groupId>
             <artifactId>java-client</artifactId>
-            <version>3.2.2</version>
+            <version>3.2.1</version>
         </dependency>
     </dependencies>
 

@@ -17,34 +17,34 @@ public class AddEnrollments {
     public static void main(String[] args) {
 
         Cluster cluster = Cluster.connect("localhost",
-                "Administrator", "password");
+                "Administrator", "password");    // <1>
 
-        Bucket bucket = cluster.bucket("student-bucket");
-        bucket.waitUntilReady(Duration.ofSeconds(10));
+        Bucket bucket = cluster.bucket("student-bucket");    // <2>
+        bucket.waitUntilReady(Duration.ofSeconds(10));    // <3>
 
         Scope scope = bucket.scope("art-school-scope");
-        Collection student_records = scope.collection("student-record-collection");
+        Collection student_records = scope.collection("student-record-collection");    // <4>
 
         // Retrieve the records
-        JsonObject hilary = retrieveStudent(cluster,"Hilary Smith");
-        JsonObject graphic_design = retrieveCourse(cluster, "graphic design");
-        JsonObject art_history = retrieveCourse(cluster, "art history");
+        JsonObject hilary = retrieveStudent(cluster,"Hilary Smith");    // <5>
+        JsonObject graphic_design = retrieveCourse(cluster, "graphic design");    // <5>
+        JsonObject art_history = retrieveCourse(cluster, "art history");    // <5>
 
-        String currentDate = LocalDate.now().format(DateTimeFormatter.ISO_DATE);
+        String currentDate = LocalDate.now().format(DateTimeFormatter.ISO_DATE);     // <6>
 
-        // Create Hilary's enrolments
+        // Create Hilary's enrollments
 
-        JsonArray enrolments = JsonArray.create();
+        JsonArray enrollments = JsonArray.create();     // <7>
 
-        enrolments.add(JsonObject.create().put("course-id", graphic_design.getString("id"))
-                .put("date-enrolled", currentDate));
+        enrollments.add(JsonObject.create().put("course-id", graphic_design.getString("id"))
+                .put("date-enrolled", currentDate));    // <8>
 
-        enrolments.add(JsonObject.create().put("course-id", art_history.getString("id"))
-                .put("date-enrolled", currentDate));
+        enrollments.add(JsonObject.create().put("course-id", art_history.getString("id"))
+                .put("date-enrolled", currentDate));    // <8>
 
-        hilary.put("enrolments", enrolments);
+        hilary.put("enrollments", enrollments);     // <9>
 
-        student_records.upsert(hilary.getString("id"), hilary);
+        student_records.upsert(hilary.getString("id"), hilary);    // <10>
 
         cluster.disconnect();
 
@@ -65,8 +65,8 @@ public class AddEnrollments {
     private static JsonObject retrieveCourse(Cluster cluster, String course) throws CouchbaseException {
 
         final QueryResult result = cluster.query("select META().id, crc.* " +
-                "from `student-bucket`.`art-school-scope`.`course-record-collection` crc " +
-                "where crc.`course-name` = $courseName",
+                        "from `student-bucket`.`art-school-scope`.`course-record-collection` crc " +
+                        "where crc.`course-name` = $courseName",
                 QueryOptions.queryOptions()
                         .parameters(JsonObject.create().put("courseName", course)));
 
