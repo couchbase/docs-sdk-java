@@ -3,6 +3,7 @@
 :nav-title: Client Settings
 :page-topic-type: reference
 :page-aliases: ROOT:client-settings, ROOT:env-config
+:page-toclevels: 2
 
 [abstract]
 {description}
