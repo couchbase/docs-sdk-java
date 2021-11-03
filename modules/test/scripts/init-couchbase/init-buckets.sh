@@ -76,4 +76,61 @@ until curl --fail -s -u ${CB_USER}:${CB_PSWD} http://${CB_HOST}:8094/api/index/t
     sleep 10
 done
 
+echo "couchbase-cli bucket-create student-bucket ..."
+/opt/couchbase/bin/couchbase-cli bucket-create \
+    -c ${CB_HOST} -u ${CB_USER} -p ${CB_PSWD} \
+    --bucket student-bucket \
+    --bucket-type couchbase \
+    --bucket-ramsize ${CB_BUCKET_RAMSIZE} \
+    --bucket-replica 0 \
+    --bucket-priority low \
+    --bucket-eviction-policy fullEviction \
+    --enable-flush 1 \
+    --enable-index-replica 0 \
+    --wait
+
+sleep 5
+
+echo "creating art-school-scope ..."
+curl -X POST --fail -s -u ${CB_USER}:${CB_PSWD} \
+    http://${CB_HOST}:8091/pools/default/buckets/student-bucket/scopes \
+    -H "Content-Type: application/x-www-form-urlencoded" \
+    -d name=art-school-scope \
+
+sleep 5
+
+echo "creating student record collection ..."
+curl -X POST --fail -s -u ${CB_USER}:${CB_PSWD} \
+    http://${CB_HOST}:8091/pools/default/buckets/student-bucket/scopes/art-school-scope/collections \
+    -H "Content-Type: application/x-www-form-urlencoded" \
+    -d name=student-record-collection \
+
+sleep 5
+
+echo "creating course record collection ..."
+curl -X POST --fail -s -u ${CB_USER}:${CB_PSWD} \
+    http://${CB_HOST}:8091/pools/default/buckets/student-bucket/scopes/art-school-scope/collections \
+    -H "Content-Type: application/x-www-form-urlencoded" \
+    -d name=course-record-collection \
+
+sleep 5
+
+echo "create student index ..."
+curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
+    "statement": "create primary index student_idx on `student-bucket`.`art-school-scope`.`student-record-collection`",
+    "pretty":true,
+    "client_context_id":"test"
+}' http://${CB_HOST}:8093/query/service
+
+sleep 5
+
+echo "create course index ..."
+curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
+    "statement": "create primary index course_idx on `student-bucket`.`art-school-scope`.`course-record-collection`",
+    "pretty":true,
+    "client_context_id":"test"
+}' http://${CB_HOST}:8093/query/service
+
+sleep 5
+
 echo "Done."
