@@ -1,8 +1,9 @@
 = Client Settings for the Java SDK
-:description: pass:q[The `ClusterEnvironment` class enables you to configure Java SDK options for bootstrapping, timeouts, reliability, and performance.]
+:description: pass:q[The `ClusterEnvironment` class enables you to configure Java SDK options for security, timeouts, reliability, and performance.]
 :nav-title: Client Settings
 :page-topic-type: reference
 :page-aliases: ROOT:client-settings, ROOT:env-config
+:page-toclevels: 2
 
 [abstract]
 {description}
@@ -70,10 +71,16 @@ Setting the property `com.couchbase.env.timeout.kvTimeout` tells the SDK to invo
 
 == Configuration Options
 
-The following tables cover all possible configuration options and explain their usage and default values.
-The tables categorize the options into groups for bootstrapping, timeout, reliability, performance, and advanced options.
+The following sections cover all possible configuration options and explain their usage and default values.
+They are categorized into groups for
+<<security-options,security>>,
+<<io-options,I/O>>,
+<<circuit-breaker-options,circuit breakers>>,
+<<timeout-options,timeout>>,
+<<compression-options,compression>>, and 
+<<general-options,general>> options.
 
-== Security Options
+=== Security Options
 
 By default the client will connect to Couchbase Server using an unencrypted connection.
 If you are using the Enterprise Edition, it's possible to secure the connection using TLS.
@@ -140,7 +147,7 @@ As an alternative to specifying the certificates to trust, you can specify a cus
 See the xref:howtos:managing-connections.adoc#ssl[Connection Management] section for more details on how to set it up properly.
 
 
-== I/O Options
+=== I/O Options
 
 I/O settings are represented by the Java class `IoConfig`.
 The associated `ClusterEnvironement.Builder` method is called `ioConfig`.
@@ -329,8 +336,7 @@ Default: `1m`
 +
 How long the window is in which the number of failed ops are tracked in a rolling fashion.
 
-
-== Timeout Options
+=== Timeout Options
 
 The default timeout values are suitable for most environments, and should be adjusted only after profiling the expected latencies in your deployment environment.
 If you get a timeout exception, it may be a symptom of another issue; increasing the timeout duration is sometimes not the best long-term solution.
@@ -347,8 +353,6 @@ The associated `ClusterEnvironement.Builder` method is called `timeoutConfig`.
 ----
 include::example$ClientSettingsExample.java[tag=client_settings_8,indent=0]
 ----
-
-=== Timeout Options Reference
 
 Name: *Key-Value Timeout*::
 Builder Method: `TimeoutConfig.kvTimeout(Duration)`
@@ -450,7 +454,7 @@ System Property: `com.couchbase.env.timeout.managementTimeout`
 The management timeout is used on all cluster management APIs (BucketManager, UserManager, CollectionManager, QueryIndexManager, etc.) if not overridden by a custom timeout.
 The default is quite high because some operations (such as flushing a bucket, for example) might take a long time.
 
-== Compression Options
+=== Compression Options
 
 The client can optionally compress documents before sending them to Couchbase Server.
 
@@ -499,7 +503,7 @@ If the compressed document size divided by the uncompressed document size is gre
 +
 For example, with a `minRatio` of `0.83`, CompressionExample will only be used if the size of the compressed document is less than 83% of the uncompressed document size.
 
-== General Options
+=== General Options
 
 The settings in this category apply to the client in general.
 They are configured directly on the `ClusterEnvironment.Builder`.
