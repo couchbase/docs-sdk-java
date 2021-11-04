@@ -2,9 +2,9 @@
 
 load 'test/test_helper.bash'
 
-@test "[student] - WipeCollections.java" {
+setup_file() {
     runExample WipeCollections
-    assert_success
+    [ "$status" -eq 0 ]
 }
 
 @test "[student] - ConnectStudent.java" {

@@ -36,10 +36,12 @@ public class AddEnrollments {
 
         JsonArray enrollments = JsonArray.create();     // <7>
 
-        enrollments.add(JsonObject.create().put("course-id", graphic_design.getString("id"))
+        enrollments.add(JsonObject.create()
+                .put("course-id", graphic_design.getString("id"))
                 .put("date-enrolled", currentDate));    // <8>
 
-        enrollments.add(JsonObject.create().put("course-id", art_history.getString("id"))
+        enrollments.add(JsonObject.create()
+                .put("course-id", art_history.getString("id"))
                 .put("date-enrolled", currentDate));    // <8>
 
         hilary.put("enrollments", enrollments);     // <9>
@@ -56,7 +58,8 @@ public class AddEnrollments {
                         "from `student-bucket`.`art-school-scope`.`student-record-collection` src " +
                         "where src.`name` = $name",
                 QueryOptions.queryOptions()
-                        .parameters(JsonObject.create().put("name", name)));
+                        .parameters(JsonObject.create()
+                                .put("name", name)));
 
         return result.rowsAsObject().get(0);
 
@@ -68,7 +71,8 @@ public class AddEnrollments {
                         "from `student-bucket`.`art-school-scope`.`course-record-collection` crc " +
                         "where crc.`course-name` = $courseName",
                 QueryOptions.queryOptions()
-                        .parameters(JsonObject.create().put("courseName", course)));
+                        .parameters(JsonObject.create()
+                                .put("courseName", course)));
 
         return result.rowsAsObject().get(0);
 

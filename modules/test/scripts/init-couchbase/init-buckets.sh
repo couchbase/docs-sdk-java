@@ -95,7 +95,7 @@ echo "creating art-school-scope ..."
 curl -X POST --fail -s -u ${CB_USER}:${CB_PSWD} \
     http://${CB_HOST}:8091/pools/default/buckets/student-bucket/scopes \
     -H "Content-Type: application/x-www-form-urlencoded" \
-    -d name=art-school-scope \
+    -d name=art-school-scope
 
 sleep 5
 
@@ -103,7 +103,7 @@ echo "creating student record collection ..."
 curl -X POST --fail -s -u ${CB_USER}:${CB_PSWD} \
     http://${CB_HOST}:8091/pools/default/buckets/student-bucket/scopes/art-school-scope/collections \
     -H "Content-Type: application/x-www-form-urlencoded" \
-    -d name=student-record-collection \
+    -d name=student-record-collection
 
 sleep 5
 
@@ -111,7 +111,7 @@ echo "creating course record collection ..."
 curl -X POST --fail -s -u ${CB_USER}:${CB_PSWD} \
     http://${CB_HOST}:8091/pools/default/buckets/student-bucket/scopes/art-school-scope/collections \
     -H "Content-Type: application/x-www-form-urlencoded" \
-    -d name=course-record-collection \
+    -d name=course-record-collection
 
 sleep 5
 
