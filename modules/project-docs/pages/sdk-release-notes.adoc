@@ -64,7 +64,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 === Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1026[JVMCBC-1026]:
-Support error map v2.
+Support for error map v2 has been added to ensure the config can be parsed without failure.
 
 == Version 3.2.2 (6 October 2021)
 
