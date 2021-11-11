@@ -24,8 +24,8 @@ public class InsertStudent {
                 .put("name", "Hilary Smith")
                 .put("date-of-birth",
                         LocalDate.of(1980, 12, 21)
-                                .format(DateTimeFormatter.ISO_DATE))    // <.>
-                .put("type", "student");    // <.>
+                                .format(DateTimeFormatter.ISO_DATE));   // <.>
+
 
         student_records.upsert("000001", hilary);    // <.>
 
