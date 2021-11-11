@@ -30,8 +30,7 @@ public class InsertCourses {
         JsonObject course = JsonObject.create()
                 .put("course-name", name)
                 .put("faculty", faculty)
-                .put("credit-points", creditPoints)
-                .put("type", "course");
+                .put("credit-points", creditPoints);
 
         collection.upsert(id, course);
 
