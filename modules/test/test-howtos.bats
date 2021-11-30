@@ -56,6 +56,11 @@ load 'test/test_helper.bash'
     assert_success
 }
 
+@test "[howtos] - Json.java" {
+    runExample Json 
+    assert_success
+}
+
 @test "[howtos] - managing_connections.java" {
     runExample managing_connections 
     assert_success

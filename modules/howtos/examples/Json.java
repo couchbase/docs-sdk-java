@@ -247,7 +247,7 @@ public class Json {
 
       System.out.println(person);
       
-      JsonObject json = collection.get("person1")
+      JsonObject json = collection.get("arthur")
         .contentAsObject();
       System.out.println(json);
     }
