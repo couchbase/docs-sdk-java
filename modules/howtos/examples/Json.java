@@ -29,10 +29,12 @@ import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
 
-// Reading from files
+// tag::file-imports[]
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+// end::file-imports[]
 
 // tag::object-mapper-imports[]
 import com.couchbase.client.java.env.ClusterEnvironment;
@@ -83,7 +85,7 @@ public class Json {
   
   static // nested static class for this example
   // tag::persona-class[]
-  public  class Persona {
+  public class Persona {
     @JsonProperty("name")
     public String nombre;
     
@@ -126,7 +128,6 @@ public class Json {
     // tag::object-mapper[]
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JsonValueModule()); // for JsonObject
-
     // tag::object-mapper-dates[]
     mapper.registerModule(new JavaTimeModule());
     mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -145,8 +146,8 @@ public class Json {
     // end::object-mapper[]
 
     System.out.println(cluster.environment().jsonSerializer().getClass());
-      // com.couchbase.client.java.codec.JacksonJsonSerializer
-      // https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/codec/JacksonJsonSerializer.html
+    // com.couchbase.client.java.codec.JacksonJsonSerializer
+    // https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/codec/JacksonJsonSerializer.html
 
     Bucket bucket = cluster.bucket(bucketName);
     Scope scope = bucket.scope("tenant_agent_00");
@@ -177,7 +178,7 @@ public class Json {
       System.out.println(jsonResult);
       System.out.println(jsonResult.getString("name"));
       // end::retrieve-json[]
-      }
+    }
     
     {
       // tag::map[]
@@ -204,17 +205,17 @@ public class Json {
     
     {
       try {
-        String path_to_arthur_json = "arthur.json";
+        String pathToArthurJson = "howtos/examples/arthur.json";
         // tag::file[]
         String content  = new String(
           Files.readAllBytes(
-            Paths.get(path_to_arthur_json)));
-        // String content  = Files.readString( Paths.get("arthur.json")); // Java 11+
+            Paths.get(pathToArthurJson)),
+          StandardCharsets.UTF_8);
+        // String content  = Files.readString(Paths.get(pathToArthurJson), StandardCharsets.UTF_8); // Java 11+
 
         JsonObject json = JsonObject.fromJson(content);
         // end::file[]
         collection.upsert("arthur", json);
-
 
         // tag::file-raw[]
         collection.upsert("arthur", content,
@@ -222,7 +223,7 @@ public class Json {
         // end::file-raw[]
       }
       catch (IOException e) {
-        // handle exception
+        System.out.println(e);
       }
     }
     

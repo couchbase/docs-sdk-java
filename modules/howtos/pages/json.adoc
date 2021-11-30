@@ -3,11 +3,13 @@
 :navtitle: JSON Modelling
 :page-topic-type: howto
 :lang: Java
+:page-toclevels: 2
 
 include::project-docs:partial$attributes.adoc[]
 
 
 == Philosophy
+
 The Couchbase Server is a key-value store that's agnostic to what's stored, but it's very common to store JSON.
 
 The Java SDK has these main objectives for JSON:
@@ -21,7 +23,7 @@ We use https://github.com/FasterXML/jackson[Jackson] internally, so if you're al
 
 The examples below assume you're familiar with connecting to a Couchbase cluster using the Java SDK, and opening resources.  Please check out xref:hello-world:start-using-sdk[the Getting Started guide] for help with this.
 
-== Inserting a simple object
+=== Inserting a simple object
 
 Let's assume we have a very simple JSON structure we want to insert:
 
@@ -51,20 +53,20 @@ include::example$Json.java[tags=jsonobject-imports,indent=0]
 include::example$Json.java[tags=jsonobject,indent=0]
 ----
 
-== Retrieving
+=== Retrieving
 
-Couchbase's `Collection.get()` method returns a `GetResult` object, which can then be cast back into a `JsonObject`.
-In this example, we print the JSON back, and access one of the fields.
+Couchbase's `Collection.get()` method returns a `GetResult` object, which can then be converted back into a `JsonObject`.
+In this example, we print the JSON back, and access one of the fields:
 
 [source,java]
 ----
 include::example$Json.java[tags=retrieve-json,indent=0]
 ----
 
-== Using Java's `Map` collection
+=== Using Java's `Map` data structure
 
-The `JsonObject` is modelled on the classic Java `Map` collection, and in fact is backed by one.
-So we can easily create an object from an existing map.
+The `JsonObject` is modelled on the classic Java `Map` data structure, and in fact is backed by one.
+So we can easily create an object from an existing Map:
 
 [source,java]
 ----
@@ -72,7 +74,7 @@ include::example$Json.java[tags=map,indent=0]
 ----
 
 The resulting `JsonObject` can be inserted as normal.
-But most JSON serializers can handle simple objects like a Map already, and ours (backed by Jackson) is no different. So you can simply.
+But most JSON serializers can handle simple objects like a Map already, and ours (backed by Jackson) is no different. So you can simply:
 
 [source,java]
 ----
@@ -90,9 +92,14 @@ include::example$Json.java[tags=retrieve-map,indent=0]
 
 While you are free to use Map, this is capable of storing any valid Java value, including ones that can't be represented as JSON. JsonObject offers validation to make sure that only the relevant xref:#datatypes[datatypes] are stored, which will give you greater diagnostics and robustness.
 
-== Inserting a JSON string or `.json` file
+=== Inserting a JSON string or `.json` file
 
-If we read the contents of a file to get a JSON string, we can also inflate a JsonObject from that string.
+If we read the contents of a file to get a JSON string, we can also inflate a JsonObject from that string:
+
+[source,java]
+----
+include::example$Json.java[tags=file-imports,indent=0]
+----
 
 [source,java]
 ----
@@ -117,7 +124,7 @@ include::example$Json.java[tags=file-raw,indent=0]
 This approach could also be used to handle JSON created by other libraries such as Gson.
 See the xref:transcoders-nonjson.adoc#rawjsontranscoder[Transcoder documentation] for more details.
 
-== Serializing objects
+=== Serializing objects
 
 It's common to want to serialize your own objects, rather than creating Json programmatically or textually. 
 Luckily our built-in JSON serializer makes light work of this task.
@@ -143,7 +150,7 @@ include::example$Json.java[tags=get-person,indent=0]
 ----
 
 [#ObjectMapper]
-== More complex Object to JSON mapping
+=== More complex Object to JSON mapping
 
 Because the SDK's serializer is backed by an industry standard library (Jackson), it is easy to model all kinds of Object to JSON mappings.
 Though the SDK automatically uses your version of Jackson when it finds the library on the CLASSPATH, you may wish to be explicit, or use an already configured ObjectMapper, as in this example:
@@ -160,7 +167,7 @@ include::example$Json.java[tags=object-mapper;!object-mapper-dates,indent=0]
 
 With this setup, we can then configure our classes as we wish.
 Here, we've just renamed the Java class and its fields in Spanish.
-But the generated JSON will have the same fields as before, for easy interoperability.
+But the generated JSON will have the same fields as before, for easy interoperability:
 
 [source,java]
 ----
@@ -184,7 +191,7 @@ In general, these values can be inserted as top-level values, or nested within a
 
 === Nested object
 
-This example shows a variety of data types, including a nested array ("possessions") and object ("address").
+This example shows a variety of data types, including a nested array ("possessions") and object ("address"):
 
 [source,java]
 ----
@@ -209,7 +216,7 @@ We can retrieve this value as usual, with the appropriate `.contentAs()`:
 include::example$Json.java[tags=string-get,indent=0]
 ----
 
-== Dates
+=== Dates
 
 JSON has no built-in representation of dates, so commonly they are represented as one of:
 
@@ -221,7 +228,7 @@ While it doesn't matter which you choose (as long as you serialize and deseriali
 Handily, as we can see on the same page, the
 xref:{version-server}@server:n1ql:n1ql-language-reference$datefun.adoc#date-formats[supported date formats] are the usual convention in JSON.
 
-Let's look at a brief example of how we might implement this, to serialize a new Event class.
+Let's look at a brief example of how we might implement this, to serialize a new Event class:
 
 [source,java]
 ----
@@ -235,14 +242,14 @@ We'll need a few extra imports:
 include::example$Json.java[tags=time-imports,indent=0]
 ----
 
-As we are controlling the serialization carefully, we'll also want to register our own <<ObjectMapper,ObjectMapper>> as above, and additionally configure some of the date handling properties.
+As we are controlling the serialization carefully, we'll also want to register our own <<ObjectMapper,ObjectMapper>> as above, and additionally configure some of the date handling properties:
 
 [source,java]
 ----
 include::example$Json.java[tags=object-mapper-dates,indent=0]
 ----
 
-Now all this is set up we can simply serialize and deserialize our Event objects exactly as we've done before.
+Now all this is set up we can simply serialize and deserialize our Event objects exactly as we've done before:
 
 [source,java]
 ----
@@ -284,7 +291,7 @@ Though you will often be mapping objects to JSON according to a defined schema, 
 
 As we want to interrogate a specific Java object with well-defined semantics, we again want to specify the <<ObjectMapper,ObjectMapper>> used.
 
-We can now cast the result to Jackson's `JsonNode`, and use its rich set of methods to identify and handle arbitrary values:
+We can now convert the result to Jackson's `JsonNode`, and use its rich set of methods to identify and handle arbitrary values:
 
 [source,java]
 ----
