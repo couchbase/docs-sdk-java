@@ -30,10 +30,54 @@ Java 11 has various enhancements like lambda local variable type inference, prof
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.2.3</version>
+        <version>3.2.4</version>
     </dependency>
 </dependencies>
 ----
+
+== Version 3.2.4 (9 December 2021)
+
+Version 3.2.4 is the fifth release of the 3.2 series.
+
+http://packages.couchbase.com/clients/java/3.2.4/Couchbase-Java-Client-3.2.4.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.2.4/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.2.4/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.2.4**
+* com.couchbase.client:**core-io:2.2.4**
+* io.projectreactor:**reactor-core:3.4.12**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Version | Built Against             | API Stability
+| `tracing-opentelemetry`   | 1.0.4   | OpenTelemetry 1.7.1       | Committed
+| `tracing-opentracing`     | 1.0.4   | OpenTracing 0.33.0        | Committed
+| `metrics-opentelemetry`   | 0.2.4   | OpenTelemetry 1.7.1-alpha | Volatile
+| `metrics-micrometer`      | 0.2.4   | Micrometer 1.7.5          | Volatile
+|=======================
+
+=== Bugs
+* https://issues.couchbase.com/browse/JCBC-1892[JCBC-1892]:
+Allow a `EventingFunctionSettings` to be empty - this fixes an issue with loading eventing functions from the cluster.
+
+=== Improvements
+* https://issues.couchbase.com/browse/JVMCBC-1033[JVMCBC-1033], https://issues.couchbase.com/browse/JVMCBC-1034[JVMCBC-1034]:
+Updates internal and external dependencies to their latest bugfix versions. This also updates OpenTelemetry to 1.7.x.
+* https://issues.couchbase.com/browse/JCBC-1881[JCBC-1881]:
+Adds (volatile) support for the `magma` storage backend when creating a bucket through the bucket manager.
+* https://issues.couchbase.com/browse/JVMCBC-1035[JVMCBC-1035]:
+The (internal) subDocumentField is now serializable - this is needed for apache spark integration.
+* https://issues.couchbase.com/browse/JVMCBC-1032[JVMCBC-1032]:
+Adds (volatile) support for Rate/Quota Limits. This is needed for Couchbase Capella.
+* https://issues.couchbase.com/browse/JVMCBC-1039[JVMCBC-1039]:
+Include httpStatus in Query and Analytics Error Context, as well as the vbucket in the KV error context. This helps with debugging.
+
 
 == Version 3.2.3 (2 November 2021)
 
