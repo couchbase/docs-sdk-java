@@ -64,19 +64,22 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 === Bugs
 * https://issues.couchbase.com/browse/JCBC-1892[JCBC-1892]:
-Allow a `EventingFunctionSettings` to be empty - this fixes an issue with loading eventing functions from the cluster.
+`EventingFunctionSettings` can now be empty - this fixes an issue with loading eventing functions from the cluster.
 
 === Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1033[JVMCBC-1033], https://issues.couchbase.com/browse/JVMCBC-1034[JVMCBC-1034]:
-Updates internal and external dependencies to their latest bugfix versions. This also updates OpenTelemetry to 1.7.x.
+Updated internal and external dependencies to their latest bugfix versions. 
+This also updates OpenTelemetry to 1.7.x.
 * https://issues.couchbase.com/browse/JCBC-1881[JCBC-1881]:
-Adds (volatile) support for the `magma` storage backend when creating a bucket through the bucket manager.
+Added (volatile) support for the `magma` storage backend when creating a bucket through the bucket manager.
 * https://issues.couchbase.com/browse/JVMCBC-1035[JVMCBC-1035]:
-The (internal) subDocumentField is now serializable - this is needed for apache spark integration.
+The (internal) `subDocumentField` is now serializable - this is needed for apache spark integration.
 * https://issues.couchbase.com/browse/JVMCBC-1032[JVMCBC-1032]:
-Adds (volatile) support for Rate/Quota Limits. This is needed for Couchbase Capella.
+Added (volatile) support for Rate/Quota Limits. 
+This is needed for Couchbase Capella.
 * https://issues.couchbase.com/browse/JVMCBC-1039[JVMCBC-1039]:
-Include httpStatus in Query and Analytics Error Context, as well as the vbucket in the KV error context. This helps with debugging.
+Included `httpStatus` in Query and Analytics Error Context, as well as the `vbucket` in the KV error context. 
+This helps with debugging.
 
 
 == Version 3.2.3 (2 November 2021)
