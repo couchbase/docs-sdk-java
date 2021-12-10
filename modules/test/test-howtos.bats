@@ -51,13 +51,18 @@ load 'test/test_helper.bash'
     assert_success
 }
 
-@test "[howtos] - KvOperations.java" {
-    runExample KvOperations 
+@test "[howtos] - Import.java" {
+    runExample Import 
     assert_success
 }
 
 @test "[howtos] - Json.java" {
     runExample Json 
+    assert_success
+}
+
+@test "[howtos] - KvOperations.java" {
+    runExample KvOperations 
     assert_success
 }
 
