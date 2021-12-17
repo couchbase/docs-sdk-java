@@ -117,13 +117,19 @@ A node configured in this way will advertise two addresses: one for connecting f
 // todo link to https://docs.couchbase.com/server/7.0/cli/cbcli/couchbase-cli-setting-alternate-address.html
 
 On the client side, the externally visible ports must be used when connecting.
-If the external ports are not the default, you can specify custom ports using the overloaded `Cluster.connect()` method that takes a set of `SeedNode` objects instead of a connection string.
+If the external ports are not the default, you can specify custom ports in the connection string when calling `Cluster.connect()`.
 
-// todo use the include (and uncomment in ManageingConnections.java) after next client snapshot is published
-// include::example$ManagingConnections.java[tag=seednodes,indent=0]
 [source,java]
 ----
 include::example$managing_connections.java[tag=managing_connections_5,indent=0]
+----
+
+For nodes that do not have the KV service, you can connect using a custom manager port instead.
+Notice how `=manager` appears after the port number, identifying it as a manager port:
+
+[source,java]
+----
+include::example$managing_connections.java[tag=managing_connections_6,indent=0]
 ----
 
 TIP: In a deployment that uses multi-dimensional scaling, a custom KV port is only applicable for nodes running the KV service.
