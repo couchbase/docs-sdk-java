@@ -29,3 +29,8 @@ load 'test/test_helper.bash'
     runExample KvBulkHelloWorld
     assert_success
 }
+
+@test "[hello-world] - IndexHelloWorld.java" {
+    runExample IndexHelloWorld
+    assert_success
+}
