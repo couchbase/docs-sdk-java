@@ -39,6 +39,15 @@ import java.io.BufferedReader;
 import com.opencsv.*;
 // end::csv-tsv-import[]
 
+import com.couchbase.client.java.ReactiveCollection;
+import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.kv.MutationResult;
+
+import reactor.core.publisher.Flux;
+import java.util.stream.BaseStream;
+import java.util.HashMap;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 public class Import {
 
@@ -48,6 +57,8 @@ public class Import {
   static String bucketName = "travel-sample";
 
   private Collection collection;
+  
+  private ReactiveCollection reactiveCollection;
   
   public Import() {
     // tag::connect[]
@@ -61,6 +72,8 @@ public class Import {
     
     collection = scope.collection("airline");
     // end::connect[]
+    
+    reactiveCollection = collection.reactive();
   }
   
   public static void main(String... args) {
@@ -70,6 +83,8 @@ public class Import {
     importer.importTSV();
     importer.importJSON();
     importer.importJSONL();
+    importer.importJSON_batch();
+    importer.importJSONL_batch();
   }
   
   // NOTE: non-generic Map, because the readers produce slightly different outputs:
@@ -84,20 +99,31 @@ public class Import {
   // tag::upsertDocument[]
   public void upsertRow(Map row) {
     
-    // define the KEY
-    String key = row.get("type") + "_" + row.get("id");
+    JsonDocument doc = preprocess(row);
     
-    // do any additional processing
-    row.put("importer", "Java SDK");
+    String key = doc.getId();
+    Object value = doc.getContent();
     
     // upsert the document
-    collection.upsert(key, row);
+    collection.upsert(key, value);
     
     // any required logging
     System.out.println(key);
-    System.out.println(row);
+    System.out.println(value);
   }
   // end::upsertDocument[]
+  
+  public JsonDocument preprocess(Map row) {
+      Map value = new HashMap(row);
+
+      // define the KEY
+      String key = value.get("type") + "_" + value.get("id");
+  
+      // do any additional processing
+      value.put("importer", "Java SDK");
+      
+      return new JsonDocument(key, JsonObject.from(value));
+  }
 
   
   // tag::importCSV[]
@@ -181,6 +207,34 @@ public class Import {
   }
   // end::importJSON[]
   
+    // tag::importJSON_batch[]
+    public void importJSON_batch() {
+      System.out.println("importJSON_batch");
+      try {
+        String content  = new String(
+          Files.readAllBytes(
+            Paths.get("howtos/examples/import.json")),
+          StandardCharsets.UTF_8);
+        
+        Flux<MutationResult> results = 
+          Flux.fromIterable(JsonArray.fromJson(content))
+            .map(row -> ((JsonObject) row).toMap())
+            .map(map -> preprocess(map))
+            .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
+            
+        results.subscribe(System.out::println);
+        results.blockLast(Duration.of(60, ChronoUnit.SECONDS));
+      }
+      catch (java.io.FileNotFoundException e) {
+        System.out.println("handle FileNotFoundException...");
+      }
+      catch (java.io.IOException e) {
+        System.out.println("handle IOException...");
+      }
+      System.out.println("DONE");
+    }
+    // end::importJSON_batch[]
+  
   // tag::importJSONL[]
   public void importJSONL() {
     try {
@@ -205,5 +259,56 @@ public class Import {
     }
     // end::repeated[]
   }
-  // tag::importJSONL[]
+  // end::importJSONL[]
+  
+  // tag::importJSONL_batch[]
+  public void importJSONL_batch() {
+    System.out.println("importJSONL_batch");
+
+    Flux<String> lines = Flux.using(
+      () -> Files.lines(Paths.get("howtos/examples/import.jsonl")),
+      Flux::fromStream,
+      BaseStream::close
+    );
+    Flux<JsonDocument> docs =
+      lines
+          .map(line -> JsonObject.fromJson(line).toMap())
+          .map(map -> preprocess(map));
+          
+    docs.subscribe(System.out::println);
+    Flux<MutationResult> results = 
+      docs.flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
+      
+    results.subscribe(System.out::println);
+    results.blockLast(Duration.of(60, ChronoUnit.SECONDS));
+
+    // ...
+    // tag::repeated[]
+    // end::repeated[]
+    System.out.println("DONE");
+  }
+  // end::importJSONL_batch[]
 }
+
+class JsonDocument {
+    private final String id;
+    private final JsonObject content;
+  
+    public JsonDocument(String id, JsonObject content) {
+      this.id = id;
+      this.content = content;
+    }
+  
+    public String getId() {
+      return id;
+    }
+  
+    public JsonObject getContent() {
+      return content;
+    }
+  
+    @Override
+    public String toString() {
+      return "JsonDocument{id='" + id + "', content=" + content + "}";
+    }
+  }
