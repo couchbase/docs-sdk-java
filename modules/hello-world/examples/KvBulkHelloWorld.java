@@ -12,7 +12,7 @@
  * the License.
  */
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
@@ -36,10 +36,11 @@ public class KvBulkHelloWorld {
     JsonObject user2 = JsonObject.create().put("id", "user_222").put("email", "jerry_mouse@gmail.com");
     JsonObject user3 = JsonObject.create().put("id", "user_333").put("email", "mickey_mouse@gmail.com");
 
-    List<JsonDocument> documents = new ArrayList<>();
-    documents.add(new JsonDocument("user_111", user1));
-    documents.add(new JsonDocument("user_222", user2));
-    documents.add(new JsonDocument("user_333", user3));
+    List<JsonDocument> documents = Arrays.asList(
+      new JsonDocument("user_111", user1),
+      new JsonDocument("user_222", user2),
+      new JsonDocument("user_333", user3)
+    );
     // end::kv-users[]
 
     {
@@ -68,10 +69,11 @@ public class KvBulkHelloWorld {
       JsonObject newUser2 = JsonObject.create().put("id", "user_222").put("email", "jerry@gmail.com");
       JsonObject newUser3 = JsonObject.create().put("id", "user_333").put("email", "mickey@gmail.com");
       
-      List<JsonDocument> newDocuments = new ArrayList<>();
-      newDocuments.add(new JsonDocument("user_111", newUser1));
-      newDocuments.add(new JsonDocument("user_222", newUser2));
-      newDocuments.add(new JsonDocument("user_333", newUser3));
+      List<JsonDocument> newDocuments = Arrays.asList(
+        new JsonDocument("user_111", newUser1),
+        new JsonDocument("user_222", newUser2),
+        new JsonDocument("user_333", newUser3)
+      );
 
       // Iterate over a list of documents to upsert.
       List<MutationResult> results = Flux.fromIterable(newDocuments)

@@ -15,8 +15,8 @@
 import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
@@ -45,7 +45,8 @@ public class KvHelloWorldScoped {
       // Create the document object.
       JsonObject geo = JsonObject.create()
           .put("lat", 51.35785)
-          .put("lon", 0.55818).put("accuracy", "RANGE_INTERPOLATED");
+          .put("lon", 0.55818)
+          .put("accuracy", "RANGE_INTERPOLATED");
 
       JsonArray reviews = JsonArray.create();
       reviews.add(JsonObject.create()
@@ -128,8 +129,7 @@ public class KvHelloWorldScoped {
     {
       System.out.println("Example: [kv-get-subdoc]");
       // tag::kv-get-subdoc[]
-      List<LookupInSpec> specs = new ArrayList<>();
-      specs.add(LookupInSpec.get("geo"));
+      List<LookupInSpec> specs = Arrays.asList(LookupInSpec.get("geo"));
 
       LookupInResult lookupInResult = hotelCollection.lookupIn("hotel-123", specs);
       System.out.println("CAS:" + lookupInResult.cas());
@@ -194,8 +194,7 @@ public class KvHelloWorldScoped {
     {
       System.out.println("Example: [kv-update-subdoc]");
       // tag::kv-update-subdoc[]
-      List<MutateInSpec> specs = new ArrayList<>();
-      specs.add(MutateInSpec.upsert("pets_ok", true));
+      List<MutateInSpec> specs = Arrays.asList(MutateInSpec.upsert("pets_ok", true));
 
       MutateInResult mutateInResult = hotelCollection.mutateIn("hotel-123", specs);
       System.out.println("CAS:" + mutateInResult.cas());
@@ -205,8 +204,7 @@ public class KvHelloWorldScoped {
     {
       System.out.println("Example: [kv-remove-subdoc]");
       // tag::kv-remove-subdoc[]
-      List<MutateInSpec> specs = new ArrayList<>();
-      specs.add(MutateInSpec.remove("url"));
+      List<MutateInSpec> specs = Arrays.asList(MutateInSpec.remove("url"));
 
       MutateInResult mutateInResult = hotelCollection.mutateIn("hotel-123", specs);
       System.out.println("CAS:" + mutateInResult.cas());
