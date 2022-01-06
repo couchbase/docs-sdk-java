@@ -57,7 +57,6 @@ public class Import {
   static String bucketName = "travel-sample";
 
   private Collection collection;
-  
   private ReactiveCollection reactiveCollection;
   
   public Import() {
@@ -73,7 +72,9 @@ public class Import {
     collection = scope.collection("airline");
     // end::connect[]
     
+    // tag::reactiveCollection[]
     reactiveCollection = collection.reactive();
+    // end::reactiveCollection[]
   }
   
   public static void main(String... args) {
@@ -83,6 +84,8 @@ public class Import {
     importer.importTSV();
     importer.importJSON();
     importer.importJSONL();
+    importer.importCSV_batch();
+    importer.importTSV_batch();
     importer.importJSON_batch();
     importer.importJSONL_batch();
   }
@@ -95,6 +98,20 @@ public class Import {
   //
   // In real code, you might choose to cast from Object to Map<String,Object>
   // or define multiple methods, but those confuse the example a little.
+  
+  // tag::preprocess[]
+  public JsonDocument preprocess(Map row) {
+    Map value = new HashMap(row);
+
+    // define the KEY
+    String key = value.get("type") + "_" + value.get("id");
+
+    // do any additional processing
+    value.put("importer", "Java SDK");
+    
+    return new JsonDocument(key, JsonObject.from(value));
+  }
+  // end::preprocess[]
   
   // tag::upsertDocument[]
   public void upsertRow(Map row) {
@@ -113,18 +130,6 @@ public class Import {
   }
   // end::upsertDocument[]
   
-  public JsonDocument preprocess(Map row) {
-      Map value = new HashMap(row);
-
-      // define the KEY
-      String key = value.get("type") + "_" + value.get("id");
-  
-      // do any additional processing
-      value.put("importer", "Java SDK");
-      
-      return new JsonDocument(key, JsonObject.from(value));
-  }
-
   
   // tag::importCSV[]
   public void importCSV() {
@@ -149,6 +154,43 @@ public class Import {
   }
   // end::importCSV[]
   
+  
+  // tag::importCSV_batch[]
+  public void importCSV_batch() {
+    // tag::omit[]
+    System.out.println("importCSV_batch");
+    // end::omit[]
+    
+    Flux<Map<String,String>> rows = Flux.generate(
+      
+      () -> new CSVReaderHeaderAware(
+        new FileReader("howtos/examples/import.csv")),
+      
+      (state, sink) -> {
+        try {
+          Map<String,String> row = state.readMap();
+          if (row == null) { sink.complete(); }
+          else { sink.next(row); }
+          return state;
+        }
+        catch (IOException e) { throw new Error("IOException"); }
+        catch (com.opencsv.exceptions.CsvValidationException e) { throw new Error("IOException"); }
+      });
+
+    Flux<MutationResult> results = 
+      rows
+      .map(row -> preprocess(row))
+      .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
+      
+    results.subscribe(System.out::println);
+    results.blockLast(Duration.of(60, ChronoUnit.SECONDS));
+    // tag::omit[]
+    System.out.println("DONE");
+    // end::omit[]
+  }
+  // end::importCSV_batch[]
+
+  
   // tag::importTSV[]
   public void importTSV() {
     CSVParser parser =
@@ -156,7 +198,6 @@ public class Import {
       .withSeparator('\t')
       .withIgnoreQuotations(true)
       .build();
-      
     
     try {
       CSVReaderHeaderAware tsv =
@@ -171,7 +212,7 @@ public class Import {
       }
     }
     // ...
-    // tag::repeated[]
+    // tag::omit[]
     catch (java.io.FileNotFoundException e) {
       System.out.println("handle FileNotFoundException...");
     }
@@ -181,9 +222,60 @@ public class Import {
     catch (com.opencsv.exceptions.CsvValidationException e) {
       System.out.println("handle CsvValidationException...");
     }
-    // end::repeated[]
+    // end::omit[]
   }
   // end::importTSV[]
+  
+  // tag::importTSV_batch[]
+  public void importTSV_batch() {
+    // tag::omit[]
+    System.out.println("importTSV_batch");
+    // end::omit[]
+
+    Flux<Map<String,String>> rows = Flux.generate(
+      
+      () -> {
+        CSVParser parser =
+          new CSVParserBuilder()
+          .withSeparator('\t')
+          .withIgnoreQuotations(true)
+          .build();
+        return
+          new CSVReaderHeaderAwareBuilder(
+            new FileReader("howtos/examples/import.tsv"))
+          .withCSVParser(parser)
+          .build();
+      },
+      
+      // ...
+      // tag::omit[]
+      (state, sink) -> {
+        try {
+          Map<String,String> row = state.readMap();
+          if (row == null) {
+            sink.complete();
+          }
+          else {
+            sink.next(row);
+          }
+          return state;
+        }
+        catch (IOException e) { throw new Error("IOException"); }
+        catch (com.opencsv.exceptions.CsvValidationException e) { throw new Error("IOException"); }
+      });
+
+    Flux<MutationResult> results = 
+      rows
+      .map(row -> preprocess(row))
+      .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
+      
+    results.subscribe(System.out::println);
+    results.blockLast(Duration.of(60, ChronoUnit.SECONDS));
+
+    System.out.println("DONE");
+    // end::omit[]
+  }
+// end::importTSV_batch[]
   
   // tag::importJSON[]
   public void importJSON() {
@@ -207,33 +299,39 @@ public class Import {
   }
   // end::importJSON[]
   
-    // tag::importJSON_batch[]
-    public void importJSON_batch() {
-      System.out.println("importJSON_batch");
-      try {
-        String content  = new String(
-          Files.readAllBytes(
-            Paths.get("howtos/examples/import.json")),
-          StandardCharsets.UTF_8);
-        
-        Flux<MutationResult> results = 
-          Flux.fromIterable(JsonArray.fromJson(content))
-            .map(row -> ((JsonObject) row).toMap())
-            .map(map -> preprocess(map))
-            .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
-            
-        results.subscribe(System.out::println);
-        results.blockLast(Duration.of(60, ChronoUnit.SECONDS));
-      }
-      catch (java.io.FileNotFoundException e) {
-        System.out.println("handle FileNotFoundException...");
-      }
-      catch (java.io.IOException e) {
-        System.out.println("handle IOException...");
-      }
-      System.out.println("DONE");
+  // tag::importJSON_batch[]
+  public void importJSON_batch() {
+    // tag::omit[]
+    System.out.println("importJSON_batch");
+    // end::omit[]
+
+    try {
+      String content  = new String(
+        Files.readAllBytes(
+          Paths.get("howtos/examples/import.json")),
+        StandardCharsets.UTF_8);
+      
+      Flux<MutationResult> results = 
+        Flux.fromIterable(JsonArray.fromJson(content))
+          .map(row -> ((JsonObject) row).toMap())
+          .map(map -> preprocess(map))
+          .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
+          
+      results.subscribe(System.out::println);
+      results.blockLast(Duration.of(60, ChronoUnit.SECONDS));
     }
-    // end::importJSON_batch[]
+    // ...
+    // tag::omit[]
+    catch (java.io.FileNotFoundException e) {
+      System.out.println("handle FileNotFoundException...");
+    }
+    catch (java.io.IOException e) {
+      System.out.println("handle IOException...");
+    }
+    System.out.println("DONE");
+    // end::omit[]
+  }
+  // end::importJSON_batch[]
   
   // tag::importJSONL[]
   public void importJSONL() {
@@ -250,65 +348,64 @@ public class Import {
       }
     }
     // ...
-    // tag::repeated[]
+    // tag::omit[]
     catch (java.io.FileNotFoundException e) {
       System.out.println("handle FileNotFoundException...");
     }
     catch (java.io.IOException e) {
       System.out.println("handle IOException...");
     }
-    // end::repeated[]
+    // end::omit[]
   }
   // end::importJSONL[]
   
   // tag::importJSONL_batch[]
   public void importJSONL_batch() {
+    // tag::omit[]
     System.out.println("importJSONL_batch");
+    // end::omit[]
 
     Flux<String> lines = Flux.using(
       () -> Files.lines(Paths.get("howtos/examples/import.jsonl")),
       Flux::fromStream,
-      BaseStream::close
-    );
-    Flux<JsonDocument> docs =
+      BaseStream::close);
+
+    Flux<MutationResult> results =
       lines
           .map(line -> JsonObject.fromJson(line).toMap())
-          .map(map -> preprocess(map));
-          
-    docs.subscribe(System.out::println);
-    Flux<MutationResult> results = 
-      docs.flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
+          .map(map -> preprocess(map))
+          .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
       
     results.subscribe(System.out::println);
     results.blockLast(Duration.of(60, ChronoUnit.SECONDS));
-
-    // ...
-    // tag::repeated[]
-    // end::repeated[]
+    // tag::omit[]
     System.out.println("DONE");
+    // end::omit[]
   }
   // end::importJSONL_batch[]
 }
 
+// tag::JsonDocument[]
 class JsonDocument {
-    private final String id;
-    private final JsonObject content;
-  
-    public JsonDocument(String id, JsonObject content) {
-      this.id = id;
-      this.content = content;
-    }
-  
-    public String getId() {
-      return id;
-    }
-  
-    public JsonObject getContent() {
-      return content;
-    }
-  
-    @Override
-    public String toString() {
-      return "JsonDocument{id='" + id + "', content=" + content + "}";
-    }
+  private final String id;
+  private final JsonObject content;
+
+  public JsonDocument(String id, JsonObject content) {
+    this.id = id;
+    this.content = content;
   }
+
+  public String getId() {
+    return id;
+  }
+
+  public JsonObject getContent() {
+    return content;
+  }
+
+  @Override
+  public String toString() {
+    return "JsonDocument{id='" + id + "', content=" + content + "}";
+  }
+}
+// end::JsonDocument[]
