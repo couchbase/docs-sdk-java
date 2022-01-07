@@ -182,9 +182,9 @@ public class Import {
     Flux<MutationResult> results = 
       rows
       .map(row -> preprocess(row))
-      .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
-      
-    results.subscribe(System.out::println);
+      .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()))
+      .doOnNext(System.out::println);
+
     results.blockLast(Duration.ofSeconds(60));
     // tag::omit[]
     System.out.println("DONE");
@@ -267,9 +267,9 @@ public class Import {
     Flux<MutationResult> results = 
       rows
       .map(row -> preprocess(row))
-      .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
-      
-    results.subscribe(System.out::println);
+      .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()))
+      .doOnNext(System.out::println);
+
     results.blockLast(Duration.ofSeconds(60));
 
     System.out.println("DONE");
@@ -281,7 +281,7 @@ public class Import {
   public void importJSON() {
     try {
       String content  = new String(
-        Files.readAllBytes(
+        Files.readAllBytes( // read whole document into memory
           Paths.get("howtos/examples/import.json")),
         StandardCharsets.UTF_8);
       
@@ -307,7 +307,7 @@ public class Import {
 
     try {
       String content  = new String(
-        Files.readAllBytes(
+        Files.readAllBytes( // read whole document into memory
           Paths.get("howtos/examples/import.json")),
         StandardCharsets.UTF_8);
       
@@ -315,9 +315,9 @@ public class Import {
         Flux.fromIterable(JsonArray.fromJson(content))
           .map(row -> ((JsonObject) row).toMap())
           .map(map -> preprocess(map))
-          .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
-          
-      results.subscribe(System.out::println);
+          .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()))
+          .doOnNext(System.out::println);
+
       results.blockLast(Duration.ofSeconds(60));
     }
     // ...
@@ -374,9 +374,9 @@ public class Import {
       lines
           .map(line -> JsonObject.fromJson(line).toMap())
           .map(map -> preprocess(map))
-          .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
-      
-    results.subscribe(System.out::println);
+          .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()))
+          .doOnNext(System.out::println);
+
     results.blockLast(Duration.ofSeconds(60));
     // tag::omit[]
     System.out.println("DONE");
