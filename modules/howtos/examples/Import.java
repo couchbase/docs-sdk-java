@@ -47,7 +47,6 @@ import reactor.core.publisher.Flux;
 import java.util.stream.BaseStream;
 import java.util.HashMap;
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 
 public class Import {
 
@@ -133,10 +132,9 @@ public class Import {
   
   // tag::importCSV[]
   public void importCSV() {
-    try {
-      CSVReaderHeaderAware csv = new CSVReaderHeaderAware(
-        new FileReader("howtos/examples/import.csv"));
-      
+    try (CSVReaderHeaderAware csv = new CSVReaderHeaderAware(
+        new FileReader("howtos/examples/import.csv"))) {
+            
       Map<String, String> row;
       while ((row = csv.readMap()) != null) {
         upsertRow(row);
@@ -173,9 +171,13 @@ public class Import {
           else { sink.next(row); }
           return state;
         }
-        catch (IOException e) { throw new Error("IOException"); }
-        catch (com.opencsv.exceptions.CsvValidationException e) { throw new Error("IOException"); }
-      });
+        catch (Exception e) { throw new RuntimeException(e); }
+      },
+      state -> {
+        try { state.close(); }
+        catch (Exception e) { throw new RuntimeException(e); }
+      }
+    );
 
     Flux<MutationResult> results = 
       rows
@@ -183,7 +185,7 @@ public class Import {
       .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
       
     results.subscribe(System.out::println);
-    results.blockLast(Duration.of(60, ChronoUnit.SECONDS));
+    results.blockLast(Duration.ofSeconds(60));
     // tag::omit[]
     System.out.println("DONE");
     // end::omit[]
@@ -199,12 +201,11 @@ public class Import {
       .withIgnoreQuotations(true)
       .build();
     
-    try {
-      CSVReaderHeaderAware tsv =
+    try (CSVReaderHeaderAware tsv =
         new CSVReaderHeaderAwareBuilder(
           new FileReader("howtos/examples/import.tsv"))
         .withCSVParser(parser)
-        .build();
+        .build()) {
 
       Map<String, String> row;
       while ((row = tsv.readMap()) != null) {
@@ -260,8 +261,7 @@ public class Import {
           }
           return state;
         }
-        catch (IOException e) { throw new Error("IOException"); }
-        catch (com.opencsv.exceptions.CsvValidationException e) { throw new Error("IOException"); }
+        catch (Exception e) { throw new RuntimeException(e); }
       });
 
     Flux<MutationResult> results = 
@@ -270,7 +270,7 @@ public class Import {
       .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
       
     results.subscribe(System.out::println);
-    results.blockLast(Duration.of(60, ChronoUnit.SECONDS));
+    results.blockLast(Duration.ofSeconds(60));
 
     System.out.println("DONE");
     // end::omit[]
@@ -318,7 +318,7 @@ public class Import {
           .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
           
       results.subscribe(System.out::println);
-      results.blockLast(Duration.of(60, ChronoUnit.SECONDS));
+      results.blockLast(Duration.ofSeconds(60));
     }
     // ...
     // tag::omit[]
@@ -335,10 +335,10 @@ public class Import {
   
   // tag::importJSONL[]
   public void importJSONL() {
-    try {
-        BufferedReader br =
+    try (BufferedReader br =
           new BufferedReader(
-            new FileReader("howtos/examples/import.jsonl"));
+            new FileReader("howtos/examples/import.jsonl"))) {
+              
         String line;
         while ((line = br.readLine()) != null) {
           Map<String,Object> row =
@@ -377,35 +377,35 @@ public class Import {
           .flatMap(doc -> reactiveCollection.upsert(doc.getId(), doc.getContent()));
       
     results.subscribe(System.out::println);
-    results.blockLast(Duration.of(60, ChronoUnit.SECONDS));
+    results.blockLast(Duration.ofSeconds(60));
     // tag::omit[]
     System.out.println("DONE");
     // end::omit[]
   }
   // end::importJSONL_batch[]
+
+  // tag::JsonDocument[]
+  class JsonDocument {
+    private final String id;
+    private final JsonObject content;
+
+    public JsonDocument(String id, JsonObject content) {
+      this.id = id;
+      this.content = content;
+    }
+
+    public String getId() {
+      return id;
+    }
+
+    public JsonObject getContent() {
+      return content;
+    }
+
+    @Override
+    public String toString() {
+      return "JsonDocument{id='" + id + "', content=" + content + "}";
+    }
+  }
+  // end::JsonDocument[]
 }
-
-// tag::JsonDocument[]
-class JsonDocument {
-  private final String id;
-  private final JsonObject content;
-
-  public JsonDocument(String id, JsonObject content) {
-    this.id = id;
-    this.content = content;
-  }
-
-  public String getId() {
-    return id;
-  }
-
-  public JsonObject getContent() {
-    return content;
-  }
-
-  @Override
-  public String toString() {
-    return "JsonDocument{id='" + id + "', content=" + content + "}";
-  }
-}
-// end::JsonDocument[]
