@@ -79,6 +79,18 @@ The following JDK releases are supported:
 
 Please make sure you run on one of the latest patch releases, since they provide stability improvements and security fixes in general.
 
+== OS Compatibility
+
+=== Alpine Linux Compatibility
+
+The I/O library the SDK is using (https://netty.io[Netty]) supports native optimizations to achieve higher throughput and lower latency - which the SDK enables by default. Unfortunately those modules are compiled against glibc and Alpine Linux uses musl instead. It is not possible to determine if the SDK runs under Alpine Linux when it starts up, so the SDK crashes.
+
+We recommend not running under Alpine Linux and use an alternative base image instead with full glibc support. In case this is not possible, there are workarounds that can be applied.
+
+ - Disable the native IO `ClusterEnvironment env = ClusterEnvironment.builder().ioEnvironment(IoEnvironment.enableNativeIo(false)).build();`
+ - Disable it in netty itself via the following system property: `-Dcom.couchbase.client.core.deps.io.netty.transport.noNative=true`
+
+The downside of those workarounds is potentially reduced performance, which can be determined through benchmarking and profiling.
 
 == Couchbase Feature Availability Matrix
 
