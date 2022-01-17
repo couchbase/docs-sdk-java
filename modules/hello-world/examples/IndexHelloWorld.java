@@ -51,7 +51,7 @@ public class IndexHelloWorld {
 
     {
       System.out.println("\n[secondary]");
-      // tag::secondary[
+      // tag::secondary[]
       cluster.queryIndexes().createIndex(
         "travel-sample", 
         "index_name",
@@ -63,7 +63,7 @@ public class IndexHelloWorld {
 
     {
       System.out.println("\n[composite]");
-      // tag::composite[
+      // tag::composite[]
       cluster.queryIndexes().createIndex(
         "travel-sample", 
         "index_travel_info", 
