@@ -91,10 +91,10 @@ The JVM SDKs should also be expected to run on other commonly-available GNU/Linu
 The https://netty.io[Netty] I/O library used by our JVM SDKs supports native optimizations to achieve higher throughput and lower latency 
 -- which the SDK enables by default. 
 Those modules are compiled against `glibc` and Alpine Linux uses `musl` instead. 
-It is not possible to determine if the SDK runs under Alpine Linux when it starts up, so the SDK crashes.
+It is not possible to determine if the SDK runs under Alpine Linux when it starts up, so SDK bootstrapping fails.
 
-We recommend not running under Alpine Linux.
-Use an alternative base image instead with full glibc support. 
+Because Alpine Linux does not have full `glibc` support,
+we recommend that you use an alternative distribution if possible. 
 In case this is not possible, there are workarounds that can be applied.
 
 * Disable the native IO:
