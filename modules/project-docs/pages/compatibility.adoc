@@ -80,6 +80,36 @@ The following JDK releases are supported:
 Please make sure you run on one of the latest patch releases, since they provide stability improvements and security fixes in general.
 
 
+== OS Compatibility
+
+In general, the JVM removes worries about underlying OS compatibility, 
+and Couchbase JVM SDKs can be expected to run on all of the Operating Systems supported by xref:7.0@server:install:install-platforms.adoc[Couchbase Server].
+The JVM SDKs should also be expected to run on other commonly-available GNU/Linux distributions which support an appropriate JDK, but not all combinations can be tested -- notable exceptions are listed below.
+
+=== Alpine Linux Compatibility
+
+The https://netty.io[Netty] I/O library used by our JVM SDKs supports native optimizations to achieve higher throughput and lower latency 
+-- which the SDK enables by default. 
+Those modules are compiled against `glibc` and Alpine Linux uses `musl` instead. 
+It is not possible to determine if the SDK runs under Alpine Linux when it starts up, so SDK bootstrapping fails.
+
+Because Alpine Linux does not have full `glibc` support,
+we recommend that you use an alternative distribution if possible. 
+In case this is not possible, there are workarounds that can be applied.
+
+* Disable the native IO:
++
+[source,toml]
+====
+ClusterEnvironment env = ClusterEnvironment.builder().ioEnvironment(IoEnvironment.enableNativeIo(false)).build();
+====
+
+* Disable it in Netty itself via the following system property:
+`-Dcom.couchbase.client.core.deps.io.netty.transport.noNative=true`
+
+The downside of these workarounds is potentially reduced performance, which can be determined through benchmarking and profiling.
+
+
 == Couchbase Feature Availability Matrix
 
 .Couchbase Server and SDK Supported Version Matrix
