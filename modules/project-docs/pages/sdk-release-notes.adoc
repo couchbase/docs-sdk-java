@@ -22,6 +22,8 @@ At least Java 8 is required for current releases;
 see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section for details.
 We recommend running the latest LTS version (i.e. at the time of writing JDK 17) with the highest patch version available.
 Java 17 has various enhancements like sealed classes, pattern matching for switch expressions (in preview), and further updates and improvements on core libraries.
+
+NOTE: JDK 17 is only supported from SDK version 3.2.4 onwards.
 // end::jdk-version[]
 
 [source,xml]
