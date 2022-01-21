@@ -82,7 +82,7 @@ Please make sure you run on one of the latest patch releases, since they provide
 
 == OS Compatibility
 
-In general, the JVM removes worries about underlying OS compatibility, 
+In general, the JVM eliminates concerns about underlying OS compatibility, 
 and Couchbase JVM SDKs can be expected to run on all of the Operating Systems supported by xref:7.0@server:install:install-platforms.adoc[Couchbase Server].
 The JVM SDKs should also be expected to run on other commonly-available GNU/Linux distributions which support an appropriate JDK, but not all combinations can be tested -- notable exceptions are listed below.
 
