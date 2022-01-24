@@ -20,8 +20,11 @@ Please see the xref:distributed-transactions-java-release-notes.adoc[Transaction
 // tag::jdk-version[]
 At least Java 8 is required for current releases;
 see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section for details.
-We recommend running the latest LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
-Java 11 has various enhancements like lambda local variable type inference, profiling tools, and updated security features.
+We recommend running the latest LTS version (i.e. at the time of writing JDK 17) with the highest patch version available.
+Java 17 has various enhancements like sealed classes, pattern matching for switch expressions (in preview), and further updates and improvements on core libraries.
+
+NOTE: JDK 17 is only supported from SDK version 3.2.4 onwards.
+If you're using an SDK version earlier than 3.2.4, the recommended LTS version is JDK 11.
 // end::jdk-version[]
 
 [source,xml]
@@ -42,6 +45,8 @@ Version 3.2.4 is the fifth release of the 3.2 series.
 http://packages.couchbase.com/clients/java/3.2.4/Couchbase-Java-Client-3.2.4.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.2.4/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.2.4/[Core API Reference]
+
+NOTE: This release introduces support for JDK 17.
 
 The supported and tested dependencies for this release are:
 
