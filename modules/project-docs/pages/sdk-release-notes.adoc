@@ -24,6 +24,7 @@ We recommend running the latest LTS version (i.e. at the time of writing JDK 17)
 Java 17 has various enhancements like sealed classes, pattern matching for switch expressions (in preview), and further updates and improvements on core libraries.
 
 NOTE: JDK 17 is only supported from SDK version 3.2.4 onwards.
+If you're using an SDK version earlier than 3.2.4, the recommended LTS version is JDK 11.
 // end::jdk-version[]
 
 [source,xml]
