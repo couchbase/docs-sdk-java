@@ -74,54 +74,53 @@ Removed the Azure link type from the analytics management API, due to a change i
 * https://issues.couchbase.com/browse/JCBC-1895[JCBC-1895]:
 Fixed an issue where `lookupInResult.contentAs(0, Boolean.class)` was throwing a `DecodingFailureException` on a Sub-Document exists operation.
 * https://issues.couchbase.com/browse/JCBC-1896[JCBC-1896]:
-JsonValueSerializerWrapper does not support decoding via TypeRef.
+Fixed an issue where `JsonValueSerializerWrapper` was unable to support decoding via TypeRef.
 * https://issues.couchbase.com/browse/JCBC-1904[JCBC-1904]:
-Eventing constant and URL binding issues.
+Fixed issues with constant and URL bindings and also introduced convenience methods to load a function from raw JSON.
 * https://issues.couchbase.com/browse/JVMCBC-1046[JVMCBC-1046]:
-Do not load global config if node not in seed node list anymore.
+Added fix to not load the global config if a node is not in the seed node list anymore.
 * https://issues.couchbase.com/browse/JVMCBC-1058[JVMCBC-1058]:
-Throw FeatureNotAvailableException for scopes and collections on memcached buckets.
+The SDK now throws a more descriptive `FeatureNotAvailableException` for scopes and collections on memcached buckets.
 
 === Improvements
 * https://issues.couchbase.com/browse/JCBC-1860[JCBC-1860]:
-`ConflictResolutionType.CUSTOM` added to the bucket management API.
+`ConflictResolutionType.CUSTOM` has now been added to the bucket management API.
 * https://issues.couchbase.com/browse/JCBC-1864[JCBC-1864]:
-FTS options now include IncludeLocations and Operator.
+FTS options now include `IncludeLocations` and `Operator`.
 * https://issues.couchbase.com/browse/JCBC-1876[JCBC-1876]:
 Query API now supports preserving TTL.
 * https://issues.couchbase.com/browse/JCBC-1882[JCBC-1882]:
 Index management API now supports managing indexes for a collection.
 * https://issues.couchbase.com/browse/JCBC-1898[JCBC-1898]:
-Add convenience method for getting raw bytes from GetResult.
+Added convenience method for getting raw bytes from `GetResult`.
 * https://issues.couchbase.com/browse/JCBC-1902[JCBC-1902]:
-Send configured user timeout to search.
+The SDK now sends the configured user timeout to search.
 * https://issues.couchbase.com/browse/JCBC-1905[JCBC-1905]:
-Add convenience methods for loading eventing function JSON.
+Added convenience methods for loading eventing function JSON.
 * https://issues.couchbase.com/browse/JCBC-1909[JCBC-1909]:
-Add scanWait to AnalyticsOptions.
+Added `scanWait` to `AnalyticsOptions`.
 * https://issues.couchbase.com/browse/JCBC-1903[JCBC-1903]:
-Add javadocs for bucket management API.
+Added javadocs for bucket management API.
 * https://issues.couchbase.com/browse/JCBC-1908[JCBC-1908]:
-Add javadocs for query index management APIs.
+Added javadocs for query index management APIs.
 * https://issues.couchbase.com/browse/JVMCBC-1055[JVMCBC-1055],
 https://issues.couchbase.com/browse/JVMCBC-1047[JVMCBC-1047],
 https://issues.couchbase.com/browse/JVMCBC-1051[JVMCBC-1051]:
-Updating dependencies.
+Updated dependencies.
 Netty goes from 4.1.72.Final to 4.1.73.Final.
 Jackson from 2.13.0 to 2.13.1.
 Reactor from 3.4.12 to 3.4.14.
 log4j (an optional dependency) from 2.15.0 to 2.17.1.
 * https://issues.couchbase.com/browse/JVMCBC-1037[JVMCBC-1037]:
-Avoid whenComplete closure for timeout cancellation.
-This is a small internal performance optimisation.
+Added a minor performance optimisation that avoids `whenComplete` closure for timeout cancellation.
 * https://issues.couchbase.com/browse/JVMCBC-1045[JVMCBC-1045]:
 Added an internal watchdog that updates the cluster configuration if the number of nodes changes.
 * https://issues.couchbase.com/browse/JVMCBC-1048[JVMCBC-1048]:
-Always set RequestContext on RequestSpan.
+Added change that ensures the SDK always sets `RequestContext` on `RequestSpan`.
 * https://issues.couchbase.com/browse/JVMCBC-1056[JVMCBC-1056]:
-Log more info on unexpected endpoint disconnect.
+Added more log information on unexpected endpoint disconnect.
 * https://issues.couchbase.com/browse/JVMCBC-1059[JVMCBC-1059]:
-Handles any `retry:true` field in a query error result by retrying it.
+The SDK now handles any `retry:true` field in a query error result by retrying it.
 
 
 == Version 3.2.4 (9 December 2021)
