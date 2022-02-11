@@ -59,7 +59,7 @@ We'll use the built-in JSON types for simplicity, but you can use different type
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=upsert]
+include::example$KvOperations.java[tag=upsert,indent=0]
 ----
 
 [NOTE]
@@ -71,7 +71,7 @@ They can be accessed like this:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=apis]
+include::example$KvOperations.java[tag=apis,indent=0]
 ----
 =====
 
@@ -80,7 +80,7 @@ Insert works very similarly to upsert, but will fail if the document already exi
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=insert]
+include::example$KvOperations.java[tag=insert,indent=0]
 ----
 
 == Retrieving documents
@@ -89,14 +89,14 @@ We've tried upserting and inserting documents into Couchbase Server, let's get t
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=get-simple]
+include::example$KvOperations.java[tag=get-simple,indent=0]
 ----
 
 Of course if we're getting a document we probably want to do something with the content:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=get]
+include::example$KvOperations.java[tag=get,indent=0]
 ----
 
 Once we have a `GetResult`, we can use `contentAsObject()` to turn the content back into a `JsonObject` like we inserted it in the examples before, 
@@ -108,7 +108,7 @@ A very common sequence of operations is to `get` a document, modify its contents
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=replace]
+include::example$KvOperations.java[tag=replace,indent=0]
 ----
 
 We `upsert` an initial version of the document. 
@@ -134,12 +134,12 @@ Let's see a more advanced `replace` example that shows one way to handle this:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=replace-retry]
+include::example$KvOperations.java[tag=replace-retry,indent=0]
 ----
 
 Note that this code is simplistic to show how CAS retry works in general. 
 If the `replace()` above never works, you would always get a CAS mismatch, and never break out of the loop - so 
-`for(int i = 0; i < maxAttempts; i++)` would be a resaonable alternative.
+`for(int i = 0; i < maxAttempts; i++)` would be a reasonable alternative.
 
 In later chapters we cover more sophisticated approaches to this, including asynchronous retry, retry with backoff and bailing out after a maximum amount of tries. 
 All these should be in place for robust, production ready code.
@@ -151,7 +151,7 @@ Removing a document is straightforward:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=remove]
+include::example$KvOperations.java[tag=remove,indent=0]
 ----
 
 Like `replace`, `remove` also optionally takes the CAS value if you want to make sure you are only removing the document if it hasn't changed since you last fetched it.
@@ -167,7 +167,7 @@ It can be used like this:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=durability]
+include::example$KvOperations.java[tag=durability,indent=0]
 ----
 
 If no argument is provided the application will report success back as soon as the primary node has acknowledged the mutation in its memory. 
@@ -185,7 +185,7 @@ The three replication levels are:
 
 The options are in increasing levels of safety. 
 Note that nothing comes for free - for a given node, waiting for writes to storage is considerably slower than waiting for it to be available in-memory.
-These trade offs, as well as which settings may be tuned, are discussed in the xref:concept-docs:durability-replication-failure-considerations.adoc#durable-writes[durability page].
+These tradeoffs, as well as which settings may be tuned, are discussed in the xref:concept-docs:durability-replication-failure-considerations.adoc#durable-writes[durability page].
 
 If a version of Couchbase Server lower than 6.5 is being used then the application can fall-back to xref:concept-docs:durability-replication-failure-considerations.adoc#older-server-versions['client verified' durability]. 
 Here the SDK will do a simple poll of the replicas and only return once the requested durability level is achieved. 
@@ -193,7 +193,7 @@ This can be achieved like this:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=durability-observed]
+include::example$KvOperations.java[tag=durability-observed,indent=0]
 ----
 
 To stress, durability is a useful feature but should not be the default for most applications, as there is a performance consideration, 
@@ -209,35 +209,39 @@ You can set an expiry value from a `Duration` when creating a document:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=expiry-insert]
+include::example$KvOperations.java[tag=expiry-insert,indent=0]
 ----
 
-We recommend using a `Duration` only if the provided value is less than 50 years.
+The expiry may be specified as a `Duration` only if the provided value is less than 50 years.
 
 For expiration more than 50 years in the future, or if you have already calculated when a document should expire, you can specify the expiry as an `Instant`:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=expiry-insert-instant]
+include::example$KvOperations.java[tag=expiry-insert-instant,indent=0]
 ----
 
-When getting a document, the expiry is not provided automatically by Couchbase Server but it can be requested:
+When getting a document from Couchbase Server, the expiry is not included by default, but it can be requested
+by setting the `withExpiry` option to true:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=expiry-get]
+include::example$KvOperations.java[tag=expiry-get,indent=0]
 ----
-
-If the document has an expiry, `expiry()` returns the length of time between the start of the epoch and the point in time when the loaded document expires. 
-In other words, the number of seconds in the returned duration is equal to the epoch second when the document expires. 
-Alternatively, you can get the absolute epoch expiry time through the `expiryTime()` method.
 
 Note that when updating the document, special care must be taken to avoid resetting the expiry to zero. 
-Here's how:
+If you are using Couchbase Server 7.0 or later, set the `preserveExpiry` option when updating the document:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=expiry-replace]
+include::example$KvOperations.java[tag=preserve-expiry,indent=0]
+----
+
+Prior to Couchbase 7.0, it's necessary to fetch the previous expiry and set it again:
+
+[source,java]
+----
+include::example$KvOperations.java[tag=expiry-replace,indent=0]
 ----
 
 Some applications may find `getAndTouch` useful, which fetches a document while updating its expiry field. 
@@ -245,16 +249,13 @@ It can be used like this:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=expiry-touch]
+include::example$KvOperations.java[tag=expiry-touch,indent=0]
 ----
-
-include::7.0@sdk:shared:partial$documents.adoc[tag=exp-note]
-
 
 
 == Atomic Counters
 
-The value of a document can be increased or decreased atomically using `Binary.Increment()` and `Binary.Decrement()`.
+The value of a document can be increased or decreased atomically using `collecion.binary().increment()` and `collection.binary().decrement()`.
 ////
 .Increment
 [source,csharp]
@@ -291,7 +292,7 @@ Here is an example showing an upsert in the `users` collection, which lives in t
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=named-collection-upsert]
+include::example$KvOperations.java[tag=named-collection-upsert,indent=0]
 ----
 
 

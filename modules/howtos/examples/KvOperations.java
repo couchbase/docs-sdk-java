@@ -23,6 +23,7 @@ import static com.couchbase.client.java.kv.UpsertOptions.upsertOptions;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.Period;
+import java.util.Optional;
 
 import com.couchbase.client.core.error.CasMismatchException;
 import com.couchbase.client.core.error.CouchbaseException;
@@ -44,6 +45,8 @@ import com.couchbase.client.java.kv.PersistTo;
 import com.couchbase.client.java.kv.ReplicateTo;
 // end::imports[]
 
+import com.couchbase.client.core.error.FeatureNotAvailableException;
+
 public class KvOperations {
 
   public static void main(String... args) {
@@ -54,7 +57,9 @@ public class KvOperations {
     Scope scope = bucket.scope("_default");
     Collection collection = scope.collection("_default");
 
-    JsonObject json = JsonObject.create().put("title", "My Blog Post").put("author", "mike");
+    JsonObject json = JsonObject.create()
+        .put("title", "My Blog Post")
+        .put("author", "mike");
 
     // tag::apis[]
     AsyncCollection asynccollection = collection.async();
@@ -64,7 +69,9 @@ public class KvOperations {
     {
       System.out.println("\nExample: [upsert]");
       // tag::upsert[]
-      JsonObject content = JsonObject.create().put("author", "mike").put("title", "My Blog Post 1");
+      JsonObject content = JsonObject.create()
+          .put("author", "mike")
+          .put("title", "My Blog Post 1");
 
       MutationResult result = collection.upsert("document-key", content);
       // end::upsert[]
@@ -74,7 +81,8 @@ public class KvOperations {
       System.out.println("\nExample: [insert]");
       // tag::insert[]
       try {
-        JsonObject content = JsonObject.create().put("title", "My Blog Post 2");
+        JsonObject content = JsonObject.create()
+            .put("title", "My Blog Post 2");
         MutationResult insertResult = collection.insert("document-key2", content);
       } catch (DocumentExistsException ex) {
         System.err.println("The document already exists!");
@@ -197,7 +205,8 @@ public class KvOperations {
       System.out.println("\nExample: [expiry-get]");
       // tag::expiry-get[]
       GetResult result = collection.get("my-document3", getOptions().withExpiry(true));
-      System.out.println("Expiry of found doc: " + result.expiry());
+      Optional<Instant> expiry = result.expiryTime();
+      System.out.println("Expiry of found doc: " + expiry);
       // end::expiry-get[]
 
       System.out.println("cas value: " + result.cas());
@@ -212,7 +221,17 @@ public class KvOperations {
           replaceOptions().expiry(found.expiryTime().get()));
       // end::expiry-replace[]
 
-      System.out.println("cas value: " + result.cas());
+    }
+
+    try {
+      System.out.println("\nExample: [preserve-expiry]");
+
+      // tag::preserve-expiry[]
+      collection.replace("my-document3", json,
+          replaceOptions().preserveExpiry(true));
+      // end::preserve-expiry[]
+    } catch (FeatureNotAvailableException e){
+      System.out.println("Couldn't run preserveExpiry example: " + e);
     }
 
     {
