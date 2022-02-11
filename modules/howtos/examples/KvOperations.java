@@ -128,10 +128,11 @@ public class KvOperations {
       String id = "my-document";
       collection.upsert(id, JsonObject.create().put("initial", true));
 
-      GetResult found = collection.get(id);
-      JsonObject content = found.contentAsObject();
-      content.put("modified", true).put("initial", false);
       while (true) {
+        GetResult found = collection.get(id);
+        JsonObject content = found.contentAsObject();
+        content.put("modified", true).put("initial", false);
+
         try {
           collection.replace(id, content, replaceOptions().cas(found.cas()));
           break; // if successful, break out of the retry loop
