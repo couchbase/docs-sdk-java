@@ -39,7 +39,7 @@ Performance: the thread-safe logging list has been replaced with a faster altern
 
 === Bug Fixes
 * https://issues.couchbase.com/browse/TXNJ-447[TXNJ-447]:
-Deferred commit no longer fails with a NullPointerException.
+Deferred commit no longer fails with a `NullPointerException`.
 * https://issues.couchbase.com/browse/TXNJ-452[TXNJ-452],
 https://issues.couchbase.com/browse/TXNJ-460[TXNJ-460],
 https://issues.couchbase.com/browse/TXNJ-461[TXNJ-461],
@@ -48,7 +48,7 @@ https://issues.couchbase.com/browse/TXNJ-465[TXNJ-465]:
 Multiple fixes to the reactive version of `ctx.query()`, particularly around error handling.
 Any users of this API should upgrade immediately.
 * https://issues.couchbase.com/browse/TXNJ-455[TXNJ-455]:
-Avoid ErrorCallbackNotImplemented errors during cleanup shutdown when metadata collections were in use.
+Avoid `ErrorCallbackNotImplemented` errors during cleanup shutdown when metadata collections were in use.
 * https://issues.couchbase.com/browse/TXNJ-467[TXNJ-467]:
 The single query transaction is completely rewritten, and now performs the `tximplicit` optimisation as expected.
 
