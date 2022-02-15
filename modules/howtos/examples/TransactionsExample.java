@@ -102,7 +102,7 @@ public class TransactionsExample {
         try {
             transactions.run((ctx) -> {
                 // 'ctx' is an AttemptContext, which permits getting, inserting,
-                // removing and replacing documents, performing SQL++ queries, and committing or
+                // removing and replacing documents, performing N1QL queries, and committing or
                 // rolling back the transaction.
 
                 // ... Your transaction logic here ...
@@ -193,13 +193,13 @@ public class TransactionsExample {
                 TransactionGetResult docC = ctx.get(collection, "doc-c");
                 ctx.remove(docC);
 
-                // Performing a SELECT SQL++ query against a scope:
+                // Performing a SELECT N1QL query against a scope:
                 QueryResult qr = ctx.query(inventory, "SELECT * FROM hotel WHERE country = $1",
                         TransactionQueryOptions.queryOptions()
                                 .parameters(JsonArray.from("United Kingdom")));
                 List<JsonObject> rows = qr.rowsAs(JsonObject.class);
 
-                // Performing an UPDATE SQL++ query on multiple documents, in the `inventory` scope:
+                // Performing an UPDATE N1QL query on multiple documents, in the `inventory` scope:
                 ctx.query(inventory, "UPDATE route SET airlineid = $1 WHERE airline = $2",
                         TransactionQueryOptions.queryOptions()
                                 .parameters(JsonArray.from("airline_137", "AF")));
@@ -243,7 +243,7 @@ public class TransactionsExample {
                     .then(ctx.get(collection.reactive(), "doc-c"))
                         .flatMap(doc -> ctx.remove(doc))
 
-                    // Performing a SELECT SQL++ query, in the `inventory` scope:
+                    // Performing a SELECT N1QL query, in the `inventory` scope:
                     .then(ctx.query(inventory, "SELECT * FROM hotel WHERE country = $1",
                             TransactionQueryOptions.queryOptions()
                                     .parameters(JsonArray.from("United Kingdom"))))
@@ -253,7 +253,7 @@ public class TransactionsExample {
                                 // the application would do something with each row here
                             }))
 
-                    // Performing an UPDATE SQL++ query on multiple documents, in the `inventory` scope:
+                    // Performing an UPDATE N1QL query on multiple documents, in the `inventory` scope:
                     .then(ctx.query(inventory, "UPDATE route SET airlineid = $1 WHERE airline = $2",
                             TransactionQueryOptions.queryOptions()
                                     .parameters(JsonArray.from("airline_137", "AF"))))
@@ -735,7 +735,7 @@ public class TransactionsExample {
     }
 
     static void querySingle() {
-        String bulkLoadStatement = null; // a bulk-loading SQL++ statement.  Left out of example per DOC-9630.
+        String bulkLoadStatement = null; // a bulk-loading N1QL statement.  Left out of example per DOC-9630.
 
         // tag::querySingle[]
         try {
