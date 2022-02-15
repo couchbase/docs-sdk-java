@@ -102,7 +102,7 @@ public class TransactionsExample {
         try {
             transactions.run((ctx) -> {
                 // 'ctx' is an AttemptContext, which permits getting, inserting,
-                // removing and replacing documents, performing N1QL queries, and committing or
+                // removing and replacing documents, performing SQL++ queries, and committing or
                 // rolling back the transaction.
 
                 // ... Your transaction logic here ...
@@ -193,13 +193,13 @@ public class TransactionsExample {
                 TransactionGetResult docC = ctx.get(collection, "doc-c");
                 ctx.remove(docC);
 
-                // Performing a SELECT N1QL query against a scope:
+                // Performing a SELECT SQL++ query against a scope:
                 QueryResult qr = ctx.query(inventory, "SELECT * FROM hotel WHERE country = $1",
                         TransactionQueryOptions.queryOptions()
                                 .parameters(JsonArray.from("United Kingdom")));
                 List<JsonObject> rows = qr.rowsAs(JsonObject.class);
 
-                // Performing an UPDATE N1QL query on multiple documents, in the `inventory` scope:
+                // Performing an UPDATE SQL++ query on multiple documents, in the `inventory` scope:
                 ctx.query(inventory, "UPDATE route SET airlineid = $1 WHERE airline = $2",
                         TransactionQueryOptions.queryOptions()
                                 .parameters(JsonArray.from("airline_137", "AF")));
@@ -243,7 +243,7 @@ public class TransactionsExample {
                     .then(ctx.get(collection.reactive(), "doc-c"))
                         .flatMap(doc -> ctx.remove(doc))
 
-                    // Performing a SELECT N1QL query, in the `inventory` scope:
+                    // Performing a SELECT SQL++ query, in the `inventory` scope:
                     .then(ctx.query(inventory, "SELECT * FROM hotel WHERE country = $1",
                             TransactionQueryOptions.queryOptions()
                                     .parameters(JsonArray.from("United Kingdom"))))
@@ -253,7 +253,7 @@ public class TransactionsExample {
                                 // the application would do something with each row here
                             }))
 
-                    // Performing an UPDATE N1QL query on multiple documents, in the `inventory` scope:
+                    // Performing an UPDATE SQL++ query on multiple documents, in the `inventory` scope:
                     .then(ctx.query(inventory, "UPDATE route SET airlineid = $1 WHERE airline = $2",
                             TransactionQueryOptions.queryOptions()
                                     .parameters(JsonArray.from("airline_137", "AF"))))
@@ -594,49 +594,21 @@ public class TransactionsExample {
     static void concurrentOps() {
         // tag::concurrentOps[]
         List<String> docIds = Arrays.asList("doc1", "doc2", "doc3", "doc4", "doc5");
-
         ReactiveCollection coll = collection.reactive();
+        int concurrency = 100; // This many operations will be in-flight at once
 
         TransactionResult result = transactions.reactive((ctx) -> {
-
-            // Tracks whether all operations were successful
-            AtomicBoolean allOpsSucceeded = new AtomicBoolean(true);
-
-            // The first mutation must be done in serial, as it also creates a metadata
-            // entry
-            return ctx.get(coll, docIds.get(0)).flatMap(doc -> {
-                JsonObject content = doc.contentAsObject();
-                content.put("value", "updated");
-                return ctx.replace(doc, content);
-            })
-
-                    // Do all other docs in parallel
-                    .thenMany(Flux.fromIterable(docIds.subList(1, docIds.size()))
-                            .flatMap(docId -> ctx.get(coll, docId).flatMap(doc -> {
+            return Flux.fromIterable(docIds)
+                    .parallel(concurrency)
+                    .runOn(Schedulers.boundedElastic())
+                    .concatMap(docId -> ctx.get(collection.reactive(), docId)
+                            .flatMap(doc -> {
                                 JsonObject content = doc.contentAsObject();
                                 content.put("value", "updated");
                                 return ctx.replace(doc, content);
-                            }).onErrorResume(err -> {
-                                allOpsSucceeded.set(false);
-                                // App should replace this with logging
-                                err.printStackTrace();
-
-                                // Allow other ops to finish
-                                return Mono.empty();
-                            }),
-
-                                    // Run these in parallel
-                                    docIds.size())
-
-            // The commit or rollback must also be done in serial
-            ).then(Mono.defer(() -> {
-                // Commit iff all ops succeeded
-                if (allOpsSucceeded.get()) {
-                    return ctx.commit();
-                } else {
-                    throw new RuntimeException("Retry the transaction");
-                }
-            }));
+                            }))
+                    .sequential()
+                    .then();
         }).block();
         // end::concurrentOps[]
     }
@@ -763,9 +735,9 @@ public class TransactionsExample {
     }
 
     static void querySingle() {
-        // tag::querySingle[]
-        String bulkLoadStatement = null; // a bulk-loading N1QL statement
+        String bulkLoadStatement = null; // a bulk-loading SQL++ statement.  Left out of example per DOC-9630.
 
+        // tag::querySingle[]
         try {
             SingleQueryTransactionResult result = transactions.query(bulkLoadStatement);
 
