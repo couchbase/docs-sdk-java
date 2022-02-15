@@ -59,6 +59,7 @@ import com.couchbase.transactions.log.TransactionCleanupEndRunEvent;
 import io.opentelemetry.api.trace.Span;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 // end::imports[]
 
