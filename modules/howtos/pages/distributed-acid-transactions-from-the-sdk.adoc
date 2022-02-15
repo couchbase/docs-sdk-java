@@ -210,8 +210,8 @@ include::example$TransactionsExample.java[tag=getReadOwnWrites,indent=0]
 
 include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=query-intro]
 
-=== Using SQL++
-If you already use SQL++ from the Java SDK, then its use in transactions is very similar.
+=== Using N1QL
+If you already use N1QL from the Java SDK, then its use in transactions is very similar.
 it returns the same `QueryResult` you are used to, and takes most of the same options.
 
 You must take care to write `ctx.query()` inside the lambda however, rather than `cluster.query()` or `scope.query()`.
@@ -247,7 +247,7 @@ include::example$TransactionsExample.java[tag=queryExamplesComplex,indent=0]
 ----
 
 === Read Your Own Writes
-As with Key-Value operations, SQL++ queries support Read Your Own Writes.
+As with Key-Value operations, N1QL queries support Read Your Own Writes.
 
 This example shows INSERTing a document and then SELECTing it again.
 
@@ -259,7 +259,7 @@ include::example$TransactionsExample.java[tag=queryInsert,indent=0]
 Other transactions, and other non-transactional actors, will not be able to see this staged insert yet.
 <2> But the SELECT can, as we are reading a mutation staged inside the same transaction.
 
-=== Mixing Key-Value and SQL++
+=== Mixing Key-Value and N1QL
 Key-Value operations and queries can be freely intermixed, and will interact with each other as you would expect.
 
 In this example we insert a document with Key-Value, and read it with a SELECT.
