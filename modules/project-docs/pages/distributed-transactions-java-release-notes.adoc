@@ -15,28 +15,42 @@ This page features the release notes for that library -- for release notes, down
 See the xref:7.0@server:learn:data/transactions.adoc[Distributed ACID Transactions concept doc] in the server documentation for details of how Couchbase implements transactions.
 The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Transactions HOWTO doc] walks you through all aspects of working with Distributed Transactions.
 
+== Distributed Transactions Java 1.2.3 (15 February 2022)
 
-== Distributed Transactions Java 1.2.2 (29 October 2021)
+This release has been tested with Couchbase Java SDK version 3.2.5 and requires version 3.1.5 or higher.
 
-This release has been tested with Couchbase Java SDK version 3.2.2 and requires version 3.1.5 or higher.
+https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.2.3/[JavaDocs]
 
-https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.2.2/[JavaDocs]
+The headline change in this release is that the library's thread safety has been signficantly improved.
+Prior to this release the library was thread-safe, but had to be used in a specific documented way to be so.
+Now those restrictions have been removed, and the documentation has been updated to reflect it.
 
-=== Interface Changes
-Some interfaces that were in `@Stability.Volatile` or `@Stability.Uncommitted` have been modified:
-
-* https://issues.couchbase.com/browse/TXNJ-442[TXNJ-442]:
-`ReactiveQueryStatementTransactionResult` has been been renamed to `ReactiveSingleQueryTransactionResult`, consistent with the blocking API.
-This new interface added in 1.2.1 is marked at @Stability.Uncommitted, indicating that breakages - though unusual - are possible.
-* https://issues.couchbase.com/browse/TXNJ-445[TXNJ-445]:
-An overload `Mono<ReactiveQueryResult> query(final ReactiveScope scope, final String statement)` was added, to be consistent with the blocking API.
+=== Improvements
+* https://issues.couchbase.com/browse/TXNJ-258[TXNJ-258],
+https://issues.couchbase.com/browse/TXNJ-326[TXNJ-326],
+https://issues.couchbase.com/browse/TXNJ-252[TXNJ-252],
+https://issues.couchbase.com/browse/TXNJ-454[TXNJ-454]:
+Multiple improvements to thread safety, described above.
+* https://issues.couchbase.com/browse/TXNJ-368[TXNJ-368]:
+The application's lambda is now run on a dedicated Reactive scheduler.
+This will help to prevent issues if the lambda runs a blocking non-Couchbase operation (which it should not do).
+* https://issues.couchbase.com/browse/TXNJ-453[TXNJ-453]:
+Performance: the thread-safe logging list has been replaced with a faster alternative.
 
 === Bug Fixes
-* https://issues.couchbase.com/browse/TXNJ-436[TXNJ-436],
-https://issues.couchbase.com/browse/TXNJ-446[TXNJ-446]:
-Rollback and commit now consistently set `isDone` in queryMode, preventing implicit commit.
-* https://issues.couchbase.com/browse/TXNJ-444[TXNJ-444]:
-Fixed an incorrectly formatted error message that was causing a `MissingFormatArgumentException`.
+* https://issues.couchbase.com/browse/TXNJ-447[TXNJ-447]:
+Deferred commit no longer fails with a `NullPointerException`.
+* https://issues.couchbase.com/browse/TXNJ-452[TXNJ-452],
+https://issues.couchbase.com/browse/TXNJ-460[TXNJ-460],
+https://issues.couchbase.com/browse/TXNJ-461[TXNJ-461],
+https://issues.couchbase.com/browse/TXNJ-464[TXNJ-464],
+https://issues.couchbase.com/browse/TXNJ-465[TXNJ-465]:
+Multiple fixes to the reactive version of `ctx.query()`, particularly around error handling.
+Any users of this API should upgrade immediately.
+* https://issues.couchbase.com/browse/TXNJ-455[TXNJ-455]:
+Avoid `ErrorCallbackNotImplemented` errors during cleanup shutdown when metadata collections were in use.
+* https://issues.couchbase.com/browse/TXNJ-467[TXNJ-467]:
+The single query transaction is completely rewritten, and now performs the `tximplicit` optimisation as expected.
 
 
 == Distributed Transactions Java 1.2.2 (29 October 2021)

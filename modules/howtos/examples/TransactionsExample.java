@@ -594,49 +594,21 @@ public class TransactionsExample {
     static void concurrentOps() {
         // tag::concurrentOps[]
         List<String> docIds = Arrays.asList("doc1", "doc2", "doc3", "doc4", "doc5");
-
         ReactiveCollection coll = collection.reactive();
+        int concurrency = 100; // This many operations will be in-flight at once
 
         TransactionResult result = transactions.reactive((ctx) -> {
-
-            // Tracks whether all operations were successful
-            AtomicBoolean allOpsSucceeded = new AtomicBoolean(true);
-
-            // The first mutation must be done in serial, as it also creates a metadata
-            // entry
-            return ctx.get(coll, docIds.get(0)).flatMap(doc -> {
-                JsonObject content = doc.contentAsObject();
-                content.put("value", "updated");
-                return ctx.replace(doc, content);
-            })
-
-                    // Do all other docs in parallel
-                    .thenMany(Flux.fromIterable(docIds.subList(1, docIds.size()))
-                            .flatMap(docId -> ctx.get(coll, docId).flatMap(doc -> {
+            return Flux.fromIterable(docIds)
+                    .parallel(concurrency)
+                    .runOn(Schedulers.boundedElastic())
+                    .concatMap(docId -> ctx.get(collection.reactive(), docId)
+                            .flatMap(doc -> {
                                 JsonObject content = doc.contentAsObject();
                                 content.put("value", "updated");
                                 return ctx.replace(doc, content);
-                            }).onErrorResume(err -> {
-                                allOpsSucceeded.set(false);
-                                // App should replace this with logging
-                                err.printStackTrace();
-
-                                // Allow other ops to finish
-                                return Mono.empty();
-                            }),
-
-                                    // Run these in parallel
-                                    docIds.size())
-
-            // The commit or rollback must also be done in serial
-            ).then(Mono.defer(() -> {
-                // Commit iff all ops succeeded
-                if (allOpsSucceeded.get()) {
-                    return ctx.commit();
-                } else {
-                    throw new RuntimeException("Retry the transaction");
-                }
-            }));
+                            }))
+                    .sequential()
+                    .then();
         }).block();
         // end::concurrentOps[]
     }
@@ -763,9 +735,9 @@ public class TransactionsExample {
     }
 
     static void querySingle() {
-        // tag::querySingle[]
-        String bulkLoadStatement = null; // a bulk-loading N1QL statement
+        String bulkLoadStatement = null; // a bulk-loading N1QL statement.  Left out of example per DOC-9630.
 
+        // tag::querySingle[]
         try {
             SingleQueryTransactionResult result = transactions.query(bulkLoadStatement);
 
