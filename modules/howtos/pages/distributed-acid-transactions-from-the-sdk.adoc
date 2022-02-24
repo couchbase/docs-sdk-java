@@ -542,5 +542,7 @@ include::example$TransactionsExample.java[tag=defer3,indent=0]
 The transaction expiry timer (which is configurable) will begin ticking once the transaction starts, and is not paused while the transaction is in a deferred state.
 
 
+== Further Reading
 
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=further]
+* There’s plenty of explanation about how Transactions work in Couchbase in our xref:7.0@server:learn:data/transactions.adoc[Transactions documentation].
+* You can find further code examples on our https://github.com/couchbaselabs/couchbase-transactions-java-examples[transactions examples repository].
