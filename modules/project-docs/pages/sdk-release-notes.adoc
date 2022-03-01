@@ -441,11 +441,11 @@ Optional artifacts on top of this SDK version are tested for the following compa
 === Bug Fixes
 
 * https://issues.couchbase.com/browse/JVMCBC-1067[JVMCBC-1067]:
-Internal and external maintenance dependencies are updated to their latest available bufix releases (including Netty to 4.1.74.Final).
+Internal and external maintenance dependencies are updated to their latest available bugfix releases (including Netty to 4.1.74.Final).
 * https://issues.couchbase.com/browse/JVMCBC-1046[JVMCBC-1046]:
 Added fix to not load the global config if a node is not in the seed node list anymore.
 * https://issues.couchbase.com/browse/JVMCBC-1006[JVMCBC-1006]:
-`ErrorContext` must be included in message.
+`ErrorContext` is now included in the message of a `CouchbaseException`.
 * https://issues.couchbase.com/browse/JVMCBC-1895[JCBC-1895]:
 Fixed an issue where `lookupInResult.contentAs(0, Boolean.class)` was throwing a `DecodingFailureException` on a Sub-Document exists operation.
 * https://issues.couchbase.com/browse/JVMCBC-1896[JCBC-1896]:
