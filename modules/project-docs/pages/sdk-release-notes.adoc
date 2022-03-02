@@ -69,7 +69,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 * https://issues.couchbase.com/browse/JVMCBC-1060[JVMCBC-1060]:
 Fixed an issue where rate limited exceptions were not thrown for `SearchIndexManager` errors.
 * https://issues.couchbase.com/browse/JVMCBC-1071[JVMCBC-1071]:
-The SDK now ensures that negative values are not allowed in the `ValueRecorder`.
+The SDK now ensures that negative values are not sent to the `ValueRecorder`.
 * https://issues.couchbase.com/browse/JCBC-1918[JCBC-1918]:
 Executing a Full-Text Search query with an open-ended date range facet no longer results in a `NullPointerException`.
 * https://issues.couchbase.com/browse/JCBC-1919[JCBC-1919]:
