@@ -67,41 +67,44 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 === Bugs
 * https://issues.couchbase.com/browse/JVMCBC-1060[JVMCBC-1060]:
-Rate limited exceptions not thrown for SearchIndexManager errors.
+Fixed an issue where rate limited exceptions were not thrown for `SearchIndexManager` errors.
 * https://issues.couchbase.com/browse/JVMCBC-1071[JVMCBC-1071]:
-Prevent negative value to be sent to ValueRecorder.
+The SDK now ensures that negative values are not allowed in the `ValueRecorder`.
 * https://issues.couchbase.com/browse/JCBC-1918[JCBC-1918]:
-Executing a Full-Text Search query with an open-ended date range facet no longer results in a NullPointerException.
+Executing a Full-Text Search query with an open-ended date range facet no longer results in a `NullPointerException`.
 * https://issues.couchbase.com/browse/JCBC-1919[JCBC-1919]:
-Quote index fields in the analytics index manager.
+Index fields are now quoted in the analytics index manager.
 * https://issues.couchbase.com/browse/JCBC-1921[JCBC-1921]:
-QueryIndexManager buildDeferredIndexes throws ParsingFailureException against CB 6.0.
+QueryIndexManager `buildDeferredIndexes` no longer throws a `ParsingFailureException` against Couchbase Server 6.0.
 
 === New Features
 * https://issues.couchbase.com/browse/JVMCBC-1057[JVMCBC-1057]:
-Add core infrastructure for the Backup service.
+Added core infrastructure for the Backup service. 
+Users can now make custom HTTP requests to the Backup service.
 * https://issues.couchbase.com/browse/JVMCBC-1064[JVMCBC-1064]:
-When implementing a custom RetryStrategy, a new overload of `RetryAction.noRetry` lets you specify an exception translator for converting the default request cancellation exception into your preferred exception class.
+When implementing a custom `RetryStrategy`, a new overload of `RetryAction.noRetry` lets you specify an exception translator for converting the default request cancellation exception into your preferred exception class.
 
 === Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1065[JVMCBC-1065]:
-RetryReason.allowsNonIdempotentRetry() is now public, so you can call it from a custom RetryStrategy.
+`RetryReason.allowsNonIdempotentRetry()` is now public, so you can call it from a custom `RetryStrategy`.
 * https://issues.couchbase.com/browse/JVMCBC-1066[JVMCBC-1066]:
-When SecurityConfig.Builder.trustCertificate(Path) is given a file containing more than one certificate, it now trusts all the certificates instead of just the first one.
-Likewise, the result of SecurityConfig.decodeCertificates(List<String>) now includes all certificates in each string, not just the first certificate in each string.
+When `SecurityConfig.Builder.trustCertificate(Path)` is given a file containing more than one certificate, it now trusts all the certificates instead of just the first one.
+Likewise, the result of `SecurityConfig.decodeCertificates(List<String>)` now includes all certificates in each string, not just the first certificate in each string.
 * https://issues.couchbase.com/browse/JVMCBC-1068[JVMCBC-1068]:
-Explicitly handle FeatureNotAvailable for Magma on CE.
+Added explicit handling of `FeatureNotAvailable` for Magma on CE.
 * https://issues.couchbase.com/browse/JVMCBC-1069[JVMCBC-1069]:
-Explicitly handle FeatureNotAvailable for Query CE.
+Added explicit handling of `FeatureNotAvailable` for Query CE.
 * https://issues.couchbase.com/browse/JCBC-1916[JCBC-1916]:
-Update Analytics Management API Javadocs.
+Updated the Analytics Management API Javadocs.
 * https://issues.couchbase.com/browse/JCBC-1917[JCBC-1917]:
-You can now configure properties of the ClusterEnvironment without having to build and shut down the environment. The new  ClusterOptions.environment(Consumer<ClusterEnvironment.Builder>) method lets you configure properties of a ClusterEnvironment owned by the Cluster, so you don't need to manage the environment yourself.
+You can now configure properties of the `ClusterEnvironment` without having to build and shut down the environment.
+The new `ClusterOptions.environment(Consumer<ClusterEnvironment.Builder>)` method lets you configure properties of a `ClusterEnvironment` owned by the Cluster, so you don't need to manage the environment yourself.
 Example usage:
-```
+[source,java]
+----
 Cluster cluster = Cluster.connect("localhost", clusterOptions(username, password)
     .environment(env -> env.ioConfig().captureTraffic(ServiceType.MANAGER)));
-```
+----
 
 == Version 3.2.5 (2 February 2022)
 
