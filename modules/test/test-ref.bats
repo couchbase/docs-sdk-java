@@ -1,6 +1,6 @@
 #!./test/libs/bats/bin/bats
 
-load 'test/test_helper.bash'
+load 'test_helper'
 
 @test "[ref] - ClientSettingsExample.java" {
     runExample ClientSettingsExample

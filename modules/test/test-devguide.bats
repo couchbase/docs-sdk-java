@@ -1,6 +1,6 @@
 #!./test/libs/bats/bin/bats
 
-load 'test/test_helper.bash'
+load 'test_helper'
 
 @test "[devguide] - BulkGet.java" {
     runExample BulkGet 
