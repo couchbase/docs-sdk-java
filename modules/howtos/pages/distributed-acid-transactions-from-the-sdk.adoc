@@ -4,12 +4,15 @@
 :page-partial:
 :page-topic-type: howto
 :page-aliases: acid-transactions
+:page-toclevels: 2
 
+include::project-docs:partial$attributes.adoc[]
+include::partial$acid-transactions-attributes.adoc[]
 
 [abstract]
 {description}
 
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=intro]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=intro]
 
 You may also want to start with our https://github.com/couchbaselabs/couchbase-transactions-java-examples[transactions examples repository],
 which features useful downloadable examples of using Distributed Transactions.
@@ -22,7 +25,7 @@ Javadocs are available https://docs.couchbase.com/sdk-api/couchbase-transactions
 * Couchbase Server 6.6.1 or above.
 * Couchbase Java client 3.1.5 or above.
 It is recommended to follow the transitive dependency for the transactions library from Maven.
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
 
 
 == Getting Started
@@ -74,6 +77,7 @@ include::example$TransactionsExample.java[tag=init,indent=0]
 ----
 
 === Multiple Transactions Objects
+
 Generally an application will need just one `Transactions` object, and in fact the library will usually warn if more are created.
 Each `Transactions` object uses some resources, including a thread-pool.
 
@@ -88,10 +92,10 @@ Transactions can optionally be globally configured at the point of creating the 
 include::example$TransactionsExample.java[tag=config,indent=0]
 ----
 
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=config]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=config]
 
 
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=creating]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=creating]
 
 As with the Couchbase Java Client, you can use the library in either synchronous mode:
 
@@ -111,11 +115,10 @@ The synchronous mode is the easiest to write and understand.
 The asynchronous API allows you to build your application in a reactive style, which can help you scale with excellent efficiency.
 Those new to reactive programming may want to check out https://projectreactor.io/[the Project Reactor site] for more details on this powerful paradigm.
 
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=lambda-ctx]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=lambda-ctx]
 
-== Examples
-A code example is worth a thousand words, so here is a quick summary of the main transaction operations.
-They are described in more detail below. 
+// Examples
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=examples-intro]
 
 .With the synchronous API
 [source,java]
@@ -131,7 +134,7 @@ include::example$TransactionsExample.java[tag=examplesReactive,indent=0]
 ----
 
 
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=mechanics]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tags=mechanics;!integrated-sdk-cleanup-process]
 
 
 == Key-Value Mutations
@@ -208,15 +211,16 @@ Gets will 'read your own writes', e.g. this will succeed:
 include::example$TransactionsExample.java[tag=getReadOwnWrites,indent=0]
 ----
 
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=query-intro]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tags=query-intro;!integrated-sdk-begin-transaction]
 
 === Using N1QL
+
 If you already use N1QL from the Java SDK, then its use in transactions is very similar.
-it returns the same `QueryResult` you are used to, and takes most of the same options.
+It returns the same `QueryResult` you are used to, and takes most of the same options.
 
 You must take care to write `ctx.query()` inside the lambda however, rather than `cluster.query()` or `scope.query()`.
 
-An example of SELECTing some rows from the `travel-sample` bucket:
+An example of selecting some rows from the `travel-sample` bucket:
 
 [source,java]
 ----
@@ -247,44 +251,64 @@ include::example$TransactionsExample.java[tag=queryExamplesComplex,indent=0]
 ----
 
 === Read Your Own Writes
+
 As with Key-Value operations, N1QL queries support Read Your Own Writes.
 
-This example shows INSERTing a document and then SELECTing it again.
+This example shows inserting a document and then selecting it again.
 
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=queryInsert,indent=0]
 ----
+
 <1> The inserted document is only staged at this point. as the transaction has not yet committed.
 Other transactions, and other non-transactional actors, will not be able to see this staged insert yet.
 <2> But the SELECT can, as we are reading a mutation staged inside the same transaction.
 
 === Mixing Key-Value and N1QL
+
 Key-Value operations and queries can be freely intermixed, and will interact with each other as you would expect.
 
 In this example we insert a document with Key-Value, and read it with a SELECT.
+
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=queryRyow,indent=0]
 ----
+
 <1> As with the 'Read Your Own Writes' example, here the insert is only staged, and so it is not visible to other transactions or non-transactional actors.
 <2> But the SELECT can view it, as the insert was in the same transaction.
 
 === Query Options
-Query options can be provided via `TransactionsQueryOptions`, which provides a subset of the options in the Java SDK's `QueryOptions`.
+
+Query options can be provided via `TransactionQueryOptions`, which provides a subset of the options in the Java SDK's `QueryOptions`.
 
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=queryOptions,indent=0]
 ----
 
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=query-options]
+The supported options are:
+
+* parameters
+* scanConsistency
+* flexIndex
+* serializer
+* clientContextId
+* scanWait
+* scanCap
+* pipelineBatch
+* pipelineCap
+* profile
+* readonly
+* adhoc
+* raw
 
 See the xref:howtos:n1ql-queries-with-sdk.adoc#query-options[QueryOptions documentation] for details on these.
 
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=query-perf]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=query-perf]
 
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=query-single]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=query-single]
 
 [source,java]
 ----
@@ -325,7 +349,7 @@ An asynchronous cleanup process ensures that once the transaction reaches the co
 
 
 // == A Full Transaction Example
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=example]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=example]
 
 A complete version of this example is available on our https://github.com/couchbaselabs/couchbase-transactions-java-examples[GitHub transactions examples page].
 
@@ -336,7 +360,9 @@ include::example$TransactionsExample.java[tag=full,indent=0]
 
 
 // concurrency
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=concurrency]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=concurrency]
+
+To help detect that this co-operative requirement is fulfilled, the application can subscribe to the client's event logger and check for any `IllegalDocumentState` events, like so:
 
 [source,java]
 ----
@@ -375,19 +401,21 @@ After a transaction is rolled back, it cannot be committed, no further operation
 
 
 //  Error Handling
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=error]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=error]
 
+There are three exceptions that Couchbase transactions can raise to the application: `TransactionFailed`, `TransactionExpired` and `TransactionCommitAmbiguous`.
+All exceptions derive from `TransactionFailed` for backwards-compatibility purposes.
 
 
 //  txnfailed
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=txnfailed]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=txnfailed]
 
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=config-expiration,indent=0]
 ----
 
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=txnfailed1]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=txnfailed1]
 
 Similar to `TransactionResult`, `SingleQueryTransactionResult` also has an `unstagingComplete()` method.
 
@@ -400,8 +428,21 @@ Pulling all of the above together, this is the suggested best practice for error
 include::example$TransactionsExample.java[tag=full-error-handling,indent=0]
 ----
 
+// Asynchronous Cleanup
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tags=cleanup;!integrated-sdk-cleanup-collections]
 
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=cleanup]
+[#tuning-cleanup]
+=== Configuring Cleanup
+
+The cleanup settings can be configured as so:
+
+[options="header"]
+|===
+|Setting|Default|Description
+|`cleanupWindow`|60 seconds|This determines how long a cleanup 'run' is; that is, how frequently this client will check its subset of ATR documents.  It is perfectly valid for the application to change this setting, which is at a conservative default.  Decreasing this will cause expiration transactions to be found more swiftly (generally, within this cleanup window), with the tradeoff of increasing the number of reads per second used for the scanning process.
+|`cleanupLostAttempts`|true|This is the thread that takes part in the distributed cleanup process described above, that cleans up expired transactions created by any client.  It is strongly recommended that it is left enabled.
+|`cleanupClientAttempts`|true|This thread is for cleaning up transactions created just by this client.  The client will preferentially aim to send any transactions it creates to this thread, leaving transactions for the distributed cleanup process only when it is forced to (for example, on an application crash).  It is strongly recommended that it is left enabled.
+|===
 
 === Monitoring Cleanup
 
@@ -493,16 +534,17 @@ include::example$TransactionsExample.java[tag=concurrentOps,indent=0]
 ----
 
 
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=custom-metadata-1]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=custom-metadata-1]
 
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=custom-metadata,indent=0]
 ----
 
-include::7.0@sdk:shared:partial$acid-transactions.adoc[tag=custom-metadata-2]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=custom-metadata-2]
 
 === Multiple Transactions Objects
+
 Generally, an application requires only one `Transactions` object.
 But in some deployments, an application may need to access multiple custom metadata collections, and it is reasonable to create multiple `Transactions` objects as this is the only way to enable this.
 
@@ -544,5 +586,5 @@ The transaction expiry timer (which is configurable) will begin ticking once the
 
 == Further Reading
 
-* There’s plenty of explanation about how Transactions work in Couchbase in our xref:7.0@server:learn:data/transactions.adoc[Transactions documentation].
+* There's plenty of explanation about how Transactions work in Couchbase in our xref:{version-server}@server:learn:data/transactions.adoc[Transactions documentation].
 * You can find further code examples on our https://github.com/couchbaselabs/couchbase-transactions-java-examples[transactions examples repository].
