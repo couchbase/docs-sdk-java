@@ -1,6 +1,6 @@
 #!./test/libs/bats/bin/bats
 
-load 'test/test_helper.bash'
+load 'test_helper'
 
 @test "[hello-world] - DocParser.java" {
     runExample DocParser
