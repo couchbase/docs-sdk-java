@@ -145,8 +145,8 @@ load 'test_helper'
     assert_output --partial "Got debug info as well"
 }
 
-@test "[howtos] - QueryIndexManager.java" {
-    runExample QueryIndexManager
+@test "[howtos] - QueryIndexManagerExample.java" {
+    runExample QueryIndexManagerExample
     assert_success
 }
 

@@ -2,6 +2,7 @@
 :description: Provisioning cluster resources is managed at the collection or bucket level, depending upon the service affected.
 :navtitle: Provisioning Cluster Resources
 :page-aliases: ROOT:managing-clusters.adoc
+:page-toclevels: 2
 
 // API refs
 :bucket-api-reference: pass:q[BucketManager -- https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Cluster.html#buckets()[`Cluster.buckets()`]]
