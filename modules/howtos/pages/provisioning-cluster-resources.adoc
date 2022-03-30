@@ -213,7 +213,7 @@ include::example$QueryIndexManagerExample.java[tag=drop-primary-or-secondary-ind
 
 // * Search - note & link to FTS page & API?
 
-== View Management
+== Views Management
 
 include::{version-server}@sdk:shared:partial$flush-info-pars.adoc[tag=view-management]
 
