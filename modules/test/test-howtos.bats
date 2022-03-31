@@ -154,3 +154,8 @@ load 'test_helper'
     runExample ProvisioningResourcesBuckets
     assert_success
 }
+
+@test "[howtos] - ProvisioningResourcesViews.java" {
+    runExample ProvisioningResourcesViews
+    assert_success
+}
