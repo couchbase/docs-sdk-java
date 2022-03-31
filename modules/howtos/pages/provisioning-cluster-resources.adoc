@@ -36,7 +36,7 @@ Management operations in the SDK may be performed through several interfaces dep
 NOTE: When using a Couchbase version earlier than 6.5, you must create a valid Bucket connection using `Cluster.bucket(name)` before you can use cluster level managers.
 
 
-== Creating and Removing Buckets
+== Bucket Management
 
 The `BucketManager` interface may be used to create and delete buckets from the Couchbase cluster.
 It is instantiated through the `Cluster.buckets()` method.
@@ -88,7 +88,7 @@ include::example$ProvisioningResourcesBuckets.java[tag=removeBucket,indent=0]
 ----
 
 [#java-flushing]
-== Flushing Buckets
+=== Flushing Buckets
 
 include::{version-server}@sdk:shared:partial$flush-info-pars.adoc[tag=flush-intro]
 
@@ -159,6 +159,11 @@ include::{version-server}@sdk:shared:partial$flush-info-pars.adoc[tag=index-mana
 
 The `QueryIndexManager` interface contains the means for managing indexes used for queries.
 It can be instantiated through the `Cluster.queryIndexes()` method.
+
+[source,java]
+----
+include::example$QueryIndexManagerExample.java[tag=creating-index-mgr,indent=0]
+----
 
 include::{version-server}@sdk:shared:partial$flush-info-pars.adoc[tag=query-index-manager-intro]
 
