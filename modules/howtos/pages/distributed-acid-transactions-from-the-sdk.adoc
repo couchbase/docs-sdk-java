@@ -14,52 +14,18 @@ include::partial$acid-transactions-attributes.adoc[]
 
 include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=intro]
 
-You may also want to start with our https://github.com/couchbaselabs/couchbase-transactions-java-examples[transactions examples repository],
-which features useful downloadable examples of using Distributed Transactions.
-
-Javadocs are available https://docs.couchbase.com/sdk-api/couchbase-transactions-java/index.html?overview-summary.html[online].
+// TODO update when available
+// Javadocs are available https://docs.couchbase.com/sdk-api/couchbase-transactions-java/index.html?overview-summary.html[online].
 
 
 == Requirements
 
 * Couchbase Server 6.6.1 or above.
-* Couchbase Java client 3.1.5 or above.
-It is recommended to follow the transitive dependency for the transactions library from Maven.
 include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
 
+Couchbase transactions require no additional components or services to be configured.
 
 == Getting Started
-
-Couchbase transactions require no additional components or services to be configured. 
-Simply add the transactions library into your project.
-The latest version, as of February 2022, is 1.2.3.
-
-With Gradle this can be accomplished by modifying these sections of your build.gradle file like so:
-
-[source,gradle]
-----
-dependencies {
-    compile group: 'com.couchbase.client', name: 'couchbase-transactions', version: '1.2.3'
-}
-----
-
-Or with Maven:
-
-[source,maven]
-----
-<dependency>
-    <groupId>com.couchbase.client</groupId>
-    <artifactId>couchbase-transactions</artifactId>
-    <version>1.2.3</version>
-</dependency>
-----
-
-This will automatically pull in any transitive dependencies of this library, including a compatible version of the Couchbase Java SDK.
-
-A complete simple gradle project is available on our https://github.com/couchbaselabs/couchbase-transactions-java-examples[transactions examples repository].
-
-
-== Initializing Transactions
 
 To make it easy to use any of the following examples, here are all the imports used by them:
 
@@ -68,28 +34,29 @@ To make it easy to use any of the following examples, here are all the imports u
 include::example$TransactionsExample.java[tag=imports,indent=0]
 ----
 
-The starting point is the `Transactions` object.  
-It is very important that the application ensures that only one of these is created, as it performs automated background processes that should not be duplicated.
+Transactions are accessed via a `Cluster`.  A simple transaction that inserts one doc and updates the content of another looks like this (with error handling removed for brevity):
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=init,indent=0]
+include::example$TransactionsExample.java[tag=create-simple,indent=0]
 ----
-
-=== Multiple Transactions Objects
-
-Generally an application will need just one `Transactions` object, and in fact the library will usually warn if more are created.
-Each `Transactions` object uses some resources, including a thread-pool.
-
-There is one rare exception where an application may need to create multiple `Transactions` objects, which is covered in <<Custom Metadata Collections>>.
 
 == Configuration
 
-Transactions can optionally be globally configured at the point of creating the `Transactions` object:
+The default configuration should be appropriate for most use-cases.
+If needed, transactions can be globally configured at the point of creating the `Cluster`.
+As usual with `Cluster` configuration, you can either explicitly create and manage the `ClusterEnvironment` yourself:
 
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=config,indent=0]
+----
+
+or alternatively use this lambda syntax, which leads to the `ClusterEnvironment` being owned and managed by the `Cluster`:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=config-easy,indent=0]
 ----
 
 include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=config]
@@ -97,7 +64,7 @@ include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=config]
 
 include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=creating]
 
-As with the Couchbase Java Client, you can use the library in either synchronous mode:
+You can create transactions in either synchronous mode:
 
 [source,java]
 ----
@@ -117,6 +84,15 @@ Those new to reactive programming may want to check out https://projectreactor.i
 
 include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=lambda-ctx]
 
+The following helper logging methods will be used throughout the examples.
+Transaction logging is too verbose to be sent to the Java SDK event-bus, so instead it is stored in an in-memory log that can be accessed both from `TransactionResult` and `TransactionFailedException`.
+It is a good practice for the application to log any failed transactions into its own logging system, here represented with a `logger` object:
+[source,java]
+----
+include::example$TransactionsExample.java[tag=logger,indent=0]
+----
+See the <<Logging>> documentation for more detail.
+
 // Examples
 include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=examples-intro]
 
@@ -134,17 +110,18 @@ include::example$TransactionsExample.java[tag=examplesReactive,indent=0]
 ----
 
 
-include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tags=mechanics;!integrated-sdk-cleanup-process]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tags=mechanics;!library-cleanup-process]
 
 
 == Key-Value Mutations
 
+IMPORTANT: Make sure to use the transactional Key-Value operations inside the lambda, such as `ctx.insert()`, rather than `collection.insert()`.
+Those would be executed as regular non-transactional Key-Value operations, and since the lambda can be executed multiple times, so could those operations.
+
 === Replacing
 
 Replacing a document requires a `ctx.get()` call first.
-This is necessary so that the transactions library can check that the document is not involved in another transaction.
-If it is, then the transactions library will handle this at the `ctx.replace()` point.  
-Generally, this involves rolling back what has been done so far, and retrying the lambda.
+This is necessary so that the SDK can check that the document is not involved in another transaction, and take appropriate action if so.
 
 .With the synchronous API:
 [source,java]
@@ -177,7 +154,7 @@ include::example$TransactionsExample.java[tag=removeReactive,indent=0]
 NOTE: For those using the asynchronous API - some `ctx` methods, notably `ctx.remove()`, return `Mono<Void>`.
 There is a common 'gotcha' with `Mono<Void>` in that it does not trigger a 'next' reactive event - only a 'completion' event.
 This means that some reactive operators chained afterwards - including the common `flatMap` - will not trigger.
-Generally, you will to do `ctx.remove(...).then(...)` rather than `ctx.remove(...).flatMap(...)`.
+Generally, you will need to do `ctx.remove(...).then(...)` rather than `ctx.remove(...).flatMap(...)`.
 
 === Inserting
 
@@ -192,17 +169,19 @@ include::example$TransactionsExample.java[tag=insert,indent=0]
 include::example$TransactionsExample.java[tag=insertReactive,indent=0]
 ----
 
-== Key-Value Reads
-
-There are two ways to get a document with Key-Value, `get` and `getOptional`:
+=== Reads
 
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=get,indent=0]
 ----
 
-`get` will cause the transaction to fail with `TransactionFailed` (after rolling back any changes, of course).
-It is provided as a convenience method so the developer does not have to check the `Optional` if the document must exist for the transaction to succeed.
+If the application needs to ignore or take action on a document not existing, it can catch the exception:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=get-catch,indent=0]
+----
 
 Gets will 'read your own writes', e.g. this will succeed:
 
@@ -210,15 +189,17 @@ Gets will 'read your own writes', e.g. this will succeed:
 ----
 include::example$TransactionsExample.java[tag=getReadOwnWrites,indent=0]
 ----
+Of course, no other transaction will be able to read that inserted document, until this transaction reaches the commit point.
 
-include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tags=query-intro;!integrated-sdk-begin-transaction]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tags=query-intro;!library-begin-transaction]
 
 === Using N1QL
 
-If you already use N1QL from the Java SDK, then its use in transactions is very similar.
-It returns the same `QueryResult` you are used to, and takes most of the same options.
+If you already use N1QL, then its use in transactions is very similar.
+A query returns a `TransactionQueryResult` that is very similar to the `QueryResult` you are used to, and a query takes a `TransactionQueryOptions` that provides the majority of the same options as `QueryOptions`.
 
-You must take care to write `ctx.query()` inside the lambda however, rather than `cluster.query()` or `scope.query()`.
+IMPORTANT: It's important to use the transactional `ctx.query()` inside the lambda, rather than `cluster.query()` or `scope.query()`.
+Those would be executed as regular non-transactional queries, and since the lambda can be executed multiple times, so could the statements.
 
 An example of selecting some rows from the `travel-sample` bucket:
 
@@ -331,27 +312,19 @@ include::example$TransactionsExample.java[tag=querySingleConfigured,indent=0]
 
 == Committing
 
-Committing is automatic: if there is no explicit call to `ctx.commit()` at the end of the transaction logic callback, and no exception is thrown, it will be committed.
+Committing is automatic: at the end of the lambda, if all operations have succeeded and no exception is thrown, committing will commence.
 
-With the asynchronous API, if you leave off the explicit call to `commit` then you may need to call `.then()` on the result of the chain to convert it to the required `Mono<Void>` return type:
+Committing starts with the atomic step of switching the transaction's Active Transaction Record entry to Committed.
+As soon as this is done, all its changes will be atomically visible to reads from other transactions - this is Read Atomicity.
+The individual documents will then be committed so they are visible to non-transactional actors, in an eventually consistent fashion.
 
-[source,java]
-----
-include::example$TransactionsExample.java[tag=commit,indent=0]
-----
-
-As soon as the transaction is committed, all its changes will be atomically visible to reads from other transactions.
-The changes will also be committed (or "unstaged") so they are visible to non-transactional actors, in an eventually consistent fashion.
-
-Commit is final: after the transaction is committed, it cannot be rolled back, and no further operations are allowed on it.
+Commit is final: after the atomic Committed step is reached, the transaction cannot be rolled back, and no further operations are allowed on it.
 
 An asynchronous cleanup process ensures that once the transaction reaches the commit point, it will be fully committed - even if the application crashes.
 
 
 // == A Full Transaction Example
 include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=example]
-
-A complete version of this example is available on our https://github.com/couchbaselabs/couchbase-transactions-java-examples[GitHub transactions examples page].
 
 [source,java]
 ----
@@ -362,7 +335,7 @@ include::example$TransactionsExample.java[tag=full,indent=0]
 // concurrency
 include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=concurrency]
 
-To help detect that this co-operative requirement is fulfilled, the application can subscribe to the client's event logger and check for any `IllegalDocumentState` events, like so:
+To help detect that this co-operative requirement is fulfilled, the application can subscribe to the client's event logger and check for any `IllegalDocumentStateEvent` events, like so:
 
 [source,java]
 ----
@@ -375,11 +348,15 @@ The event contains the key of the document involved, to aid the application with
 
 == Rollback
 
-If an exception is thrown, either by the application from the lambda, or by the transactions library, then that attempt is rolled back.
-The transaction logic may or may not be retried, depending on the exception.
+If an exception is thrown, either by the application from the lambda, or by the transactions logic itself (e.g. on a failed operation), then that attempt is rolled back.
+
+The application's lambda may or may not be retried, depending on the error that occurred.
+The general rule for retrying is whether the transaction is likely to succeed on a retry.
+For example, if this transaction is trying to write a document that is currently involved in another transaction (a write-write conflict), this will lead to a retry as that is likely a transient state.
+But if the transaction is trying to get a document that does not exist, it will not retry.
 //- see link:#error-handling[Error handling and logging].
 
-If the transaction is not retried then it will throw a `TransactionFailed` exception, and its `getCause` method can be used for more details on the failure.
+If the transaction is not retried then it will throw a `TransactionFailedException`, and its `getCause` method can be used for more details on the failure.
 
 The application can use this to signal why it triggered a rollback, as so:
 
@@ -388,22 +365,13 @@ The application can use this to signal why it triggered a rollback, as so:
 include::example$TransactionsExample.java[tag=rollback-cause,indent=0]
 ----
 
-The transaction can also be explicitly rolled back:
-
-[source,java]
-----
-include::example$TransactionsExample.java[tag=rollback,indent=0]
-----
-
-In this case, if `ctx.rollback()` is reached, then the transaction will be regarded as successfully rolled back and no TransactionFailed will be thrown.
-
-After a transaction is rolled back, it cannot be committed, no further operations are allowed on it, and the library will not try to automatically commit it at the end of the code block.
+After a transaction is rolled back, it cannot be committed, no further operations are allowed on it, and the SDK will not try to automatically commit it at the end of the code block.
 
 
 //  Error Handling
 include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=error]
 
-There are three exceptions that Couchbase transactions can raise to the application: `TransactionFailed`, `TransactionExpired` and `TransactionCommitAmbiguous`.
+There are three exceptions that Couchbase transactions can raise to the application: `TransactionFailedException`, `TransactionExpiredException` and `TransactionCommitAmbiguousException`.
 All exceptions derive from `TransactionFailed` for backwards-compatibility purposes.
 
 
@@ -415,9 +383,14 @@ include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=txnfaile
 include::example$TransactionsExample.java[tag=config-expiration,indent=0]
 ----
 
-include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=txnfailed1]
+Alternatively it can be configured at the per-transaction level:
 
-Similar to `TransactionResult`, `SingleQueryTransactionResult` also has an `unstagingComplete()` method.
+[source,java]
+----
+include::example$TransactionsExample.java[tag=config-expiration-per,indent=0]
+----
+
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=txnfailed1]
 
 === Full Error Handling Example
 
@@ -429,12 +402,19 @@ include::example$TransactionsExample.java[tag=full-error-handling,indent=0]
 ----
 
 // Asynchronous Cleanup
-include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tags=cleanup;!integrated-sdk-cleanup-collections]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tags=cleanup;!library-cleanup-buckets]
 
 [#tuning-cleanup]
 === Configuring Cleanup
 
 The cleanup settings can be configured as so:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=config-cleanup,indent=0]
+----
+
+The settings supported by `TransactionsCleanupConfig` are:
 
 [options="header"]
 |===
@@ -442,6 +422,7 @@ The cleanup settings can be configured as so:
 |`cleanupWindow`|60 seconds|This determines how long a cleanup 'run' is; that is, how frequently this client will check its subset of ATR documents.  It is perfectly valid for the application to change this setting, which is at a conservative default.  Decreasing this will cause expiration transactions to be found more swiftly (generally, within this cleanup window), with the tradeoff of increasing the number of reads per second used for the scanning process.
 |`cleanupLostAttempts`|true|This is the thread that takes part in the distributed cleanup process described above, that cleans up expired transactions created by any client.  It is strongly recommended that it is left enabled.
 |`cleanupClientAttempts`|true|This thread is for cleaning up transactions created just by this client.  The client will preferentially aim to send any transactions it creates to this thread, leaving transactions for the distributed cleanup process only when it is forced to (for example, on an application crash).  It is strongly recommended that it is left enabled.
+|`addCollections`|empty|Adds additional collections to the 'cleanup set' - the set of collections being cleaned up.|
 |===
 
 === Monitoring Cleanup
@@ -456,10 +437,10 @@ include::example$TransactionsExample.java[tag=cleanup-events,indent=0]
 `TransactionCleanupEndRunEvent` is raised whenever a current 'run' is finished, and contains statistics from the run.
 (A run is typically around every 60 seconds, with default configuration.)
 
-A `TransactionCleanupAttempt` event is raised when an expired transaction was found by this process, and a cleanup attempt was made.
+A `TransactionCleanupAttemptEvent` event is raised when an expired transaction was found by this process, and a cleanup attempt was made.
 It contains whether that attempt was successful, along with any logs relevant to the attempt.
 
-In addition, if cleanup fails to cleanup a transaction that is more than two hours past expiry, it will raise the `TransactionCleanupAttempt` event at WARN level (rather than the default DEBUG).
+In addition, if cleanup fails to cleanup a transaction that is more than two hours past expiry, it will raise the `TransactionCleanupAttemptEvent` event at WARN level (rather than the default DEBUG).
 With most default configurations of the event-bus (see <<Logging>> below), this will cause that event to be logged somewhere visible to the application.
 If there is not a good reason for the cleanup to be failed (such as a downed node that has not yet been failed-over), then the user is encouraged to report the issue.
 
@@ -479,42 +460,42 @@ or for the asynchronous API:
 include::example$TransactionsExample.java[tag=async_logging,indent=0]
 ----
 
+Those convenience methods are:
+[source,java]
+----
+include::example$TransactionsExample.java[tag=logger,indent=0]
+----
+Of course, the application should replace `logger.warning` with their own logging system.
+
 A failed transaction can involve dozens, even hundreds, of lines of logging, so the application may prefer to write failed transactions into a separate file.
 
-For convenience there is also a config option that will automatically write this programmatic log to the standard Couchbase Java logging configuration inherited from the SDK if a transaction fails.
-This will log all lines of any failed transactions, to `WARN` level:
-[source,java]
-----
-include::example$TransactionsExample.java[tag=config_warn,indent=0]
-----
-
-
-By default the Couchbase Java logging event-bus is setup to look for and use SLF4J/logback, log4j1, and log4j2 on the classpath, and to fallback to java.util.Logging.  
-
-Please see the xref:howtos:collecting-information-and-logging.adoc[Java SDK logging documentation] for details.
-
-Most applications will have their own preferred Java logging solution in-place already.
-For those starting from scratch here is a complete example using the basic `java.util.Logging`:
+In addition a successful transaction can be logged:
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=full-logging,indent=0]
+include::example$TransactionsExample.java[tag=logging-success,indent=0]
 ----
-
 
 == Tracing
-
+If configured, detailed telemetry on each transaction can be output that is compatible with various external systems including OpenTelemetry and its predecessor OpenTracing.
 This telemetry is particularly useful for monitoring performance.
 
-If the underlying Couchbase Java SDK is configured for tracing, then no further work is required: transaction spans will be output automatically.
-See the xref:howtos:observability-tracing.adoc[Couchbase Java SDK Request Tracing documentation] for how to configure this.
+See the xref:howtos:observability-tracing.adoc[SDK Request Tracing documentation] for how to configure this.
+
+The tracing should currently be regarded as 'developer preview' functionality, as the spans and attributes output may change over time.
 
 === Parent Spans
 
-While the above is sufficient to use and output transaction spans, the application may wish to indicate that the transaction is part of a larger span -- for instance, a user request.
+The application may wish to indicate that the transaction is part of a larger span -- for instance, a user request.
 It can do this by passing that as a parent span.
 
-If you have an existing OpenTelemetry span you can easily convert it to a Couchbase `RequestSpan` and pass it to the transactions library:
+This can be done using the SDK's `RequestTracer` abstraction as so:
+[source,java]
+----
+include::example$TransactionsExample.java[tag=tracing,indent=0]
+----
+
+Or if you have an existing OpenTelemetry span you can easily convert it to a Couchbase `RequestSpan` and pass it to the SDK:
 
 [source,java]
 ----
@@ -524,9 +505,6 @@ include::example$TransactionsExample.java[tag=tracing-wrapped,indent=0]
 == Concurrent Operations
 The reactive API allows operations to be performed concurrently inside a transaction, which can assist performance.
 
-Any users of the reactive API are very strongly advised to use at minimum the 1.2.3 release of the transactions library.
-Prior to this there were specific rules the application had to follow to get thread-safe results, and these rules can be found in the https://docs.couchbase.com/java-sdk/3.1/howtos/distributed-acid-transactions-from-the-sdk.html#concurrent-operations-with-the-async-api[previous version of this document].
-
 An example of performing parallel operations using the reactive API:
 [source,java]
 ----
@@ -534,57 +512,24 @@ include::example$TransactionsExample.java[tag=concurrentOps,indent=0]
 ----
 
 
-include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=custom-metadata-1]
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=custom-metadata-1,indent=0]
 
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=custom-metadata,indent=0]
 ----
 
-include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=custom-metadata-2]
-
-=== Multiple Transactions Objects
-
-Generally, an application requires only one `Transactions` object.
-But in some deployments, an application may need to access multiple custom metadata collections, and it is reasonable to create multiple `Transactions` objects as this is the only way to enable this.
-
-The library will not warn about multiple `Transactions` objects being created in this scenario.
-
-== Deferred Commits
-
-NOTE: The deferred commit feature is currently in alpha, and the API may change.
-
-Deferred commits allow a transaction to be paused just before the commit point.
-Optionally, everything required to finish the transaction can then be bundled up into a context that may be serialized into a String or byte array, and deserialized elsewhere (for example, in another process).
-The transaction can then be committed, or rolled back.
-
-The intention behind this feature is to allow multiple transactions, potentially spanning multiple databases, to be brought to just before the commit point, and then all committed together.
-
-Here's an example of deferring the initial commit and serializing the transaction:
+or at an individual transaction level with:
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=defer1,indent=0]
+include::example$TransactionsExample.java[tag=custom-metadata-per,indent=0]
 ----
 
-And then committing the transaction later:
-
-[source,java]
-----
-include::example$TransactionsExample.java[tag=defer2,indent=0]
-----
-
-Alternatively the transaction can be rolled back:
-
-[source,java]
-----
-include::example$TransactionsExample.java[tag=defer3,indent=0]
-----
-
-The transaction expiry timer (which is configurable) will begin ticking once the transaction starts, and is not paused while the transaction is in a deferred state.
-
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=integrated-sdk-custom-metadata-2,indent=0]
 
 == Further Reading
 
 * There's plenty of explanation about how Transactions work in Couchbase in our xref:{version-server}@server:learn:data/transactions.adoc[Transactions documentation].
-* You can find further code examples on our https://github.com/couchbaselabs/couchbase-transactions-java-examples[transactions examples repository].
+* Couchbase transactions for Java was previously distributed as a separate library, before being integrated into the SDK.
+Users of that library are recommended to follow the xref:distributed-acid-transactions-migration-guide.adoc[migration guide].
