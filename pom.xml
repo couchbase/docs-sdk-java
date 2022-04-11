@@ -10,12 +10,7 @@
         <dependency>
             <groupId>com.couchbase.client</groupId>
             <artifactId>java-client</artifactId>
-            <version>3.2.6</version>
-        </dependency>
-        <dependency>
-            <groupId>com.couchbase.client</groupId>
-            <artifactId>couchbase-transactions</artifactId>
-            <version>1.2.3</version>
+            <version>3.2.7-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -152,7 +147,7 @@
     <build>
         <resources>
             <resource>
-                <directory>./resources</directory>
+                <directory>modules/resources</directory>
             </resource>
         </resources>
         <plugins>
@@ -178,13 +173,13 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>howtos/examples/</source>
-                                <source>hello-world/examples/</source>
-                                <source>project-docs/examples/</source>
-                                <source>ref/examples/</source>
-                                <source>concept-docs/examples/</source>
-                                <source>devguide/examples/</source>
-                                <source>student/examples/</source>
+                                <source>modules/howtos/examples/</source>
+                                <source>modules/hello-world/examples/</source>
+                                <source>modules/project-docs/examples/</source>
+                                <source>modules/ref/examples/</source>
+                                <source>modules/concept-docs/examples/</source>
+                                <source>modules/devguide/examples/</source>
+                                <source>modules/student/examples/</source>
                             </sources>
                         </configuration>
                     </execution>
