@@ -87,6 +87,7 @@ include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=lambda-c
 The following helper logging methods will be used throughout the examples.
 Transaction logging is too verbose to be sent to the Java SDK event-bus, so instead it is stored in an in-memory log that can be accessed both from `TransactionResult` and `TransactionFailedException`.
 It is a good practice for the application to log any failed transactions into its own logging system, here represented with a `logger` object:
+
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=logger,indent=0]
