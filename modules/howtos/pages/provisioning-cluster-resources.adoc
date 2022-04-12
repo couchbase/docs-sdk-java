@@ -59,7 +59,7 @@ Here is the list of parameters available:
 |====
 | Name | Description | Can be updated
 | `name string` | The name of the bucket, required for creation. | false
-| `flushEnabled boolean` | Enables flushing to be performed on this bucket (see the <<java-flushing>> section below). | true
+| `flushEnabled boolean` | Enables flushing to be performed on this bucket (see the <<Flushing Buckets>> section below). | true
 | `replicaIndexes boolean` | Whether or not to replicate indexes. | false
 | `ramQuotaMB uint64` | How much memory should each node use for the bucket, required for creation. | true
 | `numReplicas` int | The number of replicas to use for the bucket. | true
@@ -91,7 +91,6 @@ Once you no longer need to use the bucket, you can remove it:
 include::example$ProvisioningResourcesBuckets.java[tag=removeBucket,indent=0]
 ----
 
-[#java-flushing]
 === Flushing Buckets
 
 include::{version-server}@sdk:shared:partial$flush-info-pars.adoc[tag=flush-intro]
