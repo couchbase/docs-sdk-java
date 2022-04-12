@@ -311,6 +311,9 @@ and configure it:
 include::example$TransactionsExample.java[tag=querySingleConfigured,indent=0]
 ----
 
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=n1ql-rbac]
+
+
 == Committing
 
 Committing is automatic: at the end of the lambda, if all operations have succeeded and no exception is thrown, committing will commence.
