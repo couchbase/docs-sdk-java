@@ -1,0 +1,185 @@
+= Distributed Transactions Migration Guide
+:description: For those transitioning from using the Couchbase Transactions library for Java.
+:navtitle: ACID Transactions Migration Guide
+:page-partial:
+:page-topic-type: howto
+:page-aliases: acid-transactions-migration-guide
+:page-toclevels: 2
+
+include::project-docs:partial$attributes.adoc[]
+include::partial$acid-transactions-attributes.adoc[]
+
+[abstract]
+{description}
+
+Couchbase transactions for Java were originally introduced as a library separate from the Couchbase Java SDK.
+
+We subsequently chose to integrate transactions directly into the SDKs, to make it easier for users to get started.
+
+This document details the small changes that existing users of the current transactions library need to make, to migrate to the SDK-integrated version.
+
+The existing transactions library will continue to be supported with bugfixes for some time, but new transaction features will only be added to the SDK and it is recommended that all users migrate.
+
+== Accessing transactions
+This is now done via a `Cluster` object.
+There is no longer any need to create a `Transactions` object.
+
+.Before
+[source,java]
+----
+var transactions = Transactions.create(cluster);
+
+transactions.run((ctx) -> {
+    // Your transaction logic.
+});
+----
+
+.After
+[source,java]
+----
+include::example$TransactionsMigration.java[tag=access,indent=0]
+----
+
+== Configuration
+Configuration used to be performed when creating the `Transactions` object, and is now performed when creating the `Cluster` object.
+
+.Before
+[source,java]
+----
+var transactions =
+  Transactions.create(cluster,
+    TransactionConfigBuilder.
+      .durabilityLevel(TransactionDurabilityLevel.MAJORITY)
+      .metadataCollection(collection));
+----
+
+.After
+[source,java]
+----
+include::example$TransactionsMigration.java[tag=config,indent=0]
+----
+
+A few details of configuration change:
+
+* `TransactionsConfig::metadataCollection` takes a `TransactionKeyspace` instead of a `Collection` (since a `Collection` cannot be created at this point).
+* `keyValueTimeout` has been removed from `TransactionsConfig` and `TransactionOptions`.
+* `TransactionDurabilityLevel` has been dropped in favour of using the SDK's `DurabilityLevel`.
+* `TransactionOptions` now allows a `metadataCollection` parameter.
+
+And certain classes have been renamed to be compliant with the Java SDK:
+
+[options="header"]
+|===
+|Before|After|
+|`TransactionConfigBuilder`|`TransactionsConfig`|
+|`TransactionQueryConfigBuilder`|`TransactionsQueryConfig`|
+|`SingleQueryTransactionConfigBuilder`|`SingleQueryTransactionOptions`|
+|`PerTransactionConfigBuilder`|`TransactionOptions`|
+|===
+
+=== Cleanup configuration
+Cleanup configuration options have been encapsulated into their own class:
+
+.Before
+[source,java]
+----
+var transactions =
+  Transactions.create(cluster,
+    TransactionConfigBuilder.create()
+      .cleanupClientAttempts(false)
+      .cleanupLostAttempts(false)
+      .cleanupWindow(Duration.ofSeconds(30)));
+----
+
+.After
+[source,java]
+----
+include::example$TransactionsMigration.java[tag=config-cleanup,indent=0]
+----
+
+== Lambda
+`ctx.commit()` has been removed, as it is redundant: commit automatically happens when the lambda successfully reaches the end.
+
+`ctx.rollback()` has been removed, as it too is redundant: the application can throw any exception from the lambda to trigger a rollback.
+
+`ctx.getOptional()` has been replaced with `ctx.get()` throwing a `DocumentExistsException`.
+This may be caught, allowing the transaction to continue.
+
+== Package changes
+All classes have changed packages to be compatible with the Java SDK conventions.
+
+The simplest way to convert many of the classes to their new locations is to search for `import com.couchbase.transactions.` and replace it with `import com.couchbase.client.java.transactions.`.
+
+Some additional manual conversion after this may be required.
+
+== Single query transactions
+These are now integrated with the existing SDK `QueryOptions`.
+
+.Before
+[source,java]
+----
+SingleQueryTransactionResult sqr = transactions.query("INSERT...");
+----
+
+.After
+[source,java]
+----
+include::example$TransactionsMigration.java[tag=single-query,indent=0]
+----
+
+Or with configuration:
+
+
+.Before
+[source,java]
+----
+SingleQueryTransactionResult sqr = transactions.query("INSERT...",
+  SingleQueryTransactionConfigBuilder.create()
+    .durabilityLevel(TransactionDurabilityLevel.MAJORITY));
+
+QueryResult qr = sqr.queryResult();
+----
+
+.After
+[source,java]
+----
+include::example$TransactionsMigration.java[tag=single-query-config,indent=0]
+----
+
+== Cleanup
+This doesn't impact the API, but it is useful to know that lost cleanup has changed.
+
+Previously, lost cleanup would look for expired transactions on the default collections of all buckets in the cluster.
+Unless a metadata collection was specified, in which case only that collection would be cleaned up.
+
+Now, cleanup is dynamic.
+As transactions are run, the collection where metadata is created for that collection, is added to what we call the 'cleanup set'.
+This is just the set of collections where cleanup, for this application, is looking for expired transactions.
+
+The intent has always been that users without complex requirements should never need to think about or configure transaction cleanup, and this new dynamic cleanup allows us to be closer still to that goal.
+
+== Naming
+All exceptions and events have been renamed to be compliant with the SDK.
+For example, `TransactionFailed` is now `TransactionFailedException`, and `TransactionCleanupAttempt` is now `TransactionCleanupAttemptEvent`.
+
+== Logging
+`TransactionFailedException` now exposes the logs directly, rather than containing a nested `TransactionResult`.
+
+.Before
+[source,java]
+----
+catch (TransactionFailedException err) {
+    err.result().log().logs().forEach(msg -> logger.warning(msg.toString()));
+}
+----
+
+.After
+[source,java]
+----
+include::example$TransactionsMigration.java[tag=log,indent=0]
+----
+
+== Further Reading
+
+* There's plenty of explanation about how Transactions work in Couchbase in our xref:{version-server}@server:learn:data/transactions.adoc[Transactions documentation].
+* The xref:distributed-acid-transactions-from-the-sdk.adoc[Java SDK transactions documentation].

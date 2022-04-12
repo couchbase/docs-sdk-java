@@ -5,7 +5,7 @@
 
 
 // creating
-:lambda-attempt-ctx: pass:q[an `AttemptContext`]
+:lambda-attempt-ctx: pass:q[a `TransactionAttemptContext`]
 :collection-insert: pass:q[`collection.insert()`]
 :ctx-insert: pass:q[`ctx.insert()`]
 
@@ -16,8 +16,8 @@
 
 
 // txnfailed
-:transaction-failed: TransactionFailed
-:transaction-expired: TransactionExpired
-:transaction-config: TransactionConfigBuilder
-:transaction-commit-ambiguous: TransactionCommitAmbiguous
+:transaction-failed: TransactionFailedException
+:transaction-expired: TransactionExpiredException
+:transaction-config: TransactionsConfig
+:transaction-commit-ambiguous: TransactionCommitAmbiguousException
 :txnfailed-unstaging-complete: TransactionResult.unstagingComplete()
