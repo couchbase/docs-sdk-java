@@ -13,68 +13,68 @@ load 'test_helper'
 }
 
 @test "[howtos] - Auth.java" {
-    runExample Auth 
+    runExample Auth
     assert_success
 }
 
 @test "[howtos] - Cas.java" {
-    runExample Cas 
+    runExample Cas
     assert_success
 }
 
 @test "[howtos] - CollectingInformationAndLogging.java" {
-    runExample CollectingInformationAndLogging 
+    runExample CollectingInformationAndLogging
     assert_success
 }
 
 @test "[howtos] - CollectionManagerExample.java" {
-    runExample CollectionManagerExample 
+    runExample CollectionManagerExample
     assert_success
 }
 
 @test "[howtos] - EncryptingUsingSDK.java" {
     skip "Example requires a keystore, needs further investigation."
 
-    runExample EncryptingUsingSDK 
+    runExample EncryptingUsingSDK
     assert_success
 }
 
 @test "[howtos] - ErrorHandling.java" {
     skip "Need further investigation on how to check expected exceptions."
 
-    runExample ErrorHandling 
+    runExample ErrorHandling
     assert_success
 }
 
 @test "[howtos] - HealthCheck.java" {
-    runExample HealthCheck 
+    runExample HealthCheck
     assert_success
 }
 
 @test "[howtos] - Import.java" {
-    runExample Import 
+    runExample Import
     assert_success
 }
 
 @test "[howtos] - Json.java" {
-    runExample Json 
+    runExample Json
     assert_success
 }
 
 @test "[howtos] - KvOperations.java" {
-    runExample KvOperations 
+    runExample KvOperations
     assert_success
 }
 
 @test "[howtos] - managing_connections.java" {
-    runExample managing_connections 
+    runExample managing_connections
     assert_success
 }
 
 @test "[howtos] - ManagingConnections.java" {
     skip "Example requires certificates and multiple nodes, unable to test."
 
-    runExample ManagingConnections 
+    runExample ManagingConnections
     assert_success
 }
 
@@ -86,7 +86,7 @@ load 'test_helper'
 }
 
 @test "[howtos] - Queries.java" {
-    runExample Queries 
+    runExample Queries
     assert_success
 }
 
@@ -137,10 +137,25 @@ load 'test_helper'
 }
 
 @test "[howtos] - Views.java" {
-    runExample Views 
+    runExample Views
     assert_success
 
     # example tag: views-meta
     assert_output --partial "Got total rows: 4"
     assert_output --partial "Got debug info as well"
+}
+
+@test "[howtos] - QueryIndexManagerExample.java" {
+    runExample QueryIndexManagerExample
+    assert_success
+}
+
+@test "[howtos] - ProvisioningResourcesBuckets.java" {
+    runExample ProvisioningResourcesBuckets
+    assert_success
+}
+
+@test "[howtos] - ProvisioningResourcesViews.java" {
+    runExample ProvisioningResourcesViews
+    assert_success
 }
