@@ -21,6 +21,7 @@ include::7.1@sdk:shared:partial$durability-replication-failure-considerations.ad
 include::7.1@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=performance]
 
 include::7.1@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=txns]
+* xref:project-docs:distributed-transactions-java-release-notes.adoc[Transactions Release Notes].
 
 // include::7.1@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=failover]
 
