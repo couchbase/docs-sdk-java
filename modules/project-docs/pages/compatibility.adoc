@@ -183,7 +183,7 @@ The following table provides an overview.
 | SDK 2.x
 | *Recommended*
 
-| *Server 7.0*
+| *Server 7.0 & 7.1*
 | Not Supported
 | *Recommended*
 |===

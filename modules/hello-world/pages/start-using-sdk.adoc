@@ -4,27 +4,63 @@
 :page-partial:
 :page-aliases: ROOT:getting-started,ROOT:start-using,ROOT:hello-couchbase,ROOT:start-using-sdk,ROOT:java-intro,ROOT:tutorial
 
-[abstract]
-The Couchbase Java SDK allows Java applications to access a Couchbase cluster.
-It offers synchronous APIs as well as reactive and asynchronous equivalents to maximize flexibility and performance.
 
-The Couchbase Java SDK 3._x_ is a complete rewrite of the 2.x API, providing a simpler surface area and adding support for Couchbase Server features like xref:concept-docs:collections.adoc[Collections and Scopes] (available in Couchbase Server 7.0).
-The (reactive) API also migrated from `RxJava` to `Reactor`, along with other improvements to performance, logging, debugging and timeout troubleshooting.
-If you're upgrading your application from Java SDK 2.x, please read our xref:project-docs:migrating-sdk-code-to-3.n.adoc[Migrating 2.x code to SDK 3.0 Guide].
 
-== Installing the SDK
 
-At least Java 8 is required for current releases;
-see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section for details.
+
+
+
+
+
+== Hello Couchbase
+
+On this page we show you how to quickly get up and running --  installing the Couchbase Java SDK, and trying out the Hello World code example against Couchbase Capella, or against a local Couchbase cluster.
+
+We will go through the code sample step by step, but for those in a hurry to see it, here it is:
+
+[{tabs}] 
+==== 
+Couchbase Capella Sample::
++
+--
+If you are connecting to https://docs.couchbase.com/cloud/index.html[Couchbase Capella], be sure to get the correct endpoint as well as user, password, and bucket  -- and see the <<cloud-connections, Cloud section>>, below.
+
+[source,java]
+----
+include::devguide:example$CloudConnect.java[tag=cloud-connect,indent=0]
+----
+--
+
+Local Couchbase Server::
++ 
+-- 
+[source.try-it,java]
+----
+include::example$StartUsing.java[tags=**]
+----
+
+As well as the Java SDK (see below), and a running instance of Couchbase Server, you will need to load up the Travel Sample Bucket
+using either the xref:{version-server}@server:manage:manage-settings/install-sample-buckets.adoc#install-sample-buckets-with-the-ui[Web interface]
+or the xref:{version-server}@server:manage:manage-settings/install-sample-buckets.adoc#install-sample-buckets-with-the-cli[command line].
+--
+====
+
+The Couchbase Capella free trial version comes with the Travel Sample Bucket, and its Query indexes, loaded and ready.
+
+
+== Quick Installation
+
 We recommend running the latest Java LTS version (i.e. at the time of writing JDK 17) with the highest patch version available.
-Java 17 has various enhancements like sealed classes, pattern matching for switch expressions (in preview), and further updates and improvements on core libraries.
-
+// Other supported Java versions will work, too.
 Couchbase publishes all stable artifacts to https://search.maven.org/search?q=com.couchbase.client[Maven Central].
-The latest version (as of March 2022) is https://search.maven.org/artifact/com.couchbase.client/java-client/3.2.6/jar[3.2.6].
 
 You can use your favorite dependency management tool to install the SDK.
-The following snippet shows how to do it with https://maven.apache.org/[Maven].
 
+[{tabs}] 
+==== 
+Maven::
++
+==
 [source,xml]
 ----
 <dependencies>
@@ -35,17 +71,22 @@ The following snippet shows how to do it with https://maven.apache.org/[Maven].
     </dependency>
 </dependencies>
 ----
+--
 
-For https://gradle.org/[Gradle], you can use:
-
+Gradle::
++
+--
 [source,groovy]
 ----
 implementation 'com.couchbase.client:java-client:3.2.6'
 ----
+--
+====
 
-Alternatively, we provide a zip file with all the dependencies bundled if you wish to manually include the `jar` files in your classpath. Refer to the xref:project-docs:sdk-release-notes.adoc[Release Notes] for further details. You can also find links to the hosted javadocs there.
+See the xref:project-docs:sdk-full-installation.adoc[installation page] for more detailed instructions.
 
-== Hello Couchbase
+
+== Step by Step
 
 Once you have the Java client installed, open your IDE, and try out the following:
 
@@ -54,7 +95,7 @@ Once you have the Java client installed, open your IDE, and try out the followin
 include::example$StartUsing.java[tag=connect,indent=0]
 ----
 
-Couchbase uses xref:7.0@server:learn:security/roles.adoc[Role Based Access Control (RBAC)] to control access to resources.
+Couchbase uses xref:7.1@server:learn:security/roles.adoc[Role Based Access Control (RBAC)] to control access to resources.
 Here we will use the _Full Admin_ role created during installation of the Couchbase Data Platform.
 For production client code, you will want to use more appropriate, restrictive settings -- but here we want to get you up and running quickly.
 If you're developing client code on the same VM or machine as the Couchbase Server, your connection string can be just `localhost`.
@@ -104,20 +145,6 @@ You can learn more about N1QL queries on the xref:howtos:n1ql-queries-with-sdk.a
 Other services (like analytics, search or views) work very similar to the two shown above. 
 Please refer to their respective documentation sections to learn more.
 
-== Full Example
-
-If you want to copy and paste to run the full example, here it is:
-
-[{tabs}] 
-==== 
-Local Couchbase Server::
-+ 
--- 
-[source.try-it,java]
-----
-include::example$StartUsing.java[tags=**]
-----
---
 
 Couchbase Capella Sample::
 +
