@@ -4,6 +4,8 @@ Plus notes on Cloud, networks, and AWS Lambda.
 :navtitle: Compatibility
 :page-aliases: ROOT:overview,ROOT:compatibility-versions-features,compatibility-versions-features
 
+include::project-docs:partial$attributes.adoc[]
+
 [abstract]
 {description}
 
@@ -81,7 +83,40 @@ Please make sure you run on one of the latest patch releases, since they provide
 == OS Compatibility
 
 In general, the JVM eliminates concerns about underlying OS compatibility, 
-and Couchbase JVM SDKs can be expected to run on all of the Operating Systems supported by xref:7.0@server:install:install-platforms.adoc[Couchbase Server].
+and Couchbase JVM SDKs can be expected to run on all of the Operating Systems supported by xref:{version-server}@server:install:install-platforms.adoc[Couchbase Server].
+
+Specifically, the 3.3 SDK is tested with the following OSs and platforms:
+
+
+****
+[discrete]
+=== GNU/Linux
+
+* Amazon Linux 2.
+* Red Hat Enterprise Linux 7 & 8;
+* CentOS 7 & 8.
+* Ubuntu (LTS) 16.04 (_Xenial_), 18.04 (_Bionic_), & 20.04 (_Focal_).
+* Debian 9 (_Stretch_) & 10 (_Buster_).
+* Alpine Linux -- but see <<alpine-linux-compatibility, workaround note below>>.
+
+[discrete]
+=== Microsoft Windows
+
+Microsoft Windows 10 / All LTS releases from Windows Server 2016.
+
+[discrete]
+=== Mac OS X
+
+The current and previous two releases of OS X.
+At time of writing (April 2022): 10.15 (_Catalina_), 11 (_Big Sur_), and 12 (_Monterey_).
+M1 ARM  architecture is fully supported in the 4.0 Python SDK.
+
+[discrete]
+=== ARM Processor Support
+
+Python 4.0 SDK supports AWS Amazon Graviton2 and Apple M1 ARM processors.
+****
+
 The JVM SDKs should also be expected to run on other commonly-available GNU/Linux distributions which support an appropriate JDK, but not all combinations can be tested -- notable exceptions are listed below.
 
 === Alpine Linux Compatibility
