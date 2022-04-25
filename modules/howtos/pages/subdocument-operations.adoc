@@ -406,7 +406,7 @@ NOTE: Currently, paths cannot exceed 1024 characters, and cannot be more than 32
 DJSON documents with more than 32 nested layers cannot be parsed, atttempting to do so will result in a`DocumentTooDeepException` exception.
 
 
-include::7.0@sdk:shared:partial$sdk-xattr-overview.adoc[tag=extended_attributes]
+include::7.1@sdk:shared:partial$sdk-xattr-overview.adoc[tag=extended_attributes]
 
 
 [source,java]

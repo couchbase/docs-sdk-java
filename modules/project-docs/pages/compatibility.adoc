@@ -188,7 +188,7 @@ The downside of these workarounds is potentially reduced performance, which can 
 2+| Since SDK 3.1.0
 |===
 
-include::7.0@sdk:shared:partial$network-requirements.adoc[]
+include::7.1@sdk:shared:partial$network-requirements.adoc[]
    
 
 [#spring-compat]
