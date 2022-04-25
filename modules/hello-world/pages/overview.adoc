@@ -1,4 +1,4 @@
-= Couchbase Java SDK 3.2
+= Couchbase Java SDK 3.3
 :page-type: landing-page
 :page-layout: landing-page-top-level-sdk
 :page-role: tiles
@@ -32,7 +32,7 @@ include::hello-world:example$Overview.java[tag=overview,indent=0]
 [.column]
 ====== {empty}
 
-== Couchbase Java SDK 3.2
+== Couchbase Java SDK 3.3
 
 ++++
 <div class="card-row three-column-row">
@@ -46,7 +46,7 @@ include::hello-world:example$Overview.java[tag=overview,indent=0]
 [.content]
 * Dive right in with a xref:start-using-sdk.adoc[quick install and Hello World].
 * Try out our xref:sample-application.adoc[Travel Sample Application].
-* Take a look at the xref:howtos:working-with-collections.adoc[Collections feature].
+* Compare and contrast with our spring-data-sample-application.adic[]Spring Data  sample App].
 ////
 []
 [source,xml]
@@ -92,7 +92,7 @@ Leverage the new Couchbase Server Scopes and Collection features to build multi-
 Integrate with Open Telemetry API to instrument telemetry data for your mission critical workloads that will make troubleshooting and debugging of your applications easier than ever.
 Add an additional layer of security and protect your sensitive workloads using our Client Side Field Level Encryption capability. 
 
-Introducing xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed ACID Transactions from the Java SDK].
+Our xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed ACID Transactions] library is now integrated into the Java SDK.
 
 [.column]
 ====== {empty}
