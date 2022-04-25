@@ -33,10 +33,51 @@ If you're using an SDK version earlier than 3.2.4, the recommended LTS version i
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.2.6</version>
+        <version>3.2.7</version>
     </dependency>
 </dependencies>
 ----
+
+== Version 3.2.7 (25 April 2022)
+
+
+Version 3.2.7 is the eigth release of the 3.2 series.
+
+http://packages.couchbase.com/clients/java/3.2.7/Couchbase-Java-Client-3.2.7.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.2.7/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.2.7/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.2.7**
+* com.couchbase.client:**core-io:2.2.7**
+* io.projectreactor:**reactor-core:3.4.17**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Version | Built Against             | API Stability
+| `tracing-opentelemetry`   | 1.0.7   | OpenTelemetry 1.9.1       | Committed
+| `tracing-opentracing`     | 1.0.7   | OpenTracing 0.33.0        | Committed
+| `metrics-opentelemetry`   | 0.2.7   | OpenTelemetry 1.7.1-alpha | Volatile
+| `metrics-micrometer`      | 0.2.7   | Micrometer 1.7.5          | Volatile
+|=======================
+
+=== Bugs
+* https://issues.couchbase.com/browse/JCBC-1922[JCBC-1922]:
+The KeyValue error code `NOT_STORED` is now properly mapped to `DocumentExistsException` on `insert` and `mutateIn`.
+* https://issues.couchbase.com/browse/JVMCBC-1077[JVMCBC-1077]:
+The environment now properly shuts down the `Meter` if it is owned and not passed in externally.
+
+=== Improvements
+* https://issues.couchbase.com/browse/JVMCBC-1082[JVMCBC-1082]:
+Updated internal and external dependencies.
+ * Netty from 4.1.73 to 4.1.76
+ * Jackson from 2.13.1 to 2.13.2 (and 2.13.2.2)
+ * Reactor from 3.4.14 to 3.4.17 
 
 == Version 3.2.6 (2 March 2022)
 
