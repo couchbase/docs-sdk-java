@@ -92,7 +92,7 @@ Those modules are compiled against `glibc` and Alpine Linux uses `musl` instead 
 so the Java SDK is unable to complete bootstrapping on this platform.
 
 Because Alpine Linux does not have the `glibc` support needed,
-we highly recommend that you seek an alternative distribution where possible. 
+we highly recommend that you seek an alternative distribution where possible (note, in any case, that OpenJDK does not support Alpine Linux). 
 If that is not a option, then a possible workaround that can be applied is as follows:
 
 * Disable the native IO:
