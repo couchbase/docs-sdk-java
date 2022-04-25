@@ -118,7 +118,7 @@ include::example$StartUsing.java[tag=bucket,indent=0]
 
 If you installed the `travel-sample` data bucket, substitute _travel-sample_ for _bucketName_.
 
-The 3.2 SDK supports full integration with the xref:concept-docs:collections.adoc[Collections] feature in the latest release of the Couchbase Data Platform, Couchbase Server 7.0.
+The 3.2 SDK supports full integration with the xref:concept-docs:collections.adoc[Collections] feature introduced in Couchbase Server 7.0.
 This brings complete support of Collections, allowing Documents to be grouped by purpose or theme, according to a specified _Scope_.
 Here we will use the `users` collection within the `tenant_agent_00` scope from `travel-sample` bucket as an example.
 
