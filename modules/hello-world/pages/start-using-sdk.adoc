@@ -60,7 +60,7 @@ You can use your favorite dependency management tool to install the SDK.
 ==== 
 Maven::
 +
-==
+--
 [source,xml]
 ----
 <dependencies>
