@@ -3,16 +3,18 @@
 :page-toclevels: 2
 
 include::project-docs:partial$attributes.adoc[]
+include::partial$acid-transactions-attributes.adoc[]
 
 [abstract]
 {description}
 
 Couchbase transactions for Java were originally introduced as a library separate from the Couchbase Java SDK.
-We subsequently chose to integrate transactions directly into the SDK, to make it easier for users to get started.
 
-This document details the small changes that existing users of the current transactions library need to make, to migrate to the SDK-integrated version.
+We subsequently chose to integrate transactions directly into the SDKs with the release of Java SDK 3.3.0, to make it easier for users to get started.
 
-The existing transactions library will continue to be supported with bugfixes for some time, but new transaction features will only be added to the SDK and it is recommended that all users migrate.
+This document details the small changes that existing users of the legacy transactions library need to make, to migrate to the SDK-integrated version.
+
+The xref:3.2@java-sdk:project-docs:distributed-transactions-java-release-notes.adoc[legacy transactions library] will continue to be supported with bugfixes for some time, but new transaction features will only be added to the SDK and it is recommended that all users migrate.
 
 == Accessing transactions
 
@@ -128,6 +130,7 @@ include::example$TransactionsMigration.java[tag=single-query,indent=0]
 ----
 
 Or with configuration:
+
 
 .Before
 [source,java]

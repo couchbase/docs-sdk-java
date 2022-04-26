@@ -12,28 +12,11 @@
 These pages cover the 3._x_ versions of the Couchbase Java SDK. 
 For release notes, download links, and installation methods for 2.7 and earlier releases of the Couchbase Java Client, which will not work with Distributed Transactions, please see the xref:2.7@java-sdk::sdk-release-notes.adoc[2.x Java Release Notes & Download Archive].
 
+
 == Installation
 
-// tag::jdk-version[]
-At least Java 8 is required for current releases;
-see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section for details.
-We recommend running the latest LTS version (i.e. at the time of writing JDK 17) with the highest patch version available.
-Java 17 has various enhancements like sealed classes, pattern matching for switch expressions (in preview), and further updates and improvements on core libraries.
+See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide for details.
 
-NOTE: JDK 17 is only supported from SDK version 3.2.4 onwards.
-If you're using an SDK version earlier than 3.2.4, the recommended LTS version is JDK 11.
-// end::jdk-version[]
-
-[source,xml]
-----
-<dependencies>
-    <dependency>
-        <groupId>com.couchbase.client</groupId>
-        <artifactId>java-client</artifactId>
-        <version>3.3.0</version>
-    </dependency>
-</dependencies>
-----
 
 == Version 3.3.0 (26 April 2022)
 
@@ -70,31 +53,32 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 === Improvements
 * https://issues.couchbase.com/browse/JCBC-1929[JCBC-1929]:
-Integrate transactions library into SDK.
+Integrated transactions library into SDK.
 * https://issues.couchbase.com/browse/JVMCBC-1070[JVMCBC-1070]:
-Bundle public Capella CA certificate.
+Bundled public Capella CA certificate.
 * https://issues.couchbase.com/browse/JVMCBC-1074[JVMCBC-1074]:
 If you try to connect to Capella without enabling TLS, now you'll get an exception that says TLS is required (instead of an `UnknownHostException`).
 * https://issues.couchbase.com/browse/JVMCBC-1076[JVMCBC-1076]:
-Deprecate `Event.createdAt()` in favor of a version that returns an `Instant`.
+Deprecated `Event.createdAt()` in favor of a version that returns an `Instant`.
 * https://issues.couchbase.com/browse/JVMCBC-1078[JVMCBC-1078]:
-Allow to customize the `schedulerThreadCount`.
+Made `schedulerThreadCount` customizable.
 * https://issues.couchbase.com/browse/JVMCBC-1079[JVMCBC-1079]:
-Add ConnectionString SDK 3 compatibility attributes.
+Added ConnectionString SDK 3 compatibility attributes.
 * https://issues.couchbase.com/browse/JVMCBC-1082[JVMCBC-1082]:
-Update maintenance dependencies.
+Updated maintenance dependencies.
 * https://issues.couchbase.com/browse/JVMCBC-1085[JVMCBC-1085]:
-Store last connect attempt failure and expose through `Diagnostics`.
+Exposed last connect attempt failure through `Diagnostics`.
 * https://issues.couchbase.com/browse/JCBC-1886[JCBC-1886]:
 Allow to list the number of currently available replicas for a document ID.
 * https://issues.couchbase.com/browse/JCBC-1923[JCBC-1923]:
-Warn when ignoring connection string parameters or scheme.
+Added warning when ignoring connection string parameters or scheme.
 
 === Bugs
 * https://issues.couchbase.com/browse/JCBC-1922[JCBC-1922]:
-NOT_STORED when inserting a document will now correctly raise a `DocumentAlreadyExistsException` (rather than a `DocumentNotFoundException`).
+`NOT_STORED` when inserting a document will now correctly raise a `DocumentAlreadyExistsException` (rather than a `DocumentNotFoundException` as before).
 * https://issues.couchbase.com/browse/JVMCBC-1077[JVMCBC-1077]:
 Shutting down a ClusterEnvironment now correctly stops a `Meter` owned by the cluster. This plugs a resource leak where `LoggingMeter` worker threads would never be stopped.
+
 
 == Version 3.2.7 (25 April 2022)
 
