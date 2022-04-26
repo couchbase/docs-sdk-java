@@ -20,46 +20,28 @@ import com.couchbase.client.java.*;
 import com.couchbase.client.java.kv.*;
 import com.couchbase.client.java.json.*;
 import com.couchbase.client.java.query.*;
+import java.time.Duration;
 // end::imports[]
-
-// tag::capella-imports[]
-
-// Required for Capella connection configuration
-import com.couchbase.client.core.env.SecurityConfig;
-import com.couchbase.client.java.env.ClusterEnvironment;
-// end::capella-imports[]
 
 
 public class CloudConnect {
+  // tag::connect[]
   // Update these variables to point to your Couchbase Capella instance and credentials.
-  static String endpoint = "cb.njg8j7mwqnvwjqah.cloud.couchbase.com";
-  static String bucketname = "travel-sample";
+  static String connectionString = "couchbases://cb.njg8j7mwqnvwjqah.cloud.couchbase.com";
   static String username = "username";
   static String password = "Password!123";
+  static String bucketName = "travel-sample";
   
+  // end::connect[]
+
   public static void main(String... args) {
     // tag::connect[]
-    // Configure TLS
-    SecurityConfig.Builder securityConfig = SecurityConfig
-      .enableTls(true); // Enable transport security
-
-    // Build the environment with the TLS config
-    ClusterEnvironment env = ClusterEnvironment
-      .builder()
-      .securityConfig(securityConfig)
-      .build();
-      
-    ClusterOptions options = ClusterOptions
-      .clusterOptions(username, password)
-      .environment(env);
-
-    // Initialize the Connection
-    Cluster cluster = Cluster.connect(endpoint, options);
+    Cluster cluster = Cluster.connect(connectionString, username, password);
     // end::connect[]
     
     // tag::bucket[]
     // get a bucket reference
-    Bucket bucket = cluster.bucket(bucketname);
+    Bucket bucket = cluster.bucket(bucketName);
     bucket.waitUntilReady(Duration.parse("PT10S")) ;
     // end::bucket[]
 
@@ -92,4 +74,3 @@ public class CloudConnect {
   }
 }
 // end::cloud-connect[]
-

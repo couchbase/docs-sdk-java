@@ -24,11 +24,14 @@ import java.time.Duration;
 // end::imports[]
 
 public class StartUsing {
-
-  static String connectionString = "localhost";
+  // tag::connect[]
+  // Update these variables to point to your Couchbase Server instance and credentials.
+  static String connectionString = "couchbase://localhost";
   static String username = "Administrator";
   static String password = "password";
   static String bucketName = "travel-sample";
+  
+  // end::connect[]
 
   public static void main(String... args) {
     // tag::connect[]
@@ -37,7 +40,7 @@ public class StartUsing {
     
     // tag::bucket[]
     // get a bucket reference
-    Bucket bucket = cluster.bucket(bucketname);
+    Bucket bucket = cluster.bucket(bucketName);
     bucket.waitUntilReady(Duration.parse("PT10S")) ;
     // end::bucket[]
 

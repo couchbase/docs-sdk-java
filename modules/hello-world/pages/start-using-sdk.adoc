@@ -91,22 +91,22 @@ Couchbase Capella Connection::
 --
 [source,java]
 ----
-include::devguide:example$CloudConnect.java[tag=connect,indent=0]
+include::devguide:example$CloudConnect.java[tags=connect,indent=0]
 ----
+
+From 3.3, the Java SDK includes Capella's standard certificates by default, so you do not need to additional configuration.
+You do need to enable TLS, which can be done by simply using `couchbases:` in the Connection String as in this example.
+See xref:howtos:managing-connections.adoc[Managing Connections] for full configuration details.
 --
 Local Server Connection::
 +
 --
 [source,java]
 ----
-include::example$StartUsing.java[tag=connect,indent=0]
+include::example$StartUsing.java[tags=connect,indent=0]
 ----
 --
 ====
-
-For Capella, you will need to enable TLS.
-From 3.3, the Java SDK includes Capella's standard certificates by default, so you do not need to additional configuration.
-See xref:howtos:managing-connections.adoc[Managing Connections] for full details if you have more complex requirements.
 
 Couchbase uses xref:{version-server}@server:learn:security/roles.adoc[Role Based Access Control (RBAC)] to control access to resources.
 Here we suggest using the _Full Admin_ role created during setup of   Couchbase Capella, or a local Couchbase Server cluster.
@@ -115,7 +115,6 @@ For production client code, you will want to use more appropriate, restrictive s
 If you're developing client code on the same VM or machine as the Couchbase Server, your connection string can be just `localhost`.
 
 The `Cluster` provides access to cluster-level operations like N1Ql queries, analytics or full-text search. You will also find different management APIs on it.
-
 
 To access the KV (Key/Value) API or to query views, you need to open a `Bucket`:
 
