@@ -75,7 +75,6 @@
 
 .Project Docs
 * xref:project-docs:sdk-release-notes.adoc[SDK Release Notes]
-* xref:project-docs:distributed-transactions-java-release-notes.adoc[Transactions Release Notes]
 * xref:project-docs:compatibility.adoc[Compatibility]
 ** xref:project-docs:migrating-sdk-code-to-3.n.adoc[Migrating to SDK 3 API]
 ** xref:project-docs:distributed-acid-transactions-migration-guide.adoc[Transactions Migration Guide]
