@@ -232,7 +232,7 @@ As always we recommend not blocking in the first place in reactive code.
 == Querying at Scope Level
 
 It is possible to query off the xref:concept-docs:n1ql-query.adoc#collections-and-scopes-and-the-query-context[`Scope` level],
-_with Couchbase Server release 7.0_, using the `scope.query()` method.
+_with Couchbase Server release 7.x_, using the `scope.query()` method.
 It takes the statement as a required argument, and then allows additional options if needed.
 
 A complete list of `QueryOptions` can be found in the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/AsyncScope.html#query-java.lang.String-[API docs].

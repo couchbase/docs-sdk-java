@@ -14,97 +14,63 @@
  * limitations under the License.
  */
 
-import static com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions;
-import static com.couchbase.client.java.query.QueryOptions.queryOptions;
-
-import java.security.cert.X509Certificate;
+// tag::cloud-connect[]
+// tag::imports[]
+import com.couchbase.client.java.*;
+import com.couchbase.client.java.kv.*;
+import com.couchbase.client.java.json.*;
+import com.couchbase.client.java.query.*;
 import java.time.Duration;
-import java.util.Collections;
-import java.util.List;
+// end::imports[]
 
-import com.couchbase.client.core.deps.io.netty.handler.ssl.util.InsecureTrustManagerFactory;
-import com.couchbase.client.core.env.IoConfig;
-import com.couchbase.client.core.env.SecurityConfig;
-import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.ClusterOptions;
-import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.Scope;
-import com.couchbase.client.java.env.ClusterEnvironment;
-import com.couchbase.client.java.json.JsonArray;
-import com.couchbase.client.java.json.JsonObject;
-import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
-import com.couchbase.client.java.query.QueryResult;
-import com.couchbase.client.java.query.QueryScanConsistency;
 
 public class CloudConnect {
+  // tag::connect[]
+  // Update these variables to point to your Couchbase Capella instance and credentials.
+  static String connectionString = "couchbases://cb.njg8j7mwqnvwjqah.cloud.couchbase.com";
+  static String username = "username";
+  static String password = "Password!123";
+  static String bucketName = "travel-sample";
+  
+  // end::connect[]
 
-    public static void main(String... args) {
-        // tag::cloud-connect[]
-        // Update these variables to point to your Couchbase Capella instance and credentials.
-        String endpoint = "--your-instance--.dp.cloud.couchbase.com";
-        String bucketname = "bucketname";
-        String username = "username";
-        String password = "password";
+  public static void main(String... args) {
+    // tag::connect[]
+    Cluster cluster = Cluster.connect(connectionString, username, password);
+    // end::connect[]
+    
+    // tag::bucket[]
+    // get a bucket reference
+    Bucket bucket = cluster.bucket(bucketName);
+    bucket.waitUntilReady(Duration.parse("PT10S")) ;
+    // end::bucket[]
 
-        String tlsCertificate = "-----BEGIN CERTIFICATE-----\n" +
-          "... your certificate content in here ...\n" +
-          "-----END CERTIFICATE-----";
-        // User Input ends here.
+    // tag::collection[]
+    // get a user defined collection reference
+    Scope scope = bucket.scope("tenant_agent_00");
+    Collection collection = scope.collection("users");
+    // end::collection[]
 
-        // Configure TLS
-        List<X509Certificate> cert = SecurityConfig.decodeCertificates(Collections.singletonList(tlsCertificate));
-        SecurityConfig.Builder securityConfig = SecurityConfig
-          .enableTls(true) // Enable transport security
-          .trustCertificates(cert); // Configure the cloud certificate
-          // During development, if you want to trust all certificates you can connect
-          // to your cloud like with the InsecureTrustManagerFactory. As the name points
-          // out, this is INSECURE!
-          // .trustManagerFactory(InsecureTrustManagerFactory.INSTANCE)
+    // tag::upsert-get[]
+    // Upsert Document
+    MutationResult upsertResult = collection.upsert(
+            "my-document",
+            JsonObject.create().put("name", "mike")
+    );
 
-        // Build the environment with the TLS config
-        ClusterEnvironment env = ClusterEnvironment
-          .builder()
-          .securityConfig(securityConfig)
-          .build();
+    // Get Document
+    GetResult getResult = collection.get("my-document");
+    String name = getResult.contentAsObject().getString("name");
+    System.out.println(name); // name == "mike"
+    // end::upsert-get[]
 
-        // Initialize the Connection
-        Cluster cluster = Cluster.connect(endpoint, ClusterOptions.clusterOptions(username, password).environment(env));
-        Bucket bucket = cluster.bucket(bucketname);
-        bucket.waitUntilReady(Duration.parse("PT10S")) ;
-        Collection collection = bucket.defaultCollection();
-
-        // Create a JSON Document
-        JsonObject arthur = JsonObject.create()
-          .put("name", "Arthur")
-          .put("email", "kingarthur@couchbase.com")
-          .put("interests", JsonArray.from("Holy Grail", "African Swallows"));
-
-        // Store the Document
-        collection.upsert("u:king_arthur", arthur);
-
-        // Load the Document and print it
-        // Prints Content and Metadata of the stored Document
-        System.out.println(collection.get("u:king_arthur"));
-
-        // Create a N1QL Primary Index
-        cluster.queryIndexes().createPrimaryIndex(
-          bucketname,
-          createPrimaryQueryIndexOptions().ignoreIfExists(true)
-        );
-
-        // Perform a N1QL Query
-        QueryResult result = cluster.query(
-          "SELECT name FROM " + bucketname + " WHERE $1 IN interests",
-          queryOptions()
-            .parameters(JsonArray.from("African Swallows"))
-            .scanConsistency(QueryScanConsistency.REQUEST_PLUS)
-        );
-
-        // Print each found Row
-        for (JsonObject row : result.rowsAsObject()) {
-            System.out.println("Query row: " + row);
-        }
-        // end::cloud-connect[]
-    }
+    // tag::n1ql-query[]
+    // Call the query() method on the cluster object and store the result.
+    QueryResult result = cluster.query("select \"Hello World\" as greeting");
+    
+    // Return the result rows with the rowsAsObject() method and print to the terminal.
+    System.out.println(result.rowsAsObject());
+    // end::n1ql-query[]
+  }
 }
+// end::cloud-connect[]

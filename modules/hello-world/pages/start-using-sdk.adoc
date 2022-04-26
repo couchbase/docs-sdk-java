@@ -4,14 +4,6 @@
 :page-partial:
 :page-aliases: ROOT:getting-started,ROOT:start-using,ROOT:hello-couchbase,ROOT:start-using-sdk,ROOT:java-intro,ROOT:tutorial
 
-
-
-
-
-
-
-
-
 == Hello Couchbase
 
 On this page we show you how to quickly get up and running --  installing the Couchbase Java SDK, and trying out the Hello World code example against Couchbase Capella, or against a local Couchbase cluster.
@@ -23,12 +15,14 @@ We will go through the code sample step by step, but for those in a hurry to see
 Couchbase Capella Sample::
 +
 --
-If you are connecting to https://docs.couchbase.com/cloud/index.html[Couchbase Capella], be sure to get the correct endpoint as well as user, password, and bucket  -- and see the <<cloud-connections, Cloud section>>, below.
+If you are connecting to https://docs.couchbase.com/cloud/index.html[Couchbase Capella], be sure to get the correct endpoint as well as user, password  -- and see the <<cloud-connections, Cloud section>>, below.
 
 [source,java]
 ----
 include::devguide:example$CloudConnect.java[tag=cloud-connect,indent=0]
 ----
+
+The Couchbase Capella free trial version comes with the Travel Sample Bucket, and its Query indexes, loaded and ready.
 --
 
 Local Couchbase Server::
@@ -36,7 +30,7 @@ Local Couchbase Server::
 -- 
 [source.try-it,java]
 ----
-include::example$StartUsing.java[tags=**]
+include::example$StartUsing.java[tags=start-using,indent=0]
 ----
 
 As well as the Java SDK (see below), and a running instance of Couchbase Server, you will need to load up the Travel Sample Bucket
@@ -45,14 +39,14 @@ or the xref:{version-server}@server:manage:manage-settings/install-sample-bucket
 --
 ====
 
-The Couchbase Capella free trial version comes with the Travel Sample Bucket, and its Query indexes, loaded and ready.
-
 
 == Quick Installation
 
 We recommend running the latest Java LTS version (i.e. at the time of writing JDK 17) with the highest patch version available.
 // Other supported Java versions will work, too.
 Couchbase publishes all stable artifacts to https://search.maven.org/search?q=com.couchbase.client[Maven Central].
+
+The latest version (as of April 2022) is https://search.maven.org/artifact/com.couchbase.client/java-client/3.3.0/jar[3.3.0].
 
 You can use your favorite dependency management tool to install the SDK.
 
@@ -67,7 +61,7 @@ Maven::
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.2.6</version>
+        <version>3.3.0</version>
     </dependency>
 </dependencies>
 ----
@@ -78,7 +72,7 @@ Gradle::
 --
 [source,groovy]
 ----
-implementation 'com.couchbase.client:java-client:3.2.6'
+implementation 'com.couchbase.client:java-client:3.3.0'
 ----
 --
 ====
@@ -90,24 +84,37 @@ See the xref:project-docs:sdk-full-installation.adoc[installation page] for more
 
 Once you have the Java client installed, open your IDE, and try out the following:
 
+[{tabs}] 
+==== 
+Couchbase Capella Connection::
++
+--
 [source,java]
 ----
-include::example$StartUsing.java[tag=connect,indent=0]
+include::devguide:example$CloudConnect.java[tags=connect,indent=0]
 ----
 
-Couchbase uses xref:7.1@server:learn:security/roles.adoc[Role Based Access Control (RBAC)] to control access to resources.
-Here we will use the _Full Admin_ role created during installation of the Couchbase Data Platform.
+From 3.3, the Java SDK includes Capella's standard certificates by default, so you do not need to additional configuration.
+You do need to enable TLS, which can be done by simply using `couchbases:` in the Connection String as in this example.
+See xref:howtos:managing-connections.adoc[Managing Connections] for full configuration details.
+--
+Local Server Connection::
++
+--
+[source,java]
+----
+include::example$StartUsing.java[tags=connect,indent=0]
+----
+--
+====
+
+Couchbase uses xref:{version-server}@server:learn:security/roles.adoc[Role Based Access Control (RBAC)] to control access to resources.
+Here we suggest using the _Full Admin_ role created during setup of   Couchbase Capella, or a local Couchbase Server cluster.
+
 For production client code, you will want to use more appropriate, restrictive settings -- but here we want to get you up and running quickly.
 If you're developing client code on the same VM or machine as the Couchbase Server, your connection string can be just `localhost`.
 
 The `Cluster` provides access to cluster-level operations like N1Ql queries, analytics or full-text search. You will also find different management APIs on it.
-
-If you are not using an IDE or are new to Java, the following imports are necessary to build the following snippets:
-
-[source,java]
-----
-include::example$StartUsing.java[tag=imports,indent=0]
-----
 
 To access the KV (Key/Value) API or to query views, you need to open a `Bucket`:
 
@@ -118,7 +125,7 @@ include::example$StartUsing.java[tag=bucket,indent=0]
 
 If you installed the `travel-sample` data bucket, substitute _travel-sample_ for _bucketName_.
 
-The 3.2 SDK supports full integration with the xref:concept-docs:collections.adoc[Collections] feature in the latest release of the Couchbase Data Platform, Couchbase Server 7.0.
+The 3.3 SDK supports full integration with the xref:concept-docs:collections.adoc[Collections] feature introduced in Couchbase Server 7.0.
 This brings complete support of Collections, allowing Documents to be grouped by purpose or theme, according to a specified _Scope_.
 Here we will use the `users` collection within the `tenant_agent_00` scope from `travel-sample` bucket as an example.
 
@@ -146,25 +153,12 @@ Other services (like analytics, search or views) work very similar to the two sh
 Please refer to their respective documentation sections to learn more.
 
 
-Couchbase Capella Sample::
-+
---
-If you are connecting to https://docs.couchbase.com/cloud/index.html[Couchbase Capella], be sure to get the correct endpoint as well as user, password, and bucket  -- and see the <<cloud-connections, Cloud section>>, below.
-
-[source,java]
-----
-include::devguide:example$CloudConnect.java[tag=cloud-connect,indent=0]
-----
---
-====
-
-
 == Cloud Connections
 
 For developing on Capella, if you are not working from the same _Availability Zone_, refer to the following:
 
-* Notes on xref:ref:client-settings.adoc#constrained-network-environments[Constrained Network Environments], 
-* xref:project-docs:compatibility.adoc#network-requirements[Network Requirements], 
+* Notes on xref:ref:client-settings.adoc#constrained-network-environments[Constrained Network Environments]
+* xref:project-docs:compatibility.adoc#network-requirements[Network Requirements]
 * If you have a consumer-grade router which has problems with DNS-SRV records review our xref:howtos:troubleshooting-cloud-connections.adoc#troubleshooting-host-not-found[Troubleshooting Guide].
 
 

@@ -12,10 +12,10 @@ Retry behaviour is more proactive, and lazy bootstrapping moves all error handli
 Individual behavior changes across services are explained here.
 
 
-include::7.0@sdk:shared:partial$migration.adoc[tag=intro]
+include::7.1@sdk:shared:partial$migration.adoc[tag=intro]
 
 
-include::7.0@sdk:shared:partial$migration.adoc[tag=terms]
+include::7.1@sdk:shared:partial$migration.adoc[tag=terms]
 
 As an example here is a KeyValue document fetch:
 
@@ -31,13 +31,13 @@ Compare this to a N1QL query:
 include::example$MigratingSDKCodeTo3n.java[tag=migrating_sdk_code_to_3_n_2,indent=0]
 ----
 
-include::7.0@sdk:shared:partial$migration.adoc[tag=terms2]
+include::7.1@sdk:shared:partial$migration.adoc[tag=terms2]
 
 
-include::7.0@sdk:shared:partial$migration.adoc[tag=new]
+include::7.1@sdk:shared:partial$migration.adoc[tag=new]
 
 
-include::7.0@sdk:shared:partial$migration.adoc[tag=lang]
+include::7.1@sdk:shared:partial$migration.adoc[tag=lang]
 
 ==  Installation and Configuration
 

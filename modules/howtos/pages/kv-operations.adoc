@@ -285,7 +285,7 @@ NOTE: Increment & Decrement are considered part of the ‘binary’ API and as s
 
 == Scoped KV Operations
 
-It is possible to perform scoped key-value operations on named xref:7.0@server:learn:data/scopes-and-collections.adoc[`Collections`] _with Couchbase Server release 7.0_.
+It is possible to perform scoped key-value operations on named xref:7.1@server:learn:data/scopes-and-collections.adoc[`Collections`] _with Couchbase Server release 7.x_.
 See the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Collection.html[API docs] for more information.
 
 Here is an example showing an upsert in the `users` collection, which lives in the `travel-sample.tenant_agent_00` keyspace:

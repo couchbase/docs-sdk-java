@@ -29,7 +29,7 @@ Although query and path-based (Sub-Document) services are available, the simplic
 
 
 
-include::7.0@sdk:shared:partial$documents.adoc[tag=document]
+include::7.1@sdk:shared:partial$documents.adoc[tag=document]
 
 == Primitive Key-Value Operations
 
@@ -42,9 +42,9 @@ get(String docid)
 remove(String docid)
 ----
 
-include::7.0@sdk:shared:partial$documents.adoc[tag=crud-overview]
+include::7.1@sdk:shared:partial$documents.adoc[tag=crud-overview]
 
-include::7.0@sdk:shared:partial$documents.adoc[tag=store-update]
+include::7.1@sdk:shared:partial$documents.adoc[tag=store-update]
 
 [NOTE]
 ====
@@ -55,7 +55,7 @@ If you wish to only modify certain parts of a document, you can use xref:subdocu
 include::example$DocumentsExample.java[tag=mutate-in]
 ----
 
-or xref:7.0@server:n1ql:n1ql-language-reference/update.adoc[N1QL UPDATE] to update documents based on specific query criteria:
+or xref:7.1@server:n1ql:n1ql-language-reference/update.adoc[N1QL UPDATE] to update documents based on specific query criteria:
 
 [source,sql]
 ----
@@ -63,7 +63,7 @@ update `travel-sample`.inventory.airline SET sale_price = msrp * 0.75 WHERE msrp
 ----
 ====
 
-include::7.0@sdk:shared:partial$documents.adoc[tag=get_generic]
+include::7.1@sdk:shared:partial$documents.adoc[tag=get_generic]
 
 [source,sql]
 ----
@@ -86,7 +86,7 @@ include::example$DocumentsExample.java[tag=lookup-in]
 
 // Counters
 
-include::7.0@sdk:shared:partial$documents.adoc[tag=counters1]
+include::7.1@sdk:shared:partial$documents.adoc[tag=counters1]
 
 [source,java,indent=0]
 ----
@@ -100,14 +100,14 @@ You can simplify by importing `decrementOptions()` statically:
 collection.binary().decrement(counterDocId, decrementOptions().delta(5));   
 ----
 
-include::7.0@sdk:shared:partial$documents.adoc[tag=counters2]
+include::7.1@sdk:shared:partial$documents.adoc[tag=counters2]
 
 [source,java,indent=0]
 ----
 include::example$DocumentsExample.java[tag=counter-increment]
 ----
 
-include::7.0@sdk:shared:partial$documents.adoc[tag=counters3]
+include::7.1@sdk:shared:partial$documents.adoc[tag=counters3]
 
 
 === Use Cases
@@ -118,22 +118,22 @@ You will find several ways of working with counters https://docs.couchbase.com/s
 
 
 // Expiry
-include::7.0@sdk:shared:partial$documents.adoc[tag=expiration]
+include::7.1@sdk:shared:partial$documents.adoc[tag=expiration]
 
 
 ////
-include::7.0@sdk:shared:partial$documents.adoc[tag=]
+include::7.1@sdk:shared:partial$documents.adoc[tag=]
 
 
-include::7.0@sdk:shared:partial$documents.adoc[tag=]
+include::7.1@sdk:shared:partial$documents.adoc[tag=]
 
-include::7.0@sdk:shared:partial$documents.adoc[tag=]
+include::7.1@sdk:shared:partial$documents.adoc[tag=]
 
-include::7.0@sdk:shared:partial$documents.adoc[tag=]
+include::7.1@sdk:shared:partial$documents.adoc[tag=]
 
-include::7.0@sdk:shared:partial$documents.adoc[tag=]
+include::7.1@sdk:shared:partial$documents.adoc[tag=]
 
-include::7.0@sdk:shared:partial$documents.adoc[tag=]
+include::7.1@sdk:shared:partial$documents.adoc[tag=]
 
-include::7.0@sdk:shared:partial$documents.adoc[tag=]
+include::7.1@sdk:shared:partial$documents.adoc[tag=]
 ////

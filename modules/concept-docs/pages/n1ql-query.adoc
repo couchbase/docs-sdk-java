@@ -8,11 +8,11 @@
 {description}
 
 
-include::7.0@sdk:shared:partial$n1ql-queries.adoc[tag=intro]
+include::7.1@sdk:shared:partial$n1ql-queries.adoc[tag=intro]
 
 
 // Prepared Statements for Query Optimization
-include::7.0@sdk:shared:partial$n1ql-queries.adoc[tag=prepared]
+include::7.1@sdk:shared:partial$n1ql-queries.adoc[tag=prepared]
 The maximum client-side query cache size is 5000 entries.
 
 [source,java]
@@ -23,10 +23,10 @@ include::example$N1qlQueryExample.java[tag=n1ql_query_1,indent=0]
 
 == Indexes
 
-The Couchbase Query Service makes use of xref:7.0@server:learn:services-and-indexes/indexes/indexes.adoc[_indexes_] in order to do its work.
+The Couchbase Query Service makes use of xref:7.1@server:learn:services-and-indexes/indexes/indexes.adoc[_indexes_] in order to do its work.
 Indexes replicate subsets of documents from data nodes over to index nodes,
 allowing specific data (for example, specific document properties) to be retrieved quickly,
-and to distribute load away from data nodes in xref:7.0@server:learn:services-and-indexes/services/services.adoc[MDS] topologies.
+and to distribute load away from data nodes in xref:7.1@server:learn:services-and-indexes/services/services.adoc[MDS] topologies.
 
 [IMPORTANT]
 In order to make a bucket queryable, it must have at least one index defined.
@@ -59,7 +59,7 @@ Indexes help improve the performance of a query.
 When an index includes the actual values of all the fields specified in the query,
 the index _covers_ the query, and eliminates the need to fetch the actual values from the Data Service.
 An index, in this case, is called a _covering index_, and the query is called a _covered_ query.
-For more information, see xref:7.0@server:n1ql:n1ql-language-reference/covering-indexes.adoc[Covering Indexes].
+For more information, see xref:7.1@server:n1ql:n1ql-language-reference/covering-indexes.adoc[Covering Indexes].
 
 You can also create and define indexes in the SDK using:
 
@@ -96,11 +96,11 @@ include::example$N1qlQueryExample.java[tag=n1ql_query_3,indent=0]
 
 
 // Index Consistency
-include::7.0@sdk:shared:partial$n1ql-queries.adoc[tag=index-consistency]
+include::7.1@sdk:shared:partial$n1ql-queries.adoc[tag=index-consistency]
 
 The following options are available:
 
-include::7.0@server:learn:page$services-and-indexes/indexes/index-replication.adoc[tag=scan_consistency]
+include::7.1@server:learn:page$services-and-indexes/indexes/index-replication.adoc[tag=scan_consistency]
 
 Consider the following snippet:
 
@@ -124,7 +124,7 @@ and allows optimization on a case-by-case basis.
 
 == Collections and Scopes, and the Query Context
 
-From Couchbase Server release 7.0 the xref:7.0@server:learn:data/scopes-and-collections.adoc[Collections] feature lets you logically group similar documents into Collections.
+From Couchbase Server release 7.0 the xref:7.1@server:learn:data/scopes-and-collections.adoc[Collections] feature lets you logically group similar documents into Collections.
 
 You can query collections in N1QL, by referring to a fully qualified keyspace.
 For example, to list the documents in the `airline` collection in the `inventory` scope:
@@ -134,7 +134,7 @@ For example, to list the documents in the `airline` collection in the `inventory
 SELECT * FROM `travel-sample`.inventory.airline;
 ----
 
-As a convenience, you can also query a partial keyspace from the xref:7.0@server:n1ql:n1ql-intro:sysinfo.adoc#query-context[Query Context] of a specific Scope. 
+As a convenience, you can also query a partial keyspace from the xref:7.1@server:n1ql:n1ql-intro:sysinfo.adoc#query-context[Query Context] of a specific Scope. 
 For example, from the context of `{backtick}travel-sample{backtick}.inventory`, you could abbreviate the previous query to:
 
 [source,n1ql]
@@ -142,5 +142,5 @@ For example, from the context of `{backtick}travel-sample{backtick}.inventory`, 
 SELECT * FROM airline;
 ----
 
-To do this, you can xref:7.0@server:tools:query-workbench.adoc#query-context[Set a Query Context] in the Query Workbench
+To do this, you can xref:7.1@server:tools:query-workbench.adoc#query-context[Set a Query Context] in the Query Workbench
 or xref:howtos:n1ql-queries-with-sdk.adoc#querying-at-scope-level[query at scope level] using the SDK.
