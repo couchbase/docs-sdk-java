@@ -3,7 +3,6 @@
 :page-toclevels: 2
 
 include::project-docs:partial$attributes.adoc[]
-include::howtos:partial$acid-transactions-attributes.adoc[]
 
 [abstract]
 {description}
