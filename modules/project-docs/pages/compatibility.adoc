@@ -26,7 +26,7 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 
 .Recommended SDK per Server Version Matrix
 [#table_sdk_versions]
-[cols="40,20,25,20"]
+[cols="40,20,25"]
 |===
 | | SDK 3.0, 3.1 | SDK 3.2, 3.3
 
@@ -49,6 +49,11 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 
 Note the https://www.couchbase.com/support-policy[End of Life dates^] for Couchbase Server and SDK versions.
 See the notes there for Support details.
+
+=== Capella Compatibility
+
+At time of release, the Couchbase 4.0 Python SDK is fully compatible with Couchbase Capella, our fully-hosted database-as-a-service.
+To make development easier, the 4.0 SDK includes the Capella client certificate ready installed.
 
 
 [#jdk-compat]
@@ -100,12 +105,12 @@ Microsoft Windows 10 / All LTS releases from Windows Server 2016.
 
 The current and previous two releases of OS X.
 At time of writing (April 2022): 10.15 (_Catalina_), 11 (_Big Sur_), and 12 (_Monterey_).
-M1 ARM  architecture is fully supported in the 4.0 Python SDK.
+M1 ARM  architecture is fully supported in the 3.3 Java SDK.
 
 [discrete]
 === ARM Processor Support
 
-Python 4.0 SDK supports AWS Amazon Graviton2 and Apple M1 ARM processors.
+Java 3.3 SDK supports AWS Amazon Graviton2 and Apple M1 ARM processors.
 ****
 
 The JVM SDKs should also be expected to run on other commonly-available GNU/Linux distributions which support an appropriate JDK, but not all combinations can be tested -- notable exceptions are listed below.
@@ -197,11 +202,11 @@ The following table provides an overview.
 | _Status ->_
 | _New Features, Active Development_
 
-| *Recommended*
+| | *Recommended*
 
-| *Recommended*
+| | *Recommended*
 
-| *Recommended*
+| | *Recommended*
 |===
 
 NOTE: Check the Spring Data Couchbase's compile dependencies -- older versions may link an out-of-date version of the Java SDK in their dependencies list, although a supported version should be in the `updates`.
