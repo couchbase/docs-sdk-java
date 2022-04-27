@@ -198,16 +198,19 @@ The following table provides an overview.
 .Recommended Spring Data Couchbase per Server Version Matrix
 [#table_spring_versions]
 |===
-| | SDC 4.0 - 4.2
+|  | SDC 4.0 - 4.2
 
 | _Status ->_
 | _New Features, Active Development_
 
-| | *Recommended*
+| *Server 6.0*
+| *Recommended*
 
-| | *Recommended*
+| *Server 6.5 & 6.6*
+| *Recommended*
 
-| | *Recommended*
+| *Server 7.0 & 7.1*
+| *Recommended*
 |===
 
 NOTE: Check the Spring Data Couchbase's compile dependencies -- older versions may link an out-of-date version of the Java SDK in their dependencies list, although a supported version should be in the `updates`.
