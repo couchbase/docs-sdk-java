@@ -74,7 +74,7 @@
 * xref:ref:travel-app-data-model.adoc[Travel Sample Data Model]
 
 .Project Docs
-* xref:project-docs:sdk-release-notes.adoc[SDK Release Notes]
+* xref:project-docs:sdk-release-notes.adoc#version-3-2-7-25-april-2022[SDK Release Notes]
 * xref:project-docs:distributed-transactions-java-release-notes.adoc[Transactions Release Notes]
 * xref:project-docs:compatibility.adoc[Compatibility]
 ** xref:project-docs:migrating-sdk-code-to-3.n.adoc[Migrating to SDK 3 API]
