@@ -538,4 +538,4 @@ include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=integrat
 
 == Further Reading
 
-* There's plenty of explanation about how Transactions work in Couchbase in our xref:{version-server}@server:learn:data/transactions.adoc[Transactions documentation].
+* There's plenty of explanation about how Transactions work in Couchbase in our xref:7.0@server:learn:data/transactions.adoc[Transactions documentation].

@@ -14,7 +14,7 @@ Documents may already be stored compressed with Snappy on the server.
 New documents may be passed from client applications to the server in compressed form, saving around 40% in bandwidth (depending on the document content and size), and also transmission time.
 These operations take place automatically, after the SDK negotiates the capability with the server, and do not require any changes on the client side.
 
-For SDKs with Snappy compression enabled, documents will be automatically compressed if the xref:7.1@server:learn:buckets-memory-and-storage/compression.adoc#compression-modes[Couchbase Server] is not set to `Off` for Compression see xref:#minimum-size[see below].
+For SDKs with Snappy compression enabled, documents will be automatically compressed if the xref:7.0@server:learn:buckets-memory-and-storage/compression.adoc#compression-modes[Couchbase Server] is not set to `Off` for Compression see xref:#minimum-size[see below].
 Instructions to disable compression can be found at xref:#threshold[the bottom of the page].
 
 == Limits
