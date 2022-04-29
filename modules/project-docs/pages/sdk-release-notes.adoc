@@ -18,7 +18,7 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 // tag::all[]
 == Version 3.3.0 (26 April 2022)
 
-Version 3.3.0 is the first release of the 3.3 series, codenamed "Eos".
+Version 3.3.0 is the first release of the 3.3 series.
 
 The three headline changes in this release:
 
