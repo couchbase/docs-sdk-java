@@ -26,7 +26,7 @@ The three headline changes in this release:
 * Directly integrates transactions into the SDK rather than requiring a separate library.  Existing users of the transactions library can refer to the xref:project-docs:distributed-acid-transactions-migration-guide.adoc[Distributed Transactions Migration Guide] to see the simple steps needed to migrate, which we recommend.
 * Bundles the public server security certificates for Couchbase Capella, to make it easier for users to get started with Capella.
 
-http://packages.couchbase.com/clients/java/3.3.0/Couchbase-Java-Client-3.3.0.zip[Download] |
+https://packages.couchbase.com/clients/java/3.3.0/Couchbase-Java-Client-3.3.0.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.3.0/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.3.0/[Core API Reference]
 
@@ -82,7 +82,7 @@ Shutting down a ClusterEnvironment now correctly stops a `Meter` owned by the cl
 
 Version 3.2.7 is the eighth release of the 3.2 series.
 
-http://packages.couchbase.com/clients/java/3.2.7/Couchbase-Java-Client-3.2.7.zip[Download] |
+https://packages.couchbase.com/clients/java/3.2.7/Couchbase-Java-Client-3.2.7.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.2.7/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.2.7/[Core API Reference]
 
@@ -122,7 +122,7 @@ Updated internal and external dependencies.
 
 Version 3.2.6 is the seventh release of the 3.2 series.
 
-http://packages.couchbase.com/clients/java/3.2.6/Couchbase-Java-Client-3.2.6.zip[Download] |
+https://packages.couchbase.com/clients/java/3.2.6/Couchbase-Java-Client-3.2.6.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.2.6/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.2.6/[Core API Reference]
 
@@ -190,7 +190,7 @@ Cluster cluster = Cluster.connect("localhost", clusterOptions(username, password
 
 Version 3.2.5 is the sixth release of the 3.2 series.
 
-http://packages.couchbase.com/clients/java/3.2.5/Couchbase-Java-Client-3.2.5.zip[Download] |
+https://packages.couchbase.com/clients/java/3.2.5/Couchbase-Java-Client-3.2.5.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.2.5/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.2.5/[Core API Reference]
 
@@ -275,7 +275,7 @@ The SDK now handles any `retry:true` field in a query error result by retrying i
 
 Version 3.2.4 is the fifth release of the 3.2 series.
 
-http://packages.couchbase.com/clients/java/3.2.4/Couchbase-Java-Client-3.2.4.zip[Download] |
+https://packages.couchbase.com/clients/java/3.2.4/Couchbase-Java-Client-3.2.4.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.2.4/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.2.4/[Core API Reference]
 
@@ -324,7 +324,7 @@ This helps with debugging.
 
 Version 3.2.3 is the fourth release of the 3.2 series.
 
-http://packages.couchbase.com/clients/java/3.2.3/Couchbase-Java-Client-3.2.3.zip[Download] |
+https://packages.couchbase.com/clients/java/3.2.3/Couchbase-Java-Client-3.2.3.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.2.3/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.2.3/[Core API Reference]
 
@@ -355,7 +355,7 @@ Support for error map v2 has been added to ensure the config can be parsed witho
 
 Version 3.2.2 is the third release of the 3.2 series.
 
-http://packages.couchbase.com/clients/java/3.2.2/Couchbase-Java-Client-3.2.2.zip[Download] |
+https://packages.couchbase.com/clients/java/3.2.2/Couchbase-Java-Client-3.2.2.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.2.2/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.2.2/[Core API Reference]
 
@@ -406,7 +406,7 @@ This fix removes need for `TargetedQueryRequest`.
 
 Version 3.2.1 is the second release of the 3.2 series.
 
-http://packages.couchbase.com/clients/java/3.2.1/Couchbase-Java-Client-3.2.1.zip[Download] |
+https://packages.couchbase.com/clients/java/3.2.1/Couchbase-Java-Client-3.2.1.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.2.1/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.2.1/[Core API Reference]
 
@@ -473,7 +473,7 @@ Allow to export Context as Map.
 Version 3.2.0 is the first release of the 3.2 series.
 It promotes to GA support for the scopes and collections provided by Couchbase Server 7.0, and also OpenTelemetry.
 
-http://packages.couchbase.com/clients/java/3.2.0/Couchbase-Java-Client-3.2.0.zip[Download] |
+https://packages.couchbase.com/clients/java/3.2.0/Couchbase-Java-Client-3.2.0.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.2.0/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.2.0/[Core API Reference]
 
@@ -563,7 +563,7 @@ Update OpenTelemetry to 1.3.0.
 
 Version 3.1.8 is the ninth release of the 3.1 series, bringing stabilizations over 3.1.7.
 
-http://packages.couchbase.com/clients/java/3.1.8/Couchbase-Java-Client-3.1.8.zip[Download] |
+https://packages.couchbase.com/clients/java/3.1.8/Couchbase-Java-Client-3.1.8.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.8/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.8/[Core API Reference]
 
@@ -603,7 +603,7 @@ Fixed an issue where `JsonValueSerializerWrapper` was unable to support decoding
 
 Version 3.1.7 is the eigth release of the 3.1 series, bringing stabilizations and enhancements over 3.1.6.
 
-http://packages.couchbase.com/clients/java/3.1.7/Couchbase-Java-Client-3.1.7.zip[Download] |
+https://packages.couchbase.com/clients/java/3.1.7/Couchbase-Java-Client-3.1.7.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.7/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.7/[Core API Reference]
 
@@ -656,7 +656,7 @@ Properly map server query timeout while streaming.
 
 Version 3.1.6 is the seventh release of the 3.1 series, bringing stabilizations and enhancements over 3.1.5.
 
-http://packages.couchbase.com/clients/java/3.1.6/Couchbase-Java-Client-3.1.6.zip[Download] |
+https://packages.couchbase.com/clients/java/3.1.6/Couchbase-Java-Client-3.1.6.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.6/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.6/[Core API Reference]
 
@@ -693,7 +693,7 @@ Improve bucket configuration handling (revEpoch).
 
 Version 3.1.5 is the sixth release of the 3.1 series, bringing stabilizations and enhancements over 3.1.4.
 
-http://packages.couchbase.com/clients/java/3.1.5/Couchbase-Java-Client-3.1.5.zip[Download] |
+https://packages.couchbase.com/clients/java/3.1.5/Couchbase-Java-Client-3.1.5.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.5/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.5/[Core API Reference]
 
@@ -734,7 +734,7 @@ Add support for collections to `SearchOptions`.
 
 Version 3.1.4 is the fifth release of the 3.1 series, bringing stabilizations and enhancements over 3.1.3.
 
-http://packages.couchbase.com/clients/java/3.1.4/Couchbase-Java-Client-3.1.4.zip[Download] |
+https://packages.couchbase.com/clients/java/3.1.4/Couchbase-Java-Client-3.1.4.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.4/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.4/[Core API Reference]
 
@@ -788,7 +788,7 @@ Distinguish between CAS mismatch and DML failure on query error.
 
 Version 3.1.3 is the fourth release of the 3.1 series, bringing stabilizations and enhancements over 3.1.2.
 
-http://packages.couchbase.com/clients/java/3.1.3/Couchbase-Java-Client-3.1.3.zip[Download] |
+https://packages.couchbase.com/clients/java/3.1.3/Couchbase-Java-Client-3.1.3.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.3/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.3/[Core API Reference]
 
@@ -841,7 +841,7 @@ Retain stability annotations at runtime.
 
 Version 3.1.2 is the third release of the 3.1 series, bringing stabilizations and enhancements over 3.1.1.
 
-http://packages.couchbase.com/clients/java/3.1.2/Couchbase-Java-Client-3.1.2.zip[Download] |
+https://packages.couchbase.com/clients/java/3.1.2/Couchbase-Java-Client-3.1.2.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.2/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.2/[Core API Reference]
 
@@ -869,7 +869,7 @@ Any send HTTP request will send a hostname if hostnames are used, rather than IP
 
 Version 3.1.1 is the second release of the 3.1 series, bringing stabilizations and enhancements over 3.1.0.
 
-http://packages.couchbase.com/clients/java/3.1.1/Couchbase-Java-Client-3.1.1.zip[Download] |
+https://packages.couchbase.com/clients/java/3.1.1/Couchbase-Java-Client-3.1.1.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.1/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.1/[Core API Reference]
 
@@ -918,7 +918,7 @@ Expose partition information from the query management API on `QueryIndex` class
 
 Version 3.1.0 is the first GA release of the 3.1 series, bringing stabilizations and enhancements over 3.0.10 and the 3.0 SDK, and adding features to support Couchbase Server 6.6 and 7.0β.
 
-http://packages.couchbase.com/clients/java/3.1.0/Couchbase-Java-Client-3.1.0.zip[Download] |
+https://packages.couchbase.com/clients/java/3.1.0/Couchbase-Java-Client-3.1.0.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.1.0/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.1.0/[Core API Reference]
 
@@ -954,7 +954,7 @@ In addition to the tickets outlined below, different interfaces have been elevat
 
 Version 3.0.10 is a maintenance release, bringing enhancements over the last stable release.
 
-http://packages.couchbase.com/clients/java/3.0.10/Couchbase-Java-Client-3.0.10.zip[Download] |
+https://packages.couchbase.com/clients/java/3.0.10/Couchbase-Java-Client-3.0.10.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.10/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.11/[Core API Reference]
 
@@ -977,7 +977,7 @@ Updated OpenTelemetry to 0.9.1.
 
 Version 3.0.9 is a bugfix release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
-http://packages.couchbase.com/clients/java/3.0.9/Couchbase-Java-Client-3.0.9.zip[Download] |
+https://packages.couchbase.com/clients/java/3.0.9/Couchbase-Java-Client-3.0.9.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.9/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.10/[Core API Reference]
 
@@ -1043,7 +1043,7 @@ Fast dispatch pooled requests.
 
 Version 3.0.8 is a bugfix release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
-http://packages.couchbase.com/clients/java/3.0.8/Couchbase-Java-Client-3.0.8.zip[Download] |
+https://packages.couchbase.com/clients/java/3.0.8/Couchbase-Java-Client-3.0.8.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.8/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.9/[Core API Reference]
 
@@ -1099,7 +1099,7 @@ The client now trackes multiple parallel bucket open attempts (against different
 
 Version 3.0.7 is the eighth release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
-http://packages.couchbase.com/clients/java/3.0.7/Couchbase-Java-Client-3.0.7.zip[Download] |
+https://packages.couchbase.com/clients/java/3.0.7/Couchbase-Java-Client-3.0.7.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.7/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.8/[Core API Reference]
 
@@ -1149,7 +1149,7 @@ Maintenance dependency bump: Netty -> 4.1.51, Jackson -> 2.11.1, Reactor -> 3.3.
 
 Version 3.0.6 is the seventh release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
-http://packages.couchbase.com/clients/java/3.0.6/Couchbase-Java-Client-3.0.6.zip[Download] |
+https://packages.couchbase.com/clients/java/3.0.6/Couchbase-Java-Client-3.0.6.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.6/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.7/[Core API Reference]
 
@@ -1200,7 +1200,7 @@ Trailing : no longer added to IPv6 addresses without [].
 
 Version 3.0.5 is the sixth release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
-http://packages.couchbase.com/clients/java/3.0.5/Couchbase-Java-Client-3.0.5.zip[Download] |
+https://packages.couchbase.com/clients/java/3.0.5/Couchbase-Java-Client-3.0.5.zip[Download] |
 http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.5/[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.6/[Core API Reference]
 
@@ -1232,7 +1232,7 @@ Duplicate global loading exceptions are now swallowed to remove redundant warnin
 
 Version 3.0.4 is the fifth release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
-http://packages.couchbase.com/clients/java/3.0.4/Couchbase-Java-Client-3.0.4.zip[Download] |
+https://packages.couchbase.com/clients/java/3.0.4/Couchbase-Java-Client-3.0.4.zip[Download] |
 http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.4/[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.5/[Core API Reference]
 
@@ -1260,7 +1260,7 @@ If bucket is not flushable, a `BucketNotFlushableException` is now raised.
 
 Version 3.0.3 is the fourth release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
-http://packages.couchbase.com/clients/java/3.0.3/Couchbase-Java-Client-3.0.3.zip[Download] |
+https://packages.couchbase.com/clients/java/3.0.3/Couchbase-Java-Client-3.0.3.zip[Download] |
 http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.3/[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.4/[Core API Reference]
 
@@ -1316,7 +1316,7 @@ Bootstrap will now correctly use the mapped port if alternate addr is present.
 
 Version 3.0.2 is the third release of the 3.0 series, bringing  enhancements and bugfixes over the last stable release.
 
-http://packages.couchbase.com/clients/java/3.0.2/Couchbase-Java-Client-3.0.2.zip[Download] |
+https://packages.couchbase.com/clients/java/3.0.2/Couchbase-Java-Client-3.0.2.zip[Download] |
 http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.2/[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.3/[Core API Reference]
 
@@ -1359,7 +1359,7 @@ Native Netty transports not included, resulting in fallback to default implement
 
 Version 3.0.1 is the second release of the 3.0 series, bringing  enhancements and bugfixes over the last stable release.
 
-http://packages.couchbase.com/clients/java/3.0.1/Couchbase-Java-Client-3.0.1.zip[Download] |
+https://packages.couchbase.com/clients/java/3.0.1/Couchbase-Java-Client-3.0.1.zip[Download] |
 http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.1/[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.2/[Core API Reference]
 
@@ -1402,7 +1402,7 @@ Or maintain a list of KV nodes in xref:howtos:managing-connections.adoc#using-dn
 
 This is the first GA release of the third generation Java SDK.
 
-http://packages.couchbase.com/clients/java/3.0.0/Couchbase-Java-Client-3.0.0.zip[Download] |
+https://packages.couchbase.com/clients/java/3.0.0/Couchbase-Java-Client-3.0.0.zip[Download] |
 http://docs.couchbase.com/sdk-api/couchbase-java-client-3.0.0/[API Reference] | 
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.0.0/[Core API Reference]
 
