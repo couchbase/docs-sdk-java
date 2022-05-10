@@ -185,5 +185,5 @@ include::example$TransactionsMigration.java[tag=log,indent=0]
 
 == Further Reading
 
-* There's plenty of explanation about how Transactions work in Couchbase in our xref:7.0@server:learn:data/transactions.adoc[Transactions documentation].
+* There's plenty of explanation about how Transactions work in Couchbase in our xref:7.1@server:learn:data/transactions.adoc[Transactions documentation].
 * The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Java SDK transactions documentation].

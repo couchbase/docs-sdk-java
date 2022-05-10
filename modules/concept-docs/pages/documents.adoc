@@ -2,9 +2,7 @@
 :description: Couchbase supports CRUD operations, various data structures, and binary documents.
 :nav-title: Documents & Doc Ops
 :page-topic-type: concept
-:page-aliases: ROOT:documents.adoc,ROOT:documents-basics.adoc,ROOT:documents-atomic.adoc,ROOT:core-operations.adoc
-// [NEO] - Add these back in for Neo release and change server version to 7.1
-// 7.0@server:developer-guide:expiry.adoc,7.0@server:developer-guide:creating-documents.adoc,
+:page-aliases: ROOT:documents.adoc,ROOT:documents-basics.adoc,ROOT:documents-atomic.adoc,ROOT:core-operations.adoc,7.1@server:developer-guide:expiry.adoc,7.1@server:developer-guide:creating-documents.adoc
 
 [abstract]
 {description}
@@ -57,7 +55,7 @@ If you wish to only modify certain parts of a document, you can use xref:subdocu
 include::example$DocumentsExample.java[tag=mutate-in]
 ----
 
-or xref:7.0@server:n1ql:n1ql-language-reference/update.adoc[N1QL UPDATE] to update documents based on specific query criteria:
+or xref:7.1@server:n1ql:n1ql-language-reference/update.adoc[N1QL UPDATE] to update documents based on specific query criteria:
 
 [source,sql]
 ----
