@@ -1,9 +1,7 @@
 = Durability & Failure
 :description: Data durability refers to the fault tolerance and persistence of data in the face of software or hardware failure.
 :page-topic-type: concept
-:page-aliases: ROOT:failure-considerations,ROOT:durability,ROOT:enhanced-durability
-// [NEO] - Add back when Neo is released and change server version to 7.1
-//7.0@server:developer-guide:durability.adoc
+:page-aliases: ROOT:failure-considerations,ROOT:durability,ROOT:enhanced-durability,7.1@server:developer-guide:durability.adoc
 
 [abstract]
 {description}

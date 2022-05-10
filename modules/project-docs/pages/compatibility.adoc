@@ -80,7 +80,7 @@ Please make sure you run on one of the latest patch releases, since they provide
 == OS Compatibility
 
 In general, the JVM eliminates concerns about underlying OS compatibility, 
-and Couchbase JVM SDKs can be expected to run on all of the Operating Systems supported by xref:7.0@server:install:install-platforms.adoc[Couchbase Server].
+and Couchbase JVM SDKs can be expected to run on all of the Operating Systems supported by xref:7.1@server:install:install-platforms.adoc[Couchbase Server].
 
 Specifically, the 3.3 SDK is tested with the following OSs and platforms:
 
