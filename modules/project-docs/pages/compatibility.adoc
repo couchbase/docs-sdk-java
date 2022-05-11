@@ -161,7 +161,7 @@ The downside of these workarounds is potentially reduced performance, which can 
 
 | Distributed ACID Transactions
 2+| Not Supported
-2+| Since SDK 3.1 included in SDK.
+2+| Since SDK 3.3 included in SDK.
 Since SDK 3.0 with With Java Transactions Libraryfootnote:[3.0.7 or more recent recommended; preferably, follow the transitive dependency for the transactions library in Maven.]
 
 | N1QL Queries inside the Transaction Lambda
