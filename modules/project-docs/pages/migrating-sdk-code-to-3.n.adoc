@@ -342,11 +342,33 @@ The following table describes the SDK 2 KV APIs and where they are now located i
 |`Bucket.unlock`                 | `Collection.unlock`
 |`Bucket.touch`                  | `Collection.touch`
 |`Bucket.lookupIn`               | `Collection.lookupIn`
-|`Bucket.mutateIn`               | `Collection.mutateIn`
+|`Bucket.mutateIn`               | `Collection.mutateIn` (see <<subdoc-store-semantics,note about store semantics>>)
 |`Bucket.counter`                | `BinaryCollection.increment` and `BinaryCollection.decrement`
 |`Bucket.append`                 | `BinaryCollection.append`
 |`Bucket.prepend`                | `BinaryCollection.prepend`
 |====
+
+[[subdoc-store-semantics]]
+[NOTE]
+====
+To migrate code that called `MutateInBuilder.upsertDocument(true)`, specify the operation's store semantics.
+For example:
+
+.SDK 2
+[source,java]
+----
+bucket.mutateIn("myDocument")
+    .insert("color", "blue")
+    .upsertDocument(true)
+    .execute();
+----
+
+.SDK 3
+[source,java]
+----
+include::example$MigratingSDKCodeTo3n.java[tag=subdoc_mutatein_store_semantics,indent=0]
+----
+====
 
 In addition, the datastructure APIs have been renamed and moved:
 

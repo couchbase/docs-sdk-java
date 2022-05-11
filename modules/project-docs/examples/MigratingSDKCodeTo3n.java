@@ -81,6 +81,17 @@ public class MigratingSDKCodeTo3n {
     // end::migrating_sdk_code_to_3_n_22[]
   }
 
+  public void migrating_sdk_code_to_3_n_22() throws Exception {
+    // tag::subdoc_mutatein_store_semantics[]
+    collection.mutateIn(
+        "myDocument",
+        singletonList(MutateInSpec.insert("color", "blue")),
+        MutateInOptions.mutateInOptions()
+            .storeSemantics(StoreSemantics.UPSERT)
+    );
+    // end::subdoc_mutatein_store_semantics[]
+  }
+
   public static void main(String[] args) throws Exception {
     MigratingSDKCodeTo3n obj = new MigratingSDKCodeTo3n();
     obj.init();
