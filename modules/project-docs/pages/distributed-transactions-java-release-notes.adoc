@@ -25,17 +25,21 @@ This release has been tested with Couchbase Java SDK version 3.3.0 and requires 
 https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.2.4/[JavaDocs]
 
 === Improvements
+
 * https://issues.couchbase.com/browse/TXNJ-474[TXNJ-474]:
 Improved handling of concurrent non-transactional modifications.
 In particular, this addresses interoperability issues with Sync Gateway in certain niche situations.
 
 === API Affecting
+
 * https://issues.couchbase.com/browse/TXNJ-472[TXNJ-472]:
 Many errors are now raised directly from single query transactions, rather than wrapped in a `TransactionFailed`.
 
 === Bugs
+
 * https://issues.couchbase.com/browse/TXNJ-469[TXNJ-469]:
 Single query transactions now stream rows correctly, instead of buffering internally.
+
 * https://issues.couchbase.com/browse/TXNJ-471[TXNJ-471]:
 Now uses the correct scheduler for all cleanup operations.
 
