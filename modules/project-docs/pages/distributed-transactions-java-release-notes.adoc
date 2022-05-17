@@ -18,6 +18,27 @@ Existing users of the transactions library can refer to the xref:3.3@java-sdk:pr
 See the xref:7.0@server:learn:data/transactions.adoc[Distributed ACID Transactions concept doc] in the server documentation for details of how Couchbase implements transactions.
 The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed Transactions HOWTO doc] walks you through all aspects of working with Distributed Transactions.
 
+== Distributed Transactions Java 1.2.4 (17 May 2022)
+
+This release has been tested with Couchbase Java SDK version 3.3.0 and requires version 3.1.5 or higher.
+
+https://docs.couchbase.com/sdk-api/couchbase-transactions-java-1.2.4/[JavaDocs]
+
+=== Improvements
+* https://issues.couchbase.com/browse/TXNJ-474[TXNJ-474]:
+Improved handling of concurrent non-transactional modifications.
+In particular, this addresses interoperability issues with Sync Gateway in certain niche situations.
+
+=== API Affecting
+* https://issues.couchbase.com/browse/TXNJ-472[TXNJ-472]:
+Many errors are now raised directly from single query transactions, rather than wrapped in a `TransactionFailed`.
+
+=== Bugs
+* https://issues.couchbase.com/browse/TXNJ-469[TXNJ-469]:
+Single query transactions now stream rows correctly, instead of buffering internally.
+* https://issues.couchbase.com/browse/TXNJ-471[TXNJ-471]:
+Now uses the correct scheduler for all cleanup operations.
+
 == Distributed Transactions Java 1.2.3 (15 February 2022)
 
 This release has been tested with Couchbase Java SDK version 3.2.5 and requires version 3.1.5 or higher.
