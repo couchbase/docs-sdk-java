@@ -77,10 +77,9 @@ public class EncryptingUsingSDK {
     CryptoManager cryptoManager = DefaultCryptoManager.builder().decrypter(provider.decrypter())
         .defaultEncrypter(provider.encrypterForKey("myKey")).build();
 
-    ClusterEnvironment env = ClusterEnvironment.builder().cryptoManager(cryptoManager).build();
-
     Cluster cluster = Cluster.connect("localhost",
-        ClusterOptions.clusterOptions("username", "password").environment(env));
+        ClusterOptions.clusterOptions("username", "password")
+            .environment(env -> env.cryptoManager(cryptoManager)));
     // end::encrypting_using_sdk_1[]
   }
 
@@ -140,7 +139,8 @@ public class EncryptingUsingSDK {
 
   public void legacy_field_name_prefix() throws Exception {
     // tag::legacy_field_name_prefix[]
-    CryptoManager cryptoManager = DefaultCryptoManager.builder().encryptedFieldNamePrefix("__crypt_")
+    CryptoManager cryptoManager = DefaultCryptoManager.builder()
+        .encryptedFieldNamePrefix("__crypt_")
         // other config...
         .build();
     // end::legacy_field_name_prefix[]
@@ -166,11 +166,12 @@ public class EncryptingUsingSDK {
 
     // Here you can register more modules, add mixins, enable features, etc.
 
-    ClusterEnvironment env = ClusterEnvironment.builder().cryptoManager(cryptoManager)
-        .jsonSerializer(JacksonJsonSerializer.create(mapper)).build();
-
     Cluster cluster = Cluster.connect(connectionString,
-        ClusterOptions.clusterOptions(username, password).environment(env));
+        ClusterOptions.clusterOptions(username, password)
+            .environment(env -> env
+                .cryptoManager(cryptoManager)
+                .jsonSerializer(JacksonJsonSerializer.create(mapper))
+            ));
     // end::encrypting_using_sdk_6[]
   }
 

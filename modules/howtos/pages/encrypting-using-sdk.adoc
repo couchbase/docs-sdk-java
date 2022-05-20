@@ -50,7 +50,7 @@ HashiCorp Vault Transit integration requires https://docs.spring.io/spring-vault
 <dependency>
     <groupId>org.springframework.vault</groupId>
     <artifactId>spring-vault-core</artifactId>
-    <version>2.2.2.RELEASE</version>
+    <version>2.3.2</version>
 </dependency>
 ----
 
