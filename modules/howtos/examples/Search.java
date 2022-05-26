@@ -15,11 +15,9 @@
  */
 
 import static com.couchbase.client.java.search.SearchOptions.searchOptions;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
@@ -35,9 +33,7 @@ import com.couchbase.client.java.search.result.ReactiveSearchResult;
 import com.couchbase.client.java.search.result.SearchResult;
 import com.couchbase.client.java.search.result.SearchRow;
 import com.couchbase.client.java.search.sort.SearchSort;
-
 import org.reactivestreams.Subscription;
-
 import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.Mono;
 

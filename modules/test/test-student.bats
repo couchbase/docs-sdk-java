@@ -2,11 +2,6 @@
 
 load 'test_helper'
 
-setup_file() {
-    runExample WipeCollections
-    [ "$status" -eq 0 ]
-}
-
 @test "[student] - ConnectStudent.java" {
     runExample ConnectStudent
     assert_success

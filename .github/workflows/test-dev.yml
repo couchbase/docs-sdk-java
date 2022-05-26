@@ -2,15 +2,15 @@ name: Test Code Samples (Dev)
 
 on:
   push:
-    branches: [ "release/3.*" ]
+    branches: ["release/3.*"]
 
 env:
   REGISTRY: registry.gitlab.com/cb-vanilla/server
-  CB_EDITION: 7.0.0
-  CB_BUILD: 5295
+  CB_DEV_VERSION: 7.1.1
+  CB_DEV_BUILD: 3030
 
 jobs:
-  # The pre_job uses a smart Github action that will check the provided path filters 
+  # The pre_job uses a smart Github action that will check the provided path filters
   # to determine if subsequent jobs should be "skipped" when the filters don't apply.
   # This ensures that our Github branch protection rules are still satisfied and users
   # can merge their PRs with skipped status checks where appropriate.
@@ -25,7 +25,7 @@ jobs:
       - id: skip_check
         uses: fkirc/skip-duplicate-actions@master
         with:
-          cancel_others: 'true' # cancel previous workflow runs when pushing a new commit. 
+          cancel_others: "true" # cancel previous workflow runs when pushing a new commit.
           paths: '["**/Makefile", "modules/test/**", "**/*.java", "**/pom.xml"]'
 
   test:
@@ -33,8 +33,7 @@ jobs:
     if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
     env:
-      working-directory:
-        ./modules
+      working-directory: ./modules
 
     steps:
       - name: Checkout actions
@@ -48,7 +47,7 @@ jobs:
           password: ${{ secrets.DOCKER_PSWD }}
 
       - name: Build Couchbase Docker image
-        run: CB_EDITION=${{ env.REGISTRY }}:${{ env.CB_EDITION }} CB_BUILD=${{ env.CB_BUILD }} make cb-build
+        run: CB_EDITION=${{ env.REGISTRY }}:${{ env.CB_DEV_VERSION }} CB_BUILD=${{ env.CB_DEV_BUILD }} make cb-build
         working-directory: ${{ env.working-directory }}
 
       - name: Run Couchbase Server+SDK container

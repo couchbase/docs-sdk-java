@@ -12,10 +12,3 @@ load 'test_helper'
     assert_failure
     assert_output --partial "com.couchbase.client.core.error.ParsingFailureException: Parsing of the input failed"
 }
-
-@test "[project-docs] - Transactions.java" {
-    skip "Example is not runnable, we can be satisfied that it compiles. Skipping for now."
-
-    runExample TransactionsDemo
-    assert_success
-}

@@ -1,7 +1,7 @@
 ARG BASE_IMAGE=ubuntu:20.04
 
 ARG CB_EDITION=couchbase/server:enterprise
-ARG CB_BUILD=7.0.0
+ARG CB_BUILD=7.1.0
 ARG CB_IMAGE=$CB_EDITION-$CB_BUILD
 
 ARG CB_CLIENT_OS=ubuntu2004
@@ -45,7 +45,7 @@ RUN javac --version && \
 # Copy init-couchbase files into image.
 
 RUN mkdir -p /init-couchbase
-COPY test/scripts/init-couchbase /init-couchbase
+COPY modules/test/scripts/init-couchbase /init-couchbase
 RUN chmod +x /init-couchbase/*.sh
 
 # Append to /opt/couchbase/etc/couchbase/static_config...
