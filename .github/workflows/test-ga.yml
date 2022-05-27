@@ -2,12 +2,16 @@ name: Test Code Samples (GA)
 
 on:
   push:
-    branches: [ "release/3.*" ]
+    branches: ["release/3.*"]
   pull_request:
-    branches: [ "release/3.*" ]
+    branches: ["release/3.*"]
+
+env:
+  CB_EDITION: couchbase/server:enterprise
+  CB_BUILD: 7.1.0
 
 jobs:
-  # The pre_job uses a smart Github action that will check the provided path filters 
+  # The pre_job uses a smart Github action that will check the provided path filters
   # to determine if subsequent jobs should be "skipped" when the filters don't apply.
   # This ensures that our Github branch protection rules are still satisfied and users
   # can merge their PRs with skipped status checks where appropriate.
@@ -22,7 +26,7 @@ jobs:
       - id: skip_check
         uses: fkirc/skip-duplicate-actions@master
         with:
-          cancel_others: 'true' # cancel previous workflow runs when pushing a new commit.
+          cancel_others: "true" # cancel previous workflow runs when pushing a new commit.
           paths: '["**/Makefile", "modules/test/**", "**/*.java", "**/pom.xml"]'
 
   test:
@@ -30,15 +34,14 @@ jobs:
     if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
     env:
-      working-directory:
-        ./modules
+      working-directory: ./
 
     steps:
       - name: Checkout actions
         uses: actions/checkout@v2
 
       - name: Build Couchbase Docker image
-        run: make cb-build
+        run: CB_EDITION=${{ env.CB_EDITION }} CB_BUILD=${{ env.CB_BUILD }} make cb-build
         working-directory: ${{ env.working-directory }}
 
       - name: Run Couchbase Server+SDK container
@@ -57,7 +60,7 @@ jobs:
         # We run this step only on the default 3.1+ branch
         # because secrets are not accessible on PRs from forks.
         # Therefore, this notification will only happen when a PR is merged.
-        if: failure() && startsWith(github.ref, 'refs/heads/release/3.*') 
+        if: failure() && startsWith(github.ref, 'refs/heads/release/3.*')
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}

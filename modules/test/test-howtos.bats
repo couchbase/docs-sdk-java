@@ -118,7 +118,7 @@ load 'test_helper'
 }
 
 @test "[howtos] - TransactionsExample.java" {
-    skip "Example seems to hang when executed, needs further investigation."
+    skip "Example doesn't compile, unable to test."
 
     runExample TransactionsExample
     assert_success

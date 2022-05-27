@@ -57,6 +57,7 @@ To facilitate running the tests there is a `Makefile` in the `/modules` director
 There you will find all the relevant commands needed to execute the docker container and the test/build scripts.
 
 === Running a test
+
 Before you can run the tests you will need to ensure you have Docker and npm available on your machine.
 
 To run the example tests you will need to build the testing Docker image, run the container and execute your tests.
@@ -65,11 +66,11 @@ TIP: After your first build of the docker image you won't need to build it every
 
 Here are the steps required to achieve this:
 
-- `cd` into the `/modules` directory and run `make cb-build` to build a local image of Couchbase Server + Java SDK.
+- From the root directory run `make cb-build` to build a local image of Couchbase Server + Java SDK.
 
-- Once that has completed succesfully you can run `make cb-start` to run the docker container.
+- Once that has completed successfully you can run `make cb-start` to run the docker container.
 
-Note that this can take some time as it will configure couchbase server with all the required test data (e.g. travel-sample bucket) for the examples to run successfully.
+Note that this can take some time as it will configure Couchbase Server with all the required test data (e.g. travel-sample bucket) for the examples to run successfully.
 
 - If you run `docker ps` in a separate shell you should see a container called `cb-test` running.
 ```
@@ -90,9 +91,10 @@ CONTAINER ID   IMAGE                          COMMAND                  CREATED  
 
 - To stop the docker container you can simply run `make cb-stop`, this will stop and remove the docker container, but will keep the local image should you need to start it up again.
 
-TIP: Because we mount the `/modules` directory in the `cb-test` container, you will see your local code changes reflected in the container instantly, so there is no need to stop and start the container when debugging your code.
+TIP: Because we mount the project directory in the `cb-test` container, you will see your local code changes reflected in the container instantly, so there is no need to stop and start the container when debugging your code.
 
 === Creating a new test
+
 If you look at the `/modules/test` directory you will find files with the *.bats* extension, which are essentially our test files.
 
 Depending on where your code sample is going to be located (e.g. `/modules/devguide`), you will see a corresponding test file in the test directory. 
@@ -120,6 +122,7 @@ The assertion will fail if the string is not found.
 Note that it will not always be necessary to assert the output of your code sample, in those cases just using `assert_success` will be enough.
 
 === CI - Github Actions
+
 When submitting a PR, the code sample tests will run against your changes in the same manner as your local machine using Github Actions. 
 
 You can see the workflow definitions in the `.github` folder.

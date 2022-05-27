@@ -133,7 +133,7 @@ public class Import {
   // tag::importCSV[]
   public void importCSV() {
     try (CSVReaderHeaderAware csv = new CSVReaderHeaderAware(
-        new FileReader("howtos/examples/import.csv"))) {
+        new FileReader("modules/howtos/examples/import.csv"))) {
             
       Map<String, String> row;
       while ((row = csv.readMap()) != null) {
@@ -162,7 +162,7 @@ public class Import {
     Flux<Map<String,String>> rows = Flux.generate(
       
       () -> new CSVReaderHeaderAware(
-        new FileReader("howtos/examples/import.csv")),
+        new FileReader("modules/howtos/examples/import.csv")),
       
       (state, sink) -> {
         try {
@@ -203,7 +203,7 @@ public class Import {
     
     try (CSVReaderHeaderAware tsv =
         new CSVReaderHeaderAwareBuilder(
-          new FileReader("howtos/examples/import.tsv"))
+          new FileReader("modules/howtos/examples/import.tsv"))
         .withCSVParser(parser)
         .build()) {
 
@@ -243,7 +243,7 @@ public class Import {
           .build();
         return
           new CSVReaderHeaderAwareBuilder(
-            new FileReader("howtos/examples/import.tsv"))
+            new FileReader("modules/howtos/examples/import.tsv"))
           .withCSVParser(parser)
           .build();
       },
@@ -282,7 +282,7 @@ public class Import {
     try {
       String content  = new String(
         Files.readAllBytes( // read whole document into memory
-          Paths.get("howtos/examples/import.json")),
+          Paths.get("modules/howtos/examples/import.json")),
         StandardCharsets.UTF_8);
       
       for (Object row: JsonArray.fromJson(content)) {
@@ -308,7 +308,7 @@ public class Import {
     try {
       String content  = new String(
         Files.readAllBytes( // read whole document into memory
-          Paths.get("howtos/examples/import.json")),
+          Paths.get("modules/howtos/examples/import.json")),
         StandardCharsets.UTF_8);
       
       Flux<MutationResult> results = 
@@ -337,7 +337,7 @@ public class Import {
   public void importJSONL() {
     try (BufferedReader br =
           new BufferedReader(
-            new FileReader("howtos/examples/import.jsonl"))) {
+            new FileReader("modules/howtos/examples/import.jsonl"))) {
               
         String line;
         while ((line = br.readLine()) != null) {
@@ -366,7 +366,7 @@ public class Import {
     // end::omit[]
 
     Flux<String> lines = Flux.using(
-      () -> Files.lines(Paths.get("howtos/examples/import.jsonl")),
+      () -> Files.lines(Paths.get("modules/howtos/examples/import.jsonl")),
       Flux::fromStream,
       BaseStream::close);
 

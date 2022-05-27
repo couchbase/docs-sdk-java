@@ -18,7 +18,7 @@ import static com.couchbase.client.java.kv.GetOptions.getOptions;
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 
 import java.time.Duration;
-
+import java.util.Collections;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
@@ -27,6 +27,10 @@ import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.env.ClusterEnvironment;
 import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.client.java.query.QueryResult;
+import com.couchbase.client.java.kv.MutateInSpec;
+import com.couchbase.client.java.kv.MutateInOptions;
+import com.couchbase.client.java.kv.StoreSemantics;
+
 
 public class MigratingSDKCodeTo3n {
 
@@ -81,11 +85,11 @@ public class MigratingSDKCodeTo3n {
     // end::migrating_sdk_code_to_3_n_22[]
   }
 
-  public void migrating_sdk_code_to_3_n_22() throws Exception {
+  public void migrating_sdk_code_to_3_n_23() throws Exception {
     // tag::subdoc_mutatein_store_semantics[]
     collection.mutateIn(
         "myDocument",
-        singletonList(MutateInSpec.insert("color", "blue")),
+        Collections.singletonList(MutateInSpec.insert("color", "blue")),
         MutateInOptions.mutateInOptions()
             .storeSemantics(StoreSemantics.UPSERT)
     );
@@ -99,5 +103,6 @@ public class MigratingSDKCodeTo3n {
     obj.migrating_sdk_code_to_3_n_2();
     obj.migrating_sdk_code_to_3_n_11();
     obj.migrating_sdk_code_to_3_n_22();
+    obj.migrating_sdk_code_to_3_n_23();
   }
 }
