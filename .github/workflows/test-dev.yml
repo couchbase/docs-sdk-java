@@ -6,8 +6,8 @@ on:
 
 env:
   REGISTRY: registry.gitlab.com/cb-vanilla/server
-  CB_DEV_VERSION: 7.1.1
-  CB_DEV_BUILD: 3030
+  CB_DEV_VERSION: 7.1.0
+  CB_DEV_BUILD: 1250
 
 jobs:
   # The pre_job uses a smart Github action that will check the provided path filters
