@@ -3,6 +3,8 @@
 # exit immediately if a command fails or if there are unset vars
 set -euo pipefail
 
+CREATE_ANALYTICS_DATASETS=$1
+
 CB_USER="${CB_USER:-Administrator}"
 CB_PSWD="${CB_PSWD:-password}"
 CB_HOST=localhost
@@ -36,6 +38,27 @@ curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '
     "pretty":true,
     "client_context_id":"test"
 }' http://${CB_HOST}:8095/analytics/service
+
+echo "Check if analytics datasets need to be built..."
+# These are already setup in the official Couchbase Enterprise docker image.
+# However, this is not the case for our internal dev image.
+if [ $CREATE_ANALYTICS_DATASETS = true ]; then
+    echo "create scoped airport dataset"
+    curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
+        "statement": "ALTER COLLECTION `travel-sample`.`inventory`.`airport` ENABLE ANALYTICS;",
+        "pretty":true,
+        "client_context_id":"test"
+    }' http://${CB_HOST}:8095/analytics/service
+
+    curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
+        "statement": "CONNECT LINK Local;",
+        "pretty":true,
+        "client_context_id":"test"
+    }' http://${CB_HOST}:8095/analytics/service
+
+else
+    echo "...analytics datasets are not required."
+fi
 
 echo "create huge-dataset dataset"
 curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{

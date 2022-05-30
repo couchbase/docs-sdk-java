@@ -8,6 +8,7 @@ env:
   REGISTRY: registry.gitlab.com/cb-vanilla/server
   CB_DEV_VERSION: 7.1.0
   CB_DEV_BUILD: 1250
+  CREATE_ANALYTICS_DATASETS: true
 
 jobs:
   # The pre_job uses a smart Github action that will check the provided path filters
@@ -51,7 +52,7 @@ jobs:
         working-directory: ${{ env.working-directory }}
 
       - name: Run Couchbase Server+SDK container
-        run: make cb-start
+        run: CREATE_ANALYTICS_DATASETS=${{ env.CREATE_ANALYTICS_DATASETS }} make cb-start
         working-directory: ${{ env.working-directory }}
 
       - name: Test code samples
