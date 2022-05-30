@@ -46,7 +46,7 @@ include::hello-world:example$Overview.java[tag=overview,indent=0]
 [.content]
 * Dive right in with a xref:start-using-sdk.adoc[quick install and Hello World].
 * Try out our xref:sample-application.adoc[Travel Sample Application].
-* Compare and contrast with our spring-data-sample-application.adoc[Spring Data sample App].
+* Compare and contrast with our xref:spring-data-sample-application.adoc[Spring Data sample App].
 
 [.column]
 ====== {empty}
