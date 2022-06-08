@@ -48,9 +48,8 @@ Optional artifacts on top of this SDK version are tested for the following compa
 * https://issues.couchbase.com/browse/JVMCBC-1089[JVMCBC-1089]:
 SDK users can now customize the `ConsoleLogger` format.
 * https://issues.couchbase.com/browse/JVMCBC-1093[JVMCBC-1093]:
-Fixed an issue where the DNS SRV lookup failed, due to a missing SRV record.
-The SDK previously logged a `WARNING` with a stack trace.
-The lookup failure is typically harmless, so the log message has been downgraded to `INFO` level without a stack trace.
+Previously, when a DNS SRV lookup failure occured, the SDK logged this as a `WARNING` along with a stack trace.
+The lookup failure is typically harmless, so the log message has now been downgraded to `INFO` level, without a stack trace.
 * https://issues.couchbase.com/browse/JVMCBC-1088[JVMCBC-1088]:
 Updated Netty to version `4.1.77.Final`.
 
