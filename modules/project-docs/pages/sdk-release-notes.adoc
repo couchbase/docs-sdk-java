@@ -46,7 +46,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 === Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1089[JVMCBC-1089]:
 Allow to customize the ConsoleLogger format.
-* https://issues.couchbase.com/browse/JVMCBC-1093[JVMCBC-1093] -
+* https://issues.couchbase.com/browse/JVMCBC-1093[JVMCBC-1093]:
 When a DNS SRV lookup fails due to a missing SRV record, the SDK used to log a scary warning with a stack trace.
 The lookup failure is typically harmless, so the log message was downgraded to INFO level without a stack trace.
 * https://issues.couchbase.com/browse/JVMCBC-1088[JVMCBC-1088]:
