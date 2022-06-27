@@ -800,3 +800,4 @@ Note that some options have been removed, and others have different ways to conf
 |`propagateParentSpan`         | removed
 |====
 
+include::7.1@sdk:shared:partial$archive.adoc[tag=migration]
