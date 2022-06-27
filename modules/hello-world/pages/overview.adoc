@@ -112,3 +112,5 @@ This includes xref:project-docs:compatibility.adoc#spring-compat[Spring Data] an
 ++++
 </div>
 ++++
+
+include::7.1@sdk:shared:partial$archive.adoc[tag=link]
