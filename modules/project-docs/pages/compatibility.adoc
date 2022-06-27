@@ -237,4 +237,4 @@ include::7.1@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stab
 
 include::7.1@sdk:shared:partial$api-version.adoc[tag=api-version]
 
-include::7.1@sdk:pages:partial$archive.adoc[tag=link]
+include::7.1@sdk:shared:partial$archive.adoc[tag=link]
