@@ -16,6 +16,7 @@
 
 // tag::imports[]
 
+import com.couchbase.client.core.cnc.events.transaction.TransactionLogEvent;
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.core.msg.kv.DurabilityLevel;
@@ -36,10 +37,7 @@ import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryProfile;
 import com.couchbase.client.java.query.QueryScanConsistency;
-import com.couchbase.client.java.transactions.TransactionKeyspace;
-import com.couchbase.client.java.transactions.TransactionQueryOptions;
-import com.couchbase.client.java.transactions.TransactionQueryResult;
-import com.couchbase.client.java.transactions.TransactionResult;
+import com.couchbase.client.java.transactions.*;
 import com.couchbase.client.java.transactions.config.TransactionsCleanupConfig;
 import com.couchbase.client.java.transactions.config.TransactionsConfig;
 import com.couchbase.client.java.transactions.config.TransactionsQueryConfig;
@@ -84,13 +82,13 @@ public class TransactionsExample {
 
     static void config() {
         // tag::config[]
-        var env = ClusterEnvironment.builder()
+        ClusterEnvironment env = ClusterEnvironment.builder()
                 .transactionsConfig(TransactionsConfig.durabilityLevel(DurabilityLevel.PERSIST_TO_MAJORITY)
                         .cleanupConfig(TransactionsCleanupConfig.cleanupWindow(Duration.ofSeconds(30)))
                         .queryConfig(TransactionsQueryConfig.scanConsistency(QueryScanConsistency.NOT_BOUNDED)))
                 .build();
 
-        var cluster = Cluster.connect("localhost", ClusterOptions.clusterOptions("username", "password")
+        Cluster cluster = Cluster.connect("localhost", ClusterOptions.clusterOptions("username", "password")
                 .environment(env));
 
         // Use the cluster
@@ -104,7 +102,7 @@ public class TransactionsExample {
 
     static void configEasy() {
         // tag::config-easy[]
-        var cluster = Cluster.connect("localhost", ClusterOptions.clusterOptions("username", "password")
+        Cluster cluster = Cluster.connect("localhost", ClusterOptions.clusterOptions("username", "password")
                 .environment(env -> env.transactionsConfig(TransactionsConfig
                         .durabilityLevel(DurabilityLevel.PERSIST_TO_MAJORITY)
                         .cleanupConfig(TransactionsCleanupConfig
@@ -120,8 +118,8 @@ public class TransactionsExample {
     }
 
     static void createSimple() {
-        var doc1Content = JsonObject.create();
-        var doc2Content = JsonObject.create();
+        JsonObject doc1Content = JsonObject.create();
+        JsonObject doc2Content = JsonObject.create();
 
         // tag::create-simple[]
         cluster.transactions().run((ctx) -> {
@@ -157,7 +155,7 @@ public class TransactionsExample {
 
     static void loggingSucccess() {
         // tag::logging-success[]
-        var result = cluster.transactions().run((ctx) -> {
+        TransactionResult result = cluster.transactions().run((ctx) -> {
             // Your transaction logic
         });
 
@@ -196,25 +194,25 @@ public class TransactionsExample {
         Scope inventory = cluster.bucket("travel-sample").scope("inventory");
 
         try {
-            var result = cluster.transactions().run((ctx) -> {
+            TransactionResult result = cluster.transactions().run((ctx) -> {
                 // Inserting a doc:
                 ctx.insert(collection, "doc-a", JsonObject.create());
 
                 // Getting documents:
-                var docA = ctx.get(collection, "doc-a");
+                TransactionGetResult docA = ctx.get(collection, "doc-a");
 
                 // Replacing a doc:
-                var docB = ctx.get(collection, "doc-b");
-                var content = docB.contentAs(JsonObject.class);
+                TransactionGetResult docB = ctx.get(collection, "doc-b");
+                JsonObject content = docB.contentAs(JsonObject.class);
                 content.put("transactions", "are awesome");
                 ctx.replace(docB, content);
 
                 // Removing a doc:
-                var docC = ctx.get(collection, "doc-c");
+                TransactionGetResult docC = ctx.get(collection, "doc-c");
                 ctx.remove(docC);
 
                 // Performing a SELECT N1QL query against a scope:
-                var qr = ctx.query(inventory, "SELECT * FROM hotel WHERE country = $1",
+                TransactionQueryResult qr = ctx.query(inventory, "SELECT * FROM hotel WHERE country = $1",
                         TransactionQueryOptions.queryOptions()
                                 .parameters(JsonArray.from("United Kingdom")));
                 var rows = qr.rowsAs(JsonObject.class);
@@ -303,7 +301,7 @@ public class TransactionsExample {
         // tag::get-catch[]
         cluster.transactions().run((ctx) -> {
             try {
-                var doc = ctx.get(collection, "a-doc");
+                TransactionGetResult doc = ctx.get(collection, "a-doc");
             }
             catch (DocumentNotFoundException err) {
                 // The application can continue the transaction here if needed, or take alternative action
@@ -315,7 +313,7 @@ public class TransactionsExample {
     static void get() {
         // tag::get[]
         cluster.transactions().run((ctx) -> {
-            var doc = ctx.get(collection, "a-doc");
+            TransactionGetResult doc = ctx.get(collection, "a-doc");
         });
         // end::get[]
     }
@@ -327,7 +325,7 @@ public class TransactionsExample {
 
             ctx.insert(collection, docId, JsonObject.create());
 
-            var doc = ctx.get(collection, docId);
+            TransactionGetResult doc = ctx.get(collection, docId);
         });
         // end::getReadOwnWrites[]
     }
@@ -335,8 +333,8 @@ public class TransactionsExample {
     static void replace() {
         // tag::replace[]
         cluster.transactions().run((ctx) -> {
-            var doc = ctx.get(collection, "doc-id");
-            var content = doc.contentAs(JsonObject.class);
+            TransactionGetResult doc = ctx.get(collection, "doc-id");
+            JsonObject content = doc.contentAs(JsonObject.class);
             content.put("transactions", "are awesome");
             ctx.replace(doc, content);
         });
@@ -347,7 +345,7 @@ public class TransactionsExample {
         // tag::replaceReactive[]
         cluster.reactive().transactions().run((ctx) -> {
             return ctx.get(collection.reactive(), "doc-id").flatMap(doc -> {
-                var content = doc.contentAs(JsonObject.class);
+                JsonObject content = doc.contentAs(JsonObject.class);
                 content.put("transactions", "are awesome");
                 return ctx.replace(doc, content);
             });
@@ -358,7 +356,7 @@ public class TransactionsExample {
     static void remove() {
         // tag::remove[]
         cluster.transactions().run((ctx) -> {
-            var doc = ctx.get(collection, "doc-id");
+            TransactionGetResult doc = ctx.get(collection, "doc-id");
             ctx.remove(doc);
         });
         // end::remove[]
@@ -530,17 +528,17 @@ public class TransactionsExample {
     static void completeErrorHandling() {
         // tag::full-error-handling[]
         try {
-            var result = cluster.transactions().run((ctx) -> {
+            TransactionResult result = cluster.transactions().run((ctx) -> {
                 // ... transactional code here ...
             });
 
-            // The transaction definitely reached the commit point. Unstaging
-            // the individual documents may or may not have completed
+            // The transaction definitely reached the commit point.
+            // Unstaging the individual documents may or may not have completed
 
             if (!result.unstagingComplete()) {
                 // In rare cases, the application may require the commit to have
-                // completed.  (Recall that the asynchronous cleanup process is
-                // still working to complete the commit.)
+                // completed (recall that the asynchronous cleanup process is
+                // still working to complete the commit).
                 // The next step is application-dependent.
             }
         } catch (TransactionCommitAmbiguousException e) {
@@ -646,7 +644,7 @@ public class TransactionsExample {
         // its own logging system to replace `logger`.
         logger.warning("Transaction possibly reached the commit point");
 
-        for (TransactionLogMessage msg : err.logs()) {
+        for (TransactionLogEvent msg : err.logs()) {
             logger.warning(msg.toString());
         }
 
@@ -656,7 +654,7 @@ public class TransactionsExample {
     public static RuntimeException logFailure(TransactionFailedException err) {
         logger.warning("Transaction did not reach commit point");
 
-        for (TransactionLogMessage msg : err.logs()) {
+        for (TransactionLogEvent msg : err.logs()) {
             logger.warning(msg.toString());
         }
 
