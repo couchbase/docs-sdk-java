@@ -107,3 +107,5 @@ xref:project-docs:third-party-integrations.adoc[Integrations & Ecosystem];
 ++++
 </div>
 ++++
+
+include::7.1@sdk:shared:partial$archive.adoc[tag=link]
