@@ -34,7 +34,7 @@ We recommend running the latest Java LTS version (i.e. at the time of writing JD
 Java 17 has various enhancements like sealed classes, pattern matching for switch expressions (in preview), and further updates and improvements on core libraries.
 
 Couchbase publishes all stable artifacts to https://search.maven.org/search?q=com.couchbase.client[Maven Central].
-The latest version (as of June 2022) is https://search.maven.org/artifact/com.couchbase.client/java-client/3.3.1/jar[3.3.1].
+The latest version (as of July 2022) is https://search.maven.org/artifact/com.couchbase.client/java-client/3.3.2/jar[3.3.2].
 
 You can use your favorite dependency management tool to install the SDK.
 
@@ -52,7 +52,7 @@ The following snippet shows how to do it with https://maven.apache.org/[Maven].
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.3.1</version>
+        <version>3.3.2</version>
     </dependency>
 </dependencies>
 ----
@@ -64,7 +64,7 @@ For https://gradle.org/[Gradle], you can use:
 
 [source,groovy]
 ----
-implementation 'com.couchbase.client:java-client:3.3.1'
+implementation 'com.couchbase.client:java-client:3.3.2'
 ----
 --
 ====

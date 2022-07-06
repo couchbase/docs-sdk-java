@@ -16,7 +16,42 @@ For release notes, download links, and installation methods for 2.7 and earlier 
 See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide for details.
 
 // tag::all[]
-== Version 3.3.1 (8 Jun 2022)
+== Version 3.3.2 (6 July 2022)
+
+Version 3.3.2 is the third release of the 3.3 series, and is a maintenance release.
+
+https://packages.couchbase.com/clients/java/3.3.2/Couchbase-Java-Client-3.3.2.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.3.2/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.3.2/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.3.2**
+* com.couchbase.client:**core-io:2.3.2**
+* io.projectreactor:**reactor-core:3.4.17**
+* org.reactivestreams:**reactive-streams:1.0.3**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.1.2   | OpenTelemetry 1.13.0       | Committed
+| `tracing-opentracing`     | 1.1.2   | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.3.2   | OpenTelemetry 1.13.0-alpha | Volatile
+| `metrics-micrometer`      | 0.3.2   | Micrometer 1.8.4           | Volatile
+|=======================
+
+=== Bug Fixes
+
+* https://issues.couchbase.com/browse/JVMCBC-1103[JVMCBC-1103]:
+To reduce overhead, the `MAX_PARALLEL_FETCH` value in `KeyValueBucketRefresher` has been updated to only fetch one config per poll interval.
+
+* https://issues.couchbase.com/browse/JVMCBC-1104[JVMCBC-1104]:
+Fixed issue where the global refresher did not honor the config poll interval.
+
+== Version 3.3.1 (8 June 2022)
 
 Version 3.3.1 is the second release of the 3.3 series, and is a maintenance release.
 
