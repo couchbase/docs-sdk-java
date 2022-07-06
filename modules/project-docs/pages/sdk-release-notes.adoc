@@ -44,10 +44,12 @@ Optional artifacts on top of this SDK version are tested for the following compa
 |=======================
 
 === Bug Fixes
+
 * https://issues.couchbase.com/browse/JVMCBC-1103[JVMCBC-1103]:
-Only fetch one config per poll interval.
+To reduce overhead, the `MAX_PARALLEL_FETCH` value in `KeyValueBucketRefresher` has been updated to only fetch one config per poll interval.
+
 * https://issues.couchbase.com/browse/JVMCBC-1104[JVMCBC-1104]:
-Global refresher does not honor the config poll interval.
+Fixed issue where the global refresher did not honor the config poll interval.
 
 == Version 3.3.1 (8 June 2022)
 
