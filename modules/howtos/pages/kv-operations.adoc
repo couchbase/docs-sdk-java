@@ -4,6 +4,7 @@
 :page-topic-type: howto
 :page-aliases: ROOT:document-operations.adoc,ROOT:documents-creating,ROOT:documents-updating,ROOT:documents-retrieving,ROOT:documents-deleting
 :example-source: 3.2@java-sdk:howtos:example$Queries.java
+:page-toclevels: 2
 include::project-docs:partial$attributes.adoc[]
 
 [abstract]
@@ -282,6 +283,10 @@ include::example$KvOperations.cs[tag=binarydecrementwithoptions,indent=0]
 ----
 ////
 NOTE: Increment & Decrement are considered part of the ‘binary’ API and as such may still be subject to change
+
+
+include::7.1@sdk:shared:partial$atomic.adoc[tag=xdcr]
+
 
 == Scoped KV Operations
 
