@@ -14,11 +14,16 @@
 * xref:howtos:full-text-searching-with-sdk.adoc[Full Text Search]
 * xref:howtos:view-queries-with-sdk.adoc[MapReduce Views]
 
+.Transactions
+* xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Transactions: Howto Guide]
+** xref:howtos:transactions-tracing.adoc[Tracing]
+* xref:concept-docs:transactions.adoc[Key Concepts]
+** xref:concept-docs:transactions-cleanup.adoc[Cleanup]
+** xref:concept-docs:transactions-error-handling.adoc[Error Handling]
+
 .Advanced Data Operations
 * xref:howtos:concurrent-async-apis.adoc[Async & Reactive APIs]
 * xref:howtos:concurrent-document-mutations.adoc[Concurrent Document Mutations]
-* xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Transactions]
-** xref:howtos:transactions-tracing.adoc[Tracing]
 * xref:howtos:encrypting-using-sdk.adoc[Encrypting Your Data]
 * xref:howtos:transcoders-nonjson.adoc[Transcoders & Non-JSON]
 * xref:howtos:working-with-collections.adoc[Working with Collections]
@@ -60,9 +65,6 @@
 ** xref:concept-docs:understanding-views.adoc[Map Reduce Views]
 ** xref:concept-docs:n1ql-query.adoc[Query]
 ** xref:concept-docs:full-text-search-overview.adoc[Search]
-* xref:concept-docs:transactions.adoc[Transactions]
-** xref:concept-docs:transactions-cleanup.adoc[Cleanup]
-** xref:concept-docs:transactions-error-handling.adoc[Error Handling]
 * xref:concept-docs:sdk-user-management-overview.adoc[User Management]
 ** xref:concept-docs:certificate-based-authentication.adoc[Cert Auth]
 ** xref:concept-docs:rbac.adoc[RBAC]
