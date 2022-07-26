@@ -15,7 +15,8 @@
 * xref:howtos:view-queries-with-sdk.adoc[MapReduce Views]
 
 .Transactions
-* xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Transactions: Howto Guide]
+* xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[How-to Guide]
+** xref:howtos:transactions-single-query.adoc[Single Query Transactions]
 ** xref:howtos:transactions-tracing.adoc[Tracing]
 * xref:concept-docs:transactions.adoc[Key Concepts]
 ** xref:concept-docs:transactions-cleanup.adoc[Cleanup]
