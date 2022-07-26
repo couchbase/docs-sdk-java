@@ -2,7 +2,7 @@
 :description: Tracing Couchbase Distributed ACID transactions.
 :page-partial:
 :page-topic-type: howto
-:page-pagination: prev
+:page-pagination: full
 
 [abstract]
 {description}

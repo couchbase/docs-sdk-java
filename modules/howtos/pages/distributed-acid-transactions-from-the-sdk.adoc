@@ -47,26 +47,6 @@ Refer to the xref:{version-server}@server:learn:security/roles.adoc[Roles] page 
 
 include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
 
-== Configuration
-
-The default configuration should be appropriate for most use-cases.
-If needed, transactions can be globally configured at the point of creating the `Cluster`.
-As usual with `Cluster` configuration, you can either explicitly create and manage the `ClusterEnvironment` yourself:
-
-[source,java]
-----
-include::example$TransactionsExample.java[tag=config,indent=0]
-----
-
-or alternatively use this {lambda} syntax, which leads to the `ClusterEnvironment` being owned and managed by the `Cluster`:
-
-[source,java]
-----
-include::example$TransactionsExample.java[tag=config-easy,indent=0]
-----
-
-include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=config]
-
 == Creating a Transaction 
 
 include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=creating]
@@ -380,8 +360,44 @@ include::example$TransactionsExample.java[tag=concurrentOps,indent=0]
 
 include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=query-perf-note]
 
+=== Non-Transactional Writes
+
+To ensure key-value performance is not compromised, and to avoid conflicting writes, applications should *never* perform non-transactional _writes_ concurrently with transactional ones, on the same document.
+
+You can verify this when debugging your application by subscribing to the client's event logger and checking for any `IllegalDocumentStateEvent` events.
+These events are raised when a non-transactional write has been detected and overridden.
+
+[source,java]
+----
+include::howtos:example$TransactionsExample.java[tag=concurrency,indent=0]
+----
+
+The event contains the key of the document involved, to aid the application with debugging.
+
+See xref:concept-docs:transactions.adoc#concurrency-with-non-transactional-writes[Concurrency with Non-Transactional Writes] to learn more.
+
+== Configuration
+
+The default configuration should be appropriate for most use-cases.
+If needed, transactions can be globally configured at the point of creating the `Cluster`.
+As usual with `Cluster` configuration, you can either explicitly create and manage the `ClusterEnvironment` yourself:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=config,indent=0]
+----
+
+or alternatively use this {lambda} syntax, which leads to the `ClusterEnvironment` being owned and managed by the `Cluster`:
+
+[source,java]
+----
+include::example$TransactionsExample.java[tag=config-easy,indent=0]
+----
+
+include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=config]
+
 == Additional Resources
 
 * Learn more about xref:concept-docs:transactions.adoc[Distributed ACID Transactions].
 
-* Check out the SDK https://docs.couchbase.com/sdk-api/couchbase-java-client/index.html[API Reference].
+* Check out the SDK https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/transactions/package-summary.html[API Reference].
