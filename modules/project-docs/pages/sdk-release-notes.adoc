@@ -15,7 +15,57 @@ For release notes, download links, and installation methods for 2.7 and earlier 
 
 See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide for details.
 
+
 // tag::all[]
+== Version 3.3.3 (2 August 2022)
+
+Version 3.3.3 is the fourth release of the 3.3 series, and is a maintenance release.
+
+https://packages.couchbase.com/clients/java/3.3.3/Couchbase-Java-Client-3.3.3.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.3.3/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.3.3/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.3.3**
+* com.couchbase.client:**core-io:2.3.3**
+* io.projectreactor:**reactor-core:3.4.21**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.1.2   | OpenTelemetry 1.13.0       | Committed
+| `tracing-opentracing`     | 1.1.2   | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.3.2   | OpenTelemetry 1.13.0-alpha | Volatile
+| `metrics-micrometer`      | 0.3.2   | Micrometer 1.8.4           | Volatile
+|=======================
+
+=== Improvements
+* https://issues.couchbase.com/browse/JVMCBC-1116[JVMCBC-1116]:
+Dependency versions have been increased.
+* https://issues.couchbase.com/browse/JVMCBC-1121[JVMCBC-1121]:
+In some rare cases -- such as an application crash -- a transaction is left for the async cleanup algorithm to finish; 
+by default it will find this within one minute.
+In cases where this does not happen, this will trigger a warning after two hours -- not the two days that was previously the case.
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/JVMCBC-1110[JVMCBC-1110]:
+Transaction clients now reliably remove themselves from client records on shutdown.
+* https://issues.couchbase.com/browse/JVMCBC-1119[JVMCBC-1119]:
+The num (kv) nodesExt to equal number of nodes check can lead to otherwise healthy clusters being flagged as not ready.
+The check has been removed, and now the ` Bucket `waitUntilReady` will not timeout on these edge cases.
+* https://issues.couchbase.com/browse/JVMCBC-1120[JVMCBC-1120]:
+`ClusterConfig#allNodeAddresses` now takes global config into account -- avoiding the triggering of some unnecessary reconfigurations.
+* https://issues.couchbase.com/browse/JVMCBC-1112[JVMCBC-1112]:
+Deprecated Reactor Processors have been replaced.
+* https://issues.couchbase.com/browse/JVMCBC-1115[JVMCBC-1115]:
+The SDK now allows for configurations with _only_ TLS ports.
+
+
 == Version 3.3.2 (6 July 2022)
 
 Version 3.3.2 is the third release of the 3.3 series, and is a maintenance release.
@@ -50,6 +100,7 @@ To reduce overhead, the `MAX_PARALLEL_FETCH` value in `KeyValueBucketRefresher` 
 
 * https://issues.couchbase.com/browse/JVMCBC-1104[JVMCBC-1104]:
 Fixed issue where the global refresher did not honor the config poll interval.
+
 
 == Version 3.3.1 (8 June 2022)
 
@@ -87,6 +138,7 @@ Previously, when a DNS SRV lookup failure occured, the SDK logged this as a `WAR
 The lookup failure is typically harmless, so the log message has now been downgraded to `INFO` level, without a stack trace.
 * https://issues.couchbase.com/browse/JVMCBC-1088[JVMCBC-1088]:
 Updated Netty to version `4.1.77.Final`.
+
 
 == Version 3.3.0 (26 April 2022)
 
