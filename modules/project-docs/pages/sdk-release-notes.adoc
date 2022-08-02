@@ -16,6 +16,51 @@ For release notes, download links, and installation methods for 2.7 and earlier 
 See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide for details.
 
 // tag::all[]
+== Version 3.3.3 (2 August 2022)
+
+Version 3.3.3 is the fourth release of the 3.3 series, and is a maintenance release.
+
+https://packages.couchbase.com/clients/java/3.3.3/Couchbase-Java-Client-3.3.3.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.3.3/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.3.3/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.3.3**
+* com.couchbase.client:**core-io:2.3.3**
+* io.projectreactor:**reactor-core:3.4.21**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.1.2   | OpenTelemetry 1.13.0       | Committed
+| `tracing-opentracing`     | 1.1.2   | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.3.2   | OpenTelemetry 1.13.0-alpha | Volatile
+| `metrics-micrometer`      | 0.3.2   | Micrometer 1.8.4           | Volatile
+|=======================
+
+=== Improvements
+* https://issues.couchbase.com/browse/JVMCBC-1116[JVMCBC-1116]:
+Dependency versions have been increased.
+* https://issues.couchbase.com/browse/JVMCBC-1121[JVMCBC-1121]:
+Warn after 2 hours of failing to cleanup a transaction (previous setting was 2 days).
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/JVMCBC-1110[JVMCBC-1110]:
+Transaction clients now reliably remove themselves from client records on shutdown.
+* https://issues.couchbase.com/browse/JVMCBC-1119[JVMCBC-1119]:
+Do not wait for num (kv) nodesExt to equal number of nodes on Bucket waitUntilReady.
+* https://issues.couchbase.com/browse/JVMCBC-1120[JVMCBC-1120]:
+`ClusterConfig#allNodeAddresses` needs to take global config into account.
+* https://issues.couchbase.com/browse/JVMCBC-1112[JVMCBC-1112]:
+Replace deprecated Reactor Processors.
+* https://issues.couchbase.com/browse/JVMCBC-1115[JVMCBC-1115]:
+Allow for configurations with only TLS ports.
+
 == Version 3.3.2 (6 July 2022)
 
 Version 3.3.2 is the third release of the 3.3 series, and is a maintenance release.
