@@ -72,10 +72,10 @@ The fields are kept compact so that the logs don't get too big, but since they a
 | Property       | Description
 | `b` | Name of the bucket
 | `r` | Remote hostname if dispatched
-| `l` | Local hostnamr if dispatched
+| `l` | Local hostname if dispatched
 | `s` | The name/type of the request
 | `c` | The Channel ID to correlate with the server logs
-| `d` | The server duration if present
+| `d` | The server duration in microseconds if present
 | `t` | The configured timeout in milliseconds
 | `i` | The operation ID (i.e. opaque for Key/Value)
 |====
