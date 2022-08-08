@@ -165,7 +165,7 @@ Since SDK 3.0 with With Java Transactions Libraryfootnote:[3.0.7 or more recent 
 3+| Not Supported
 | Since SDK 3.1, or since 3.0.7 with Java Transactions Libraryfootnote:[1.2.1 or newer recommended.]
 
-| Default Collections
+| Collections
 2+| Not Supported
 | Developer Preview in 6.5-6.6, SDK 3.0
 | Since SDK 3.0.6
