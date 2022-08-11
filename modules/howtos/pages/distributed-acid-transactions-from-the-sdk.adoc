@@ -261,7 +261,7 @@ Generally, you will need to do `ctx.remove(...).then(...)` rather than `ctx.remo
 == {sqlpp} Queries
 
 If you already use https://www.couchbase.com/products/n1ql[{sqlpp} (formerly N1QL)], then its use in transactions is very similar.
-A query returns a `TransactionQueryResult` that is very similar to the `QueryResult` you are used to, and a query takes a `TransactionQueryOptions` that provides the majority of the same options as `QueryOptions`.
+A query returns a `TransactionQueryResult` that is very similar to the `QueryResult` you are used to, and takes most of the same options.
 
 [IMPORTANT]
 ====
@@ -327,7 +327,7 @@ include::example$TransactionsExample.java[tag=queryOptions,indent=0]
 | `scanCap(int)` | Specifies a maximum cap on the query scan size.
 | `pipelineBatch(int)` | Sets the batch size for the query pipeline.
 | `pipelineCap(int)` | Sets the cap for the query pipeline.
-| `profile(QueryProfile)` | Allows to enable additional query profiling as part of the response.
+| `profile(QueryProfile)` | Allows you to enable additional query profiling as part of the response.
 | `readonly(boolean)` | Tells the client and server that this query is readonly.
 | `adhoc(boolean)` | If set to false will prepare the query and later execute the prepared statement.
 | `raw(String, Object)` | Escape hatch to add arguments that are not covered by these options.
@@ -353,6 +353,7 @@ include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=rbac]
 The reactive API allows operations to be performed concurrently inside a transaction, which can assist performance.
 
 An example of performing parallel operations using the reactive API:
+
 [source,java]
 ----
 include::example$TransactionsExample.java[tag=concurrentOps,indent=0]
