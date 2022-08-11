@@ -195,7 +195,7 @@ The following table provides an overview.
 .Recommended Spring Data Couchbase per Server Version Matrix
 [#table_spring_versions]
 |===
-|  | SDC 4.0 - 4.2
+|  | SDC 4.0 - 4.4
 
 | _Status ->_
 | _New Features, Active Development_
