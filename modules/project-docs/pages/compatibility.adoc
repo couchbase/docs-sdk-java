@@ -62,7 +62,7 @@ See the notes there for Support details.
 
 At time of release, the Couchbase 3.2 Java SDK is fully compatible with Couchbase Capella, our fully-hosted database-as-a-service.
 
-include::{version-server}@sdk:shared:partial$capella.adoc[tag=cloud]
+include::7.0@sdk:shared:partial$capella.adoc[tag=cloud]
 
 
 
