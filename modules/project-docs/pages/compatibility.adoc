@@ -3,6 +3,7 @@
 Plus notes on Cloud, networks, and AWS Lambda.
 :navtitle: Compatibility
 :page-aliases: ROOT:overview,ROOT:compatibility-versions-features,compatibility-versions-features
+:page-toclevels: 2
 
 [abstract]
 {description}
@@ -56,6 +57,13 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 
 Note the https://www.couchbase.com/support-policy[End of Life dates^] for Couchbase Server and SDK versions.
 See the notes there for Support details.
+
+=== Capella Compatibility
+
+At time of release, the Couchbase 3.2 Java SDK is fully compatible with Couchbase Capella, our fully-hosted database-as-a-service.
+
+include::{version-server}@sdk:shared:partial$capella.adoc[tag=cloud]
+
 
 
 [#jdk-compat]
