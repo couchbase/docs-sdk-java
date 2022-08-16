@@ -52,6 +52,8 @@ See the notes there for Support details.
 At time of release, the Couchbase 3.3 Java SDK is fully compatible with Couchbase Capella, our fully-hosted database-as-a-service.
 To make development easier, the 3.3 SDK includes the Capella client certificate ready installed.
 
+include::{version-server}@sdk:shared:partial$capella.adoc[tag=cloud]
+
 
 [#jdk-compat]
 == JDK Version Compatibility
