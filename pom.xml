@@ -78,7 +78,7 @@
         <dependency>
             <groupId>io.projectreactor.addons</groupId>
             <artifactId>reactor-adapter</artifactId>
-            <version>3.3.3.RELEASE</version>
+            <version>3.4.1</version>
         </dependency>
 
         <dependency>
