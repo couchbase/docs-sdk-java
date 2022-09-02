@@ -66,7 +66,7 @@ public class Migrating {
       // tag::timeoutbuilder[]
       // SDK 3 equivalent
       ClusterEnvironment env = ClusterEnvironment.builder()
-          .timeoutConfig(TimeoutConfig.kvTimeout(Duration.ofSeconds(5))).build();
+          .build();
       // end::timeoutbuilder[]
     }
 
