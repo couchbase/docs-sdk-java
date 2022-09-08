@@ -1,4 +1,4 @@
-= Migrating from SDK2 to SDK3 API
+= Migrating to SDK 3 API
 :description: The 3.x API breaks the existing 2.x APIs in order to provide a number of improvements. \
 Collections and Scopes are introduced.
 :nav-title: Migrating to Java SDK 3.x API

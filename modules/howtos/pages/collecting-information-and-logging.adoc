@@ -1,4 +1,4 @@
-= Collecting Information & Logging
+= Logging
 :description: Configuring logging; working with the event bus; and log redaction for data security.
 :page-topic-type: howto
 :page-aliases: ROOT:logging

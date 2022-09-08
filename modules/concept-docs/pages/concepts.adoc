@@ -1,6 +1,5 @@
-= Concepts Guides
+= Overview
 :description: A discursive look at the features exposed by the Couchbase Java SDK.
-:navtitle: Concepts
 :page-topic-type: landing-page
 
 [abstract]

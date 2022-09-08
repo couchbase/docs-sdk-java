@@ -1,5 +1,5 @@
 name: java-sdk
-version: '3.3'
+version: '3.4'
 title: Java SDK
 start_page: hello-world:overview.adoc
 nav:
