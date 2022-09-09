@@ -79,7 +79,7 @@ The first thing you need to do is include an andditional dependency which provid
 <dependency>
     <groupId>com.couchbase.client</groupId>
     <artifactId>tracing-opentelemetry</artifactId>
-    <version>0.3.4</version>
+    <version>1.1.4</version>
 </dependency>
 ----
 
