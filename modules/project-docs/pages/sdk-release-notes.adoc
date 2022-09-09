@@ -47,36 +47,37 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 === Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1131[JVMCBC-1131]:
-Track number of created instances.
+Added ability to track the number of created instances.
+Users can now set to hard-fail if too many instances are created.
 * https://issues.couchbase.com/browse/JVMCBC-1134[JVMCBC-1134]:
-Make `MemcachedProtocol::decodeStatus` inlineable.
+Updated `MemcachedProtocol::decodeStatus` to be inlineable.
 * https://issues.couchbase.com/browse/JVMCBC-1135[JVMCBC-1135]:
-Move `Core#reconfiguration` off IO threads.
+Moved `Core#reconfiguration` off IO threads.
 * https://issues.couchbase.com/browse/JVMCBC-1143[JVMCBC-1143]:
 Failed telemetry spans will now record their exception and error status.
 * https://issues.couchbase.com/browse/JVMCBC-1145[JVMCBC-1145]:
-Update maintenance dependencies.
+Updated maintenance dependencies.
 * https://issues.couchbase.com/browse/JCBC-1985[JCBC-1985]:
-Add optional `Cluster` instance limit.
+Added optional `Cluster` instance limit.
 * https://issues.couchbase.com/browse/JCBC-1975[JCBC-1975]:
-Support a 7.1 performance optimisation for transactions that reduces memory requirements in the clients.
+Added support for a Couchbase Server 7.1 performance optimisation for transactions that reduces memory requirements in clients.
 * https://issues.couchbase.com/browse/JCBC-1989[JCBC-1989]:
-Add `Closeable` to `Cluster`.
+Added `Closeable` capability to the `Cluster` class, which enables usage of the `try-with-resources` pattern.
 * https://issues.couchbase.com/browse/JVMCBC-1139[JVMCBC-1139]:
-Config profile prototype.
+Added support for Configuration Profiles.
+Note that this API is currently marked as `@Stability.Volatile` and could be subject to change.
 * https://issues.couchbase.com/browse/JVMCBC-1126[JVMCBC-1126]:
-Update metrics and tracing dependencies.
+Updated metrics and tracing dependencies.
 
 === Bug Fixes
 * https://issues.couchbase.com/browse/JVMCBC-1125[JVMCBC-1125]:
-Fix a rare `CompletionException` seen from transactions when a very aggressive cleanup window is configured.
+Fixed a rare `CompletionException` seen from transactions when a very aggressive cleanup window is configured.
 * https://issues.couchbase.com/browse/JVMCBC-1136[JVMCBC-1136]:
-Remove verbose transactions cleanup debug "stop on" logging that was being logged at INFO level.
+Removed verbose transactions cleanup debug "stop on" logging that was being logged at INFO level.
 * https://issues.couchbase.com/browse/JCBC-1993[JCBC-1993]:
-Fix a `NullPointerException` when there is no FTS index.
+Fixed issue where a `NullPointerException` was thrown for a non-existent FTS index.
 * https://issues.couchbase.com/browse/JCBC-1955[JCBC-1955]:
-Fixes a bug where concurrent transactions could hang due to scheduler starvation.
-
+Fixed a bug where concurrent transactions could hang due to scheduler starvation.
 
 
 == Version 3.3.3 (2 August 2022)
