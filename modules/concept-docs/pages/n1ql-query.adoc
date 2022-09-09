@@ -1,4 +1,4 @@
-= Querying with N1QL
+= Query
 :description: Parallel data management for complex queries over many records, using a familiar SQL-like syntax.
 :nav-title: Querying with N1QL
 :page-topic-type: concept

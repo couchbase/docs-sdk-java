@@ -1,4 +1,4 @@
-= Distributed ACID Transactions from the Java SDK
+= Using Couchbase Transactions
 :description: A practical guide on using Couchbase Distributed ACID transactions, via the Java SDK.
 :page-partial:
 :page-topic-type: howto
@@ -17,7 +17,7 @@ Users of the transactions library are recommended to follow the xref:project-doc
 
 This guide will show you examples of how to perform multi-document ACID (atomic, consistent, isolated, and durable) database transactions within your application, using the Couchbase Java SDK.
 
-Refer to the xref:concept-docs:transactions.adoc[Distributed ACID Transactions] concept material for a high-level overview.
+Refer to the xref:concept-docs:transactions.adoc[] page for a high-level overview.
 
 == Prerequisites
 

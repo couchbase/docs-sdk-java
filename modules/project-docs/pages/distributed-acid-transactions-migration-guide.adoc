@@ -1,4 +1,4 @@
-= Distributed Transactions Migration Guide
+= Transactions Migration Guide
 :description: For those transitioning from using the Couchbase Transactions library for Java.
 :page-toclevels: 2
 

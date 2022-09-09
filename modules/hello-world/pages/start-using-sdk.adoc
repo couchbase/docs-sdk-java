@@ -1,12 +1,19 @@
-= Install and Start Using the Java SDK with Couchbase Server
-:description: Installing the Couchbase Java SDK & a Hello World example program.
-:navtitle: Start Using the SDK
+= Start Using the Java SDK
+:description: A quick start guide to get you up and running with Couchbase and the Java SDK.
 :page-partial:
 :page-aliases: ROOT:getting-started,ROOT:start-using,ROOT:hello-couchbase,ROOT:start-using-sdk,ROOT:java-intro,ROOT:tutorial
+:page-toclevels: 2
+:page-pagination: next
+
+[abstract]
+{description}
+
+The Couchbase Java client allows applications to access a Couchbase database.
+It offers synchronous APIs as well as reactive and asynchronous equivalents to maximize flexibility and performance.
 
 == Hello Couchbase
 
-On this page we show you how to quickly get up and running --  installing the Couchbase Java SDK, and trying out the Hello World code example against Couchbase Capella, or against a local Couchbase cluster.
+On this page we show you how to quickly get up and running -- installing the Couchbase Java SDK, and trying out the Hello World code example against Couchbase Capella, or against a local Couchbase cluster.
 
 We will go through the code sample step by step, but for those in a hurry to see it, here it is:
 

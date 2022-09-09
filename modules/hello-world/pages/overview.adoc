@@ -1,111 +1,113 @@
-= Couchbase Java SDK 3.3
-:page-type: landing-page
+= Couchbase Java SDK 3.4
 :page-layout: landing-page-top-level-sdk
 :page-role: tiles
-:!sectids:
 
+= Couchbase Java SDK 3.4
 
-++++
-<div class="card-row two-column-row">
-++++
-
-
-[.column]
-====== {empty}
-[.content]
-The Couchbase Java client allows Java applications to access a Couchbase cluster.
-It offers synchronous APIs as well as reactive and asynchronous equivalents to maximize flexibility and performance.
-
-[.column]
-[.content]
 [source,java]
 ----
 include::hello-world:example$Overview.java[tag=overview,indent=0]
 ----
 
-++++
-</div>
-++++
+The Couchbase Java client allows applications to access a Couchbase database.
+It offers synchronous APIs as well as reactive and asynchronous equivalents to maximize flexibility and performance. +
 
+{empty} +
 
+== icon:database[] Using Your Database
 
-[.column]
-====== {empty}
-
-== Couchbase Java SDK 3.3
+How-to guides to help you start your development journey with Couchbase and the Java SDK.
 
 ++++
 <div class="card-row three-column-row">
 ++++
 
-
 [.column]
-====== {empty}
 .Getting Started
-
-[.content]
-* Dive right in with a xref:start-using-sdk.adoc[quick install and Hello World].
-* Try out our xref:sample-application.adoc[Travel Sample Application].
-* Compare and contrast with our xref:spring-data-sample-application.adoc[Spring Data sample App].
-
-[.column]
-====== {empty}
-.Practical Howto Docs
-
-[.content]
-Connect to our services -- xref:howtos:kv-operations.adoc[data (KV)]; 
-xref:howtos:n1ql-queries-with-sdk.adoc[Query]; 
-xref:howtos:full-text-searching-with-sdk.adoc[Search]; 
-xref:howtos:analytics-using-sdk.adoc[Analytics]; 
-xref:howtos:view-queries-with-sdk.adoc[Views] -- 
-and the xref:howtos:subdocument-operations.adoc[Sub-Document] and xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[transaction] APIs.
+* xref:hello-world:start-using-sdk.adoc[]
+* xref:howtos:kv-operations.adoc[]
+* xref:howtos:n1ql-queries-with-sdk.adoc[]
+* xref:howtos:full-text-searching-with-sdk.adoc[]
+* xref:hello-world:sample-application.adoc[]
+* xref:hello-world:spring-data-sample-application.adoc[]
 
 [.column]
-====== {empty}
-.Reference Guides
-
-[.content]
-The documentation supplements the practical Howto docs with references and xref:concept-docs:concepts.adoc[concept guides], for those who prefer a broader understanding before diving in and coding.
-
-https://docs.couchbase.com/sdk-api/couchbase-java-client/[API Docs^]
-
+.Transactions
+* xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[]
+* xref:concept-docs:transactions.adoc[]
 
 [.column]
-====== {empty}
-.What's Hot?
-
-[.content]
-Leverage the new Couchbase Server Scopes and Collection features to build multi-tenant micro-service application.
-Integrate with Open Telemetry API to instrument telemetry data for your mission critical workloads that will make troubleshooting and debugging of your applications easier than ever.
-Add an additional layer of security and protect your sensitive workloads using our Client Side Field Level Encryption capability. 
-
-Our xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Distributed ACID Transactions] library is now integrated into the Java SDK.
+.Working with Data
+* xref:howtos:subdocument-operations.adoc[]
+* xref:howtos:analytics-using-sdk.adoc[]
+* xref:howtos:encrypting-using-sdk.adoc[]
+* xref:howtos:working-with-collections.adoc[Working with Collections]
 
 [.column]
-====== {empty}
-.About
-
-[.content]
-Those useful nuts-and-bolts guides to 
-xref:project-docs:compatibility.adoc[compatibility tables]; 
-xref:project-docs:sdk-release-notes.adoc[release notes]; 
-xref:project-docs:get-involved.adoc[contribution guide]; and the 
-xref:project-docs:migrating-sdk-code-to-3.n.adoc[migration guide] for moving to the 3.x API.
+.Managing Couchbase
+* xref:howtos:managing-connections.adoc[]
+* xref:howtos:sdk-authentication.adoc[]
+* xref:howtos:provisioning-cluster-resources.adoc[]
+* xref:howtos:sdk-user-management-example.adoc[]
 
 [.column]
-====== {empty}
-.Community
-
-[.content]
-For community help, visit the https://forums.couchbase.com/c/java-sdk/5[Couchbase forums^].
-The Java SDK can be combined with many other projects in the broader Java and JVM ecosystem and beyond.
-This includes xref:project-docs:compatibility.adoc#spring-compat[Spring Data] and xref:spark-connector::getting-started.adoc[Spark].
-//  -- in the https://blog.couchbase.com/[Couchbase Blog^] there are examples covering everything from ????
-[]
-xref:project-docs:third-party-integrations.adoc[Integrations & Ecosystem]; 
+.Errors & Diagnostics
+* xref:howtos:error-handling.adoc[]
+* xref:howtos:collecting-information-and-logging.adoc[]
+* xref:howtos:slow-operations-logging.adoc[]
 
 ++++
 </div>
 ++++
 
-include::7.1@sdk:shared:partial$archive.adoc[tag=link]
+== icon:graduation-cap[] Learn
+
+Take a deep-dive into our concept material and learn more about Couchbase.
+
+++++
+<div class="card-row three-column-row">
+++++
+
+[.column]
+.Data Concepts
+* xref:concept-docs:data-model.adoc[]
+* xref:concept-docs:data-services.adoc[Service Selection]
+* xref:concept-docs:encryption.adoc[Field Level Encryption]
+
+[.column]
+.Errors & Diagnostics Concepts
+* xref:concept-docs:errors.adoc[]
+* xref:concept-docs:response-time-observability.adoc[]
+* xref:concept-docs:durability-replication-failure-considerations.adoc[]
+
+++++
+</div>
+++++
+
+== icon:book[] Resources
+
+Useful resources to help support your development experience with Couchbase and the Java SDK.
+
+++++
+<div class="card-row three-column-row">
+++++
+
+[.column]
+.Reference
+* https://docs.couchbase.com/sdk-api/couchbase-java-client/[API Reference]
+* xref:ref:client-settings.adoc[]
+* xref:ref:error-codes.adoc[]
+* xref:ref:glossary.adoc[Glossary]
+* xref:ref:travel-app-data-model.adoc[]
+
+[.column]
+.Project Docs
+* xref:project-docs:sdk-release-notes.adoc[]
+* xref:project-docs:compatibility.adoc[Compatibility]
+* xref:project-docs:migrating-sdk-code-to-3.n.adoc[]
+* xref:project-docs:third-party-integrations.adoc[]
+* xref:project-docs:sdk-full-installation.adoc[Full Installation]
+
+++++
+</div>
+++++

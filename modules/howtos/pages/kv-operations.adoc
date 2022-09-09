@@ -1,10 +1,11 @@
-= Key Value Operations
-:description: Key Value (KV) or data service offers the simplest way to retrieve or mutate data where the key is known.
-:navtitle: KV Operations
+= Data Operations
+:description: Data service offers the simplest way to retrieve or mutate data where the key is known.
 :page-topic-type: howto
 :page-aliases: ROOT:document-operations.adoc,ROOT:documents-creating,ROOT:documents-updating,ROOT:documents-retrieving,ROOT:documents-deleting
 :example-source: 3.2@java-sdk:howtos:example$Queries.java
 :page-toclevels: 2
+:page-pagination: full
+
 include::project-docs:partial$attributes.adoc[]
 
 [abstract]

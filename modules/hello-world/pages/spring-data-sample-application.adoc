@@ -1,9 +1,8 @@
 = Spring Data Sample Application
-:description: Discover how to program interactions with Spring Data and Couchbase Server via the Data, Query, \
-and Search services -- using the Travel Sample Application with the built-in Travel Sample data Bucket.
-:nav-title: Spring Data Travel Sample App
+:description: Discover how to program interactions with Spring Data and Couchbase via the Data, Query, and Search services.
 :content-type: tutorial
 :page-topic-type: tutorial
+:page-pagination: prev
 
 :travel-sample-git-project: try-cb-spring
 

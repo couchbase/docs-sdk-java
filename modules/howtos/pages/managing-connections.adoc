@@ -1,4 +1,4 @@
-= Managing Connections using the Java SDK with Couchbase Server
+= Managing Connections
 :description: This section describes how to connect the Java SDK to a Couchbase cluster.
 :navtitle: Managing Connections
 :page-topic-type: howto

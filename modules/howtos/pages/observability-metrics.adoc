@@ -1,4 +1,4 @@
-= Observability Metrics Reporting
+= Metrics Reporting
 :description: Individual request tracing presents a very specific (though isolated) view of the system.
 :page-topic-type: howto
 

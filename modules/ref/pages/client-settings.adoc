@@ -1,4 +1,4 @@
-= Client Settings for the Java SDK
+= Client Settings
 :description: pass:q[The `ClusterEnvironment` class enables you to configure Java SDK options for security, timeouts, reliability, and performance.]
 :nav-title: Client Settings
 :page-topic-type: reference
