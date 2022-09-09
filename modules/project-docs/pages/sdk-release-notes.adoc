@@ -17,6 +17,68 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 
 // tag::all[]
+== Version 3.3.4 (9 September 2022)
+
+Version 3.3.4 is the fifth release of the 3.3 series, and is a maintenance release.
+
+https://packages.couchbase.com/clients/java/3.3.4/Couchbase-Java-Client-3.3.4.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.3.4/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.3.4/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.3.4**
+* com.couchbase.client:**core-io:2.3.4**
+* io.projectreactor:**reactor-core:3.4.22**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.1.4   | OpenTelemetry 1.16.0       | Committed
+| `tracing-opentracing`     | 1.1.4   | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.3.4   | OpenTelemetry 1.16.0       | Volatile
+| `metrics-micrometer`      | 0.3.4   | Micrometer 1.9.2           | Volatile
+|=======================
+
+
+=== Improvements
+* https://issues.couchbase.com/browse/JVMCBC-1131[JVMCBC-1131]:
+Track number of created instances.
+* https://issues.couchbase.com/browse/JVMCBC-1134[JVMCBC-1134]:
+Make `MemcachedProtocol::decodeStatus` inlineable.
+* https://issues.couchbase.com/browse/JVMCBC-1135[JVMCBC-1135]:
+Move `Core#reconfiguration` off IO threads.
+* https://issues.couchbase.com/browse/JVMCBC-1143[JVMCBC-1143]:
+Failed telemetry spans will now record their exception and error status.
+* https://issues.couchbase.com/browse/JVMCBC-1145[JVMCBC-1145]:
+Update maintenance dependencies.
+* https://issues.couchbase.com/browse/JCBC-1985[JCBC-1985]:
+Add optional `Cluster` instance limit.
+* https://issues.couchbase.com/browse/JCBC-1975[JCBC-1975]:
+Support a 7.1 performance optimisation for transactions that reduces memory requirements in the clients.
+* https://issues.couchbase.com/browse/JCBC-1989[JCBC-1989]:
+Add `Closeable` to `Cluster`.
+* https://issues.couchbase.com/browse/JVMCBC-1139[JVMCBC-1139]:
+Config profile prototype.
+* https://issues.couchbase.com/browse/JVMCBC-1126[JVMCBC-1126]:
+Update metrics and tracing dependencies.
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/JVMCBC-1125[JVMCBC-1125]:
+Fix a rare `CompletionException` seen from transactions when a very aggressive cleanup window is configured.
+* https://issues.couchbase.com/browse/JVMCBC-1136[JVMCBC-1136]:
+Remove verbose transactions cleanup debug "stop on" logging that was being logged at INFO level.
+* https://issues.couchbase.com/browse/JCBC-1993[JCBC-1993]:
+Fix a `NullPointerException` when there is no FTS index.
+* https://issues.couchbase.com/browse/JCBC-1955[JCBC-1955]:
+Fixes a bug where concurrent transactions could hang due to scheduler starvation.
+
+
+
 == Version 3.3.3 (2 August 2022)
 
 Version 3.3.3 is the fourth release of the 3.3 series, and is a maintenance release.
