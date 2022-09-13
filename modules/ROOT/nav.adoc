@@ -54,7 +54,7 @@
 ** xref:concept-docs:nonjson.adoc[]
 ** xref:concept-docs:subdocument-operations.adoc[Sub-Documents]
 ** xref:concept-docs:xattr.adoc[XATTR & Virtual XATTR]
-* xref:concept-docs:errors.adoc[]
+* xref:concept-docs:errors.adoc[Errors & Diagnostics]
 ** xref:concept-docs:health-check.adoc[]
 ** xref:concept-docs:response-time-observability.adoc[]
 * xref:concept-docs:durability-replication-failure-considerations.adoc[]

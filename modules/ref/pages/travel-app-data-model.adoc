@@ -1,4 +1,1 @@
-= Travel Sample Data Model
-:page-topic-type: reference
-
 include::7.1@sdk:pages:partial$travel-app-data-model.adoc[tag=model]
