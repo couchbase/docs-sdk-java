@@ -45,11 +45,11 @@ Refer to the xref:{version-server}@server:learn:security/roles.adoc[Roles] page 
 --
 ====
 
-include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
+include::{version-common}@sdk:shared:partial$acid-transactions.adoc[tag=requirements]
 
 == Creating a Transaction 
 
-include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=creating]
+include::{version-common}@sdk:shared:partial$acid-transactions.adoc[tag=creating]
 
 You can create transactions either _synchronously_ or _asynchronously_ (using the https://projectreactor.io/[Project Reactor] reactive library).
 
@@ -84,9 +84,9 @@ include::example$TransactionsExample.java[tag=examplesReactive,indent=0]
 --
 ====
 
-include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=lambda-ctx]
+include::{version-common}@sdk:shared:partial$acid-transactions.adoc[tag=lambda-ctx]
 
-include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=creating-error]
+include::{version-common}@sdk:shared:partial$acid-transactions.adoc[tag=creating-error]
 
 === Logging
 
@@ -346,7 +346,7 @@ include::example$TransactionsExample.java[tag=queryRyow,indent=0]
 <1> The key-value insert operation is only staged, and so it is not visible to other transactions or non-transactional actors.
 <2> But the `SELECT` can view it, as the insert was in the same transaction.
 
-include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=rbac]
+include::{version-common}@sdk:shared:partial$acid-transactions.adoc[tag=rbac]
 
 == Concurrent Operations
 
@@ -359,7 +359,7 @@ An example of performing parallel operations using the reactive API:
 include::example$TransactionsExample.java[tag=concurrentOps,indent=0]
 ----
 
-include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=query-perf-note]
+include::{version-common}@sdk:shared:partial$acid-transactions.adoc[tag=query-perf-note]
 
 === Non-Transactional Writes
 
@@ -395,7 +395,7 @@ or alternatively use this {lambda} syntax, which leads to the `ClusterEnvironmen
 include::example$TransactionsExample.java[tag=config-easy,indent=0]
 ----
 
-include::{version-server}@sdk:shared:partial$acid-transactions.adoc[tag=config]
+include::{version-common}@sdk:shared:partial$acid-transactions.adoc[tag=config]
 
 == Additional Resources
 

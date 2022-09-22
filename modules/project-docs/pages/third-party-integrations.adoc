@@ -7,17 +7,17 @@
 {description}
 
 
-include::7.1@sdk:shared:partial$integrations.adoc[tag=intro]
+include::{version-common}@sdk:shared:partial$integrations.adoc[tag=intro]
 
 
-include::7.1@sdk:shared:partial$integrations.adoc[tag=official]
+include::{version-common}@sdk:shared:partial$integrations.adoc[tag=official]
 
 The Couchbase Java SDK is a first class citizen in the https://spring.io/projects/spring-data-couchbase[Spring Data] world, and there are many examples of using the SDK with https://blog.couchbase.com/couchbase-spring-boot-spring-data/[Spring Boot] and Spring Data (and Spring Data JPA).
 
 Couchbase also supports integrating with xref:3.2@spark-connector:ROOT:java-api.adoc[Spark].
 
 
-include::7.1@sdk:shared:partial$integrations.adoc[tag=important]
+include::{version-common}@sdk:shared:partial$integrations.adoc[tag=important]
 
 Many dataflow tools integrate with Couchbase, including https://github.com/apache/nifi/tree/main/nifi-nar-bundles/nifi-couchbase-bundle[Apache NiFi], 
 https://wildfly-extras.github.io/wildfly-camel/#_camel_couchbase[Apache Camel],
@@ -25,7 +25,7 @@ and https://github.com/couchbaselabs/flink-connector-couchbase[Apache Flink].
 Why not make development easier, and use https://blog.couchbase.com/create-a-zeppelin-interpreter-for-couchbase/[Apache Zeppelin]?
 
 
-include::7.1@sdk:shared:partial$integrations.adoc[tag=other]
+include::{version-common}@sdk:shared:partial$integrations.adoc[tag=other]
 
 https://github.com/differentway/couchmove[Couchmove] is an open-source Java migration tool for Couchbase, inspired by Flyway.
 It can help you "track, manage and apply changes, in your Couchbase buckets."

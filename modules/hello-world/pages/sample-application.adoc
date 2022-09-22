@@ -9,13 +9,13 @@
 
 include::project-docs:partial$attributes.adoc[]
 
-include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=abstract]
+include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=abstract]
 
-include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=quick-start]
+include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=quick-start]
 
-include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=bring-your-own]
+include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=bring-your-own]
 
-include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=using]
+include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=using]
 
 
 
@@ -95,6 +95,6 @@ Here, the _flights_ array, containing the flight IDs, is converted to actual obj
 ----
 
 
-include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=data-model]
+include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=data-model]
 
-include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=rest-api]
+include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=rest-api]

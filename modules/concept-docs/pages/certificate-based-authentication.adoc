@@ -1,1 +1,1 @@
-include::7.1@sdk:pages:partial$certificates.adoc[]
+include::{version-common}@sdk:pages:partial$certificates.adoc[]

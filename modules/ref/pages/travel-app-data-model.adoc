@@ -1,1 +1,1 @@
-include::7.1@sdk:pages:partial$travel-app-data-model.adoc[tag=model]
+include::{version-common}@sdk:pages:partial$travel-app-data-model.adoc[tag=model]

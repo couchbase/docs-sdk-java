@@ -7,9 +7,9 @@
 {description}
 
 
-include::7.1@sdk:pages:partial$health-check.adoc[tag="intro"]
+include::{version-common}@sdk:pages:partial$health-check.adoc[tag="intro"]
 
-include::7.1@sdk:pages:partial$health-check.adoc[tag="uses"]
+include::{version-common}@sdk:pages:partial$health-check.adoc[tag="uses"]
 
 == Ping
 A call to `ping` actively sends requests to the different services on the target cluster, measuring the latency and returning any errors as part of the report.

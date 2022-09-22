@@ -30,9 +30,9 @@ Only the relevant data is exchanged between client and server, allowing for less
 
 
 
-// include::7.1@sdk:shared:partial$data-model.adoc[tag=intro]
+// include::{version-common}@sdk:shared:partial$data-model.adoc[tag=intro]
 
-// include::7.1@sdk:shared:partial$data-model.adoc[tag=structures]
+// include::{version-common}@sdk:shared:partial$data-model.adoc[tag=structures]
 
 // == Creating a Data Structure
 

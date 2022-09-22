@@ -10,13 +10,13 @@ include::project-docs:partial$attributes.adoc[]
 // override :name-sdk: from attributes.adoc
 :name-sdk: Java Spring Data
 
-include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=abstract]
+include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=abstract]
 
-include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=quick-start]
+include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=quick-start]
 
-include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=bring-your-own]
+include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=bring-your-own]
 
-include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=using]
+include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=using]
 
 
 == Sample App Backend
@@ -103,6 +103,6 @@ List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
   }
 ----
 
-include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=data-model]
+include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=data-model]
 
-include::{version-server}@sdk:shared:partial$sample-application.adoc[tag=rest-api]
+include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=rest-api]

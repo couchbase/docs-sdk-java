@@ -204,7 +204,7 @@ E.....@.@.............+....Z.'yZ..#........
 .%v.....4....m*...A.2I.1.&.*,6+..#..#.5
 ----
 
-include::7.1@sdk:shared:partial$dnssrv-pars.adoc[tag=dnssrv]
+include::{version-common}@sdk:shared:partial$dnssrv-pars.adoc[tag=dnssrv]
 
 DNS SRV bootstrapping is available in the Java SDK from version 2.1.0.
 In order to make the SDK actually use the SRV records, you need to enable DNS SRV on the environment and pass in the host name from your records (here `example.com`):
@@ -257,7 +257,7 @@ _plus_ it waits for the K-V (data) sockets to be ready.
 Other timeout issues may occur when using the SDK located geographically separately from the Couchbase Server cluster -- this is xref:project-docs:compatibility#network-requirements[not recommended].
 See the xref:#working-in-the-cloud[Cloud section] below for some suggestions of settings adjustments.
 
-include::7.1@sdk:shared:partial$managing-connections.adoc[tag=cloud]
+include::{version-common}@sdk:shared:partial$managing-connections.adoc[tag=cloud]
 
 
 == Async and Reactive APIs

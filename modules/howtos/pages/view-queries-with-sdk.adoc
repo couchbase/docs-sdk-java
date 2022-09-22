@@ -6,11 +6,11 @@
 [abstract]
 {description}
 
-// include::{version-server}@sdk:shared:partial$views.adoc[tag=deprecate]
-include::7.1@sdk:shared:partial$views.adoc[tag=deprecate]
+// include::{version-common}@sdk:shared:partial$views.adoc[tag=deprecate]
+include::{version-common}@sdk:shared:partial$views.adoc[tag=deprecate]
 
 
-include::7.1@sdk:shared:partial$views.adoc[tag=views-intro]
+include::{version-common}@sdk:shared:partial$views.adoc[tag=views-intro]
 
 == Querying Views
 

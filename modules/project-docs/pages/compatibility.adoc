@@ -52,7 +52,7 @@ See the notes there for Support details.
 At time of release, the Couchbase 3.3 Java SDK is fully compatible with Couchbase Capella, our fully-hosted database-as-a-service.
 To make development easier, the 3.3 SDK includes the Capella client certificate ready installed.
 
-include::{version-server}@sdk:shared:partial$capella.adoc[tag=cloud]
+include::{version-common}@sdk:shared:partial$capella.adoc[tag=cloud]
 
 
 [#jdk-compat]
@@ -185,7 +185,7 @@ Since SDK 3.0 with With Java Transactions Libraryfootnote:[3.0.7 or more recent 
 3+| Since SDK 3.1.0
 |===
 
-include::7.1@sdk:shared:partial$network-requirements.adoc[]
+include::{version-common}@sdk:shared:partial$network-requirements.adoc[]
 
 
 [#spring-compat]
@@ -231,8 +231,8 @@ In case of errors, override with Core IO's preferred version, e.g.:
 ----
 ====
 
-include::7.1@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]
+include::{version-common}@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]
 
-include::7.1@sdk:shared:partial$api-version.adoc[tag=api-version]
+include::{version-common}@sdk:shared:partial$api-version.adoc[tag=api-version]
 
-include::7.1@sdk:shared:partial$archive.adoc[tag=link]
+include::{version-common}@sdk:shared:partial$archive.adoc[tag=link]

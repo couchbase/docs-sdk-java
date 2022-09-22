@@ -286,7 +286,7 @@ include::example$KvOperations.cs[tag=binarydecrementwithoptions,indent=0]
 NOTE: Increment & Decrement are considered part of the ‘binary’ API and as such may still be subject to change
 
 
-include::7.1@sdk:shared:partial$atomic.adoc[tag=xdcr]
+include::{version-common}@sdk:shared:partial$atomic.adoc[tag=xdcr]
 
 
 == Scoped KV Operations

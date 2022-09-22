@@ -5,13 +5,13 @@ include::project-docs:partial$attributes.adoc[]
 // TODO: Add this back when we release SDK 3.4 and remove from 3.3
 // 7.1@server:developer-guide:cas-concurrency.adoc
 
-include::7.1@sdk:shared:partial$cas.adoc[tag=intro]
+include::{version-common}@sdk:shared:partial$cas.adoc[tag=intro]
 
-include::7.1@sdk:shared:partial$cas.adoc[tag=demo]
+include::{version-common}@sdk:shared:partial$cas.adoc[tag=demo]
 
-include::7.1@sdk:shared:partial$cas.adoc[tag=example]
+include::{version-common}@sdk:shared:partial$cas.adoc[tag=example]
 
-include::7.1@sdk:shared:partial$cas.adoc[tag=errors]
+include::{version-common}@sdk:shared:partial$cas.adoc[tag=errors]
 
 [source,java]
 ----
@@ -21,11 +21,11 @@ include::example$Cas.java[tag=handlingerrors,indent=0]
 Sometimes more logic is needed when performing updates, for example, if a property is mutually exclusive with another property; only one or the other can exist, but not both.
 
 
-include::7.1@sdk:shared:partial$cas.adoc[tag=performance]
+include::{version-common}@sdk:shared:partial$cas.adoc[tag=performance]
 
-include::7.1@sdk:shared:partial$cas.adoc[tag=format]
+include::{version-common}@sdk:shared:partial$cas.adoc[tag=format]
 
-include::7.1@sdk:shared:partial$cas.adoc[tag=locking]
+include::{version-common}@sdk:shared:partial$cas.adoc[tag=locking]
 
 [source,java]
 ----
