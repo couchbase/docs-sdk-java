@@ -1,4 +1,4 @@
-= Views
+= MapReduce Views
 :description: You can use MapReduce views to create queryable indexes in Couchbase Server.
 :page-topic-type: howto
 :page-aliases: ROOT:view-queries-with-sdk
