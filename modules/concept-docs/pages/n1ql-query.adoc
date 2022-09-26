@@ -4,6 +4,8 @@
 :page-topic-type: concept
 :page-aliases: ROOT:n1ql-query,ROOT:prepared-statements,ROOT:querying
 
+include::project-docs:partial$attributes.adoc[]
+
 [abstract]
 {description}
 

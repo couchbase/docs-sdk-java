@@ -3,6 +3,8 @@
 :page-topic-type: howto
 :page-aliases: ROOT:view-queries-with-sdk
 
+include::project-docs:partial$attributes.adoc[]
+
 [abstract]
 {description}
 

@@ -5,6 +5,8 @@
 :page-aliases: ROOT:client-settings, ROOT:env-config
 :page-toclevels: 2
 
+include::project-docs:partial$attributes.adoc[]
+
 [abstract]
 {description}
 

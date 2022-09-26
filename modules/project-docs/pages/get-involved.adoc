@@ -1,6 +1,8 @@
 = Get Involved
 :navtitle: Get Involved
 
+include::project-docs:partial$attributes.adoc[]
+
 == Contributing
 
 Couchbase welcomes community contributions to the Java SDK.

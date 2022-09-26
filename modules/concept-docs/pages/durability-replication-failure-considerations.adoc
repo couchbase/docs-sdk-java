@@ -5,6 +5,8 @@
 // TODO: Add this back when we release SDK 3.4 and remove from 3.3
 //7.1@server:developer-guide:durability.adoc
 
+include::project-docs:partial$attributes.adoc[]
+
 [abstract]
 {description}
 Even the most reliable software and hardware might fail at some point, and along with the failures, introduce a chance of data loss.

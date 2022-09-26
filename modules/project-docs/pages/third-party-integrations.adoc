@@ -2,6 +2,8 @@
 :description: The Couchbase Java SDK is often used with unofficial and third party tools and applications to integrate into broader language and platform ecosystems, and across data lakes in heterogeneous environments.
 :page-topic-type: project-doc
 
+include::project-docs:partial$attributes.adoc[]
+
 [abstract]
 
 {description}

@@ -2,6 +2,8 @@
 :description: A discursive look at the features exposed by the Couchbase Java SDK.
 :page-topic-type: landing-page
 
+include::project-docs:partial$attributes.adoc[]
+
 [abstract]
 {description}
 

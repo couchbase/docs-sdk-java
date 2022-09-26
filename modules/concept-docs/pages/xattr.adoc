@@ -4,6 +4,8 @@
 :page-topic-type: concept
 :page-aliases: sdk-xattr-overview,ROOT:sdk-xattr-overview
 
+include::project-docs:partial$attributes.adoc[]
+
 [abstract]
 {description}
 

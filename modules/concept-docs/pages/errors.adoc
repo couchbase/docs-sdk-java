@@ -4,6 +4,8 @@
 :page-topic-type: concept
 :page-aliases: handling-error-conditions
 
+include::project-docs:partial$attributes.adoc[]
+
 [abstract]
 {description}
 

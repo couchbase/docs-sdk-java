@@ -4,6 +4,8 @@
 :page-topic-type: howto
 :page-aliases: ROOT:managing-connections,howtos:multi-network,ROOT:connecting,ROOT:connection-advanced
 
+include::project-docs:partial$attributes.adoc[]
+
 [abstract]
 {description}
 It contains best practices as well as information on TLS/SSL and other advanced connection options.
