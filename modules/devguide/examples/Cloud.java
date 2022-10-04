@@ -42,7 +42,7 @@ import com.couchbase.client.java.query.QueryResult;
 
 /**
  * Example of Cas (Check and Set) handling in Java for the Couchbase Developer
- * Guide ported from 2.x. See CloudConnect.java for 3.x.
+ * Guide ported from 2.x. See StartUsingCloud.java for 3.x.
  */
 
 public class Cloud {
