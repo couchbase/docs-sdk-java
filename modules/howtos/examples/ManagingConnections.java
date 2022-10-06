@@ -167,6 +167,13 @@ public class ManagingConnections {
     }
 
     {
+      // tag::tls-no-trust[]
+      ClusterEnvironment env = ClusterEnvironment.builder()
+              .securityConfig(SecurityConfig.enableTls(true)).build();
+      // end::tls-no-trust[]
+    }
+
+    {
       // tag::dnssrv[]
       ClusterEnvironment env = ClusterEnvironment.builder().ioConfig(IoConfig.enableDnsSrv(true)).build();
       // end::dnssrv[]
