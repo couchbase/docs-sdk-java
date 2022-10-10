@@ -157,21 +157,24 @@ Make sure you have the Enterprise Edition of Couchbase Server, or a Couchbase Ca
 Couchbase Capella::
 +
 --
-The Java SDK includes Capella’s standard root certificate by default, which means you don’t need any additional configuration to enable TLS.
-Simply use `couchbases://` in your connection string, or `SecurityConfig.enableTls(true)` in your `SecurityConfig` settings.
+The Java SDK bundles Capella’s standard root certificate by default.
+This means you don’t need any additional configuration to enable TLS -- simply use `couchbases://` in your connection string.
+
+NOTE: Capella's root certificate is *not* signed by a well known CA (Certificate Authority).
+However, as the certificate is bundled with the SDK, it is trusted by default.
 --
 
 Couchbase Server::
 +
 --
-As of SDK 3.4, if your cluster's root certificate is signed by a well known Certificate Authority (e.g., GoDaddy, Verisign, etc) and is included in the JVM's trust store, you no longer need to configure the certificate in the `securityConfig` settings.
+As of SDK 3.4, if you connect to a Couchbase Server cluster with a root certificate issued by a trusted CA (Certificate Authority), you no longer need to configure this in the `securityConfig` settings.
 
-[source,java]
-----
-include::example$ManagingConnections.java[tag=tls-no-trust,indent=0]
-----
+The cluster's root certificate just needs to be issued by a CA whose certificate is in the JVM's trust store.
+This includes well known CAs (e.g., GoDaddy, Verisign, etc...), plus any other CA certificates that you wish to add.
 
-However, you can still provide a certificate explicitly if necessary:
+TIP: Trusted certificates are stored in a special file named `cacerts`, which lives inside your Java installation folder.
+
+You can still provide a certificate explicitly if necessary:
 
 . Get the CA certificate from the cluster and save it in a text file.
 . Enable encryption on the client side and point it to the file containing the certificate.
@@ -181,7 +184,8 @@ It is important to make sure you are transferring the certificate in an encrypte
 If you are running on `localhost` and just want to enable TLS for a development machine, just copying and pasting it suffices
 -- _so long as you use `127.0.0.1` rather than `localhost` in the connection string_.
 This is because the certificate will not match the name _localhost_.
-Setting `TLSSkipVerify` is a workaround if you need to use `couchbases://localhost`.
+
+Setting `InsecureTrustManagerFactory.INSTANCE` in the `securityConfig` settings is a workaround if you need to use `couchbases://localhost`.
 
 Navigate in the admin UI to menu:Settings[Cluster] and copy the input box of the TLS certificate into a file on your machine (which we will refer to as `cluster.cert`).
 It looks similar to this:
@@ -206,9 +210,6 @@ The next step is to enable encryption and pass it the path to the certificate fi
 ----
 include::example$ManagingConnections.java[tag=tls,indent=0]
 ----
-
-Then use this custom `ClusterEnvironment` when opening the connection to the cluster.
-See <<cluster-environment>> for an example of creating a `Cluster` with a custom environment.
 
 If you want to verify it's actually working, you can use a tool like [.cmd]`tcpdump`.
 For example, an unencrypted upsert request looks like this (using `sudo tcpdump -i lo0 -A -s 0 port 11210`):
