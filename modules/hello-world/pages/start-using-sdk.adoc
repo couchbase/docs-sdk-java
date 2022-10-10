@@ -197,7 +197,6 @@ From version 3.3, the Java SDK includes Capella’s standard certificates by def
 You do need to enable TLS, which can be done by simply using `couchbases://` in the connection string as in this example.
 
 Alternatively, you can use a xref:howtos:managing-connections.adoc#cluster-environment[Cluster Environment] when you need to customize the client’s behavior (e.g. changing connection timeout settings).
-You will also need to enable TLS, but in this case using a `SecurityConfig`:
 
 [source,java]
 ----

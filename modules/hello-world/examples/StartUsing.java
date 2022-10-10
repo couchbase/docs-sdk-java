@@ -1,13 +1,10 @@
 // tag::start-using[]
 // tag::imports[]
-import com.couchbase.client.core.env.SecurityConfig;
 import com.couchbase.client.java.*;
-import com.couchbase.client.java.env.ClusterEnvironment;
 import com.couchbase.client.java.kv.*;
 import com.couchbase.client.java.json.*;
 import com.couchbase.client.java.query.*;
 
-import java.nio.file.Paths;
 import java.time.Duration;
 // end::imports[]
 
@@ -22,27 +19,25 @@ public class StartUsing {
 
   public static void main(String... args) {
     // tag::connect-string[]
+    // For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
     Cluster cluster = Cluster.connect("couchbase://" + connectionString, username, password);
     // end::connect-string[]
     cluster.disconnect();
 
     // tag::connect-env[]
-    ClusterEnvironment env = ClusterEnvironment.builder()
-            // Customize client settings by calling methods on the builder.
-            // For example, you can enable TLS with the code below:
-            // .securityConfig(SecurityConfig.enableTls(true).trustCertificate(Paths.get("/path/to/cluster.cert")))
-            .build();
-
+    // For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
     cluster = Cluster.connect(
-            connectionString,
-            ClusterOptions.clusterOptions(username, password).environment(env)
+            "couchbase://" + connectionString,
+            ClusterOptions.clusterOptions(username, password).environment(env -> {
+              // Customize client settings by calling methods on the builder.
+            })
     );
     // end::connect-env[]
     
     // tag::bucket[]
     // get a bucket reference
     Bucket bucket = cluster.bucket(bucketName);
-    bucket.waitUntilReady(Duration.parse("PT10S")) ;
+    bucket.waitUntilReady(Duration.ofSeconds(10));
     // end::bucket[]
 
     // tag::collection[]

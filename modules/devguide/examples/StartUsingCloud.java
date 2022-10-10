@@ -1,24 +1,18 @@
 // tag::cloud-connect[]
 // tag::imports[]
-import static com.couchbase.client.java.query.QueryOptions.queryOptions;
-
-import com.couchbase.client.core.env.SecurityConfig;
 import com.couchbase.client.java.*;
-import com.couchbase.client.java.env.ClusterEnvironment;
 import com.couchbase.client.java.kv.*;
 import com.couchbase.client.java.json.*;
 import com.couchbase.client.java.query.*;
 
 import java.time.Duration;
-
-import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 // end::imports[]
 
 
 public class StartUsingCloud {
   // tag::connect-info[]
   // Update these variables to point to your Couchbase Capella instance and credentials.
-  static String connectionString = "cb.5lql7zxho580-tyt.cloud.couchbase.com";
+  static String connectionString = "cb.<your-endpoint-here>.cloud.couchbase.com";
   static String username = "username";
   static String password = "Password!123";
   static String bucketName = "travel-sample";
@@ -26,24 +20,21 @@ public class StartUsingCloud {
 
   public static void main(String... args) {
     // tag::connect-string[]
-    // Simple connection with TLS enabled.
+    // Simple connection.
     Cluster cluster = Cluster.connect("couchbases://" + connectionString, username, password);
     // end::connect-string[]
     cluster.disconnect();
 
     // tag::connect-env[]
-    // Custom environment connection with TLS enabled.
-    ClusterEnvironment env = ClusterEnvironment.builder()
-            .securityConfig(SecurityConfig.enableTls(true))
-            // Sets a pre-configured profile called "wan-development" to help avoid latency issues
-            // when accessing Capella from a different Wide Area Network
-            // or Availability Zone (e.g. your laptop).
-            .applyProfile("wan-development")
-            .build();
-
+    // Custom environment connection.
     cluster = Cluster.connect(
-            connectionString,
-            ClusterOptions.clusterOptions(username, password).environment(env)
+            "couchbases://" + connectionString,
+            ClusterOptions.clusterOptions(username, password).environment(env -> {
+              // Sets a pre-configured profile called "wan-development" to help avoid latency issues
+              // when accessing Capella from a different Wide Area Network
+              // or Availability Zone (e.g. your laptop).
+              env.applyProfile("wan-development");
+            })
     );
     // end::connect-env[]
 
