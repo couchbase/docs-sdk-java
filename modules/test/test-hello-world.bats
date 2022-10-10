@@ -11,7 +11,7 @@ load 'test_helper'
     runExample StartUsing
     assert_success
     assert_output --partial "mike"
-    assert_output --partial "[{\"greeting\":\"Hello World\"}]"
+    assert_output --partial "[{\"airline\":{\"country\":\"United States\","
 }
 
 @test "[hello-world] - Overview.java" {
