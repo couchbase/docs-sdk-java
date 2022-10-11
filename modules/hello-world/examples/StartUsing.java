@@ -1,47 +1,43 @@
-/*
- * Copyright (c) 2020 Couchbase, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 // tag::start-using[]
 // tag::imports[]
 import com.couchbase.client.java.*;
 import com.couchbase.client.java.kv.*;
 import com.couchbase.client.java.json.*;
 import com.couchbase.client.java.query.*;
+
 import java.time.Duration;
 // end::imports[]
 
 public class StartUsing {
-  // tag::connect[]
+  // tag::connect-info[]
   // Update these variables to point to your Couchbase Server instance and credentials.
-  static String connectionString = "couchbase://localhost";
+  static String connectionString = "localhost";
   static String username = "Administrator";
   static String password = "password";
   static String bucketName = "travel-sample";
-  
-  // end::connect[]
+  // end::connect-info[]
 
   public static void main(String... args) {
-    // tag::connect[]
-    Cluster cluster = Cluster.connect(connectionString, username, password);
-    // end::connect[]
+    // tag::connect-string[]
+    // For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
+    Cluster cluster = Cluster.connect("couchbase://" + connectionString, username, password);
+    // end::connect-string[]
+    cluster.disconnect();
+
+    // tag::connect-env[]
+    // For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
+    cluster = Cluster.connect(
+            "couchbase://" + connectionString,
+            ClusterOptions.clusterOptions(username, password).environment(env -> {
+              // Customize client settings by calling methods on the builder.
+            })
+    );
+    // end::connect-env[]
     
     // tag::bucket[]
     // get a bucket reference
     Bucket bucket = cluster.bucket(bucketName);
-    bucket.waitUntilReady(Duration.parse("PT10S")) ;
+    bucket.waitUntilReady(Duration.ofSeconds(10));
     // end::bucket[]
 
     // tag::collection[]
@@ -64,8 +60,9 @@ public class StartUsing {
     // end::upsert-get[]
 
     // tag::n1ql-query[]
-    // Call the query() method on the cluster object and store the result.
-    QueryResult result = cluster.query("select \"Hello World\" as greeting");
+    // Call the query() method on the scope object and store the result.
+    Scope inventoryScope = bucket.scope("inventory");
+    QueryResult result = inventoryScope.query("SELECT * FROM airline WHERE id = 10;");
     
     // Return the result rows with the rowsAsObject() method and print to the terminal.
     System.out.println(result.rowsAsObject());

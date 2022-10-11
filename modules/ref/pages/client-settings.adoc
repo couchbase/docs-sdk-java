@@ -632,3 +632,49 @@ You are responsible for stopping it after it is no longer needed.
 // section on wide area network support
 
 include::{version-common}@sdk:shared:partial$client-settings-wide-network.adoc[]
+
+== Configuration Profiles
+
+Configuration Profiles provide predefined client settings that allow you to quickly configure an environment for common use-cases.
+When using a configuration profile, the current client settings are overridden with the values provided in the profile.
+Any property that is not specified in the profile is left unchanged.
+
+CAUTION: The Configuration Profiles feature is currently a xref:java-sdk:project-docs:compatibility.adoc#interface-stability[Volatile API] and may be subject to change.
+
+=== WAN Development
+
+*Builder Method:* `applyProfile("wan-development")`
+
+A `wan-development` configuration profile can be used to modify client settings for development or high-latency environments.
+This profile changes the default timeouts.
+
+
+.Profile Settings
+[cols="1,1"]
+|===
+| Setting | Value
+
+| `connectTimeout`
+| 20s
+
+| `kvTimeout`
+| 20s
+
+| `kvDurableTimeout`
+| 20s
+
+| `viewTimeout`
+| 120s
+
+| `queryTimeout`
+| 120s
+
+| `analyticsTimeout`
+| 120s
+
+| `searchTimeout`
+| 120s
+
+| `managementTimeout`
+| 120s
+|===
