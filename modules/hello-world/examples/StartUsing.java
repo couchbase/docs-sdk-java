@@ -29,7 +29,7 @@ public class StartUsing {
     cluster = Cluster.connect(
             "couchbase://" + connectionString,
             ClusterOptions.clusterOptions(username, password).environment(env -> {
-              // Customize client settings by calling methods on the builder.
+              // Customize client settings by calling methods on the "env" variable.
             })
     );
     // end::connect-env[]
