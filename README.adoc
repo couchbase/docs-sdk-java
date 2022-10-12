@@ -1,6 +1,6 @@
-image:https://github.com/couchbase/docs-sdk-java/actions/workflows/build.yml/badge.svg?branch=release%2F3.3[link="https://github.com/couchbase/docs-sdk-java/actions/workflows/build.yml"] 
-image:https://github.com/couchbase/docs-sdk-java/actions/workflows/test-ga.yml/badge.svg?branch=release%2F3.3[link="https://github.com/couchbase/docs-sdk-java/actions/workflows/test-ga.yml"]
-image:https://github.com/couchbase/docs-sdk-java/actions/workflows/test-dev.yml/badge.svg?branch=release%2F3.3[link="https://github.com/couchbase/docs-sdk-java/actions/workflows/test-dev.yml"]
+image:https://github.com/couchbase/docs-sdk-java/actions/workflows/build.yml/badge.svg?branch=release%2F3.4[link="https://github.com/couchbase/docs-sdk-java/actions/workflows/build.yml"] 
+image:https://github.com/couchbase/docs-sdk-java/actions/workflows/test-ga.yml/badge.svg?branch=release%2F3.4[link="https://github.com/couchbase/docs-sdk-java/actions/workflows/test-ga.yml"]
+image:https://github.com/couchbase/docs-sdk-java/actions/workflows/test-dev.yml/badge.svg?branch=release%2F3.4[link="https://github.com/couchbase/docs-sdk-java/actions/workflows/test-dev.yml"]
 
 
 = Couchbase Java SDK Documentation
