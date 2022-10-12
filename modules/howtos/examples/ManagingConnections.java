@@ -161,8 +161,12 @@ public class ManagingConnections {
 
     {
       // tag::tls[]
-      ClusterEnvironment env = ClusterEnvironment.builder()
-          .securityConfig(SecurityConfig.enableTls(true).trustCertificate(Paths.get("/path/to/cluster.cert"))).build();
+      Cluster cluster = Cluster.connect(
+              "couchbases://<your-endpoint-or-ip-address>",
+              ClusterOptions.clusterOptions("username", "password").environment(env -> {
+                env.securityConfig(SecurityConfig.trustCertificate(Paths.get("/path/to/cluster.cert")));
+              })
+      );
       // end::tls[]
     }
 
