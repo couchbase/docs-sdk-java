@@ -218,7 +218,8 @@ Local Couchbase Server::
 include::example$StartUsing.java[tags=connect-string,indent=0]
 ----
 
-If you're developing client code on the same VM or machine as the Couchbase Server, you can just set the `connectionString` variable to equal `localhost`.
+For developing locally on the same machine as Couchbase Server, your URI can be `couchbase://localhost` as shown here.
+For production deployments, you will want to use a secure server, with `couchbases://`.
 
 Alternatively, you can use a xref:howtos:managing-connections.adoc#cluster-environment[Cluster Environment] when you need to customize the client’s behavior (e.g. changing connection timeout settings).
 
