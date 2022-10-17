@@ -110,7 +110,7 @@ M1 ARM  architecture is fully supported in the 3.3 Java SDK.
 [discrete]
 === ARM Processor Support
 
-* AWS Amazon Graviton2, Apple M1 ARM processors, and ARMv8 on Ubuntu 20.04 (from SDK 3.4).
+AWS Amazon Graviton2, Apple M1 ARM processors, and ARMv8 on Ubuntu 20.04 (from SDK 3.4).
 ****
 
 The JVM SDKs should also be expected to run on other commonly-available GNU/Linux distributions which support an appropriate JDK, but not all combinations can be tested -- notable exceptions are listed below.
