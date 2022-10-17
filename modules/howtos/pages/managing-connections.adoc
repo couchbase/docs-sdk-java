@@ -185,7 +185,8 @@ If you are running on `localhost` and just want to enable TLS for a development 
 -- _so long as you use `127.0.0.1` rather than `localhost` in the connection string_.
 This is because the certificate will not match the name _localhost_.
 
-Setting `InsecureTrustManagerFactory.INSTANCE` in the `securityConfig` settings is a workaround if you need to use `couchbases://localhost`.
+// TODO: not entirely sure this is correct, need to check this.
+//Setting `InsecureTrustManagerFactory.INSTANCE` in the `securityConfig` settings is a workaround if you need to use `couchbases://localhost`.
 
 Navigate in the admin UI to menu:Settings[Cluster] and copy the input box of the TLS certificate into a file on your machine (which we will refer to as `cluster.cert`).
 It looks similar to this:
