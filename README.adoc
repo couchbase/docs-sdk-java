@@ -14,7 +14,7 @@ endif::[]
 :url-ui: {url-org}/docs-ui
 :url-playbook: {url-org}/docs-site
 
-This repository hosts the documentation source for the Couchbase Java SDK.
+This repository hosts the documentation source for the Couchbase Java SDK. 
 
 == Contributing
 
@@ -25,7 +25,7 @@ Check out our {url-contribute}[contributing guide] to learn how to:
 * build the documentation
 * submit a pull request
 
-Thank you for helping to make the documentation better.
+Thank you for helping to make the documentation better. We really appreciate it.
 
 == Docs Component Configuration
 
