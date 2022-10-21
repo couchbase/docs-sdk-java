@@ -10,7 +10,7 @@ include::project-docs:partial$attributes.adoc[]
 [abstract]
 {description}
 
-The 3.3 SDK requires Java 8 or later to be installed, earlier versions will not work.
+The 3.4 SDK requires Java 8 or later to be installed, earlier versions will not work.
 _Java 17 is recommended_, which has various enhancements like sealed classes, pattern matching for switch expressions (in preview), and further updates and improvements on core libraries.
 Most of the flavors available will do, although we may only provide support for OpenJDK and Oracle JDK going forward. 
 
@@ -29,13 +29,9 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 [#table_sdk_versions]
 [cols="40,20,25"]
 |===
-| | SDK 3.0, 3.1 | SDK 3.2, 3.3
+| | 3.1 | SDK 3.2-3.4
 
-| *Server 6.0*
-| *✔*
-| *✔*
-
-| *Server 6.5-6.6*
+| *Server 6.6*
 | *✔*
 | *✔*
 
@@ -49,8 +45,8 @@ See the notes there for Support details.
 
 === Capella Compatibility
 
-At time of release, the Couchbase 3.3 Java SDK is fully compatible with Couchbase Capella, our fully-hosted database-as-a-service.
-To make development easier, the 3.3 SDK includes the Capella client certificate ready installed.
+The Java SDK is fully compatible with Couchbase Capella, our fully-hosted database-as-a-service.
+To make development easier, the SDK includes the Capella client certificate ready installed.
 
 include::{version-common}@sdk:shared:partial$capella.adoc[tag=cloud]
 
@@ -65,7 +61,7 @@ We recommend running the latest LTS version (i.e. at the time of writing JDK 17)
 We only support LTS versions of Oracle JDK and OpenJDK.
 Other versions may work -- _but they are not tested and they are not supported_.
 
-The following JDK releases are supported at time of 3.3 SDK release (April 2022):
+The following JDK releases are supported at time of 3.4 SDK release (October 2022):
 
 * https://adoptium.net/[OpenJDK 11] (Hotspot recommended) or https://www.oracle.com/java/technologies/downloads/#jdk11[Oracle JDK 11]
 * https://adoptium.net/[OpenJDK 17 with HotSpot JVM] (recommended)
@@ -79,7 +75,7 @@ Please make sure you run on one of the latest patch releases, since they provide
 == OS Compatibility
 
 In general, the JVM eliminates concerns about underlying OS compatibility, 
-and Couchbase JVM SDKs can be expected to run on all of the Operating Systems supported by xref:7.1@server:install:install-platforms.adoc[Couchbase Server].
+and Couchbase JVM SDKs can be expected to run on all of the Operating Systems supported by xref:{version-server}@server:install:install-platforms.adoc[Couchbase Server].
 
 The Java SDK is tested and supported on the following OSs and platforms:
 
@@ -104,8 +100,8 @@ Microsoft Windows 10 / All LTS releases from Windows Server 2016.
 === Mac OS X
 
 The current and previous two releases of OS X.
-At time of writing (April 2022): 10.15 (_Catalina_), 11 (_Big Sur_), and 12 (_Monterey_).
-M1 ARM  architecture is fully supported in the 3.3 Java SDK.
+At time of writing (October 2022): 13 (Ventura), 12 (Monterey), and 11 (Big Sur).
+M1 ARM  architecture is fully supported in the Java SDK.
 
 [discrete]
 === ARM Processor Support
@@ -142,48 +138,42 @@ The downside of these workarounds is potentially reduced performance, which can 
 == Couchbase Feature Availability Matrix
 
 .Couchbase Server and SDK Supported Version Matrix
-[.table-merge-cells] 
-[cols="7,5,5,5,7"]
+[.table-merge-cells]
+[cols="7,5,7"]
 |===
-| | Server 5.5 | Server 6.0 | Server 6.5 & 6.6 | Server 7.0 & 7.1
+| | Server 6.6 | Server 7.0 & 7.1
 
 | Enhanced Durability
-4+| All SDK versions
+2+| All SDK versions
 
-| Durable Writes 
-2+| Not Supported
+| Durable Writes
 2+| Since SDK 3.0
 
 | Analytics
-| DP in 5.5 with SDK 2.6
-3+| Since SDK 2.7
+2+| Since SDK 2.7
 
 | Distributed ACID Transactions
-2+| Not Supported
-2+| Since SDK 3.3 included in SDK.
-Since SDK 3.0 with With Java Transactions Libraryfootnote:[3.0.7 or more recent recommended; preferably, follow the transitive dependency for the transactions library in Maven.]
+2+| Since SDK 3.3 included in SDK, or since SDK 3.0 with Java Transactions Libraryfootnote:[3.0.7 or more recent recommended; preferably, follow the transitive dependency for the transactions library in Maven.]
 
 | N1QL Queries inside the Transaction Lambda
-3+| Not Supported
+| Not Supported
 | Since SDK 3.1, or since 3.0.7 with Java Transactions Libraryfootnote:[1.2.1 or newer recommended.]
 
 | Collections
-2+| Not Supported
-| Developer Preview in 6.5-6.6, SDK 3.0
+| Developer Preview in 6.6, SDK 3.0
 | Since SDK 3.0.6
 
 | Scope-Level N1QL Queries & all Collections features
-3+| Not Supported
-2+| Since SDK 3.2.0
+| Not Supported
+| Since SDK 3.2.0
 
 | Field Level Encryption v2
-2+| Not Supported
-3+| Since SDK 3.0.5footnote:[Field Level Encryption distributed as separate library.]
+2+| Since SDK 3.0.5footnote:[Field Level Encryption distributed as separate library.]
 
 | Request Tracing
-2+| Not Supported
-3+| Since SDK 3.1.0
+2+| Since SDK 3.1.0
 |===
+
 
 include::{version-common}@sdk:shared:partial$network-requirements.adoc[]
 
