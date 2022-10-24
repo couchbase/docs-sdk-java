@@ -2,9 +2,7 @@
 :description: Couchbase supports CRUD operations, various data structures, and binary documents.
 :nav-title: Documents & Doc Ops
 :page-topic-type: concept
-:page-aliases: ROOT:documents.adoc,ROOT:documents-basics.adoc,ROOT:documents-atomic.adoc,ROOT:core-operations.adoc,
-// TODO: Add this back when we release SDK 3.4 and remove from 3.3
-// 7.1@server:developer-guide:expiry.adoc,7.1@server:developer-guide:creating-documents.adoc
+:page-aliases: ROOT:documents.adoc,ROOT:documents-basics.adoc,ROOT:documents-atomic.adoc,ROOT:core-operations.adoc,7.1@server:developer-guide:expiry.adoc,7.1@server:developer-guide:creating-documents.adoc
 
 include::project-docs:partial$attributes.adoc[]
 
