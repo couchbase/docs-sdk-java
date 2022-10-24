@@ -69,24 +69,71 @@ More information will be provided as we get closer to stabilization.
 
 
 == OpenTelemetry Integration
-
 The built-in tracer is great if you do not have a centralized monitoring system, but if you already plug into the OpenTelemetry ecosystem we want to make sure to provide first-class support.
 
-The first thing you need to do is include an andditional dependency which provides the interoperability code:
+=== Exporting to OpenTelemetry
+This method exports tracing telemetry in OpenTelemetry's standard format (OTLP), which can be sent to any OTLP-compatible backend/processor such as Jaeger, Zipkin or `opentelemetry-collector`.
+
+Add this to your Maven, or the equivalent to your build tool of choice:
+
+[source,xml]
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-bom</artifactId>
+            <version>1.17.0</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+<dependencies>
+    <dependency>
+        <groupId>com.couchbase.client</groupId>
+        <artifactId>tracing-opentelemetry</artifactId>
+        <version>1.2.0</version>
+    </dependency>
+    <dependency>
+        <groupId>com.couchbase.client</groupId>
+        <artifactId>metrics-opentelemetry</artifactId>
+        <version>0.4.0</version>
+    </dependency>
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-api</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-exporter-otlp</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-sdk</artifactId>
+    </dependency>
+</dependencies>
+----
+
+And now:
+
+[source,java]
+----
+include::example$Tracing.java[tag=otel-direct,indent=0]
+----
+
+=== Exporting directly to Jaeger
+This example outputs tracing telemetry from the SDK directly to Jaeger, or a Jaeger-compatible backend such as Zipkin.
+
+Add this to your Maven, or the equivalent to your build tool of choice:
 
 [source,xml]
 ----
 <dependency>
     <groupId>com.couchbase.client</groupId>
     <artifactId>tracing-opentelemetry</artifactId>
-    <version>1.1.4</version>
+    <version>1.2.0</version>
 </dependency>
-----
-
-You also need to include your downstream exporter of choice, in the following example we'll use Jaeger tracing:
-
-[source,xml]
-----
 <dependency>
     <groupId>io.opentelemetry</groupId>
     <artifactId>opentelemetry-exporter-jaeger</artifactId>
@@ -118,7 +165,13 @@ Once the exporter is set up, it can be wrapped into the `OpenTelemetryRequestTra
 include::example$Tracing.java[tag=otel-configure-setup,indent=0]
 ----
 
-At this point, all traces will be sent into the OpenTelemetry exporter. 
+=== Span output
+At this point, whichever method you have used, the SDK will automatically be exporting spans and you should see them in your backend of choice.
+
+(Bear in mind during testing that the exporter may batch spans and hence not export them if the application exits quickly enough.  This can be configured on the `BatchSpanProcessor` or `JaegerGrpcSpanExporter` objects.)
+
+=== Parent spans
+
 If you want to set a parent for a SDK request, you can do it in the respective `*Options`:
 
 [source,java]
