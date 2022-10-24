@@ -47,7 +47,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 === Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1102[JVMCBC-1102]:
-Support for serverless execution environments including AWS Lambda.
+Added support for serverless execution environments including AWS Lambda.
 * https://issues.couchbase.com/browse/JCBC-2004[JCBC-2004]:
 Changed `AuthenticationFailureException` error message to indicate that bucket hibernation is now a potential cause.
 Bucket hibernation is a feature coming in a future Couchbase release.
@@ -61,7 +61,7 @@ Maintenance dependency bump.
 
 === Bugs
 * https://issues.couchbase.com/browse/JCBC-2002[JCBC-2002]:
-expiryTime should always return empty optional if no expiry set.
+`expiryTime` will now return an empty optional if no expiry set.
 * https://issues.couchbase.com/browse/JCBC-1987[JCBC-1987]:
 Fixed a problem where `QueryIndexManager.buildDeferredIndexes` would throw `InternalServerFailureException` when building indexes on the default collection if there were also deferred indexes in a different collection.
 * https://issues.couchbase.com/browse/JVMCBC-1141[JVMCBC-1141]:
