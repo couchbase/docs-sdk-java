@@ -1,9 +1,7 @@
 = Concurrent Document Mutations
 :page-topic-type: howto
 include::project-docs:partial$attributes.adoc[]
-:page-aliases: ROOT:concurrent-document-mutations.adoc,
-// TODO: Add this back when we release SDK 3.4 and remove from 3.3
-// 7.1@server:developer-guide:cas-concurrency.adoc
+:page-aliases: ROOT:concurrent-document-mutations.adoc,7.1@server:developer-guide:cas-concurrency.adoc
 
 include::{version-common}@sdk:shared:partial$cas.adoc[tag=intro]
 
