@@ -3,6 +3,8 @@ import java.time.Duration;
 import com.couchbase.client.core.cnc.RequestTracer;
 import com.couchbase.client.core.env.CoreEnvironment;
 import com.couchbase.client.core.env.ThresholdLoggingTracerConfig;
+import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.ClusterOptions;
 import com.couchbase.client.java.env.ClusterEnvironment;
 import com.couchbase.client.tracing.opentelemetry.OpenTelemetryRequestTracer;
 
@@ -10,8 +12,13 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.exporter.jaeger.JaegerGrpcSpanExporter;
+import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.resources.Resource;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
+import io.opentelemetry.sdk.trace.samplers.Sampler;
 
 public class Tracing {
 
@@ -32,7 +39,7 @@ public class Tracing {
         ManagedChannel jaegerChannel = ManagedChannelBuilder.forAddress("localhost", 14250).usePlaintext().build();
 
         // Export traces to Jaeger
-        JaegerGrpcSpanExporter jaegerExporter = JaegerGrpcSpanExporter.builder().setServiceName("otel-jaeger-example")
+        JaegerGrpcSpanExporter jaegerExporter = JaegerGrpcSpanExporter.builder().setServiceName("YOUR_SERVICE_NAME_HERE")
             .setChannel(jaegerChannel).setDeadlineMs(30000).build();
 
         // Set to process the spans by the Jaeger Exporter
@@ -48,5 +55,38 @@ public class Tracing {
         // end::otel-configure-setup[]
       }
     }
+  }
+
+  public static void opentelemetryDirect() {
+    String hostname = "";
+    String username = "";
+    String password = "";
+
+    // tag::otel-direct[]
+    // Set the OpenTelemetry SDK's SdkTracerProvider
+    SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
+            .setResource(Resource.getDefault()
+                    .merge(Resource.builder()
+                            // An OpenTelemetry service name generally reflects the name of your microservice,
+                            // e.g. "shopping-cart-service"
+                            .put("service.name", "YOUR_SERVICE_NAME_HERE")
+                            .build()))
+            .addSpanProcessor(BatchSpanProcessor.builder(OtlpGrpcSpanExporter.builder()
+                    .setEndpoint("HOSTNAME_OF_OPENTELEMETRY_BACKEND:4317")
+                    .build()).build())
+            .setSampler(Sampler.alwaysOn())
+            .build();
+
+    // Set the OpenTelemetry SDK's OpenTelemetry
+    OpenTelemetry openTelemetry = OpenTelemetrySdk.builder()
+            .setTracerProvider(sdkTracerProvider)
+            .buildAndRegisterGlobal();
+
+    Cluster cluster = Cluster.connect(hostname, ClusterOptions.clusterOptions(username, password)
+            .environment(env -> {
+              // Provide the OpenTelemetry object to the Couchbase SDK
+              env.requestTracer(OpenTelemetryRequestTracer.wrap(openTelemetry));
+            }));
+    // end::otel-direct[]
   }
 }
