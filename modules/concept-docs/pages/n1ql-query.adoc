@@ -37,14 +37,14 @@ You can define a _primary index_ on a bucket.
 When a _primary_ index is defined you can issue non-covered (see below) queries on the bucket as well.
 This includes using the `META` function in the queries.
 
-[source,n1ql]
+[source,sqlpp]
 ----
 CREATE PRIMARY INDEX ON `users`
 ----
 
 You can also define indexes over given document fields and then use those fields in the query:
 
-[source,n1ql]
+[source,sqlpp]
 ----
 CREATE INDEX ix_name ON `users`(name);
 CREATE INDEX ix_email ON `users`(email);
@@ -52,7 +52,7 @@ CREATE INDEX ix_email ON `users`(email);
 
 This would allow you to query the _users_ bucket regarding a document's `name` or `email` properties, thus:
 
-[source,n1ql]
+[source,sqlpp]
 ----
 SELECT name, email FROM `users` WHERE name="Monty Python" OR email="monty@python.org";
 ----
@@ -77,7 +77,7 @@ Creating indexes on buckets with many existing documents can take a long time.
 You can build indexes in the background, creating _deferred_ indexes.
 The deferred indexes can be built together, rather than having to re-scan the entire bucket for each index.
 
-[source,sql]
+[source,sqlpp]
 ----
 CREATE PRIMARY INDEX ON `users` WITH {"defer_build": true};
 CREATE INDEX ix_name ON `users`(name) WITH {"defer_build": true};
@@ -131,7 +131,7 @@ From Couchbase Server release 7.0 the xref:7.1@server:learn:data/scopes-and-coll
 You can query collections in N1QL, by referring to a fully qualified keyspace.
 For example, to list the documents in the `airline` collection in the `inventory` scope:
 
-[source,n1ql]
+[source,sqlpp]
 ----
 SELECT * FROM `travel-sample`.inventory.airline;
 ----
@@ -139,7 +139,7 @@ SELECT * FROM `travel-sample`.inventory.airline;
 As a convenience, you can also query a partial keyspace from the xref:7.1@server:n1ql:n1ql-intro:sysinfo.adoc#query-context[Query Context] of a specific Scope. 
 For example, from the context of `{backtick}travel-sample{backtick}.inventory`, you could abbreviate the previous query to:
 
-[source,n1ql]
+[source,sqlpp]
 ----
 SELECT * FROM airline;
 ----

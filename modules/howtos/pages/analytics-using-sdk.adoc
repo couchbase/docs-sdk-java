@@ -201,9 +201,9 @@ We always recommend not blocking in the first place in reactive code.
 
 == Scoped Queries on Named Collections
 
-In addition to creating a dataset with a WHERE clause to filter the results to documents with certain characteristics, SDK 3.2 now allows you to create a dataset against a named collection, for example:
+In addition to creating a dataset with a WHERE clause to filter the results to documents with certain characteristics, the SDK allows you to create a dataset against a named collection, for example:
 
-[source,n1ql]
+[source,sqlpp]
 ----
 ALTER COLLECTION `travel-sample`.inventory.airport ENABLE ANALYTICS;
 
