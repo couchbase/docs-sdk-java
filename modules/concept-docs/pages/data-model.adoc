@@ -20,7 +20,7 @@ Values can be placed in the beginning or end of a list, and can be accessed usin
 
 In fact, the Java SDK provides implementations of the `Map`, `List`, `Set`, and `Queue` interfaces which are described in the <<jcf>> section.
 
-These data structures are stored as JSON documents in Couchbase, and can therefore be accessed using N1QL, Full Text Search, and normal key-value operations.
+These data structures are stored as JSON documents in Couchbase, and can therefore be accessed using {sqlpp_url}[{sqlpp} (formerly N1QL)], Full Text Search, and normal key-value operations.
 Data structures can also be manipulated using the traditional sub-document and full-document KV APIs.
 
 Using the data structures API may help your application in two ways:

@@ -451,7 +451,7 @@ Please note that we do not provide any stability guarantees on the names and val
 | Contains the clientContext set by the user in the request options.
 
 | service
-| Contains a map of service-specific properties (i.e. the opaque for key value, the statement for a N1QL query etc)
+| Contains a map of service-specific properties (i.e. the opaque for key value, the statement for a {sqlpp_url}[{sqlpp}] query etc)
 
 | timings
 | Contains information like how long encoding, dispatch, total time etc. took in microseconds.

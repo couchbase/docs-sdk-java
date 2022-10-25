@@ -33,5 +33,5 @@ https://github.com/differentway/couchmove[Couchmove] is an open-source Java migr
 It can help you "track, manage and apply changes, in your Couchbase buckets."
 The philosophy of the project claims to "strongly favor simplicity and convention over configuration".
 
-In CouchMove you write your migrations in N1QL, while in https://github.com/couchbaselabs/CouchVersion[CouchVersion] you can write them using the Java SDK, which essentially allow you to create more complex migrations.
+In CouchMove you write your migrations in {sqlpp_url}[{sqlpp} (formerly N1QL)], while in https://github.com/couchbaselabs/CouchVersion[CouchVersion] you can write them using the Java SDK, which essentially allow you to create more complex migrations.
 CouchVersion provides a new approach for adding changes (change sets) based on Java classes and methods with appropriate annotations.

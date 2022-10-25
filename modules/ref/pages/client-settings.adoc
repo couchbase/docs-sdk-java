@@ -177,7 +177,7 @@ Default:  `true`
 +
 System Property: `com.couchbase.env.io.mutationTokensEnabled`
 +
-Mutation tokens allow enhanced durability requirements as well as advanced N1QL querying capabilities.
+Mutation tokens allow enhanced durability requirements as well as advanced {sqlpp_url}[{sqlpp} (formerly N1QL)] querying capabilities.
 Set this to `false` if you do not require these features and wish to avoid the associated overhead.
 
 Name: *Network Resolution*::
@@ -401,7 +401,7 @@ Default: `75s`
 +
 System Property: `com.couchbase.env.timeout.queryTimeout`
 +
-The Query timeout is used on all N1QL query operations if not overridden by a custom timeout.
+The Query timeout is used on all {sqlpp} query operations if not overridden by a custom timeout.
 Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
 
 Name: *Search Timeout*::

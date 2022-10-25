@@ -223,7 +223,7 @@ JSON has no built-in representation of dates, so commonly they are represented a
 * a string-formatted https://www.w3.org/TR/NOTE-datetime[ISO-8601^] date 
 * an offset in seconds or milliseconds from the Unix epoch 1 January 1970 UTC
 
-While it doesn't matter which you choose (as long as you serialize and deserialize your Date object consistently!) it may make sense to store the dates in Couchbase in a format that can be easily manipulated using the xref:7.1@server:n1ql:n1ql-language-reference/datefun.adoc[date functions in N1QL].
+While it doesn't matter which you choose (as long as you serialize and deserialize your Date object consistently!) it may make sense to store the dates in Couchbase in a format that can be easily manipulated using the xref:7.1@server:n1ql:n1ql-language-reference/datefun.adoc[date functions in {sqlpp}].
 
 Handily, as we can see on the same page, the
 xref:7.1@server:n1ql:n1ql-language-reference$datefun.adoc#date-formats[supported date formats] are the usual convention in JSON.

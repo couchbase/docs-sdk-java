@@ -1,6 +1,5 @@
 = Query
 :description: Parallel data management for complex queries over many records, using a familiar SQL-like syntax.
-:nav-title: Querying with N1QL
 :page-topic-type: concept
 :page-aliases: ROOT:n1ql-query,ROOT:prepared-statements,ROOT:querying
 
@@ -128,7 +127,7 @@ and allows optimization on a case-by-case basis.
 
 From Couchbase Server release 7.0 the xref:7.1@server:learn:data/scopes-and-collections.adoc[Collections] feature lets you logically group similar documents into Collections.
 
-You can query collections in N1QL, by referring to a fully qualified keyspace.
+You can query collections in {sqlpp}, by referring to a fully qualified keyspace.
 For example, to list the documents in the `airline` collection in the `inventory` scope:
 
 [source,sqlpp]

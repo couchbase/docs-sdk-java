@@ -1,5 +1,5 @@
 = Query
-:description: You can query for documents in Couchbase using the N1QL query language, a language based on SQL, but designed for structured and flexible JSON documents.
+:description: You can query for documents in Couchbase using the {sqlpp_url}[{sqlpp} (formerly N1QL)] query language, a language based on SQL, but designed for structured and flexible JSON documents.
 :page-topic-type: howto
 :page-aliases: n1ql-query,ROOT:querying-n1ql
 :page-pagination: full
@@ -12,7 +12,7 @@ Querying can solve typical programming tasks such as finding a user profile by e
 
 == Getting Started
 
-After familiarizing yourself with the basics on how the N1QL query language works and how to query it from the UI you can use it from the Java SDK.
+After familiarizing yourself with the basics on how the {sqlpp} query language works and how to query it from the UI you can use it from the Java SDK.
 
 Before starting, here are all of the imports used in the following examples:
 
@@ -246,11 +246,11 @@ include::example$Queries.java[tag=scope-level-query,indent=0]
 
 == Additional Resources
 
-NOTE: N1QL is not the only query option in Couchbase.
+NOTE: {sqlpp} is not the only query option in Couchbase.
 Be sure to check that xref:concept-docs:data-services.adoc[your use case fits your selection of query service].
 
-* For a deeper dive into N1QL from the SDK, refer to our xref:concept-docs:n1ql-query.adoc[N1QL SDK concept doc].
-* The xref:7.1@server:n1ql:n1ql-language-reference/index.adoc[Server doc N1QL intro] introduces a complete guide to the N1QL language, including all of the latest additions.
-* The http://query.pub.couchbase.com/tutorial/#1[N1QL interactive tutorial] is a good introduction to the basics of N1QL use.
+* For a deeper dive into {sqlpp} from the SDK, refer to our xref:concept-docs:n1ql-query.adoc[{sqlpp} SDK concept doc].
+* The xref:7.1@server:n1ql:n1ql-language-reference/index.adoc[Server doc {sqlpp} intro] introduces a complete guide to the {sqlpp} language, including all of the latest additions.
+* The http://query.pub.couchbase.com/tutorial/#1[{sqlpp} interactive tutorial] is a good introduction to the basics of {sqlpp} use.
 * For scaling up queries, be sure to xref:7.1@server:learn:services-and-indexes/indexes/index-replication.adoc[read up on Indexes].
-* N1QL is for operational queries; for analytical workloads, read more on xref:concept-docs:http-services.adoc#long-running-queries-big-data[when to choose Analytics], our implementation of SQL++ available in the Enterprise Edition.
+* Read more on xref:concept-docs:http-services.adoc#long-running-queries-big-data[when to choose the Analytics service].

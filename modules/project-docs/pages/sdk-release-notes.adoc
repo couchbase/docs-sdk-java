@@ -1179,7 +1179,7 @@ Internal and external dependencies have been updated, including project reactor 
 * https://issues.couchbase.com/browse/JVMCBC-905[JVMCBC-905]:
 It is now possible to disable TLS hostname verification as part of the `SecurityConfig`.
 * https://issues.couchbase.com/browse/JVMCBC-901[JVMCBC-901]:
-Support for transactions with N1QL queries has been added to the core subsystem so that the upper transaction dependency can make use of it.
+Support for transactions with {sqlpp_url}[{sqlpp} (formerly N1QL)] queries has been added to the core subsystem so that the upper transaction dependency can make use of it.
 
 In addition to the tickets outlined below, different interfaces have been elevated from `Uncomitted` or `Volatile` to `Comitted`. These include:
 
@@ -1314,7 +1314,7 @@ On the request timeout exception, the retry reasons are now accessible directly.
 * https://issues.couchbase.com/browse/JCBC-1693[JCBC-1693]:
 The `UserManager` API has been extended to support collections and scopes (needs at least Server 7.0 to be usable).
 * https://issues.couchbase.com/browse/JCBC-1660[JCBC-1660]:
-Support for scope-level N1QL queries has been added (needs at least Server 7.0 to be usable).
+Support for scope-level {sqlpp} queries has been added (needs at least Server 7.0 to be usable).
 * https://issues.couchbase.com/browse/JCBC-1658[JCBC-1658]:
 Support for scope-level analytics queries has been added (needs at least Server 7.0 to be usable).
 

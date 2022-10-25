@@ -26,7 +26,7 @@ As an example here is a KeyValue document fetch:
 include::example$MigratingSDKCodeTo3n.java[tag=migrating_sdk_code_to_3_n_1,indent=0]
 ----
 
-Compare this to a N1QL query:
+Compare this to a {sqlpp_url}[{sqlpp} (formerly N1QL)] query:
 
 [source,java]
 ----
@@ -260,7 +260,7 @@ There have been changes made in the following areas:
 The exception hierachy is now flat and unified under a `CouchbaseException`. 
 Each `CouchbaseException` has an associated `ErrorContext` which is populated with as much information as possible and then dumped alongside the stack trace if an error happens.
 
-Here is an example of the error context if a N1QL query is performed with an invalid syntax (i.e. `select 1= from`):
+Here is an example of the error context if a {sqlpp} query is performed with an invalid syntax (i.e. `select 1= from`):
 
 [source]
 ----
@@ -441,7 +441,7 @@ Similar functionality is available through `mutateIn` on JSON documents.
 
 === Query
 
-N1QL querying is now available at the `Cluster` level instead of the bucket level, because you can also write N1QL queries that span multiple buckets. Compare a simple N1QL query from SDK 2 with its SDK 3 equivalent:
+{sqlpp} querying is now available at the `Cluster` level instead of the bucket level, because you can also write {sqlpp} queries that span multiple buckets. Compare a simple {sqlpp} query from SDK 2 with its SDK 3 equivalent:
 
 [source,java]
 ----
@@ -524,7 +524,7 @@ Not only does it throw a `CouchbaseException`, it also tries to map it to a spec
 
 ==== DSL Deprecation
 
-The fluent API feature in SDK 2.x was found not to scale well for larger queries, nor for SQL++.
+The fluent API feature in SDK 2.x was found not to scale well for larger queries, nor for {sqlpp}.
 For these reasons it is not amongst the features carried over to SDK 3.x.
 
 In most cases, a simple string statement is the best replacement.
@@ -532,7 +532,7 @@ In most cases, a simple string statement is the best replacement.
 
 === Analytics
 
-Analytics querying, like N1QL, is also moved to the `Cluster` level: it is now accessible through the `Cluster.analyticsQuery` method. 
+Analytics querying, like {sqlpp}, is also moved to the `Cluster` level: it is now accessible through the `Cluster.analyticsQuery` method.
 As with the Query service, parameters for the Analytics queries have moved into the `AnalyticsOptions`:
 
 [source,java]
@@ -660,7 +660,7 @@ com.couchbase.client.core.error.ViewNotFoundException: The queried view is not f
 In SDK 2, the management APIs were centralized in the `ClusterManager` at the cluster level and the `BucketManager` at the bucket level. 
 Since SDK 3 provides more management APIs, they have been split up in their respective domains. 
 So for example when in SDK 2 you needed to remove a bucket you would call `ClusterManager.removeBucket` you will now find it under `BucketManager.dropBucket`. 
-Also, creating a N1QL index now lives in the `QueryIndexManager`, which is accessible through the `Cluster`.
+Also, creating a {sqlpp} index now lives in the `QueryIndexManager`, which is accessible through the `Cluster`.
 
 The following table provides a mapping from the SDK 2 management APIs to those of SDK 3:
 

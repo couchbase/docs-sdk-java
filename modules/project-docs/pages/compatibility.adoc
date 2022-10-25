@@ -155,7 +155,7 @@ The downside of these workarounds is potentially reduced performance, which can 
 | Distributed ACID Transactions
 2+| Since SDK 3.3 included in SDK, or since SDK 3.0 with Java Transactions Libraryfootnote:[3.0.7 or more recent recommended; preferably, follow the transitive dependency for the transactions library in Maven.]
 
-| N1QL Queries inside the Transaction Lambda
+| {sqlpp} Queries inside the Transaction Lambda
 | Not Supported
 | Since SDK 3.1, or since 3.0.7 with Java Transactions Libraryfootnote:[1.2.1 or newer recommended.]
 
@@ -163,7 +163,7 @@ The downside of these workarounds is potentially reduced performance, which can 
 | Developer Preview in 6.6, SDK 3.0
 | Since SDK 3.0.6
 
-| Scope-Level N1QL Queries & all Collections features
+| Scope-Level {sqlpp} Queries & all Collections features
 | Not Supported
 | Since SDK 3.2.0
 
