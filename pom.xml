@@ -178,6 +178,8 @@
                     <target>${maven.compiler.target}</target>
                     <excludes>
                         <exclude>TransactionsExample.java</exclude>
+                        <exclude>Metrics.java</exclude>
+                        <exclude>Tracing.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>

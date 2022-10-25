@@ -8,7 +8,7 @@ on:
 
 env:
   CB_EDITION: couchbase/server:enterprise
-  CB_BUILD: 7.1.0
+  CB_BUILD: 7.1.2
 
 jobs:
   # The pre_job uses a smart Github action that will check the provided path filters
