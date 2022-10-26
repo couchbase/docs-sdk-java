@@ -7,7 +7,7 @@ on:
     branches: ["release/3.*"]
 
 env:
-  JAVA_VERSION: 16
+  JAVA_VERSION: 17
 
 jobs:
   # The pre_job uses a smart Github action that will check the provided path filters
@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Java
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: ${{ env.JAVA_VERSION }} # The JDK version to make available on the path.
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
@@ -51,7 +51,7 @@ jobs:
         working-directory: ${{ env.working-directory }}
 
       - name: Notify slack on failure
-        # We run this step only on the default 3.1+ branch
+        # We run this step only on the default branch
         # because secrets are not accessible on PRs from forks.
         # Therefore, this notification will only happen when a PR is merged.
         if: failure() && startsWith(github.ref, 'refs/heads/release/3.*')
