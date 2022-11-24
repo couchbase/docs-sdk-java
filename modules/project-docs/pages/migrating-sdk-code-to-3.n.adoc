@@ -372,6 +372,9 @@ include::example$MigratingSDKCodeTo3n.java[tag=subdoc_mutatein_store_semantics,i
 ----
 ====
 
+TIP: The unofficial, unsupported https://github.com/couchbaselabs/couchbase-java-sdk2-migration-kit[Couchbase Java SDK 2 Migration Kit] has more Sub-Document API migration examples.
+It also has source code for temporary bridge classes that can assist with migrating Sub-Document requests from SDK 2 to SDK 3.
+
 In addition, the datastructure APIs have been renamed and moved:
 
 .Datastructure API Changes
@@ -529,6 +532,8 @@ For these reasons it is not amongst the features carried over to SDK 3.x.
 
 In most cases, a simple string statement is the best replacement.
 
+TIP: You can still use the Query DSL classes with SDK 3 if you want, but you'll need to add the source code to your project and maintain it yourself.
+A version of the source code modified to work with SDK 3 is available as part of the unofficial, unsupported https://github.com/couchbaselabs/couchbase-java-sdk2-migration-kit[Couchbase Java SDK 2 Migration Kit].
 
 === Analytics
 
