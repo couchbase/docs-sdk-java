@@ -17,6 +17,71 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 
 // tag::all[]
+== Version 3.4.1 (7 December 2022)
+
+Version 3.4.1 is the second release of the 3.4 series.
+The headline change is support for the KV range scan feature (`collection.scan()`), added at @Stability.Volatile level.
+This feature will be available in a future version of Couchbase Server.
+
+https://packages.couchbase.com/clients/java/3.4.1/Couchbase-Java-Client-3.4.1.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.4.1/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.4.1/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.4.1**
+* com.couchbase.client:**core-io:2.4.1**
+* io.projectreactor:**reactor-core:3.5.0**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.2.1             | OpenTelemetry 1.19.0       | Committed
+| `tracing-opentracing`     | 1.2.1             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.4.1             | OpenTelemetry 1.19.0       | Volatile
+| `metrics-micrometer`      | 0.4.1             | Micrometer 1.10.0          | Volatile
+|=======================
+
+
+=== Improvements
+* https://issues.couchbase.com/browse/JVMCBC-1163[JVMCBC-1163]:
+Dependencies have been updated.
+* https://issues.couchbase.com/browse/JVMCBC-1156[JVMCBC-1156]:
+The traffic tracing functionality has been enchanced to perform Wireshark-style dissection of portions of the KV protocol.
+* https://issues.couchbase.com/browse/JCBC-1984[JCBC-1984]:
+KV range scan functionality (`collection.scan()`) added at @Stability.Volatile level.
+Users are encouraged to experiment with the feature and provide feedback ahead of its formal release in 3.5.0.
+* https://issues.couchbase.com/browse/JCBC-2018[JCBC-2018]:
+Make Core and CoreEnvironment Autocloseable.
+* https://issues.couchbase.com/browse/JCBC-2009[JCBC-2009]:
+Fixed an issue where ArraySetOptions was extending CommonDatastructureOptions incorrectly.
+* https://issues.couchbase.com/browse/JCBC-2021[JCBC-2021]:
+Diagnostics for an endpoint now include the state of the endpoint's circuit breaker.
+* https://issues.couchbase.com/browse/JCBC-2027[JCBC-2027]:
+The `ClusterEnvironment.Builder` methods that take a `Builder` are deprecated in favor of the overloads that take a `Consumer<Builder>`.
+For example, `ioConfig(IoConfig.Builder)` is deprecated in favor of `ioConfig(Consumer<IoConfig.Builder>)`.
+The methods that take a `Consumer<Builder>` are preferable because they allow customizing the config without clobbering the previous values.
+* https://issues.couchbase.com/browse/JCBC-2028[JCBC-2028]:
+`Cluster.connect` now throws an `IllegalArgumentException` if you pass a pre-built `ClusterEnvironment` and a connection string incompatible with the environment.
+Before this change, an incompatibility was logged as a warning, and the connection string scheme and parameters were ignored.
+`ConnectionStringIgnoredEvent` is now deprecated, since the SDK never publishes it anymore.
+** A pre-built environment without TLS enabled is incompatible with a connection string that specifies the secure `couchases` scheme.
+** A pre-built environment is incompatible with a connection string that has parameters.
+* https://issues.couchbase.com/browse/JVMCBC-1159[JVMCBC-1159]:
+Transactions now support upcoming server query_context changes.
+
+=== Bugs
+* https://issues.couchbase.com/browse/JVMCBC-1157[JVMCBC-1157]:
+The SDK no longer rejects a `PersistTo` requirement in a bucket using the Magma storage engine. Before this change, the SDK would refuse the request because it misidentified Magma buckets as ephemeral (unable to persist documents).
+* https://issues.couchbase.com/browse/JVMCBC-1167[JVMCBC-1167]:
+If you call `CancellationErrorContext.getWaitUntilReadyContext()` on an error context that didn't come from a "wait until ready" request, the method is now guaranteed to return null instead of sometimes throwing a `ClassCastException`.
+* https://issues.couchbase.com/browse/JCBC-2024[JCBC-2024]:
+Fixed a memory leak in ManagerMessageHandler.
+
 == Version 3.4.0 (24 October 2022)
 
 Version 3.4.0 is the first release of the 3.4 series.
