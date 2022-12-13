@@ -122,15 +122,27 @@ Because Alpine Linux does not have the `glibc` support needed,
 we highly recommend that you seek an alternative distribution where possible. 
 If that is not a option, then a possible workaround that can be applied is as follows:
 
-* Disable the native IO:
+* Disable native IO and native TLS by setting both the `ioEnvironment.enableNativeIo` and `security.enableNativeTls` client settings to false, as in this example:
 +
-[source,toml]
-====
-ClusterEnvironment env = ClusterEnvironment.builder().ioEnvironment(IoEnvironment.enableNativeIo(false)).build();
-====
+[source,java]
+----
+Cluster cluster = Cluster.connect(
+  connectionString,
+  ClusterOptions.clusterOptions(username, password)
+    .environment(env -> env
+      .ioEnvironment(it -> it.enableNativeIo(false))
+      .securityConfig(it -> it.enableNativeTls(false))
+    )
+);
+----
 
-* Disable it in Netty itself via the following system property:
-`-Dcom.couchbase.client.core.deps.io.netty.transport.noNative=true`
+* Alternatively, disable it in Netty itself via the following system properties:
++
+[source,shell]
+----
+-Dcom.couchbase.client.core.deps.io.netty.transport.noNative=true
+-Dcom.couchbase.client.core.deps.io.netty.handler.ssl.noOpenSsl=true
+----
 
 The downside of these workarounds is potentially reduced performance, which can be determined through benchmarking and profiling.
 
