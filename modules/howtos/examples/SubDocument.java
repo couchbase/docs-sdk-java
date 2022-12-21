@@ -96,33 +96,41 @@ public class SubDocument {
 
   static void getFunc() {
     // tag::get[]
-    LookupInResult result = collection.lookupIn("hotel_1368", Collections.singletonList(get("geo.lat")));
+    LookupInResult result = collection.lookupIn("hotel_1368",
+        Collections.singletonList(get("geo.lat")));
 
-    String str = result.contentAs(0, String.class);
-    System.out.println("getFunc: Latitude = " + str);
+    try {
+      String str = result.contentAs(0, String.class);
+      System.out.println("getFunc: Latitude = " + str);
+    } catch (PathNotFoundException e) {
+      e.printStackTrace();
+    }
     // end::get[]
   }
 
   static void existsFunc() {
-
     // tag::exists[]
-    try {
-      LookupInResult result = collection.lookupIn("hotel_1368",
-          Collections.singletonList(exists("address.does_not_exist")));
-    } catch (PathNotFoundException e) {
-      System.out.println("existsFunc: " + e);
-    }
+    LookupInResult result = collection.lookupIn("hotel_1368",
+        Collections.singletonList(exists("address.does_not_exist")));
+    boolean pathExists = result.exists(0);
+    System.out.println("Non-existent path exists? " + pathExists);
     // end::exists[]
   }
 
   static void combine() {
     // tag::combine[]
-    try {
-      LookupInResult result = collection.lookupIn("hotel_1368",
-          Arrays.asList(get("geo.lat"), exists("address.does_not_exist")));
-    } catch (PathNotFoundException e) {
-      System.out.println("combine: " + e);
-    }
+    LookupInResult result = collection.lookupIn("hotel_1368",
+        Arrays.asList(
+            get("geo.lat"), // index 0
+            exists("address.does_not_exist") // index 1
+        )
+    );
+
+    String lat = result.contentAs(0, String.class);
+    boolean otherExists = result.exists(1);
+
+    System.out.println("Latitude: " + lat);
+    System.out.println("Non-existent path exists? " + otherExists);
     // end::combine[]
   }
 

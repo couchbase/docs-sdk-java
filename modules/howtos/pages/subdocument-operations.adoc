@@ -96,10 +96,6 @@ NOTE: The operation used here is `LookupInSpec.get`, but we import this static m
 include::example$SubDocument.java[tag=exists,indent=0]
 ----
 
-NOTE: LookupInResult has an `exists` method, but this should not be confused with the exists __operation__.  The `exists` method
-is used to check if anything was returned by the server for a given operation.  The result of the exists operation should
-be checked with `contentAs(X, Boolean.class)`, as in the example.
-
 Multiple operations can be combined:
 
 .Combine multiple lookup operations
