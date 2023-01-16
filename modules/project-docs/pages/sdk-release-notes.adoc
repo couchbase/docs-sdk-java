@@ -17,6 +17,48 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 
 // tag::all[]
+== Version 3.4.2 (16 January 2023)
+This is a regular maintenance release.
+
+https://packages.couchbase.com/clients/java/3.4.2/Couchbase-Java-Client-3.4.2.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.4.2/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.4.2/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* com.couchbase.client:**java-client:3.4.2**
+* com.couchbase.client:**core-io:2.4.2**
+* io.projectreactor:**reactor-core:3.5.0**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.2.2             | OpenTelemetry 1.19.0       | Committed
+| `tracing-opentracing`     | 1.2.2             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.4.2             | OpenTelemetry 1.19.0       | Volatile
+| `metrics-micrometer`      | 0.4.2             | Micrometer 1.10.0          | Volatile
+|=======================
+
+
+=== Improvements
+* https://issues.couchbase.com/browse/JVMCBC-1175[JVMCBC-1175]:
+The SDK now includes native libraries for IO and TLS that can enhance performance on `aarch_64` architectures like Graviton and Apple Silicon. Previously, native libraries were included only for `x86_64` architectures.
+Native libraries for IO and TLS are enabled by default. If you need to disable native IO, set the `ioEnvironment.enableNativeIo` client setting to false. To disable native TLS, set the `security.enableNativeTls` client setting to false.
+
+=== Bugs
+* https://issues.couchbase.com/browse/JVMCBC-1161[JVMCBC-1161]:
+Fixed a minor issue where `cluster.disconnect()` could occasionally timeout due to a race condition.
+* https://issues.couchbase.com/browse/JVMCBC-1176[JVMCBC-1176]:
+Setting `security.enableNativeTls` to false now prevents the SDK from even attempting to load the native TLS library. (Prior to this change, the SDK would load the library and just not use it.) In addition to saving a bit of memory, this prevents the JVM from segfaulting on Alpine Linux where glibc is not available.
+* https://issues.couchbase.com/browse/JVMCBC-1180[JVMCBC-1180]:
+Supporting in transactions a future version of Couchbase Server that requires query_context be sent in all queries.
+* https://issues.couchbase.com/browse/JVMCBC-1174[JVMCBC-1174]:
+Fixed a regression that prevented native TLS from being used regardless of whether the `security.enableNativeTls` client setting was set to true.
+
 == Version 3.4.1 (7 December 2022)
 
 Version 3.4.1 is the second release of the 3.4 series.
