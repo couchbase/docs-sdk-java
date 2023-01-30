@@ -72,7 +72,7 @@ More information will be provided as we get closer to stabilization.
 The built-in tracer is great if you do not have a centralized monitoring system, but if you already plug into the OpenTelemetry ecosystem we want to make sure to provide first-class support.
 
 === Exporting to OpenTelemetry
-This method exports tracing telemetry in OpenTelemetry's standard format (OTLP), which can be sent to any OTLP-compatible backend/processor such as Jaeger, Zipkin or `opentelemetry-collector`.
+This method exports tracing telemetry in OpenTelemetry's standard format (OTLP), which can be sent to any OTLP-compatible receiver such as Jaeger, Zipkin or `opentelemetry-collector`.
 
 Add this to your Maven, or the equivalent to your build tool of choice:
 
@@ -122,53 +122,13 @@ And now:
 include::example$Tracing.java[tag=otel-direct,indent=0]
 ----
 
-=== Exporting directly to Jaeger
-This example outputs tracing telemetry from the SDK directly to Jaeger, or a Jaeger-compatible backend such as Zipkin.
+At this point the SDK will automatically be exporting spans, and you should see them in your receiver of choice.
 
-Add this to your Maven, or the equivalent to your build tool of choice:
-
-[source,xml]
-----
-<dependency>
-    <groupId>com.couchbase.client</groupId>
-    <artifactId>tracing-opentelemetry</artifactId>
-    <version>1.2.0</version>
-</dependency>
-<dependency>
-    <groupId>io.opentelemetry</groupId>
-    <artifactId>opentelemetry-exporter-jaeger</artifactId>
-    <version>0.11.0</version>
-</dependency>
-<dependency>
-    <groupId>io.grpc</groupId>
-    <artifactId>grpc-protobuf</artifactId>
-    <version>1.28.0</version>
-</dependency>
-<dependency>
-    <groupId>io.grpc</groupId>
-    <artifactId>grpc-netty-shaded</artifactId>
-    <version>1.28.0</version>
-</dependency>
-----
-
-Next up, initialize the jaeger tracer:
-
-[source,java]
-----
-include::example$Tracing.java[tag=otel-configure,indent=0]
-----
-
-Once the exporter is set up, it can be wrapped into the `OpenTelemetryRequestTracer` and passed into the environment.
-
-[source,java]
-----
-include::example$Tracing.java[tag=otel-configure-setup,indent=0]
-----
-
-=== Span output
-At this point, whichever method you have used, the SDK will automatically be exporting spans and you should see them in your backend of choice.
-
-(Bear in mind during testing that the exporter may batch spans and hence not export them if the application exits quickly enough.  This can be configured on the `BatchSpanProcessor` or `JaegerGrpcSpanExporter` objects.)
+=== OpenTelemetry Troubleshooting
+* There are many ways to export spans.  The example is exporting OpenTelemetry Protocol (OTLP) spans over GRPC to port 4317, which we believe is the defacto standard for OpenTelemetry.  Make sure that your receiver is compatible with this, e.g. has these ports open and is ready to receive OTLP traffic over GRPC.  With https://www.jaegertracing.io/docs/1.41/getting-started/[Jaeger in Docker] this is achieved with the options `-e COLLECTOR_OTLP_ENABLED=true` and `-p 4317:4317`.
+* The exporter used in this example is `BatchSpanProcessor`, which may not have a chance to export spans if the application exits very quickly (e.g. a test application).  `SimpleSpanProcessor` can be used instead, though is not likely suitable for production.
+* The example above uses `Sampler.alwaysOn()`, which exports every span.  This may need to be reduced to avoid overwhelming the receiver, with e.g. `Sampler.traceIdRatioBased(0.01)` to sample 1% of all traces.
+* It can be worth sending traces into https://opentelemetry.io/docs/collector/[OpenTelemetry Collector], and forwarding them on from there to your receiver of choice.  Among other capabilities the collector can log traces it receives, making for easier debugging.
 
 === Parent spans
 
@@ -199,7 +159,7 @@ You need to include the `tracing-opentracing` module:
 </dependency>
 ----
 
-And then wrap the Tracer:
+And then create an OpenTracing `Tracer` and pass it to the SDK:
 
 [source,java]
 ----

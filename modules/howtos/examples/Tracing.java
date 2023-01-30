@@ -32,28 +32,6 @@ public class Tracing {
         CoreEnvironment environment = CoreEnvironment.builder().thresholdLoggingTracerConfig(config).build();
         // end::tracing-configure[]
       }
-
-      {
-        // tag::otel-configure[]
-        // Create a channel towards Jaeger end point
-        ManagedChannel jaegerChannel = ManagedChannelBuilder.forAddress("localhost", 14250).usePlaintext().build();
-
-        // Export traces to Jaeger
-        JaegerGrpcSpanExporter jaegerExporter = JaegerGrpcSpanExporter.builder().setServiceName("YOUR_SERVICE_NAME_HERE")
-            .setChannel(jaegerChannel).setDeadlineMs(30000).build();
-
-        // Set to process the spans by the Jaeger Exporter
-        OpenTelemetrySdk.getGlobalTracerManagement()
-            .addSpanProcessor(SimpleSpanProcessor.builder(jaegerExporter).build());
-        // end::otel-configure[]
-
-        // tag::otel-configure-setup[]
-        // Wrap Tracer
-        RequestTracer tracer = OpenTelemetryRequestTracer.wrap(OpenTelemetry.get());
-
-        ClusterEnvironment environment = ClusterEnvironment.builder().requestTracer(tracer).build();
-        // end::otel-configure-setup[]
-      }
     }
   }
 
@@ -68,12 +46,16 @@ public class Tracing {
             .setResource(Resource.getDefault()
                     .merge(Resource.builder()
                             // An OpenTelemetry service name generally reflects the name of your microservice,
-                            // e.g. "shopping-cart-service"
+                            // e.g. "shopping-cart-service".
                             .put("service.name", "YOUR_SERVICE_NAME_HERE")
                             .build()))
+            // The BatchSpanProcessor will efficiently batch traces and periodically export them.
+            // This exporter exports traces on the OTLP protocol over GRPC on port 4317.
             .addSpanProcessor(BatchSpanProcessor.builder(OtlpGrpcSpanExporter.builder()
                     .setEndpoint("HOSTNAME_OF_OPENTELEMETRY_BACKEND:4317")
                     .build()).build())
+            // Export every trace: this may be too heavy for production.
+            // An alternative is `.setSampler(Sampler.traceIdRatioBased(0.01))`
             .setSampler(Sampler.alwaysOn())
             .build();
 
