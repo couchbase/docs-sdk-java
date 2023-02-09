@@ -43,25 +43,29 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 
 === Improvements
+
 * https://issues.couchbase.com/browse/JCBC-2034[JCBC-2034]:
-`CollectionQueryIndexManager` has been added at a @Stability.Volatile level, to better allow management of query indexes at the Collection level.
+`CollectionQueryIndexManager` has been added at a `@Stability.Volatile` level, to better allow management of query indexes at the Collection level.
 Documentation and an upgrade to a higher stability level will follow in the next minor SDK bump.
-Until then, users are encourage to try out the new functionality and provide feedback - but should expect the possibility of API changes.
+Until then, users are encourage to try out the new functionality and provide feedback -- but should expect the possibility of API changes.
 * https://issues.couchbase.com/browse/JVMCBC-1181[JVMCBC-1181]:
 It is now possible to authenticate over secure connections even if the JVM does not support the SASL PLAIN authentication mechanisms.
 * https://issues.couchbase.com/browse/JVMCBC-1184[JVMCBC-1184]:
-Update dependencies.
+Updated dependencies.
 * https://issues.couchbase.com/browse/JVMCBC-1213[JVMCBC-1213]:
 If too many operations are specified in a single sub-document lookup, the exception message now indicates why the operation failed.
 
 === Bug Fixes
+
 * https://issues.couchbase.com/browse/JVMCBC-1160[JVMCBC-1160]:
 When a sub-document path has a syntax error or is inappropriate for an operation, the SDK now throws `PathInvalidException`.
 Prior to this change, it would throw a generic `CouchbaseException` with the message "Unexpected SubDocument response code".
 * https://issues.couchbase.com/browse/JCBC-2045[JCBC-2045]:
 `WatchQueryIndexOptions` now extends `CommonOptions`, allowing standard options such as timeout to be specified.
 
+
 == Version 3.4.2 (16 January 2023)
+
 This is a regular maintenance release.
 
 https://packages.couchbase.com/clients/java/3.4.2/Couchbase-Java-Client-3.4.2.zip[Download] |
@@ -102,6 +106,7 @@ Setting `security.enableNativeTls` to false now prevents the SDK from even attem
 Supporting in transactions a future version of Couchbase Server that requires query_context be sent in all queries.
 * https://issues.couchbase.com/browse/JVMCBC-1174[JVMCBC-1174]:
 Fixed a regression that prevented native TLS from being used regardless of whether the `security.enableNativeTls` client setting was set to true.
+
 
 == Version 3.4.1 (7 December 2022)
 
