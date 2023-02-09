@@ -17,6 +17,50 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 
 // tag::all[]
+== Version 3.4.3 (9 February 2023)
+This is a regular maintenance release.
+
+https://packages.couchbase.com/clients/java/3.4.3/Couchbase-Java-Client-3.4.3.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.4.3/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.4.3/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.5.0**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.2.3             | OpenTelemetry 1.19.0       | Committed
+| `tracing-opentracing`     | 1.2.3             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.4.3             | OpenTelemetry 1.19.0       | Volatile
+| `metrics-micrometer`      | 0.4.3             | Micrometer 1.10.0          | Volatile
+|=======================
+
+
+=== Improvements
+* https://issues.couchbase.com/browse/JCBC-2034[JCBC-2034]:
+`CollectionQueryIndexManager` has been added at a @Stability.Volatile level, to better allow management of query indexes at the Collection level.
+Documentation and an upgrade to a higher stability level will follow in the next minor SDK bump.
+Until then, users are encourage to try out the new functionality and provide feedback - but should expect the possibility of API changes.
+* https://issues.couchbase.com/browse/JVMCBC-1181[JVMCBC-1181]:
+It is now possible to authenticate over secure connections even if the JVM does not support the SASL PLAIN authentication mechanisms.
+* https://issues.couchbase.com/browse/JVMCBC-1184[JVMCBC-1184]:
+Update dependencies.
+* https://issues.couchbase.com/browse/JVMCBC-1213[JVMCBC-1213]:
+If too many operations are specified in a single sub-document lookup, the exception message now indicates why the operation failed.
+
+=== Bug Fixes
+* https://issues.couchbase.com/browse/JVMCBC-1160[JVMCBC-1160]:
+When a sub-document path has a syntax error or is inappropriate for an operation, the SDK now throws `PathInvalidException`.
+Prior to this change, it would throw a generic `CouchbaseException` with the message "Unexpected SubDocument response code".
+* https://issues.couchbase.com/browse/JCBC-2045[JCBC-2045]:
+`WatchQueryIndexOptions` now extends `CommonOptions`, allowing standard options such as timeout to be specified.
+
 == Version 3.4.2 (16 January 2023)
 This is a regular maintenance release.
 
