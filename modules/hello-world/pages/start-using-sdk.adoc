@@ -24,34 +24,35 @@ In this guide, you will learn:
 
 == Hello Couchbase
 
-We will go through the code sample step by step, but for those in a hurry to see it, here it is:
+We will go through the code sample step by step, but for those in a hurry, here's the complete code:
 
-[{tabs}] 
+[{tabs}]
 ==== 
 Couchbase Capella Sample::
 +
 --
-If you are connecting to https://docs.couchbase.com/cloud/index.html[Couchbase Capella], be sure to get the correct endpoint as well as user, password.
+If you are connecting to https://docs.couchbase.com/cloud/index.html[Couchbase Capella], you'll need to know the endpoint address, as well as a username and password.
+
+This example requires the Travel Sample Bucket.
+The Couchbase Capella free trial version comes with this bucket, and its Query indexes, loaded and ready.
 
 [source,java]
 ----
-include::devguide:example$StartUsingCloud.java[tag=cloud-connect,indent=0]
+include::devguide:example$StartUsingCapella.java[tag=cloud-connect,indent=0]
 ----
-
-The Couchbase Capella free trial version comes with the Travel Sample Bucket, and its Query indexes, loaded and ready.
 --
 
 Local Couchbase Server::
-+ 
--- 
++
+--
+Before running this example, you will need to install the Travel Sample Bucket
+using either the xref:{version-server}@server:manage:manage-settings/install-sample-buckets.adoc#install-sample-buckets-with-the-ui[Web interface]
+or the xref:{version-server}@server:manage:manage-settings/install-sample-buckets.adoc#install-sample-buckets-with-the-cli[command line].
+
 [source.try-it,java]
 ----
 include::example$StartUsing.java[tags=start-using,indent=0]
 ----
-
-As well as the Java SDK (see below), and a running instance of Couchbase Server, you will need to load up the Travel Sample Bucket
-using either the xref:{version-server}@server:manage:manage-settings/install-sample-buckets.adoc#install-sample-buckets-with-the-ui[Web interface]
-or the xref:{version-server}@server:manage:manage-settings/install-sample-buckets.adoc#install-sample-buckets-with-the-cli[command line].
 --
 ====
 
@@ -138,7 +139,7 @@ Here are all the imports needed to run the sample code:
 
 [source,java]
 ----
-include::devguide:example$StartUsingCloud.java[tags=imports,indent=0]
+include::devguide:example$StartUsingCapella.java[tags=imports,indent=0]
 ----
 
 If you haven't already, create an empty class and add a `main()` method.
@@ -161,7 +162,7 @@ Couchbase Capella::
 --
 [source,java]
 ----
-include::devguide:example$StartUsingCloud.java[tags=connect-info,indent=0]
+include::devguide:example$StartUsingCapella.java[tags=connect-info,indent=0]
 ----
 --
 
@@ -188,19 +189,14 @@ The basic connection details that you’ll need are given below -- for more back
 Couchbase Capella::
 +
 --
-[source,java]
-----
-include::devguide:example$StartUsingCloud.java[tags=connect-string,indent=0]
-----
+From version 3.3, the Java SDK includes Capella’s standard Certificate Authority (CA) certificates by default, so you don't need any additional configuration.
+Capella requires TLS, which you can enable by using a connection string that starts with `couchbases://` (note the final 's').
 
-From version 3.3, the Java SDK includes Capella’s standard certificates by default, so you don't need any additional configuration.
-You do need to enable TLS, which can be done by simply using `couchbases://` in the connection string as in this example.
-
-Alternatively, you can use a xref:howtos:managing-connections.adoc#cluster-environment[Cluster Environment] when you need to customize the client’s behavior (e.g. changing connection timeout settings).
+This example shows how to connect and customize the xref:howtos:managing-connections.adoc#cluster-environment[Cluster Environment] settings.
 
 [source,java]
 ----
-include::devguide:example$StartUsingCloud.java[tags=connect-env,indent=0]
+include::devguide:example$StartUsingCapella.java[tags=connect-env,indent=0]
 ----
 
 When accessing Capella from a different Wide Area Network or Availability Zone, you may experience latency issues with the default connection settings.
@@ -213,15 +209,10 @@ CAUTION: The Configuration Profiles feature is currently a xref:java-sdk:project
 Local Couchbase Server::
 +
 --
-[source,java]
-----
-include::example$StartUsing.java[tags=connect-string,indent=0]
-----
+For developing locally on the same machine as Couchbase Server, your connection string can be `couchbase://127.0.0.1` as shown here.
+For production deployments, you will want to enable TLS by using `couchbases://` (note the final 's') instead of `couchbase://`.
 
-For developing locally on the same machine as Couchbase Server, your URI can be `couchbase://localhost` as shown here.
-For production deployments, you will want to use a secure server, with `couchbases://`.
-
-Alternatively, you can use a xref:howtos:managing-connections.adoc#cluster-environment[Cluster Environment] when you need to customize the client’s behavior (e.g. changing connection timeout settings).
+This example shows how to connect and customize the xref:howtos:managing-connections.adoc#cluster-environment[Cluster Environment] settings.
 
 [source,java]
 ----
@@ -230,11 +221,22 @@ include::example$StartUsing.java[tags=connect-env,indent=0]
 --
 ====
 
-Following successful authentication, add this code snippet to access your `Bucket`:
+[TIP]
+.Simpler Connection
+====
+There's also a simpler version of `Cluster.connect()` for when you don't need to customize the cluster environment:
 
 [source,java]
 ----
-include::devguide:example$StartUsingCloud.java[tag=bucket,indent=0]
+include::devguide:example$SimpleConnect.java[tags=connect-string,indent=0]
+----
+====
+
+Now that you have a `Cluster`, add this code snippet to access your `Bucket`:
+
+[source,java]
+----
+include::devguide:example$StartUsingCapella.java[tag=bucket,indent=0]
 ----
 
 === Add and Retrieve Documents
@@ -246,7 +248,7 @@ Here we refer to the `users` collection within the `tenant_agent_00` scope from 
 
 [source,java]
 ----
-include::devguide:example$StartUsingCloud.java[tag=collection,indent=0]
+include::devguide:example$StartUsingCapella.java[tag=collection,indent=0]
 ----
 
 xref:howtos:kv-operations.adoc[Data operations], like storing and retrieving documents, can be done using simple methods on the `Collection` class such as `Collection.get()` and `Collection.upsert()`.
@@ -255,7 +257,7 @@ Add the following code to create a new document and retrieve it:
 
 [source,java]
 ----
-include::devguide:example$StartUsingCloud.java[tag=upsert-get,indent=0]
+include::devguide:example$StartUsingCapella.java[tag=upsert-get,indent=0]
 ----
 
 === {sqlpp} Lookup
@@ -267,7 +269,7 @@ However, with a Scope level query you only need to specify the Collection name -
 
 [source,java]
 ----
-include::devguide:example$StartUsingCloud.java[tag=n1ql-query,indent=0]
+include::devguide:example$StartUsingCapella.java[tag=n1ql-query,indent=0]
 ----
 
 You can learn more about {sqlpp} queries on the xref:howtos:n1ql-queries-with-sdk.adoc[] page.

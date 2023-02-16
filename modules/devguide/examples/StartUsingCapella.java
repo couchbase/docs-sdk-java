@@ -8,33 +8,25 @@ import com.couchbase.client.java.query.*;
 import java.time.Duration;
 // end::imports[]
 
-
-public class StartUsingCloud {
+public class StartUsingCapella {
   // tag::connect-info[]
   // Update these variables to point to your Couchbase Capella instance and credentials.
-  static String connectionString = "cb.<your-endpoint-here>.cloud.couchbase.com";
+  static String connectionString = "couchbases://cb.<your-endpoint-here>.cloud.couchbase.com";
   static String username = "username";
   static String password = "Password!123";
   static String bucketName = "travel-sample";
   // end::connect-info[]
 
   public static void main(String... args) {
-    // tag::connect-string[]
-    // Simple connection.
-    Cluster cluster = Cluster.connect("couchbases://" + connectionString, username, password);
-    // end::connect-string[]
-    cluster.disconnect();
-
     // tag::connect-env[]
-    // Custom environment connection.
-    cluster = Cluster.connect(
-            "couchbases://" + connectionString,
-            ClusterOptions.clusterOptions(username, password).environment(env -> {
-              // Sets a pre-configured profile called "wan-development" to help avoid latency issues
-              // when accessing Capella from a different Wide Area Network
-              // or Availability Zone (e.g. your laptop).
-              env.applyProfile("wan-development");
-            })
+    Cluster cluster = Cluster.connect(
+        connectionString,
+        ClusterOptions.clusterOptions(username, password).environment(env -> {
+          // Sets a pre-configured profile called "wan-development" to help avoid
+          // latency issues when accessing Capella from a different Wide Area Network
+          // or Availability Zone (e.g. your laptop).
+          env.applyProfile("wan-development");
+        })
     );
     // end::connect-env[]
 
@@ -45,7 +37,7 @@ public class StartUsingCloud {
     // end::bucket[]
 
     // tag::collection[]
-    // Get a user defined collection reference
+    // Get a user-defined collection reference
     Scope scope = bucket.scope("tenant_agent_00");
     Collection collection = scope.collection("users");
     // end::collection[]
@@ -53,8 +45,8 @@ public class StartUsingCloud {
     // tag::upsert-get[]
     // Upsert Document
     MutationResult upsertResult = collection.upsert(
-            "my-document",
-            JsonObject.create().put("name", "mike")
+        "my-document",
+        JsonObject.create().put("name", "mike")
     );
 
     // Get Document

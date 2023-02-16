@@ -11,29 +11,22 @@ import java.time.Duration;
 public class StartUsing {
   // tag::connect-info[]
   // Update these variables to point to your Couchbase Server instance and credentials.
-  static String connectionString = "localhost";
+  static String connectionString = "couchbase://127.0.0.1";
   static String username = "Administrator";
   static String password = "password";
   static String bucketName = "travel-sample";
   // end::connect-info[]
 
   public static void main(String... args) {
-    // tag::connect-string[]
-    // For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
-    Cluster cluster = Cluster.connect("couchbase://" + connectionString, username, password);
-    // end::connect-string[]
-    cluster.disconnect();
-
     // tag::connect-env[]
-    // For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
-    cluster = Cluster.connect(
-            "couchbase://" + connectionString,
-            ClusterOptions.clusterOptions(username, password).environment(env -> {
-              // Customize client settings by calling methods on the "env" variable.
-            })
+    Cluster cluster = Cluster.connect(
+        connectionString,
+        ClusterOptions.clusterOptions(username, password).environment(env -> {
+          // Customize client settings by calling methods on the "env" variable.
+        })
     );
     // end::connect-env[]
-    
+
     // tag::bucket[]
     // get a bucket reference
     Bucket bucket = cluster.bucket(bucketName);
@@ -41,7 +34,7 @@ public class StartUsing {
     // end::bucket[]
 
     // tag::collection[]
-    // get a user defined collection reference
+    // get a user-defined collection reference
     Scope scope = bucket.scope("tenant_agent_00");
     Collection collection = scope.collection("users");
     // end::collection[]
@@ -49,8 +42,8 @@ public class StartUsing {
     // tag::upsert-get[]
     // Upsert Document
     MutationResult upsertResult = collection.upsert(
-            "my-document",
-            JsonObject.create().put("name", "mike")
+        "my-document",
+        JsonObject.create().put("name", "mike")
     );
 
     // Get Document
@@ -63,7 +56,7 @@ public class StartUsing {
     // Call the query() method on the scope object and store the result.
     Scope inventoryScope = bucket.scope("inventory");
     QueryResult result = inventoryScope.query("SELECT * FROM airline WHERE id = 10;");
-    
+
     // Return the result rows with the rowsAsObject() method and print to the terminal.
     System.out.println(result.rowsAsObject());
     // end::n1ql-query[]
