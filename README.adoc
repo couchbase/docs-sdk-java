@@ -88,6 +88,8 @@ CONTAINER ID   IMAGE                          COMMAND                  CREATED  
 
 - If you want to run all the code sample tests you can also execute `make tests`.
 
+- If you want to run the code sample without passing it through any tests, you can run `make TEST_NAME="StartUsing.java" run-file`
+
 - To stop the docker container you can simply run `make cb-stop`, this will stop and remove the docker container, but will keep the local image should you need to start it up again.
 
 TIP: Because we mount the project directory in the `cb-test` container, you will see your local code changes reflected in the container instantly, so there is no need to stop and start the container when debugging your code.
