@@ -17,6 +17,53 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 
 // tag::all[]
+== Version 3.4.4 (8 March 2023)
+This is a regular maintenance release.
+
+https://packages.couchbase.com/clients/java/3.4.4/Couchbase-Java-Client-3.4.4.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.4.4/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.4.4/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.5.0**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.2.4             | OpenTelemetry 1.19.0       | Committed
+| `tracing-opentracing`     | 1.2.4             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.4.4             | OpenTelemetry 1.19.0       | Volatile
+| `metrics-micrometer`      | 0.4.4             | Micrometer 1.10.0          | Volatile
+|=======================
+
+
+=== Improvements
+* https://issues.couchbase.com/browse/JCBC-2050[JCBC-2050]:
+Coordinates in Full-Text Search geographic queries can now be specified using a staged builder, so it's harder to accidentally swap the latitude and longitude components. Example usage:
+```
+Coordinate eiffelTower = Coordinate.lat(48.858093).lon(2.294694);
+```
+Or, if you prefer to specify longitude first:
+```
+Coordinate eiffelTower = Coordinate.lon(2.294694).lat(48.858093);
+```
+* https://issues.couchbase.com/browse/JVMCBC-1237[JVMCBC-1237]:
+Added "network" as an alias for the "io.networkResolution" connection string parameter.
+For example, the connection string "couchbase://example.com?network=external" is now equivalent to "couchbase://example.com?io.networkResolution=external".
+This was done for compatibility with other Couchbase SDKs that use "network" as the name of this parameter.
+
+=== Bugs
+* https://issues.couchbase.com/browse/JVMCBC-1232[JVMCBC-1232]:
+`Cluster.connect()` now rejects connection strings that have no addresses (like "couchbase://").
+Before this change, it would accept the invalid connection string, and subsequent operations would fail with a misleading error message: "The cluster does not support cluster-level queries".
+* https://issues.couchbase.com/browse/JVMCBC-1234[JVMCBC-1234]:
+Fixed a regression in Java SDK 3.4.3 and Scala SDK 1.4.3 that caused SQL++ query result metadata to always include metrics, regardless of the "metrics" query option.
+
 == Version 3.4.3 (9 February 2023)
 This is a regular maintenance release.
 
