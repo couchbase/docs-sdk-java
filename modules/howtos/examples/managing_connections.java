@@ -69,20 +69,10 @@ public class managing_connections {
 		// end::managing_connections_8[]
 	}
 
-	public void managing_connections_9() throws Exception { // file: howtos/pages/managing-connections.adoc line: 252
-		// tag::managing_connections_9[]
-		Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");
-		cluster.waitUntilReady(Duration.ofSeconds(10));
-		Bucket bucket = cluster.bucket("travel-sample");
-		Collection collection = bucket.defaultCollection();
-		// end::managing_connections_9[]
-	}
-
 	public static void main(String[] args) throws Exception {
 		managing_connections obj = new managing_connections();
 		obj.init();
 		obj.managing_connections_5();
 		obj.managing_connections_8();
-		obj.managing_connections_9();
 	}
 }

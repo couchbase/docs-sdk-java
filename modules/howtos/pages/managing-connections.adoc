@@ -274,7 +274,7 @@ Or more fully:
 
 [source,java]
 ----
-include::example$managing_connections.java[tag=managing_connections_9,indent=0]
+include::example$ClusterExample.java[tag=managing_connections_9,indent=0]
 ----
 
 If you are working at the _Bucket_ level, then the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Bucket.html#waitUntilReady-java.time.Duration-[Bucket-level `waitUntilReady`] does the same as the Cluster-level version,
