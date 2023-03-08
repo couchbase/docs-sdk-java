@@ -25,8 +25,12 @@ cb-build:
 		--build-arg CB_BUILD=${CB_BUILD} \
 		-t ${LOCAL_IMAGE_NAME} -f Dockerfile .
 
-# Run couchbase server+sdk container. Note that this runs with the `-rm` option, 
-# which will ensure the container is deleted when stopped.
+# Run couchbase server+sdk container. This runs with the `-rm` option, which
+# will ensure the container is deleted when stopped. The `-v` option bind
+# mounts the docs-sdk-java directory on the host docs to the docs directory in
+# the container. This means any changes you make in this directory on the host
+# will be automatically reflected in the container. Please note that this does
+# not apply to changes made to any of the .sh files. See the Dockerfile for details.
 cb-start:
 	@docker run -t --rm -v ${PWD}:/docs -d --name cb-test -p 8091-8096:8091-8096 ${LOCAL_IMAGE_NAME}
 	@docker exec -t cb-test bin/bash -c "/init-couchbase/init.sh"

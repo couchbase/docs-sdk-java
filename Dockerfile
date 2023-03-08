@@ -42,7 +42,10 @@ ENV PATH="$PATH:/opt/java/openjdk/bin"
 RUN javac --version && \
     java --version
 
-# Copy init-couchbase files into image.
+# Copy init-couchbase files into image & change permssions to make them executable.
+# As this is not a mounted file, any changes made to the .sh files on the host
+# will not be automatically reflected in this directory. The image will need to be 
+# rebuilt in order for any changes to take effect.
 
 RUN mkdir -p /init-couchbase
 COPY modules/test/scripts/init-couchbase /init-couchbase
