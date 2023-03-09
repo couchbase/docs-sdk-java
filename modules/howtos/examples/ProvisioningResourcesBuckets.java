@@ -12,7 +12,10 @@
  * the License.
  */
 
+import java.time.Duration;
+
 import com.couchbase.client.core.error.BucketExistsException;
+import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.manager.bucket.BucketManager;
 import com.couchbase.client.java.manager.bucket.BucketSettings;
@@ -44,6 +47,10 @@ public class ProvisioningResourcesBuckets {
 				System.out.println("Bucket already exists");
 			}
 			// end::createBucket[]
+
+			// Wait until bucket is created before trying to flush it
+			Bucket bucket = cluster.bucket("hello");
+			bucket.waitUntilReady(Duration.ofSeconds(10));
 		}
 
 		{
@@ -58,6 +65,7 @@ public class ProvisioningResourcesBuckets {
 		}
 		{
 			System.out.println("[flushBucket]");
+
 
 			// tag::flushBucket[]
 			bucketMgr.flushBucket("hello");
