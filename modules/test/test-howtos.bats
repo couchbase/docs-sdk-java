@@ -22,6 +22,11 @@ load 'test_helper'
     assert_success
 }
 
+@test "[howtos] - ClusterExample.java" {
+    runExample ClusterExample
+    assert_success
+}
+
 @test "[howtos] - CollectingInformationAndLogging.java" {
     runExample CollectingInformationAndLogging
     assert_success
