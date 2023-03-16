@@ -7,6 +7,7 @@ import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryResult;
+import com.couchbase.client.java.query.QueryScanConsistency;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -54,12 +55,13 @@ public class AddEnrollments {
 
     private static JsonObject retrieveStudent(Cluster cluster, String name) throws CouchbaseException {
 
+        QueryOptions studentQueryOptions = QueryOptions.queryOptions();
+        studentQueryOptions.parameters(JsonObject.create().put("name", name));
+        studentQueryOptions.scanConsistency(QueryScanConsistency.REQUEST_PLUS);
+
         final QueryResult result = cluster.query("select META().id, src.* " +
                         "from `student-bucket`.`art-school-scope`.`student-record-collection` src " +
-                        "where src.`name` = $name",
-                QueryOptions.queryOptions()
-                        .parameters(JsonObject.create()
-                                .put("name", name)));
+                        "where src.`name` = $name", studentQueryOptions);
 
         return result.rowsAsObject().get(0);
 
@@ -67,12 +69,13 @@ public class AddEnrollments {
 
     private static JsonObject retrieveCourse(Cluster cluster, String course) throws CouchbaseException {
 
+        QueryOptions courseQueryOptions = QueryOptions.queryOptions();
+        courseQueryOptions.parameters(JsonObject.create().put("courseName", course));
+        courseQueryOptions.scanConsistency(QueryScanConsistency.REQUEST_PLUS);
+
         final QueryResult result = cluster.query("select META().id, crc.* " +
                         "from `student-bucket`.`art-school-scope`.`course-record-collection` crc " +
-                        "where crc.`course-name` = $courseName",
-                QueryOptions.queryOptions()
-                        .parameters(JsonObject.create()
-                                .put("courseName", course)));
+                        "where crc.`course-name` = $courseName", courseQueryOptions);
 
         return result.rowsAsObject().get(0);
 

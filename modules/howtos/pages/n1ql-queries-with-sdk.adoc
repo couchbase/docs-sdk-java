@@ -1,5 +1,5 @@
 = Query
-:description: You can query for documents in Couchbase using the {sqlpp_url}[{sqlpp} (formerly N1QL)] query language, a language based on SQL, but designed for structured and flexible JSON documents.
+:description: You can query for documents in Couchbase using the {sqlpp_url}[{sqlpp}] (formerly N1QL) query language, a language based on SQL, but designed for structured and flexible JSON documents.
 :page-topic-type: howto
 :page-aliases: n1ql-query,ROOT:querying-n1ql
 :page-pagination: full
@@ -23,10 +23,33 @@ include::example$Queries.java[tag=imports,indent=0]
 
 Here's a complete example of doing a query and handling the results:
 
+[{tabs}]
+====
+Couchbase Capella Sample::
++
+--
+These examples requires the Travel Sample Bucket.
+The Couchbase Capella free trial version comes with this bucket, and its Query indexes, loaded and ready.
+
 [source,java]
 ----
-include::example$Queries.java[tag=simple,indent=0]
+include::example$SimpleQueryCloud.java[tag=class,indent=0]
 ----
+--
+
+Local Couchbase Server::
++
+--
+To run these examples, you will need to install the Travel Sample Bucket
+using either the xref:{version-server}@server:manage:manage-settings/install-sample-buckets.adoc#install-sample-buckets-with-the-ui[Web interface]
+or the xref:{version-server}@server:manage:manage-settings/install-sample-buckets.adoc#install-sample-buckets-with-the-cli[command line].
+
+[source,java]
+----
+include::example$SimpleQuery.java[tag=class,indent=0]
+----
+--
+====
 
 Let's break it down. A query is always performed at the `Cluster` level, using the `query` method. It takes the statement as a required argument and then allows to provide additional options if needed (in the example above, no options are specified).
 
@@ -156,7 +179,7 @@ include::example$Queries.java[tag=scanconsistency,indent=0]
 //If you need "global" scan consistency, use `QueryScanConsistency.REQUEST_PLUS` on `scanConsistency(QueryScanConsistency)`.
 
 
-=== Client Context Id
+=== Client Context ID
 
 The SDK will always send a client context ID with each query, even if none is provided by the user.
 By default a UUID will be generated that is mirrored back from the query engine and can be used for debugging purposes.
