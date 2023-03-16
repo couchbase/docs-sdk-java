@@ -112,6 +112,18 @@ load 'test_helper'
     assert_output --partial "id='hotel_26223'"
 }
 
+@test "[howtos] - SimpleQuery.java" {
+    runExample SimpleQuery
+    assert_success
+}
+
+@test "[howtos] - SimpleQueryCloud.java" {
+    skip "Example requires a cloud endpoint. Unable to run."
+
+    runExample SimpleQueryCloud
+    assert_success
+}
+
 @test "[howtos] - SubDocument.java" {
     runExample SubDocument
     assert_success

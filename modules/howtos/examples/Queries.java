@@ -52,24 +52,6 @@ public class Queries {
     // end::connect-bucket-and-scope[]
 
     {
-      System.out.println("Example: [simple]");
-      // tag::simple[]
-      try {
-        final QueryResult result = cluster.query("select * from `travel-sample`.inventory.airline limit 100",
-            queryOptions().metrics(true));
-
-        for (JsonObject row : result.rowsAsObject()) {
-          System.out.println("Found row: " + row);
-        }
-
-        System.out.println("Reported execution time: " + result.metaData().metrics().get().executionTime());
-      } catch (CouchbaseException ex) {
-        ex.printStackTrace();
-      }
-      // end::simple[]
-    }
-
-    {
       System.out.println("\nExample: [named]");
       // tag::named[]
       QueryResult result = cluster.query(
