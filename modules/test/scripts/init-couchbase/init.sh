@@ -16,6 +16,9 @@ CB_ANALYTICS_RAMSIZE="${CB_ANALYTICS_RAMSIZE:-1024}"
 
 CB_INDEXER_PORT="${CB_INDEXER_PORT:-9102}"
 
+NO_COLOR="$(tput sgr0)"
+BOLD_BLUE="$(tput bold)$(tput setaf 4)"
+
 # exit immediately if a command fails or if there are unset vars
 set -euo pipefail
 
@@ -23,26 +26,26 @@ set -euo pipefail
 # back to the foreground after the node is configured
 set -m
 
-echo "Starting couchbase-server..."
+printf '%s%s%s\n' $BOLD_BLUE 'Starting couchbase-server...' $NO_COLOR
 /entrypoint.sh couchbase-server &
 
 sleep 5
 
-echo "Restarting couchbase-server..."
+printf '%s%s%s\n' $BOLD_BLUE 'Restarting couchbase-server...' $NO_COLOR
 /opt/couchbase/bin/couchbase-server -k
 
 sleep 5
 
-echo "Waiting for couchbase-server..."
+printf '%s%s%s\n' $BOLD_BLUE 'Waiting for couchbase-server...' $NO_COLOR
 until curl -s http://${CB_HOST}:${CB_PORT}/pools >/dev/null; do
     sleep 5
-    echo "Waiting for couchbase-server..."
+    printf '%s%s%s\n' $BOLD_BLUE 'Waiting for couchbase-server...' $NO_COLOR
 done
 
-echo "Waiting for couchbase-server... ready"
+printf '%s%s%s\n' $BOLD_BLUE 'Waiting for couchbase-server... ready' $NO_COLOR
 
 if ! couchbase-cli server-list -c ${CB_HOST}:${CB_PORT} -u ${CB_USER} -p ${CB_PSWD} >/dev/null; then
-    echo "couchbase cluster-init..."
+    printf '%s%s%s\n' $BOLD_BLUE 'couchbase cluster-init...' $NO_COLOR
     couchbase-cli cluster-init \
         --services ${CB_SERVICES} \
         --cluster-name ${CB_NAME} \
@@ -68,7 +71,6 @@ sleep 3
 
 curl http://${CB_USER}:${CB_PSWD}@${CB_HOST}:${CB_INDEXER_PORT}/internal/settings?internal=ok | jq .
 
-echo "Installing bats test framework..."
+printf '%s%s%s\n' $BOLD_BLUE 'Installing bats test framework...' $NO_COLOR
 npm install -g bats
 export TERM=xterm-256color
-echo

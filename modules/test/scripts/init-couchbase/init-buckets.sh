@@ -11,7 +11,11 @@ CB_HOST=localhost
 
 CB_BUCKET_RAMSIZE="${CB_BUCKET_RAMSIZE:-128}"
 
-echo "couchbase-cli bucket-create travel-sample..."
+NO_COLOR="$(tput sgr0)"
+BOLD_BLUE="$(tput bold)$(tput setaf 4)"
+BOLD_GREEN="$(tput bold)$(tput setaf 2)"
+
+printf '%s%s%s\n' $BOLD_BLUE 'couchbase-cli bucket-create travel-sample...' $NO_COLOR
 /opt/couchbase/bin/couchbase-cli bucket-create \
     -c ${CB_HOST} -u ${CB_USER} -p ${CB_PSWD} \
     --bucket travel-sample \
@@ -26,24 +30,24 @@ echo "couchbase-cli bucket-create travel-sample..."
 
 sleep 5
 
-echo "cbimport travel-sample..."
+printf '%s%s%s\n' $BOLD_BLUE 'cbimport travel-sample...' $NO_COLOR
 /opt/couchbase/bin/cbimport json --format sample --verbose \
     -c ${CB_HOST} -u ${CB_USER} -p ${CB_PSWD} \
     -b travel-sample \
     -d file:///opt/couchbase/samples/travel-sample.zip
 
-echo "create airports dataset"
+printf '%s%s%s\n' $BOLD_BLUE 'create airports dataset' $NO_COLOR
 curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
     "statement": "CREATE DATASET airports ON `travel-sample` WHERE `type`=\"airport\";",
     "pretty":true,
     "client_context_id":"test"
 }' http://${CB_HOST}:8095/analytics/service
 
-echo "Check if analytics datasets need to be built..."
+printf '%s%s%s\n' $BOLD_BLUE 'Check if analytics datasets need to be built...' $NO_COLOR
 # These are already setup in the official Couchbase Enterprise docker image.
 # However, this is not the case for our internal dev image.
 if [ $CREATE_ANALYTICS_DATASETS = true ]; then
-    echo "create scoped airport dataset"
+    printf '%s%s%s\n' $BOLD_BLUE 'create scoped airport dataset' $NO_COLOR
     curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
         "statement": "ALTER COLLECTION `travel-sample`.`inventory`.`airport` ENABLE ANALYTICS;",
         "pretty":true,
@@ -57,21 +61,21 @@ if [ $CREATE_ANALYTICS_DATASETS = true ]; then
     }' http://${CB_HOST}:8095/analytics/service
 
 else
-    echo "...analytics datasets are not required."
+    printf '%s%s%s\n' $BOLD_BLUE '...analytics datasets are not required.' $NO_COLOR
 fi
 
-echo "create huge-dataset dataset"
+printf '%s%s%s\n' $BOLD_BLUE 'create huge-dataset dataset' $NO_COLOR
 curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
         "statement": "CREATE DATASET `huge-dataset` ON `travel-sample`;",
         "pretty":true,
         "client_context_id":"test"
 }' http://${CB_HOST}:8095/analytics/service
 
-echo "sleep 10 to allow stabilization..."
+printf '%s%s%s\n' $BOLD_BLUE 'sleep 10 to allow stabilization...' $NO_COLOR
 sleep 10
 
 echo
-echo "create travel-sample-index"
+printf '%s%s%s\n' $BOLD_BLUE 'create travel-sample-index' $NO_COLOR
 curl --fail -s -u ${CB_USER}:${CB_PSWD} -X PUT \
     http://${CB_HOST}:8094/api/index/travel-sample-index \
     -H 'cache-control: no-cache' \
@@ -79,14 +83,14 @@ curl --fail -s -u ${CB_USER}:${CB_PSWD} -X PUT \
     -d @/init-couchbase/travel-sample-index.json
 
 echo
-echo "Waiting for travel-sample-index to be ready..."
+printf '%s%s%s\n' $BOLD_BLUE 'Waiting for travel-sample-index to be ready...' $NO_COLOR
 until curl --fail -s -u ${CB_USER}:${CB_PSWD} http://${CB_HOST}:8094/api/index/travel-sample-index/count |
     jq -e '.count' | grep 917 >/dev/null; do # there are 917 docs to be processed in this index...
     echo "Waiting for travel-sample-index to be ready. Trying again in 10 seconds."
     sleep 10
 done
 
-echo "couchbase-cli bucket-create student-bucket ..."
+printf '%s%s%s\n' $BOLD_BLUE 'couchbase-cli bucket-create student-bucket ...' $NO_COLOR
 /opt/couchbase/bin/couchbase-cli bucket-create \
     -c ${CB_HOST} -u ${CB_USER} -p ${CB_PSWD} \
     --bucket student-bucket \
@@ -101,7 +105,7 @@ echo "couchbase-cli bucket-create student-bucket ..."
 
 sleep 5
 
-echo "creating art-school-scope ..."
+printf '%s%s%s\n' $BOLD_BLUE 'creating art-school-scope ...' $NO_COLOR
 curl -X POST --fail -s -u ${CB_USER}:${CB_PSWD} \
     http://${CB_HOST}:8091/pools/default/buckets/student-bucket/scopes \
     -H "Content-Type: application/x-www-form-urlencoded" \
@@ -109,7 +113,7 @@ curl -X POST --fail -s -u ${CB_USER}:${CB_PSWD} \
 
 sleep 5
 
-echo "creating student record collection ..."
+printf '%s%s%s\n' $BOLD_BLUE 'creating student record collection ...' $NO_COLOR
 curl -X POST --fail -s -u ${CB_USER}:${CB_PSWD} \
     http://${CB_HOST}:8091/pools/default/buckets/student-bucket/scopes/art-school-scope/collections \
     -H "Content-Type: application/x-www-form-urlencoded" \
@@ -117,7 +121,7 @@ curl -X POST --fail -s -u ${CB_USER}:${CB_PSWD} \
 
 sleep 5
 
-echo "creating course record collection ..."
+printf '%s%s%s\n' $BOLD_BLUE 'creating course record collection ...' $NO_COLOR
 curl -X POST --fail -s -u ${CB_USER}:${CB_PSWD} \
     http://${CB_HOST}:8091/pools/default/buckets/student-bucket/scopes/art-school-scope/collections \
     -H "Content-Type: application/x-www-form-urlencoded" \
@@ -125,7 +129,7 @@ curl -X POST --fail -s -u ${CB_USER}:${CB_PSWD} \
 
 sleep 5
 
-echo "create student index ..."
+printf '%s%s%s\n' $BOLD_BLUE 'create student index ...' $NO_COLOR
 curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
     "statement": "create primary index student_idx on `student-bucket`.`art-school-scope`.`student-record-collection`",
     "pretty":true,
@@ -134,7 +138,7 @@ curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '
 
 sleep 5
 
-echo "create course index ..."
+printf '%s%s%s\n' $BOLD_BLUE 'create course index ...' $NO_COLOR
 curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
     "statement": "create primary index course_idx on `student-bucket`.`art-school-scope`.`course-record-collection`",
     "pretty":true,
@@ -143,4 +147,4 @@ curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '
 
 sleep 5
 
-echo "Done."
+printf '%s%s%s\n' $BOLD_GREEN 'Done.' $NO_COLOR
