@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# ===============================================
+# NOTE: Any changes made to this file will not be 
+# automatically reflected in `make cb-start` as
+# the Makefile does not use the mounted version
+# of this file in the Docker image. You will need
+# to rebuild the image via `make cb-build` before
+# running `make cb-start`.
+# ===============================================
+
 CB_USER="${CB_USER:-Administrator}"
 CB_PSWD="${CB_PSWD:-password}"
 CB_HOST="${CB_HOST:-127.0.0.1}"
