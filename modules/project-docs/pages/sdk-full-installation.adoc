@@ -43,18 +43,17 @@ You can use your favorite dependency management tool to install the SDK.
 Maven::
 +
 --
-The following snippet shows how to do it with https://maven.apache.org/[Maven].
+For https://maven.apache.org[Maven], you can insert the following into the dependencies section of your project's `pom.xml` file:
 
 [source,xml]
 ----
-<dependencies>
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
         <version>3.4.4</version>
     </dependency>
-</dependencies>
 ----
+Refer to the https://maven.apache.org/guides/introduction/introduction-to-the-pom.html/[Maven Documentation] for more information regarding the structure of the `pom.xml` file.
 --
 Gradle::
 +
