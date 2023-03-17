@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# ===============================================
+# NOTE: Any changes made to this file will not be 
+# automatically reflected in `make cb-start` as
+# the Makefile does not use the mounted version
+# of this file in the Docker image. You will need
+# to rebuild the image via `make cb-build` before
+# running `make cb-start`.
+# ===============================================
+
 # exit immediately if a command fails or if there are unset vars
 set -euo pipefail
 
@@ -32,9 +41,9 @@ echo "cbimport travel-sample..."
     -b travel-sample \
     -d file:///opt/couchbase/samples/travel-sample.zip
 
-echo "create airports dataset"
+echo "create airport dataset"
 curl --fail -v -u ${CB_USER}:${CB_PSWD} -H "Content-Type: application/json" -d '{
-    "statement": "CREATE DATASET airports ON `travel-sample` WHERE `type`=\"airport\";",
+    "statement": "CREATE DATASET airport ON `travel-sample` WHERE `type`=\"airport\";",
     "pretty":true,
     "client_context_id":"test"
 }' http://${CB_HOST}:8095/analytics/service
