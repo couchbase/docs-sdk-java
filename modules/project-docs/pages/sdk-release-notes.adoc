@@ -219,6 +219,12 @@ The SDK no longer rejects a `PersistTo` requirement in a bucket using the Magma 
 If you call `CancellationErrorContext.getWaitUntilReadyContext()` on an error context that didn't come from a "wait until ready" request, the method is now guaranteed to return null instead of sometimes throwing a `ClassCastException`.
 * https://issues.couchbase.com/browse/JCBC-2024[JCBC-2024]:
 Fixed a memory leak in ManagerMessageHandler.
+* https://issues.couchbase.com/browse/JVMCBC-1247[JVMCBC-1247]:
+The SDK now throws `InvalidArgumentException: Failed to parse connection string` if the connection string has a syntax error.
+For example, the following connection string is malformed, because the `couchbase://` part is repeated:
+`couchbase://foo.example.com,couchbase://bar.example.com`.
+The correct way to include multiple addresses in a connection string is to specify the scheme only once, and to join addresses with commas, like:
+`couchbase://foo.example.com,bar.example.com`
 
 == Version 3.4.0 (24 October 2022)
 
