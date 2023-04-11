@@ -60,9 +60,9 @@ include::example$StartUsing.java[tags=start-using,indent=0]
 
 We recommend running the latest Java LTS version (i.e. at the time of writing JDK 17) with the highest patch version available.
 // Other supported Java versions will work, too.
-Couchbase publishes all stable artifacts to https://search.maven.org/search?q=com.couchbase.client[Maven Central].
+Couchbase publishes all stable artifacts to https://central.sonatype.com/namespace/com.couchbase.client[Maven Central].
 
-The latest version (as of March 2023) is https://search.maven.org/artifact/com.couchbase.client/java-client/3.4.4/jar[3.4.4].
+The latest version (as of April 2023) is https://central.sonatype.com/artifact/com.couchbase.client/java-client/3.4.4/jar[3.4.4].
 
 You can use your favorite dependency management tool to install the SDK.
 

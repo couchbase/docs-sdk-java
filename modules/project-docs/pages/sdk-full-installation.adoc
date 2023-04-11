@@ -32,8 +32,8 @@ see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section f
 We recommend running the latest Java LTS version (i.e. at the time of writing JDK 17) with the highest patch version available.
 Java 17 has various enhancements like sealed classes, pattern matching for switch expressions (in preview), and further updates and improvements on core libraries.
 
-Couchbase publishes all stable artifacts to https://search.maven.org/search?q=com.couchbase.client[Maven Central].
-The latest version (as of March 2023) is https://search.maven.org/artifact/com.couchbase.client/java-client/3.4.4/jar[3.4.4].
+Couchbase publishes all stable artifacts to https://central.sonatype.com/namespace/com.couchbase.client[Maven Central].
+The latest version (as of April 2023) is https://central.sonatype.com/artifact/com.couchbase.client/java-client/3.4.4/jar[3.4.4].
 
 You can use your favorite dependency management tool to install the SDK.
 
