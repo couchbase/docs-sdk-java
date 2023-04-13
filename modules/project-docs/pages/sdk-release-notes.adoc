@@ -17,6 +17,42 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 
 // tag::all[]
+== Version 3.4.5 (13 April 2023)
+This is a regular maintenance release.
+
+https://packages.couchbase.com/clients/java/3.4.5/Couchbase-Java-Client-3.4.5.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.4.5/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.4.5/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.5.0**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.2.5             | OpenTelemetry 1.19.0       | Committed
+| `tracing-opentracing`     | 1.2.5             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.4.5             | OpenTelemetry 1.19.0       | Volatile
+| `metrics-micrometer`      | 0.4.5             | Micrometer 1.10.0          | Volatile
+|=======================
+
+=== Improvements
+* https://issues.couchbase.com/browse/JVMCBC-1223[JVMCBC-1223]:
+Adds a `RetryReason.AUTHENTICATION_ERROR` at `Uncommitted` API stability level.
+A custom `RetryStrategy` can use this new, more granular information to distinguish if a connection problem is down to an authentication issue.
+
+=== Bugs
+* https://issues.couchbase.com/browse/JVMCBC-1252[JVMCBC-1252]:
+Orphaned "observe" operations will no longer occasionally contain a `total_duration_us` field equal to 0.
+* https://issues.couchbase.com/browse/JVMCBC-1255[JVMCBC-1255]:
+If you were subscribing to the event bus and printing all the events, you may have noticed `Event.toString()` throwing a `NullPointerException` if the event context is null.
+`Event.toString()` now handles null contexts more gracefully, and no longer throws this exception.
+
 == Version 3.4.4 (8 March 2023)
 This is a regular maintenance release.
 
