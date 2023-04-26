@@ -47,6 +47,8 @@ Adds a `RetryReason.AUTHENTICATION_ERROR` at `Uncommitted` API stability level.
 A custom `RetryStrategy` can use this new, more granular information to distinguish if a connection problem is down to an authentication issue.
 
 === Bugs
+* https://issues.couchbase.com/browse/JCBC-2032[JCBC-2032]:
+The JSON returned by `SearchQuery.export()` no longer contains extra fields unrelated to the query.
 * https://issues.couchbase.com/browse/JVMCBC-1252[JVMCBC-1252]:
 Orphaned "observe" operations will no longer occasionally contain a `total_duration_us` field equal to 0.
 * https://issues.couchbase.com/browse/JVMCBC-1255[JVMCBC-1255]:
