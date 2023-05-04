@@ -20,6 +20,45 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 == Version 3.4.5 (13 April 2023)
 This is a regular maintenance release.
 
+https://packages.couchbase.com/clients/java/3.4.6/Couchbase-Java-Client-3.4.6.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.4.6/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.4.6/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.5.0**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.2.6             | OpenTelemetry 1.19.0       | Committed
+| `tracing-opentracing`     | 1.2.6             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.4.6             | OpenTelemetry 1.19.0       | Volatile
+| `metrics-micrometer`      | 0.4.6             | Micrometer 1.10.0          | Volatile
+|=======================
+
+=== Improvements
+* https://issues.couchbase.com/browse/JCBC-1570[JCBC-1570],
+https://issues.couchbase.com/browse/JCBC-2058[JCBC-2058]:
+The `osgi-feature` artifact now uses Log4j 2 instead of Log4j 1.
+
+=== Bugs
+* https://issues.couchbase.com/browse/JCBC-2062[JCBC-2062]:
+Fixed a regression in 3.4.5 that caused `ReactiveCollection.lookupIn` to always throw `StackOverflowException`.
+* https://issues.couchbase.com/browse/JVMCBC-1275[JVMCBC-1275]:
+Fixed a regression in Couchbase Java SDK 3.4.5 and Scala SDK 1.4.5 that caused Full Text Search `term` queries to throw `NullPointerException` unless `prefixLength` and `fuzziness` were specified.
+* https://issues.couchbase.com/browse/JVMCBC-1281[JVMCBC-1281]:
+Fixed a regression in Java SDK 3.4.5 that could cause Full-Text Search results to be sorted in the wrong order if the sort option was specified using a mix of strings and `SearchSort` objects.
+* https://issues.couchbase.com/browse/JVMCBC-1285[JVMCBC-1285]:
+Fixed a regression in Couchbase Java SDK 3.4.5 and Scala SDK 1.4.5 that caused Full-Text Search queries to fail to report the locations of some terms. Specifically, any location that did not have `arrayPositions` was omitted from the results.
+
+== Version 3.4.5 (13 April 2023)
+This is a regular maintenance release.
+
 https://packages.couchbase.com/clients/java/3.4.5/Couchbase-Java-Client-3.4.5.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.4.5/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.4.5/[Core API Reference]
