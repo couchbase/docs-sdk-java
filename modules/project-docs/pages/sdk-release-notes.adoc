@@ -17,7 +17,7 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 
 // tag::all[]
-== Version 3.4.5 (13 April 2023)
+== Version 3.4.6 (4 May 2023)
 This is a regular maintenance release.
 
 https://packages.couchbase.com/clients/java/3.4.6/Couchbase-Java-Client-3.4.6.zip[Download] |
