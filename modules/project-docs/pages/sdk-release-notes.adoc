@@ -61,7 +61,7 @@ Dependencies updated.
 * https://issues.couchbase.com/browse/JVMCBC-1283[JVMCBC-1283]:
 A faceted Full-Text Search result's `SearchNumericRange.min()` and `max()` methods now correctly return null instead of zero when the respective range endpoint is unbounded.
 * https://issues.couchbase.com/browse/JVMCBC-1288[JVMCBC-1288]:
-Fixed a regression in Couchbase Java SDK 3.4.5 and Scala SDK 1.2.5 that prevented Full-Text Search result rows from including an explanation when requested.
+Fixed a regression in Couchbase Java SDK 3.4.5 and Scala SDK 1.4.5 that prevented Full-Text Search result rows from including an explanation when requested.
 * https://issues.couchbase.com/browse/JVMCBC-1292[JVMCBC-1292]:
 Removed `META-INF/versions/9/module-info.class` from the `core-io` jar. This file was associated with an improperly repackaged dependency, and never should have been there.
 
