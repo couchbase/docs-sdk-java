@@ -17,6 +17,54 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 
 // tag::all[]
+== Version 3.4.7 (12 June 2023)
+This is a regular maintenance release.
+
+https://packages.couchbase.com/clients/java/3.4.7/Couchbase-Java-Client-3.4.7.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.4.7/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.4.7/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.5.0**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.2.7             | OpenTelemetry 1.19.0       | Committed
+| `tracing-opentracing`     | 1.2.7             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.4.7             | OpenTelemetry 1.19.0       | Volatile
+| `metrics-micrometer`      | 0.4.7             | Micrometer 1.10.0          | Volatile
+|=======================
+
+=== API Impacting
+* https://issues.couchbase.com/browse/JCBC-2075[JCBC-2075]:
+Deprecated `ArrayInsert.createPath()`. Calling this method always causes `mutateIn` to throw an exception, because the "array insert" sub-document command does not support creating missing parent objects. If you want to create missing parent objects, please use `MutateInSpec.arrayAppend()` or `arrayPrepend()` instead of `arrayInsert()`.
+
+=== Improvements
+* https://issues.couchbase.com/browse/JCBC-2069[JCBC-2069]:
+`Collection.getAndTouch` now has an additional overload that allows specifying the expiry as an `Instant` instead of a `Duration`.
+* https://issues.couchbase.com/browse/JVMCBC-1290[JVMCBC-1290]:
+Added a new environment config property, `SecurityConfig.enableCertificateVerification(boolean)`, which defaults to true. The purpose of this property is to allow disabling TLS certificate verification in development environments where configuring the CA certificate to trust is not practical. Setting this to false is equivalent to configuring the environment to use `InsecureTrustManager.INSTANCE`.
+For compatibility with other modern Couchbase SDKs, certificate verification can now be disabled using the connection string parameter: `tls_verify=none`.
+This config property is introduced at stability level `Volatile`, meaning it may change in a patch release without notice.
+* https://issues.couchbase.com/browse/JVMCBC-1278[JVMCBC-1278],
+https://issues.couchbase.com/browse/JVMCBC-1310[JVMCBC-1310],
+https://issues.couchbase.com/browse/JVMCBC-1313[JVMCBC-1313]:
+Dependencies updated.
+
+=== Bugs
+* https://issues.couchbase.com/browse/JVMCBC-1283[JVMCBC-1283]:
+A faceted Full-Text Search result's `SearchNumericRange.min()` and `max()` methods now correctly return null instead of zero when the respective range endpoint is unbounded.
+* https://issues.couchbase.com/browse/JVMCBC-1288[JVMCBC-1288]:
+Fixed a regression in Couchbase Java SDK 3.4.5 and Scala SDK 1.4.5 that prevented Full-Text Search result rows from including an explanation when requested.
+* https://issues.couchbase.com/browse/JVMCBC-1292[JVMCBC-1292]:
+Removed `META-INF/versions/9/module-info.class` from the `core-io` jar. This file was associated with an improperly repackaged dependency, and never should have been there.
+
 == Version 3.4.6 (4 May 2023)
 This is a regular maintenance release.
 
