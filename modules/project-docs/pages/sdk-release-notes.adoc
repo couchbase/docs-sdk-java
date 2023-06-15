@@ -38,4 +38,4 @@ If you're using an SDK version earlier than 3.2.4, the recommended LTS version i
 </dependencies>
 ----
 
-include::3.3@java-sdk:project-docs:page$sdk-release-notes.adoc[tag=all]
+include::3.4@java-sdk:project-docs:page$sdk-release-notes.adoc[tag=all]
