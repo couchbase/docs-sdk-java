@@ -33,4 +33,4 @@ We recommend running the latest LTS version (i.e. at the time of writing JDK 11)
 </dependencies>
 ----
 
-include::3.3@java-sdk:project-docs:page$sdk-release-notes.adoc[tag=all]
+include::3.4@java-sdk:project-docs:page$sdk-release-notes.adoc[tag=all]
