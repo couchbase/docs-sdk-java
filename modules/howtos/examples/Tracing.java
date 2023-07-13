@@ -50,9 +50,9 @@ public class Tracing {
                             .put("service.name", "YOUR_SERVICE_NAME_HERE")
                             .build()))
             // The BatchSpanProcessor will efficiently batch traces and periodically export them.
-            // This exporter exports traces on the OTLP protocol over GRPC on port 4317.
+            // This exporter exports traces on the OTLP protocol over GRPC to localhost:4317.
             .addSpanProcessor(BatchSpanProcessor.builder(OtlpGrpcSpanExporter.builder()
-                    .setEndpoint("HOSTNAME_OF_OPENTELEMETRY_BACKEND:4317")
+                    .setEndpoint("http://localhost:4317")
                     .build()).build())
             // Export every trace: this may be too heavy for production.
             // An alternative is `.setSampler(Sampler.traceIdRatioBased(0.01))`

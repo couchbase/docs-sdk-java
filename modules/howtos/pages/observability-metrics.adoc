@@ -7,22 +7,11 @@
 In addition, it also makes sense to capture information that aggregates request data (i.e. requests per second),
 but also data which is not tied to a specific request at all (i.e. resource utilization).
 
-The deployment situation itself is similar to the request tracer: either applications already have a metrics infrastructure in place or they don’t. 
-The difference is that exposing some kind of metrics is much more common than request based tracing, 
-because most production deployments at least monitor CPU and memory usage (e.g. through JMX).
+The SDK exposes metrics for operation durations, broken down into p50, p90, p99, p99.9 and p100 percentiles.
 
-Metrics broadly fall into the following categories:
+These metrics can either be logged periodically into the application logs, using the `LoggingMeter` (this is the default behaviour).
 
-* Request/Response Metrics (such as requests per second).
-* SDK Metrics (such as how many open collections, various queue lengths).
-* System Metrics (such as cpu usage or garbage collection performance).
-
-Right now only the first category is implemented by the SDK, more are planned.
-
-[NOTE]
-====
-The `AggregatingMeter`, which was previously available in SDK 3.1, has been renamed to `LoggingMeter` in the 3.2 release. 
-====
+Or, sent into the OpenTelemetry or Micrometer libraries, where they can be sent on to the user's metrics infrastructure - such as Prometheus.
 
 == The Default LoggingMeter
 
@@ -91,76 +80,200 @@ The following table shows the currently available properties:
 == OpenTelemetry Integration
 
 The SDK supports plugging in any `OpenTelemetry` metrics consumer instead of using the default `LoggingMeter`.
-To do this, first you need to add an additional dependency to your application:
+
+To do this, first add this to your Maven, or the equivalent to your build tool of choice:
 
 [source,xml]
 ----
-<dependency>
-    <groupId>com.couchbase.client</groupId>
-    <artifactId>metrics-opentelemetry</artifactId>
-    <version>0.3.4</version>
-</dependency>
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-bom</artifactId>
+            <version>1.17.0</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+<dependencies>
+    <dependency>
+        <groupId>com.couchbase.client</groupId>
+        <artifactId>metrics-opentelemetry</artifactId>
+        <version>0.4.4</version>
+    </dependency>
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-api</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-sdk</artifactId>
+    </dependency>
+</dependencies>
 ----
 
-In addition, you need to add the OpenTelemetry exporter of your choice. 
-As an example this could be the Prometheus exporter:
+In addition, you'll need to get the metrics data into your metrics backend.
+This is often done by having the metrics backend (such as Prometheus) regularly gather, or 'scrape', the metrics data.
 
-[source,xml]
-----
-<dependency>
-    <groupId>io.opentelemetry</groupId>
-    <artifactId>opentelemetry-exporter-prometheus</artifactId>
-    <version>0.11.0</version>
-</dependency>
-<dependency>
-    <groupId>io.prometheus</groupId>
-    <artifactId>simpleclient_httpserver</artifactId>
-    <version>0.9.0</version>
-</dependency>
-----
+There are multiple approaches here.
+The `opentelemetry-exporter-prometheus` library makes it possible to open an HTTP server in the application that Prometheus can then scape.
 
-Next, you need to initialize your OpenTelemetry `Meter`. Again, the following example uses prometheus:
+As that library is in alpha, here we will instead show how to send OpenTelemetry metrics into `opentelemetry-collector`, where it can be scraped by Prometheus or another metrics backend.
+
+This aligns well with tracing, where a recommended approach is also to send OpenTelemetry spans into `opentelemetry-collector`, where they can be processed and forwarded elsewhere.
+See xref:howtos:observability-tracing.adoc[the Request Tracing documentation] for more information.
+
+For metrics, add this logic to the application:
 
 [source,java]
 ----
 include::example$Metrics.java[tag=metrics-otel-prometheus,indent=0]
 ----
 
-Once your meter is initialized, it needs to be wrapped and supplied to the environment:
 
-[source,java]
-----
-include::example$Metrics.java[tag=metrics-otel-env,indent=0]
-----
+At this point the SDK is hooked up with the OpenTelemetry metrics and will emit them to the exporter.
 
-At this point the SDK is hooked up with the OpenTelemetry metrics and will emit them to the exporter. 
-The specific output format is still evolving, but look out for metrics with the `cb.` prefix: `cb.requests` and `cb.responses`. 
-The `cb.requests` is a counter while the `cb.responses` is a `ValueRecorder` which also collects latency information for each request. 
-Each metric contains tags that allow you to group them in different ways, including the service type (e.g. `query`) or the server hostname.
+A `db.couchbase.operations` histogram is exported, which will appear in Prometheus as `db_couchbase_operations`.
 
+It has these tags: `db.couchbase.service` ("kv", "query", etc.) and `db.operation` ("upsert", "query", etc.)
+
+=== Testing
+For convenience, here is a simple Docker-based configuration of `opentelemetry-collector` and Prometheus for localhost testing of an OpenTelemetry setup.
+
+Create file `otel.yaml`:
+```
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+exporters:
+  logging:
+    loglevel: debug
+  prometheus:
+    endpoint: '0.0.0.0:10000'
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: []
+      exporters: [prometheus, logging]
+```
+
+And file `prometheus.yaml`:
+```
+scrape_configs:
+  - job_name: 'otel-collector'
+
+    scrape_interval: 1s
+
+    static_configs:
+      - targets: ['otel:10000']
+        labels:
+          group: 'production'
+```
+
+Now run `opentelemetry-collector` and Prometheus:
+```
+docker network create shared
+docker run --rm --name otel -v "${PWD}/otel.yaml:/etc/otel-local-config.yaml" -p 4317:4317 -p 10000:10000 --network shared otel/opentelemetry-collector --config /etc/otel-local-config.yaml
+docker run --rm --name prometheus -p 9090:9090  --mount type=bind,source="${PWD}/prometheus.yaml,destination=/etc/prometheus/prometheus.yml" --network shared prom/prometheus
+```
+
+Some things to note:
+
+* The containers are put on the same network so they can refer to each other by container name.
+* The app has been told to export metrics over OLTP GRPC to localhost:4317.  `opentelemetry-collector` is listening to this.
+* `opentelemetry-collector` will store the metrics, and exposes port 10000 for Prometheus to periodically scrape.
+
+Now run the application.
+All being well, `opentelemetry-collector` should regularly log that it's receiving the `db.couchbase.operations` metric, as it has been configured with a `logging` exporter.
+
+And Prometheus (the UI is available on http://localhost:9090) should allow querying for `db_couchbase_operations`.
+(Though a real deployment will generally use another tool, such as Grafana, for visualisation.)
+
+If this fails, check http://localhost:9090/api/v1/targets to see if Prometheus is unable to contact `opentelemetry-collector`.
 
 == Micrometer Integration
 
-In addition to OpenTelemetry, we also provide a module so you can hook up the SDK metrics to Micrometer. 
+In addition to OpenTelemetry, we also provide a module allowing SDK metrics to be integrated into Micrometer.
+
+To do this, first add this to your Maven, or the equivalent to your build tool of choice:
 
 [source,xml]
 ----
 <dependency>
     <groupId>com.couchbase.client</groupId>
     <artifactId>metrics-micrometer</artifactId>
-    <version>0.1.0</version>
+    <version>0.4.4</version>
+</dependency>
+<dependency>
+    <groupId>io.prometheus</groupId>
+    <artifactId>simpleclient</artifactId>
+    <version>0.16.0</version>
+</dependency>
+<dependency>
+    <groupId>io.prometheus</groupId>
+    <artifactId>simpleclient_httpserver</artifactId>
+    <version>0.16.0</version>
+</dependency>
+<dependency>
+    <groupId>io.micrometer</groupId>
+    <artifactId>micrometer-registry-prometheus</artifactId>
+    <version>1.10.5</version>
+</dependency>
+<!-- Gives improved histograms for Micrometer when on classpath -->
+<dependency>
+    <groupId>org.hdrhistogram</groupId>
+    <artifactId>HdrHistogram</artifactId>
+    <version>2.1.12</version>
 </dependency>
 ----
 
-In addition to the facade you also need to include your micrometer implementation of choice. 
-Once you've created the a Micrometer `MeterRegistry`, you need to wrap it and pass it into the environment:
+You can now create a Micrometer registry and pass it into the SDK.
+Here we're using a Prometheus Micrometer registry, and setting up an HTTP server inside the application that will run on port 10000 and which Prometheus can scrape.
+
+But Micrometer of course, like OpenTelemetry, can support many more metrics backends than Prometheus.
+See the Micrometer documentation for details.
 
 [source,java]
 ----
-ClusterEnvironment environment = ClusterEnvironment
-    .builder()
-    .meter(MicrometerMeter.wrap(meterRegistry))
-    .build();
+include::example$MetricsMicrometer.java[tag=metrics-micrometer-prometheus,indent=0]
 ----
 
-At this point the metrics are hooked up to Micrometer and will be reported as `cb.requests` (as a `Counter`) and `cb.responses` (as a `DistributionSummary`).
+
+At this point the metrics are hooked up to Micrometer, and ready to be scraped by Prometheus.
+See the OpenTelemetry documentation above for what metrics to expect.
+
+=== Testing
+For convenience, here is a simple Docker-based Prometheus configuration for localhost testing of a Micrometer metrics setup.
+
+Create file `prometheus.yaml`:
+```
+scrape_configs:
+  - job_name: 'otel-collector'
+
+    scrape_interval: 1s
+
+    static_configs:
+      - targets: ['host.docker.internal:10000']
+        labels:
+          group: 'production'
+```
+
+Now run Prometheus:
+```
+docker run --rm --name prometheus -p 9090:9090  --mount type=bind,source="${PWD}/prometheus.yaml,destination=/etc/prometheus/prometheus.yml" prom/prometheus
+```
+
+Note the Prometheus config uses `host.docker.internal` to connect from a Docker container to the application running on localhost.  This will not work on all Docker deployments - see the Docker documentation for more information on connecting to localhost.
+
+Now run the application.
+
+All being well, Prometheus (the UI is available on http://localhost:9090) should allow querying for `db_couchbase_operations_buckets`.
+(Though a real deployment will generally use another tool, such as Grafana, for visualisation.)
+
+If this fails, check http://localhost:9090/api/v1/targets to see if Prometheus is unable to contact the application.
