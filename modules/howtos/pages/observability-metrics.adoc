@@ -11,7 +11,7 @@ The SDK exposes metrics for operation durations, broken down into p50, p90, p99,
 
 These metrics can either be logged periodically into the application logs, using the `LoggingMeter` (this is the default behaviour).
 
-Or, sent into the OpenTelemetry or Micrometer libraries, where they can be sent on to the user's metrics infrastructure - such as Prometheus.
+Or, sent into the OpenTelemetry or Micrometer libraries, where they can be sent on to the user's metrics infrastructure -- such as Prometheus.
 
 == The Default LoggingMeter
 
