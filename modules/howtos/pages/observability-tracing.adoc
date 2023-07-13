@@ -93,12 +93,7 @@ Add this to your Maven, or the equivalent to your build tool of choice:
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>tracing-opentelemetry</artifactId>
-        <version>1.2.0</version>
-    </dependency>
-    <dependency>
-        <groupId>com.couchbase.client</groupId>
-        <artifactId>metrics-opentelemetry</artifactId>
-        <version>0.4.0</version>
+        <version>1.2.4</version>
     </dependency>
     <dependency>
         <groupId>io.opentelemetry</groupId>

@@ -54,22 +54,12 @@
         <dependency>
             <groupId>com.couchbase.client</groupId>
             <artifactId>metrics-opentelemetry</artifactId>
-            <version>0.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-exporter-prometheus</artifactId>
-            <version>0.11.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.prometheus</groupId>
-            <artifactId>simpleclient_httpserver</artifactId>
-            <version>0.9.0</version>
+            <version>0.4.4</version>
         </dependency>
         <dependency>
             <groupId>com.couchbase.client</groupId>
             <artifactId>tracing-opentelemetry</artifactId>
-            <version>1.2.0</version>
+            <version>1.2.4</version>
         </dependency>
         <dependency>
             <groupId>io.opentelemetry</groupId>
@@ -137,6 +127,33 @@
             <groupId>org.msgpack</groupId>
             <artifactId>msgpack</artifactId>
             <version>0.6.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.couchbase.client</groupId>
+            <artifactId>metrics-micrometer</artifactId>
+            <version>0.4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient</artifactId>
+            <version>0.16.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient_httpserver</artifactId>
+            <version>0.16.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.10.5</version>
+        </dependency>
+        <!-- Gives improved histograms when on classpath for Micrometer -->
+        <dependency>
+            <groupId>org.hdrhistogram</groupId>
+            <artifactId>HdrHistogram</artifactId>
+            <version>2.1.12</version>
         </dependency>
     </dependencies>
 

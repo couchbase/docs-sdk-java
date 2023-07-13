@@ -16,15 +16,10 @@
 
 // tag::imports[]
 
-import com.couchbase.client.core.cnc.events.transaction.TransactionLogEvent;
+import com.couchbase.client.core.cnc.events.transaction.*;
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.core.msg.kv.DurabilityLevel;
-import com.couchbase.client.core.transactions.events.IllegalDocumentStateEvent;
-import com.couchbase.client.core.transactions.events.TransactionCleanupAttemptEvent;
-import com.couchbase.client.core.transactions.events.TransactionCleanupEndRunEvent;
-import com.couchbase.client.core.transactions.events.TransactionEvent;
-import com.couchbase.client.core.transactions.log.CoreTransactionLogMessage;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
@@ -43,7 +38,6 @@ import com.couchbase.client.java.transactions.config.TransactionsConfig;
 import com.couchbase.client.java.transactions.config.TransactionsQueryConfig;
 import com.couchbase.client.java.transactions.error.TransactionCommitAmbiguousException;
 import com.couchbase.client.java.transactions.error.TransactionFailedException;
-import com.couchbase.client.java.transactions.log.TransactionLogMessage;
 import com.couchbase.client.tracing.opentelemetry.OpenTelemetryRequestSpan;
 import io.opentelemetry.api.trace.Span;
 import reactor.core.publisher.Flux;
@@ -424,21 +418,16 @@ public class TransactionsExample {
         cluster.environment().eventBus().subscribe(event -> {
             if (event instanceof IllegalDocumentStateEvent) {
                 // log this event for review
-                log(((TransactionEvent) event).logs());
             }
         });
         // end::concurrency[]
-    }
-
-    private static void log(List<CoreTransactionLogMessage> logs) {
-        // Application can write to their logs here
     }
 
     static void cleanupEvents() {
         // tag::cleanup-events[]
         cluster.environment().eventBus().subscribe(event -> {
             if (event instanceof TransactionCleanupAttemptEvent || event instanceof TransactionCleanupEndRunEvent) {
-                log(((TransactionEvent) event).logs());
+                // log event for review
             }
         });
         // end::cleanup-events[]
