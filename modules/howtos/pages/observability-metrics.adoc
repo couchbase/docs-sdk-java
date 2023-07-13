@@ -7,7 +7,7 @@
 In addition, it also makes sense to capture information that aggregates request data (i.e. requests per second),
 but also data which is not tied to a specific request at all (i.e. resource utilization).
 
-The SDK exposes metrics for operation durations, broken down into p50, p90, p99, p99.9 and p100 percentiles.
+The SDK exposes metrics for operation durations, broken down into p50, p90, p99, p99.9, and p100 percentiles.
 
 These metrics can either be logged periodically into the application logs, using the `LoggingMeter` (this is the default behaviour).
 
@@ -197,6 +197,7 @@ And Prometheus (the UI is available on http://localhost:9090) should allow query
 
 If this fails, check http://localhost:9090/api/v1/targets to see if Prometheus is unable to contact `opentelemetry-collector`.
 
+
 == Micrometer Integration
 
 In addition to OpenTelemetry, we also provide a module allowing SDK metrics to be integrated into Micrometer.
@@ -269,11 +270,12 @@ Now run Prometheus:
 docker run --rm --name prometheus -p 9090:9090  --mount type=bind,source="${PWD}/prometheus.yaml,destination=/etc/prometheus/prometheus.yml" prom/prometheus
 ```
 
-Note the Prometheus config uses `host.docker.internal` to connect from a Docker container to the application running on localhost.  This will not work on all Docker deployments - see the Docker documentation for more information on connecting to localhost.
+Note the Prometheus config uses `host.docker.internal` to connect from a Docker container to the application running on localhost.  
+This will not work on all Docker deployments -- see the Docker documentation for more information on connecting to localhost.
 
 Now run the application.
 
 All being well, Prometheus (the UI is available on http://localhost:9090) should allow querying for `db_couchbase_operations_buckets`.
-(Though a real deployment will generally use another tool, such as Grafana, for visualisation.)
+(Though a real deployment will generally use another tool, such as Grafana, for visualization.)
 
 If this fails, check http://localhost:9090/api/v1/targets to see if Prometheus is unable to contact the application.
