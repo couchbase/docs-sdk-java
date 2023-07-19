@@ -50,7 +50,9 @@ It will only work against 7.6 and above: against older server versions, it will 
 * https://issues.couchbase.com/browse/JVMCBC-1322[JVMCBC-1322]:
 The `waitUntilReady()` method now logs additional diagnostic information to the `com.couchbase.core.WaitUntilReady` logging category at `DEBUG` level.
 * https://issues.couchbase.com/browse/JCBC-2059[JCBC-2059]:
-If a `Cluster` becomes eligible for garbage collection, and you haven't called `cluster.disconnect()` yet, the SDK now logs a warning and disconnects the cluster for you. This prevent the abandoned cluster's network connections from living forever. Please do not rely on this "auto-disconnect" feature. It's always better to call `cluster.disconnect()` as soon as you're done talking to the cluster, so the network connections and other resources get released right away.
+If a `Cluster` becomes eligible for garbage collection, and you haven't called `cluster.disconnect()` yet, the SDK now logs a warning and disconnects the cluster for you. 
+This prevent the abandoned cluster's network connections from living forever. Please do not rely on this "auto-disconnect" feature. 
+It's always better to call `cluster.disconnect()` as soon as you're done talking to the cluster, so the network connections and other resources get released right away.
 * https://issues.couchbase.com/browse/JCBC-2076[JCBC-2076]:
 `Collection.touch` now has an additional overload that allows specifying the expiry as an `Instant` instead of a `Duration`.
 
