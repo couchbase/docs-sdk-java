@@ -17,6 +17,45 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 
 // tag::all[]
+== Version 3.4.8 (19 July 2023)
+This is a regular maintenance release.
+
+https://packages.couchbase.com/clients/java/3.4.8/Couchbase-Java-Client-3.4.8.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.4.8/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.4.8/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.5.0**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.2.8             | OpenTelemetry 1.19.0       | Committed
+| `tracing-opentracing`     | 1.2.8             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.4.8             | OpenTelemetry 1.19.0       | Volatile
+| `metrics-micrometer`      | 0.4.8             | Micrometer 1.10.0          | Volatile
+|=======================
+
+=== Improvements
+* https://issues.couchbase.com/browse/JCBC-2077[JCBC-2077]:
+Upcoming Couchbase server release 7.6 will support having SQL++ queries read from replicas, in scenarios where the active is unavailable (such as failover).
+This improves availability, though users should be aware that they may be reading stale data.
+The option is activated with `scope.query("...", queryOptions().useReplica(true))`, and is disabled by default.
+It will only work against 7.6 and above: against older server versions, it will raise a `FeatureNotAvailableException`.
+* https://issues.couchbase.com/browse/JVMCBC-1322[JVMCBC-1322]:
+The `waitUntilReady()` method now logs additional diagnostic information to the `com.couchbase.core.WaitUntilReady` logging category at `DEBUG` level.
+* https://issues.couchbase.com/browse/JCBC-2059[JCBC-2059]:
+If a `Cluster` becomes eligible for garbage collection, and you haven't called `cluster.disconnect()` yet, the SDK now logs a warning and disconnects the cluster for you. 
+This prevent the abandoned cluster's network connections from living forever. Please do not rely on this "auto-disconnect" feature. 
+It's always better to call `cluster.disconnect()` as soon as you're done talking to the cluster, so the network connections and other resources get released right away.
+* https://issues.couchbase.com/browse/JCBC-2076[JCBC-2076]:
+`Collection.touch` now has an additional overload that allows specifying the expiry as an `Instant` instead of a `Duration`.
+
 == Version 3.4.7 (12 June 2023)
 This is a regular maintenance release.
 
