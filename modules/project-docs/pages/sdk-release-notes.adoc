@@ -18,6 +18,7 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 // tag::all[]
 == Version 3.4.9 (2 August 2023)
+
 This release adds support for Sub-Document reads from replicas at @Stability.Volatile level: see `collection.lookupInAnyReplica()` and `collection.lookupInAllReplicas()`.
 
 https://packages.couchbase.com/clients/java/3.4.9/Couchbase-Java-Client-3.4.9.zip[Download] |
@@ -45,13 +46,14 @@ Optional artifacts on top of this SDK version are tested for the following compa
 * https://issues.couchbase.com/browse/JVMCBC-1339[JVMCBC-1339]:
 When KV traffic capture is enabled, each `ReadTrafficCapturedEvent` now contains a single protocol frame, and the human-readable frame description is more accurate.
 * https://issues.couchbase.com/browse/JVMCBC-1320[JVMCBC-1320]:
-The waitUntilReady method is now more aggressive about retrying failed pings.
-Also, waiting for a desired state of DEGRADED no longer fails when the client is fully connected to the cluster.
+The `waitUntilReady` method is now more aggressive about retrying failed pings.
+Also, waiting for a desired state of `DEGRADED` no longer fails when the client is fully connected to the cluster.
 * https://issues.couchbase.com/browse/JVMCBC-1343[JVMCBC-1343]:
 Reduced the default value for the `io.idleHttpConnectionTimeout` client setting to 1 second.
 The previous default (4.5 seconds) was too close to the 5-second server-side timeout, and could lead to spurious request failures.
 * https://issues.couchbase.com/browse/JCBC-2078[JCBC-2078]:
 Support for Sub-Document read from replica.
+
 
 == Version 3.4.8 (19 July 2023)
 This is a regular maintenance release.
