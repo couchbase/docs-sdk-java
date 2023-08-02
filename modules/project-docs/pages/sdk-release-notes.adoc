@@ -18,7 +18,7 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 // tag::all[]
 == Version 3.4.9 (2 August 2023)
-This is a regular maintenance release.
+This release adds support for Sub-Document reads from replicas at @Stability.Volatile level: see `collection.lookupInAnyReplica()` and `collection.lookupInAllReplicas()`.
 
 https://packages.couchbase.com/clients/java/3.4.9/Couchbase-Java-Client-3.4.9.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.4.9/index.html[API Reference] |
