@@ -14,7 +14,7 @@
 ** xref:concept-docs:transactions-cleanup.adoc[]
 ** xref:concept-docs:transactions-error-handling.adoc[]
 
-.Working with Data
+.Further Data Ops
 * xref:howtos:json.adoc[]
 * xref:howtos:subdocument-operations.adoc[]
 //  ** xref:howtos:sdk-xattr-example.adoc[Extended Attributes]
@@ -25,7 +25,6 @@
 * xref:howtos:concurrent-document-mutations.adoc[]
 * xref:howtos:encrypting-using-sdk.adoc[]
 * xref:howtos:transcoders-nonjson.adoc[Transcoders & Non-JSON Documents]
-* xref:howtos:working-with-collections.adoc[Working with Collections]
 
 .Managing Couchbase
 * xref:howtos:managing-connections.adoc[]
@@ -82,6 +81,7 @@
 * xref:project-docs:sdk-release-notes.adoc[]
 * xref:project-docs:compatibility.adoc[]
 ** xref:project-docs:migrating-sdk-code-to-3.n.adoc[]
+*** xref:howtos:working-with-collections.adoc[Working with Collections]
 ** xref:project-docs:distributed-acid-transactions-migration-guide.adoc[]
 ** xref:project-docs:third-party-integrations.adoc[]
 * xref:project-docs:sdk-full-installation.adoc[]
