@@ -21,10 +21,10 @@ import com.couchbase.client.java.json.*;
 import com.couchbase.client.java.query.*;
 // end::imports[]
 
-public class StartUsing {
+class Program {
 
   static String connectionString = "localhost";
-  static String username = "Administrator";
+  static String username = "username";
   static String password = "password";
   static String bucketName = "travel-sample";
 
