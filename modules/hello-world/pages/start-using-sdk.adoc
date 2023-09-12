@@ -95,6 +95,7 @@ implementation 'com.couchbase.client:java-client:3.4.10'
 
 See the xref:project-docs:sdk-full-installation.adoc[installation page] for more detailed instructions.
 
+
 == Prerequisites
 
 The following code samples assume:
