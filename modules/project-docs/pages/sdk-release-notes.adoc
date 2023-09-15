@@ -2,6 +2,7 @@
 :description: Release notes, installation instructions, and download archive for the Couchbase Java Client.
 :navtitle: Release Notes
 :page-topic-type: project-doc
+:page-toclevels: 2
 :page-partial:
 :page-aliases: relnotes-java-sdk,ROOT:sdk-release-notes,ROOT:relnotes-java-sdk,ROOT:release-notes,ROOT:download-links,server:sdks:java-2.2/download-links
 
@@ -11,13 +12,23 @@
 These pages cover the 3._x_ versions of the Couchbase Java SDK. 
 For release notes, download links, and installation methods for 2.7 and earlier releases of the Couchbase Java Client, which will not work with Distributed Transactions, please see the https://docs-archive.couchbase.com/java-sdk/2.7/sdk-release-notes.html[2.x Java Release Notes & Download Archive].
 
-== Installation
+=== Installation
 
 See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide for details.
 
 
 // tag::all[]
-== Version 3.4.10 (6 September 2023)
+
+
+[#latest-release]
+== Java SDK 3.4 Releases
+
+We always recommend using the latest version of the SDK -- it contains all of the latest security patches and support for new and upcoming features.
+All patch releases for each dot minor release should be API compatible, and safe to upgrade;
+any changes to expected behavior are noted in the release notes that follow.
+
+
+=== Version 3.4.10 (6 September 2023)
 
 This is a standard maintenance release.
 
@@ -42,7 +53,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.4.10             | Micrometer 1.10.0          | Volatile
 |=======================
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1367[JVMCBC-1367]:
 The `db.couchbase.operations` metric now has `db.name` (bucket), `db.couchbase.scope`, `db.couchbase.collection` and `outcome` labels (tags).
 This new feature is at Stability.Volatile, and may change before it is promoted to Stability.Committed in a future release.
@@ -50,7 +61,7 @@ This new feature is at Stability.Volatile, and may change before it is promoted 
 https://issues.couchbase.com/browse/JVMCBC-1352[JVMCBC-1352]:
 Upgraded dependencies.
 
-=== Bugfixes
+==== Bugfixes
 * https://issues.couchbase.com/browse/JVMCBC-1350[JVMCBC-1350]:
 `lookupInAnyReplica` now throws `FeatureNotAvailableException` if the server does not support the feature.
 * https://issues.couchbase.com/browse/JVMCBC-1351[JVMCBC-1351]:
@@ -66,7 +77,7 @@ This condition was typically short-lived, and healed the next time the SDK polle
 Fixed a rare `java.lang.ArithmeticException: / by zero` exception in `RoundRobinSelectionStrategy.select` that could occur during rebalance.
 
 
-== Version 3.4.9 (2 August 2023)
+=== Version 3.4.9 (2 August 2023)
 
 This release adds support for Sub-Document reads from replicas at @Stability.Volatile level: see `collection.lookupInAnyReplica()` and `collection.lookupInAllReplicas()`.
 
@@ -91,7 +102,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.4.9             | Micrometer 1.10.0          | Volatile
 |=======================
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1339[JVMCBC-1339]:
 When KV traffic capture is enabled, each `ReadTrafficCapturedEvent` now contains a single protocol frame, and the human-readable frame description is more accurate.
 * https://issues.couchbase.com/browse/JVMCBC-1320[JVMCBC-1320]:
@@ -104,7 +115,7 @@ The previous default (4.5 seconds) was too close to the 5-second server-side tim
 Support for Sub-Document read from replica.
 
 
-== Version 3.4.8 (19 July 2023)
+=== Version 3.4.8 (19 July 2023)
 This is a regular maintenance release.
 
 https://packages.couchbase.com/clients/java/3.4.8/Couchbase-Java-Client-3.4.8.zip[Download] |
@@ -128,7 +139,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.4.8             | Micrometer 1.10.0          | Volatile
 |=======================
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JCBC-2077[JCBC-2077]:
 Upcoming Couchbase server release 7.6 will support having SQL++ queries read from replicas, in scenarios where the active is unavailable (such as failover).
 This improves availability, though users should be aware that they may be reading stale data.
@@ -143,7 +154,7 @@ It's always better to call `cluster.disconnect()` as soon as you're done talking
 * https://issues.couchbase.com/browse/JCBC-2076[JCBC-2076]:
 `Collection.touch` now has an additional overload that allows specifying the expiry as an `Instant` instead of a `Duration`.
 
-== Version 3.4.7 (12 June 2023)
+=== Version 3.4.7 (12 June 2023)
 This is a regular maintenance release.
 
 https://packages.couchbase.com/clients/java/3.4.7/Couchbase-Java-Client-3.4.7.zip[Download] |
@@ -167,11 +178,11 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.4.7             | Micrometer 1.10.0          | Volatile
 |=======================
 
-=== API Impacting
+==== API Impacting
 * https://issues.couchbase.com/browse/JCBC-2075[JCBC-2075]:
 Deprecated `ArrayInsert.createPath()`. Calling this method always causes `mutateIn` to throw an exception, because the "array insert" sub-document command does not support creating missing parent objects. If you want to create missing parent objects, please use `MutateInSpec.arrayAppend()` or `arrayPrepend()` instead of `arrayInsert()`.
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JCBC-2069[JCBC-2069]:
 `Collection.getAndTouch` now has an additional overload that allows specifying the expiry as an `Instant` instead of a `Duration`.
 * https://issues.couchbase.com/browse/JVMCBC-1290[JVMCBC-1290]:
@@ -183,7 +194,7 @@ https://issues.couchbase.com/browse/JVMCBC-1310[JVMCBC-1310],
 https://issues.couchbase.com/browse/JVMCBC-1313[JVMCBC-1313]:
 Dependencies updated.
 
-=== Bugs
+==== Bugs
 * https://issues.couchbase.com/browse/JVMCBC-1283[JVMCBC-1283]:
 A faceted Full-Text Search result's `SearchNumericRange.min()` and `max()` methods now correctly return null instead of zero when the respective range endpoint is unbounded.
 * https://issues.couchbase.com/browse/JVMCBC-1288[JVMCBC-1288]:
@@ -191,7 +202,7 @@ Fixed a regression in Couchbase Java SDK 3.4.5 and Scala SDK 1.4.5 that prevente
 * https://issues.couchbase.com/browse/JVMCBC-1292[JVMCBC-1292]:
 Removed `META-INF/versions/9/module-info.class` from the `core-io` jar. This file was associated with an improperly repackaged dependency, and never should have been there.
 
-== Version 3.4.6 (4 May 2023)
+=== Version 3.4.6 (4 May 2023)
 This is a regular maintenance release.
 
 https://packages.couchbase.com/clients/java/3.4.6/Couchbase-Java-Client-3.4.6.zip[Download] |
@@ -215,12 +226,12 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.4.6             | Micrometer 1.10.0          | Volatile
 |=======================
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JCBC-1570[JCBC-1570],
 https://issues.couchbase.com/browse/JCBC-2058[JCBC-2058]:
 The `osgi-feature` artifact now uses Log4j 2 instead of Log4j 1.
 
-=== Bugs
+==== Bugs
 * https://issues.couchbase.com/browse/JCBC-2062[JCBC-2062]:
 Fixed a regression in 3.4.5 that caused `ReactiveCollection.lookupIn` to always throw `StackOverflowException`.
 * https://issues.couchbase.com/browse/JVMCBC-1275[JVMCBC-1275]:
@@ -230,7 +241,7 @@ Fixed a regression in Java SDK 3.4.5 that could cause Full-Text Search results t
 * https://issues.couchbase.com/browse/JVMCBC-1285[JVMCBC-1285]:
 Fixed a regression in Couchbase Java SDK 3.4.5 and Scala SDK 1.4.5 that caused Full-Text Search queries to fail to report the locations of some terms. Specifically, any location that did not have `arrayPositions` was omitted from the results.
 
-== Version 3.4.5 (13 April 2023)
+=== Version 3.4.5 (13 April 2023)
 This is a regular maintenance release.
 
 https://packages.couchbase.com/clients/java/3.4.5/Couchbase-Java-Client-3.4.5.zip[Download] |
@@ -254,12 +265,12 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.4.5             | Micrometer 1.10.0          | Volatile
 |=======================
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1223[JVMCBC-1223]:
 Adds a `RetryReason.AUTHENTICATION_ERROR` at `Uncommitted` API stability level.
 A custom `RetryStrategy` can use this new, more granular information to distinguish if a connection problem is down to an authentication issue.
 
-=== Bugs
+==== Bugs
 * https://issues.couchbase.com/browse/JCBC-2032[JCBC-2032]:
 The JSON returned by `SearchQuery.export()` no longer contains extra fields unrelated to the query.
 * https://issues.couchbase.com/browse/JVMCBC-1252[JVMCBC-1252]:
@@ -268,7 +279,7 @@ Orphaned "observe" operations will no longer occasionally contain a `total_durat
 If you were subscribing to the event bus and printing all the events, you may have noticed `Event.toString()` throwing a `NullPointerException` if the event context is null.
 `Event.toString()` now handles null contexts more gracefully, and no longer throws this exception.
 
-== Version 3.4.4 (8 March 2023)
+=== Version 3.4.4 (8 March 2023)
 This is a regular maintenance release.
 
 https://packages.couchbase.com/clients/java/3.4.4/Couchbase-Java-Client-3.4.4.zip[Download] |
@@ -293,7 +304,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 |=======================
 
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JCBC-2050[JCBC-2050]:
 Coordinates in Full-Text Search geographic queries can now be specified using a staged builder, so it's harder to accidentally swap the latitude and longitude components. Example usage:
 ```
@@ -308,14 +319,14 @@ Added "network" as an alias for the "io.networkResolution" connection string par
 For example, the connection string "couchbase://example.com?network=external" is now equivalent to "couchbase://example.com?io.networkResolution=external".
 This was done for compatibility with other Couchbase SDKs that use "network" as the name of this parameter.
 
-=== Bugs
+==== Bugs
 * https://issues.couchbase.com/browse/JVMCBC-1232[JVMCBC-1232]:
 `Cluster.connect()` now rejects connection strings that have no addresses (like "couchbase://").
 Before this change, it would accept the invalid connection string, and subsequent operations would fail with a misleading error message: "The cluster does not support cluster-level queries".
 * https://issues.couchbase.com/browse/JVMCBC-1234[JVMCBC-1234]:
 Fixed a regression in Java SDK 3.4.3 and Scala SDK 1.4.3 that caused SQL++ query result metadata to always include metrics, regardless of the "metrics" query option.
 
-== Version 3.4.3 (9 February 2023)
+=== Version 3.4.3 (9 February 2023)
 This is a regular maintenance release.
 
 https://packages.couchbase.com/clients/java/3.4.3/Couchbase-Java-Client-3.4.3.zip[Download] |
@@ -340,7 +351,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 |=======================
 
 
-=== Improvements
+==== Improvements
 
 * https://issues.couchbase.com/browse/JCBC-2034[JCBC-2034]:
 `CollectionQueryIndexManager` has been added at a `@Stability.Volatile` level, to better allow management of query indexes at the Collection level.
@@ -353,7 +364,7 @@ Updated dependencies.
 * https://issues.couchbase.com/browse/JVMCBC-1213[JVMCBC-1213]:
 If too many operations are specified in a single sub-document lookup, the exception message now indicates why the operation failed.
 
-=== Bug Fixes
+==== Bug Fixes
 
 * https://issues.couchbase.com/browse/JVMCBC-1160[JVMCBC-1160]:
 When a sub-document path has a syntax error or is inappropriate for an operation, the SDK now throws `PathInvalidException`.
@@ -362,7 +373,7 @@ Prior to this change, it would throw a generic `CouchbaseException` with the mes
 `WatchQueryIndexOptions` now extends `CommonOptions`, allowing standard options such as timeout to be specified.
 
 
-== Version 3.4.2 (16 January 2023)
+=== Version 3.4.2 (16 January 2023)
 
 This is a regular maintenance release.
 
@@ -390,12 +401,12 @@ Optional artifacts on top of this SDK version are tested for the following compa
 |=======================
 
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1175[JVMCBC-1175]:
 The SDK now includes native libraries for IO and TLS that can enhance performance on `aarch_64` architectures like Graviton and Apple Silicon. Previously, native libraries were included only for `x86_64` architectures.
 Native libraries for IO and TLS are enabled by default. If you need to disable native IO, set the `ioEnvironment.enableNativeIo` client setting to false. To disable native TLS, set the `security.enableNativeTls` client setting to false.
 
-=== Bugs
+==== Bugs
 * https://issues.couchbase.com/browse/JVMCBC-1161[JVMCBC-1161]:
 Fixed a minor issue where `cluster.disconnect()` could occasionally timeout due to a race condition.
 * https://issues.couchbase.com/browse/JVMCBC-1176[JVMCBC-1176]:
@@ -406,7 +417,7 @@ Supporting in transactions a future version of Couchbase Server that requires qu
 Fixed a regression that prevented native TLS from being used regardless of whether the `security.enableNativeTls` client setting was set to true.
 
 
-== Version 3.4.1 (7 December 2022)
+=== Version 3.4.1 (7 December 2022)
 
 Version 3.4.1 is the second release of the 3.4 series.
 The headline change is support for the KV range scan feature (`collection.scan()`), added at @Stability.Volatile level.
@@ -436,7 +447,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 |=======================
 
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1163[JVMCBC-1163]:
 Dependencies have been updated.
 * https://issues.couchbase.com/browse/JVMCBC-1156[JVMCBC-1156]:
@@ -463,7 +474,7 @@ Before this change, an incompatibility was logged as a warning, and the connecti
 * https://issues.couchbase.com/browse/JVMCBC-1159[JVMCBC-1159]:
 Transactions now support upcoming server query_context changes.
 
-=== Bugs
+==== Bugs
 * https://issues.couchbase.com/browse/JVMCBC-1157[JVMCBC-1157]:
 The SDK no longer rejects a `PersistTo` requirement in a bucket using the Magma storage engine. Before this change, the SDK would refuse the request because it misidentified Magma buckets as ephemeral (unable to persist documents).
 * https://issues.couchbase.com/browse/JVMCBC-1167[JVMCBC-1167]:
@@ -477,7 +488,7 @@ For example, the following connection string is malformed, because the `couchbas
 The correct way to include multiple addresses in a connection string is to specify the scheme only once, and to join addresses with commas, like:
 `couchbase://foo.example.com,bar.example.com`
 
-== Version 3.4.0 (24 October 2022)
+=== Version 3.4.0 (24 October 2022)
 
 Version 3.4.0 is the first release of the 3.4 series.
 
@@ -505,7 +516,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 |=======================
 
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1102[JVMCBC-1102]:
 Added support for serverless execution environments including AWS Lambda.
 * https://issues.couchbase.com/browse/JCBC-2004[JCBC-2004]:
@@ -519,7 +530,7 @@ If your Couchbase Server cluster's root certificate is signed by a well-known ce
 * https://issues.couchbase.com/browse/JVMCBC-1154[JVMCBC-1154]:
 Maintenance dependency bump.
 
-=== Bugs
+==== Bugs
 * https://issues.couchbase.com/browse/JCBC-2002[JCBC-2002]:
 `expiryTime` will now return an empty optional if no expiry set.
 * https://issues.couchbase.com/browse/JCBC-1987[JCBC-1987]:
@@ -529,7 +540,11 @@ Provide required OpenTelemetry span attributes.
 * https://issues.couchbase.com/browse/JVMCBC-1155[JVMCBC-1155]:
 Make sure targeted round robin request keeps retrying if no config is available.
 
-== Version 3.3.4 (9 September 2022)
+
+== Java SDK 3.3 Releases
+
+
+=== Version 3.3.4 (9 September 2022)
 
 Version 3.3.4 is the fifth release of the 3.3 series, and is a maintenance release.
 
@@ -557,7 +572,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 |=======================
 
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1131[JVMCBC-1131]:
 Added ability to track the number of created instances.
 Users can now set to hard-fail if too many instances are created.
@@ -581,7 +596,7 @@ Note that this API is currently marked as `@Stability.Volatile` and could be sub
 * https://issues.couchbase.com/browse/JVMCBC-1126[JVMCBC-1126]:
 Updated metrics and tracing dependencies.
 
-=== Bug Fixes
+==== Bug Fixes
 * https://issues.couchbase.com/browse/JVMCBC-1125[JVMCBC-1125]:
 Fixed a rare `CompletionException` seen from transactions when a very aggressive cleanup window is configured.
 * https://issues.couchbase.com/browse/JVMCBC-1136[JVMCBC-1136]:
@@ -592,7 +607,7 @@ Fixed issue where a `NullPointerException` was thrown for a non-existent FTS ind
 Fixed a bug where concurrent transactions could hang due to scheduler starvation.
 
 
-== Version 3.3.3 (2 August 2022)
+=== Version 3.3.3 (2 August 2022)
 
 Version 3.3.3 is the fourth release of the 3.3 series, and is a maintenance release.
 
@@ -619,7 +634,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.3.2   | Micrometer 1.8.4           | Volatile
 |=======================
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1116[JVMCBC-1116]:
 Dependency versions have been increased.
 * https://issues.couchbase.com/browse/JVMCBC-1121[JVMCBC-1121]:
@@ -627,7 +642,7 @@ In some rare cases -- such as an application crash -- a transaction is left for 
 by default it will find this within one minute.
 In cases where this does not happen, this will trigger a warning after two hours -- not the two days that was previously the case.
 
-=== Bug Fixes
+==== Bug Fixes
 * https://issues.couchbase.com/browse/JVMCBC-1110[JVMCBC-1110]:
 Transaction clients now reliably remove themselves from client records on shutdown.
 * https://issues.couchbase.com/browse/JVMCBC-1119[JVMCBC-1119]:
@@ -641,7 +656,7 @@ Deprecated Reactor Processors have been replaced.
 The SDK now allows for configurations with _only_ TLS ports.
 
 
-== Version 3.3.2 (6 July 2022)
+=== Version 3.3.2 (6 July 2022)
 
 Version 3.3.2 is the third release of the 3.3 series, and is a maintenance release.
 
@@ -668,7 +683,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.3.2   | Micrometer 1.8.4           | Volatile
 |=======================
 
-=== Bug Fixes
+==== Bug Fixes
 
 * https://issues.couchbase.com/browse/JVMCBC-1103[JVMCBC-1103]:
 To reduce overhead, the `MAX_PARALLEL_FETCH` value in `KeyValueBucketRefresher` has been updated to only fetch one config per poll interval.
@@ -677,7 +692,7 @@ To reduce overhead, the `MAX_PARALLEL_FETCH` value in `KeyValueBucketRefresher` 
 Fixed issue where the global refresher did not honor the config poll interval.
 
 
-== Version 3.3.1 (8 June 2022)
+=== Version 3.3.1 (8 June 2022)
 
 Version 3.3.1 is the second release of the 3.3 series, and is a maintenance release.
 
@@ -704,7 +719,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.3.1   | Micrometer 1.8.4           | Volatile
 |=======================
 
-=== Improvements
+==== Improvements
 
 * https://issues.couchbase.com/browse/JVMCBC-1089[JVMCBC-1089]:
 SDK users can now customize the `ConsoleLogger` format.
@@ -715,7 +730,7 @@ The lookup failure is typically harmless, so the log message has now been downgr
 Updated Netty to version `4.1.77.Final`.
 
 
-== Version 3.3.0 (26 April 2022)
+=== Version 3.3.0 (26 April 2022)
 
 Version 3.3.0 is the first release of the 3.3 series.
 
@@ -748,7 +763,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.3.0   | Micrometer 1.8.4           | Volatile
 |=======================
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JCBC-1929[JCBC-1929]:
 Integrated transactions library into SDK.
 * https://issues.couchbase.com/browse/JVMCBC-1070[JVMCBC-1070]:
@@ -770,14 +785,16 @@ Allow to list the number of currently available replicas for a document ID.
 * https://issues.couchbase.com/browse/JCBC-1923[JCBC-1923]:
 Added warning when ignoring connection string parameters or scheme.
 
-=== Bugs
+==== Bugs
 * https://issues.couchbase.com/browse/JCBC-1922[JCBC-1922]:
 `NOT_STORED` when inserting a document will now correctly raise a `DocumentAlreadyExistsException` (rather than a `DocumentNotFoundException` as before).
 * https://issues.couchbase.com/browse/JVMCBC-1077[JVMCBC-1077]:
 Shutting down a ClusterEnvironment now correctly stops a `Meter` owned by the cluster. This plugs a resource leak where `LoggingMeter` worker threads would never be stopped.
 
 
-== Version 3.2.7 (25 April 2022)
+== Java SDK 3.2 Releases
+
+=== Version 3.2.7 (25 April 2022)
 
 Version 3.2.7 is the eighth release of the 3.2 series.
 
@@ -804,20 +821,20 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.2.7   | Micrometer 1.7.5          | Volatile
 |=======================
 
-=== Bugs
+==== Bugs
 * https://issues.couchbase.com/browse/JCBC-1922[JCBC-1922]:
 The KeyValue error code `NOT_STORED` is now properly mapped to `DocumentExistsException` on `insert` and `mutateIn`.
 * https://issues.couchbase.com/browse/JVMCBC-1077[JVMCBC-1077]:
 The environment now properly shuts down the `Meter` if it is owned and not passed in externally.
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1082[JVMCBC-1082]:
 Updated internal and external dependencies.
  * Netty from 4.1.73 to 4.1.76
  * Jackson from 2.13.1 to 2.13.2 (and 2.13.2.2)
  * Reactor from 3.4.14 to 3.4.17 
 
-== Version 3.2.6 (2 March 2022)
+=== Version 3.2.6 (2 March 2022)
 
 Version 3.2.6 is the seventh release of the 3.2 series.
 
@@ -844,7 +861,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.2.6   | Micrometer 1.7.5          | Volatile
 |=======================
 
-=== Bugs
+==== Bugs
 * https://issues.couchbase.com/browse/JVMCBC-1060[JVMCBC-1060]:
 Fixed an issue where rate limited exceptions were not thrown for `SearchIndexManager` errors.
 * https://issues.couchbase.com/browse/JVMCBC-1071[JVMCBC-1071]:
@@ -856,14 +873,14 @@ Index fields are now quoted in the analytics index manager.
 * https://issues.couchbase.com/browse/JCBC-1921[JCBC-1921]:
 QueryIndexManager `buildDeferredIndexes` no longer throws a `ParsingFailureException` against Couchbase Server 6.0.
 
-=== New Features
+==== New Features
 * https://issues.couchbase.com/browse/JVMCBC-1057[JVMCBC-1057]:
 Added core infrastructure for the Backup service. 
 Users can now make custom HTTP requests to the Backup service.
 * https://issues.couchbase.com/browse/JVMCBC-1064[JVMCBC-1064]:
 When implementing a custom `RetryStrategy`, a new overload of `RetryAction.noRetry` lets you specify an exception translator for converting the default request cancellation exception into your preferred exception class.
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1065[JVMCBC-1065]:
 `RetryReason.allowsNonIdempotentRetry()` is now public, so you can call it from a custom `RetryStrategy`.
 * https://issues.couchbase.com/browse/JVMCBC-1066[JVMCBC-1066]:
@@ -885,7 +902,7 @@ Cluster cluster = Cluster.connect("localhost", clusterOptions(username, password
     .environment(env -> env.ioConfig().captureTraffic(ServiceType.MANAGER)));
 ----
 
-== Version 3.2.5 (2 February 2022)
+=== Version 3.2.5 (2 February 2022)
 
 Version 3.2.5 is the sixth release of the 3.2 series.
 
@@ -912,12 +929,12 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.2.5   | Micrometer 1.7.5          | Volatile
 |=======================
 
-=== API Impacting
+==== API Impacting
 * https://issues.couchbase.com/browse/JCBC-1901[JCBC-1901]:
 Removed the Azure link type from the analytics management API, due to a change in the underlying server API.
 (Note that this interface is marked @Stability.Volatile indicating that it can change.)
 
-=== Bugs
+==== Bugs
 * https://issues.couchbase.com/browse/JCBC-1895[JCBC-1895]:
 Fixed an issue where `lookupInResult.contentAs(0, Boolean.class)` was throwing a `DecodingFailureException` on a Sub-Document exists operation.
 * https://issues.couchbase.com/browse/JCBC-1896[JCBC-1896]:
@@ -929,7 +946,7 @@ Added fix to not load the global config if a node is not in the seed node list a
 * https://issues.couchbase.com/browse/JVMCBC-1058[JVMCBC-1058]:
 The SDK now throws a more descriptive `FeatureNotAvailableException` for scopes and collections on memcached buckets.
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JCBC-1860[JCBC-1860]:
 `ConflictResolutionType.CUSTOM` has now been added to the bucket management API.
 * https://issues.couchbase.com/browse/JCBC-1864[JCBC-1864]:
@@ -970,7 +987,7 @@ Added more log information on unexpected endpoint disconnect.
 The SDK now handles any `retry:true` field in a query error result by retrying it.
 
 
-== Version 3.2.4 (9 December 2021)
+=== Version 3.2.4 (9 December 2021)
 
 Version 3.2.4 is the fifth release of the 3.2 series.
 
@@ -999,11 +1016,11 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.2.4   | Micrometer 1.7.5          | Volatile
 |=======================
 
-=== Bugs
+==== Bugs
 * https://issues.couchbase.com/browse/JCBC-1892[JCBC-1892]:
 `EventingFunctionSettings` can now be empty - this fixes an issue with loading eventing functions from the cluster.
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1033[JVMCBC-1033], https://issues.couchbase.com/browse/JVMCBC-1034[JVMCBC-1034]:
 Updated internal and external dependencies to their latest bugfix versions. 
 This also updates OpenTelemetry to 1.7.x.
@@ -1019,7 +1036,7 @@ Included `httpStatus` in Query and Analytics Error Context, as well as the `vbuc
 This helps with debugging.
 
 
-== Version 3.2.3 (2 November 2021)
+=== Version 3.2.3 (2 November 2021)
 
 Version 3.2.3 is the fourth release of the 3.2 series.
 
@@ -1046,11 +1063,11 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.2.3   | Micrometer 1.7.0          | Volatile
 |=======================
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JVMCBC-1026[JVMCBC-1026]:
 Support for error map v2 has been added to ensure the config can be parsed without failure.
 
-== Version 3.2.2 (6 October 2021)
+=== Version 3.2.2 (6 October 2021)
 
 Version 3.2.2 is the third release of the 3.2 series.
 
@@ -1077,7 +1094,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.2.2   | Micrometer 1.7.0          | Volatile
 |=======================
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JCBC-1872[JCBC-1872]:
 Bring `NodeLocatorHelper` to SDK 3 from 2.
 * https://issues.couchbase.com/browse/JCBC-1875[JCBC-1875]:
@@ -1091,7 +1108,7 @@ Batch-Log messages in DefaultEventBus.
 Now events which are overflowing are not directly logged to stderr but rather batched up and logged at interval.
 Note that this implies some "loss of precision", as not all dropped events are logged - one event per type is preserved.
 
-=== Bugs
+==== Bugs
 * https://issues.couchbase.com/browse/JVMCBC-1017[JVMCBC-1017]:
 Fixed issue with Threshold Logging Tracing not working due to `RequestContext` not being set.
 * https://issues.couchbase.com/browse/JCBC-1873[JCBC-1873]:
@@ -1101,7 +1118,7 @@ Added `target` property to `QueryRequest` and ensured it is honored for prepare 
 This fix removes need for `TargetedQueryRequest`.
 
 
-== Version 3.2.1 (1 September 2021)
+=== Version 3.2.1 (1 September 2021)
 
 Version 3.2.1 is the second release of the 3.2 series.
 
@@ -1128,13 +1145,13 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.2.1   | Micrometer 1.7.0          | Volatile
 |=======================
 
-=== Known Issues
+==== Known Issues
 * https://issues.couchbase.com/browse/JVMCBC-1017[JVMCBC-1017]:
 The `ThresholdLoggingTracer` will not record any request and will not log them into the log file. 
 If you rely on this functionality please use 3.1.7 as only 3.2.0 and 3.2.1 are affected. 
 This issue will be addressed in 3.2.2.
 
-=== Bug Fixes
+==== Bug Fixes
 * https://issues.couchbase.com/browse/JVMCBC-1002[JVMCBC-1002]:
 Default log level reverted to INFO.
 * https://issues.couchbase.com/browse/JVMCBC-1007[JVMCBC-1007]:
@@ -1142,7 +1159,7 @@ Default log level reverted to INFO.
 * https://issues.couchbase.com/browse/JCBC-1850[JCBC-1850]:
 Fixed `NullPointerException` with `OpenTracing`.
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JCBC-1732[JCBC-1732]:
 Eventing Management API added.
 * https://issues.couchbase.com/browse/JCBC-1852[JCBC-1852]:
@@ -1167,7 +1184,7 @@ Allow to export Context as Map.
 `ErrorContext` must be included in message.
 
 
-== Version 3.2.0 (20 July 2021)
+=== Version 3.2.0 (20 July 2021)
 
 Version 3.2.0 is the first release of the 3.2 series.
 It promotes to GA support for the scopes and collections provided by Couchbase Server 7.0, and also OpenTelemetry.
@@ -1195,13 +1212,13 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.2.0   | Micrometer 1.7.0          | Volatile
 |=======================
 
-=== Known Issues
+==== Known Issues
 * https://issues.couchbase.com/browse/JVMCBC-1017[JVMCBC-1017]:
 The `ThresholdLoggingTracer` will not record any request and will not log them into the log file. 
 If you rely on this functionality please use 3.1.7 as only 3.2.0 and 3.2.1 are affected. 
 This issue will be addressed in 3.2.2.
 
-=== Bug Fixes
+==== Bug Fixes
 * https://issues.couchbase.com/browse/JVMCBC-949[JVMCBC-949]:
 Opening a non-default collection on an memcached bucket now fails fast.
 * https://issues.couchbase.com/browse/JVMCBC-983[JVMCBC-983]:
@@ -1209,7 +1226,7 @@ Ignore slow subscribers on certain Flux intervals.
 * https://issues.couchbase.com/browse/JCBC-1822[JCBC-1822]:
 `BatchHelper` now supports MDS deployments.
 
-=== Interface Changes
+==== Interface Changes
 All interface changes are to interfaces that are currently in beta and marked `@Stability.Volatile` or `@Stability.Uncommitted`.
 
 * https://issues.couchbase.com/browse/JVMCBC-978[JVMCBC-978]:
@@ -1223,7 +1240,7 @@ Promote collection APIs from Volatile to Committed.
 * https://issues.couchbase.com/browse/JCBC-1844[JCBC-1844]:
 Promote `BatchHelper` from Volatile to Uncommitted.
 
-=== Improvement
+==== Improvement
 * https://issues.couchbase.com/browse/JVMCBC-980[JVMCBC-980]:
 Add exception wrappers to Tracers and Meters.
 * https://issues.couchbase.com/browse/JVMCBC-987[JVMCBC-987]:
@@ -1258,7 +1275,11 @@ Add support for SDK2-compatible `LegacyTranscoder`.
 * https://issues.couchbase.com/browse/JCBC-1841[JCBC-1841]:
 Update OpenTelemetry to 1.3.0.
 
-== Version 3.1.8 (1 March 2022)
+
+== Java SDK 3.1 Releases
+
+
+=== Version 3.1.8 (1 March 2022)
 
 Version 3.1.8 is the ninth release of the 3.1 series, bringing stabilizations over 3.1.7.
 
@@ -1285,7 +1306,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.1.8   | Micrometer 1.6.6          | Volatile
 |=======================
 
-=== Bug Fixes
+==== Bug Fixes
 
 * https://issues.couchbase.com/browse/JVMCBC-1067[JVMCBC-1067]:
 Internal and external maintenance dependencies are updated to their latest available bugfix releases (including Netty to 4.1.74.Final).
@@ -1298,7 +1319,7 @@ Fixed an issue where `lookupInResult.contentAs(0, Boolean.class)` was throwing a
 * https://issues.couchbase.com/browse/JVMCBC-1896[JCBC-1896]:
 Fixed an issue where `JsonValueSerializerWrapper` was unable to support decoding via TypeRef.
 
-== Version 3.1.7 (11 August 2021)
+=== Version 3.1.7 (11 August 2021)
 
 Version 3.1.7 is the eigth release of the 3.1 series, bringing stabilizations and enhancements over 3.1.6.
 
@@ -1325,7 +1346,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.1.7   | Micrometer 1.6.6          | Volatile
 |=======================
 
-=== Bug Fixes
+==== Bug Fixes
 
 * https://issues.couchbase.com/browse/JVMCBC-949[JVMCBC-949]:
 Opening a non-default collection on an memcached bucket now fails fast.
@@ -1338,7 +1359,7 @@ Ignore null values for attributed in OpenTelemetry and OpenTracing.
 * https://issues.couchbase.com/browse/JVMCBC-990[JVMCBC-990]:
 Gracefully handle cluster-level WaitUntilReady against clusters < 6.5.
 
-=== Improvements
+==== Improvements
 
 * https://issues.couchbase.com/browse/JVMCBC-996[JVMCBC-996]:
 Throw `FeatureNotAvailableException` if scope level queries are not available.
@@ -1351,7 +1372,7 @@ Allow supplying an SDK2-compatible memcached hashing strategy.
 * https://issues.couchbase.com/browse/JVMCBC-999[JVMCBC-999]:
 Properly map server query timeout while streaming.
 
-== Version 3.1.6 (4 June 2021)
+=== Version 3.1.6 (4 June 2021)
 
 Version 3.1.6 is the seventh release of the 3.1 series, bringing stabilizations and enhancements over 3.1.5.
 
@@ -1366,13 +1387,13 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.4.6**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
-=== Bug Fixes
+==== Bug Fixes
 * https://issues.couchbase.com/browse/JCBC-1676[JCBC-1676]:
 Bucket creation now succeeds against Community Edition 6.5 and above.
 * https://issues.couchbase.com/browse/JVMCBC-972[JVMCBC-972]:
 Only open one GCCCP connection per node.
 
-=== Improvements
+==== Improvements
 * https://issues.couchbase.com/browse/JCBC-1808[JCBC-1808]:
 Updated tracing and metrics module dependencies.
 * https://issues.couchbase.com/browse/JCBC-1649[JCBC-1649]:
@@ -1388,7 +1409,7 @@ Further improve wait until ready diagnostics.
 * https://issues.couchbase.com/browse/JVMCBC-977[JVMCBC-977]:
 Improve bucket configuration handling (revEpoch).
 
-== Version 3.1.5 (6 May 2021)
+=== Version 3.1.5 (6 May 2021)
 
 Version 3.1.5 is the sixth release of the 3.1 series, bringing stabilizations and enhancements over 3.1.4.
 
@@ -1403,7 +1424,7 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.4.5**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
-=== Bug Fixes
+==== Bug Fixes
 
 * https://issues.couchbase.com/browse/JCBC-1804[JCBC-1804]:
 Ensure `contentAsObject/Array()` works with a custom JsonSerializer.
@@ -1414,7 +1435,7 @@ Add better retry handling for local and global bucket config fetch failures, mak
 * https://issues.couchbase.com/browse/JVMCBC-967[JVMCBC-967]:
 Work around and fix a `OverflowException` with `PersistTo`/`ReplicateTo`, caused by Reactor.
 
-=== Improvements
+==== Improvements
 
 * https://issues.couchbase.com/browse/JVMCBC-958[JVMCBC-958]:
 Improve the performance of individual collection ID fetches, speeding up the time of bootstrap whan a lot of collections are opened.
@@ -1429,7 +1450,7 @@ Add (internal, volatile) request callback functionality.
 * https://issues.couchbase.com/browse/JCBC-1733[JCBC-1733]:
 Add support for collections to `SearchOptions`.
 
-== Version 3.1.4 (7 April 2021)
+=== Version 3.1.4 (7 April 2021)
 
 Version 3.1.4 is the fifth release of the 3.1 series, bringing stabilizations and enhancements over 3.1.3.
 
@@ -1446,7 +1467,7 @@ The supported and tested dependencies for this release are:
 
 WARNING: Due to protocol level changes, Java SDK 3.1.4 and later are not compatible with _pre-release_ versions of Couchbase Server 7.0.
 
-=== Bug Fixes
+==== Bug Fixes
 
 * https://issues.couchbase.com/browse/JCBC-1798[JCBC-1798]:
 Fixes ViewResult.metaData() throwing Exception when debug=true.
@@ -1460,7 +1481,7 @@ waitUntilReady is now more resilient to just-created buckets.
 * https://issues.couchbase.com/browse/JVMCBC-954[JVMCBC-954]:
 More resilient handling of rebalances.
 
-=== Improvements
+==== Improvements
 
 * https://issues.couchbase.com/browse/JCBC-1786[JCBC-1786]:
 Transcoders now allow contentAs(Object.class).
@@ -1483,7 +1504,7 @@ Move GetAny/AllReplicas into core.
 Distinguish between CAS mismatch and DML failure on query error.
 
 
-== Version 3.1.3 (2 March 2021)
+=== Version 3.1.3 (2 March 2021)
 
 Version 3.1.3 is the fourth release of the 3.1 series, bringing stabilizations and enhancements over 3.1.2.
 
@@ -1498,7 +1519,7 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.4.3**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
-=== Improvements
+==== Improvements
 
 * https://issues.couchbase.com/browse/JCBC-1776[JCBC-1776],
 https://issues.couchbase.com/browse/JVMCBC-924[JVMCBC-924],
@@ -1513,7 +1534,7 @@ Performance: Replace new byte[] full copies with ByteBufUtil.getBytes.
 * https://issues.couchbase.com/browse/JVMCBC-927[JVMCBC-927]:
 Performance: Improve performance of metrics hot code path.
 
-=== Bugs
+==== Bugs
 
 * https://issues.couchbase.com/browse/JVMCBC-930[JVMCBC-930]:
 Threshold and Orphan Reporting now report the correct time units.
@@ -1522,7 +1543,7 @@ Fixed a memory leak when OrphanReporter is disabled.
 * https://issues.couchbase.com/browse/JVMCBC-933[JVMCBC-933]:
 ThresholdRequestTracer and OrphanReporter now use bounded queues.
 
-=== Internal Improvements
+==== Internal Improvements
 
 * https://issues.couchbase.com/browse/JVMCBC-912[JVMCBC-912]:
 Refactor property loading.
@@ -1536,7 +1557,7 @@ Add OpenTelemetry attributes for spans.
 Retain stability annotations at runtime.
 
 
-== Version 3.1.2 (2 February 2021)
+=== Version 3.1.2 (2 February 2021)
 
 Version 3.1.2 is the third release of the 3.1 series, bringing stabilizations and enhancements over 3.1.1.
 
@@ -1551,12 +1572,12 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.4.1**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
-=== API Affecting
+==== API Affecting
 
 * https://issues.couchbase.com/browse/JCBC-1763[JCBC-1763]:
 CollectionManager::getScope is now deprecated, in favour of using getAllScopes.
 
-=== Enhancements
+==== Enhancements
 
 * https://issues.couchbase.com/browse/JVMCBC-915[JVMCBC-915]:
 As a performance optimization, loading a collection now only fetches the information required for that collection, rather than the full collection manifest.
@@ -1564,7 +1585,7 @@ As a performance optimization, loading a collection now only fetches the informa
 Any send HTTP request will send a hostname if hostnames are used, rather than IP, leading to consistent hostname use across the system.
 
 
-== Version 3.1.1 (12 January 2021)
+=== Version 3.1.1 (12 January 2021)
 
 Version 3.1.1 is the second release of the 3.1 series, bringing stabilizations and enhancements over 3.1.0.
 
@@ -1579,14 +1600,14 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.4.1**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
-=== API Affecting
+==== API Affecting
 
 * https://issues.couchbase.com/browse/JVMCBC-906[JVMCBC-906]:
 Removed Tracer as a _mandatory_ argument from `OpenTelemetrySpan`.
 (The OpenTelemetry module is marked `@Stability.Volatile`, indicating that there may be API-breaking changes.
 The volatility arises from the underlying `OpenTelemetry` library itself being at a beta/volatile level.)
 
-=== Bugs
+==== Bugs
 
 * https://issues.couchbase.com/browse/JVMCBC-909[JVMCBC-909]:
 Retry opening the bucket until timeout when it is not found, to allow for it not yet being created.
@@ -1601,7 +1622,7 @@ Support for collections added to `BatchHelper`.
 Prepared non-adhoc queries on scopes were failing, as query_context was not being passed to the individual prepare and/or execute statements.
 This has now been fixed, and scope-level queries are working as expected. 
 
-=== Enhancements
+==== Enhancements
 
 * https://issues.couchbase.com/browse/JVMCBC-907[JVMCBC-907]:
 The Orphan Reporter can now be disabled.
@@ -1613,7 +1634,7 @@ Escape the scope for scope-level queries now enabled, as a fix in the server mea
 Expose partition information from the query management API on `QueryIndex` class.
 
 
-== Version 3.1.0 (2 December 2020)
+=== Version 3.1.0 (2 December 2020)
 
 Version 3.1.0 is the first GA release of the 3.1 series, bringing stabilizations and enhancements over 3.0.10 and the 3.0 SDK, and adding features to support Couchbase Server 6.6 and 7.0β.
 
@@ -1628,7 +1649,7 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.4.0**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
-=== Enhancements
+==== Enhancements
 
 * https://issues.couchbase.com/browse/JCBC-1731[JCBC-1731]:
 Experimental support for Metrics (`Meter`) and the internals have been reworked around the `RequestTracer`. The new metrics implementation is disabled by default but will be enabled in the future. We encourage you to try it out and provide feedback, please see the documentation section on tracing and metrics for further information.
@@ -1649,7 +1670,10 @@ In addition to the tickets outlined below, different interfaces have been elevat
 * Search Disable-Scoring Option
 
 
-== Version 3.0.10 (3 November 2020)
+== Java SDK 3.0 Releases
+
+
+=== Version 3.0.10 (3 November 2020)
 
 Version 3.0.10 is a maintenance release, bringing enhancements over the last stable release.
 
@@ -1664,7 +1688,7 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.3.9.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
-=== Enhancements
+==== Enhancements
 
 * https://issues.couchbase.com/browse/JVMCBC-898[JVMCBC-898]:
 Added fallback for lastDispatchedTo in context, to improve debuggability.
@@ -1672,7 +1696,7 @@ Added fallback for lastDispatchedTo in context, to improve debuggability.
 Updated OpenTelemetry to 0.9.1.
 
 
-== Version 3.0.9 (7 October 2020)
+=== Version 3.0.9 (7 October 2020)
 
 Version 3.0.9 is a bugfix release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
@@ -1687,12 +1711,12 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.3.9.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
-=== API Affecting
+==== API Affecting
 * https://issues.couchbase.com/browse/JCBC-1716[JCBC-1716]: The Analytics getPendingMutations API had a return value (`Map<String, Long>`) that did not reflect what was returned from the server.
 The return value has been changed to `Map<String, Map<String, Long>>` accordingly.
 As the getPendingMutations method was previously uncallable due to the resulting deserialization failure, we believe this API change - though technically breaking - will not impact any users, and we have kept the API version at 3.x.
 
-=== Bug Fixes
+==== Bug Fixes
 * https://issues.couchbase.com/browse/JCBC-1713[JCBC-1713]: 
 Improve LDAP auth failure handling.
 * https://issues.couchbase.com/browse/JCBC-1718[JCBC-1718]: 
@@ -1711,7 +1735,7 @@ BatchHelper: handle success case with no body gracefully.
 Subdoc 'no access' error code is now reported correctly.
 This helps users to identify and fix permissions errors for system XATTRs.
 
-=== Enhancements
+==== Enhancements
 * https://issues.couchbase.com/browse/JCBC-1651[JCBC-1651]: 
 Geopolygon search support.
 * https://issues.couchbase.com/browse/JCBC-1652[JCBC-1652]: 
@@ -1738,7 +1762,7 @@ Improve LDAP auth failure handling.
 Fast dispatch pooled requests.
 
 
-== Version 3.0.8 (31 August 2020)
+=== Version 3.0.8 (31 August 2020)
 
 Version 3.0.8 is a bugfix release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
@@ -1753,7 +1777,7 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.3.9.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
-=== Enhancements
+==== Enhancements
 
 * https://issues.couchbase.com/browse/JCBC-1705[JCBC-1705]:
 A (uncomitted) API has been added which allows to very efficiently perform bulk fetch and bulk exists operations. See the `BatchHelper` class for more details.
@@ -1778,7 +1802,7 @@ Support for scope-level {sqlpp} queries has been added (needs at least Server 7.
 * https://issues.couchbase.com/browse/JCBC-1658[JCBC-1658]:
 Support for scope-level analytics queries has been added (needs at least Server 7.0 to be usable).
 
-=== Bug Fixes
+==== Bug Fixes
 * https://issues.couchbase.com/browse/JCBC-1696[JCBC-1696]:
 When adding the option `withExpiry(true)` to `GetOptions`, it is now possible to use a custom transcoder which is JSON compatible.
 * https://issues.couchbase.com/browse/JVMCBC-805[JVMCBC-805]:
@@ -1794,7 +1818,7 @@ The client now trackes multiple parallel bucket open attempts (against different
 * https://issues.couchbase.com/browse/JVMCBC-878[JVMCBC-878]:
 `EndpointDiagnostics` had the local and remote hostnames mixed up, they now show up in the correct order.
 
-== Version 3.0.7 (4 August 2020)
+=== Version 3.0.7 (4 August 2020)
 
 Version 3.0.7 is the eighth release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
@@ -1809,14 +1833,14 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.3.8.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
-=== API Affecting
+==== API Affecting
 * https://issues.couchbase.com/browse/JCBC-1681[JCBC-1681]: 
 Removed cas from `IncrementOptions` and `DecrementOptions`.  
 CAS is not supported by the underlying protocol and should not have been exposed in these options.
 * https://issues.couchbase.com/browse/JCBC-1625[JCBC-1625]: 
 Deprecated `maxTTL` on BucketSettings in favor of `maxExpiry`.
 
-=== Bug Fixes
+==== Bug Fixes
 * https://issues.couchbase.com/browse/JCBC-1647[JCBC-1647]: 
 Deprecated `EjectionPolicy` in favor of `EvictionPolicyType`.
 And added the "noEviction" and "nruEviction" policies used by ephemeral buckets.
@@ -1829,7 +1853,7 @@ In this case just null should now be returned, instead of a NPE deep down in the
 A bug in the chunk response parser prohibited responses meant that View reduce responses were never completed, and as a result timed out on the user side.
 The completion of view results with reduce enabled has now been fixed.
 
-=== Enhancements
+==== Enhancements
 * https://issues.couchbase.com/browse/JCBC-1661[JCBC-1661], https://issues.couchbase.com/browse/JCBC-1665[JCBC-1665]: 
 Building on the expiry improvements in the previous release, this adds a new `expiryTime()` method that returns expiry as an `Instant`, which better expresses the concept than the `Duration` returned by `expiry()`.  
 The latter will be deprecated in a future release.  
@@ -1844,7 +1868,7 @@ Performance improvement: do not grab ByteBuf slice when extracting server respon
 * https://issues.couchbase.com/browse/JVMCBC-869[JVMCBC-869]: 
 Maintenance dependency bump: Netty -> 4.1.51, Jackson -> 2.11.1, Reactor -> 3.3.7, OpenTelemetry -> 0.6.0.
 
-== Version 3.0.6 (14 July 2020)
+=== Version 3.0.6 (14 July 2020)
 
 Version 3.0.6 is the seventh release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
@@ -1859,7 +1883,7 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.3.5.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
-=== Enhancements
+==== Enhancements
 * https://issues.couchbase.com/browse/JCBC-1645[JCBC-1645]:
 Specifying document expiries has been made significantly easier.
 Expiries are supplied as a `Duration`.  
@@ -1873,7 +1897,7 @@ Bootstrapping is now fully pipelined for performance, building on the improvemen
 * https://issues.couchbase.com/browse/JVMCBC-865[JVMCBC-865]:
 Changed the default idle timeout to 4.5s for http connections, to support performance improvements in query service.
 
-=== Bug Fixes
+==== Bug Fixes
 * https://issues.couchbase.com/browse/JCBC-1662[JCBC-1662]:
 `MutateInMacro` for CRC32 is fixed.
 * https://issues.couchbase.com/browse/JCBC-1664[JCBC-1664]:
@@ -1895,7 +1919,7 @@ Trailing : no longer added to IPv6 addresses without [].
 'invalid IPv6 address' warnings now no longer produced when trying to connect to a valid Ipv6 address thus specified.
 
 
-== Version 3.0.5 (2 June 2020)
+=== Version 3.0.5 (2 June 2020)
 
 Version 3.0.5 is the sixth release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
@@ -1910,7 +1934,7 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.3.5.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
-=== Enhancements
+==== Enhancements
 
 * http://issues.couchbase.com/browse/JVMCBC-852[JVMCBC-852]:
 Bumped Reactor to 3.3.5, Netty to 4.1.50.Final, and Jackson to 2.11.0.
@@ -1920,14 +1944,14 @@ For performance, the KV bootstrap sequence is now partially pipelined.
 In addition, there are internal revisions to support the forthcoming Field Level Encryption (FLE) support.
 This will be available in a separate library for Enterprise Edition subscribers.
 
-=== Bug Fixes
+==== Bug Fixes
 
 * http://issues.couchbase.com/browse/JVMCBC-851[JVMCBC-851]:
 Reactive getAllReplicas methods will now honor a provided custom transcoder.
 * http://issues.couchbase.com/browse/JVMCBC-849[JVMCBC-849]:
 Duplicate global loading exceptions are now swallowed to remove redundant warnings from logging (this was a cosmetic-only issue).
 
-== Version 3.0.4 (7 May 2020)
+=== Version 3.0.4 (7 May 2020)
 
 Version 3.0.4 is the fifth release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
@@ -1942,12 +1966,12 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.3.4.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.3**
 
-=== Enhancements
+==== Enhancements
 
 * http://issues.couchbase.com/browse/JVMCBC-841[JVMCBC-841]:
 Bumped Netty dependency to 2.0.30, and reactor to 3.3.4
 
-=== Bug Fixes
+==== Bug Fixes
 
 * http://issues.couchbase.com/browse/JVMCBC-845[JVMCBC-845]:
 If a rebalance is stopped in the middle, an edge case occasionally causes KV ops to time out as the fast forward map is chosen over the retry.
@@ -1955,7 +1979,7 @@ The behavior has now been changed so that the client will try the old and new se
 * http://issues.couchbase.com/browse/JCBC-1626[JCBC-1626]:
 If bucket is not flushable, a `BucketNotFlushableException` is now raised.
 
-== Version 3.0.3 (7 April 2020)
+=== Version 3.0.3 (7 April 2020)
 
 Version 3.0.3 is the fourth release of the 3.0 series, bringing enhancements and bugfixes over the last stable release.
 
@@ -1970,7 +1994,7 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.3.3.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.2**
 
-=== Enhancements
+==== Enhancements
 
 * http://issues.couchbase.com/browse/JCBC-1603[JCBC-1603], http://issues.couchbase.com/browse/JCBC-1606[JCBC-1606]:
 Exposed API to set the CollectionsExample TTL.
@@ -1992,7 +2016,7 @@ Enabled Unordered Execution by Default.
 * http://issues.couchbase.com/browse/JVMCBC-837[JVMCBC-837]:
 Updates OpenTelemetry to 0.3 (beta).
 
-=== Bug Fixes
+==== Bug Fixes
 
 * http://issues.couchbase.com/browse/JCBC-1618[JCBC-1618]:
 Named fields in SearchRows results are now deserialized.
@@ -2011,7 +2035,7 @@ Omit internal config request in orphan reporting.
 Bootstrap will now correctly use the mapped port if alternate addr is present.
 
 
-== Version 3.0.2 (3 March 2020)
+=== Version 3.0.2 (3 March 2020)
 
 Version 3.0.2 is the third release of the 3.0 series, bringing  enhancements and bugfixes over the last stable release.
 
@@ -2026,7 +2050,7 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.3.1.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.2**
 
-=== Enhancements
+==== Enhancements
 
 * http://issues.couchbase.com/browse/JCBC-1588[JCBC-1588]:
 Give TypeRef overload of JsonSerializer a default "unsupported" impl, making it easier for applications to implement custom JsonSerializers.
@@ -2043,7 +2067,7 @@ Added a global component to the core id.
 * http://issues.couchbase.com/browse/JVMCBC-825[JVMCBC-825]:
 Support added for new VATTR HELLO flag.
 
-=== Bug Fixes
+==== Bug Fixes
 
 * http://issues.couchbase.com/browse/JCBC-1587[JCBC-1587]:
 Exists no longer returns wrong value if executed right after remove.
@@ -2054,7 +2078,7 @@ Properly clear cache when repreparing/retrying query.
 * http://issues.couchbase.com/browse/JVMCBC-824[JVMCBC-824]:
 Native Netty transports not included, resulting in fallback to default implementation.  Only affected 2.0.2 core release.
 
-== Version 3.0.1 (5 February 2020)
+=== Version 3.0.1 (5 February 2020)
 
 Version 3.0.1 is the second release of the 3.0 series, bringing  enhancements and bugfixes over the last stable release.
 
@@ -2069,14 +2093,14 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.3.1.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.2**
 
-=== Enhancements
+==== Enhancements
 
 * http://issues.couchbase.com/browse/JCBC-1578[JCBC-1578]:
 Added support for Java Object Serialization as a custom `Transcoder`.
 * http://issues.couchbase.com/browse/JVMCBC-808[JVMCBC-808]:
 The internal packaged `netty` dependency has been reduced to the minimum amount of artifacts needed, trimming the resulting jar size a little.
 
-=== Bug Fixes
+==== Bug Fixes
 
 * http://issues.couchbase.com/browse/JCBC-1574[JCBC-1574]:
 `JsonObject/Array.put(String,Object)` now supports writing generic Maps and Lists.
@@ -2090,14 +2114,14 @@ TLS: remote hostname and port are passed down to the SSL engine, making sure tha
 * http://issues.couchbase.com/browse/JCBC-1575[JCBC-1575]:
 Bucket Management: BucketSettings load does now recognize numReplicas properly.
 
-=== Known Issues
+==== Known Issues
 
 * http://issues.couchbase.com/browse/JVMCBC-805[JVMCBC-805]:
 When bootstrapping against a non-KV node the KV socket is not cleaned up properly. 
 As a workaround (and as we recommend in general), please only bootstrap against nodes which have the KV service enabled.
 Or maintain a list of KV nodes in xref:howtos:managing-connections.adoc#using-dns-srv-records[DNS SRV].
 
-== Version 3.0.0 (10 January 2020)
+=== Version 3.0.0 (10 January 2020)
 
 This is the first GA release of the third generation Java SDK.
 
@@ -2112,7 +2136,7 @@ The supported and tested dependencies for this release are:
 * io.projectreactor:**reactor-core:3.3.1.RELEASE**
 * org.reactivestreams:**reactive-streams:1.0.2**
 
-=== Enhancements
+==== Enhancements
 
 The following list describes the API changes between 3.0.0 beta.2 and 3.0.0 GA.
 
@@ -2158,7 +2182,7 @@ The concept of backpressure has been re-introduced but in slightly different for
 * http://issues.couchbase.com/browse/JVMCBC-[JVMCBC-]:
 The circuit breaker now has a customizable completion callback.
 
-=== Bug Fixes
+==== Bug Fixes
 
 The following list describes the API changes between 3.0.0 beta.2 and 3.0.0 GA.
 
@@ -2181,13 +2205,13 @@ Views now use the right default View timeout instead of the Analytics one.
 * http://issues.couchbase.com/browse/JVMCBC-789[JVMCBC-789]:
 Performing operations while initially loading the collection map is now handled gracefully.
 
-=== Known Issues
+==== Known Issues
 
 * http://issues.couchbase.com/browse/JVMCBC-805[JVMCBC-805]:
 When bootstrapping against a non-KV node the KV socket is not cleaned up properly. As a workaround (an we recommend in general) please
 only bootstrap against nodes which have the KV service enabled.
 
-=== API Changes
+==== API Changes
 
 The following list describes the API changes between 3.0.0 beta.2 and 3.0.0 GA. 
 Since SDK 3 is a complete rewrite over SDK 2, the individual changes between them are not listed here. 
@@ -2205,7 +2229,7 @@ The diagnostics API has been reworked on all levels.
 The `empty` constructors are gone from `JsonObject` and `JsonArray` since they duplicate `create`.
 
 
-== Pre-releases
+=== Pre-releases
 
 Numerous _Alpha_ and _Beta_ releases were made in the run-up to the 3.0 release, and although unsupported, the release notes and download links are retained for archive purposes xref:3.0-pre-release-notes.adoc[here].
 
