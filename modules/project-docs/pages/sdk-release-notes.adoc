@@ -27,7 +27,9 @@ We always recommend using the latest version of the SDK -- it contains all of th
 All patch releases for each dot minor release should be API compatible, and safe to upgrade;
 any changes to expected behavior are noted in the release notes that follow.
 
+
 === Version 3.4.11 (4 October 2023)
+
 With thanks to our community for the contribution, support for Micrometer Observation has been added via the new `tracing-micrometer-observation` module.
 
 https://packages.couchbase.com/clients/java/3.4.11/Couchbase-Java-Client-3.4.11.zip[Download] |
@@ -60,6 +62,7 @@ Internal improvements to support upcoming faster failover and config push featur
 ==== Bugfixes
 * https://issues.couchbase.com/browse/JVMCBC-1364[JVMCBC-1364]:
 Fixed decoding of certain niche sub-document errors, so they no longer raise a `DecodingFailureException`.
+
 
 === Version 3.4.10 (6 September 2023)
 
