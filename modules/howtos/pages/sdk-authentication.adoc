@@ -45,16 +45,26 @@ include::{version-common}@sdk:shared:partial$auth-overview.adoc[tag=cert-auth]
 
 == Authenticating the Java Client by Certificate
 
-For sample procedures whereby certificates can be generated and deployed, see xref:7.1@server:manage:manage-security/manage-certificates.adoc[Manage Certificates].
-The rest of this document assumes that the processes there, or something similar, have been followed.
-That is, a cluster certificate has been created and installed on the server, a client certificate has been created, and it is stored in a JVM keystore along with the cluster's certificate.
+To learn how to generate and deploy certificates, see xref:7.1@server:manage:manage-security/manage-certificates.adoc[Manage Certificates].
+The rest of this section assumes you followed those processes, or did something similar.
+
+For the following example, you will need a client certificate and the associated private key.
+These must be stored together in the same Java KeyStore file or pkcs12 bundle.
+
+If your cluster's root certificate does not come from a well-known Certificate Authority (CA), you must tell the client to trust the cluster's root certificate.
+This example assumes the cluster's root certificate is available in a file called `ca-cert.pem`.
+
+TIP: To trust multiple root certificates, put them all in the same `ca-certs.pem` file.
 
 [source,java]
 ----
 include::example$Auth.java[tag=certauth,indent=0]
 ----
 
-In addition to providing the initialized `KeyStore` directly, the `CertificateAuthenticator` can also be initialized from a key store path, a key directly or a `KeyManagerFactory` for maximum flexibility. Please see the API documentation for the `CertificateAuthenticator` for more details.
+`CertificateAuthenticator` has several static factory methods.
+If you prefer not to load your own `KeyStore` object, you can create a `CertificateAuthenticator` from a `Path` to a key store file, or from an in-memory certificate & key.
+For maximum flexibility, you can even provide your own `KeyManagerFactory`.
+Please see the API documentation for the `CertificateAuthenticator` for more details.
 
 include::{version-common}@sdk:shared:partial$auth-overview.adoc[tag=ldap]
 
