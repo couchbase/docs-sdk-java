@@ -30,7 +30,7 @@ any changes to expected behavior are noted in the release notes that follow.
 
 === Version 3.4.11 (4 October 2023)
 
-With thanks to our community for the contribution, support for Micrometer Observation has been added via the new `tracing-micrometer-observation` module.
+With thanks to community member https://github.com/marcingrzejszczak[Marcin Grzejszczak] for the contribution, support for Micrometer Observation has been added via the new `tracing-micrometer-observation` module.
 
 https://packages.couchbase.com/clients/java/3.4.11/Couchbase-Java-Client-3.4.11.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.4.11/index.html[API Reference] |
@@ -55,7 +55,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 ==== Improvements
 * https://issues.couchbase.com/browse/JCBC-2046[JCBC-2046]:
-With thanks to our community for the contribution, support for Micrometer Observation has been added via the new `tracing-micrometer-observation` module.
+With thanks to community member https://github.com/marcingrzejszczak[Marcin Grzejszczak] for the contribution, support for Micrometer Observation has been added via the new `tracing-micrometer-observation` module.
 * https://issues.couchbase.com/browse/JVMCBC-1327[JVMCBC-1327]:
 Internal improvements to support upcoming faster failover and config push features.
 
