@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-import static com.couchbase.client.java.ClusterOptions.clusterOptions;
-
-import java.security.KeyStore;
-
+import com.couchbase.client.core.env.Authenticator;
 import com.couchbase.client.core.env.CertificateAuthenticator;
 import com.couchbase.client.core.env.PasswordAuthenticator;
 import com.couchbase.client.core.error.InvalidArgumentException;
 import com.couchbase.client.java.Cluster;
+
+import java.nio.file.Paths;
+import java.security.KeyStore;
+
+import static com.couchbase.client.java.ClusterOptions.clusterOptions;
 
 public class Auth {
 
@@ -53,11 +55,27 @@ public class Auth {
     {
       try {
         // tag::certauth[]
-        // should be replaced with your actual KeyStore
+        // Replace the following line with code that gets your actual key store.
+        // The key store contains the client's certificate and private key.
         KeyStore keyStore = loadKeyStore();
 
-        CertificateAuthenticator authenticator = CertificateAuthenticator.fromKeyStore(keyStore, "keyStorePassword");
-        Cluster cluster = Cluster.connect("127.0.0.1", clusterOptions(authenticator));
+        Authenticator authenticator = CertificateAuthenticator.fromKeyStore(
+            keyStore,
+            "keyStorePassword"
+        );
+
+        Cluster cluster = Cluster.connect(
+            "couchbases://127.0.0.1",
+            clusterOptions(authenticator)
+                .environment(env -> env
+                    .securityConfig(security -> security
+                        // Tell the client to trust the cluster's root certificate.
+                        // If your cluster's root certificate is from a well-known
+                        // Certificate Authority (CA), you can skip this.
+                        .trustCertificate(Paths.get("/path/to/ca-cert.pem"))
+                    )
+                )
+        );
         // end::certauth[]
       } catch (InvalidArgumentException e) {
         // The code requires a valid keystore, catching the exception for
