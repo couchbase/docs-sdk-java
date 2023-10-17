@@ -51,7 +51,11 @@ include::example$SimpleQuery.java[tag=class,indent=0]
 --
 ====
 
-Let's break it down. A query is always performed at the `Cluster` level, using the `query` method. It takes the statement as a required argument and then allows to provide additional options if needed (in the example above, no options are specified).
+Note that building indexes is covered in some detail on the xref:concept-docs:n1ql-query.adoc#index-building[Query concept page], which you should take a quick look at --
+and in the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/manager/query/package-summary.html[API Reference].
+
+Let's break down the above code snippet. 
+A query is always performed at the `Cluster` level, using the `query` method. It takes the statement as a required argument and then allows to provide additional options if needed (in the example above, no options are specified).
 
 Once a result returns you can iterate the returned rows and/or accessing the `QueryMetaData` associated with the query. If something goes wrong during the execution of the query, a derivate of the `CouchbaseException` will be thrown that also provides additional context on the operation:
 
