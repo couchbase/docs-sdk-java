@@ -72,3 +72,47 @@ Refer to the xref:project-docs:sdk-release-notes.adoc[Release Notes] for further
 You can also find links to the hosted javadocs there.
 
 
+
+[snapshots]
+== Using a Snapshot Version
+
+Couchbase publishes pre-release snapshot artifacts to the Sonatype OSS Snapshot Repository.
+If you wish to use a snapshot version, you'll need to tell your build tool about this repository.
+
+[{tabs}]
+====
+Maven::
++
+--
+.`*pom.xml*`
+[source,xml]
+----
+<repositories>
+  <repository>
+    <id>sonatype-snapshots</id>
+    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    <releases><enabled>false</enabled></releases>
+    <snapshots><enabled>true</enabled></snapshots>
+  </repository>
+</repositories>
+----
+
+--
+Gradle (Groovy)::
++
+--
+.`*build.gradle*`
+
+[source,groovy]
+----
+repositories {
+    mavenCentral()
+
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+        mavenContent { snapshotsOnly() }
+    }
+}
+----
+--
+====
