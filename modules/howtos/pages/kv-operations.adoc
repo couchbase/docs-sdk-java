@@ -285,6 +285,11 @@ include::example$KvOperations.cs[tag=binarydecrementwithoptions,indent=0]
 ////
 NOTE: Increment & Decrement are considered part of the ‘binary’ API and as such may still be subject to change
 
+TIP: Setting the document expiry time only works when a document is created, and it is not possible to update the expiry time of an existing counter document with the Increment method -- to do this during an increment, use with the `Touch()` method.
+
+
+
+// Atomicity Across Data Centers
 
 include::{version-common}@sdk:shared:partial$atomic.adoc[tag=xdcr]
 
