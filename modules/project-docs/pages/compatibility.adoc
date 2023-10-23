@@ -10,7 +10,7 @@ include::project-docs:partial$attributes.adoc[]
 [abstract]
 {description}
 
-The 3.4 SDK requires Java 8 or later to be installed, earlier versions will not work.
+The 3.5 SDK requires Java 8 or later to be installed, earlier versions will not work.
 _Java 17 is recommended_, which has various enhancements like sealed classes, pattern matching for switch expressions (in preview), and further updates and improvements on core libraries.
 Most of the flavors available will do, although we may only provide support for OpenJDK and Oracle JDK going forward. 
 
@@ -29,11 +29,11 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 [#table_sdk_versions]
 [cols="40,20,25"]
 |===
-| | 3.1 | SDK 3.2-3.4
+| | 3.1 | SDK 3.2-3.5
 
 | *Server 6.6*
-| *✔*
-| *✔*
+| *◎*
+| *◎*
 
 | *Server 7.0-7.2*
 | *◎*
@@ -100,7 +100,7 @@ Microsoft Windows 10 / All LTS releases from Windows Server 2016.
 === Mac OS X
 
 The current and previous two releases of OS X.
-At time of writing (October 2022): 13 (Ventura), 12 (Monterey), and 11 (Big Sur).
+At time of writing (November 2023): 14 (Sonoma), 13 (Ventura), and 12 (Monterey).
 M1 ARM  architecture is fully supported in the Java SDK.
 
 [discrete]
@@ -151,39 +151,43 @@ The downside of these workarounds is potentially reduced performance, which can 
 
 .Couchbase Server and SDK Supported Version Matrix
 [.table-merge-cells]
-[cols="7,5,7"]
+[cols="7,5,6.7"]
 |===
-| | Server 6.6 | Server 7.0 & 7.1
+| | Server 6.6 | Server 7.0 & 7.1 | Server 7.2
 
 | Enhanced Durability
-2+| All SDK versions
+3+| All SDK versions
 
 | Durable Writes
-2+| Since SDK 3.0
+3+| Since SDK 3.0
 
 | Analytics
-2+| Since SDK 2.7
+3+| Since SDK 2.7
 
 | Distributed ACID Transactions
-2+| Since SDK 3.3 included in SDK, or since SDK 3.0 with Java Transactions Libraryfootnote:[3.0.7 or more recent recommended; preferably, follow the transitive dependency for the transactions library in Maven.]
+3+| Since SDK 3.3 included in SDK, or since SDK 3.0 with Java Transactions Libraryfootnote:[3.0.7 or more recent recommended; preferably, follow the transitive dependency for the transactions library in Maven.]
 
 | {sqlpp} Queries inside the Transaction Lambda
 | Not Supported
-| Since SDK 3.1, or since 3.0.7 with Java Transactions Libraryfootnote:[1.2.1 or newer recommended.]
+2+| Since SDK 3.1, or since 3.0.7 with Java Transactions Libraryfootnote:[1.2.1 or newer recommended.]
 
 | Collections
 | Developer Preview in 6.6, SDK 3.0
-| Since SDK 3.0.6
+2+| Since SDK 3.0.6
 
 | Scope-Level {sqlpp} Queries & all Collections features
 | Not Supported
-| Since SDK 3.2.0
+2+| Since SDK 3.2.0
 
 | Field Level Encryption v2
-2+| Since SDK 3.0.5footnote:[Field Level Encryption distributed as separate library.]
+3+| Since SDK 3.0.5footnote:[Field Level Encryption distributed as separate library.]
 
 | Request Tracing
-2+| Since SDK 3.1.0
+3+| Since SDK 3.1.0
+
+| Cloud Native Gateway
+2+| Not Supported
+| From SDK 3.5.0 (with xref:operator::overview.adoc[Couchbase Autonomous Operator] 2.6+)
 |===
 
 
