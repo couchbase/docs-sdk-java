@@ -1,7 +1,8 @@
 = MapReduce Views
-:description: You can use MapReduce views to create queryable indexes in Couchbase Server.
+:description: Our legacy MapReduce Views Service is best replaced by the scalable Query Service.
+:navtitle: MapReduce Views
 :page-topic-type: howto
-:page-aliases: ROOT:view-queries-with-sdk
+:page-aliases: ROOT:view-queries-with-sdk,ROOT:geo-spatial-views
 
 include::project-docs:partial$attributes.adoc[]
 
@@ -9,60 +10,29 @@ include::project-docs:partial$attributes.adoc[]
 {description}
 
 // include::{version-common}@sdk:shared:partial$views.adoc[tag=deprecate]
-include::{version-common}@sdk:shared:partial$views.adoc[tag=deprecate]
 
 
-include::{version-common}@sdk:shared:partial$views.adoc[tag=views-intro]
+// option 1 - C++ - redirect to migration page, and add note at end.
 
-== Querying Views
+// option 2 - most others - this common page, with per-sdk archive link at end.
 
-View operations are accessible on the `Bucket` API. 
-Once you have a reference to the bucket you need to at least supply the name of the design document and the name of the view:
 
-[source,java]
-----
-include::example$Views.java[tag=views-simple,indent=0]
-----
 
-It is important to remember that by default, the SDK will look for a view deployed to the production namespace. 
-If you want to query one which is still in the development namespace you can do it like this:
+////
+Views are a legacy service which pre-dates the {name-sdk}.
+Your use case is most likely to be met by the xref:howtos:n1ql-queries-with-sdk.adoc[Query service].
+////
 
-[source,java]
-----
-include::example$Views.java[tag=views-dev,indent=0]
-----
+xref:{version-server}@server:learn:views/views-intro.adoc[MapReduce Views] date from the earliest days of Couchbase and although still maintained and supported for legacy use, they are deprecated in Couchbase Server, and will eventually be removed.
 
-In the same way you can supply all kinds of different options, including the `ViewScanConsistency` which was previously called `Stale`.
+Views are the only service which does not benefit from xref:{version-server}@server:learn:services-and-indexes/services/services.adoc#services-and-multi-dimensional-scaling[Multi-Dimensional Scaling], and is rarely the best choice over, say, xref:howtos:n1ql-queries-with-sdk.adoc[our Query service] if you are starting a fresh application.
+See our discussion document on xref:concept-docs:data-services.adoc[the best service for you to use].
 
-[source,java]
-----
-include::example$Views.java[tag=views-opts,indent=0]
-----
+CAUTION: If you are provisioning Views on Couchbase Server for a legacy application, _they must run on a 
+xref:{version-server}@server:learn:buckets-memory-and-storage/storage-engines.adoc#couchstore[couchstore] bucket_.
 
-If you have a `reduce` function in your view and you want to call it, make sure to call `.reduce(true)` as well.
 
-== Working with View Rows
+We will maintain support for Views in the SDKs for so long as it can be used with a supported version of Couchbase Server.
 
-A `ViewResult` can emit 0 to N view rows. 
-The available data inside each `ViewRow` depends both on the map function written and if a reduce function is used.
+Information on using MapReduce Views with the SDK can still be accessed in our https://docs-archive.couchbase.com/java-sdk/3.1/howtos/view-queries-with-sdk.html[documentation archive].
 
-The structure of a `ViewRow` looks like this:
-
-[source,java]
-----
-include::example$Views.java[tag=view_rows_structure,indent=0]
-----
-
-Both the `key` and the `value` can be converted into any target type, depending on how you wrote your view function. 
-Note that the document ID is always a `String`, but it is wrapped in an `Optional` because it is not available if a reduce function is used.
-
-== Accessing View Metadata
-
-In addition to the rows the view result contains additional `ViewMetaData`.
-
-[source,java]
-----
-include::example$Views.java[tag=views-meta,indent=0]
-----
-
-The number of rows is always present, the debug information only if you enable it on the `ViewOptions` as indicated through being wrapped into an `Optional<JsonObject>`.
