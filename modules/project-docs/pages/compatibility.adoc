@@ -63,7 +63,7 @@ Other versions may work -- _but they are not tested and they are not supported_.
 
 The following JDK releases are supported at time of 3.4 SDK release (October 2022):
 
-* https://adoptium.net/[OpenJDK 21 with HotSpot JVM] (recommended)
+* https://adoptium.net/[OpenJDK 21 with HotSpot JVM] (recommended) -- from SDK 3.4.11 (may work with earlier SDK releases, but not tested).
 * https://adoptium.net/[OpenJDK 17 with HotSpot JVM]
 * https://www.oracle.com/java/technologies/downloads/#jdk17[Oracle JDK 17 (recommended)]
 * https://adoptium.net/[OpenJDK 11] (Hotspot recommended) or https://www.oracle.com/java/technologies/downloads/#jdk11[Oracle JDK 11]
