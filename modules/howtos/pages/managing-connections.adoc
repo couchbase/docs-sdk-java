@@ -230,6 +230,45 @@ E.....@.@.............+....Z.'yZ..#........
 --
 ====
 
+
+
+
+
+== Cloud Native Gateway
+
+
+Couchbase's next generation connection protocol, introduced in Go SDK 2.7 and a future release of Couchbase Autonomous Operator, can be enabled simply by changing the connection string to `couchbase2://` but there are a few differences to be aware of, described <<#limitations,below>>.
+// Couchbase's next generation connection protocol, introduced in Go SDK 2.7 and Couchbase Autonomous Operator 2.6.1, can be enabled simply by changing the connection string to `couchbase2://` but there are a few differences to be aware of, described <<#limitations,below>>.
+
+The protocol implements a gRPC-style interface between the SDK and Couchbase Server (in this case, only available in the Server running on Kubernetes or OpenShift, with a forthcoming release of xref:operator::overview.adoc[Couchbase Autonomous Operator].
+
+
+
+=== Limitations
+
+The protostellar protocol will not work with certain legacy features: MapReduce Views (a deprecated Service -- 
+use xref:howtos:n1ql-queries-with-sdk.adoc[Query] instead) and 
+Memcached buckets (superseded by the improved xref:{server_version}@server:learn:buckets-memory-and-storage/buckets.adoc#bucket-types[Ephemeral Buckets]).
+
+The following are not currently implemented over the `couchbase2://` protocol:
+
+* Authentication by client certificate.
+* Multi-document ACID transactions.
+* Analytics service.
+* Health Check.
+
+There are some different behaviors seen with this protocol:
+
+* Some config options are unsupported -- see the xref:ref:client-settings.adoc#cloud-native-gateway[Settings page].
+* The SDK will poll the gRPC channels until they are in a good state, or return an error, or timeout while waiting -- in our standard protocol there is an option of setting `waitUntilReady()` for just certain services to become available.
+* Some error codes are more generic -- in cases where the client would not be expected to need to take specific action -- but should cause no problem, unless you have written code looking at individual strings within the error messages.
+* Although documents continue to be stored compressed by Couchbase Server, they will not be transmitted in compressed form (to and from the client) over the wire, using `couchbase2://`.
+
+
+
+
+
+
 include::{version-common}@sdk:shared:partial$dnssrv-pars.adoc[tag=dnssrv]
 
 DNS SRV bootstrapping is available in the Java SDK from version 2.1.0.

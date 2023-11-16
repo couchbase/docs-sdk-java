@@ -466,3 +466,15 @@ Please note that we do not provide any stability guarantees on the names and val
 | If already sent to a node contains the channel ID that can be used to correlate with the server logs.
 
 |===
+
+
+
+
+
+
+== Cloud Native Gateway
+
+If you connect to the Kubernetes or OpenShift over our xref:howtos:managing-connections.adoc#cloud-native-gateway[CloudNative Gateway], using the new `couchbase2://` endpoints, there are a few changes in the error messages returned.
+
+Some error codes are more generic -- in cases where the client would not be expected to need to take specific action -- but should cause no problem, unless you have written code looking at individual strings within the error messages.
+

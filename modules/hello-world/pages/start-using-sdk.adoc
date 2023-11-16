@@ -240,6 +240,19 @@ Now that you have a `Cluster`, add this code snippet to access your `Bucket`:
 include::devguide:example$StartUsingCapella.java[tag=bucket,indent=0]
 ----
 
+
+
+////
+[TIP]
+.Connecting to Cloud Native Gateway, for Kubernetes or OpenShift
+====
+Couchbase's large number of ports across the URLs of many services can be proxied by using a `couchbase2://` endpoint as the connection string -- read more on the xref:howtos:managing-connections.adoc#cloud-native-gateway[Connections] page.
+====
+////
+
+
+
+
 === Add and Retrieve Documents
 
 The Java SDK supports full integration with the xref:{version-server}@server:learn:data/scopes-and-collections.adoc[Collections] feature introduced in Couchbase Server 7.0.

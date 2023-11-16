@@ -154,6 +154,7 @@ The downside of these workarounds is potentially reduced performance, which can 
 [.table-merge-cells]
 [cols="7,5,6.7"]
 |===
+
 | | Server 6.6 | Server 7.0 & 7.1 | Server 7.2
 
 | Enhanced Durability
@@ -188,7 +189,7 @@ The downside of these workarounds is potentially reduced performance, which can 
 
 | Cloud Native Gateway
 2+| Not Supported
-| From SDK 3.5.0 (with xref:operator::overview.adoc[Couchbase Autonomous Operator] 2.6+)
+| From SDK 3.5.0 (with xref:operator::overview.adoc[Couchbase Autonomous Operator] 2.6.1+)
 |===
 
 
