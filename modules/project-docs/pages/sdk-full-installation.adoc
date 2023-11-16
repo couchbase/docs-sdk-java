@@ -13,7 +13,7 @@
 The Couchbase Java SDK allows Java applications to access a Couchbase cluster.
 It offers synchronous APIs as well as reactive and asynchronous equivalents to maximize flexibility and performance.
 
-The Couchbase Java SDK 3._x_ is a complete rewrite of the 2.x API, providing a simpler surface area and adding support for Couchbase Server features like xref:concept-docs:collections.adoc[Collections and Scopes] (available in Couchbase Server 7.0).
+The Couchbase Java SDK 3._x_ is a complete rewrite of the 2.x API, providing a simpler surface area and adding support for Couchbase Server features like xref:concept-docs:collections.adoc[Collections and Scopes] (available in Couchbase Server 7.0+).
 The (reactive) API also migrated from `RxJava` to `Reactor`, along with other improvements to performance, logging, debugging and timeout troubleshooting.
 If you're upgrading your application from Java SDK 2.x, please read our xref:project-docs:migrating-sdk-code-to-3.n.adoc[Migrating 2.x code to SDK 3.0 Guide].
 
@@ -29,11 +29,10 @@ The underlying OS normally makes no difference, but library incompatibilities in
 
 At least Java 8 is required for current releases;
 see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section for details.
-We recommend running the latest Java LTS version (i.e. at the time of writing JDK 17) with the highest patch version available.
-Java 17 has various enhancements like sealed classes, pattern matching for switch expressions (in preview), and further updates and improvements on core libraries.
+We recommend running the latest Java LTS version (i.e. at the time of writing JDK 21) with the highest patch version available.
 
 Couchbase publishes all stable artifacts to https://central.sonatype.com/namespace/com.couchbase.client[Maven Central].
-The latest version (as of October 2023) is https://central.sonatype.com/artifact/com.couchbase.client/java-client/3.4.11/jar[3.4.11].
+The latest version (as of November 2023) is https://central.sonatype.com/artifact/com.couchbase.client/java-client/3.5.0/jar[3.5.0].
 
 You can use your favorite dependency management tool to install the SDK.
 
@@ -50,7 +49,7 @@ For https://maven.apache.org[Maven], you can insert the following into the depen
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.4.11</version>
+        <version>3.5.0</version>
     </dependency>
 ----
 Refer to the https://maven.apache.org/guides/introduction/introduction-to-the-pom.html/[Maven Documentation] for more information regarding the structure of the `pom.xml` file.
@@ -62,7 +61,7 @@ For https://gradle.org/[Gradle], you can use:
 
 [source,groovy]
 ----
-implementation 'com.couchbase.client:java-client:3.4.11'
+implementation 'com.couchbase.client:java-client:3.5.0'
 ----
 --
 ====

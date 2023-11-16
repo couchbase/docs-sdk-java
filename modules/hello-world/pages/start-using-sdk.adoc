@@ -58,11 +58,11 @@ include::example$StartUsing.java[tags=start-using,indent=0]
 
 == Quick Installation
 
-We recommend running the latest Java LTS version (i.e. at the time of writing JDK 17) with the highest patch version available.
+We recommend running the latest Java LTS version (i.e. at the time of writing JDK 21) with the highest patch version available.
 // Other supported Java versions will work, too.
 Couchbase publishes all stable artifacts to https://central.sonatype.com/namespace/com.couchbase.client[Maven Central].
 
-The latest version (as of October 2023) is https://central.sonatype.com/artifact/com.couchbase.client/java-client/3.4.11/jar[3.4.11].
+The latest version (as of November 2023) is https://central.sonatype.com/artifact/com.couchbase.client/java-client/3.4.11/jar[3.5.0].
 
 You can use your favorite dependency management tool to install the SDK.
 
@@ -77,7 +77,7 @@ Maven::
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.4.11</version>
+        <version>3.5.0</version>
     </dependency>
 </dependencies>
 ----
@@ -88,7 +88,7 @@ Gradle::
 --
 [source,groovy]
 ----
-implementation 'com.couchbase.client:java-client:3.4.11'
+implementation 'com.couchbase.client:java-client:3.5.0'
 ----
 --
 ====
