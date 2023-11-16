@@ -67,6 +67,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 BEHAVIORAL CHANGE
 +
 As https://www.couchbase.com/forums/t/embracing-slf4j-in-couchbase-java-sdk-3-5/36474[previously announced], the SLF4J API is now a required dependency, and the SDK does all logging through SLF4J. The following client settings for customizing logging behavior are deprecated, and no longer have any effect:
+
 ** `logger.disableSlf4J`
 ** `logger.fallbackToConsole`
 ** `logger.consoleLoggerFormatter`
