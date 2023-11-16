@@ -11,7 +11,7 @@ include::project-docs:partial$attributes.adoc[]
 {description}
 
 The 3.5 SDK requires Java 8 or later to be installed, earlier versions will not work.
-_Java 17 is recommended_, which has various enhancements like sealed classes, pattern matching for switch expressions (in preview), and further updates and improvements on core libraries.
+_Java 21 is recommended_.
 Most of the flavors available will do, although we may only provide support for OpenJDK and Oracle JDK going forward. 
 
 == Couchbase Version/SDK Version Matrix
@@ -56,16 +56,17 @@ include::{version-common}@sdk:shared:partial$capella.adoc[tag=cloud]
 
 The Java SDK is tested with Oracle JDK and OpenJDK.
 Other JDK implementations might work but are not tested and are unsupported.
-We recommend running the latest LTS version (i.e. at the time of writing JDK 17) with the highest patch version available.
+We recommend running the latest LTS version (i.e. at the time of writing JDK 21) with the highest patch version available.
 
 We only support LTS versions of Oracle JDK and OpenJDK.
 Other versions may work -- _but they are not tested and they are not supported_.
 
-The following JDK releases are supported at time of 3.4 SDK release (October 2022):
+The following JDK releases are supported at time of 3.5 SDK release (November 2023):
 
+* https://adoptium.net/[OpenJDK 21 with HotSpot JVM] (recommended)
+* https://adoptium.net/[OpenJDK 17 with HotSpot JVM]
+* https://www.oracle.com/java/technologies/downloads/#jdk17[Oracle JDK 17]
 * https://adoptium.net/[OpenJDK 11] (Hotspot recommended) or https://www.oracle.com/java/technologies/downloads/#jdk11[Oracle JDK 11]
-* https://adoptium.net/[OpenJDK 17 with HotSpot JVM] (recommended)
-* https://www.oracle.com/java/technologies/downloads/#jdk17[Oracle JDK 17 (recommended)]
 * https://adoptium.net/[OpenJDK 1.8 with HotSpot JVM]
 * https://www.oracle.com/java/technologies/downloads/#java8[Oracle JDK 1.8]
 
@@ -84,11 +85,11 @@ The Java SDK is tested and supported on the following OSs and platforms:
 [discrete]
 === GNU/Linux
 
-* Amazon Linux 2.
-* Red Hat Enterprise Linux 7 & 8;
-* CentOS 7 & 8.
-* Ubuntu (LTS) 16.04 (_Xenial_), 18.04 (_Bionic_), & 20.04 (_Focal_).
-* Debian 9 (_Stretch_) & 10 (_Buster_).
+* Amazon Linux 2 & AL2023.
+* Red Hat Enterprise Linux 8 & 9;
+// * CentOS 7.
+* Ubuntu (LTS) 20.04 (_Focal_) & 22.04 (_Jammy_).
+* Debian 10 (_Buster_) & 11 (_Bullseye_).
 * Alpine Linux (_Oracle JDK only_) -- but see <<alpine-linux-compatibility, workaround note below>>.
 
 [discrete]
@@ -106,7 +107,7 @@ M1 ARM  architecture is fully supported in the Java SDK.
 [discrete]
 === ARM Processor Support
 
-AWS Amazon Graviton2, Apple M1 ARM processors, and ARMv8 on Ubuntu 20.04 (from SDK 3.4).
+AWS Amazon Graviton2, Apple M1 ARM processors, and ARMv8 on Ubuntu 20.04+ (from SDK 3.4).
 ****
 
 The JVM SDKs should also be expected to run on other commonly-available GNU/Linux distributions which support an appropriate JDK, but not all combinations can be tested -- notable exceptions are listed below.
@@ -203,18 +204,14 @@ The following table provides an overview.
 .Recommended Spring Data Couchbase per Server Version Matrix
 [#table_spring_versions]
 |===
-|  | SDC 4.0 - 4.4
+|  | SDC 4.3 - 4.4 | SDC 5.0 - 5.1
 
 | _Status ->_
+| _Maintenance Support_
 | _New Features, Active Development_
 
-| *Server 6.0*
-| *Recommended*
-
-| *Server 6.5 & 6.6*
-| *Recommended*
-
-| *Server 7.0 & 7.1*
+| *Server 7.0 - 7.2*
+| *Compatible*
 | *Recommended*
 |===
 
@@ -225,14 +222,14 @@ Using the latest Spring Data Couchbase should ensure that this is so.
 [CAUTION]
 .Reactor Core Version
 ====
-SpringBoot may set the io.projectreactor version at an earlier version than the one needed by the current version of https://search.maven.org/artifact/com.couchbase.client/core-io/2.2.0/jar[Couchbase JVM Core IO]. 
+SpringBoot may set the io.projectreactor version at an earlier version than the one needed by the current version of https://search.maven.org/artifact/com.couchbase.client/core-io/2.5.0/jar[Couchbase JVM Core IO]. 
 In case of errors, override with Core IO's preferred version, e.g.:
 
 ----
 <dependency>
     <groupId>io.projectreactor</groupId>
     <artifactId>reactor-core</artifactId>
-    <version>3.4.6.RELEASE</version>
+    <version>3.5.0.RELEASE</version>
 </dependency>
 ----
 ====
