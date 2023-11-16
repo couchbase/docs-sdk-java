@@ -34,10 +34,64 @@ any changes to expected behavior are noted in the release notes that follow.
 
 Version 3.5.0 is the first release of the 3.5 series.
 
+The SDK now supports the new couchbase2 protocol, which is upcoming in future Couchbase Server versions.
+It can be enabled through using a connection string starting with "couchbase2://".
+Please see xref:howtos:managing-connections.adoc#cloud-native-gateway[Cloud Native Gateway] for more information.
 
+The SDK now directly depends on SLF4J, which may impact some users - see below for details.
+
+https://packages.couchbase.com/clients/java/3.5.0/Couchbase-Java-Client-3.5.0.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.5.0/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.5.0/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.5.8**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.3.0             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.3.0             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.5.0             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.5.0             | Micrometer 1.10.0          | Volatile
+|=======================
+
+==== API Impacting
+* https://issues.couchbase.com/browse/JVMCBC-1319[JVMCBC-1319]:
+BEHAVIORAL CHANGE
+
+As https://www.couchbase.com/forums/t/embracing-slf4j-in-couchbase-java-sdk-3-5/36474[previously announced], the SLF4J API is now a required dependency, and the SDK does all logging through SLF4J. The following client settings for customizing logging behavior are deprecated, and no longer have any effect:
+
+    `logger.disableSlf4J`
+    `logger.fallbackToConsole`
+    `logger.consoleLoggerFormatter`
+
+If your project does not already use SLF4J, please follow the announcement link for details and a mini-migration guide.
+
+==== Improvements
+* https://issues.couchbase.com/browse/JVMCBC-1402[JVMCBC-1402],
+https://issues.couchbase.com/browse/JVMCBC-1410[JVMCBC-1410]:
+Upgrade Netty from 4.1.96 to 4.1.100, and upgrade OpenTelemetry dependency.
+* https://issues.couchbase.com/browse/JVMCBC-1430[JVMCBC-1430]:
+Optimisation: remove creation of unnecessary metrics labels when default LoggingMeter is used.
+* https://issues.couchbase.com/browse/JVMCBC-1391[JVMCBC-1391]:
+The Bucket Manager API is now forward-compatible with future versions of Couchbase Server that might support storage engine types other than "magma" and "couchstore".
+* https://issues.couchbase.com/browse/JVMCBC-1327[JVMCBC-1327]:
+Improved support for failover handling in future server versions.
+
+==== Bugfixes
+* https://issues.couchbase.com/browse/JVMCBC-1264[JVMCBC-1264]:
+DNS SRV lookups now honor the DNS search path.
+This enables DNS SRV resolution in Kubernetes environments where the `*-srv` hostname advertised by the Couchbase Operator is a partial name that must be resolved using a suffix from the DNS search path.
+* https://issues.couchbase.com/browse/JVMCBC-1426[JVMCBC-1426]:
+When Couchbase Server is too busy to start a new KV range scan, the SDK now retries instead of throwing a `CouchbaseException`.
 
 == Java SDK 3.4 Releases
-
 
 === Version 3.4.11 (4 October 2023)
 
