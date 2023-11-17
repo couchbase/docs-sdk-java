@@ -83,4 +83,10 @@ To safeguard against the case of several thousand documents stealing CPU time to
 include::example$CompressionExample.java[tag=compression_1,indent=0]
 ----
 
-The `CompressionConfig` also allows you to disable compression completely or tune the ratio of when a compressed document (compared to the size of the uncompressed) should be sent over the wire.
+
+== Configuring Compression
+
+As well as the above example of changing the minimum size of document to undergo compression,
+the `CompressionConfig` also allows you to disable compression completely or tune the ratio of when a compressed document (compared to the size of the uncompressed) should be sent over the wire.
+
+More details can be found on the xref:ref:client-settings.adoc#compression-options[Client Settings page].
