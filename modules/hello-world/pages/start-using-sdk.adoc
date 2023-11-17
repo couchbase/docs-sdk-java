@@ -62,7 +62,7 @@ We recommend running the latest Java LTS version (i.e. at the time of writing JD
 // Other supported Java versions will work, too.
 Couchbase publishes all stable artifacts to https://central.sonatype.com/namespace/com.couchbase.client[Maven Central].
 
-The latest version (as of November 2023) is https://central.sonatype.com/artifact/com.couchbase.client/java-client/3.4.11/jar[3.5.0].
+The latest version (as of November 2023) is https://central.sonatype.com/artifact/com.couchbase.client/java-client/3.5.0/jar[3.5.0].
 
 You can use your favorite dependency management tool to install the SDK.
 
