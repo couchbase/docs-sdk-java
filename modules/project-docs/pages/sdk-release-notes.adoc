@@ -80,7 +80,7 @@ If your project does not already use SLF4J, please follow the announcement link 
 https://issues.couchbase.com/browse/JVMCBC-1410[JVMCBC-1410]:
 Upgraded Netty from 4.1.96 to 4.1.100, and upgraded `OpenTelemetry` dependency.
 * https://issues.couchbase.com/browse/JVMCBC-1430[JVMCBC-1430]:
-Optimisation: removed creation of unnecessary metrics labels when default `LoggingMeter` is used.
+Optimization: removed creation of unnecessary metrics labels when default `LoggingMeter` is used.
 * https://issues.couchbase.com/browse/JVMCBC-1391[JVMCBC-1391]:
 The Bucket Manager API is now forward-compatible with future versions of Couchbase Server that might support storage engine types other than "magma" and "couchstore".
 * https://issues.couchbase.com/browse/JVMCBC-1327[JVMCBC-1327]:
