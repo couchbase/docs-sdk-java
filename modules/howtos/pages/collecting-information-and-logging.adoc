@@ -7,107 +7,179 @@
 {description}
 
 
-The Java SDK logs events and also provides an event bus that transmits information about the behavior of your database system, including system and metric events.
-It has no hard dependency on a specific logger implementation, but you should add one you are comfortable with.
+The Couchbase Java SDK logs events and also provides an event bus that transmits information about the behavior of your database system, including system and metric events.
 
 == Logging
 
-The Couchbase Java SDK has no hard dependency on a specific logger implementation.
-It tries to find a logger on the class path and uses that logger if it is supported by the SDK.
-If no logger implementation is found, the standard JDK logger is used.
+The Couchbase Java SDK uses https://www.slf4j.org[SLF4J], a logging facade that lets you use any logging framework that has an SLF4J binding.
+This includes popular Java logging frameworks like Log4j, Logback, and `java.util.logging` (JUL).
 
-The following loggers are supported (and tried in this order):
+To see log messages from the Couchbase SDK, add an SLF4J binding as a dependency of your project.
 
-. SLF4J
-. JDK Logger (java.util.logging)
+[slf4j-api-versions]
+.SLF4J API versions
+[NOTE]
+====
+At the time of writing, there are two different versions of the SLF4J API:
 
-*Configuring SLF4J*
+*Version 2* is the modern version of SLF4J.
+It is actively maintained, and recommended for most users.
 
-To enable SLF4J, put it on the class path, as well as one of the support logger implementations (like logback).
-If you want to use logback and include logback-classic, it will be pulled in automatically:
+*Version 1.7* is no longer maintained, but you can still use it if your preferred SLF4J binding does not support version 2.
 
+The Couchbase SDK is compatible with both versions of the SLF4J API.
+The SDK's Maven POM has a dependency on version 1.7, but you can override this by using version 2 in your project.
+====
+
+[log4j2]
+=== Using Log4j 2
+
+Log4j 2 is a popular and flexible logging framework.
+This section shows how to configure your project to use Log4j 2 with the Couchbase SDK.
+
+First, add an https://logging.apache.org/log4j/2.x/log4j-slf4j-impl.html[SLF4J binding for Log4j 2] as a dependency of your project.
+The following example uses the binding for SLF4J API version 2.
+
+[{tabs}]
+====
+Maven::
++
+--
+Add these as children of the `dependencies` element.
+
+.`*pom.xml*`
 [source,xml]
 ----
 <dependency>
-  <groupId>ch.qos.logback</groupId>
-  <artifactId>logback-classic</artifactId>
-  <version>1.2.3</version>
+  <groupId>org.apache.logging.log4j</groupId>
+  <artifactId>log4j-slf4j2-impl</artifactId>
+  <version>2.22.0</version>
+</dependency>
+
+<!-- If your SLF4J binding requires API version 2
+     (like log4j-slf4j2-impl in this example!),
+     add this dependency to your project to ensure
+     Maven uses the correct SLF4J API version. -->
+<dependency>
+  <groupId>org.slf4j</groupId>
+  <artifactId>slf4j-api</artifactId>
+  <version>2.0.9</version>
 </dependency>
 ----
 
-By default, the log level for logback is set to DEBUG, but with the addition of a logback configuration this can be configured (for example, as a `logback.xml` in the resources folder):
+TIP: An alternate way to ensure Maven uses the correct version of the SLF4J API is to declare the dependency on `log4j-slf4j2-impl` *before* the dependency on the Couchbase SDK.
+See the Maven documentation on https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Transitive_Dependencies[Transitive Dependencies] to learn more about how Maven resolves transitive dependency version conflicts.
+--
+Gradle::
++
+--
+.`*build.gradle*`
+[source,groovy]
+----
+// Add this to the `dependencies` section:
+implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.22.0")
+----
+NOTE: Gradle automatically uses the correct SLF4J API 2.x dependency required by `log4j-slf4j2-impl`, even though the Couchbase SDK declares a dependency on SLF4J API 1.7.
+--
+====
 
+[configuring-log4j]
+==== Configuring Log4j 2 output
+
+Log4j 2 needs a configuration file to tell it which messages to log, where to write them, and how each message should be formatted.
+
+Here's an example `log4j2.xml` configuration file you can use to get started.
+It tells Log4j 2 to log messages to the console, and sets some reasonable logging levels.
+
+TIP: If your project uses the https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html[Maven Standard Directory Layout], this file should live in the `src/main/resources` directory.
+This makes it available at runtime as a class path resource.
+
+.src/main/resources/log4j2.xml
 [source,xml]
 ----
-<configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX", UTC} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{ISO8601_OFFSET_DATE_TIME_HHCMM} %-5p [%c:%L] %m%n"/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <!-- Trace/debug/info messages from the Couchbase SDK's repackaged Netty
+         are of little interest, unless you're debugging a network issue. -->
+    <Logger name="com.couchbase.client.core.deps.io.netty" level="warn"/>
 
-    <root level="info">
-        <appender-ref ref="STDOUT" />
-    </root>
-</configuration>
+    <!-- Uncomment if using the 'io.captureTraffic' client setting. -->
+    <!-- <Logger name="com.couchbase.io" level="trace"/> -->
+
+    <!-- Most messages from the Couchbase SDK are logged under
+         this prefix. Change the level to "debug" to see more
+         details about SDK activity, or "warn" to see less.
+         In production environments, we recommend "info". -->
+    <Logger name="com.couchbase" level="info"/>
+
+    <!-- The default level for everything else. -->
+    <Root level="info">
+      <AppenderRef ref="Console"/>
+    </Root>
+  </Loggers>
+</Configuration>
 ----
 
-Consult the https://www.slf4j.org/docs.html[SLF4J documentation^] for advanced configuration.
+Consult the https://logging.apache.org/log4j/2.x/manual/configuration.html[Log4J 2 configuration documentation^] for more information and advanced configuration options.
 
-*Configuring Log4j*
+[jul]
+=== Using `java.util.logging` (JUL)
 
-Log4j can also be used behind the SLF4J logging facade.
+If `java.util.logging` (JUL) is your preferred logging framework, add the `slf4j-jdk14` SLF4J binding as dependency of your project.
 
+[{tabs}]
+====
+Maven::
++
+--
+Add these as children of the `dependencies` element.
+
+.`*pom.xml*`
 [source,xml]
 ----
 <dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-log4j12</artifactId>
-    <version>1.7.30</version>
+  <groupId>org.slf4j</groupId>
+  <artifactId>slf4j-jdk14</artifactId>
+  <version>2.0.9</version>
+</dependency>
+
+<!-- If your SLF4J binding requires API version 2
+     (like slf4j-jdk14 in this example!),
+     add this dependency to your project to ensure
+     Maven uses the correct SLF4J API version. -->
+<dependency>
+  <groupId>org.slf4j</groupId>
+  <artifactId>slf4j-api</artifactId>
+  <version>2.0.9</version>
 </dependency>
 ----
 
-If no configuration is applied, the following message appears:
-
-[source]
+TIP: An alternate way to ensure Maven uses the correct version of the SLF4J API is to declare the dependency on `slf4j-jdk14` *before* the dependency on the Couchbase SDK.
+See the Maven documentation on https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Transitive_Dependencies[Transitive Dependencies] to learn more about how Maven resolves transitive dependency version conflicts.
+--
+Gradle::
++
+--
+.`*build.gradle*`
+[source,groovy]
 ----
-log4j:WARN No appenders could be found for logger (reactor.util.Loggers$LoggerFactory).
-log4j:WARN Please initialize the log4j system properly.
-log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+// Add this to your `dependencies` section:
+implementation("org.slf4j:slf4j-jdk14:2.0.9")
 ----
+NOTE: Gradle automatically uses the correct SLF4J API 2.x dependency required by `slf4j-jdk14`, even though the Couchbase SDK declares a dependency on SLF4J API 1.7.
+--
+====
 
-Note that the `Reactor` library which the Java SDK depends upon also uses the same strategy with SLF4J, so logging for both can be configured with the same strategies out of the box.
+[configuring-the-jdk-logger]
+==== Configuring a JUL Logger
 
-This `log4j.xml` sets it to INFO level:
-
-[source,xml]
-----
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
-<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
-
-    <appender name="console" class="org.apache.log4j.ConsoleAppender">
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern"
-                   value="%d{yyyy-MM-dd'T'HH:mm:ss.SSSZZZZ} %-5p %c{1}:%L - %m%n" />
-        </layout>
-    </appender>
-
-    <root>
-        <level value="INFO" />
-        <appender-ref ref="console" />
-    </root>
-
-</log4j:configuration>
-----
-
-Consult the https://logging.apache.org/log4j/2.x/javadoc.html[Log4J documentation^] for more information and advanced configuration options.
-
-== Configuring the JDK Logger
-
-If no logging library is found on the class path, the JDK logger (also known as JUL from `java.util.logging`) is used as a fallback.
-
-By default it logs INFO level and above.
+By default, JUL logs INFO level and above.
 If you want to set it to DEBUG (or the JUL equivalent: Fine) you can do it like this programmatically before initializing the `Cluster` object (or creating a custom `ClusterEnvironment`):
 
 [source,java]
@@ -115,18 +187,8 @@ If you want to set it to DEBUG (or the JUL equivalent: Fine) you can do it like 
 include::example$CollectingInformationAndLogging.java[tag=collecting_information_and_logging_1,indent=0]
 ----
 
-You should not use JUL in production because SLF4J and Log4J provide better configuration options and performance.
-
-== Customizing the Logger
-
-The logger is configured in a way that it should work out of the box for most users, but there might still be occasion where you want to tweak it. The behavior of the logger can be tuned by customizing the `LoggerConfig` on the `ClusterEnvironment`. For example, if you always want to log to `stderr` and ignore SLF4J (even if present on the classpath) and disable JUL you can configure it this way:
-
-[source,java]
-----
-include::example$CollectingInformationAndLogging.java[tag=collecting_information_and_logging_2,indent=0]
-----
-
-You can also use it to enable the http://logback.qos.ch/manual/mdc.html[Mapped Diagnostic Context^].
+TIP: We do not recommend using JUL in production.
+Dedicated logging frameworks like Log4j 2 and Logback are more configurable, and tend to perform better than JUL.
 
 == The Event Bus
 
