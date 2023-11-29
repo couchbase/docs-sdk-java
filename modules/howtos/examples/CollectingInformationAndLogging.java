@@ -51,28 +51,17 @@ public class CollectingInformationAndLogging {
     collection = scope.collection("airport");
     // end::connection_1[]
   }
+
   public void collecting_information_and_logging_1() throws Exception { // file: howtos/pages/collecting-information-and-logging.adoc line: 114
     // tag::collecting_information_and_logging_1[]
     Logger logger = Logger.getLogger("com.couchbase.client");
     logger.setLevel(Level.FINE);
-    for(Handler h : logger.getParent().getHandlers()) {
-    	if(h instanceof ConsoleHandler){
-        	h.setLevel(Level.FINE);
-    	}
+    for (Handler h : logger.getParent().getHandlers()) {
+      if (h instanceof ConsoleHandler) {
+        h.setLevel(Level.FINE);
+      }
     }
     // end::collecting_information_and_logging_1[]
-  }
-
-  public void collecting_information_and_logging_2() throws Exception { // file: howtos/pages/collecting-information-and-logging.adoc line: 131
-    // tag::collecting_information_and_logging_2[]
-    ClusterEnvironment environment = ClusterEnvironment
-      .builder()
-      .loggerConfig(LoggerConfig
-        .fallbackToConsole(true)
-        .disableSlf4J(true)
-      )
-      .build();
-    // end::collecting_information_and_logging_2[]
   }
 
   public void collecting_information_and_logging_3() throws Exception { // file: howtos/pages/collecting-information-and-logging.adoc line: 163
@@ -105,7 +94,6 @@ public class CollectingInformationAndLogging {
     CollectingInformationAndLogging obj = new CollectingInformationAndLogging();
     obj.init();
     obj.collecting_information_and_logging_1();
-    obj.collecting_information_and_logging_2();
     obj.collecting_information_and_logging_3();
     obj.collecting_information_and_logging_4();
     System.out.println("Done.");
