@@ -29,9 +29,13 @@ All patch releases for each dot minor release should be API compatible, and safe
 any changes to expected behavior are noted in the release notes that follow.
 
 
-=== Version 3.5.1 (7 December 2023)
+=== Version 3.5.1 (8 December 2023)
 
 This is a regular maintenance release.
+
+https://packages.couchbase.com/clients/java/3.5.1/Couchbase-Java-Client-3.5.1.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.5.1/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.5.1/[Core API Reference]
 
 The supported and tested dependencies for this release are:
 
