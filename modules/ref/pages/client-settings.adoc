@@ -338,6 +338,15 @@ Default: `1m`
 +
 How long the window is in which the number of failed ops are tracked in a rolling fashion.
 
+[TIP]
+.Cloud Native Gateway
+====
+If using the `couchbase2://` connection protocol with xref:howtos:managing-connections.adoc#cloud-native-gateway[Cloud Native Gateway], 
+note that circuit breaker options are not available when using this protocol.
+The connection protocol uses a separate queue per node, and thus avoids the main cause of possible cascading failure.
+====
+
+
 === Timeout Options
 
 The default timeout values are suitable for most environments, and should be adjusted only after profiling the expected latencies in your deployment environment.
