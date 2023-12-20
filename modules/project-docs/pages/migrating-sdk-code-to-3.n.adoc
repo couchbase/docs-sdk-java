@@ -47,7 +47,7 @@ The Java SDK 3.x is available for download from the same resources as the previo
 In addition, a `zip` file is available with the required jars. 
 Please see the xref:sdk-release-notes.adoc[Release Notes] for up-to-date information.
 
-IMPORTANT: Java SDK 3.x has a minimum required Java version of 8, although we recommend running the latest LTS version (i.e. at the time of writing JDK 11) with the highest patch version available.
+IMPORTANT: Java SDK 3.x has a minimum required Java version of 8, although we recommend running the latest LTS version (i.e. at the time of writing JDK 21) with the highest patch version available.
 
 Note that the transitive dependency list has changed. 
 As a refresher, Java SDK 2 depended on the following artifacts:
