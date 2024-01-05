@@ -29,6 +29,44 @@ All patch releases for each dot minor release should be API compatible, and safe
 any changes to expected behavior are noted in the release notes that follow.
 
 
+=== Version 3.5.2 (5 January 2024)
+
+This is a regular maintenance release.
+
+https://packages.couchbase.com/clients/java/3.5.2/Couchbase-Java-Client-3.5.2.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.5.2/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.5.2/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.5.8**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.3.2             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.3.2             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.5.2             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.5.1             | Micrometer 1.10.0          | Volatile
+|=======================
+
+
+==== Improvements
+
+* https://issues.couchbase.com/browse/JCBC-2113[JCBC-2113]:
+Added a `QueryMetadata.signatureBytes()` method for accessing query signatures that are not JSON Objects.
+
+==== Bugfixes
+
+* https://issues.couchbase.com/browse/JVMCBC-1455[JVMCBC-1455]:
+Fix compatibility with couchbase2 by upgrading internal GRPC dependency. All couchbase2 users should upgrade to this release.
+* https://issues.couchbase.com/browse/JVMCBC-1463[JVMCBC-1463]:
+Fix compatibility between couchbase2 and the tracing-opentelemetry module.
+
 === Version 3.5.1 (8 December 2023)
 
 This is a regular maintenance release.
