@@ -64,7 +64,7 @@ Added a `QueryMetadata.signatureBytes()` method for accessing query signatures t
 
 * https://issues.couchbase.com/browse/JVMCBC-1455[JVMCBC-1455]:
 Fixed compatibility with `couchbase2://` endpoints by upgrading internal GRPC dependency. 
-All `couchbase2` users should upgrade to this release.
+All couchbase2 protocol users should upgrade to this release.
 * https://issues.couchbase.com/browse/JVMCBC-1463[JVMCBC-1463]:
 Fixed compatibility between `couchbase2://` endpoints and the `tracing-opentelemetry` module.
 
