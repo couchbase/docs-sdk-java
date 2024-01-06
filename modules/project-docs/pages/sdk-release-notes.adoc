@@ -63,9 +63,11 @@ Added a `QueryMetadata.signatureBytes()` method for accessing query signatures t
 ==== Bugfixes
 
 * https://issues.couchbase.com/browse/JVMCBC-1455[JVMCBC-1455]:
-Fix compatibility with couchbase2 by upgrading internal GRPC dependency. All couchbase2 users should upgrade to this release.
+Fixed compatibility with `couchbase2://` endpoints by upgrading internal GRPC dependency. 
+All `couchbase2://` users should upgrade to this release.
 * https://issues.couchbase.com/browse/JVMCBC-1463[JVMCBC-1463]:
-Fix compatibility between couchbase2 and the tracing-opentelemetry module.
+Fixed compatibility between `couchbase2://` endpoints and the `tracing-opentelemetry` module.
+
 
 === Version 3.5.1 (8 December 2023)
 
