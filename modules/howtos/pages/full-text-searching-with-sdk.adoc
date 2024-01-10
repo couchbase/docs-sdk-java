@@ -17,11 +17,19 @@ It uses natural language processing for indexing and querying documents, provide
 
 Some of the supported query-types include simple queries like Match and Term queries, range queries like Date Range and Numeric Range and compound queries for conjunctions, disjunctions and/or boolean queries.
 
+The Full Text Search service also supports vector search from Couchbase Server 7.6 onwards.
+
 == Getting Started
 
 After familiarizing yourself with how to create and query a Search index in the UI you can query it from the SDK. 
-Intentionally the API itself is very similar to the query and analytics ones, the main difference being that you cannot cast the resulting rows into a domain object directly but rather get a `SearchRow` returned. 
-The reason for this is that a search row ("hit") has more metadata associated with it than you potentially want to look at.
+
+There are two APIs for querying search: `cluster.searchQuery()`, and `cluster.search()`.
+Both are also available at the Scope level.
+
+The former API supports FTS queries (`SearchQuery`), while the latter additionally supports the `VectorSearch` added in 7.6.
+Most of this documentation will focus on the former API, as the latter is in @Stability.Volatile status.
+
+We will perform an FTS query here - see the <<vector search>> section for examples of that.
 
 [source,java]
 ----
@@ -29,8 +37,7 @@ include::example$Search.java[tag=simple,indent=0]
 ----
 
 Let's break it down. 
-A Search query is always performed at the `Cluster` level, using the `searchQuery` method. 
-It takes the name of the index and the type of query  as required arguments and then allows to provide additional options if needed 
+The `searchQuery` API takes the name of the index and the type of query  as required arguments and then allows to provide additional options if needed
 (in the example above, no options are specified).
 
 Once a result returns you can iterate over the returned rows, and/or access the `SearchMetaData` associated with the query. 
@@ -40,13 +47,6 @@ If something goes wrong during the execution of the search query, a subclass of 
 ----
 Exception in thread "main" com.couchbase.client.core.error.IndexNotFoundException: Index not found {"completed":true,"coreId":1,"httpStatus":400,"idempotent":true,"lastDispatchedFrom":"127.0.0.1:53818","lastDispatchedTo":"127.0.0.1:8094","requestId":3,"requestType":"SearchRequest","service":{"indexName":"unknown-index","type":"search"},"status":"INVALID_ARGS","timeoutMs":75000,"timings":{"dispatchMicros":18289,"totalMicros":1359398}}
 ----
-
-[NOTE]
-.Open Buckets and Cluster-Level Queries
-====
-If you are using a cluster older than Couchbase Server 6.5, it is required that there is at least one bucket open before performing a cluster-level query.
-If you fail to do so, the SDK will return a `FeatureNotAvailableException` with a descriptive error message asking you to open one.
-====
 
 == Search Queries
 
@@ -108,6 +108,72 @@ Note that the `SearchMetaData` also contains potential `errors`, because the SDK
 This makes sure that even with partial data usually Search results are useable,
 so if you absolutely need to check if all partitions are present in the result double check the error 
 (and not only catch an exception on the query itself).
+
+== Scoped vs Global Indexes
+The FTS APIs exist at both the `Cluster` and `Scope` levels.
+
+This is because FTS supports, as of Couchbase Server 7.6, a new form of "scoped index" in addition to the traditional "global index".
+
+It's important to use the `Cluster.searchQuery()` / `Cluster.search()` for global indexes, and `Scope.searchQuery()` / `Scope.search()` for scoped indexes.
+
+== Vector Search
+As of Couchbase Server 7.6, the FTS service supports vector search in additional to traditional full text search queries.
+// todo link to the server docs when available
+
+=== Examples
+==== Single vector query
+In this first example we are performing a single vector query:
+[source,java]
+----
+include::example$Search.java[tag=vector1,indent=0]
+----
+
+Let's break this down.
+We create a `SearchRequest`, which can contain a traditional FTS query `SearchQuery` and/or the new `VectorSearch`.
+Here we are just using the latter.
+
+The `VectorSearch` allows us to perform one or more `VectorQuery` s.
+
+The `VectorQuery` itself takes the name of the document field that contains embedded vectors ("vector_field" here), plus actual vector query in the form of a `float[]`.
+
+(Note that Couchbase itself is not involved in generating the vectors, and these will come from an external source such as an embeddings API.)
+
+Finally we execute the `SearchRequest` against the FTS index "travel-sample-index", which has previously been setup to vector index the "vector_field" field.
+
+This happens to be a scoped index so we are using `scope.search()`.
+If it was a global index we would use `cluster.search()` instead - see <<Scoped vs Global Indexes>>.
+
+It returns the same `SearchResult` detailed earlier.
+
+==== Multiple vector queries
+You can run multiple vector queries together:
+
+[source,java]
+----
+include::example$Search.java[tag=vector3,indent=0]
+----
+
+How the results are combined (ANDed or ORed) can be controlled with `vectorSearchOptions().vectorQueryCombination()`.
+
+==== Combining FTS and vector queries
+You can combine a traditional FTS query with vector queries:
+
+[source,java]
+----
+include::example$Search.java[tag=vector2,indent=0]
+----
+
+How the results are combined (ANDed or ORed) can be controlled with `vectorSearchOptions().vectorQueryCombination()`.
+
+==== FTS queries
+And note that traditional FTS queries, without vector search, are also supported with the new `cluster.search()` / `scope.search()` APIs:
+
+[source,java]
+----
+include::example$Search.java[tag=vector4,indent=0]
+----
+
+The `SearchQuery` is created in the same way as detailed earlier.
 
 == Search Options
 
@@ -217,10 +283,10 @@ Please see the xref:transcoders-nonjson.adoc[documentation on transcoding and se
 
 == Reactive And Async APIs
 
-In addition to the blocking API on `Cluster`, the SDK provides reactive and async APIs on `ReactiveCluster` or `AsyncCluster` respectively. 
+In addition to the blocking API on `Cluster`, the SDK provides reactive and async APIs on `ReactiveCluster` or `AsyncCluster` respectively (and similar for `Scope`, `ReactiveScope` and `AsyncScope`).
 If you are in doubt of which API to use, we recommend looking at the reactive first: 
 it builds on top of reactor, a powerful library that allows you to compose reactive computations and deal with error handling and other related concerns (like retry) in an elegant manner. 
-The async API on the other hand exposes a `CompletableFuture` and is more meant for lower level integration into other libraries or if you need the last drop of performance.
+The async API on the other hand exposes a `CompletableFuture` and is more intended for lower level integration into other libraries or if you need the last drop of performance.
 
 There is another reason for using the reactive API here: streaming large results with backpressure from the application side. 
 Both the blocking and async APIs have no means of signalling backpressure in a good way, so if you need it the reactive API is your best option.
