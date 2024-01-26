@@ -152,7 +152,7 @@ The downside of these workarounds is potentially reduced performance, which can 
 
 .Couchbase Server and SDK Supported Version Matrix
 [.table-merge-cells]
-[cols="7,5,6.7"]
+[cols="7,5,6,7"]
 |===
 
 | | Server 6.6 | Server 7.0 & 7.1 | Server 7.2
