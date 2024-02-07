@@ -63,6 +63,24 @@ If Jackson is on the application's classpath, the SDK will instead automatically
 It does this during `ClusterEnvironment` creation: if no serializer has been specified, and if Jackson is detected on the classpath, then a `JacksonJsonSerializer` is used as the global default serializer instead of `DefaultJsonSerializer`.  
 This will create and use a Jackson `ObjectMapper` from the standard `com.fasterxml.jackson.databind` package.
 
+// TODO add this to Transcoding.java file
+
+.Using a custom JsonMapper
+[source,java]
+----
+JsonMapper customMapper = JsonMapper.builder()
+  // add modules or customize other settings
+  .build();
+ 
+Cluster cluster = Cluster.connect(
+  connectionString,
+  ClusterOptions.clusterOptions(username, password)
+    .environment(env -> env
+      .jsonSerializer(JacksonJsonSerializer.create(customMapper))
+    )
+);
+----
+
 == RawJsonTranscoder
 The RawJsonTranscoder provides the ability for the application to explicitly specify that the data they are storing or retrieving is JSON.
 This transcoder does not accept a serializer, and always performs straight pass through of the data to the server.
