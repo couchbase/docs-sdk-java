@@ -29,7 +29,7 @@ All patch releases for each dot minor release should be API compatible, and safe
 any changes to expected behavior are noted in the release notes that follow.
 
 
-=== Version 3.5.3 (4 February 2024)
+=== Version 3.5.3 (6 February 2024)
 
 This is a regular maintenance release.
 
@@ -60,20 +60,22 @@ Optional artifacts on top of this SDK version are tested for the following compa
 * https://issues.couchbase.com/browse/JVMCBC-1460[JVMCBC-1460]
 `couchbase2` now supports compressing data between the SDK and the server.
 * https://issues.couchbase.com/browse/JVMCBC-1464[JVMCBC-1464]
-The metrics-opentelemetry package is now aligned with the same OpenTelemetry version as tracing-opentelemetry.
+The `metrics-opentelemetry` package is now aligned with the same `OpenTelemetry` version as `tracing-opentelemetry`.
 * https://issues.couchbase.com/browse/JVMCBC-1468[JVMCBC-1468]
-`Cluster.connect` now validates that connection strings using the `couchbase2` scheme have exactly one host. (Previously, hosts after the first were silently ignored.).
+`Cluster.connect` now validates that connection strings using the `couchbase2` scheme have exactly one host.
+(Previously, hosts after the first were silently ignored.).
 * https://issues.couchbase.com/browse/JVMCBC-1470[JVMCBC-1470]
-Improved support for Full Text Search in couchbase2 mode.
+Improved support for Full Text Search in `couchbase2` mode.
 * https://issues.couchbase.com/browse/JVMCBC-1472[JVMCBC-1472]
 `couchbase2` errors will now include diagnostic information when CNG is running with the `--debug` flag.
 * https://issues.couchbase.com/browse/JCBC-2117[JCBC-2117]
-Support for maxTTL value of -1 for collection "no expiry".
+Support added for `maxTTL` value of -1 for collection "no expiry".
 
 ==== Bugfixes
 
 * https://issues.couchbase.com/browse/JVMCBC-1475[JVMCBC-1475]
-Accessing the terms of a `TermFacet` result no longer throws NullPointerException if the target field is absent from all documents.
+Accessing the terms of a `TermFacet` result no longer throws `NullPointerException` if the target field is absent from all documents.
+
 
 === Version 3.5.2 (5 January 2024)
 
