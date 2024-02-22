@@ -307,6 +307,21 @@ include::example$KvOperations.java[tag=named-collection-upsert,indent=0]
 ----
 
 
+== KV Range Scan
+
+From version 7.6 of Couchbase Server, KV Range Scan offers the opportunity to group operations by ranges of alphanumerically adjacent keys.
+One common use case would be sequentially captured data given date / time-prefixed keys.
+
+In general, we recommend use of this API for low concurrency batch queries where latency is not a critical as the system may have to scan a lot of documents to find the matching documents. 
+For low latency range queries, it is recommended that you use {sqlpp} with the necessary indexes.
+
+.Example low concurrency batch query over many documents
+[source,java]
+----
+
+----
+
+
 == Additional resources
 
 Working on just a specific path within a JSON document will reduce network bandwidth requirements -- see the xref:subdocument-operations.adoc[Sub-Document] pages.
