@@ -290,27 +290,26 @@ include::example$SubDocument.java[tag=create-path,indent=0]
 ----
 
 
-== Read From Replica
+== Reading Sub-Documents From Replicas
 
-The `ReplicaRead` feature, introduced in Server 7.6, allows Sub-Doc to work with replica copies of the data in the same way that our data service can work with replicas of full documents
-(using `collection.get_any_replica` and `collection_get_all_replicas`).
+Couchbase Server 7.6 and later support Sub-Doc lookup from replicas.
 
-`LookupInAnyReplica` will return the first response -- from active or replica:
-
-[source,java]
-----
-LookupInAnyReplica 
-----
-
-While `LookupInAllReplicas` will fetch all replicas (and the active copy), and return all responses.
+The `collection.lookupInAnyReplica()` method returns the first response -- from active or replica:
 
 [source,java]
 ----
-LookupInAllReplicas
+include::example$SubDocument.java[tag=lookup-in-any-replica,indent=0]
 ----
 
-You may want to use `LookupInAllReplicas` to build a consensus,
-but it's more likely that you'll make use of `LookupInAnyReplica` as a fallback to a `lookupIn`, when the active node times out.
+The `collection.lookupInAllReplicas()` fetches all available replicas (and the active copy), and returns all responses.
+
+[source,java]
+----
+include::example$SubDocument.java[tag=lookup-in-all-replicas,indent=0]
+----
+
+You may want to use `lookupInAllReplicas` to build a consensus,
+but it's more likely that you'll make use of `lookupInAnyReplica` as a fallback to a `lookupIn`, when the active node times out.
 
 
 == Concurrent Modifications
