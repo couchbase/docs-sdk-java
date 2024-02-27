@@ -1,6 +1,7 @@
 = Couchbase Java SDK Release Notes and Archives
 :navtitle: Release Notes
 :page-topic-type: project-doc
+:page-toclevels: 2
 :page-partial:
 :page-aliases: relnotes-java-sdk,ROOT:sdk-release-notes,ROOT:relnotes-java-sdk,ROOT:release-notes,ROOT:download-links
 
@@ -33,4 +34,4 @@ We recommend running the latest LTS version (i.e. at the time of writing JDK 11)
 </dependencies>
 ----
 
-include::3.4@java-sdk:project-docs:page$sdk-release-notes.adoc[tag=all]
+include::3.5@java-sdk:project-docs:page$sdk-release-notes.adoc[tag=all]
