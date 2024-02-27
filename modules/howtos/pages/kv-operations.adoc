@@ -307,19 +307,74 @@ include::example$KvOperations.java[tag=named-collection-upsert,indent=0]
 ----
 
 
+[#kv-range-scan]
 == KV Range Scan
 
-From version 7.6 of Couchbase Server, KV Range Scan offers the opportunity to group operations by ranges of alphanumerically adjacent keys.
-One common use case would be sequentially captured data given date / time-prefixed keys.
+A range scan gives you documents from a collection, even if you don't know the document IDs.
+This feature requires Couchbase Server 7.6 or newer.
 
-In general, we recommend use of this API for low concurrency batch queries where latency is not a critical as the system may have to scan a lot of documents to find the matching documents. 
-For low latency range queries, it is recommended that you use {sqlpp} with the necessary indexes.
+TIP: KV range scan is suitable for use cases that require relatively low concurrency and tolerate relatively high latency.
+If your application does many scans at once, or requires low latency results, we recommend using {sqlpp} (with a primary index on the collection) instead of KV range scan.
 
-.Example low concurrency batch query over many documents
+
+[#kv-range-scan-range]
+=== Range scan
+
+Here's an example of a KV range scan that gets all documents in a collection:
+
+.KV Range Scan for all documents in a collection
 [source,java]
 ----
-
+include::example$KvOperations.java[tag=rangeScanAllDocuments,indent=0]
 ----
+<1> The `ScanType.rangeScan()` method has two nullable parameters: `from` and `to`.
+If you pass null like in this example, you'll get all documents in the collection.
+These parameters are for advanced use cases; you probably won't need to specify them.
+Instead, it's more common to use the "prefix" scan type shown in the next example.
+
+[#kv-range-scan-prefix]
+=== Prefix scan
+
+KV range scan can also give you all documents whose IDs start with the same prefix.
+
+Imagine you have a collection where documents are named like this: `<username>::<uuid>`.
+In other words, the document ID starts with the name of the user associated with the document, followed by a delimiter, and then a UUID.
+If you use this document naming scheme, you can use a prefix range scan to get all documents associated with a user.
+
+For example, to get all documents associated with user "alice", you would write:
+
+.KV Range Scan for all documents in a collection whose IDs start with "alice::"
+[source,java]
+----
+include::example$KvOperations.java[tag=rangeScanPrefix,indent=0]
+----
+<1> Note the scan type is *prefixScan*.
+
+[#kv-range-scan-sample]
+=== Sample scan
+
+If you want to get random documents from a collection, use a sample scan.
+
+.KV Range Scan for 100 random documents
+[source,java]
+----
+include::example$KvOperations.java[tag=rangeScanSample,indent=0]
+----
+<1> In this example, no more than `100` documents are returned.
+
+[#kv-range-scan-only-ids]
+=== Get IDs instead of full document
+
+If you only want the document IDs, set the `idsOnly` option to true, like this:
+
+.KV Range Scan for all document IDs in a collection
+[source,java]
+----
+include::example$KvOperations.java[tag=rangeScanAllDocumentIds,indent=0]
+----
+<1> The returned `ScanResult` objects throw `NoSuchElementException` if you try to access any property other than `id`.
+
+Setting `idsOnly` to true also works with the other scan types described above.
 
 
 == Additional resources
