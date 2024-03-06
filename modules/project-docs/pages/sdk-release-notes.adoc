@@ -1,4 +1,5 @@
 = Couchbase Java SDK Release Notes and Archives
+:description: Release notes, installation instructions, and download archive for the Couchbase Java Client.
 :navtitle: Release Notes
 :page-topic-type: project-doc
 :page-toclevels: 2
