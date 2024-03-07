@@ -1,67 +1,29 @@
 = Compatibility
-:description: Features available in different SDK versions, and compatibility between Server and SDK. \
+:description: Platform compatibility, and features available in different SDK versions, and compatibility between Server and SDK. \
 Plus notes on Cloud, networks, and AWS Lambda.
-:navtitle: Compatibility
 :page-aliases: ROOT:overview,ROOT:compatibility-versions-features,compatibility-versions-features
-:page-toclevels: 2
+:page-toclevels: 3
+:table-caption!:
 
-include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 {description}
 
-The 3.5 SDK requires Java 8 or later to be installed, earlier versions will not work.
-_Java 21 is recommended_.
-Most of the flavors available will do, although we may only provide support for OpenJDK and Oracle JDK going forward. 
 
-== Couchbase Version/SDK Version Matrix
-
-Couchbase SDKs are tested against a variety of different environments to ensure both backward and forward compatibility with different versions of Couchbase Server.
-The matrix below denotes the version of Couchbase Server, the version of the Java SDK and whether the SDK is:
-
-* ✖ *Unsupported*: This combination is not tested, and is not within the scope of technical support if you have purchased a support agreement.
-* ◎ *Compatible*: This combination has been tested previously, and should be compatible.
-This combination is not recommended by our technical support organization.
-It is best to upgrade either the SDK or the Couchbase version you are using.
-* ✔ *Supported*: This combination is subject to ongoing quality assurance, and is fully supported by our technical support organization.
-
-.Recommended SDK per Server Version Matrix
-[#table_sdk_versions]
-[cols="40,20,25"]
-|===
-| | 3.1 | SDK 3.2-3.5
-
-| *Server 6.6*
-| *◎*
-| *◎*
-
-| *Server 7.0-7.2*
-| *◎*
-| *✔*
-|===
-
-Note the https://www.couchbase.com/support-policy[End of Life dates^] for Couchbase Server and SDK versions.
-See the notes there for Support details.
-
-=== Capella Compatibility
-
-The Java SDK is fully compatible with Couchbase Capella, our fully-hosted database-as-a-service.
-To make development easier, the SDK includes the Capella client certificate ready installed.
-
-include::{version-common}@sdk:shared:partial$capella.adoc[tag=cloud]
+The 3.5 SDK requires Java 8 or later to be installed, _Java 21 is recommended_.
 
 
-[#jdk-compat]
-== JDK Version Compatibility
 
-The Java SDK is tested with Oracle JDK and OpenJDK.
+== Platform Compatibility
+
+
+=== JDK Version Compatibility
+
+The {name-sdk} is tested with Oracle JDK and OpenJDK.
 Other JDK implementations might work but are not tested and are unsupported.
 We recommend running the latest LTS version (i.e. at the time of writing JDK 21) with the highest patch version available.
 
-We only support LTS versions of Oracle JDK and OpenJDK.
-Other versions may work -- _but they are not tested and they are not supported_.
-
-The following JDK releases are supported at time of 3.5 SDK release (November 2023):
+The following JDK releases are supported:
 
 * https://adoptium.net/[OpenJDK 21 with HotSpot JVM] (recommended)
 * https://adoptium.net/[OpenJDK 17 with HotSpot JVM]
@@ -73,13 +35,13 @@ The following JDK releases are supported at time of 3.5 SDK release (November 20
 Please make sure you run on one of the latest patch releases, since they provide stability improvements and security fixes in general.
 
 
-== OS Compatibility
+
+=== OS Compatibility
 
 In general, the JVM eliminates concerns about underlying OS compatibility, 
 and Couchbase JVM SDKs can be expected to run on all of the Operating Systems supported by xref:{version-server}@server:install:install-platforms.adoc[Couchbase Server].
 
-The Java SDK is tested and supported on the following OSs and platforms:
-
+The {name-sdk} is tested and supported on the following OSs and platforms:
 
 ****
 [discrete]
@@ -87,37 +49,39 @@ The Java SDK is tested and supported on the following OSs and platforms:
 
 * Amazon Linux 2 & AL2023.
 * Red Hat Enterprise Linux 8 & 9;
-// * CentOS 7.
+* Oracle Linux 8 & 9.
 * Ubuntu (LTS) 20.04 (_Focal_) & 22.04 (_Jammy_).
-* Debian 10 (_Buster_) & 11 (_Bullseye_).
-* Alpine Linux (_Oracle JDK only_) -- but see <<alpine-linux-compatibility, workaround note below>>.
+* Debian 10 (_Buster_), 11 (_Bullseye_), and Debian 12 (_Bookworm_).
+* SUSE Enterprise Linux 12 & 15
+* Alpine Linux 3.18 (_Oracle JDK only_) -- but see <<alpine-linux-compatibility, workaround note below>>.
 
 [discrete]
 === Microsoft Windows
 
-Microsoft Windows 10 / All LTS releases from Windows Server 2016.
+* Microsoft Windows 10 & 11;
+* Windows Server 2019 & 2022.
 
 [discrete]
 === Mac OS X
 
 The current and previous two releases of OS X.
-At time of writing (November 2023): 14 (Sonoma), 13 (Ventura), and 12 (Monterey).
-M1 ARM  architecture is fully supported in the Java SDK.
+At time of writing (March 2024): 14 (Sonoma), 13 (Ventura), and 12 (Monterey).
+M1 ARM  architecture is fully supported in the Scala SDK.
 
 [discrete]
 === ARM Processor Support
 
-AWS Amazon Graviton2, Apple M1 ARM processors, and ARMv8 on Ubuntu 20.04+ (from SDK 3.4).
+AWS Amazon Graviton2, Apple M1 ARM processors, and ARMv8 on Ubuntu 20.04+ (from SDK 1.4).
 ****
 
 The JVM SDKs should also be expected to run on other commonly-available GNU/Linux distributions which support an appropriate JDK, but not all combinations can be tested -- notable exceptions are listed below.
 
-=== Alpine Linux Compatibility
+==== Alpine Linux Compatibility
 
 The https://netty.io[Netty] I/O library used by our JVM SDKs supports native optimizations to achieve higher throughput and lower latency 
 -- which the SDK enables by default. 
 Those modules are compiled against `glibc` and Alpine Linux uses `musl` instead --
-so the Java SDK is unable to complete bootstrapping on this platform.
+so the {name-sdk} is unable to complete bootstrapping on this platform.
 
 Because Alpine Linux does not have the `glibc` support needed,
 we highly recommend that you seek an alternative distribution where possible. 
@@ -148,56 +112,95 @@ Cluster cluster = Cluster.connect(
 The downside of these workarounds is potentially reduced performance, which can be determined through benchmarking and profiling.
 
 
-== Couchbase Feature Availability Matrix
+
+
+// Network Requirements
+include::{version-common}@sdk:shared:partial$network-requirements.adoc[]
+
+
+
+
+
+
+== Couchbase Server Compatibility
+
+
+Couchbase SDKs are tested against a variety of different environments to ensure both backward and forward compatibility with different versions of Couchbase Server.
+
+=== Couchbase Version/SDK Version Matrix
+
+The matrix below denotes the version of Couchbase Server, the version of the Scala SDK and whether the SDK is:
+
+* ✖ *Unsupported*: This combination is not tested, and is not within the scope of technical support if you have purchased a support agreement.
+* ◎ *Compatible*: This combination has been tested previously, and should be compatible.
+This combination is not recommended by our technical support organization.
+It is best to upgrade either the SDK or the Couchbase version you are using.
+* ✔ *Supported*: This combination is subject to ongoing quality assurance, and is fully supported by our technical support organization.
+
+.Recommended SDK per Server Version Matrix
+[#table_sdk_versions]
+|===
+| | 1.3 | 1.4, 1.5 | 1.6
+
+| *Server 7.0 - 7.2*
+| *✔*
+| *✔*
+| *✔*
+
+| *Server 7.6*
+| *✔*
+| *✔*
+| *✔*
+|===
+
+Note the https://www.couchbase.com/support-policy[End of Life dates^] for Couchbase Server and SDK versions.
+See the notes there for Support details.
+
+=== Capella Compatibility
+
+The Couchbase Scala SDK is fully compatible with Couchbase Capella, our fully-hosted database-as-a-service.
+To make development easier, the SDK includes the Capella client certificate ready installed.
+
+include::{version-common}@sdk:shared:partial$capella.adoc[tag=cloud]
+
+
+=== Couchbase New Feature Availability Matrix
 
 .Couchbase Server and SDK Supported Version Matrix
 [.table-merge-cells]
-[cols="7,5,6,7"]
+[cols="7,6,6,6"]
 |===
-
-| | Server 6.6 | Server 7.0 & 7.1 | Server 7.2
+| | Server 7.0 & 7.1 | Server 7.2 | Server 7.6
 
 | Enhanced Durability
 3+| All SDK versions
 
 | Durable Writes
-3+| Since SDK 3.0
+3+| Since 3.0
 
 | Analytics
-3+| Since SDK 2.7
-
-| Distributed ACID Transactions
-3+| Since SDK 3.3 included in SDK, or since SDK 3.0 with Java Transactions Libraryfootnote:[3.0.7 or more recent recommended; preferably, follow the transitive dependency for the transactions library in Maven.]
-
-| {sqlpp} Queries inside the Transaction Lambda
-| Not Supported
-2+| Since SDK 3.1, or since 3.0.7 with Java Transactions Libraryfootnote:[1.2.1 or newer recommended.]
+3+| Since 2.7
 
 | Collections
-| Developer Preview in 6.6, SDK 3.0
-2+| Since SDK 3.0.6
+3+| Since 3.0.6
 
-| Scope-Level {sqlpp} Queries & all Collections features
-| Not Supported
-2+| Since SDK 3.2.0
-
-| Field Level Encryption v2
-3+| Since SDK 3.0.5footnote:[Field Level Encryption distributed as separate library.]
+| Scope-Level {sqlpp} (formerly N1QL) Queries & all Collections features
+3+| Since SDK 3.2.0
 
 | Request Tracing
 3+| Since SDK 3.1.0
 
 | Cloud Native Gateway
-2+| Not Supported
-| From SDK 3.5.0 (with xref:operator::overview.adoc[Couchbase Autonomous Operator] 2.6.1+)
+| Not Supported
+2+| From SDK 3.5.0 (with xref:operator::overview.adoc[Couchbase Autonomous Operator] 2.6.1+)
+
+| Vector Search
+2+| N/A
+| From SDK 3.6.0
 |===
 
 
-include::{version-common}@sdk:shared:partial$network-requirements.adoc[]
-
-
-[#spring-compat]
-== Spring Data Couchbase Compatibility
+=== Spring Data Couchbase Compatibility
 
 https://projects.spring.io/spring-data-couchbase/[Spring Data Couchbase^] uses the Java SDK underneath and as a result is also provides different compatibilities with Couchbase Server.
 The following table provides an overview.
@@ -205,38 +208,37 @@ The following table provides an overview.
 .Recommended Spring Data Couchbase per Server Version Matrix
 [#table_spring_versions]
 |===
-|  | SDC 4.3 - 4.4 | SDC 5.0 - 5.1
+|  | SDC 4.3 - 4.4 | SDC 5.0 - 5.2
 
 | _Status ->_
 | _Maintenance Support_
 | _New Features, Active Development_
 
-| *Server 7.0 - 7.2*
+| *Server 7.0 - 7.6*
 | *Compatible*
 | *Recommended*
 |===
 
-NOTE: Check the Spring Data Couchbase's compile dependencies -- older versions may link an out-of-date version of the Java SDK in their dependencies list, although a supported version should be in the `updates`.
-Please make sure that you are using a supported version of the Couchbase Java SDK, prefereably the latest version, which will contain any available bug fixes.
+NOTE: Check the Spring Data Couchbase's compile dependencies -- older versions may link an out-of-date version of the SDK in their dependencies list, although a supported version should be in the `updates`.
+Please make sure that you are using a supported version of the Couchbase Scala SDK, prefereably the latest version, which will contain any available bug fixes.
 Using the latest Spring Data Couchbase should ensure that this is so.
 
-[CAUTION]
-.Reactor Core Version
-====
-SpringBoot may set the io.projectreactor version at an earlier version than the one needed by the current version of https://search.maven.org/artifact/com.couchbase.client/core-io/2.5.0/jar[Couchbase JVM Core IO]. 
-In case of errors, override with Core IO's preferred version, e.g.:
 
-----
-<dependency>
-    <groupId>io.projectreactor</groupId>
-    <artifactId>reactor-core</artifactId>
-    <version>3.5.0.RELEASE</version>
-</dependency>
-----
-====
+=== API Version
+
+include::{version-common}@sdk:shared:partial$api-version.adoc[tag=api-version]
+
+
+
+
+== SDK API Stability
+
+
+=== Interface Stability
 
 include::{version-common}@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]
 
-include::{version-common}@sdk:shared:partial$api-version.adoc[tag=api-version]
+
+=== Older SDK Versions
 
 include::{version-common}@sdk:shared:partial$archive.adoc[tag=link]
