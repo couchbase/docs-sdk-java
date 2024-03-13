@@ -10,7 +10,7 @@ Plus notes on Cloud, networks, and AWS Lambda.
 {description}
 
 
-The 3.5 SDK requires Java 8 or later to be installed, _Java 21 is recommended_.
+The 3.6 SDK requires Java 8 or later to be installed, _Java 21 is recommended_.
 
 
 
