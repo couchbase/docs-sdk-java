@@ -16,6 +16,7 @@
 
 import static com.couchbase.client.java.search.SearchOptions.searchOptions;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import com.couchbase.client.core.error.CouchbaseException;
@@ -28,11 +29,14 @@ import com.couchbase.client.java.kv.MutationResult;
 import com.couchbase.client.java.kv.MutationState;
 import com.couchbase.client.java.search.HighlightStyle;
 import com.couchbase.client.java.search.SearchQuery;
+import com.couchbase.client.java.search.SearchRequest;
 import com.couchbase.client.java.search.facet.SearchFacet;
 import com.couchbase.client.java.search.result.ReactiveSearchResult;
 import com.couchbase.client.java.search.result.SearchResult;
 import com.couchbase.client.java.search.result.SearchRow;
 import com.couchbase.client.java.search.sort.SearchSort;
+import com.couchbase.client.java.search.vector.VectorQuery;
+import com.couchbase.client.java.search.vector.VectorSearch;
 import org.reactivestreams.Subscription;
 import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.Mono;
@@ -170,6 +174,48 @@ public class Search {
       });
       // end::backpressure[]
     }
+
+    // This will come from an external source, such as an embeddings API.
+    float[] vectorQuery = null;
+    float[] anotherVectorQuery = null;
+
+    {
+      // tag::vector1[]
+      SearchRequest request = SearchRequest
+              .create(VectorSearch.create(VectorQuery.create("vector_field", vectorQuery)));
+
+      SearchResult result = scope.search("vector-index", request);
+      // end::vector1[]
+    }
+
+    {
+      // tag::vector2[]
+      SearchRequest request = SearchRequest.create(SearchQuery.matchAll())
+              .vectorSearch(VectorSearch.create(VectorQuery.create("vector_field", vectorQuery)));
+
+      SearchResult result = scope.search("vector-index", request);
+      // end::vector2[]
+    }
+
+    {
+      // tag::vector3[]
+      SearchRequest request = SearchRequest
+              .create(VectorSearch.create(List.of(
+                              VectorQuery.create("vector_field", vectorQuery).numCandidates(2).boost(0.3),
+                              VectorQuery.create("vector_field", anotherVectorQuery).numCandidates(5).boost(0.7)));
+
+      SearchResult result = scope.search("vector-and-fts-index", request);
+      // end::vector3[]
+    }
+
+    {
+      // tag::vector4[]
+      SearchRequest request = SearchRequest.create(SearchQuery.matchAll());
+
+      SearchResult result = scope.search("travel-sample-index", request);
+      // end::vector4[]
+    }
+
   }
 
   static void process(SearchRow value) {

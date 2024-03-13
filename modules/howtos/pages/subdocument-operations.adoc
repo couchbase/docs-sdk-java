@@ -289,6 +289,29 @@ In this case, the _createPath_ option may be used.
 include::example$SubDocument.java[tag=create-path,indent=0]
 ----
 
+
+== Reading Sub-Documents From Replicas
+
+Couchbase Server 7.6 and later support Sub-Doc lookup from replicas.
+
+The `collection.lookupInAnyReplica()` method returns the first response -- from active or replica:
+
+[source,java]
+----
+include::example$SubDocument.java[tag=lookup-in-any-replica,indent=0]
+----
+
+The `collection.lookupInAllReplicas()` fetches all available replicas (and the active copy), and returns all responses.
+
+[source,java]
+----
+include::example$SubDocument.java[tag=lookup-in-all-replicas,indent=0]
+----
+
+You may want to use `lookupInAllReplicas` to build a consensus,
+but it's more likely that you'll make use of `lookupInAnyReplica` as a fallback to a `lookupIn`, when the active node times out.
+
+
 == Concurrent Modifications
 
 Concurrent Sub-Document operations on different parts of a document will not conflict.
