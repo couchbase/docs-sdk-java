@@ -98,11 +98,6 @@ Previously, the SDK assumed `1` was the default value, and omitted the parameter
 
 == Java SDK 3.5 Releases
 
-We always recommend using the latest version of the SDK -- it contains all of the latest security patches and support for new and upcoming features.
-All patch releases for each dot minor release should be API compatible, and safe to upgrade;
-any changes to expected behavior are noted in the release notes that follow.
-
-
 === Version 3.5.3 (6 February 2024)
 
 This is a regular maintenance release.
