@@ -17,4 +17,4 @@ For release notes, download links, and installation methods for 2.7 and earlier 
 See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide for details.
 
 
-include::3.5@java-sdk:project-docs:page$sdk-release-notes.adoc[tag=all]
+include::3.6@java-sdk:project-docs:page$sdk-release-notes.adoc[tag=all]
