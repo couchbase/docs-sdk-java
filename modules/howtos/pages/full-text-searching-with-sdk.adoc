@@ -2,12 +2,6 @@
 :description: You can use the Full Text Search service (FTS) to create queryable full-text indexes in Couchbase Server.
 :page-topic-type: howto
 :page-aliases: ROOT:search-query, ROOT:full-text-searching-with-sdk.adoc
-:lang: Java
-:version: 3.2.1
-:example-source: 3.2@java-sdk:howtos:example$Search.java
-:example-source-lang: java
-:page-pagination: full
-
 
 [abstract]
 {description}
