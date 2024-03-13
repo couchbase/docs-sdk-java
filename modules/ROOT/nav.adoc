@@ -78,7 +78,7 @@
 * xref:ref:travel-app-data-model.adoc[]
 
 .Project Docs
-* xref:project-docs:sdk-release-notes.adoc[]
+* xref:project-docs:sdk-release-notes.adoc#java-sdk-3-5-releases[]
 * xref:project-docs:compatibility.adoc[]
 ** xref:project-docs:migrating-sdk-code-to-3.n.adoc[]
 *** xref:howtos:working-with-collections.adoc[Working with Collections]
