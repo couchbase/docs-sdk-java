@@ -10,7 +10,7 @@ asciidoc:
     sdk_current_version: '3.6.0'
     sdk_dot_minor: 3.6
     sdk_dot_major: 3.x
-    version-server: '7.2'
+    version-server: '7.6'
     version-common: '7.5'
     name_platform: 'Java'
     name-sdk: Java SDK
