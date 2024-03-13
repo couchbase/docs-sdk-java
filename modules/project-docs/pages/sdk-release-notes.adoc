@@ -21,6 +21,81 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 
 [#latest-release]
+== Java SDK 3.6 Releases
+
+We always recommend using the latest version of the SDK -- it contains all of the latest security patches and support for new and upcoming features.
+All patch releases for each dot minor release should be API compatible, and safe to upgrade;
+any changes to expected behavior are noted in the release notes that follow.
+
+////
+# get version numbers like this
+src=../couchbase-jvm-clients
+grep '<reactor.version>' $src/pom.xml
+grep ' <reactive-streams.version>' $src/pom.xml
+echo tracing-opentelemetry ; grep '<version>' $src/tracing-opentelemetry/pom.xml | head -2 | tail -1 ; grep '<opentelemetry.version>' $src/pom.xml 
+echo tracing-opentracing ; grep '<version>' $src/tracing-opentracing/pom.xml | head -2 | tail -1 ; grep '<opentracing.version>' $src/tracing-opentracing/pom.xml
+echo metrics-open-telemetry ; grep '<version>' $src/tracing-opentracing/pom.xml | head -2 | tail -1 ; grep '<opentelemetry.version>' $src/pom.xml 
+echo metrics-micrometergrep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/metrics-micrometer/pom.xml 
+////
+
+
+=== Version 3.6.0 (11 March 2024)
+
+Version 3.6.0 is the first release of the 3.6 series.
+
+https://packages.couchbase.com/clients/java/3.6.0/Couchbase-Java-Client-3.6.0.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.6.0/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.6.0/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+* io.projectreactor:**reactor-core:3.6.3**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.4.0             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.4.0             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.6.1             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.6.1             | Micrometer 1.10.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://issues.couchbase.com/browse/JCBC-2116[JCBC-2116]
+Added support for vector search, a new feature in Couchbase Server 7.6.
+This API is currently at `@Stability.Uncommitted` level.
+* https://issues.couchbase.com/browse/JCBC-2131[JCBC-2131]
+`Scope.searchIndexes()` is now part of the committed public API.
+* https://issues.couchbase.com/browse/JVMCBC-1487[JVMCBC-1487]
+Upgraded reactor-core from 3.5.8 to 3.6.3.
+* https://issues.couchbase.com/browse/JVMCBC-1488[JVMCBC-1488]
+Upgraded Jackson from 2.16.0 to 2.16.1.
+* https://issues.couchbase.com/browse/JVMCBC-1489[JVMCBC-1489]
+Upgraded Netty from 4.1.101 to 4.1.107.
+* https://issues.couchbase.com/browse/JVMCBC-xxxx[JVMCBC-1491]
+`Collection.scan()` methods are not part of the SDK's committed API.
+These methods do range-scans of documentIds.
+This feature requires Couchbase Server 7.6 or later.
+* https://issues.couchbase.com/browse/JVMCBC-xxxx[JVMCBC-1493]
+`Collection.lookupInAnyReplica()` and `Collection.lookupInAllReplicas()` are now part of the SDK’s committed API.
+These methods do sub-document lookups against replicas.
+This feature requires Couchbase Server 7.6 or later.
+
+==== Bugfixes
+
+* https://issues.couchbase.com/browse/JCBC-2125[JCBC-2125]
+Fixed an issue with `ScopeSearchIndexManager`, `disallowQuerying`, and `freezePlan` methods, which were not waiting for the server result before returning in the blocking API.
+* https://issues.couchbase.com/browse/JVMCBC-1480[JVMCBC-1480]
+`couchbase2:` should use exponential backoff when bypassing `BestEffortRetryStrategy`.
+* https://issues.couchbase.com/browse/JVMCBC-1494[JVMCBC-1494]
+If you specify `min=1` for a Full-Text Search disjunction query, the SDK now always sends the value to the server.
+Previously, the SDK assumed `1` was the default value, and omitted the parameter in that case.
+
+
 == Java SDK 3.5 Releases
 
 We always recommend using the latest version of the SDK -- it contains all of the latest security patches and support for new and upcoming features.
