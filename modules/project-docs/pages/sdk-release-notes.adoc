@@ -77,11 +77,11 @@ Upgraded Jackson from 2.16.0 to 2.16.1.
 * https://issues.couchbase.com/browse/JVMCBC-1489[JVMCBC-1489]
 Upgraded Netty from 4.1.101 to 4.1.107.
 * https://issues.couchbase.com/browse/JVMCBC-1491[JVMCBC-1491]
-`Collection.scan()` methods are not part of the SDK's committed API.
+`Collection.scan()` methods are now part of the SDK's committed public API.
 These methods do range-scans of documentIds.
 This feature requires Couchbase Server 7.6 or later.
 * https://issues.couchbase.com/browse/JVMCBC-1493[JVMCBC-1493]
-`Collection.lookupInAnyReplica()` and `Collection.lookupInAllReplicas()` are now part of the SDK’s committed API.
+`Collection.lookupInAnyReplica()` and `Collection.lookupInAllReplicas()` are now part of the SDK’s committed public API.
 These methods do sub-document lookups against replicas.
 This feature requires Couchbase Server 7.6 or later.
 
