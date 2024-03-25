@@ -289,6 +289,7 @@ In this case, the _createPath_ option may be used.
 include::example$SubDocument.java[tag=create-path,indent=0]
 ----
 
+////
 
 == Reading Sub-Documents From Replicas
 
@@ -310,6 +311,8 @@ include::example$SubDocument.java[tag=lookup-in-all-replicas,indent=0]
 
 You may want to use `lookupInAllReplicas` to build a consensus,
 but it's more likely that you'll make use of `lookupInAnyReplica` as a fallback to a `lookupIn`, when the active node times out.
+
+////
 
 
 == Concurrent Modifications
