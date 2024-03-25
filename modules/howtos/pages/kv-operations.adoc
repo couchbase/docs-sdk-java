@@ -307,6 +307,9 @@ include::example$KvOperations.java[tag=named-collection-upsert,indent=0]
 ----
 
 
+
+////
+
 [#kv-range-scan]
 == KV Range Scan
 
@@ -375,6 +378,9 @@ include::example$KvOperations.java[tag=rangeScanAllDocumentIds,indent=0]
 <1> The returned `ScanResult` objects throw `NoSuchElementException` if you try to access any property other than `id`.
 
 Setting `idsOnly` to true also works with the other scan types described above.
+
+////
+
 
 
 == Additional resources
