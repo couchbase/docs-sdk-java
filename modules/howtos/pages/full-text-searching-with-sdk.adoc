@@ -109,7 +109,12 @@ This makes sure that even with partial data usually Search results are useable,
 so if you absolutely need to check if all partitions are present in the result double check the error 
 (and not only catch an exception on the query itself).
 
+
+
+////
+
 == Scoped vs Global Indexes
+
 The FTS APIs exist at both the `Cluster` and `Scope` levels.
 
 This is because FTS supports, as of Couchbase Server 7.6, a new form of "scoped index" in addition to the traditional "global index".
@@ -174,6 +179,10 @@ include::example$Search.java[tag=vector4,indent=0]
 ----
 
 The `SearchQuery` is created in the same way as detailed earlier.
+
+////
+
+
 
 == Search Options
 
