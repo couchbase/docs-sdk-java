@@ -66,7 +66,7 @@ The {name-sdk} is tested and supported on the following OSs and platforms:
 
 The current and previous two releases of OS X.
 At time of writing (March 2024): 14 (Sonoma), 13 (Ventura), and 12 (Monterey).
-M1 ARM  architecture is fully supported in the Scala SDK.
+M1 ARM  architecture is fully supported in the {name-sdk}.
 
 [discrete]
 === ARM Processor Support
@@ -129,7 +129,7 @@ Couchbase SDKs are tested against a variety of different environments to ensure 
 
 === Couchbase Version/SDK Version Matrix
 
-The matrix below denotes the version of Couchbase Server, the version of the Scala SDK and whether the SDK is:
+The matrix below denotes the version of Couchbase Server, the version of the {name-sdk} and whether the SDK is:
 
 * ✖ *Unsupported*: This combination is not tested, and is not within the scope of technical support if you have purchased a support agreement.
 * ◎ *Compatible*: This combination has been tested previously, and should be compatible.
@@ -158,7 +158,7 @@ See the notes there for Support details.
 
 === Capella Compatibility
 
-The Couchbase Scala SDK is fully compatible with Couchbase Capella, our fully-hosted database-as-a-service.
+The Couchbase {name-sdk} is fully compatible with Couchbase Capella, our fully-hosted database-as-a-service.
 To make development easier, the SDK includes the Capella client certificate ready installed.
 
 include::{version-common}@sdk:shared:partial$capella.adoc[tag=cloud]
