@@ -220,7 +220,7 @@ The following table provides an overview.
 |===
 
 NOTE: Check the Spring Data Couchbase's compile dependencies -- older versions may link an out-of-date version of the SDK in their dependencies list, although a supported version should be in the `updates`.
-Please make sure that you are using a supported version of the Couchbase Scala SDK, prefereably the latest version, which will contain any available bug fixes.
+Please make sure that you are using a supported version of the Couchbase Java SDK, prefereably the latest version, which will contain any available bug fixes.
 Using the latest Spring Data Couchbase should ensure that this is so.
 
 
