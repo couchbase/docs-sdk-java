@@ -38,7 +38,7 @@ echo metrics-open-telemetry ; grep '<version>' $src/tracing-opentracing/pom.xml 
 echo metrics-micrometergrep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/metrics-micrometer/pom.xml 
 ////
 
-=== Version 3.6.1 (2 April 2024)
+=== Version 3.6.1 (5 April 2024)
 
 This is a regular maintenance release.
 
@@ -77,6 +77,7 @@ Added `EventingFunctionLanguageCompatibility.VERSION_7_2_0`.
 * https://issues.couchbase.com/browse/JVMCBC-1504[JVMCBC-1504]
 Deprecated static methods that return new config builders, like `TimeoutConfig.builder()` and `TimeoutConfig.kvTimeout(Duration)`.
 See the following example for the recommended way to configure client settings:
++
 [source,java]
 ----
 Cluster cluster = Cluster.connect(
