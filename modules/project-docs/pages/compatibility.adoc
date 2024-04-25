@@ -199,6 +199,9 @@ include::{version-common}@sdk:shared:partial$capella.adoc[tag=cloud]
 | From SDK 3.6.0
 |===
 
+This table is not an exhaustive list -- just a few highlights -- provided to help assess compatibility of older versions in particular.
+For alignment of SDKs and new Server features, scroll down to the information below the <<api-version,API Version table>>.
+
 
 === Spring Data Couchbase Compatibility
 
