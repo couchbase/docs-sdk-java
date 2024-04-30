@@ -34,9 +34,51 @@ grep '<reactor.version>' $src/pom.xml
 grep ' <reactive-streams.version>' $src/pom.xml
 echo tracing-opentelemetry ; grep '<version>' $src/tracing-opentelemetry/pom.xml | head -2 | tail -1 ; grep '<opentelemetry.version>' $src/pom.xml 
 echo tracing-opentracing ; grep '<version>' $src/tracing-opentracing/pom.xml | head -2 | tail -1 ; grep '<opentracing.version>' $src/tracing-opentracing/pom.xml
-echo metrics-open-telemetry ; grep '<version>' $src/tracing-opentracing/pom.xml | head -2 | tail -1 ; grep '<opentelemetry.version>' $src/pom.xml 
-echo metrics-micrometergrep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/metrics-micrometer/pom.xml 
+echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml | head -2 | tail -1 ; grep '<opentelemetry.version>' $src/pom.xml 
+echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/metrics-micrometer/pom.xml 
 ////
+
+=== Version 3.6.2 (29 April 2024)
+
+This is a regular maintenance release.
+
+https://packages.couchbase.com/clients/java/3.6.2/Couchbase-Java-Client-3.6.2.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.6.2/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.6.2/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.3**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.4.2             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.4.2             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.6.2             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.6.2             | Micrometer 1.10.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://issues.couchbase.com/browse/JVMCBC-1508[JVMCBC-1508]
+Upgraded Netty dependency.
+* https://issues.couchbase.com/browse/JVMCBC-1509[JVMCBC-1509]
+Upgraded Jackson dependency.
+* https://issues.couchbase.com/browse/JCBC-2135[JCBC-2135]
+Added binary support for transactions.
+
+==== Bugfixes
+
+* https://issues.couchbase.com/browse/JVMCBC-1506[JVMCBC-1506]
+Reduced the rate at which messages appear in the server's `http_access.log` when a user provides valid credentials but does not have permission to access the bucket.
+* https://issues.couchbase.com/browse/JVMCBC-1512[JVMCBC-1512]
+Updated Service in Cluster Configuration if only the port is changed.
+
 
 === Version 3.6.1 (5 April 2024)
 
