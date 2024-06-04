@@ -98,3 +98,12 @@ Here, the _flights_ array, containing the flight IDs, is converted to actual obj
 include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=data-model]
 
 include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=rest-api]
+
+
+// TODO: we don't use the partial here, because of the location of swagger.json
+// in try-cb-dotnet/wwwroot/
+== REST API
+
+You can explore the REST API here in read-only mode, or once you are running the application, at the `/apidocs` endpoint.
+
+swagger_ui::https://raw.githubusercontent.com/couchbaselabs/{travel-sample-git-project}/HEAD/try-cb-dotnet/wwwroot/swagger.json[]
