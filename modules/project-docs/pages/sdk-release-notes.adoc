@@ -21,7 +21,7 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 
 [#latest-release]
-== Java SDK 3.6 Releases
+== Java SDK 3.7 Releases
 
 We always recommend using the latest version of the SDK -- it contains all of the latest security patches and support for new and upcoming features.
 All patch releases for each dot minor release should be API compatible, and safe to upgrade;
@@ -37,6 +37,9 @@ echo tracing-opentracing ; grep '<version>' $src/tracing-opentracing/pom.xml | h
 echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml | head -2 | tail -1 ; grep '<opentelemetry.version>' $src/pom.xml 
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/metrics-micrometer/pom.xml 
 ////
+
+
+== Java SDK 3.6 Releases
 
 === Version 3.6.2 (29 April 2024)
 
