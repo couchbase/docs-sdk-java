@@ -1,5 +1,5 @@
 name: java-sdk
-version: '3.6'
+version: '3.7'
 title: Java SDK
 start_page: hello-world:overview.adoc
 nav:
@@ -7,15 +7,14 @@ nav:
 asciidoc:
   attributes:
     page-nav-header-levels: 1
-    server_version: '7.6'
-    sdk_current_version: '3.6.2'
-    sdk_dot_minor: '3.6'
+    server_version: '7.6.2'
+    sdk_current_version: '3.7.02'
+    sdk_dot_minor: '3.7'
     sdk_dot_major: '3.x'
     version-server: '7.6'
-    version-common: '7.5'
+    version-common: '7.6'
     name_platform: 'Java'
     name-sdk: Java SDK
-    sdk_api: '3.5'
+    sdk_api: '3.6'
     sdk-api-link: https://docs.couchbase.com/sdk-api/couchbase-java-client/
     sdk-gh-link: https://github.com/couchbase/couchbase-jvm-clients/
-    
