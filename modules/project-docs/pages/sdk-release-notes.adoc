@@ -4,7 +4,8 @@
 :page-topic-type: project-doc
 :page-toclevels: 2
 :page-partial:
-:page-aliases: relnotes-java-sdk,ROOT:sdk-release-notes,ROOT:relnotes-java-sdk,ROOT:release-notes,ROOT:download-links,server:sdks:java-2.2/download-links
+:page-aliases: relnotes-java-sdk,ROOT:sdk-release-notes,ROOT:relnotes-java-sdk,ROOT:release-notes,ROOT:download-links
+// ,server:sdks:java-2.2/download-links
 
 [abstract]
 {description}
