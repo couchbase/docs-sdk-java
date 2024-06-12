@@ -24,6 +24,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.Period;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.couchbase.client.core.error.CasMismatchException;
 import com.couchbase.client.core.error.CouchbaseException;
@@ -46,6 +47,9 @@ import com.couchbase.client.java.kv.ReplicateTo;
 // end::imports[]
 
 import com.couchbase.client.core.error.FeatureNotAvailableException;
+import com.couchbase.client.java.kv.ScanOptions;
+import com.couchbase.client.java.kv.ScanResult;
+import com.couchbase.client.java.kv.ScanType;
 
 public class KvOperations {
 
@@ -257,6 +261,61 @@ public class KvOperations {
 
       System.out.println("cas value: " + result.cas());
     }
+
+    try {
+      System.out.println("\nExample: [range-scan-range]");
+
+      // tag::rangeScanAllDocuments[]
+      Stream<ScanResult> results = collection.scan(
+          ScanType.rangeScan(null, null) // <1>
+      );
+      results.forEach(System.out::println);
+      // end::rangeScanAllDocuments[]
+    } catch (FeatureNotAvailableException e){
+      System.out.println("Couldn't run range-scan-range example: " + e);
+    }
+
+    try {
+      System.out.println("\nExample: [range-scan-prefix]");
+
+      // tag::rangeScanPrefix[]
+      Stream<ScanResult> results = collection.scan(
+          ScanType.prefixScan("alice::") // <1>
+      );
+      results.forEach(System.out::println);
+      // end::rangeScanPrefix[]
+    } catch (FeatureNotAvailableException e){
+      System.out.println("Couldn't run range-scan-prefix example: " + e);
+    }
+
+    try {
+      System.out.println("\nExample: [range-scan-sample]");
+
+      // tag::rangeScanSample[]
+      Stream<ScanResult> results = collection.scan(
+          ScanType.samplingScan(100) // <1>
+      );
+      results.forEach(System.out::println);
+      // end::rangeScanSample[]
+    } catch (FeatureNotAvailableException e){
+      System.out.println("Couldn't run range-scan-sample example: " + e);
+    }
+
+    try {
+      System.out.println("\nExample: [range-scan-ids-only]");
+
+      // tag::rangeScanAllDocumentIds[]
+      Stream<ScanResult> results = collection.scan(
+          ScanType.rangeScan(null, null),
+          ScanOptions.scanOptions()
+              .idsOnly(true)
+      );
+      results.forEach(it -> System.out.println(it.id())); // <1>
+      // end::rangeScanAllDocumentIds[]
+    } catch (FeatureNotAvailableException e){
+      System.out.println("Couldn't run range-scan-ids-only example: " + e);
+    }
+
 
     // Cleans up example data from the _default collection
     // to avoid errors when running the sample code (mainly for `insert` examples).

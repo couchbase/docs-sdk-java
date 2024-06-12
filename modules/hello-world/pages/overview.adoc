@@ -1,9 +1,9 @@
-= Couchbase Java SDK 3.5
+= Couchbase Java SDK 3.6
 :page-layout: landing-page-top-level-sdk
 :page-role: tiles
 :!sectids:
 
-= Couchbase Java SDK 3.5
+= Couchbase Java SDK 3.6
 
 [source,java]
 ----

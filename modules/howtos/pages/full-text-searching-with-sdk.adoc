@@ -2,12 +2,6 @@
 :description: You can use the Full Text Search service (FTS) to create queryable full-text indexes in Couchbase Server.
 :page-topic-type: howto
 :page-aliases: ROOT:search-query, ROOT:full-text-searching-with-sdk.adoc
-:lang: Java
-:version: 3.2.1
-:example-source: 3.2@java-sdk:howtos:example$Search.java
-:example-source-lang: java
-:page-pagination: full
-
 
 [abstract]
 {description}
@@ -114,7 +108,7 @@ The FTS APIs exist at both the `Cluster` and `Scope` levels.
 
 This is because FTS supports, as of Couchbase Server 7.6, a new form of "scoped index" in addition to the traditional "global index".
 
-It's important to use the `Cluster.searchQuery()` / `Cluster.search()` for global indexes, and `Scope.searchQuery()` / `Scope.search()` for scoped indexes.
+It's important to use the `Cluster.searchQuery()` or `Cluster.search()` for global indexes, and `Scope.search()` for scoped indexes.
 
 == Vector Search
 As of Couchbase Server 7.6, the FTS service supports vector search in additional to traditional full text search queries.
