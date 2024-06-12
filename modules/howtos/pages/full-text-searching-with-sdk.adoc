@@ -120,6 +120,17 @@ It's important to use the `Cluster.searchQuery()` / `Cluster.search()` for globa
 As of Couchbase Server 7.6, the FTS service supports vector search in additional to traditional full text search queries.
 // todo link to the server docs when available
 
+////
+Vector Search builds on Couchbase Server’s Search Service to provide vector index support for Retrieval Augmented Generation (RAG) with an existing Large Language Model (LLM).
+
+Vector Search adds a new index type to the Search Service to support AI application development, known as a Vector Search index. Using Vector Search and Couchbase Server, you can develop applications with an existing LLM while giving context and up-to-date information from your own data.
+
+For more information about Vector Search, see Use Vector Search for AI Applications.
+
+https://preview.docs-test.couchbase.com/sarah-AV-68571/server/current/vector-search/vector-search.html
+////
+
+
 === Examples
 ==== Single vector query
 In this first example we are performing a single vector query:
