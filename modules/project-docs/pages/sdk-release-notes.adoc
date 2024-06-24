@@ -39,6 +39,38 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 ////
 
 
+
+=== Version 3.7.0 (15 June 2024)
+
+This is the first release of 3.7 series.
+
+https://packages.couchbase.com/clients/java/3.7.0/Couchbase-Java-Client-3.7.0.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.0/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.7.0/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.3**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.5.0             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.5.0             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.7.0             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.7.0             | Micrometer 1.10.9          | Volatile
+|=======================
+
+==== Improvements
+* https://issues.couchbase.com/browse/JCBC-2149[JCBC-2149]:
+Adds support for base64-encoded vectors in `VectorQuery`.
+
+
+
 == Java SDK 3.6 Releases
 
 === Version 3.6.2 (29 April 2024)
@@ -68,18 +100,18 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 ==== Improvements
 
-* https://issues.couchbase.com/browse/JVMCBC-1508[JVMCBC-1508]
+* https://issues.couchbase.com/browse/JVMCBC-1508[JVMCBC-1508]:
 Upgraded Netty dependency.
-* https://issues.couchbase.com/browse/JVMCBC-1509[JVMCBC-1509]
+* https://issues.couchbase.com/browse/JVMCBC-1509[JVMCBC-1509]:
 Upgraded Jackson dependency.
-* https://issues.couchbase.com/browse/JCBC-2135[JCBC-2135]
+* https://issues.couchbase.com/browse/JCBC-2135[JCBC-2135]:
 Added binary support for transactions.
 
 ==== Bugfixes
 
-* https://issues.couchbase.com/browse/JVMCBC-1506[JVMCBC-1506]
+* https://issues.couchbase.com/browse/JVMCBC-1506[JVMCBC-1506]:
 Reduced the rate at which messages appear in the server's `http_access.log` when a user provides valid credentials but does not have permission to access the bucket.
-* https://issues.couchbase.com/browse/JVMCBC-1512[JVMCBC-1512]
+* https://issues.couchbase.com/browse/JVMCBC-1512[JVMCBC-1512]:
 Updated Service in Cluster Configuration if only the port is changed.
 
 
@@ -110,16 +142,16 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 ==== Improvements
 
-* https://issues.couchbase.com/browse/JVMCBC-1477[JVMCBC-1477]
+* https://issues.couchbase.com/browse/JVMCBC-1477[JVMCBC-1477]:
 Reduced the rate at which messages appear in the server’s `http_access.log` when invalid credentials are provided resulting in 401 errors.  
 Issues resulting in 403 errors will be handled in a future release.
-* https://issues.couchbase.com/browse/JVMCBC-1498[JVMCBC-1498]
+* https://issues.couchbase.com/browse/JVMCBC-1498[JVMCBC-1498]:
 The fields of a `SearchRow` from a Full-Text Search result are now included in the output of `SearchRow.toString()`.
-* https://issues.couchbase.com/browse/JVMCBC-1499[JVMCBC-1499]
+* https://issues.couchbase.com/browse/JVMCBC-1499[JVMCBC-1499]:
 Disabled DNS SRV caching. The SDK now responds quicker to DNS changes in dynamic environments like Kubernetes.
-* https://issues.couchbase.com/browse/JVMCBC-1500[JVMCBC-1500]
+* https://issues.couchbase.com/browse/JVMCBC-1500[JVMCBC-1500]:
 Added `EventingFunctionLanguageCompatibility.VERSION_7_2_0`.
-* https://issues.couchbase.com/browse/JVMCBC-1504[JVMCBC-1504]
+* https://issues.couchbase.com/browse/JVMCBC-1504[JVMCBC-1504]:
 Deprecated static methods that return new config builders, like `TimeoutConfig.builder()` and `TimeoutConfig.kvTimeout(Duration)`.
 See the following example for the recommended way to configure client settings:
 +
@@ -162,33 +194,33 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 ==== Improvements
 
-* https://issues.couchbase.com/browse/JCBC-2116[JCBC-2116]
+* https://issues.couchbase.com/browse/JCBC-2116[JCBC-2116]:
 Added support for vector search, a new feature in Couchbase Server 7.6.
 This API is currently at `@Stability.Uncommitted` level.
-* https://issues.couchbase.com/browse/JCBC-2131[JCBC-2131]
+* https://issues.couchbase.com/browse/JCBC-2131[JCBC-2131]:
 `Scope.searchIndexes()` is now part of the committed public API.
-* https://issues.couchbase.com/browse/JVMCBC-1487[JVMCBC-1487]
+* https://issues.couchbase.com/browse/JVMCBC-1487[JVMCBC-1487]:
 Upgraded reactor-core from 3.5.8 to 3.6.3.
-* https://issues.couchbase.com/browse/JVMCBC-1488[JVMCBC-1488]
+* https://issues.couchbase.com/browse/JVMCBC-1488[JVMCBC-1488]:
 Upgraded Jackson from 2.16.0 to 2.16.1.
-* https://issues.couchbase.com/browse/JVMCBC-1489[JVMCBC-1489]
+* https://issues.couchbase.com/browse/JVMCBC-1489[JVMCBC-1489]:
 Upgraded Netty from 4.1.101 to 4.1.107.
-* https://issues.couchbase.com/browse/JVMCBC-1491[JVMCBC-1491]
+* https://issues.couchbase.com/browse/JVMCBC-1491[JVMCBC-1491]:
 `Collection.scan()` methods are now part of the SDK's committed public API.
 These methods do range-scans of documentIds.
 This feature requires Couchbase Server 7.6 or later.
-* https://issues.couchbase.com/browse/JVMCBC-1493[JVMCBC-1493]
+* https://issues.couchbase.com/browse/JVMCBC-1493[JVMCBC-1493]:
 `Collection.lookupInAnyReplica()` and `Collection.lookupInAllReplicas()` are now part of the SDK’s committed public API.
 These methods do sub-document lookups against replicas.
 This feature requires Couchbase Server 7.6 or later.
 
 ==== Bugfixes
 
-* https://issues.couchbase.com/browse/JCBC-2125[JCBC-2125]
+* https://issues.couchbase.com/browse/JCBC-2125[JCBC-2125]:
 Fixed an issue with `ScopeSearchIndexManager`, `disallowQuerying`, and `freezePlan` methods, which were not waiting for the server result before returning in the blocking API.
-* https://issues.couchbase.com/browse/JVMCBC-1480[JVMCBC-1480]
+* https://issues.couchbase.com/browse/JVMCBC-1480[JVMCBC-1480]:
 `couchbase2:` should use exponential backoff when bypassing `BestEffortRetryStrategy`.
-* https://issues.couchbase.com/browse/JVMCBC-1494[JVMCBC-1494]
+* https://issues.couchbase.com/browse/JVMCBC-1494[JVMCBC-1494]:
 If you specify `min=1` for a Full-Text Search disjunction query, the SDK now always sends the value to the server.
 Previously, the SDK assumed `1` was the default value, and omitted the parameter in that case.
 
@@ -223,23 +255,23 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 ==== Improvements
 
-* https://issues.couchbase.com/browse/JVMCBC-1460[JVMCBC-1460]
+* https://issues.couchbase.com/browse/JVMCBC-1460[JVMCBC-1460]:
 `couchbase2` now supports compressing data between the SDK and the server.
-* https://issues.couchbase.com/browse/JVMCBC-1464[JVMCBC-1464]
+* https://issues.couchbase.com/browse/JVMCBC-1464[JVMCBC-1464]:
 The `metrics-opentelemetry` package is now aligned with the same `OpenTelemetry` version as `tracing-opentelemetry`.
-* https://issues.couchbase.com/browse/JVMCBC-1468[JVMCBC-1468]
+* https://issues.couchbase.com/browse/JVMCBC-1468[JVMCBC-1468]:
 `Cluster.connect` now validates that connection strings using the `couchbase2` scheme have exactly one host.
 (Previously, hosts after the first were silently ignored.).
-* https://issues.couchbase.com/browse/JVMCBC-1470[JVMCBC-1470]
+* https://issues.couchbase.com/browse/JVMCBC-1470[JVMCBC-1470]:
 Improved support for Full Text Search in `couchbase2` mode.
-* https://issues.couchbase.com/browse/JVMCBC-1472[JVMCBC-1472]
+* https://issues.couchbase.com/browse/JVMCBC-1472[JVMCBC-1472]:
 `couchbase2` errors will now include diagnostic information when CNG is running with the `--debug` flag.
-* https://issues.couchbase.com/browse/JCBC-2117[JCBC-2117]
+* https://issues.couchbase.com/browse/JCBC-2117[JCBC-2117]:
 Support added for `maxTTL` value of -1 for collection "no expiry".
 
 ==== Bugfixes
 
-* https://issues.couchbase.com/browse/JVMCBC-1475[JVMCBC-1475]
+* https://issues.couchbase.com/browse/JVMCBC-1475[JVMCBC-1475:
 Accessing the terms of a `TermFacet` result no longer throws `NullPointerException` if the target field is absent from all documents.
 
 

@@ -32,7 +32,7 @@ see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section f
 We recommend running the latest Java LTS version (i.e. at the time of writing JDK 21) with the highest patch version available.
 
 Couchbase publishes all stable artifacts to https://central.sonatype.com/namespace/com.couchbase.client[Maven Central].
-The latest version (as of April 2024) is https://central.sonatype.com/artifact/com.couchbase.client/java-client/3.6.2/jar[3.6.2].
+The latest version (as of June 2024) is https://central.sonatype.com/artifact/com.couchbase.client/java-client/{sdk_current_version}/jar[{sdk_current_version}].
 
 You can use your favorite dependency management tool to install the SDK.
 
@@ -44,12 +44,12 @@ Maven::
 --
 For https://maven.apache.org[Maven], you can insert the following into the dependencies section of your project's `pom.xml` file:
 
-[source,xml]
+[source,xml,subs="+attributes"]
 ----
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.6.2</version>
+        <version>{sdk_current_version}</version>
     </dependency>
 ----
 Refer to the https://maven.apache.org/guides/introduction/introduction-to-the-pom.html/[Maven Documentation] for more information regarding the structure of the `pom.xml` file.
@@ -59,9 +59,9 @@ Gradle::
 --
 For https://gradle.org/[Gradle], you can use:
 
-[source,groovy]
+[source,groovy,subs="+attributes"]
 ----
-implementation 'com.couchbase.client:java-client:3.6.2'
+implementation 'com.couchbase.client:java-client:{sdk_current_version}'
 ----
 --
 ====
