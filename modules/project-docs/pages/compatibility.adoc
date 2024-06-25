@@ -65,7 +65,7 @@ The {name-sdk} is tested and supported on the following OSs and platforms:
 === Mac OS X
 
 The current and previous two releases of OS X.
-At time of writing (March 2024): 14 (Sonoma), 13 (Ventura), and 12 (Monterey).
+At time of writing (June 2024): 14 (Sonoma), 13 (Ventura), and 12 (Monterey).
 M1 ARM  architecture is fully supported in the {name-sdk}.
 
 [discrete]
