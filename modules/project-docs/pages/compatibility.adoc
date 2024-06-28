@@ -10,7 +10,7 @@ Plus notes on Cloud, networks, and AWS Lambda.
 {description}
 
 
-The 3.6 SDK requires Java 8 or later to be installed, _Java 21 is recommended_.
+The 3.7 SDK requires Java 8 or later to be installed, _Java 21 is recommended_.
 
 
 
@@ -140,7 +140,7 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 .Recommended SDK per Server Version Matrix
 [#table_sdk_versions]
 |===
-| | 3.3 | 3.4, 3.5 | 3.6
+| | 3.3 | 3.4, 3.5 | 3.6, 3.7
 
 | *Server 7.0 - 7.2*
 | *✔*
