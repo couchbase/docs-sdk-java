@@ -38,11 +38,52 @@ echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/metrics-micrometer/pom.xml 
 ////
 
+=== Version 3.7.1 (23 July 2024)
+
+This is the first maintenance release of the 3.7 series.
+
+https://packages.couchbase.com/clients/java/3.7.1/Couchbase-Java-Client-3.7.1.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.1/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.7.1/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+* io.projectreactor:**reactor-core:3.6.3**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.5.1             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.5.1             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.7.1             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.7.1             | Micrometer 1.10.9          | Volatile
+|=======================
+
+==== Improvements
+* https://issues.couchbase.com/browse/JVMCBC-1523[JVMCBC-1523]:
+Upgrade org.iq80.snappy from 0.4 to 0.5.
+* https://issues.couchbase.com/browse/JCBC-1528[JCBC-1528]:
+Provide default values for tags for Micrometer.
+* https://issues.couchbase.com/browse/JCBC-1532[JCBC-1532]:
+Upgrade Jackson from 2.17.0 to 2.17.2.
+* https://issues.couchbase.com/browse/JVMCBC-1540[JVMCBC-1540]:
+This release improves compatibility with Spring Data Couchbase by reversing an internal API change present in Couchbase Java SDK 3.6.2 and 3.7.0 that prevented upgrading to the latest Couchbase SDK independently of the Spring Data Couchbase version.
+* https://issues.couchbase.com/browse/JVMCBC-1544[JVMCBC-1544]:
+An upsertIndex() call will now prevent vector indexes being created on servers before 7.6.0, as these server versions do not support these index types.
+
+==== Bugfixes
+* https://issues.couchbase.com/browse/JVMCBC-1530[JVMCBC-1530]:
+The class `com.couchbase.client.core.error.QueryException` is now deprecated. No GA version of the SDK has ever thrown this exception; it is remnant from the early days of SDK 3 beta development.
+* https://issues.couchbase.com/browse/JVMCBC-1534[JVMCBC-1534]:
+Fix possible DURABILITY_INVALID_LEVEL if Durability.NONE is used with transactions.
 
 
 === Version 3.7.0 (15 June 2024)
 
-This is the first release of 3.7 series.
+This is the first release of the 3.7 series.
 
 https://packages.couchbase.com/clients/java/3.7.0/Couchbase-Java-Client-3.7.0.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.0/index.html[API Reference] |
