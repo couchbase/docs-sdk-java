@@ -68,7 +68,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 Upgraded `org.iq80.snappy` from 0.4 to 0.5.
 * https://issues.couchbase.com/browse/JCBC-1528[JCBC-1528]:
 Provided default values for tags for Micrometer.
-* https://issues.couchbase.com/browse/JCBC-1532[JCBC-1532]:
+* https://issues.couchbase.com/browse/JVMCBC-1532[JVMCBC-1532]:
 Upgraded Jackson from 2.17.0 to 2.17.2.
 * https://issues.couchbase.com/browse/JVMCBC-1540[JVMCBC-1540]:
 Improved compatibility with Spring Data Couchbase by reversing an internal API change present in Couchbase Java SDK 3.6.2 and 3.7.0.
