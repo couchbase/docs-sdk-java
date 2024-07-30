@@ -221,6 +221,7 @@ https://docs.couchbase.com/sdk-api/couchbase-java-client-3.6.0/index.html[API Re
 http://docs.couchbase.com/sdk-api/couchbase-core-io-2.6.0/[Core API Reference]
 
 The supported and tested dependencies for this release are:
+
 * io.projectreactor:**reactor-core:3.6.3**
 * org.reactivestreams:**reactive-streams:1.0.4**
 
