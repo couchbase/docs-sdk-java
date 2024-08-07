@@ -1,3 +1,5 @@
+* xref:hello-world:overview.adoc[Couchbase {name_platform} SDK Overview]
+
 .Getting Started
 * xref:hello-world:start-using-sdk.adoc[]
 * xref:howtos:kv-operations.adoc[]
