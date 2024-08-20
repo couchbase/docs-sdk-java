@@ -107,4 +107,4 @@ include::{version-common}@sdk:shared:partial$sample-application.adoc[tag=rest-ap
 You can explore the REST API here in read-only mode, or once you are running the application, at the `/apidocs` endpoint.
 
 // swagger_ui::https://raw.githubusercontent.com/couchbaselabs/{travel-sample-git-project}/HEAD/try-cb-dotnet/wwwroot/swagger.json[]
-swagger_ui::https://raw.githubusercontent.com/couchbaselabs/try-cb-java/swagger-addon/swagger.json[]
+swagger_ui::https://raw.githubusercontent.com/couchbaselabs/try-cb-java/7.0/swagger.json[]
