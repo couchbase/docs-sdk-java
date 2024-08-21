@@ -38,6 +38,55 @@ echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/metrics-micrometer/pom.xml 
 ////
 
+=== Version 3.7.2 (13 August 2024)
+
+This is the second maintenance release of the 3.7 series.
+
+https://packages.couchbase.com/clients/java/3.7.2/Couchbase-Java-Client-3.7.2.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.2/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-3.7.2/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.3**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.5.1             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.5.1             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.7.1             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.7.1             | Micrometer 1.10.9          | Volatile
+|=======================
+
+==== Improvements
+* https://issues.couchbase.com/browse/JVMCBC-1547[JVMCBC-1547]:
+Update DnsJava to 3.6.0.
+* https://issues.couchbase.com/browse/JCBC-2157[JCBC-2157]:
+Transaction settings are now configurable using the same callback pattern used by other environment settings. Here's an example of the new syntax:
+[source,name-of-language]
+----
+Cluster cluster = Cluster.connect(
+  connectionString,
+  ClusterOptions.clusterOptions(username, password)
+    .environment(env -> env
+      .transactionsConfig(txn -> txn
+        .durabilityLevel(DurabilityLevel.MAJORITY_AND_PERSIST_TO_ACTIVE)
+        .metadataCollection(someKeyspace)
+        .queryConfig(query -> query.scanConsistency(QueryScanConsistency.REQUEST_PLUS))
+        .cleanupConfig(cleanup -> cleanup
+          .cleanupWindow(Duration.ofSeconds(10))
+          .addCollection(someOtherKeyspace))
+      )
+    )
+);
+----
+
+
 === Version 3.7.1 (23 July 2024)
 
 This is the first maintenance release of the 3.7 series.
