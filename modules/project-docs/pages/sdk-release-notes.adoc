@@ -38,6 +38,58 @@ echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/metrics-micrometer/pom.xml 
 ////
 
+=== Version 3.7.2 (13 August 2024)
+
+This is the second maintenance release of the 3.7 series.
+
+https://packages.couchbase.com/clients/java/3.7.2/Couchbase-Java-Client-3.7.2.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.2/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.7.2/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.3**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.5.1             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.5.1             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.7.1             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.7.1             | Micrometer 1.10.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://issues.couchbase.com/browse/JVMCBC-1547[JVMCBC-1547]:
+Updated DnsJava to 3.6.0.
+* https://issues.couchbase.com/browse/JCBC-2157[JCBC-2157]:
+Transaction settings are now configurable using the same callback pattern used by other environment settings.
+Here's an example of the new syntax:
++
+[source,java]
+----
+Cluster cluster = Cluster.connect(
+  connectionString,
+  ClusterOptions.clusterOptions(username, password)
+    .environment(env -> env
+      .transactionsConfig(txn -> txn
+        .durabilityLevel(DurabilityLevel.MAJORITY_AND_PERSIST_TO_ACTIVE)
+        .metadataCollection(someKeyspace)
+        .queryConfig(query -> query.scanConsistency(QueryScanConsistency.REQUEST_PLUS))
+        .cleanupConfig(cleanup -> cleanup
+          .cleanupWindow(Duration.ofSeconds(10))
+          .addCollection(someOtherKeyspace))
+      )
+    )
+);
+----
+
+
 === Version 3.7.1 (23 July 2024)
 
 This is the first maintenance release of the 3.7 series.
@@ -64,6 +116,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 |=======================
 
 ==== Improvements
+
 * https://issues.couchbase.com/browse/JVMCBC-1523[JVMCBC-1523]:
 Upgraded `org.iq80.snappy` from 0.4 to 0.5.
 * https://issues.couchbase.com/browse/JCBC-1528[JCBC-1528]:
@@ -77,9 +130,10 @@ This API change prevented upgrading to the latest Couchbase SDK, independently o
 The `upsertIndex()` call now prevents vector indexes from being created on server versions before version 7.6.0, which do not support these index types.
 
 ==== Bugfixes
+
 * https://issues.couchbase.com/browse/JVMCBC-1530[JVMCBC-1530]:
 Deprecated the `com.couchbase.client.core.error.QueryException` class.
-This exception is from SDK 3's beta development, and has never been thrown in a GA version of a Couchbase SDK.
+This exception is from the SDK 3 API's beta development, and has never been thrown in a GA version of a Couchbase SDK.
 * https://issues.couchbase.com/browse/JVMCBC-1534[JVMCBC-1534]:
 Fixed possible `DURABILITY_INVALID_LEVEL` if `Durability.NONE` is used with transactions.
 
@@ -116,6 +170,40 @@ Adds support for base64-encoded vectors in `VectorQuery`.
 
 
 == Java SDK 3.6 Releases
+
+=== Version 3.6.3 (19 August 2024)
+
+This is a regular maintenance release.
+
+https://packages.couchbase.com/clients/java/3.6.3/Couchbase-Java-Client-3.6.3.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.6.3/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.6.3/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.3**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.4.2             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.4.2             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.6.2             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.6.2             | Micrometer 1.10.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://issues.couchbase.com/browse/JVMCBC-1540[JVMCBC-1540]:
+This release improves compatibility with Spring Data Couchbase by reversing an internal API change present in Couchbase Java SDK 3.6.2 and 3.7.0,
+that prevented upgrading to the latest Couchbase SDK independently of the Spring Data Couchbase version.
+* https://issues.couchbase.com/browse/JVMCBC-1532[JVMCBC-1532], https://issues.couchbase.com/browse/JCBC-2160[JCBC-2160]:
+Upgraded Jackson to 2.17.2.
+
 
 === Version 3.6.2 (29 April 2024)
 
