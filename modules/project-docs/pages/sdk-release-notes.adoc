@@ -44,7 +44,7 @@ This is the second maintenance release of the 3.7 series.
 
 https://packages.couchbase.com/clients/java/3.7.2/Couchbase-Java-Client-3.7.2.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.2/index.html[API Reference] |
-http://docs.couchbase.com/sdk-api/couchbase-core-io-2.7.2/[Core API Reference]
+http://docs.couchbase.com/sdk-api/couchbase-core-io-3.7.2/[Core API Reference]
 
 The supported and tested dependencies for this release are:
 
