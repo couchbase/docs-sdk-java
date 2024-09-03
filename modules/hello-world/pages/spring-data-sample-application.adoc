@@ -54,7 +54,7 @@ public interface UserRepository extends CouchbaseRepository<User, String>, Dynam
 ----
 
 Using the Spring Data Couchbase repository allows us to reduce boilerplate in our code and add a layer of abstraction to our
-database interactions.
+cluster interactions.
 
 Creating a user shows the typical security concerns, with salted password hashes, as well as the advantages of using
 Spring Data Couchbase to `save` the username into the database using the `userRepository` we mentioned previously:
