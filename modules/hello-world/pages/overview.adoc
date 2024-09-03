@@ -10,7 +10,7 @@
 include::hello-world:example$Overview.java[tag=overview,indent=0]
 ----
 
-The Couchbase Java client allows applications to access a Couchbase database.
+The Couchbase Java client allows applications to access a Couchbase cluster.
 It offers synchronous APIs as well as reactive and asynchronous equivalents to maximize flexibility and performance. +
 
 {empty} +
