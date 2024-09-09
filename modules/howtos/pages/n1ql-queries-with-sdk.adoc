@@ -29,7 +29,7 @@ Couchbase Capella Sample::
 +
 --
 These examples requires the Travel Sample Bucket.
-The Couchbase Capella free trial version comes with this bucket, and its Query indexes, loaded and ready.
+The Couchbase Capella free tier version comes with this bucket, and its Query indexes, loaded and ready.
 
 [source,java]
 ----
