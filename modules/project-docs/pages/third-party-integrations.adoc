@@ -16,7 +16,7 @@ include::{version-common}@sdk:shared:partial$integrations.adoc[tag=official]
 
 The Couchbase Java SDK is a first class citizen in the https://spring.io/projects/spring-data-couchbase[Spring Data] world, and there are many examples of using the SDK with https://blog.couchbase.com/couchbase-spring-boot-spring-data/[Spring Boot] and Spring Data (and Spring Data JPA).
 
-Couchbase also supports integrating with xref:3.2@spark-connector:ROOT:java-api.adoc[Spark].
+Couchbase also supports integrating with xref:3.5@spark-connector:ROOT:java-api.adoc[Spark].
 
 
 include::{version-common}@sdk:shared:partial$integrations.adoc[tag=important]
