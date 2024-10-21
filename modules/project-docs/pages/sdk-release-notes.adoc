@@ -35,14 +35,47 @@ grep ' <reactive-streams.version>' $src/pom.xml
 echo tracing-opentelemetry ; grep '<version>' $src/tracing-opentelemetry/pom.xml | head -2 | tail -1 ; grep '<opentelemetry.version>' $src/pom.xml 
 echo tracing-opentracing ; grep '<version>' $src/tracing-opentracing/pom.xml | head -2 | tail -1 ; grep '<opentracing.version>' $src/tracing-opentracing/pom.xml
 echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml | head -2 | tail -1 ; grep '<opentelemetry.version>' $src/pom.xml 
-echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/pom.xml 
+echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/micrometer/pom.xml 
 ////
 
+=== Version 3.7.4 (08 October 2024)
+
+This is the fourth maintenance release of the 3.7 series.
+
+https://packages.couchbase.com/clients/java/3.7.4/Couchbase-Java-Client-3.7.4.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.4/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-3.7.4/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.5.4             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.5.4             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.7.4             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.7.4             | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Bug Fixes
+* https://jira.issues.couchbase.com/browse/JVMCBC-1570[JVMCBC-1570]:
+The SDK was producing an incorrect partition map in `CouchbaseBucketConfig`, for buckets with >= 2 replicas.
+This has now been fixed.
+
+==== Improvements
+* https://jira.issues.couchbase.com/browse/JVMCBC-1573[JVMCBC-1573]:
+`ExtParallelUnstaging` was producing more threads than required, leading to OOM when many concurrent transactions were executed.
+This has been rewritten to produce only the necessary number of threads are produced for each transaction.
 
 
-=== Version 3.7.3 (23 September 2024)
+=== Version 3.7.4 (23 September 2024)
 
-This is the third  maintenance release of the 3.7 series.
+This is the third maintenance release of the 3.7 series.
 
 https://packages.couchbase.com/clients/java/3.7.1/Couchbase-Java-Client-3.7.3.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.3/index.html[API Reference] |
