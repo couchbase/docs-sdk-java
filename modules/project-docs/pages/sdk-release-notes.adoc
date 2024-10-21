@@ -40,7 +40,7 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 
 === Version 3.7.4 (08 October 2024)
 
-This is the fourth  maintenance release of the 3.7 series.
+This is the fourth maintenance release of the 3.7 series.
 
 https://packages.couchbase.com/clients/java/3.7.4/Couchbase-Java-Client-3.7.4.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.4/index.html[API Reference] |
@@ -64,14 +64,18 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 ==== Bug Fixes
 * https://jira.issues.couchbase.com/browse/JVMCBC-1570[JVMCBC-1570]:
-SDK calculates incorrect replica for buckets with >= 2 replicas
+The SDK was producing an incorrect partition map in `CouchbaseBucketConfig`, for buckets with >= 2 replicas.
+This has now been fixed.
+
 ==== Improvements
 * https://jira.issues.couchbase.com/browse/JVMCBC-1573[JVMCBC-1573]:
-ExtParallelUnstaging leading to OOM when many concurrent transactions executed
+`ExtParallelUnstaging` was producing more threads than required, leading to OOM when many concurrent transactions were executed.
+This has been rewritten to produce only the necessary number of threads are produced for each transaction.
+
 
 === Version 3.7.4 (23 September 2024)
 
-This is the third  maintenance release of the 3.7 series.
+This is the third maintenance release of the 3.7 series.
 
 https://packages.couchbase.com/clients/java/3.7.1/Couchbase-Java-Client-3.7.3.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.3/index.html[API Reference] |
