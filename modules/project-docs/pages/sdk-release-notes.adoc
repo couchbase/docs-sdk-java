@@ -73,7 +73,7 @@ This has now been fixed.
 This has been rewritten to produce only the necessary number of threads are produced for each transaction.
 
 
-=== Version 3.7.4 (23 September 2024)
+=== Version 3.7.3 (23 September 2024)
 
 This is the third maintenance release of the 3.7 series.
 
