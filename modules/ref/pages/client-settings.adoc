@@ -311,7 +311,7 @@ For the other services, replace `kv` with `query`, `view`, `search`, `analytics`
 The properties of a circuit breaker are described below.
 
 enabled::
-Default: `true`
+Default: `false`
 +
 Enables or disables this circuit breaker.
 +
