@@ -21,6 +21,7 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 
 [#latest-release]
+
 == Java SDK 3.7 Releases
 
 We always recommend using the latest version of the SDK -- it contains all of the latest security patches and support for new and upcoming features.
@@ -31,12 +32,64 @@ any changes to expected behavior are noted in the release notes that follow.
 # get version numbers like this
 src=../couchbase-jvm-clients
 grep '<reactor.version>' $src/pom.xml
-grep ' <reactive-streams.version>' $src/pom.xml
+grep '<reactive-streams.version>' $src/pom.xml
 echo tracing-opentelemetry ; grep '<version>' $src/tracing-opentelemetry/pom.xml | head -2 | tail -1 ; grep '<opentelemetry.version>' $src/pom.xml 
 echo tracing-opentracing ; grep '<version>' $src/tracing-opentracing/pom.xml | head -2 | tail -1 ; grep '<opentracing.version>' $src/tracing-opentracing/pom.xml
 echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml | head -2 | tail -1 ; grep '<opentelemetry.version>' $src/pom.xml 
-echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/micrometer/pom.xml 
+echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/pom.xml 
 ////
+
+=== Version 3.7.5 (06 November 2024)
+
+This is the fifth  maintenance release of the 3.7 series.
+
+https://packages.couchbase.com/clients/java/3.7.5/Couchbase-Java-Client-3.7.5.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.5/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-3.7.5/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.5.5             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.5.5             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.7.5             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.7.5             | Micrometer 1.12.9          | Volatile
+|=======================
+
+
+==== Bug Fixes
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1572[JVMCBC-1572]:
+Due to a regression in 3.7.1, using a secure connection would cause `waitUntilReady()` to not wait, and would cause `ping()` to report failures even when nothing was wrong.
+The issue that caused these problems is now fixed.
+* https://jira.issues.couchbase.com/browse/JVMCBC-1577[JVMCBC-1577]:
+Due to a regression in 3.7.1, sometimes a request made shortly after calling `Cluster.connect()` would fail with a message that said the service is not available in the cluster, even if the service was actually available.
+This no longer happens.
+* https://jira.issues.couchbase.com/browse/JVMCBC-1579[JVMCBC-1579]:
+Deprecated `com.couchbase.client.core.node.NodeIdentifier` in favor of `com.couchbase.client.core.topology.NodeIdentifier`.
+
+==== Improvements
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1576[JVMCBC-1576]:
+Bumped `protobuf` version from `3.23.2` to `3.25.5`.
+* https://jira.issues.couchbase.com/browse/JCBC-2167[JCBC-2167]:
+When using the Reactive API, it’s now possible to specify the default Scheduler results are published on.
+The new `ClusterEnvironment.Builder.publishOnScheduler(Supplier<Scheduler>)` method takes a supplier that the SDK invokes every time you subscribe to a Mono/Flux.
+The supplier is invoked by the same thread that does the subscription.
++
+WARNING: This new configuration option is `volatile` API, meaning it could change without notice as we refine it based on your feedback.
+
+* https://jira.issues.couchbase.com/browse/JCBC-2169[JCBC-2169]:
+QueryMetrics now has a useful `.toString()` method.
+
 
 === Version 3.7.4 (08 October 2024)
 
@@ -47,6 +100,7 @@ https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.4/index.html[API Re
 http://docs.couchbase.com/sdk-api/couchbase-core-io-3.7.4/[Core API Reference]
 
 The supported and tested dependencies for this release are:
+
 * io.projectreactor:**reactor-core:3.6.9**
 * org.reactivestreams:**reactive-streams:1.0.4**
 
@@ -62,12 +116,15 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.7.4             | Micrometer 1.12.9          | Volatile
 |=======================
 
+
 ==== Bug Fixes
+
 * https://jira.issues.couchbase.com/browse/JVMCBC-1570[JVMCBC-1570]:
 The SDK was producing an incorrect partition map in `CouchbaseBucketConfig`, for buckets with >= 2 replicas.
 This has now been fixed.
 
 ==== Improvements
+
 * https://jira.issues.couchbase.com/browse/JVMCBC-1573[JVMCBC-1573]:
 `ExtParallelUnstaging` was producing more threads than required, leading to OOM when many concurrent transactions were executed.
 This has been rewritten to produce only the necessary number of threads are produced for each transaction.
