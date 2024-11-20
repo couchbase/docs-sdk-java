@@ -125,6 +125,10 @@ This has now been fixed.
 
 ==== Improvements
 
+* https://jira.issues.couchbase.com/browse/JCBC-2147[JCBC-2147]:
+New APIs added to allow getting KV documents from a preferred server group.
+This feature allows the implementation of network optimization when traffic cost between server groups is higher than in the local group.
+In this case the application might select preferred server group in the connection options, and later opt-in for local operations during replica reads. 
 * https://jira.issues.couchbase.com/browse/JVMCBC-1573[JVMCBC-1573]:
 `ExtParallelUnstaging` was producing more threads than required, leading to OOM when many concurrent transactions were executed.
 This has been rewritten to produce only the necessary number of threads are produced for each transaction.
