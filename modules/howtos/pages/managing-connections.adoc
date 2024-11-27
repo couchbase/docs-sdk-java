@@ -231,7 +231,32 @@ E.....@.@.............+....Z.'yZ..#........
 ====
 
 
+=== Choosing your Cipher Suite
 
+If you are on a version of TLS that allows a cipher suite weaker than your latest security policies allow, 
+you can specify which ciphers to use with 
+link:++https://docs.couchbase.com/sdk-api/couchbase-core-io/com/couchbase/client/core/env/SecurityConfig.Builder.html#ciphers(java.util.List++[`SecurityConfig.Builder (ciphers(List`].
+
+For example:
+
+[source,java]
+----
+Cluster cluster = Cluster.connect( connectionString, ClusterOptions.clusterOptions(username, password) .environment(env -> env .securityConfig(it -> it.ciphers(List.of( "MY_CIPHER", "TLS_ECDH_RSA_WITH_3DES_EDE_CBC_SHA",
+      "TLS_DHE_RSA_WITH_DES_CBC_SHA",
+      "TLS_RSA_WITH_DES_CBC_SHA",
+      "TLS_ECDHE_ECDSA_WITH_RC4_128_SHA",
+      "TLS_ECDHE_RSA_WITH_RC4_128_SHA",
+      "TLS_ECDH_ECDSA_WITH_RC4_128_SHA",
+      "TLS_ECDH_RSA_WITH_RC4_128_SHA",
+      "TLS_RSA_WITH_RC4_128_SHA",
+      "TLS_RSA_WITH_RC4_128_MD5"))) ) );
+----
+
+To check which ciphers are available on a self-managed Couchbase Server installation, run:
+[source.console]
+----
+/opt/couchbase/bin/couchbase-cli setting-security -c localhost -u Administrator -p password –get
+----
 
 
 == Cloud Native Gateway
