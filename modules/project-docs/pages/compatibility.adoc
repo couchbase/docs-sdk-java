@@ -206,7 +206,7 @@ For alignment of SDKs and new Server features, scroll down to the information be
 === Spring Data Couchbase Compatibility
 
 https://projects.spring.io/spring-data-couchbase/[Spring Data Couchbase^] uses the Java SDK underneath and as a result is also provides different compatibilities with Couchbase Server.
-The following table provides an overview.
+The following table provides an overview at the time of Java SDK {sdk_dot_minor}'s release:
 
 .Recommended Spring Data Couchbase per Server Version Matrix
 [#table_spring_versions]
