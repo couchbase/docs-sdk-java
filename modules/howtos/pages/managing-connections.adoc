@@ -42,15 +42,15 @@ The client fetches the full address list from the first node it is able to conta
 
 A `ClusterEnvironment` manages shared resources like thread pools, timers, and schedulers.
 It also holds the client settings.
-One way to customize the client's behavior is to build your own `ClusterEnvironment` with custom settings:
+You can customize the client's behavior by providing a callback that modifies a `ClusterEnvironment.Builder`:
 
 [source,java]
 ----
 include::example$ManagingConnections.java[tag=customenv,indent=0]
 ----
 
-TIP: If you create a `Cluster` without specifying a custom environment, the client creates a default environment used exclusively by that `Cluster`.
-This default `ClusterEnvironment` is managed completely by the Java SDK, and is automatically shut down when the associated `Cluster` is disconnected.
+TIP: When you customize the environment using a callback like in the above example, the client creates an environment that is managed completely by the Java SDK.
+This environment is automatically shut down when the associated `Cluster` is disconnected.
 
 [#connection-strings]
 == Connection Strings
@@ -95,18 +95,25 @@ If you created any `ClusterEnvironment` instances, call their `shutdown()` metho
 [#multiple-clusters]
 == Connecting to Multiple Clusters
 
-If a single application needs to connect to multiple Couchbase Server clusters, we recommend creating a single `ClusterEnvironment` and sharing it between the `Clusters`:
+If a single application needs to connect to multiple Couchbase Server clusters, it is possible to reduce the SDK's resource consumption by creating a single `ClusterEnvironment` and sharing it between the `Clusters`:
 
 [source,java]
 ----
 include::example$ManagingConnections.java[tag=shareclusterenvironment,indent=0]
 ----
 
-When you manually create a `ClusterEnvironment` like this, the SDK will not shut it down when you call `Cluster.disconnect()`.
-Instead you are responsible for shutting it down after disconnecting all clusters that share the environment.
+[WARNING]
+====
+If you manually create a `ClusterEnvironment`, be aware of these limitations:
 
-TIP: If you create a `Cluster` without specifying a custom environment, the client creates a default environment used exclusively by that `Cluster`.
-This default `ClusterEnvironment` is managed completely by the Java SDK, and is automatically shut down when the associated `Cluster` is disconnected.
+* A manually created `ClusterEnvironment` cannot be further customized by connection string parameters or Java system properties.
+
+* When you manually create a `ClusterEnvironment`, the SDK will not shut it down when you call `Cluster.disconnect()`.
+Instead, you are responsible for shutting it down after disconnecting all clusters that share the environment.
+====
+
+TIP: When connecting to a single cluster, it's usually better to customize the `ClusterEnvironment` by <<cluster-environment,providing a configuration callback>>.
+That way, the SDK automatically shuts down the environment for you, and you can customize the environment with connection string parameters and Java system properties.
 
 [#alternate-addresses]
 == Alternate Addresses and Custom Ports
