@@ -67,7 +67,7 @@ The full reference for the `ErrorContext` can be found <<#errorcontext,at the bo
 
  - A `GetRequest` timed out after `2500` ms.
  - The document in question had the ID `airline_10226` and we used the `travel-sample` bucket.
- - It has been retried 15 times and the reason was always `ENDPOINT_NOT_AVAILABLE`.
+ - It has been retried 14 times and the reason was always `ENDPOINT_NOT_AVAILABLE`.
 
 We'll discuss retry reasons later in this document, but `ENDPOINT_NOT_AVAILABLE` signals that we could not send the operation over the socket because it was not connected/available. 
 Since we now know that the socket had issues, we can inspect the logs to see if we find anything related:
