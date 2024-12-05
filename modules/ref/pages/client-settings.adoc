@@ -109,10 +109,10 @@ include::example$ClientSettingsExample.java[tag=client_settings_5,indent=0]
 [[security.enableTls]]
 Name: *Enabling Secure Connections*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `security.enableTls`
-| System{nbsp}Property   | `com.couchbase.env.security.enableTls`
+| Connection String      | `security.enableTls`
+| System Property        | `com.couchbase.env.security.enableTls`
 | Builder                | `env.securityConfig(it \-> it.enableTls(boolean))`
 | Default Value          | `false`
 |===
@@ -134,10 +134,10 @@ Please see the xref:howtos:managing-connections.adoc[Managing Connections] secti
 [[security.enableNativeTls]]
 Name: *Disabling Native TLS Provider*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `security.enableNativeTls`
-| System{nbsp}Property   | `com.couchbase.env.security.enableNativeTls`
+| Connection String      | `security.enableNativeTls`
+| System Property        | `com.couchbase.env.security.enableNativeTls`
 | Builder                | `env.securityConfig(it \-> it.enableNativeTls(boolean))`
 | Default Value          | `true`
 |===
@@ -149,10 +149,10 @@ If TLS is not enabled, then `security.enableNativeTls` has no effect.
 [[security.trustCertificate]]
 Name: *TLS Certificate Location*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `security.trustCertificate` (or `certpath`)
-| System{nbsp}Property   | `com.couchbase.env.security.trustCertificate`
+| Connection String      | `security.trustCertificate` (or `certpath`)
+| System Property        | `com.couchbase.env.security.trustCertificate`
 | Builder                | `env.securityConfig(it \-> it.trustCertificate(Path))`
 | Default Value          | N/A
 |===
@@ -163,10 +163,10 @@ See the xref:howtos:managing-connections.adoc#ssl[Connection Management] section
 [[security.trustCertificates]]
 Name: *TLS Certificates*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | N/A
-| System{nbsp}Property   | N/A
+| Connection String      | N/A
+| System Property        | N/A
 | Builder                | `env.securityConfig(it \-> it.trustCertificates(List<X509Certificate>))`
 | Default Value          | N/A
 |===
@@ -177,10 +177,10 @@ See the xref:howtos:managing-connections.adoc#ssl[Connection Management] section
 [[security.trustManagerFactory]]
 Name: *Custom TLS Trust Manager Factory*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | N/A
-| System{nbsp}Property   | N/A
+| Connection String      | N/A
+| System Property        | N/A
 | Builder                | `env.securityConfig(it \-> it.trustManagerFactory(TrustManagerFactory))`
 | Default Value          | N/A
 |===
@@ -204,10 +204,10 @@ include::example$ClientSettingsExample.java[tag=client_settings_6,indent=0]
 [[io.enableDnsSrv]]
 Name: *DNS SRV Enabled*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `io.enableDnsSrv`
-| System{nbsp}Property   | `com.couchbase.env.io.enableDnsSrv`
+| Connection String      | `io.enableDnsSrv`
+| System Property        | `com.couchbase.env.io.enableDnsSrv`
 | Builder                | `env.ioConfig(it \-> it.enableDnsSrv(boolean))`
 | Default Value          | `true`
 |===
@@ -218,10 +218,10 @@ See the xref:howtos:managing-connections.adoc#using-dns-srv-records[Connection M
 [[io.mutationTokensEnabled]]
 Name: *Mutation Tokens Enabled*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `io.mutationTokensEnabled`
-| System{nbsp}Property   | `com.couchbase.env.io.mutationTokensEnabled`
+| Connection String      | `io.mutationTokensEnabled`
+| System Property        | `com.couchbase.env.io.mutationTokensEnabled`
 | Builder                | `env.ioConfig(it \-> it.mutationTokensEnabled(boolean))`
 | Default Value          | `true`
 |===
@@ -232,10 +232,10 @@ Set this to `false` if you do not require these features and wish to avoid the a
 [[io.networkResolution]]
 Name: *Network Resolution*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `io.networkResolution` (or `network`)
-| System{nbsp}Property   | `com.couchbase.env.io.networkResolution`
+| Connection String      | `io.networkResolution` (or `network`)
+| System Property        | `com.couchbase.env.io.networkResolution`
 | Builder                | `env.ioConfig(it \-> it.networkResolution(boolean))`
 | Default Value          | `auto`
 |===
@@ -252,10 +252,10 @@ If you wish to override the heuristic, you can set this value to `default` if th
 [[io.captureTraffic]]
 Name: *Capture Traffic*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `io.captureTraffic`
-| System{nbsp}Property   | `com.couchbase.env.io.captureTraffic`
+| Connection String      | `io.captureTraffic`
+| System Property        | `com.couchbase.env.io.captureTraffic`
 | Builder                | `env.ioConfig(it \-> it.captureTraffic(ServiceType...))`
 | Default Value          | traffic capture is disabled
 |===
@@ -272,10 +272,10 @@ To see the traffic, you may need to configure your logging framework to include 
 [[io.enableTcpKeepAlives]]
 Name: *Socket Keepalive*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `io.enableTcpKeepAlives`
-| System{nbsp}Property   | `com.couchbase.env.io.enableTcpKeepAlives`
+| Connection String      | `io.enableTcpKeepAlives`
+| System Property        | `com.couchbase.env.io.enableTcpKeepAlives`
 | Builder                | `env.ioConfig(it \-> it.enableTcpKeepAlives(boolean))`
 | Default Value          | `true`
 |===
@@ -285,10 +285,10 @@ If enabled, the client periodically sends a TCP keepalive to the server to preve
 [[io.tcpKeepAliveTime]]
 Name: *Socket Keepalive Interval*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `io.tcpKeepAliveTime`
-| System{nbsp}Property   | `com.couchbase.env.io.tcpKeepAliveTime`
+| Connection String      | `io.tcpKeepAliveTime`
+| System Property        | `com.couchbase.env.io.tcpKeepAliveTime`
 | Builder                | `env.ioConfig(it \-> it.tcpKeepAliveTime(Duration))`
 | Default Value          | `60s`
 |===
@@ -302,10 +302,10 @@ On all other platforms, the OS-configured time is used (and you need to tune it 
 [[io.numKvConnections]]
 Name: *Key/Value Endpoints per Node*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `io.numKvConnections`
-| System{nbsp}Property   | `com.couchbase.env.io.numKvConnections`
+| Connection String      | `io.numKvConnections`
+| System Property        | `com.couchbase.env.io.numKvConnections`
 | Builder                | `env.ioConfig(it \-> it.numKvConnections(int))`
 | Default Value          | `1`
 |===
@@ -322,10 +322,10 @@ NOTE: xref:concept-docs:durability-replication-failure-considerations.adoc#synch
 [[io.maxHttpConnections]]
 Name: *Max HTTP Endpoints per Service per Node*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `io.maxHttpConnections`
-| System{nbsp}Property   | `com.couchbase.env.io.maxHttpConnections`
+| Connection String      | `io.maxHttpConnections`
+| System Property        | `com.couchbase.env.io.maxHttpConnections`
 | Builder                | `env.ioConfig(it \-> it.maxHttpConnections(int))`
 | Default Value          | `12`
 |===
@@ -336,10 +336,10 @@ This setting puts an upper bound on the number of HTTP connections in each pool.
 [[io.idleHttpConnectionTimeout]]
 Name: *Idle HTTP Connection Timeout*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `io.idleHttpConnectionTimeout`
-| System{nbsp}Property   | `com.couchbase.env.io.idleHttpConnectionTimeout`
+| Connection String      | `io.idleHttpConnectionTimeout`
+| System Property        | `com.couchbase.env.io.idleHttpConnectionTimeout`
 | Builder                | `env.ioConfig(it \-> it.idleHttpConnectionTimeout(Duration))`
 | Default Value          | `1s`
 |===
@@ -350,10 +350,10 @@ Durations longer than 1 second are not recommended, since Couchbase Server aggre
 [[io.configPollInterval]]
 Name: *Config Poll Interval*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `io.configPollInterval`
-| System{nbsp}Property   | `com.couchbase.env.io.configPollInterval`
+| Connection String      | `io.configPollInterval`
+| System Property        | `com.couchbase.env.io.configPollInterval`
 | Builder                | `env.ioConfig(it \-> it.configPollInterval(Duration))`
 | Default Value          | `2.5s`
 |===
@@ -452,10 +452,10 @@ include::example$ClientSettingsExample.java[tag=client_settings_8,indent=0]
 [[timeout.kvTimeout]]
 Name: *Key-Value Timeout*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `timeout.kvTimeout`
-| System{nbsp}Property   | `com.couchbase.env.timeout.kvTimeout`
+| Connection String      | `timeout.kvTimeout`
+| System Property        | `com.couchbase.env.timeout.kvTimeout`
 | Builder                | `env.timeoutConfig(it \-> it.kvTimeout(Duration))`
 | Default Value          | `2.5s` -- _but see TIP, below_
 |===
@@ -468,10 +468,10 @@ TIP: xref:concept-docs:durability-replication-failure-considerations.adoc#synchr
 [[timeout.kvDurableTimeout]]
 Name: *Key-Value Durable Operation Timeout*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `timeout.kvDurableTimeout`
-| System{nbsp}Property   | `com.couchbase.env.timeout.kvDurableTimeout`
+| Connection String      | `timeout.kvDurableTimeout`
+| System Property        | `com.couchbase.env.timeout.kvDurableTimeout`
 | Builder                | `env.timeoutConfig(it \-> it.kvDurableTimeout(Duration))`
 | Default Value          | `10s`
 |===
@@ -489,10 +489,10 @@ WARNING: The `kvDurableTimeout` property is not part of the stable API and may c
 [[timeout.viewTimeout]]
 Name: *View Timeout*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `timeout.viewTimeout`
-| System{nbsp}Property   | `com.couchbase.env.timeout.viewTimeout`
+| Connection String      | `timeout.viewTimeout`
+| System Property        | `com.couchbase.env.timeout.viewTimeout`
 | Builder                | `env.timeoutConfig(it \-> it.viewTimeout(Duration))`
 | Default Value          | `75s`
 |===
@@ -504,10 +504,10 @@ Also, if there is a node failure during the request the internal cluster timeout
 [[timeout.queryTimeout]]
 Name: *Query Timeout*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `timeout.queryTimeout`
-| System{nbsp}Property   | `com.couchbase.env.timeout.queryTimeout`
+| Connection String      | `timeout.queryTimeout`
+| System Property        | `com.couchbase.env.timeout.queryTimeout`
 | Builder                | `env.timeoutConfig(it \-> it.queryTimeout(Duration))`
 | Default Value          | `75s`
 |===
@@ -518,10 +518,10 @@ Note that it is set to such a high timeout compared to key/value since it can af
 [[timeout.searchTimeout]]
 Name: *Search Timeout*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `timeout.searchTimeout`
-| System{nbsp}Property   | `com.couchbase.env.timeout.searchTimeout`
+| Connection String      | `timeout.searchTimeout`
+| System Property        | `com.couchbase.env.timeout.searchTimeout`
 | Builder                | `env.timeoutConfig(it \-> it.searchTimeout(Duration))`
 | Default Value          | `75s`
 |===
@@ -532,10 +532,10 @@ Note that it is set to such a high timeout compared to key/value since it can af
 [[timeout.analyticsTimeout]]
 Name: *Analytics Timeout*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `timeout.analyticsTimeout`
-| System{nbsp}Property   | `com.couchbase.env.timeout.analyticsTimeout`
+| Connection String      | `timeout.analyticsTimeout`
+| System Property        | `com.couchbase.env.timeout.analyticsTimeout`
 | Builder                | `env.timeoutConfig(it \-> it.analyticsTimeout(Duration))`
 | Default Value          | `75s`
 |===
@@ -546,10 +546,10 @@ Note that it is set to such a high timeout compared to key/value since it can af
 [[timeout.connectTimeout]]
 Name: *Connect Timeout*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `timeout.connectTimeout`
-| System{nbsp}Property   | `com.couchbase.env.timeout.connectTimeout`
+| Connection String      | `timeout.connectTimeout`
+| System Property        | `com.couchbase.env.timeout.connectTimeout`
 | Builder                | `env.timeoutConfig(it \-> it.connectTimeout(Duration))`
 | Default Value          | `10s`
 |===
@@ -561,10 +561,10 @@ Connecting to the server should in practice not take longer than a second on a r
 [[timeout.disconnectTimeout]]
 Name: *Disconnect Timeout*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `timeout.disconnectTimeout`
-| System{nbsp}Property   | `com.couchbase.env.timeout.disconnectTimeout`
+| Connection String      | `timeout.disconnectTimeout`
+| System Property        | `com.couchbase.env.timeout.disconnectTimeout`
 | Builder                | `env.timeoutConfig(it \-> it.disconnectTimeout(Duration))`
 | Default{nbsp}Value     | `10s`
 |===
@@ -576,10 +576,10 @@ The default should provide enough time to drain all outstanding operations prope
 [[timeout.managementTimeout]]
 Name: *Management Timeout*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `timeout.managementTimeout`
-| System{nbsp}Property   | `com.couchbase.env.timeout.managementTimeout`
+| Connection String      | `timeout.managementTimeout`
+| System Property        | `com.couchbase.env.timeout.managementTimeout`
 | Builder                | `env.timeoutConfig(it \-> it.managementTimeout(Duration))`
 | Default Value          | `75s`
 |===
@@ -601,10 +601,10 @@ include::example$ClientSettingsExample.java[tag=client_settings_9,indent=0]
 [[compression.enable]]
 Name: *Enabling Compression*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `compression.enable`
-| System{nbsp}Property   | `com.couchbase.env.compression.enable`
+| Connection String      | `compression.enable`
+| System Property        | `com.couchbase.env.compression.enable`
 | Builder                | `env.compressionConfig(it \-> it.enable(boolean))`
 | Default Value          | `true`
 |===
@@ -615,10 +615,10 @@ If this is set to `false`, the other compression settings have no effect.
 [[compression.minSize]]
 Name: *Document Minimum Size*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `compression.minSize`
-| System{nbsp}Property   | `com.couchbase.env.compression.minSize`
+| Connection String      | `compression.minSize`
+| System Property        | `com.couchbase.env.compression.minSize`
 | Builder                | `env.compressionConfig(it \-> it.minSize(int))`
 | Default Value          | `32`
 |===
@@ -629,10 +629,10 @@ Documents smaller than this size are never compressed.
 [[compression.minRatio]]
 Name: *Document Minimum Compressibility*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | `compression.minRatio`
-| System{nbsp}Property   | `com.couchbase.env.compression.minRatio`
+| Connection String      | `compression.minRatio`
+| System Property        | `com.couchbase.env.compression.minRatio`
 | Builder                | `env.compressionConfig(it \-> it.minRatio(int))`
 | Default Value          | `0.83`
 |===
@@ -661,10 +661,10 @@ include::example$ClientSettingsExample.java[tag=client_settings_10,indent=0]
 [[retryStrategy]]
 Name: *Retry Strategy*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | N/A
-| System{nbsp}Property   | N/A
+| Connection String      | N/A
+| System Property        | N/A
 | Builder                | `env.retryStrategy(RetryStrategy)`
 | Default Value          | `BestEffortRetryStrategy.INSTANCE`
 |===
@@ -684,10 +684,10 @@ See the advanced section in the documentation on more specific information on re
 [#unordered-executions]
 Name: *Unordered Execution*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | N/A
-| System{nbsp}Property   | com.couchbase.unorderedExecutionEnabled
+| Connection String      | N/A
+| System Property        | com.couchbase.unorderedExecutionEnabled
 | Builder                | N/A
 | Default Value          | `true`
 |===
@@ -702,10 +702,10 @@ Note, changing the setting will only affect Server versions 7.0 onwards.
 [[jsonSerializer]]
 Name: *JSON Serializer*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | N/A
-| System{nbsp}Property   | N/A
+| Connection String      | N/A
+| System Property        | N/A
 | Builder                | `env.jsonSerializer(JsonSerializer)`
 | Default Value          | _see description below_
 |===
@@ -722,10 +722,10 @@ If Jackson is not present, the client will fall back to using an unspecified def
 [[transcoder]]
 Name: *Transcoder*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | N/A
-| System{nbsp}Property   | N/A
+| Connection String      | N/A
+| System Property        | N/A
 | Builder                | `env.transcoder(Transcoder)`
 | Default Value          | `JsonTranscoder`
 |===
@@ -741,10 +741,10 @@ The transcoder configured here is just the default; it can be overridden on a pe
 [[requestTracer]]
 Name: *Request Tracer*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | N/A
-| System{nbsp}Property   | N/A
+| Connection String      | N/A
+| System Property        | N/A
 | Builder                | `env.requestTracer(RequestTracer)`
 | Default Value          | `ThresholdRequestTracer`
 |===
@@ -759,10 +759,10 @@ NOTE: When using a non-default tracer, you are responsible for starting and stop
 [[scheduler]]
 Name: *Computation Scheduler*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | N/A
-| System{nbsp}Property   | N/A
+| Connection String      | N/A
+| System Property        | N/A
 | Builder                | `env.scheduler(Scheduler)`
 | Default Value          | _see below_
 |===
@@ -779,10 +779,10 @@ You are responsible for disposing of it after it is no longer needed.
 [[eventBus]]
 Name: *Event Bus*::
 +
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | N/A
-| System{nbsp}Property   | N/A
+| Connection String      | N/A
+| System Property        | N/A
 | Builder                | `eventBus(EventBus)`
 | Default Value          | `DefaultEventBus`
 |===
@@ -805,10 +805,10 @@ include::{version-common}@sdk:shared:partial$client-settings-wide-network.adoc[]
 
 == Configuration Profiles
 
-[cols="h,~"]
+[%autowidth]
 |===
-| Connection{nbsp}String | applyProfile
-| System{nbsp}Property   | com.couchbase.env.applyProfile
+| Connection String      | applyProfile
+| System Property        | com.couchbase.env.applyProfile
 | Builder                | `applyProfile(String)`
 | Default Value          | no profile
 |===
