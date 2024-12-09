@@ -274,12 +274,13 @@ There are some different behaviors seen with this protocol:
 
 
 
+// DNS-SRV
+// == Using DNS SRV records
 
+include::{version-common}@sdk:shared:partial$dnssrv-pars.adoc[tag=dnssrv-rev]
 
-include::{version-common}@sdk:shared:partial$dnssrv-pars.adoc[tag=dnssrv]
-
-DNS SRV bootstrapping is available in the Java SDK from version 2.1.0.
-In order to make the SDK actually use the SRV records, you need to enable DNS SRV on the environment and pass in the host name from your records (here `example.com`):
+DNS SRV bootstrapping is enabled by default in the {name-sdk}.
+In order to make the SDK use the SRV records, you need to pass in the hostname from your records (here `example.com`):
 
 [source,java]
 ----
