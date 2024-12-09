@@ -39,9 +39,47 @@ echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/pom.xml 
 ////
 
+=== Version 3.7.6 (04 December 2024)
+
+This is the sixth maintenance release of the 3.7 series.
+
+https://packages.couchbase.com/clients/java/3.7.6/Couchbase-Java-Client-3.7.6.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.6/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-3.7.6/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.5.6             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.5.6             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.7.6             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.7.6             | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Bug Fixes
+* https://jira.issues.couchbase.com/browse/JVMCBC-1783[JVMCBC-1783]:
+Fixed a race condition that could cause the SDK to continuously attempt to reconnect to a node, even  after the node is rebalanced out of the cluster.
+
+==== Improvements
+* https://jira.issues.couchbase.com/browse/JVMCBC-1560[JVMCBC-1560]:
+Add cluster UUID and name to metrics and spans
+* https://jira.issues.couchbase.com/browse/JVMCBC-1582[JVMCBC-1582]:
+Upgrade Netty from 4.1.112 to 4.1.115
+* https://jira.issues.couchbase.com/browse/JCBC-2173[JCBC-2173]:
+Upgrade jctools-core to 4.0.5
+* https://jira.issues.couchbase.com/browse/JCBC-2175[JCBC-2175]:
+Separate MpscArrayQueue creation in certain classes
+
 === Version 3.7.5 (06 November 2024)
 
-This is the fifth  maintenance release of the 3.7 series.
+This is the fifth maintenance release of the 3.7 series.
 
 https://packages.couchbase.com/clients/java/3.7.5/Couchbase-Java-Client-3.7.5.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.5/index.html[API Reference] |
