@@ -107,8 +107,8 @@ include::example$ClientSettingsExample.java[tag=client_settings_5,indent=0]
 ----
 
 [[security.enableTls]]
-Name: *Enabling Secure Connections*::
-+
+==== Enabling Secure Connections
+
 [%autowidth]
 |===
 | Connection String      | `security.enableTls`
@@ -116,10 +116,10 @@ Name: *Enabling Secure Connections*::
 | Builder                | `env.securityConfig(it \-> it.enableTls(boolean))`
 | Default Value          | `false`
 |===
-+
+
 Set this to `true` to encrypt all communication between the client and server using TLS.
 This feature requires the Enterprise Edition of Couchbase Server.
-+
+
 [TIP]
 ====
 The recommended way to enable TLS is to specify a connection string that starts with the `couchbases://` (note the final "s") scheme.
@@ -127,13 +127,13 @@ This forces a secure connection, regardless of whether `security.enableTls` is t
 
 Specifying `security.enableTls` is only required when building a xref:howtos:managing-connections.adoc#multiple-clusters[shared cluster environment] for use with secure connections.
 ====
-+
+
 When TLS is enabled, you might also need to specify the trusted certificates by calling exactly one of `trustCertificate`, `trustCertificates`, or `trustManagerFactory`.
 Please see the xref:howtos:managing-connections.adoc[Managing Connections] section for more details on how to set it up properly.
 
 [[security.enableNativeTls]]
-Name: *Disabling Native TLS Provider*::
-+
+==== Disabling Native TLS Provider
+
 [%autowidth]
 |===
 | Connection String      | `security.enableNativeTls`
@@ -141,14 +141,14 @@ Name: *Disabling Native TLS Provider*::
 | Builder                | `env.securityConfig(it \-> it.enableNativeTls(boolean))`
 | Default Value          | `true`
 |===
-+
+
 When TLS is enabled, the client will by default use an optimized native TLS provider if one is available.
 If for some reason you need to disable the native provider and use the JDK's portable provider instead, set this to `false`.
 If TLS is not enabled, then `security.enableNativeTls` has no effect.
 
 [[security.trustCertificate]]
-Name: *TLS Certificate Location*::
-+
+==== TLS Certificate Location
+
 [%autowidth]
 |===
 | Connection String      | `security.trustCertificate` (or `certpath`)
@@ -156,13 +156,13 @@ Name: *TLS Certificate Location*::
 | Builder                | `env.securityConfig(it \-> it.trustCertificate(Path))`
 | Default Value          | N/A
 |===
-+
+
 Path to a file containing a single X.509 certificate to trust as a Certificate Authority when establishing secure connections.
 See the xref:howtos:managing-connections.adoc#ssl[Connection Management] section for more details on how to set it up properly.
 
 [[security.trustCertificates]]
-Name: *TLS Certificates*::
-+
+==== TLS Certificates
+
 [%autowidth]
 |===
 | Connection String      | N/A
@@ -170,13 +170,13 @@ Name: *TLS Certificates*::
 | Builder                | `env.securityConfig(it \-> it.trustCertificates(List<X509Certificate>))`
 | Default Value          | N/A
 |===
-+
+
 If you wish to trust more than one certificate, or prefer to load the certificate yourself, then call this method to specify the certificates to trust as Certificate Authorities when establishing secure connections.
 See the xref:howtos:managing-connections.adoc#ssl[Connection Management] section for more details on how to set it up properly.
 
 [[security.trustManagerFactory]]
-Name: *Custom TLS Trust Manager Factory*::
-+
+==== Custom TLS Trust Manager Factory
+
 [%autowidth]
 |===
 | Connection String      | N/A
@@ -184,7 +184,7 @@ Name: *Custom TLS Trust Manager Factory*::
 | Builder                | `env.securityConfig(it \-> it.trustManagerFactory(TrustManagerFactory))`
 | Default Value          | N/A
 |===
-+
+
 As an alternative to specifying the certificates to trust, you can specify a custom `TrustManagerFactory` to use when establishing secure connections.
 See the xref:howtos:managing-connections.adoc#ssl[Connection Management] section for more details on how to set it up properly.
 
@@ -202,8 +202,8 @@ include::example$ClientSettingsExample.java[tag=client_settings_6,indent=0]
 ----
 
 [[io.enableDnsSrv]]
-Name: *DNS SRV Enabled*::
-+
+==== DNS SRV Enabled
+
 [%autowidth]
 |===
 | Connection String      | `io.enableDnsSrv`
@@ -211,13 +211,13 @@ Name: *DNS SRV Enabled*::
 | Builder                | `env.ioConfig(it \-> it.enableDnsSrv(boolean))`
 | Default Value          | `true`
 |===
-+
+
 Gets the bootstrap node list from a DNS SRV record.
 See the xref:howtos:managing-connections.adoc#using-dns-srv-records[Connection Management] section for more information on how to use it properly.
 
 [[io.mutationTokensEnabled]]
-Name: *Mutation Tokens Enabled*::
-+
+==== Mutation Tokens Enabled
+
 [%autowidth]
 |===
 | Connection String      | `io.mutationTokensEnabled`
@@ -225,13 +225,13 @@ Name: *Mutation Tokens Enabled*::
 | Builder                | `env.ioConfig(it \-> it.mutationTokensEnabled(boolean))`
 | Default Value          | `true`
 |===
-+
+
 Mutation tokens allow enhanced durability requirements as well as advanced {sqlpp_url}[{sqlpp} (formerly N1QL)] querying capabilities.
 Set this to `false` if you do not require these features and wish to avoid the associated overhead.
 
 [[io.networkResolution]]
-Name: *Network Resolution*::
-+
+==== Network Resolution
+
 [%autowidth]
 |===
 | Connection String      | `io.networkResolution` (or `network`)
@@ -239,19 +239,19 @@ Name: *Network Resolution*::
 | Builder                | `env.ioConfig(it \-> it.networkResolution(boolean))`
 | Default Value          | `auto`
 |===
-+
+
 NOTE: The value for the connection string parameter or system property should be one of `auto`, `default`, or `external` (lower case).
-+
+
 Each node in the Couchbase Server cluster might have multiple addresses associated with it.
 For example, a node might have one address that should be used when connecting from inside the same virtual network environment where the server is running, and a second address for connecting from outside the server's network environment.
-+
+
 By default the client will use a simple matching heuristic to determine which set of addresses to use (it will select the set of addresses that contains a seed node's host and port).
-+
+
 If you wish to override the heuristic, you can set this value to `default` if the client is running in the same network as the server, or `external` if the client is running in a different network.
 
 [[io.captureTraffic]]
-Name: *Capture Traffic*::
-+
+==== Capture Traffic
+
 [%autowidth]
 |===
 | Connection String      | `io.captureTraffic`
@@ -259,19 +259,19 @@ Name: *Capture Traffic*::
 | Builder                | `env.ioConfig(it \-> it.captureTraffic(ServiceType...))`
 | Default Value          | traffic capture is disabled
 |===
-+
+
 TIP: Multiple services may be specified in the connection string parameter or system property value using a comma-delimited list such as `KV,QUERY`.
 To enable capture for all services, set the value to an empty string.
-+
+
 Call this method to log all traffic to the specified services.
 If no services are specified, traffic to all services is captured.
-+
+
 Captured traffic is logged to the `com.couchbase.io` category at `TRACE` level.
 To see the traffic, you may need to configure your logging framework to include these messages.
 
 [[io.enableTcpKeepAlives]]
-Name: *Socket Keepalive*::
-+
+==== Socket Keepalive
+
 [%autowidth]
 |===
 | Connection String      | `io.enableTcpKeepAlives`
@@ -279,12 +279,12 @@ Name: *Socket Keepalive*::
 | Builder                | `env.ioConfig(it \-> it.enableTcpKeepAlives(boolean))`
 | Default Value          | `true`
 |===
-+
+
 If enabled, the client periodically sends a TCP keepalive to the server to prevent firewalls and other network equipment from dropping idle TCP connections.
 
 [[io.tcpKeepAliveTime]]
-Name: *Socket Keepalive Interval*::
-+
+==== Socket Keepalive Interval
+
 [%autowidth]
 |===
 | Connection String      | `io.tcpKeepAliveTime`
@@ -292,16 +292,16 @@ Name: *Socket Keepalive Interval*::
 | Builder                | `env.ioConfig(it \-> it.tcpKeepAliveTime(Duration))`
 | Default Value          | `60s`
 |===
-+
+
 The idle time after which a TCP keepalive gets fired.
 (This setting has no effect if `io.enableTcpKeepAlives` is `false`.)
-+
+
 NOTE: This setting only propagates to the OS on Linux when the epoll transport is used.
 On all other platforms, the OS-configured time is used (and you need to tune it there if you want to override the default interval).
 
 [[io.numKvConnections]]
-Name: *Key/Value Endpoints per Node*::
-+
+==== Key/Value Endpoints per Node
+
 [%autowidth]
 |===
 | Connection String      | `io.numKvConnections`
@@ -309,19 +309,19 @@ Name: *Key/Value Endpoints per Node*::
 | Builder                | `env.ioConfig(it \-> it.numKvConnections(int))`
 | Default Value          | `1`
 |===
-+
+
 The number of actual endpoints (sockets) to open per node in the cluster against the Key/Value service.
 By default, for every node in the cluster one socket is opened where all traffic is pushed through.
 That way the SDK implicitly benefits from network batching characteristics when the workload increases.
 If you suspect based on profiling and benchmarking that the socket is saturated you can think about slightly increasing it to have more "parallel pipelines".
 This might be especially helpful if you need to push large documents through it.
 The recommendation is keeping it at 1 unless there is other evidence.
-+
+
 NOTE: xref:concept-docs:durability-replication-failure-considerations.adoc#synchronous-writes[Durable Write] operations with Couchbase Server 6.5 and above require up to 16 kvEndpoints per node, for most efficient operation, unless the environment dictates something a little lower.
 
 [[io.maxHttpConnections]]
-Name: *Max HTTP Endpoints per Service per Node*::
-+
+==== Max HTTP Endpoints per Service per Node
+
 [%autowidth]
 |===
 | Connection String      | `io.maxHttpConnections`
@@ -329,13 +329,13 @@ Name: *Max HTTP Endpoints per Service per Node*::
 | Builder                | `env.ioConfig(it \-> it.maxHttpConnections(int))`
 | Default Value          | `12`
 |===
-+
+
 Each service (except the Key/Value service) has a separate dynamically sized pool of HTTP connections for issuing requests.
 This setting puts an upper bound on the number of HTTP connections in each pool.
 
 [[io.idleHttpConnectionTimeout]]
-Name: *Idle HTTP Connection Timeout*::
-+
+==== Idle HTTP Connection Timeout
+
 [%autowidth]
 |===
 | Connection String      | `io.idleHttpConnectionTimeout`
@@ -343,13 +343,13 @@ Name: *Idle HTTP Connection Timeout*::
 | Builder                | `env.ioConfig(it \-> it.idleHttpConnectionTimeout(Duration))`
 | Default Value          | `1s`
 |===
-+
+
 The length of time an HTTP connection may remain idle before it is closed and removed from the pool.
 Durations longer than 1 second are not recommended, since Couchbase Server aggressively drops idle connections.
 
 [[io.configPollInterval]]
-Name: *Config Poll Interval*::
-+
+==== Config Poll Interval
+
 [%autowidth]
 |===
 | Connection String      | `io.configPollInterval`
@@ -357,7 +357,7 @@ Name: *Config Poll Interval*::
 | Builder                | `env.ioConfig(it \-> it.configPollInterval(Duration))`
 | Default Value          | `2.5s`
 |===
-+
+
 The interval at which the client fetches cluster topology information in order to proactively detect changes.
 
 [#circuit-breaker-options]
@@ -450,8 +450,8 @@ include::example$ClientSettingsExample.java[tag=client_settings_8,indent=0]
 ----
 
 [[timeout.kvTimeout]]
-Name: *Key-Value Timeout*::
-+
+==== Key-Value Timeout
+
 [%autowidth]
 |===
 | Connection String      | `timeout.kvTimeout`
@@ -459,15 +459,15 @@ Name: *Key-Value Timeout*::
 | Builder                | `env.timeoutConfig(it \-> it.kvTimeout(Duration))`
 | Default Value          | `2.5s` -- _but see TIP, below_
 |===
-+
+
 The Key/Value default timeout is used on operations which are performed on a specific key if not overridden by a custom timeout.
 This includes all commands like get(), getFromReplica() and all mutation commands, but does not include operations that are performed with enhanced durability requirements.
-+
+
 TIP: xref:concept-docs:durability-replication-failure-considerations.adoc#synchronous-writes[Durable Write operations] have their own timeout setting, `kvDurableTimeout`, see below.
 
 [[timeout.kvDurableTimeout]]
-Name: *Key-Value Durable Operation Timeout*::
-+
+==== Key-Value Durable Operation Timeout
+
 [%autowidth]
 |===
 | Connection String      | `timeout.kvDurableTimeout`
@@ -475,11 +475,11 @@ Name: *Key-Value Durable Operation Timeout*::
 | Builder                | `env.timeoutConfig(it \-> it.kvDurableTimeout(Duration))`
 | Default Value          | `10s`
 |===
-+
+
 Key/Value operations with enhanced durability requirements may take longer to complete, so they have a separate default timeout.
-+
+
 *Do not* set this above 65s, which is the maximum possible `SyncWrite` timeout on the Server side.
-+
+
 WARNING: The `kvDurableTimeout` property is not part of the stable API and may change or be removed at any time.
 
 // todo: is kvDurableTimeout a strictly client-side timeout?
@@ -487,8 +487,8 @@ WARNING: The `kvDurableTimeout` property is not part of the stable API and may c
 // Does it result in an ambiguous state?
 
 [[timeout.viewTimeout]]
-Name: *View Timeout*::
-+
+==== View Timeout
+
 [%autowidth]
 |===
 | Connection String      | `timeout.viewTimeout`
@@ -496,14 +496,14 @@ Name: *View Timeout*::
 | Builder                | `env.timeoutConfig(it \-> it.viewTimeout(Duration))`
 | Default Value          | `75s`
 |===
-+
+
 The View timeout is used on view operations if not overridden by a custom timeout.
 Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
 Also, if there is a node failure during the request the internal cluster timeout is set to 60 seconds.
 
 [[timeout.queryTimeout]]
-Name: *Query Timeout*::
-+
+==== Query Timeout
+
 [%autowidth]
 |===
 | Connection String      | `timeout.queryTimeout`
@@ -511,13 +511,13 @@ Name: *Query Timeout*::
 | Builder                | `env.timeoutConfig(it \-> it.queryTimeout(Duration))`
 | Default Value          | `75s`
 |===
-+
+
 The Query timeout is used on all {sqlpp} query operations if not overridden by a custom timeout.
 Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
 
 [[timeout.searchTimeout]]
-Name: *Search Timeout*::
-+
+==== Search Timeout
+
 [%autowidth]
 |===
 | Connection String      | `timeout.searchTimeout`
@@ -525,13 +525,13 @@ Name: *Search Timeout*::
 | Builder                | `env.timeoutConfig(it \-> it.searchTimeout(Duration))`
 | Default Value          | `75s`
 |===
-+
+
 The Search timeout is used on all FTS operations if not overridden by a custom timeout.
 Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
 
 [[timeout.analyticsTimeout]]
-Name: *Analytics Timeout*::
-+
+==== Analytics Timeout
+
 [%autowidth]
 |===
 | Connection String      | `timeout.analyticsTimeout`
@@ -539,13 +539,13 @@ Name: *Analytics Timeout*::
 | Builder                | `env.timeoutConfig(it \-> it.analyticsTimeout(Duration))`
 | Default Value          | `75s`
 |===
-+
+
 The Analytics timeout is used on all Analytics query operations if not overridden by a custom timeout.
 Note that it is set to such a high timeout compared to key/value since it can affect hundreds or thousands of rows.
 
 [[timeout.connectTimeout]]
-Name: *Connect Timeout*::
-+
+==== Connect Timeout
+
 [%autowidth]
 |===
 | Connection String      | `timeout.connectTimeout`
@@ -553,14 +553,14 @@ Name: *Connect Timeout*::
 | Builder                | `env.timeoutConfig(it \-> it.connectTimeout(Duration))`
 | Default Value          | `10s`
 |===
-+
+
 The connect timeout is used when a Bucket is opened and if not overridden by a custom timeout.
 If you feel the urge to change this value to something higher, there is a good chance that your network is not properly set up.
 Connecting to the server should in practice not take longer than a second on a reasonably fast network.
 
 [[timeout.disconnectTimeout]]
-Name: *Disconnect Timeout*::
-+
+==== Disconnect Timeout
+
 [%autowidth]
 |===
 | Connection String      | `timeout.disconnectTimeout`
@@ -568,14 +568,14 @@ Name: *Disconnect Timeout*::
 | Builder                | `env.timeoutConfig(it \-> it.disconnectTimeout(Duration))`
 | Default{nbsp}Value     | `10s`
 |===
-+
+
 The disconnect timeout is used when a Cluster is disconnected and if not overridden by a custom timeout.
 A timeout is applied here always to make sure that your code does not get stuck at shutdown.
 The default should provide enough time to drain all outstanding operations properly, but make sure to adapt this timeout to fit your application requirements.
 
 [[timeout.managementTimeout]]
-Name: *Management Timeout*::
-+
+==== Management Timeout
+
 [%autowidth]
 |===
 | Connection String      | `timeout.managementTimeout`
@@ -583,7 +583,7 @@ Name: *Management Timeout*::
 | Builder                | `env.timeoutConfig(it \-> it.managementTimeout(Duration))`
 | Default Value          | `75s`
 |===
-+
+
 The management timeout is used on all cluster management APIs (BucketManager, UserManager, CollectionManager, QueryIndexManager, etc.) if not overridden by a custom timeout.
 The default is quite high because some operations (such as flushing a bucket, for example) might take a long time.
 
@@ -599,8 +599,8 @@ include::example$ClientSettingsExample.java[tag=client_settings_9,indent=0]
 ----
 
 [[compression.enable]]
-Name: *Enabling Compression*::
-+
+==== Enabling Compression
+
 [%autowidth]
 |===
 | Connection String      | `compression.enable`
@@ -608,13 +608,13 @@ Name: *Enabling Compression*::
 | Builder                | `env.compressionConfig(it \-> it.enable(boolean))`
 | Default Value          | `true`
 |===
-+
+
 If enabled, the client will compress documents before they are sent to Couchbase Server.
 If this is set to `false`, the other compression settings have no effect.
 
 [[compression.minSize]]
-Name: *Document Minimum Size*::
-+
+==== Document Minimum Size
+
 [%autowidth]
 |===
 | Connection String      | `compression.minSize`
@@ -622,13 +622,13 @@ Name: *Document Minimum Size*::
 | Builder                | `env.compressionConfig(it \-> it.minSize(int))`
 | Default Value          | `32`
 |===
-+
+
 Size in bytes.
 Documents smaller than this size are never compressed.
 
 [[compression.minRatio]]
-Name: *Document Minimum Compressibility*::
-+
+==== Document Minimum Compressibility
+
 [%autowidth]
 |===
 | Connection String      | `compression.minRatio`
@@ -636,14 +636,14 @@ Name: *Document Minimum Compressibility*::
 | Builder                | `env.compressionConfig(it \-> it.minRatio(int))`
 | Default Value          | `0.83`
 |===
-+
+
 A floating point value between 0 and 1.
 Specifies how "compressible" a document must be in order for the compressed form to be sent to the server.
-+
+
 TIP: Increasing the value allows CompressionExample to be used with less-compressible documents.
-+
+
 If the compressed document size divided by the uncompressed document size is greater than this value, then the uncompressed version of the document will be sent to Couchbase Server instead of the compressed version.
-+
+
 For example, with a `minRatio` of `0.83`, CompressionExample will only be used if the size of the compressed document is less than 83% of the uncompressed document size.
 
 [#general-options]
@@ -659,8 +659,8 @@ include::example$ClientSettingsExample.java[tag=client_settings_10,indent=0]
 ----
 
 [[retryStrategy]]
-Name: *Retry Strategy*::
-+
+==== Retry Strategy
+
 [%autowidth]
 |===
 | Connection String      | N/A
@@ -668,40 +668,40 @@ Name: *Retry Strategy*::
 | Builder                | `env.retryStrategy(RetryStrategy)`
 | Default Value          | `BestEffortRetryStrategy.INSTANCE`
 |===
-+
+
 The client's default retry strategy.
-+
+
 A retry strategy decides whether a failed operation should be retried.
 Implementing a custom strategy is fairly advanced, so the SDK ships with two out of the box: `BestEffortRetryStrategy` and `FailFastRetryStrategy`.
-+
+
 The "best effort" strategy will retry the operation until it either succeeds or the timeout expires.
 The "fail fast" strategy will immediately report the failure to your application, giving you more control over how and when to retry.
-+
+
 TIP: Most client operations that accept an options block allow for overriding the default strategy as one of the options.
-+
+
 See the advanced section in the documentation on more specific information on retry strategies and failure management.
 
 [#unordered-executions]
-Name: *Unordered Execution*::
-+
+==== Unordered Execution
+
 [%autowidth]
 |===
 | Connection String      | N/A
-| System Property        | com.couchbase.unorderedExecutionEnabled
+| System Property        | `com.couchbase.unorderedExecutionEnabled`
 | Builder                | N/A
 | Default Value          | `true`
 |===
-+
+
 From Couchbase 7.0, Out-of-Order execution allows the server to concurrently handle multiple requests on the same connection, potentially improving performance for durable writes and multi-document ACID transactions.
 This means that tuning the number of connections (KV endpoints) is no longer necessary as a workaround where data not available in the cache is causing timeouts.
-+
+
 This is set to `true` by default.
 // Server will handle any operations that are not safe to be executed out of order, and setting this to `false` is unlikely to ever be necessary.
 Note, changing the setting will only affect Server versions 7.0 onwards.
 
 [[jsonSerializer]]
-Name: *JSON Serializer*::
-+
+==== JSON Serializer
+
 [%autowidth]
 |===
 | Connection String      | N/A
@@ -709,19 +709,19 @@ Name: *JSON Serializer*::
 | Builder                | `env.jsonSerializer(JsonSerializer)`
 | Default Value          | _see description below_
 |===
-+
+
 The JSON serializer handles the conversion between JSON and Java objects.
-+
+
 If Jackson is present in the class path, the default serializer will be an instance of `JacksonJsonSerializer` using a default `ObjectMapper`.
-+
+
 TIP: To create a serializer backed by a custom `ObjectMapper`, call `JacksonJsonSerializer.create` and pass in your custom mapper.
-+
+
 If Jackson is not present, the client will fall back to using an unspecified default serializer.
 (Actually, it will use a repackaged version of Jackson, but this is an implementation detail you should not depend on.)
 
 [[transcoder]]
-Name: *Transcoder*::
-+
+==== Transcoder
+
 [%autowidth]
 |===
 | Connection String      | N/A
@@ -729,18 +729,18 @@ Name: *Transcoder*::
 | Builder                | `env.transcoder(Transcoder)`
 | Default Value          | `JsonTranscoder`
 |===
-+
+
 The transcoder is responsible for converting KV binary packages to and from Java objects.
-+
+
 The default transcoder assumes you are working with JSON documents.
 It uses the configured `jsonSerializer` to convert between JSON and Java objects.
 When writing documents it sets the appropriate flags to indicate the document content is JSON.
-+
+
 The transcoder configured here is just the default; it can be overridden on a per-operation basis.
 
 [[requestTracer]]
-Name: *Request Tracer*::
-+
+==== Request Tracer
+
 [%autowidth]
 |===
 | Connection String      | N/A
@@ -748,17 +748,17 @@ Name: *Request Tracer*::
 | Builder                | `env.requestTracer(RequestTracer)`
 | Default Value          | `ThresholdRequestTracer`
 |===
-+
+
 The default tracer logs the slowest requests per service.
-+
+
 Various `RequestTracer` implementations exist, both as part of the core library and as external modules that can be attached (i.e. for OpenTracing and OpenTelemetry).
 It is recommended to use those modules and not write your own tracer unless absolutely needed.
-+
+
 NOTE: When using a non-default tracer, you are responsible for starting and stopping it.
 
 [[scheduler]]
-Name: *Computation Scheduler*::
-+
+==== Computation Scheduler
+
 [%autowidth]
 |===
 | Connection String      | N/A
@@ -766,19 +766,19 @@ Name: *Computation Scheduler*::
 | Builder                | `env.scheduler(Scheduler)`
 | Default Value          | _see below_
 |===
-+
+
 This is an advanced setting that should not be modified without good reason.
-+
+
 The scheduler used for all CPU-intensive, non-blocking computations in the core, client, and user space.
 The default is a scheduler created from Reactor's `Schedulers.newParallel` method, with one daemon thread per CPU core.
 Extra care should be used when changing the scheduler, since many internal components depend on it.
-+
+
 NOTE: Shutting down the cluster environment will not dispose of a custom scheduler.
 You are responsible for disposing of it after it is no longer needed.
 
 [[eventBus]]
-Name: *Event Bus*::
-+
+==== Event Bus
+
 [%autowidth]
 |===
 | Connection String      | N/A
@@ -786,12 +786,12 @@ Name: *Event Bus*::
 | Builder                | `eventBus(EventBus)`
 | Default Value          | `DefaultEventBus`
 |===
-+
+
 This is an advanced setting that should not be modified without good reason.
-+
+
 The event bus implementation used to transport system, performance, and debug events from producers to subscribers.
 If you provide a custom implementation, double check that it fits with the contract of the event bus as documented.
-+
+
 NOTE: Shutting down the cluster environment will not stop a custom event bus.
 You are responsible for stopping it after it is no longer needed.
 
