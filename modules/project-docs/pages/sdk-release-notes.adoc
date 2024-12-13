@@ -67,7 +67,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 ==== Bug Fixes
 
-* https://jira.issues.couchbase.com/browse/JVMCBC-1783[JVMCBC-1783]:
+* https://jira.issues.couchbase.com/browse/JVMCBC-1583[JVMCBC-1583]:
 Fixed a race condition that could cause the SDK to continuously attempt to reconnect to a node, even after the node is rebalanced out of the cluster.
 
 ==== Improvements
