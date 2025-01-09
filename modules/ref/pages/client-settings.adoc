@@ -681,6 +681,23 @@ TIP: Most client operations that accept an options block allow for overriding th
 
 See the advanced section in the documentation on more specific information on retry strategies and failure management.
 
+[[preferredServerGroup]]
+==== Preferred Server Group
+
+[%autowidth]
+|===
+| Connection String      | `preferredServerGroup`
+| System Property        | `com.couchbase.env.preferredServerGroup`
+| Builder                | `env.preferredServerGroup(String)`
+| Default Value          | null
+|===
+
+When using Couchbase Server 7.6.2 or later, and Couchbase Java SDK 3.7.4 or later, this client setting configures the SDK to have an affinity for a specific server group.
+This lets certain operations (for example, reading from replicas) target only the nodes in a specific server group instead of all server nodes.
+
+Operations that support server group affinity have a per-request `readPreference` option.
+To target the preferred server group, set the `prefererredServerGroup` client setting to the name of a server group, and set the per-request `readPreference` option to `ReadPreference.PREFERRED_SERVER_GROUP`.
+
 [#unordered-executions]
 ==== Unordered Execution
 
