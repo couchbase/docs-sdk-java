@@ -1,4 +1,4 @@
-= Couchbase Java'        SDK Documentation
+= Couchbase Java SDK Documentation
 
 This repository hosts the documentation source for the https://docs.couchbase.com/java-sdk/3.7/hello-world/overview.html[Couchbase Java SDK].
 
