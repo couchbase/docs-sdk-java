@@ -38,7 +38,7 @@ Data Ops (CRUD)::
 
 [source,java]
 ----
-include::devguide:example$scala/KvOperations.scala[indent=0,tag=upsert]
+include::devguide:example$java/KvOperations.java[indent=0,tag=durability]
 ----
 --
 
@@ -48,7 +48,7 @@ include::devguide:example$scala/KvOperations.scala[indent=0,tag=upsert]
 
 [source,java]
 ----
-include::devguide:example$scala/Queries.scala[tag=simple,indent=0]
+include::devguide:example$java/Queries.java[tag=named,indent=0]
 ----
 --
 
@@ -58,7 +58,7 @@ Vector Search::
 
 [source,java]
 ----
-include::devguide:example$scala/FTS.scala[tag=vector1,indent=0]
+include::devguide:example$java/Search.java[tag=vector1,indent=0]
 ----
 --
 ====
