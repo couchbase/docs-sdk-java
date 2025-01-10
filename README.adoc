@@ -1,4 +1,4 @@
-= Couchbase Scala SDK Documentation
+= Couchbase Java'        SDK Documentation
 
 This repository hosts the documentation source for the https://docs.couchbase.com/java-sdk/3.7/hello-world/overview.html[Couchbase Java SDK].
 
@@ -76,9 +76,9 @@ Not often needed within the SDK documentation -- the server version in `xref` li
 | The version (branch) of the single-sourced `sdk-common` repo.
 This is substituted into Antora `include::` directives, to pull in content from the correct branch.
 
-| `name_platform:` | Allows us to name the SDK within shared content (*Scala*).
+| `name_platform:` | Allows us to name the SDK within shared content (*Java*).
 
-| `name-sdk:` | Allows us to name the SDK within shared content (*Scala SDK*).
+| `name-sdk:` | Allows us to name the SDK within shared content (*Java SDK*).
 
 | `sdk_api:` | The API version of this release.
 
@@ -116,8 +116,7 @@ A value of `3` should not be used, save in exceptionally complicated pages like 
 Update the following files:
 
 * antora.yml
-* build.gradle
-* modules/devguide/examples/scala/pom.xml
+* pom.xml
 * modules/project-docs/pages/sdk-release-notes.adoc
 
 === New Branches
