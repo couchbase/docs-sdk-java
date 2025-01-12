@@ -4,6 +4,12 @@ title: Java SDK
 start_page: hello-world:overview.adoc
 nav:
 - modules/ROOT/nav.adoc
+ext:
+  preview:
+    HEAD:
+      sources:
+        docs-sdk-common:
+          branches: release/7.6.2
 asciidoc:
   attributes:
     page-nav-header-levels: 1
