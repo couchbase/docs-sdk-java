@@ -29,15 +29,15 @@ but first let's look at those data operations, and installing the {name-sdk}.
 
 // remember to add a nomenclature note to the next version of this page for LCB.
 
-.Upsert with a Unique ID
-[source,scala]
+.Upsert with Replication set to Majority Durablity
+[source,java]
 ----
-include::devguide:example$scala/Cloud.scala[tag=upsert,indent=0]
+include::devguide:example$java/Overview.java[tag=overview,indent=0]
 ----
 
 `upsert` inserts (creates) the document if it does not exist, or replaces it if it does.
 We'll explore creating and retrieving data records in more detail <<create-read-update-delete,below>>
-(and touch lightly upon a little of Scala's functional programming approach as we go), 
+(and touch lightly upon a little of Java's functional programming approach as we go), 
 after walking through a quick installation.
 
 
@@ -84,9 +84,10 @@ For the example code below to run, you'll need the username and password of the 
 
 === Prerequisites
 
-* The Scala SDK is tested against LTS versions of Oracle JDK and OpenJDK -- 
+* The Java SDK is tested against LTS versions of Oracle JDK and OpenJDK -- 
 see the xref:project-docs:compatibility.adoc#jdk-compat[compatibility docs].
-* The Couchbase {name-sdk} {sdk_dot_minor} Client supports Scala 2.12 and 2.13.
++
+https://adoptium.net/[OpenJDK 21 with HotSpot JVM] is recommended.
 
 The code examples also assume:
 
@@ -126,57 +127,41 @@ In production, Couchbase strongly recommends setting up users with more granular
 
 
 == Installation
+We recommend running the latest Java LTS version (i.e. at the time of writing JDK 21) with the highest patch version available.
+// Other supported Java versions will work, too.
+Couchbase publishes all stable artifacts to https://central.sonatype.com/namespace/com.couchbase.client[Maven Central].
+
+The latest version of 3.7.x is https://central.sonatype.com/artifact/com.couchbase.client/java-client/{sdk_current_version}/jar[{sdk_current_version}].
 
 // tag::quick-install[]
 More details of the installation process are in the 
 xref:project-docs:sdk-full-installation.adoc[full installation guide].
-In most cases, given the above prerequisites, it's a simple matter of the following for your favorite build tool:
+In most cases, given the above prerequisites, use your favorite dependency management tool to install the SDK.
 
-[tabs] 
+[{tabs}] 
 ==== 
-Scala Build Tool (SBT)::
-+
---
-[source,sbt,subs="+attributes"]
-----
-libraryDependencies += "com.couchbase.client" %% "scala-client" % "{sdk_current_version}"
-----
-
-This will automatically use the Scala 2.12 or 2.13 builds, as appropriate for your SBT project.
---
-
-Gradle::
-+
---
-For Scala 2.13, include the following in your `build.gradle`:
-
-[source,groovy,subs="+attributes"]
-----
-dependencies {
-    compile group: 'com.couchbase.client', name: 'scala-client_2.13', version: '{sdk_current_version}'
-}
-----
-
-For Scala 2.12, refer to the full xref:project-docs:sdk-full-installation.adoc[Installation page].
---
-
 Maven::
 +
 --
-For Scala 2.13, include the following in your Maven `pom.xml`:
-
 [source,xml,subs="+attributes"]
 ----
 <dependencies>
     <dependency>
         <groupId>com.couchbase.client</groupId>
-        <artifactId>scala-client_2.13</artifactId>
+        <artifactId>java-client</artifactId>
         <version>{sdk_current_version}</version>
     </dependency>
 </dependencies>
 ----
+--
 
-For Scala 2.12, refer to the full xref:project-docs:sdk-full-installation.adoc[Installation page].
+Gradle::
++
+--
+[source,groovy,subs="+attributes"]
+----
+implementation 'com.couchbase.client:java-client:{sdk_current_version}'
+----
 --
 ====
 // end::quick-install[]
@@ -215,20 +200,19 @@ Connect to your Couchbase Capella operational cluster (or your local Couchbase C
 Couchbase Capella::
 +
 --
-[source,scala]
+[source,java]
 ----
-include::devguide:example$scala/Cloud.scala[tag=connect,indent=0]
+include::devguide:example$StartUsingCapella.java[tags=connect-info,indent=0]
 ----
-
-Note, the client certificate for connecting to a Capella cluster is included in the SDK installation.
 --
 
 Self-Managed Couchbase Server::
-+ 
--- 
-[source,scala]
++
+--
+
+[source,java]
 ----
-include::devguide:example$scala/StartUsing.scala[tag=connect,indent=0]
+include::example$StartUsing.java[tags=connect-info,indent=0]
 ----
 --
 
@@ -240,7 +224,7 @@ currently only compatible with recent versions of xref:operator:ROOT:concept-clo
 
 [source,scala]
 ----
-.connect(
+Cluster cluster = Cluster.connect(
   "couchbase2://10.12.14.16",
   ClusterOptions
     .create(username, password)
@@ -249,16 +233,9 @@ currently only compatible with recent versions of xref:operator:ROOT:concept-clo
 ----
 
 Read more on the xref:howtos:managing-connections.adoc#cloud-native-gateway[Connections] page.
-
 --
 ====
 
-
-The `ClusterEnvironment.builder` is covered more fully on the xref:ref:client-settings.adoc#the-environment-builder[Clint Settings] page.
-
-
-NOTE: `Cluster.connect` returns a `Try[Cluster]`, as the Scala client uses functional error handling and does not throw exceptions.
-You'll see examples later of how to better handle a `Try`, but for simplicity here we'll assume the operation succeeded and get the result as a `Cluster` using `.get`.
 
 For a deeper look at connection options, read xref:howtos:managing-connections.adoc[].
 
@@ -266,13 +243,27 @@ TIP: The connection code for getting started uses the Administrator password tha
 In any production app you should create a role restricted to the permissions needed for your app -- 
 more on this in xref:concept-docs:best-practices.adoc#roles-and-rbac[the Security documentation].
 
+
+The `ClusterEnvironment.Builder` is covered more fully on the xref:ref:client-settings.adoc#the-environment-builder[Client Settings] page.
+
+[TIP]
+.Simpler Connection
+====
+There's also a simpler version of `Cluster.connect()` for when you don't need to customize the cluster environment:
+[source,java]
+----
+include::devguide:example$SimpleConnect.java[tags=connect-string,indent=0]
+----
+====
+
+
 === Opening a Bucket
 
 Following successful authentication, open the bucket with:
 
-[source,scala]
+[source,java]
 ----
-include::devguide:example$scala/Cloud.scala[tag=bucket,indent=0]
+include::devguide:example$java/StartUsingCapella.java[tag=bucket,indent=0]
 ----
 
 

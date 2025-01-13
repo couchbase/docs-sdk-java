@@ -23,14 +23,10 @@ You want to query your data, but does that always mean a {sqlpp} query to the Qu
 The CRUD API of the {sqlpp} Query service is mirrored by the Data Service's API, but without the need for indexes, and using a binary protocol gives faster access than streaming JSON from the Query Service.
 
 
-[source,scala]
+[source,java]
 ----
-collection.remove("document-key2", durability = Durability.Majority) match {
-  case Success(result) => println("Document removed successfully")
-  // The mutation is available in-memory on at least a majority of replicas
-  case Failure(err: DocumentNotFoundException) =>
-    println("The document does not exist")
-  case Failure(err) => println("Error: " + err)
+collection.upsert("my-document", JsonObject.create().put("doc", true),
+    upsertOptions().durability(DurabilityLevel.MAJORITY));
 }
 ----
 
@@ -155,14 +151,9 @@ A practical look at this -- using the `durability` parameter with mutating opera
 
 
 
-This durability is enforced by the cluster, 
-
-// *TODO* Durability section
-
-// Worth putting in?
-// Note, if you are working with an older, no longer supported version of Couchbase Server, you may want to look at 3.3@java-sdk:concept-docs:durability-replication-failure-considerations.adoc#older-server-versions in the earlier SDK docs.
-// https://docs.couchbase.com/java-sdk/current/concept-docs/durability-replication-failure-considerations.html#older-server-versions
-// Change link once 3.3 is archived?
+This durability is enforced by the cluster.
+Note, if you are working with an older, no longer supported version of Couchbase Server, you may want to look at
+https://docs-archive.couchbase.com/java-sdk/3.3/concept-docs/durability-replication-failure-considerations.html#older-server-versions[client-verified durability in our archived docs].
 
 
 
@@ -182,11 +173,9 @@ which is useful if a node is timing out;
 or to return _all_ of the results, for client code to handle any inconsistency, or to build a consensus answer.
 
 
-////
-
 === Preferred Server Group Replica Reads
 
-IMPORTANT: Preferred Server Group Replica Reads are only accessible with the {name-sdk} working with Couchbase Server 7.6.2 or newer (Capella or self-managed).
+IMPORTANT: Preferred Server Group Replica Reads are only accessible with the {name-sdk} working with Couchbase Server 7.6.2 or newer (Capella or self-managed), from SDK version 3.7.4.
 
 xref:server:learn:clusters-and-availability/groups.adoc#understanding-server-group-awareness[Server Groups]
 can be used to define subsets of nodes within a Couchbase cluster, which contain a complete set of vbuckets (active or replica).
@@ -220,7 +209,6 @@ Implicit in the rules for durability, and the process of setting up Server Group
 xref:concept-docs:transactions.adoc[multi-document ACID transactions].
 ====
 
-////
 
 
 
