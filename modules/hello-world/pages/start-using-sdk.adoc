@@ -202,7 +202,7 @@ Couchbase Capella::
 --
 [source,java]
 ----
-include::devguide:example$StartUsingCapella.java[tags=connect-info,indent=0]
+include::devguide:example$java/StartUsingCapella.java[tags=connect-info,indent=0]
 ----
 --
 
@@ -212,7 +212,7 @@ Self-Managed Couchbase Server::
 
 [source,java]
 ----
-include::example$StartUsing.java[tags=connect-info,indent=0]
+include::example$java/StartUsing.java[tags=connect-info,indent=0]
 ----
 --
 
