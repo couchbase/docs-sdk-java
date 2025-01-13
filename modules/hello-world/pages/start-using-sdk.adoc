@@ -252,7 +252,7 @@ The `ClusterEnvironment.Builder` is covered more fully on the xref:ref:client-se
 There's also a simpler version of `Cluster.connect()` for when you don't need to customize the cluster environment:
 [source,java]
 ----
-include::devguide:example$SimpleConnect.java[tags=connect-string,indent=0]
+include::devguide:example$java/SimpleConnect.java[tags=connect-string,indent=0]
 ----
 ====
 
@@ -284,7 +284,7 @@ As with the earlier `Cluster.connect`, we use `.get` on the result here for simp
 *Collections* allow documents to be grouped by purpose or theme, according to a specified *scope* -- see data modeling, <<data-modeling,below>>.
 Here we will use the `airport` collection within the `inventory` scope from `travel-sample` bucket as an example.
 
-[source,scala]
+[source,java]
 ----
 include::devguide:example$scala/Cloud.scala[tag=collection,indent=0]
 ----
@@ -449,7 +449,7 @@ both
 * Explore some of the xref:project-docs:third-party-integrations.adoc[third party integrations] with Couchbase and the {name_platform} SDK, across the {name_platform} ecosystem.
 
 
-////
+
 == Next Steps
 
 Now you're up and running, try one of the following:
@@ -858,3 +858,4 @@ If you're running the SDK on your laptop against a Capella cluster, see further 
 ** xref:project-docs:compatibility.adoc#network-requirements[Network Requirements].
 ** If you have a consumer-grade router which has problems with DNS-SRV records review our xref:howtos:troubleshooting-cloud-connections.adoc#troubleshooting-host-not-found[Troubleshooting Guide].
 * Our https://forums.couchbase.com/c/java-sdk/5[community forum] is a great source of help.
+////
