@@ -41,6 +41,52 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 
 
 
+
+=== Version 3.7.7 (08 January 2025)
+
+This is the seventh maintenance release of the 3.7 series.
+
+https://packages.couchbase.com/clients/java/3.7.7/Couchbase-Java-Client-3.7.7.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.7/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-3.7.7/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.5.7             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.5.7             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.7.7             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.7.7             | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Bug Fixes
+* https://jira.issues.couchbase.com/browse/JVMCBC-1592[JVMCBC-1592]:
+When fetching fresh cluster topology information for a bucket, the SDK now dispatches the request to a random eligible node instead of using a round-robin algorithm. Randomizing the node selection avoids a pathological condition where if the number of open buckets is equal to the number of nodes, and one of the nodes is degraded, the config refresh attempt for a particular bucket would fail repeatedly because it was always sent to the degraded node.
+* https://jira.issues.couchbase.com/browse/JCBC-2152[JCBC-2152]:
+Return the inserted document in the form of a TransactionGetResult instead of the old content from the Get operation.
+
+==== Improvements
+* https://jira.issues.couchbase.com/browse/JVMCBC-1585[JVMCBC-1585]:
+When a thread executing clusterOrScope.queryStreaming() is interrupted, the thrown CancellationException now has the original InterruptedException as its cause.
+* https://jira.issues.couchbase.com/browse/JCBC-2174[JCBC-2174]:
+Added experimental queryStreaming methods to Cluster and Scope. These methods let you process SQL++ query result rows as they arrive from the server, without having to use the Reactive API. See the Javadoc for details. Example usage:
+[source,java]
+----
+clusterOrScope.queryStreaming(
+  "select 'hello' as greeting",
+  row -> System.out.println(row.contentAsObject())
+);
+----
+
+
+
 === Version 3.7.6 (04 December 2024)
 
 This is the sixth maintenance release of the 3.7 series.
