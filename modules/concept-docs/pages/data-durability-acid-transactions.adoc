@@ -1,11 +1,8 @@
 = Data Modelling, Durability, and Consistency
-// :page-aliases: 
 // :page-aliases: durability-replication-failure-considerations.adoc
 :description: Performance, availability, consistency -- balance your priorities, and model your data to achieve these goals.
 :page-toclevels: 2
-// :anyreplica-api: pass:q[https://docs.couchbase.com/sdk-api/couchbase-scala-client/com/couchbase/client/scala/Collection.html#getAnyReplica(id:String,options:com.couchbase.client.scala.kv.GetAnyReplicaOptions):scala.util.Try[com.couchbase.client.scala.kv.GetReplicaResult]
-// :anyreplica-api: https://docs.couchbase.com/sdk-api/couchbase-scala-client/com/couchbase/client/scala/Collection.html
-
+:anyreplica-api: pass:q[https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/AsyncCollection.html#getAnyReplica(java.lang.String,com.couchbase.client.java.kv.GetAnyReplicaOptions)]
 
 // Note to editors
 // 
@@ -61,7 +58,7 @@ Couchbase stores data in _documents_, and this is the atomic....
 ////
 
 Designing an application to offer guarantees of durability or consistency in a networked environment is hard.
-The newcomer to the area has to wrestle with concepts like https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed/[CAP Theorum] and the https://en.wikipedia.org/wiki/Isolation_(database_systems)[many possible interpretations] of ACID transactions. 
+The newcomer to the area has to wrestle with concepts like https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed/[CAP Theorum^] and the https://en.wikipedia.org/wiki/Isolation_(database_systems)[many possible interpretations^] of ACID transactions. 
 Here we hope to keep it _relatively_ simple, with a look at which Couchbase features give you which guarantees,
 when you may prefer to use them, and -- perhaps equally important, though sometimes overlooked -- 
 what is the performance cost of these choices.
@@ -215,7 +212,7 @@ xref:concept-docs:transactions.adoc[multi-document ACID transactions].
 
 == Concurrent Document Mutations
 
-You can use the CAS value to control how concurrent document modifications are handled.
+You can use the CAS (Compare and Swap) value to control how concurrent document modifications are handled.
 It helps avoid and control potential race conditions in which some mutations may be inadvertently lost or overridden by mutations made by other clients.
 
 === Performance considerations
@@ -248,27 +245,42 @@ xref:howtos:concurrent-document-mutations.adoc#pessimistic-locking[Pessimistic L
 
 
 
-////
+
 == Expiration
 
-*TODO* MaxTTL
-////
+The expiration setting for a document determines if and when it expires.
+When a document expires, Couchbase Server removes it.
+You can set a maximum time to live (`maxTTL`) value on buckets and collections that imposes a default expiration on their documents.
+It also imposes an upper limit on explicitly-set expiration times.
 
+You can set an expiration value on an individual document either when you create it or when you mutate it.
+Set the expiration to the number of seconds the document should exist before Couchbase Server automatically removes it.
+You can change this value later in case you want extend the life of the document.
 
+As there could be cost implications for storing ephemeral data past its usable life -- 
+or even legal implications about keeping data under GDPR and other privacy legislation --
+you should be clear about the interactions between setting `maxTTL` at different levels can have.
 
+For example, setting a collection's `maxTTL` to `0` (the default) means it will inherit the bucket's `maxTTL` value;
+setting a bucket's `maxTTL` to `0` (the default) means it will never expire.
+The table in the xref:{version-server}@server:learn:data/expiration.adoc#expiration-setting-priorities[expiration documentation]
+covers the interaction between a document’s expiration setting and the `maxTTL` settings of the collection and bucket that contain it.
 
+// TODO check they all use MAX32INT -- 2147483648 seconds
 
+=== Collection No-Expiry Option
 
-////
-TTL
+From Java SDK 3.5.3 with Capella (and self-managed Server from 7.6.0), setting a `maxTTL` of `-1` on a collection will prevent it from expiring, even when its containing bucket has reached expiry time.
+Again, see the table in the xref:{version-server}@server:learn:data/expiration.adoc#expiration-setting-priorities[expiration documentation].
 
-DOC-11679
- 
-Re: Information on maxTTL for collections is not accurate
-The summary of "Document do not expire" is actually incorrect. After I did some testing, it turns out that documents *can* expire within collections and buckets that have maxTTL=0 if you set the document's expiration to a positive value.
+=== Changing a Document, but Not the Expiry
 
-Instead of talking about maxTTL in terms of documents expiring or not expiring, I believe we should discuss maxTTL's effect on a document's expiration setting: a non-zero value as sets a default expiration value for all documents contained in the bucket/collection (actually, I believe this is all newly-created documents . Setting maxTTL on a bucket or collection does not automatically change the expiration of existing documents, from what I have seen). It also sets the upper bound on a the expiration value you can set in a document directly. The actual expiration time is set by the document's expiration setting.  
-////
+By default, changing a document also changes its expiry.
+If you do not pass a value for expiry, the document does not expire, even if the document previously had an expiry. If this is not what you want, you must tell Couchbase to keep the document’s expiry.
+
+With the mutation operation on a document (say a `replace` or an `upsert`), use `preserveExpiry = true` -- 
+and consider using optimistic locking if two threads could be changing the same document and one is not necessarily passing in `preserveExpiry = true`.
+
 
 
 
