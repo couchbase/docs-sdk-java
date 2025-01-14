@@ -52,16 +52,16 @@ We will walk through the different steps required to get the application running
 . Cloning Repo
 +
 [source,console]
-====
+----
 $ git clone https://github.com/couchbase-examples/java-springboot-quickstart.git
-====
+----
 
 . Navigate to the Project Directory
 +
 [source,console]
-====
+----
 $ cd java-springboot-quickstart
-====
+----
 
 . Install Dependencies
 +
@@ -69,9 +69,9 @@ The dependencies for the application are specified in the `pom.xml` file in the 
 Dependencies can be installed through `mvn` the default package manager for Java.
 +
 [source,console]
-====
+----
 $ mvn clean install -DskipTests=true
-====
+----
 +
 Note, the `-DskipTests=true` option is used to skip the tests.
 The tests require the application to be running.
@@ -88,13 +88,13 @@ All configuration for communication with the database is read from the applicati
 We have provided a convenience feature in this quickstart to read the properties from a local file,
 `application.properties` in the `src/main/resources` folder.
 
-====
+----
 spring.mvc.pathmatch.matching-strategy=ANT_PATH_MATCHER
 spring.couchbase.bucket.name=travel-sample
 spring.couchbase.bootstrap-hosts=DB_CONN_STR
 spring.couchbase.bucket.user=DB_USERNAME
 spring.couchbase.bucket.password=DB_PASSWORD
-====
+----
 
 Instead of the `DB_CONN_STR`, `DB_USERNAME`, and `DB_PASSWORD`, you need to add the values for the Couchbase connection.
 The connection string expects the `couchbases://` part.
@@ -119,25 +119,25 @@ At this point, we have installed the dependencies, loaded the travel-sample data
 The application is now ready and you can run it.
 
 [source,console]
-====
+----
 $ mvn spring-boot:run
-====
+----
 
 === Using Docker
 
 Build the Docker image
 
 [source,console]
-====
+----
 $ docker build -t java-springboot-quickstart .
-====
+----
 
 Run the Docker image
 
 [source,console]
-====
+----
 $ docker run -d --name springboot-container -p 9440:8080 java-springboot-quickstart -e DB_CONN_STR=<connection_string> -e DB_USERNAME=<username> -e DB_PASSWORD=<password>
-====
+----
 
 [NOTE] The `application.properties` file has the connection information to connect to your Capella cluster.
 You can also pass the connection information as environment variables to the Docker container.
@@ -162,9 +162,9 @@ To test your application, you can use Maven (mvn) to run the test suite. Here ar
 ### Run All Tests:
 
 [source,console]
-====
+----
 $ mvn test
-====
+----
 
 This command will execute all the test cases in your project.
 
@@ -175,23 +175,23 @@ Additionally, you can run individual test classes or methods using the following
 To run the tests for the AirlineIntegrationTest class:
 
 [source,console]
-====
+----
 $ mvn test -Dtest=org.couchbase.quickstart.springboot.controllers.AirlineIntegrationTest
-====
+----
 
 To run the tests for the AirportIntegrationTest class:
 
 [source,console]
-====
+----
 $ mvn test -Dtest=org.couchbase.quickstart.springboot.controllers.AirportIntegrationTest
-====
+----
 
 To run the tests for the RouteIntegrationTest class:
 
 [source,console]
-====
+----
 $ mvn test -Dtest=org.couchbase.quickstart.springboot.controllers.RouteIntegrationTest
-====
+----
 
 ## Appendix
 
