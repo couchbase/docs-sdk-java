@@ -38,7 +38,10 @@ To run this tutorial using a self-managed Couchbase cluster, please refer to the
 
 * Java SDK 17+ -- see the xref:project-docs:compatibility.adoc#jdk-compat[compatibility guide].
 +
-[NOTE] The application is tested with Java 17 and 21. If you are using a different version of Java, please update the `pom.xml` file accordingly.
+[NOTE]
+====
+The application is tested with Java 17 and 21. If you are using a different version of Java, please update the `pom.xml` file accordingly.
+====
 
 * The Travel Sample Bucket -- pre-loaded in Capella Free Tier, or see xref:cloud:clusters:data-service/import-data-documents.adoc#import-sample-data[].
 
@@ -107,10 +110,14 @@ The properties are read from the `application.properties` file if the environmen
 
 You can add environment variables `DB_CONN_STR`, `DB_USERNAME`, and `DB_PASSWORD` to your system environment variables or you can update the `application.properties` file in the `src/main/resources` folder.
 
-[TIP] Couchbase -- including Capella -- is designed to run in a LAN-like environment.
+.Running from a Development Machine
+[TIP]
+====
+Couchbase -- including Capella -- is designed to run in a LAN-like environment.
 For development, connecting to a remote cloud instance from a local laptop instead of an application server in the same region,
 may require you to adjust some timeouts.
 If you have problems, refer to the xref:ref:client-settings.adoc#constrained-network-environments[constrained network environments] section of the docs.
+====
 
 
 === Directly on Machine
@@ -139,27 +146,31 @@ Run the Docker image
 $ docker run -d --name springboot-container -p 9440:8080 java-springboot-quickstart -e DB_CONN_STR=<connection_string> -e DB_USERNAME=<username> -e DB_PASSWORD=<password>
 ----
 
-[NOTE] The `application.properties` file has the connection information to connect to your Capella cluster.
+[NOTE]
+====
+The `application.properties` file has the connection information to connect to your Capella cluster.
 You can also pass the connection information as environment variables to the Docker container.
 If you choose not to pass the environment variables, you can update the `application.properties` file in the `src/main/resources` folder.
+====
+
 
 === Verifying the Application
 
 Once the application starts, you can see the details of the application on the logs.
-include::assets/images/app-startup-spring-boot.png[]
+include::image$app-startup-spring-boot.png[]
 
 The application will run on port 8080 of your local machine -- `http://localhost:8080`.
 You will find the interactive Swagger documentation of the API if you go to the URL in your browser.
 Swagger documentation is used in this demo to showcase the different API endpoints and how they can be invoked.
 More details on the Swagger documentation can be found in the <<#swagger-documentation>>.
 
-![Swagger Documentation](./assets/images/swagger-documentation-spring-boot.png)
+include::image$swagger-documentation-spring-boot.png[Swagger Documentation]
 
-## Running Tests
+== Running Tests
 
 To test your application, you can use Maven (mvn) to run the test suite. Here are the steps to run the tests:
 
-### Run All Tests:
+=== Run All Tests:
 
 [source,console]
 ----
@@ -168,40 +179,40 @@ $ mvn test
 
 This command will execute all the test cases in your project.
 
-### Run Individual Tests:
+=== Run Individual Tests:
 
 Additionally, you can run individual test classes or methods using the following commands:
 
-To run the tests for the AirlineIntegrationTest class:
+To run the tests for the `AirlineIntegrationTest` class:
 
 [source,console]
 ----
 $ mvn test -Dtest=org.couchbase.quickstart.springboot.controllers.AirlineIntegrationTest
 ----
 
-To run the tests for the AirportIntegrationTest class:
+To run the tests for the `AirportIntegrationTest` class:
 
 [source,console]
 ----
 $ mvn test -Dtest=org.couchbase.quickstart.springboot.controllers.AirportIntegrationTest
 ----
 
-To run the tests for the RouteIntegrationTest class:
+To run the tests for the `RouteIntegrationTest` class:
 
 [source,console]
 ----
 $ mvn test -Dtest=org.couchbase.quickstart.springboot.controllers.RouteIntegrationTest
 ----
 
-## Appendix
+== Appendix
 
-### Data Model
+=== Data Model
 
 For this quickstart, we use three collections, `airport`, `airline` and `routes` that contain sample airports, airlines and airline routes respectively. The routes collection connects the airports and airlines as seen in the figure below. We use these connections in the quickstart to generate airports that are directly connected and airlines connecting to a destination airport. Note that these are just examples to highlight how you can use SQL++ queries to join the collections.
 
-![travel-sample data model](./assets/images/travel_sample_data_model.png)
+include::image$travel_sample_data_model.png[travel-sample data model]
 
-### Extending API by Adding New Entity
+=== Extending API by Adding New Entity
 
 If you would like to add another entity to the APIs, these are the steps to follow:
 
@@ -210,7 +221,7 @@ If you would like to add another entity to the APIs, these are the steps to foll
 - Define the service in a new class in the `services` package similar to the existing services like `AirportService.java`.
 - Define the repository in a new class in the `repositories` package similar to the existing repositories like `AirportRepository.java`.
 
-### Running Self-Managed Couchbase Cluster
+=== Running Self-Managed Couchbase Cluster
 
 If you are running this quickstart with a self-managed Couchbase cluster, you need to [load](https://docs.couchbase.com/server/current/manage/manage-settings/install-sample-buckets.html) the travel-sample data bucket in your cluster and generate the credentials for the bucket.
 
@@ -218,13 +229,13 @@ You need to update the connection string and the credentials in the `application
 
 Note: Couchbase Server version 7 or higher must be installed and running before running the Spring Boot Java app.
 
-### Swagger Documentation
+=== Swagger Documentation
 
 Swagger documentation provides a clear view of the API including endpoints, HTTP methods, request parameters, and response objects.
 
 Click on an individual endpoint to expand it and see detailed information. This includes the endpoint's description, possible response status codes, and the request parameters it accepts.
 
-#### Trying Out the API
+==== Trying Out the API
 
 You can try out an API by clicking on the "Try it out" button next to the endpoints.
 
@@ -232,7 +243,7 @@ You can try out an API by clicking on the "Try it out" button next to the endpoi
 
 - Execution: Once you've inputted all the necessary parameters, you can click the "Execute" button to make a live API call. Swagger UI will send the request to the API and display the response directly in the documentation. This includes the response code, response headers, and response body.
 
-#### Models
+==== Models
 
 Swagger documents the structure of request and response bodies using models. These models define the expected data structure using JSON schema and are extremely helpful in understanding what data to send and expect.
 
