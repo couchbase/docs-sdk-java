@@ -157,7 +157,7 @@ You can combine a traditional FTS query with vector queries:
 include::example$Search.java[tag=vector2,indent=0]
 ----
 
-How the results are combined (ANDed or ORed) can be controlled with `vectorSearchOptions().vectorQueryCombination()`.
+The FTS query results will be ORed together with the vector query results.
 
 ==== FTS queries
 And note that traditional FTS queries, without vector search, are also supported with the new `cluster.search()` / `scope.search()` APIs:
