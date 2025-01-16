@@ -8,6 +8,7 @@
 
 To give insight into a request/response flow, the SDK provides a `RequestTracer` interface and ships with both a default implementation as well as modules that can be plugged into feed the traces to external systems (including OpenTelemetry).
 
+In addition, users may want to consider using this https://github.com/couchbaselabs/couchbase-jvm-sdk-inmemory-tracer[in-memory tracer], which allows writing aggregated reports of all operations to the log, writing all operations to files in JSON format, and is flexible to allow the OpenTelemetry data to be processed however desired.
 
 == The Default ThresholdLoggingTracer
 
