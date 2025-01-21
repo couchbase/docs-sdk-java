@@ -185,12 +185,13 @@ In the following sections we will populate the `main()` method.
 Connect to your cluster by calling the `Cluster.connect()` method and pass it your connection details.
 The basic connection details that you’ll need are given below -- for more background information, see xref:howtos:managing-connections.adoc[].
 
-[{tabs}]
+
+[tabs,sync-group-id="Couchbase Capella|Self-Managed Couchbase Server"]
 ==== 
 Couchbase Capella::
 +
 --
-From version 3.3, the Java SDK includes Capella’s standard Certificate Authority (CA) certificates by default, so you don't need any additional configuration.
+The Java SDK includes Capella’s standard Certificate Authority (CA) certificates by default, so you don't need any additional configuration.
 Capella requires TLS, which you can enable by using a connection string that starts with `couchbases://` (note the final 's').
 
 This example shows how to connect and customize the xref:howtos:managing-connections.adoc#cluster-environment[Cluster Environment] settings.
@@ -201,13 +202,13 @@ include::devguide:example$StartUsingCapella.java[tags=connect-env,indent=0]
 ----
 
 When accessing Capella from a different Wide Area Network or Availability Zone, you may experience latency issues with the default connection settings.
-SDK 3.4 introduces a `wan-development` Configuration Profile, which provides pre-configured timeout settings suitable for working in high latency environments.
+SDK 3.4 introduced a `wan-development` Configuration Profile, which provides pre-configured timeout settings suitable for working in high latency environments.
 Basic usage is shown in the example above, but if you want to learn more see xref:ref:client-settings.adoc#constrained-network-environments[Constrained Network Environments].
 
 CAUTION: The Configuration Profiles feature is currently a xref:java-sdk:project-docs:compatibility.adoc#interface-stability[Volatile API] and may be subject to change.
 --
 
-Local Couchbase Server::
+Self-Managed Couchbase Server::
 +
 --
 For developing locally on the same machine as Couchbase Server, your connection string can be `couchbase://127.0.0.1` as shown here.
@@ -220,7 +221,45 @@ This example shows how to connect and customize the xref:howtos:managing-connect
 include::example$StartUsing.java[tags=connect-env,indent=0]
 ----
 --
+
+Cloud Native Gateway (CNG)::
++
+--
+Couchbase's large number of ports across the URLs of many services can be proxied by using a `couchbase2://` endpoint as the connection string --
+currently only compatible with recent versions of xref:operator:ROOT:concept-cloud-native-gateway.adoc[Couchbase Autonomous Operator]:
+
+[source,scala]
+----
+Cluster cluster = Cluster.connect(
+  "couchbase2://10.12.14.16",
+  ClusterOptions
+    .create(username, password)
+    .environment(env)
+)
+----
+
+Read more on the xref:howtos:managing-connections.adoc#cloud-native-gateway[Connections] page.
+--
+
+Quarkus::
++
+--
+Our  xref:quarkus-extension:ROOT:overview.adoc[Couchbase Quarkus Java Extension docs] cover installing and connecting with the Quarkus extension in detail,
+but if you already have Quarkus installed and a project ready (with `quarkus-couchbase` in your `pom.xml` or `build.gradle`),
+then your `src/main/resources/application.properties` file needs to contain:
+
+[source,properties]
+----
+quarkus.couchbase.connection-string=localhost
+quarkus.couchbase.username=username
+quarkus.couchbase.password=password
+----
+--
 ====
+
+
+
+
 
 [TIP]
 .Simpler Connection

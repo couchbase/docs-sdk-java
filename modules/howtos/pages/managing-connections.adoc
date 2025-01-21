@@ -238,6 +238,18 @@ E.....@.@.............+....Z.'yZ..#........
 ====
 
 
+== Quarkus Java Extension
+
+Our  xref:quarkus-extension:ROOT:overview.adoc[Couchbase Quarkus Java Extension docs] cover installing and connecting with the Quarkus extension in detail,
+but if you already have Quarkus installed and a project ready (with `quarkus-couchbase` in your `pom.xml` or `build.gradle`),
+then your `src/main/resources/application.properties` file needs to contain:
+
+[source,properties]
+----
+quarkus.couchbase.connection-string=localhost
+quarkus.couchbase.username=username
+quarkus.couchbase.password=password
+----
 
 
 

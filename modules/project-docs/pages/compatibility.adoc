@@ -227,6 +227,13 @@ Please make sure that you are using a supported version of the Couchbase Java SD
 Using the latest Spring Data Couchbase should ensure that this is so.
 
 
+
+=== Quarkus Java Compatibility
+
+See the xref:quarkus-extension:ROOT:overview.adoc[Couchbase Quarkus Java Extension docs] for details of using Quarkus, and the compatibility with Quarkus, GraalVM, and the Couchbase Java SDK.
+
+
+
 === API Version
 
 include::{version-common}@sdk:shared:partial$api-version.adoc[tag=api-version]
