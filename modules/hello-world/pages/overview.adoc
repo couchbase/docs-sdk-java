@@ -80,7 +80,17 @@ Install the SDK, and explore in the way that works best for you.
 </dependencies>
 ----
 
-The links below will take you where you want to go -- as will the navigation on the left-hand side of this page.
+The Couchbase Java SDK integrates into the Java ecosystem through a number of extensions and connectors, including:
+
+* https://spring.io/projects/spring-data-couchbase[Spring Data]
+* https://blog.couchbase.com/couchbase-spring-boot-spring-data/[Spring Boot]
+* xref:quarkus-extension:ROOT:overview.adoc[Couchbase Quarkus Java Extension]
+* xref:3.5@spark-connector:ROOT:java-api.adoc[Apache Spark Connector]
+
+
+== Exploring the Java SDK
+
+The links in the sections below will take you where you want to go -- as will the navigation on the left-hand side of this page.
 But if you don't know exactly where you need to go, try one of the following:
 
 * Our xref:hello-world:start-using-sdk.adoc[Quickstart Guide] introduces the SDK with a quick install, and CRUD examples against the Data Service.
@@ -185,6 +195,7 @@ Useful resources to help support your development experience with Couchbase and 
 // * https://docs-archive.couchbase.com/home/index.html[Older Versions Archive]
 // ** xref:project-docs:migrating-sdk-code-to-3.n.adoc[]
 * xref:project-docs:third-party-integrations.adoc[]
+* xref:quarkus-extension:ROOT:overview.adoc[Couchbase Quarkus Java Extension]
 * xref:project-docs:sdk-full-installation.adoc[]
 
 ++++
