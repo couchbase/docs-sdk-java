@@ -230,6 +230,8 @@ Using the latest Spring Data Couchbase should ensure that this is so.
 
 === Quarkus Java Compatibility
 
+Couchbase Quarkus requires Java SDK 3.7.7 or newer.
+
 See the xref:quarkus-extension:ROOT:overview.adoc[Couchbase Quarkus Java Extension docs] for details of using Quarkus, and the compatibility with Quarkus, GraalVM, and the Couchbase Java SDK.
 
 
