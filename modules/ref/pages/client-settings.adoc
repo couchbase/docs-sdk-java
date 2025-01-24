@@ -236,7 +236,7 @@ Set this to `false` if you do not require these features and wish to avoid the a
 |===
 | Connection String      | `io.networkResolution` (or `network`)
 | System Property        | `com.couchbase.env.io.networkResolution`
-| Builder                | `env.ioConfig(it \-> it.networkResolution(boolean))`
+| Builder                | `env.ioConfig(it \-> it.networkResolution(NetworkResolution))`
 | Default Value          | `auto`
 |===
 
