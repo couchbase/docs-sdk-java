@@ -250,7 +250,7 @@ xref:howtos:concurrent-document-mutations.adoc#pessimistic-locking[Pessimistic L
 
 The expiration setting for a document determines if and when it expires.
 When a document expires, Couchbase Server removes it.
-You can set a maximum time to live (`maxTTL`) value on buckets and collections that imposes a default expiration on their documents.
+You can set a maximum time to live (`maxExpiry`) value on buckets and collections that imposes a default expiration on their documents.
 It also imposes an upper limit on explicitly-set expiration times.
 
 You can set an expiration value on an individual document either when you create it or when you mutate it.
@@ -259,24 +259,29 @@ You can change this value later in case you want extend the life of the document
 
 As there could be cost implications for storing ephemeral data past its usable life -- 
 or even legal implications about keeping data under GDPR and other privacy legislation --
-you should be clear about the interactions between setting `maxTTL` at different levels can have.
+you should be clear about the interactions between setting `maxExpiry` at different levels can have.
 
-For example, setting a collection's `maxTTL` to `0` (the default) means it will inherit the bucket's `maxTTL` value;
-setting a bucket's `maxTTL` to `0` (the default) means it will never expire.
+For example, setting a collection's `maxExpiry` to `0` (the default) means it will inherit the bucket's `maxExpiry` value;
+setting a bucket's `maxExpiry` to `0` (the default) means it will never expire.
 The table in the xref:{version-server}@server:learn:data/expiration.adoc#expiration-setting-priorities[expiration documentation]
-covers the interaction between a document’s expiration setting and the `maxTTL` settings of the collection and bucket that contain it.
+covers the interaction between a document’s expiration setting and the `maxExpiry` settings of the collection and bucket that contain it.
+
+TIP: In earlier releases of the SDK, `maxTTL` was used for setting the time to live.
+This method has been deprecated.
+Please use `maxExpiry` at the bucket and collection level.
 
 // TODO check they all use MAX32INT -- 2147483648 seconds
 
 === Collection No-Expiry Option
 
-From Java SDK 3.5.3 with Capella (and self-managed Server from 7.6.0), setting a `maxTTL` of `-1` on a collection will prevent it from expiring, even when its containing bucket has reached expiry time.
+From Java SDK 3.5.3 with Capella (and self-managed Server from 7.6.0), setting a `maxExpiry` of `-1` on a collection will prevent it from expiring, even when its containing bucket has reached expiry time.
 Again, see the table in the xref:{version-server}@server:learn:data/expiration.adoc#expiration-setting-priorities[expiration documentation].
 
 === Changing a Document, but Not the Expiry
 
 By default, changing a document also changes its expiry.
-If you do not pass a value for expiry, the document does not expire, even if the document previously had an expiry. If this is not what you want, you must tell Couchbase to keep the document’s expiry.
+If you do not pass a value for expiry, the document does not expire, even if the document previously had an expiry.
+If this is not what you want, you must tell Couchbase to keep the document’s expiry.
 
 With the mutation operation on a document (say a `replace` or an `upsert`), use `preserveExpiry = true` -- 
 and consider using optimistic locking if two threads could be changing the same document and one is not necessarily passing in `preserveExpiry = true`.
