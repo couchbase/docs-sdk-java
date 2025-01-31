@@ -85,7 +85,7 @@ Writes in Couchbase (from the SDK or elsewhere) are written to a single node. Fr
 Each level of durability guarantee carries a price in time to persist to replicas or to disk.
 Transactional guarantees across multiple documents add another layer of performance cost -- something readily borne when the data is important enough, and justifiably discarded for many categories of transient and unimportant data.
 However, many data fall into an intermediate category, and here the atomic consistency decision is made by what's tolerable for read and write times.
-In this case, consider if a tweak to the schema, to bring items into the same document, can give you transactional guarntees without the performance penalty of multi-document transactions.
+In this case, consider if a tweak to the schema, to bring items into the same document, can give you transactional guarantees without the performance penalty of multi-document transactions.
 
 Consider, too, that many operations are performed at the _collection_ level, and keeping documents in the same collection can make for speedier indexing and queries -- whether {sqlpp} or Search.
 
