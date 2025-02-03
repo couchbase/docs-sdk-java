@@ -42,15 +42,15 @@ The client fetches the full address list from the first node it is able to conta
 
 A `ClusterEnvironment` manages shared resources like thread pools, timers, and schedulers.
 It also holds the client settings.
-One way to customize the client's behavior is to build your own `ClusterEnvironment` with custom settings:
+You can customize the client's behavior by providing a callback that modifies a `ClusterEnvironment.Builder`:
 
 [source,java]
 ----
 include::example$ManagingConnections.java[tag=customenv,indent=0]
 ----
 
-TIP: If you create a `Cluster` without specifying a custom environment, the client creates a default environment used exclusively by that `Cluster`.
-This default `ClusterEnvironment` is managed completely by the Java SDK, and is automatically shut down when the associated `Cluster` is disconnected.
+TIP: When you customize the environment using a callback like in the above example, the client creates an environment that is managed completely by the Java SDK.
+This environment is automatically shut down when the associated `Cluster` is disconnected.
 
 [#connection-strings]
 == Connection Strings
@@ -95,18 +95,25 @@ If you created any `ClusterEnvironment` instances, call their `shutdown()` metho
 [#multiple-clusters]
 == Connecting to Multiple Clusters
 
-If a single application needs to connect to multiple Couchbase Server clusters, we recommend creating a single `ClusterEnvironment` and sharing it between the `Clusters`:
+If a single application needs to connect to multiple Couchbase Server clusters, it is possible to reduce the SDK's resource consumption by creating a single `ClusterEnvironment` and sharing it between the `Clusters`:
 
 [source,java]
 ----
 include::example$ManagingConnections.java[tag=shareclusterenvironment,indent=0]
 ----
 
-When you manually create a `ClusterEnvironment` like this, the SDK will not shut it down when you call `Cluster.disconnect()`.
-Instead you are responsible for shutting it down after disconnecting all clusters that share the environment.
+[WARNING]
+====
+If you manually create a `ClusterEnvironment`, be aware of these limitations:
 
-TIP: If you create a `Cluster` without specifying a custom environment, the client creates a default environment used exclusively by that `Cluster`.
-This default `ClusterEnvironment` is managed completely by the Java SDK, and is automatically shut down when the associated `Cluster` is disconnected.
+* A manually created `ClusterEnvironment` cannot be further customized by connection string parameters or Java system properties.
+
+* When you manually create a `ClusterEnvironment`, the SDK will not shut it down when you call `Cluster.disconnect()`.
+Instead, you are responsible for shutting it down after disconnecting all clusters that share the environment.
+====
+
+TIP: When connecting to a single cluster, it's usually better to customize the `ClusterEnvironment` by <<cluster-environment,providing a configuration callback>>.
+That way, the SDK automatically shuts down the environment for you, and you can customize the environment with connection string parameters and Java system properties.
 
 [#alternate-addresses]
 == Alternate Addresses and Custom Ports
@@ -259,6 +266,20 @@ To check which ciphers are available on a self-managed Couchbase Server installa
 ----
 
 
+== Quarkus Java Extension
+
+Our  xref:quarkus-extension:ROOT:overview.adoc[Couchbase Quarkus Java Extension docs] cover installing and connecting with the Quarkus extension in detail,
+but if you already have Quarkus installed and a project ready (with `quarkus-couchbase` in your `pom.xml` or `build.gradle`),
+then your `src/main/resources/application.properties` file needs to contain:
+
+[source,properties]
+----
+quarkus.couchbase.connection-string=localhost
+quarkus.couchbase.username=username
+quarkus.couchbase.password=password
+----
+
+
 == Cloud Native Gateway
 
 Couchbase's next generation connection protocol, introduced in Java SDK 3.5 and xref:operator::concept-cloud-native-gateway.adoc[Couchbase Autonomous Operator 2.6.1], can be enabled simply by changing the connection string to `couchbase2://` but there are a few differences to be aware of, described <<#limitations,below>>.
@@ -292,12 +313,13 @@ There are some different behaviors seen with this protocol:
 
 
 
+// DNS-SRV
+// == Using DNS SRV records
 
+include::{version-common}@sdk:shared:partial$dnssrv-pars.adoc[tag=dnssrv-rev]
 
-include::{version-common}@sdk:shared:partial$dnssrv-pars.adoc[tag=dnssrv]
-
-DNS SRV bootstrapping is available in the Java SDK from version 2.1.0.
-In order to make the SDK actually use the SRV records, you need to enable DNS SRV on the environment and pass in the host name from your records (here `example.com`):
+DNS SRV bootstrapping is enabled by default in the {name-sdk}.
+In order to make the SDK use the SRV records, you need to pass in the hostname from your records (here `example.com`):
 
 [source,java]
 ----
