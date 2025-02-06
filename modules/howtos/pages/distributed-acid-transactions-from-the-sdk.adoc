@@ -1,5 +1,5 @@
 = Using Couchbase Transactions
-:reftext: Transactions from the Java SDK
+:reftext: Distributed ACID Transactions from the Java SDK
 :description: A practical guide on using Couchbase Distributed ACID transactions, via the Java SDK.
 :page-partial:
 :page-aliases: acid-transactions
