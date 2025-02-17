@@ -73,8 +73,7 @@ Added experimental client settings for tuning socket send/receive buffer size an
 ** `io.lowWaterMark`
 ** `io.highWaterMark`
 +
-[NOTE] We do not currently recommend configuring these settings unless you are working with Couchbase technical support to diagnose a network performance issue.
-
+NOTE: We do not currently recommend configuring these settings unless you are working with Couchbase technical support to diagnose a network performance issue.
 
 * https://jira.issues.couchbase.com/browse/JCBC-2179[JCBC-2179]:
 `CouchbaseHttpClient` can now send `PATCH` requests.
