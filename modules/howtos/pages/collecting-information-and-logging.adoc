@@ -1,7 +1,7 @@
 = Logging
 :description: Configuring logging; working with the event bus; and log redaction for data security.
-:page-topic-type: howto
-:page-aliases: ROOT:logging
+:page-toclevels: 3
+:page-aliases: ROOT:logging.adoc
 
 [abstract]
 {description}
@@ -84,7 +84,7 @@ NOTE: Gradle automatically uses the correct SLF4J API 2.x dependency required by
 ====
 
 [configuring-log4j]
-==== Configuring Log4j 2 output
+==== Configuring Log4j 2 Output
 
 Log4j 2 needs a configuration file to tell it which messages to log, where to write them, and how each message should be formatted.
 
@@ -163,6 +163,7 @@ Add these as children of the `dependencies` element.
 TIP: An alternate way to ensure Maven uses the correct version of the SLF4J API is to declare the dependency on `slf4j-jdk14` *before* the dependency on the Couchbase SDK.
 See the Maven documentation on https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Transitive_Dependencies[Transitive Dependencies] to learn more about how Maven resolves transitive dependency version conflicts.
 --
+
 Gradle::
 +
 --
@@ -175,6 +176,7 @@ implementation("org.slf4j:slf4j-jdk14:2.0.9")
 NOTE: Gradle automatically uses the correct SLF4J API 2.x dependency required by `slf4j-jdk14`, even though the Couchbase SDK declares a dependency on SLF4J API 1.7.
 --
 ====
+
 
 [configuring-the-jdk-logger]
 ==== Configuring a JUL Logger

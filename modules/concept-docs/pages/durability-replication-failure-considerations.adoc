@@ -1,15 +1,25 @@
 = Failure Considerations
 :description: Data durability refers to the fault tolerance and persistence of data in the face of software or hardware failure.
-:page-topic-type: concept
-// :page-aliases: ROOT:failure-considerations,ROOT:durability,ROOT:enhanced-durability,7.6@server:developer-guide:durability.adoc
+:page-toclevels: 2
+// :page-aliases: ROOT:failure-considerations.adoc,ROOT:durability.adoc,ROOT:enhanced-durability.adoc,7.6@server:developer-guide:durability.adoc
 
 include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 {description}
+Prepare your app for the inevitable challenges of working in a distributed network environment.
+
+
+
 Even the most reliable software and hardware might fail at some point, and along with the failures, introduce a chance of data loss.
-Couchbase’s durability features include Synchronous Replication, and the possibility to use distributed, multi-document ACID transactions.
+Couchbase's durability features include Synchronous Replication, and the possibility to use distributed, multi-document ACID transactions.
 It is the responsibility of the development team and the software architect to evaluate the best choice for each use case.
+
+This page covers the durability options offered by Couchbase Server, 
+with the rest of this section covering logging, health check, and observability --
+all key to understanding the health of a complex, distributed environment.
+
+
 
 include::{version-common}@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=intro]
 
@@ -17,14 +27,34 @@ include::{version-common}@sdk:shared:partial$durability-replication-failure-cons
 include::{version-common}@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=syncrep2]
 include::{version-common}@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=syncrep3]
 
-include::{version-common}@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=older]
-
 include::{version-common}@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=performance]
+
+
+=== Legacy Durability
+
+Early versions of Couchbase Server used client-verified durablilty.
+This is still available in the SDK --
+see the https://docs.couchbase.com/sdk-api/couchbase-scala-client/com/couchbase/client/scala/durability/index.html[API documentation on durability] for details of `PersistTo` and `ReplicateTo` --
+but in almost every case with current Couchbase Server versions it's best to use the guarantees offered by the the Server.
+
+
+
 
 include::{version-common}@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=txns]
 
+
+// placeholder for discussions about what happens when a node goes down.
+
 // include::{version-common}@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=failover]
 
+
+
+
+
+
+
+////
 == Further Reading
 
 For now, much of the discussion (concept-level documentation) can still be found interleaved in the xref:howtos:error-handling.adoc#exception-handling[practical error handling howto doc].
+////

@@ -1,6 +1,7 @@
 = Metrics Reporting
 :description: Individual request tracing presents a very specific (though isolated) view of the system.
-:page-topic-type: howto
+:page-toclevels: 2
+
 
 [abstract]
 {description}
@@ -21,7 +22,7 @@ By default the metrics will be emitted every 10 minutes, but you can customize t
 
 [source,java]
 ----
-include::example$Metrics.java[tag=metrics-enable-custom,indent=0]
+include::devguide:example$java/Metrics.java[tag=metrics-enable-custom,indent=0]
 ----
 
 Once enabled, there is no further configuration needed. The `LoggingMeter` will emit the collected request statistics every interval.
@@ -128,7 +129,7 @@ For metrics, add this logic to the application:
 
 [source,java]
 ----
-include::example$Metrics.java[tag=metrics-otel-prometheus,indent=0]
+include::devguide:example$java/Metrics.java[tag=metrics-otel-prometheus,indent=0]
 ----
 
 
@@ -242,7 +243,7 @@ See the Micrometer documentation for details.
 
 [source,java]
 ----
-include::example$MetricsMicrometer.java[tag=metrics-micrometer-prometheus,indent=0]
+include::devguide:example$java/MetricsMicrometer.java[tag=metrics-micrometer-prometheus,indent=0]
 ----
 
 
