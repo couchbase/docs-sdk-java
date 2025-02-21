@@ -27,7 +27,7 @@ The code samples below will use these imports:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=imports]
+include::devguide:example$java/KvOperations.java[tag=imports]
 ----
 
 [TIP]
@@ -61,7 +61,7 @@ We'll use the built-in JSON types for simplicity, but you can use different type
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=upsert,indent=0]
+include::devguide:example$java/KvOperations.java[tag=upsert,indent=0]
 ----
 
 [NOTE]
@@ -73,7 +73,7 @@ They can be accessed like this:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=apis,indent=0]
+include::devguide:example$java/KvOperations.java[tag=apis,indent=0]
 ----
 =====
 
@@ -82,7 +82,7 @@ Insert works very similarly to upsert, but will fail if the document already exi
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=insert,indent=0]
+include::devguide:example$java/KvOperations.java[tag=insert,indent=0]
 ----
 
 == Retrieving documents
@@ -91,14 +91,14 @@ We've tried upserting and inserting documents into Couchbase Server, let's get t
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=get-simple,indent=0]
+include::devguide:example$java/KvOperations.java[tag=get-simple,indent=0]
 ----
 
 Of course if we're getting a document we probably want to do something with the content:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=get,indent=0]
+include::devguide:example$java/KvOperations.java[tag=get,indent=0]
 ----
 
 Once we have a `GetResult`, we can use `contentAsObject()` to turn the content back into a `JsonObject` like we inserted it in the examples before, 
@@ -110,7 +110,7 @@ A very common sequence of operations is to `get` a document, modify its contents
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=replace,indent=0]
+include::devguide:example$java/KvOperations.java[tag=replace,indent=0]
 ----
 
 We `upsert` an initial version of the document. 
@@ -136,7 +136,7 @@ Let's see a more advanced `replace` example that shows one way to handle this:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=replace-retry,indent=0]
+include::devguide:example$java/KvOperations.java[tag=replace-retry,indent=0]
 ----
 
 Note that this code is simplistic to show how CAS retry works in general. 
@@ -153,7 +153,7 @@ Removing a document is straightforward:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=remove,indent=0]
+include::devguide:example$java/KvOperations.java[tag=remove,indent=0]
 ----
 
 Like `replace`, `remove` also optionally takes the CAS value if you want to make sure you are only removing the document if it hasn't changed since you last fetched it.
@@ -169,7 +169,7 @@ It can be used like this:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=durability,indent=0]
+include::devguide:example$java/KvOperations.java[tag=durability,indent=0]
 ----
 
 If no argument is provided the application will report success back as soon as the primary node has acknowledged the mutation in its memory. 
@@ -195,7 +195,7 @@ This can be achieved like this:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=durability-observed,indent=0]
+include::devguide:example$java/KvOperations.java[tag=durability-observed,indent=0]
 ----
 
 To stress, durability is a useful feature but should not be the default for most applications, as there is a performance consideration, 
@@ -211,7 +211,7 @@ You can set an expiry value from a `Duration` when creating a document:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=expiry-insert,indent=0]
+include::devguide:example$java/KvOperations.java[tag=expiry-insert,indent=0]
 ----
 
 The expiry may be specified as a `Duration` only if the provided value is less than 50 years.
@@ -220,7 +220,7 @@ For expiration more than 50 years in the future, or if you have already calculat
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=expiry-insert-instant,indent=0]
+include::devguide:example$java/KvOperations.java[tag=expiry-insert-instant,indent=0]
 ----
 
 When getting a document from Couchbase Server, the expiry is not included by default, but it can be requested
@@ -228,7 +228,7 @@ by setting the `withExpiry` option to true:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=expiry-get,indent=0]
+include::devguide:example$java/KvOperations.java[tag=expiry-get,indent=0]
 ----
 
 Note that when updating the document, special care must be taken to avoid resetting the expiry to zero. 
@@ -236,14 +236,14 @@ If you are using Couchbase Server 7.0 or later, set the `preserveExpiry` option 
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=preserve-expiry,indent=0]
+include::devguide:example$java/KvOperations.java[tag=preserve-expiry,indent=0]
 ----
 
 Prior to Couchbase 7.0, it's necessary to fetch the previous expiry and set it again:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=expiry-replace,indent=0]
+include::devguide:example$java/KvOperations.java[tag=expiry-replace,indent=0]
 ----
 
 Some applications may find `getAndTouch` useful, which fetches a document while updating its expiry field. 
@@ -251,7 +251,7 @@ It can be used like this:
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=expiry-touch,indent=0]
+include::devguide:example$java/KvOperations.java[tag=expiry-touch,indent=0]
 ----
 
 
@@ -303,7 +303,7 @@ Here is an example showing an upsert in the `users` collection, which lives in t
 
 [source,java]
 ----
-include::example$KvOperations.java[tag=named-collection-upsert,indent=0]
+include::devguide:example$java/KvOperations.java[tag=named-collection-upsert,indent=0]
 ----
 
 
@@ -325,7 +325,7 @@ Here's an example of a KV range scan that gets all documents in a collection:
 .KV Range Scan for all documents in a collection
 [source,java]
 ----
-include::example$KvOperations.java[tag=rangeScanAllDocuments,indent=0]
+include::devguide:example$java/KvOperations.java[tag=rangeScanAllDocuments,indent=0]
 ----
 <1> The `ScanType.rangeScan()` method has two nullable parameters: `from` and `to`.
 If you pass null like in this example, you'll get all documents in the collection.
@@ -346,7 +346,7 @@ For example, to get all documents associated with user "alice", you would write:
 .KV Range Scan for all documents in a collection whose IDs start with "alice::"
 [source,java]
 ----
-include::example$KvOperations.java[tag=rangeScanPrefix,indent=0]
+include::devguide:example$java/KvOperations.java[tag=rangeScanPrefix,indent=0]
 ----
 <1> Note the scan type is *prefixScan*.
 
@@ -358,7 +358,7 @@ If you want to get random documents from a collection, use a sample scan.
 .KV Range Scan for 100 random documents
 [source,java]
 ----
-include::example$KvOperations.java[tag=rangeScanSample,indent=0]
+include::devguide:example$java/KvOperations.java[tag=rangeScanSample,indent=0]
 ----
 <1> In this example, no more than `100` documents are returned.
 
@@ -370,7 +370,7 @@ If you only want the document IDs, set the `idsOnly` option to true, like this:
 .KV Range Scan for all document IDs in a collection
 [source,java]
 ----
-include::example$KvOperations.java[tag=rangeScanAllDocumentIds,indent=0]
+include::devguide:example$java/KvOperations.java[tag=rangeScanAllDocumentIds,indent=0]
 ----
 <1> The returned `ScanResult` objects throw `NoSuchElementException` if you try to access any property other than `id`.
 
