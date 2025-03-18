@@ -39,6 +39,8 @@ echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/pom.xml 
 ////
 
+
+
 === Version 3.7.9 (11 March 2025)
 
 This is the ninth  maintenance release of the 3.7 series.
@@ -66,20 +68,14 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 ==== Improvements
 
-* [JVMCBC-1614](https://couchbasecloud.atlassian.net/browse/JVMCBC-1614)
-Add ServiceType.id\(\)
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1614[JVMCBC-1614]:
+Added `ServiceType.id()`
 
-* [JVMCBC-1615](https://couchbasecloud.atlassian.net/browse/JVMCBC-1615)
-Move nodeUUID from NodeIdentifier to HostAndServicePorts
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1615[JVMCBC-1615]:
+Moved `nodeUUID` from `NodeIdentifier` to `HostAndServicePorts`.
 
-* [JVMCBC-1616](https://couchbasecloud.atlassian.net/browse/JVMCBC-1616)
-Upgrade Netty to 4.1.118
-
-+
-NOTE: We do not currently recommend configuring these settings unless you are working with Couchbase technical support to diagnose a network performance issue.
-
-* https://jira.issues.couchbase.com/browse/JCBC-2179[JCBC-2179]:
-`CouchbaseHttpClient` can now send `PATCH` requests.
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1616[JVMCBC-1616]
+Upgraded Netty to `4.1.118`.
 
 
 === Version 3.7.8 (11 February 2025)
