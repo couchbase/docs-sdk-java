@@ -39,6 +39,45 @@ echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/pom.xml 
 ////
 
+
+
+=== Version 3.7.9 (11 March 2025)
+
+This is the ninth  maintenance release of the 3.7 series.
+
+https://packages.couchbase.com/clients/java/3.7.9/Couchbase-Java-Client-3.7.9.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.7.9/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-3.7.9/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.5.9             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.5.9             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.7.9             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.7.9             | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1614[JVMCBC-1614]:
+Added `ServiceType.id()`
+
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1615[JVMCBC-1615]:
+Moved `nodeUUID` from `NodeIdentifier` to `HostAndServicePorts`.
+
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1616[JVMCBC-1616]
+Upgraded Netty to `4.1.118`.
+
+
 === Version 3.7.8 (11 February 2025)
 
 This is the eighth maintenance release of the 3.7 series.
