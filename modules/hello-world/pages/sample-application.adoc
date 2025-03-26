@@ -1,4 +1,5 @@
 = Quickstart in Couchbase with Spring Boot and Java
+:page-toclevels: 2
 :description: Quickstart app to build a REST API using Couchbase Capella in Java using Spring Boot
 :page-aliases: ROOT:sample-application,ROOT:tutorial4,ROOT:sample-app-backend
 
@@ -9,15 +10,13 @@
 Discover how to program interactions with Couchbase via the Data, Query, and Search services.
 
 
-After you have navigated through
-
-[signing up to Capella],
-if {} is entered as your chosen language, you will be pointed to a clonable quickstart app on GitHub.
+After you have navigated through https://cloud.couchbase.com/sign-up[signing up to Capella],
+if {name_platform} is entered as your chosen language, you will be pointed to a clonable quickstart app on GitHub.
 If you were not, you can still find it https://github.com/couchbase-examples/java-springboot-quickstart[here].
 
 
 Often, the first step developers take after creating their database is to create a REST API that can perform Create, Read, Update, and Delete (CRUD) operations for that database.
-The https://github.com/couchbase-examples/java-springboot-quickstart[quickstart repo] is designed to teach you and give you a starter project (in Java using Spring Boot) to generate such a REST API.
+The https://github.com/couchbase-examples/java-springboot-quickstart[quickstart project] is designed to teach you and give you a starter project (in Java using Spring Boot) to generate such a REST API.
 After you have loaded the travel-sample bucket in your database, you can run this application which is a REST API with Swagger documentation so that you can learn:
 
 . How to create, read, update, and delete documents using xref:howto:kv-operations[Key-Value operations].
