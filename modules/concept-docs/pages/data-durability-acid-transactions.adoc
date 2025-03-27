@@ -117,7 +117,7 @@ and one collection of courses available for them to take.
 Notionally you may view them as equivalent to an RDBMS table -- but it's up to you.
 
 Within a bucket, you can organize your collections into scopes -- some methods are available at the bucket level,
-but Search and Query Services favour Scope-level indexing and querying for greater efficiency.
+but Search and Query Services favor Scope-level indexing and querying for greater efficiency.
 
 
 
