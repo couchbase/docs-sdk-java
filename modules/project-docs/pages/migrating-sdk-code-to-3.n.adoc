@@ -22,14 +22,14 @@ As an example here is a KeyValue document fetch:
 
 [source,java]
 ----
-include::example$MigratingSDKCodeTo3n.java[tag=migrating_sdk_code_to_3_n_1,indent=0]
+include::devguide:example$java/MigratingSDKCodeTo3n.java[tag=migrating_sdk_code_to_3_n_1,indent=0]
 ----
 
 Compare this to a {sqlpp_url}[{sqlpp} (formerly N1QL)] query:
 
 [source,java]
 ----
-include::example$MigratingSDKCodeTo3n.java[tag=migrating_sdk_code_to_3_n_2,indent=0]
+include::devguide:example$java/MigratingSDKCodeTo3n.java[tag=migrating_sdk_code_to_3_n_2,indent=0]
 ----
 
 include::{version-common}@sdk:shared:partial$migration.adoc[tag=terms2]
