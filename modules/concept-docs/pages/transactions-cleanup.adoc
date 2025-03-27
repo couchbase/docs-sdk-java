@@ -18,7 +18,7 @@ The cleanup settings can be configured as so:
 
 [source,java]
 ----
-include::howtos:example$TransactionsExample.java[tag=config-cleanup,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=config-cleanup,indent=0]
 ----
 
 The settings supported by `TransactionsCleanupConfig` are:
@@ -38,7 +38,7 @@ If an application needs to monitor cleanup, it may subscribe to these events:
 
 [source,java]
 ----
-include::howtos:example$TransactionsExample.java[tag=cleanup-events,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=cleanup-events,indent=0]
 ----
 
 `TransactionCleanupEndRunEvent` is raised whenever a current 'run' is finished, and contains statistics from the run.

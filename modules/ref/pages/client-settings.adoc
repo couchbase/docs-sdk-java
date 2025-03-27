@@ -20,7 +20,7 @@ It is designed to apply the builder arguments in a fluent fashion and then creat
 .Creating a cluster with custom settings
 [source,java]
 ----
-include::example$ClientSettingsExample.java[tag=client_settings_1,indent=0]
+include::devguide:example$java/ClientSettingsExample.java[tag=client_settings_1,indent=0]
 ----
 
 [#config-builders]
@@ -39,7 +39,7 @@ Each category of client settings has its own builder class.
 .Configuring client settings for timeouts and I/O
 [source,java]
 ----
-include::example$ClientSettingsExample.java[tag=client_settings_2,indent=0]
+include::devguide:example$java/ClientSettingsExample.java[tag=client_settings_2,indent=0]
 ----
 
 The name of the `ClusterEnvironment.Builder` method for configuring a nested builder matches the name of the nested config class.
@@ -56,7 +56,7 @@ NOTE: A connection string parameter takes precedence over the corresponding <<co
 .Configuration via connection string parameters
 [source,java]
 ----
-include::example$ClientSettingsExample.java[tag=client_settings_connection_string,indent=0]
+include::devguide:example$java/ClientSettingsExample.java[tag=client_settings_connection_string,indent=0]
 ----
 <1> When specifying durations, `s` stands for seconds.
 Other valid qualifiers are `ns` for nanoseconds, `us` for microseconds, `ms` for milliseconds, and `m` for minutes.
@@ -74,7 +74,7 @@ NOTE: A system property takes precedence over the corresponding <<connection-str
 .Configuration via system property
 [source,java]
 ----
-include::example$ClientSettingsExample.java[tag=client_settings_4,indent=0]
+include::devguide:example$java/ClientSettingsExample.java[tag=client_settings_4,indent=0]
 ----
 <1> When specifying durations, `s` stands for seconds.
 Other valid qualifiers are `ns` for nanoseconds, `us` for microseconds, `ms` for milliseconds, and `m` for minutes.
@@ -103,7 +103,7 @@ If you are using the Enterprise Edition, it's possible to secure the connection 
 .Template for configuring security settings
 [source,java]
 ----
-include::example$ClientSettingsExample.java[tag=client_settings_5,indent=0]
+include::devguide:example$java/ClientSettingsExample.java[tag=client_settings_5,indent=0]
 ----
 
 [[security.enableTls]]
@@ -198,7 +198,7 @@ The associated `ClusterEnvironment.Builder` method is called `ioConfig`.
 .Template for configuring I/O settings
 [source,java]
 ----
-include::example$ClientSettingsExample.java[tag=client_settings_6,indent=0]
+include::devguide:example$java/ClientSettingsExample.java[tag=client_settings_6,indent=0]
 ----
 
 [[io.enableDnsSrv]]
@@ -378,7 +378,7 @@ The `IoConfig` builder has methods for configuring the circuit breakers of each 
 .Template for configuring circuit breaker settings
 [source,java]
 ----
-include::example$ClientSettingsExample.java[tag=client_settings_7,indent=0]
+include::devguide:example$java/ClientSettingsExample.java[tag=client_settings_7,indent=0]
 ----
 
 The corresponding system properties would be:
@@ -446,7 +446,7 @@ See <<duration-values, setting duration values>> under xref:#system-properties[S
 .Template for configuring timeouts
 [source,java]
 ----
-include::example$ClientSettingsExample.java[tag=client_settings_8,indent=0]
+include::devguide:example$java/ClientSettingsExample.java[tag=client_settings_8,indent=0]
 ----
 
 [[timeout.kvTimeout]]
@@ -595,7 +595,7 @@ The client can optionally compress documents before sending them to Couchbase Se
 .Template for configuring CompressionExample settings
 [source,java]
 ----
-include::example$ClientSettingsExample.java[tag=client_settings_9,indent=0]
+include::devguide:example$java/ClientSettingsExample.java[tag=client_settings_9,indent=0]
 ----
 
 [[compression.enable]]
@@ -655,7 +655,7 @@ They are configured directly on the `ClusterEnvironment.Builder`.
 .Template for configuring general settings
 [source,java]
 ----
-include::example$ClientSettingsExample.java[tag=client_settings_10,indent=0]
+include::devguide:example$java/ClientSettingsExample.java[tag=client_settings_10,indent=0]
 ----
 
 [[retryStrategy]]

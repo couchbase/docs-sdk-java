@@ -47,7 +47,7 @@ It is instantiated through the `Cluster.buckets()` method.
 
 [source,java]
 ----
-include::example$ProvisioningResourcesBuckets.java[tag=creatingbucketmgr,indent=0]
+include::devguide:example$java/ProvisioningResourcesBuckets.java[tag=creatingbucketmgr,indent=0]
 ----
 
 The `BucketSettings` object is used for creating or updating buckets, and for exposing information about existing buckets.
@@ -74,21 +74,21 @@ The following example creates a "hello" bucket:
 
 [source,java]
 ----
-include::example$ProvisioningResourcesBuckets.java[tag=createBucket,indent=0]
+include::devguide:example$java/ProvisioningResourcesBuckets.java[tag=createBucket,indent=0]
 ----
 
 We can now get this bucket and update it to enable Flush:
 
 [source,java]
 ----
-include::example$ProvisioningResourcesBuckets.java[tag=updateBucket,indent=0]
+include::devguide:example$java/ProvisioningResourcesBuckets.java[tag=updateBucket,indent=0]
 ----
 
 Once you no longer need to use the bucket, you can remove it:
 
 [source,java]
 ----
-include::example$ProvisioningResourcesBuckets.java[tag=removeBucket,indent=0]
+include::devguide:example$java/ProvisioningResourcesBuckets.java[tag=removeBucket,indent=0]
 ----
 
 === Flushing Buckets
@@ -99,7 +99,7 @@ You can flush a bucket in the SDK by using the `flushBucket` method:
 
 [source,java]
 ----
-include::example$ProvisioningResourcesBuckets.java[tag=flushBucket,indent=0]
+include::devguide:example$java/ProvisioningResourcesBuckets.java[tag=flushBucket,indent=0]
 ----
 
 The `Flush` operation may fail if the bucket does not have flush enabled, in that case it will return a `BucketNotFlushableException`.
@@ -114,30 +114,30 @@ for further details.
 
 [source,java]
 ----
-include::example$CollectionManagerExample.java[tag=create-collection-manager,indent=0]
+include::devguide:example$java/CollectionManagerExample.java[tag=create-collection-manager,indent=0]
 ----
 
 You can create a scope:
 
 [source,java]
 ----
-include::example$CollectionManagerExample.java[tag=create-scope,indent=0]
+include::devguide:example$java/CollectionManagerExample.java[tag=create-scope,indent=0]
 ----
 
 You can then create a collection within that scope:
 
 [source,java]
 ----
-include::example$CollectionManagerExample.java[tag=create-collection,indent=0]
+include::devguide:example$java/CollectionManagerExample.java[tag=create-collection,indent=0]
 ----
 
 Finally, you can drop unneeded collections and scopes:
 
 [source,java]
 ----
-include::example$CollectionManagerExample.java[tag=drop-collection,indent=0]
+include::devguide:example$java/CollectionManagerExample.java[tag=drop-collection,indent=0]
 
-include::example$CollectionManagerExample.java[tag=drop-scope,indent=0]
+include::devguide:example$java/CollectionManagerExample.java[tag=drop-scope,indent=0]
 
 ----
 
@@ -150,7 +150,7 @@ You can create users with the appropriate RBAC programmatically:
 
 [source,java]
 ----
-include::example$CollectionManagerExample.java[tag=scopeAdmin, indent=0]
+include::devguide:example$java/CollectionManagerExample.java[tag=scopeAdmin, indent=0]
 
 ----
 
@@ -165,7 +165,7 @@ It can be instantiated through the `Cluster.queryIndexes()` method.
 
 [source,java]
 ----
-include::example$QueryIndexManagerExample.java[tag=creating-index-mgr,indent=0]
+include::devguide:example$java/QueryIndexManagerExample.java[tag=creating-index-mgr,indent=0]
 ----
 
 include::{version-common}@sdk:shared:partial$flush-info-pars.adoc[tag=query-index-manager-intro]
@@ -177,7 +177,7 @@ Note that you cannot provide a named scope or collection separately, both must b
 
 [source,java]
 ----
-include::example$QueryIndexManagerExample.java[tag=primary,indent=0]
+include::devguide:example$java/QueryIndexManagerExample.java[tag=primary,indent=0]
 ----
 
 When a primary index name is not specified, the SDK will create the index as `#primary` by default.
@@ -192,7 +192,7 @@ Creating a _secondary_ index follows a similar approach, with some minor differe
 
 [source,java]
 ----
-include::example$QueryIndexManagerExample.java[tag=secondary,indent=0]
+include::devguide:example$java/QueryIndexManagerExample.java[tag=secondary,indent=0]
 ----
 
 The `createIndex()` method requires an index name to be provided, along with the fields to create the index on.
@@ -206,7 +206,7 @@ To achieve this we can use the `deferred` boolean option, and set it to `true`.
 
 [source,java]
 ----
-include::example$QueryIndexManagerExample.java[tag=defer-indexes,indent=0]
+include::devguide:example$java/QueryIndexManagerExample.java[tag=defer-indexes,indent=0]
 ----
 
 To delete a query index you can use the `dropIndex()` or `dropPrimaryIndex()` methods. 
@@ -216,7 +216,7 @@ Which one you use depends on the type of query index you wish to drop from the d
 
 [source,java]
 ----
-include::example$QueryIndexManagerExample.java[tag=drop-primary-or-secondary-index,indent=0]
+include::devguide:example$java/QueryIndexManagerExample.java[tag=drop-primary-or-secondary-index,indent=0]
 ----
 
 // * Search - note & link to FTS page & API?
@@ -230,14 +230,14 @@ All operations on design documents are performed on the `ViewIndexManager` insta
 
 [source,java]
 ----
-include::example$ProvisioningResourcesViews.java[tag=viewmgr,indent=0]
+include::devguide:example$java/ProvisioningResourcesViews.java[tag=viewmgr,indent=0]
 ----
 
 The following example upserts a design document with two views:
 
 [source,java]
 ----
-include::example$ProvisioningResourcesViews.java[tag=createView,indent=0]
+include::devguide:example$java/ProvisioningResourcesViews.java[tag=createView,indent=0]
 ----
 
 include::{version-common}@sdk:shared:partial$flush-info-pars.adoc[tag=one-view-update-warning]
@@ -249,19 +249,19 @@ Now that we've created a design document we can fetch it:
 
 [source,java]
 ----
-include::example$ProvisioningResourcesViews.java[tag=getView,indent=0]
+include::devguide:example$java/ProvisioningResourcesViews.java[tag=getView,indent=0]
 ----
 
 We've created the design document using `DesignDocumentNamespace.DEVELOPMENT` and now want to push it to production, we can do this with:
 
 [source,java]
 ----
-include::example$ProvisioningResourcesViews.java[tag=publishView,indent=0]
+include::devguide:example$java/ProvisioningResourcesViews.java[tag=publishView,indent=0]
 ----
 
 To remove this design document:
 
 [source,java]
 ----
-include::example$ProvisioningResourcesViews.java[tag=removeView,indent=0]
+include::devguide:example$java/ProvisioningResourcesViews.java[tag=removeView,indent=0]
 ----

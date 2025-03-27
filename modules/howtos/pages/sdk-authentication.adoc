@@ -19,21 +19,21 @@ Our xref:hello-world:start-using-sdk.adoc[Getting Started] guide introduced basi
 
 [source,java]
 ----
-include::example$Auth.java[tag=rbac-simple,indent=0]
+include::devguide:example$java/Auth.java[tag=rbac-simple,indent=0]
 ----
 
 If you need to provide custom options, the same credentials can be supplied to the `ClusterOptions`:
 
 [source,java]
 ----
-include::example$Auth.java[tag=rbac-clusteroptions,indent=0]
+include::devguide:example$java/Auth.java[tag=rbac-clusteroptions,indent=0]
 ----
 
 Note that this is actually just a convenience overload for the `PasswordAuthenticator`, which can also be used directly to supply more advanced options.
 
 [source,java]
 ----
-include::example$Auth.java[tag=rbac-pwd,indent=0]
+include::devguide:example$java/Auth.java[tag=rbac-pwd,indent=0]
 ----
 
 In this example, the `PLAIN` authentication mechanism is enabled as well, which is needed if LDAP is enabled on the server side and no TLS encrypted connection is used.
@@ -58,7 +58,7 @@ TIP: To trust multiple root certificates, put them all in the same `ca-certs.pem
 
 [source,java]
 ----
-include::example$Auth.java[tag=certauth,indent=0]
+include::devguide:example$java/Auth.java[tag=certauth,indent=0]
 ----
 
 `CertificateAuthenticator` has several static factory methods.
@@ -70,7 +70,7 @@ include::{version-common}@sdk:shared:partial$auth-overview.adoc[tag=ldap]
 
 [source,java]
 ----
-include::example$Auth.java[tag=rbac-pwd,indent=0]
+include::devguide:example$java/Auth.java[tag=rbac-pwd,indent=0]
 ----
 
 Note that `.onlyEnablePlainSaslMechanism()` requires SDK 3.0.9 or newer.

@@ -18,7 +18,7 @@ Before starting, here are all of the imports used in the following examples:
 
 [source,java]
 ----
-include::example$Queries.java[tag=imports,indent=0]
+include::devguide:example$java/Queries.java[tag=imports,indent=0]
 ----
 
 Here's a complete example of doing a query and handling the results:
@@ -33,7 +33,7 @@ The Couchbase Capella free tier version comes with this bucket, and its Query in
 
 [source,java]
 ----
-include::example$SimpleQueryCloud.java[tag=class,indent=0]
+include::devguide:example$java/SimpleQueryCloud.java[tag=class,indent=0]
 ----
 --
 
@@ -46,7 +46,7 @@ or the xref:{version-server}@server:manage:manage-settings/install-sample-bucket
 
 [source,java]
 ----
-include::example$SimpleQuery.java[tag=class,indent=0]
+include::devguide:example$java/SimpleQuery.java[tag=class,indent=0]
 ----
 --
 ====
@@ -80,14 +80,14 @@ The first example shows how to provide them by name:
 
 [source,java]
 ----
-include::example$Queries.java[tag=named,indent=0]
+include::devguide:example$java/Queries.java[tag=named,indent=0]
 ----
 
 The second example by position:
 
 [source,java]
 ----
-include::example$Queries.java[tag=positional,indent=0]
+include::devguide:example$java/Queries.java[tag=positional,indent=0]
 ----
 
 What style you choose is up to you, for readability in more complex queries we generally recommend using the named parameters.
@@ -103,7 +103,7 @@ Rows can be consumed either through a `JsonObject` directly, turned into a java 
 
 [source,java]
 ----
-include::example$Queries.java[tag=rowsasobject,indent=0]
+include::devguide:example$java/Queries.java[tag=rowsasobject,indent=0]
 ----
 
 The `QueryMetaData` provides insight into some basic profiling/timing information as well as information like the `clientContextId`.
@@ -125,7 +125,7 @@ For example, here is how you can print the `executionTime` of a query:
 
 [source,java]
 ----
-include::example$Queries.java[tag=printmetrics,indent=0]
+include::devguide:example$java/Queries.java[tag=printmetrics,indent=0]
 ----
 
 == Query Options
@@ -162,7 +162,7 @@ If `QueryScanConsistency.REQUEST_PLUS` is chosen, it will likely take a bit long
 
 [source,java]
 ----
-include::example$Queries.java[tag=scanconsistency,indent=0]
+include::devguide:example$java/Queries.java[tag=scanconsistency,indent=0]
 ----
 
 // Due to https://issues.couchbase.com/browse/MB-46876 this section won’t work with named scopes and collections,
@@ -174,8 +174,8 @@ include::example$Queries.java[tag=scanconsistency,indent=0]
 //
 //[source,java]
 //----
-//include::example$Queries.java[tag=connect-bucket-and-scope,indent=0]
-//include::example$Queries.java[tag=scanconsistency_with,indent=0]
+//include::devguide:example$java/Queries.java[tag=connect-bucket-and-scope,indent=0]
+//include::devguide:example$java/Queries.java[tag=scanconsistency_with,indent=0]
 //----
 //
 //Note that you cannot use this method and `scanConsistency(QueryScanConsistency)` at the same time, since they are mutually exclusive.
@@ -192,7 +192,7 @@ Whatever is chosen, we recommend making sure it is unique so different queries c
 
 [source,java]
 ----
-include::example$Queries.java[tag=clientcontextid,indent=0]
+include::devguide:example$java/Queries.java[tag=clientcontextid,indent=0]
 ----
 
 === Readonly
@@ -203,7 +203,7 @@ The query engine will ensure that actually no data is mutated when parsing and p
 
 [source,java]
 ----
-include::example$Queries.java[tag=readonly,indent=0]
+include::devguide:example$java/Queries.java[tag=readonly,indent=0]
 ----
 
 === Custom JSON Serializer
@@ -236,7 +236,7 @@ A simple reactive query is similar to the blocking one:
 
 [source,java]
 ----
-include::example$Queries.java[tag=simplereactive,indent=0]
+include::devguide:example$java/Queries.java[tag=simplereactive,indent=0]
 ----
 
 This query will stream all rows as they become available form the server.
@@ -244,7 +244,7 @@ If you want to manually control the data flow (which is important if you are str
 
 [source,java]
 ----
-include::example$Queries.java[tag=backpressure,indent=0]
+include::devguide:example$java/Queries.java[tag=backpressure,indent=0]
 ----
 
 In this example we initially request a batch size of 10 rows (so streaming can begin).
@@ -265,9 +265,9 @@ A complete list of `QueryOptions` can be found in the https://docs.couchbase.com
 [source,java]
 ----
 
-include::example$Queries.java[tag=connect-bucket-and-scope,indent=0]
+include::devguide:example$java/Queries.java[tag=connect-bucket-and-scope,indent=0]
 
-include::example$Queries.java[tag=scope-level-query,indent=0]
+include::devguide:example$java/Queries.java[tag=scope-level-query,indent=0]
 
 ----
 

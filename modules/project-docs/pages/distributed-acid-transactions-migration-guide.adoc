@@ -33,7 +33,7 @@ transactions.run((ctx) -> {
 .After
 [source,java]
 ----
-include::example$TransactionsMigration.java[tag=access,indent=0]
+include::devguide:example$java/TransactionsMigration.java[tag=access,indent=0]
 ----
 
 == Configuration
@@ -53,7 +53,7 @@ var transactions =
 .After
 [source,java]
 ----
-include::example$TransactionsMigration.java[tag=config,indent=0]
+include::devguide:example$java/TransactionsMigration.java[tag=config,indent=0]
 ----
 
 A few details of configuration change:
@@ -92,7 +92,7 @@ var transactions =
 .After
 [source,java]
 ----
-include::example$TransactionsMigration.java[tag=config-cleanup,indent=0]
+include::devguide:example$java/TransactionsMigration.java[tag=config-cleanup,indent=0]
 ----
 
 == Lambda
@@ -125,7 +125,7 @@ SingleQueryTransactionResult sqr = transactions.query("INSERT...");
 .After
 [source,java]
 ----
-include::example$TransactionsMigration.java[tag=single-query,indent=0]
+include::devguide:example$java/TransactionsMigration.java[tag=single-query,indent=0]
 ----
 
 Or with configuration:
@@ -144,7 +144,7 @@ QueryResult qr = sqr.queryResult();
 .After
 [source,java]
 ----
-include::example$TransactionsMigration.java[tag=single-query-config,indent=0]
+include::devguide:example$java/TransactionsMigration.java[tag=single-query-config,indent=0]
 ----
 
 == Cleanup
@@ -180,7 +180,7 @@ catch (TransactionFailedException err) {
 .After
 [source,java]
 ----
-include::example$TransactionsMigration.java[tag=log,indent=0]
+include::devguide:example$java/TransactionsMigration.java[tag=log,indent=0]
 ----
 
 == Further Reading

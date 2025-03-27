@@ -34,14 +34,14 @@ Before starting, here's all imports used in the following examples:
 
 [source,java]
 ----
-include::example$Analytics.java[tag=imports,indent=0]
+include::devguide:example$java/Analytics.java[tag=imports,indent=0]
 ----
 
 Here's a complete example of doing an analytics query and handling the results:
 
 [source,java]
 ----
-include::example$Analytics.java[tag=simple,indent=0]
+include::devguide:example$java/Analytics.java[tag=simple,indent=0]
 ----
 
 Let's break it down. An analytics query is always performed at the `Cluster` level, using the `analyticsQuery` method. It takes the statement as a required argument and then allows to provide additional options if needed (in the example above, no options are specified).
@@ -66,14 +66,14 @@ The first example shows how to provide them by name:
 
 [source,java]
 ----
-include::example$Analytics.java[tag=named,indent=0]
+include::devguide:example$java/Analytics.java[tag=named,indent=0]
 ----
 
 The second example by position:
 
 [source,java]
 ----
-include::example$Analytics.java[tag=positional,indent=0]
+include::devguide:example$java/Analytics.java[tag=positional,indent=0]
 ----
 
 What style you choose is up to you, for readability in more complex queries we generally recommend using the named parameters.
@@ -88,7 +88,7 @@ Rows can be consumed either through a `JsonObject` directly, turned into a java 
 
 [source,java]
 ----
-include::example$Analytics.java[tag=rowsasobject,indent=0]
+include::devguide:example$java/Analytics.java[tag=rowsasobject,indent=0]
 ----
 
 
@@ -110,7 +110,7 @@ For example, here is how you can print the `executionTime` of a query:
 
 [source,java]
 ----
-include::example$Analytics.java[tag=printmetrics,indent=0]
+include::devguide:example$java/Analytics.java[tag=printmetrics,indent=0]
 ----
 
 == Analytics Options
@@ -136,7 +136,7 @@ By default, the analytics engine will return whatever is currently in the index 
 
 [source,java]
 ----
-include::example$Analytics.java[tag=scanconsistency,indent=0]
+include::devguide:example$java/Analytics.java[tag=scanconsistency,indent=0]
 ----
 
 
@@ -146,7 +146,7 @@ The SDK will always send a client context ID with each query, even if none is pr
 
 [source,java]
 ----
-include::example$Analytics.java[tag=clientcontextid,indent=0]
+include::devguide:example$java/Analytics.java[tag=clientcontextid,indent=0]
 ----
 
 
@@ -156,7 +156,7 @@ By default, every analytics query has the same priority on the server. By settin
 
 [source,java]
 ----
-include::example$Analytics.java[tag=priority,indent=0]
+include::devguide:example$java/Analytics.java[tag=priority,indent=0]
 ----
 
 
@@ -166,7 +166,7 @@ If the query is marked as readonly, both the server and the SDK can improve proc
 
 [source,java]
 ----
-include::example$Analytics.java[tag=readonly,indent=0]
+include::devguide:example$java/Analytics.java[tag=readonly,indent=0]
 ----
 
 === Custom JSON Serializer
@@ -192,14 +192,14 @@ A simple reactive query is similar to the blocking one:
 
 [source,java]
 ----
-include::example$Analytics.java[tag=simplereactive,indent=0]
+include::devguide:example$java/Analytics.java[tag=simplereactive,indent=0]
 ----
 
 This query will stream all rows as they become available from the server. If you want to manually control the data flow (which is important if you are streaming a lot of rows which could cause a potential out of memory situation) you can do this by using explicit `request()` calls.
 
 [source,java]
 ----
-include::example$Analytics.java[tag=backpressure,indent=0]
+include::devguide:example$java/Analytics.java[tag=backpressure,indent=0]
 ----
 
 In this example we initially request a batch size of 10 rows (so streaming can begin).

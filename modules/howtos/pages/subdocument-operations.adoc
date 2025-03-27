@@ -79,13 +79,13 @@ The examples use the following imports:
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=imports,indent=0]
+include::devguide:example$java/SubDocument.java[tag=imports,indent=0]
 ----
 
 .Retrieve Sub-Document value
 [source,java]
 ----
-include::example$SubDocument.java[tag=get,indent=0]
+include::devguide:example$java/SubDocument.java[tag=get,indent=0]
 ----
 
 NOTE: The operation used here is `LookupInSpec.get`, but we import this static method directly for readability.
@@ -93,7 +93,7 @@ NOTE: The operation used here is `LookupInSpec.get`, but we import this static m
 .Check existence of Sub-Document path
 [source,java]
 ----
-include::example$SubDocument.java[tag=exists,indent=0]
+include::devguide:example$java/SubDocument.java[tag=exists,indent=0]
 ----
 
 Multiple operations can be combined:
@@ -101,7 +101,7 @@ Multiple operations can be combined:
 .Combine multiple lookup operations
 [source,java]
 ----
-include::example$SubDocument.java[tag=combine,indent=0]
+include::devguide:example$java/SubDocument.java[tag=combine,indent=0]
 ----
 
 == Choosing an API
@@ -110,14 +110,14 @@ asynchronous variant that returns Java `CompletableFuture`:
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=get-future,indent=0]
+include::devguide:example$java/SubDocument.java[tag=get-future,indent=0]
 ----
 
 And a third that uses reactive programming primitives from https://projectreactor.io/[Project Reactor]:
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=get-reactive,indent=0]
+include::devguide:example$java/SubDocument.java[tag=get-reactive,indent=0]
 ----
 
 == Mutating
@@ -128,7 +128,7 @@ The simplest of these operations is _upsert_, which, similar to the fulldoc-leve
 .Upserting a new Sub-Document value
 [source,java]
 ----
-include::example$SubDocument.java[tag=upsert,indent=0]
+include::devguide:example$java/SubDocument.java[tag=upsert,indent=0]
 ----
 
 Likewise, the _insert_ operation will only add the new value to the path if it does not exist:
@@ -136,7 +136,7 @@ Likewise, the _insert_ operation will only add the new value to the path if it d
 .Inserting a Sub-Document value
 [source,java]
 ----
-include::example$SubDocument.java[tag=insert,indent=0]
+include::devguide:example$java/SubDocument.java[tag=insert,indent=0]
 ----
 
 Dictionary values can also be replaced or removed, and you may combine any number of mutation operations within the same general _mutateIn_ API.
@@ -144,7 +144,7 @@ Here's an example of one which replaces one path and removes another.
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=multi,indent=0]
+include::devguide:example$java/SubDocument.java[tag=multi,indent=0]
 ----
 
 NOTE: `mutateIn` is an _atomic_ operation.  If any single operation fails, then the entire document is left unchanged.
@@ -156,12 +156,12 @@ Unlike fulldoc _append_/_prepend_ operations (which simply concatenate bytes to 
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=array-append,indent=0]
+include::devguide:example$java/SubDocument.java[tag=array-append,indent=0]
 ----
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=array-prepend,indent=0]
+include::devguide:example$java/SubDocument.java[tag=array-prepend,indent=0]
 ----
 
 If your document only needs to contain an array, you do not have to create a top-level object wrapper to contain it.
@@ -170,14 +170,14 @@ Simply initialize the document with an empty array and then use the empty path f
 .Creating and populating an array document
 [source,java]
 ----
-include::example$SubDocument.java[tag=array-create,indent=0]
+include::devguide:example$java/SubDocument.java[tag=array-create,indent=0]
 ----
 
 If you wish to create an array if it does not exist and also push elements to it within the same operation you may use the <<subdoc_create_path,_createPath_>> option:
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=array-upsert,indent=0]
+include::devguide:example$java/SubDocument.java[tag=array-upsert,indent=0]
 ----
 
 == Arrays as Unique Sets
@@ -187,7 +187,7 @@ This will do a check to determine if the given value exists or not before actual
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=array-unique,indent=0]
+include::devguide:example$java/SubDocument.java[tag=array-unique,indent=0]
 ----
 
 Note that currently the _arrayAddUnique_ will fail with a _PathMismatchException_ if the array contains JSON _floats_, _objects_, or _arrays_.
@@ -204,7 +204,7 @@ For example, to insert `"cruel"` as the second element in the array `["Hello", "
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=array-insert,indent=0]
+include::devguide:example$java/SubDocument.java[tag=array-insert,indent=0]
 ----
 
 // for your examples, above, CD: “I feel like somewhere in this we should also just a an example path like "my.path[1]" too, just to show how to use the index with a nested path. I don't think it's necessarily clear.”
@@ -219,7 +219,7 @@ These operations are logically similar to the _increment_ and _decrement_ full-d
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=counter-inc,indent=0]
+include::devguide:example$java/SubDocument.java[tag=counter-inc,indent=0]
 ----
 
 The _increment_ and _decrement_ operations perform simple arithmetic against a numeric value.
@@ -227,7 +227,7 @@ The updated value is returned.
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=counter-dec,indent=0]
+include::devguide:example$java/SubDocument.java[tag=counter-dec,indent=0]
 ----
 
 The existing value for counter operations must be within range of a 64 bit signed integer.
@@ -286,7 +286,7 @@ In this case, the _createPath_ option may be used.
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=create-path,indent=0]
+include::devguide:example$java/SubDocument.java[tag=create-path,indent=0]
 ----
 
 
@@ -298,14 +298,14 @@ The `collection.lookupInAnyReplica()` method returns the first response -- from 
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=lookup-in-any-replica,indent=0]
+include::devguide:example$java/SubDocument.java[tag=lookup-in-any-replica,indent=0]
 ----
 
 The `collection.lookupInAllReplicas()` fetches all available replicas (and the active copy), and returns all responses.
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=lookup-in-all-replicas,indent=0]
+include::devguide:example$java/SubDocument.java[tag=lookup-in-all-replicas,indent=0]
 ----
 
 You may want to use `lookupInAllReplicas` to build a consensus,
@@ -319,7 +319,7 @@ For example the following two blocks can execute concurrently without any risk o
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=concurrent,indent=0]
+include::devguide:example$java/SubDocument.java[tag=concurrent,indent=0]
 ----
 
 Even when modifying the _same_ part of the document, operations will not necessarily conflict.
@@ -333,7 +333,7 @@ If CAS is required then it can be provided like this:
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=cas,indent=0]
+include::devguide:example$java/SubDocument.java[tag=cas,indent=0]
 ----
 
 == Durability
@@ -342,14 +342,14 @@ Couchbase’s xref:concept-docs:durability-replication-failure-considerations.ad
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=old-durability,indent=0]
+include::devguide:example$java/SubDocument.java[tag=old-durability,indent=0]
 ----
 
 In Couchbase Server 7.0 and up, this is built upon with xref:concept-docs:durability-replication-failure-considerations.adoc#durable-writes[Durable Writes], which uses the concept of majority to indicate the number of configured Data Service nodes to which commitment is required:
 
 [source,java]
 ----
-include::example$SubDocument.java[tag=new-durability,indent=0]
+include::devguide:example$java/SubDocument.java[tag=new-durability,indent=0]
 ----
 
 == Error Handling
@@ -431,7 +431,7 @@ include::{version-common}@sdk:shared:partial$sdk-xattr-overview.adoc[tag=extende
 [source,java]
 .Full Document Example
 ----
-include::example$SubDocument.java[tag=full_doc_replace,indent=0]
+include::devguide:example$java/SubDocument.java[tag=full_doc_replace,indent=0]
 ----
 
 The full document can be replaced using the Sub-Doc API. 

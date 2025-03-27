@@ -116,7 +116,7 @@ And now:
 
 [source,java]
 ----
-include::example$Tracing.java[tag=otel-direct,indent=0]
+include::devguide:example$java/Tracing.java[tag=otel-direct,indent=0]
 ----
 
 At this point the SDK will automatically be exporting spans, and you should see them in your receiver of choice.

@@ -80,7 +80,7 @@ To safeguard against the case of several thousand documents stealing CPU time to
 
 [source,java]
 ----
-include::example$CompressionExample.java[tag=compression_1,indent=0]
+include::devguide:example$java/CompressionExample.java[tag=compression_1,indent=0]
 ----
 
 

@@ -65,7 +65,7 @@ By invoking `Cluster.transactions()`, we can access the `Transactions` object an
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=examples,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=examples,indent=0]
 ----
 --
 
@@ -79,7 +79,7 @@ By invoking `Cluster.reactive().transactions()`, we can access the `ReactiveTran
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=examplesReactive,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=examplesReactive,indent=0]
 ----
 --
 ====
@@ -99,7 +99,7 @@ Synchronous API::
 --
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=logging,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=logging,indent=0]
 ----
 --
 
@@ -108,7 +108,7 @@ Asynchronous API::
 --
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=async_logging,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=async_logging,indent=0]
 ----
 --
 ====
@@ -117,7 +117,7 @@ It is a good practice for the application to log any failed transactions into it
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=logger,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=logger,indent=0]
 ----
 
 Of course, you should replace `logger.warning` with the logging system of choice for your application.
@@ -128,7 +128,7 @@ You could also log a successful transaction like so:
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=logging-success,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=logging-success,indent=0]
 ----
 
 == Key-Value Operations
@@ -159,7 +159,7 @@ Synchronous API::
 --
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=insert,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=insert,indent=0]
 ----
 --
 
@@ -168,7 +168,7 @@ Asynchronous API::
 --
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=insertReactive,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=insertReactive,indent=0]
 ----
 --
 ====
@@ -179,7 +179,7 @@ To retrieve a document from the database you can call `ctx.get()`.
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=get,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=get,indent=0]
 ----
 
 As you can see, `ctx.get()` will return a `TransactionGetResult` object, which is very similar to the `GetResult` you are used to.
@@ -188,14 +188,14 @@ If the application needs to ignore or take action on a document not existing, it
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=get-catch,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=get-catch,indent=0]
 ----
 
 Gets will "Read Your Own Writes", e.g. this will succeed:
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=getReadOwnWrites,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=getReadOwnWrites,indent=0]
 ----
 
 Of course, no other transaction will be able to read that inserted document, until this transaction reaches the commit point.
@@ -212,7 +212,7 @@ Synchronous API::
 --
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=replace,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=replace,indent=0]
 ----
 --
 
@@ -221,7 +221,7 @@ Asynchronous API::
 --
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=replaceReactive,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=replaceReactive,indent=0]
 ----
 --
 ====
@@ -237,7 +237,7 @@ Synchronous API::
 --
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=remove,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=remove,indent=0]
 ----
 --
 
@@ -246,7 +246,7 @@ Asynchronous API::
 --
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=removeReactive,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=removeReactive,indent=0]
 ----
 
 [TIP]
@@ -272,21 +272,21 @@ Here is an example of selecting some rows from the `travel-sample` bucket:
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=queryExamplesSelectScope,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=queryExamplesSelectScope,indent=0]
 ----
 
 An example using a `Scope` for an `UPDATE`:
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=queryExamplesUpdate,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=queryExamplesUpdate,indent=0]
 ----
 
 And an example combining `SELECT` and `UPDATE`.
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=queryExamplesComplex,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=queryExamplesComplex,indent=0]
 ----
 
 As you can see from the snippet above, it is possible to call regular Java methods from the {lambda}, permitting complex logic to be performed.
@@ -297,7 +297,7 @@ This example shows inserting a document and then selecting it again:
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=queryInsert,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=queryInsert,indent=0]
 ----
 
 <1> The inserted document is only staged at this point, as the transaction has not yet committed. +
@@ -310,7 +310,7 @@ Query options can be provided via the `TransactionQueryOptions` object:
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=queryOptions,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=queryOptions,indent=0]
 ----
 
 .Supported Transaction Query Options
@@ -340,7 +340,7 @@ In this example we insert a document with a key-value operation, and read it wit
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=queryRyow,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=queryRyow,indent=0]
 ----
 
 <1> The key-value insert operation is only staged, and so it is not visible to other transactions or non-transactional actors.
@@ -356,7 +356,7 @@ An example of performing parallel operations using the reactive API:
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=concurrentOps,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=concurrentOps,indent=0]
 ----
 
 include::{version-common}@sdk:shared:partial$acid-transactions.adoc[tag=query-perf-note]
@@ -385,14 +385,14 @@ As usual with `Cluster` configuration, you can either explicitly create and mana
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=config,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=config,indent=0]
 ----
 
 or alternatively use this {lambda} syntax, which leads to the `ClusterEnvironment` being owned and managed by the `Cluster`:
 
 [source,java]
 ----
-include::example$TransactionsExample.java[tag=config-easy,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=config-easy,indent=0]
 ----
 
 include::{version-common}@sdk:shared:partial$acid-transactions.adoc[tag=config]

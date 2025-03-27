@@ -19,20 +19,20 @@ The most common uses of the `UserManager` API are creating and listing users:
 .Creating Users
 [source,java]
 ----
-include::example$UserManagementExample.java[tag=usermanagement_1,indent=0]
+include::devguide:example$java/UserManagementExample.java[tag=usermanagement_1,indent=0]
 ----
 
 .Listing Users
 [source,java]
 ----
-include::example$UserManagementExample.java[tag=usermanagement_2,indent=0]
+include::devguide:example$java/UserManagementExample.java[tag=usermanagement_2,indent=0]
 ----
 
 Using a user created in the SDK to access data:
 
 [source,java]
 ----
-include::example$UserManagementExample.java[tag=usermanagement_3,indent=0]
+include::devguide:example$java/UserManagementExample.java[tag=usermanagement_3,indent=0]
 ----
 
 

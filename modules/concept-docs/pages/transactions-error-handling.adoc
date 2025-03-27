@@ -19,14 +19,14 @@ include::{version-common}@sdk:shared:partial$acid-transactions.adoc[tag=txnfaile
 
 [source,java]
 ----
-include::howtos:example$TransactionsExample.java[tag=config-expiration,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=config-expiration,indent=0]
 ----
 
 Alternatively it can be configured at the per-transaction level:
 
 [source,java]
 ----
-include::howtos:example$TransactionsExample.java[tag=config-expiration-per,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=config-expiration-per,indent=0]
 ----
 
 include::{version-common}@sdk:shared:partial$acid-transactions.adoc[tag=txnfailed1]
@@ -37,5 +37,5 @@ Pulling all of the above together, this is the suggested best practice for error
 
 [source,java]
 ----
-include::howtos:example$TransactionsExample.java[tag=full-error-handling,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=full-error-handling,indent=0]
 ----

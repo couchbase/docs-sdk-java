@@ -13,7 +13,7 @@ Each blocking API provides access to its reactive counterpart through the `react
 
 [source,java]
 ----
-include::example$AsyncOperations.java[tag=access]
+include::devguide:example$java/AsyncOperations.java[tag=access]
 ----
 
 The reactive API uses the https://projectreactor.io/[Project Reactor] library as the underlying implementation, so it exposes its `Mono` and `Flux` types accordingly. As a rule of thumb, if the blocking API returns a type `T` the reactive counterpart returns `Mono<T>` if one (or no) results is expected or in some cases `Flux<T>` if there are more than one expected. We *highly* recommend that you make yourself familar with the https://projectreactor.io/docs/core/release/reference/[reactor documentation] to understand its fundamentals and also unlock its full potential.
@@ -22,14 +22,14 @@ The following example fetches a document and prints out the `GetResult` once it 
 
 [source,java]
 ----
-include::example$AsyncOperations.java[tag=simple-get]
+include::devguide:example$java/AsyncOperations.java[tag=simple-get]
 ----
 
 It is important to understand that reactive types are lazy, which means that they are only executed when a consumer subscribes to them. So a code like this won't even be executed at all:
 
 [source,java]
 ----
-include::example$AsyncOperations.java[tag=non-used-upsert]
+include::devguide:example$java/AsyncOperations.java[tag=non-used-upsert]
 ----
 
 Modern IDEs like IntelliJ even warn you about that:
@@ -40,7 +40,7 @@ You will come across the `Flux` type in APIs like query where there is one or mo
 
 [source,java]
 ----
-include::example$AsyncOperations.java[tag=verbose-query]
+include::devguide:example$java/AsyncOperations.java[tag=verbose-query]
 ----
 
 The `QueryResult` itself is wrapped in a `Mono`, but the class itself carries a `Flux<T>` of rows where `T` is a type of choice you can convert it to (in this example we simply convert it into `JsonObject`). The `flatMap` operator allows to map the stream or rows into the previous stream of the original result. If you have more question on how this works, check out the documentation https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html#flatMap-java.util.function.Function-[here].
@@ -52,7 +52,7 @@ You can access this API by using the `async()` accessor methods both on the bloc
 
 [source,java]
 ----
-include::example$AsyncOperations.java[tag=access-async]
+include::devguide:example$java/AsyncOperations.java[tag=access-async]
 ----
 
 We recommend using this API only if you are either writing integration code for higher level concurrency mechanisms or you really need the last drop of performance. In all other cases, the blocking API (for simplicity) or the reactive API (for richness in operators) is likely the better choice.
@@ -64,7 +64,7 @@ While it can be done with the async API as well, we recommend using the reactive
 
 [source,java]
 ----
-include::example$AsyncOperations.java[tag=simple-bulk]
+include::devguide:example$java/AsyncOperations.java[tag=simple-bulk]
 ----
 
 This code grabs a list of keys to fetch and passes them to `ReactiveCollection#get(String)`. Since this is happening asynchronously, the results will return in whatever order they come back from the server cluster. The `block()` at the end waits until all results have been collected. Of course the blocking part at the end is optional, but it shows that you can mix and match reactive and blocking code to on the one hand benefit from simplicity, but always go one layer below for the more powerful concepts if needed.
@@ -75,7 +75,7 @@ Here is how you can ignore individual errors:
 
 [source,java]
 ----
-include::example$AsyncOperations.java[tag=ignore-bulk]
+include::devguide:example$java/AsyncOperations.java[tag=ignore-bulk]
 ----
 
 The `.onErrorResume(e -> Mono.empty()))` returns an empty `Mono` regardless of the error. Since you have the exception in scope, you can also decide based on the actual error if you want to ignore it or propagate/fallback to a different reactive computation.
@@ -84,7 +84,7 @@ If you want to separate out failures from completions, one way would be to use s
 
 [source,java]
 ----
-include::example$AsyncOperations.java[tag=split-bulk]
+include::devguide:example$java/AsyncOperations.java[tag=split-bulk]
 ----
 
 If the result succeeds the side-effect method `doOnNext` is used to store it into the `successfulResults` and if the operation fails we are utilizing the same operator as before (`onErrorResume`) to store it in the `erroredResults` map -- but then also to ignore it for the overall sequence.
@@ -93,7 +93,7 @@ Finally, it is also possible to retry individual failures before giving up. The 
 
 [source,java]
 ----
-include::example$AsyncOperations.java[tag=retry-bulk]
+include::devguide:example$java/AsyncOperations.java[tag=retry-bulk]
 ----
 
 It is recommended to check out the `retry` and `retryBackoff` methods for their configuration options and overloads. Of course, all the operators shown here can be combined to achieve exactly the semantics you need. Finally, for even advanced retry policies you can utilize the retry functionality in the https://projectreactor.io/docs/extra/release/api/reactor/retry/Retry.html[reactor-extra] package.
@@ -122,7 +122,7 @@ Then, you can use the various conversion methods to convert back and forth betwe
 
 [source,java]
 ----
-include::example$AsyncOperations.java[tag=rs-conversion]
+include::devguide:example$java/AsyncOperations.java[tag=rs-conversion]
 ----
 
 The same strategy can be used to convert to https://akka.io/[Akka], but if you are working in the scala world we recommend using our first-class Scala SDK directly instead!

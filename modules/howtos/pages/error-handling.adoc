@@ -135,7 +135,7 @@ If you are certain that you are only selecting data you can manually tell the cl
 
 [source,java]
 ----
-include::example$ErrorHandling.java[tag=readonly,indent=0]
+include::devguide:example$java/ErrorHandling.java[tag=readonly,indent=0]
 ----
 
 === The RetryStrategy and RetryReasons
@@ -175,7 +175,7 @@ In this case you can either propagate the `CouchbaseException` up your call stac
 
 [source,java]
 ----
-include::example$ErrorHandling.java[tag=getfetch,indent=0]
+include::devguide:example$java/ErrorHandling.java[tag=getfetch,indent=0]
 ----
 
 In a different case, a document not being present might be an indication that you need to create it. 
@@ -183,7 +183,7 @@ In this case you can catch it explicitly and handle it, while re-throwing all ot
 
 [source,java]
 ----
-include::example$ErrorHandling.java[tag=getcatch,indent=0]
+include::devguide:example$java/ErrorHandling.java[tag=getcatch,indent=0]
 ----
 
 Please refer to each individual method (javadoc) for more information about which exceptions are thrown on top of the `TimeoutException` and `RequestCanceledException`.
@@ -195,7 +195,7 @@ As an example, in your application you know that a particular document is only e
 
 [source,java]
 ----
-include::example$ErrorHandling.java[tag=tryupsert,indent=0]
+include::devguide:example$java/ErrorHandling.java[tag=tryupsert,indent=0]
 ----
 
 This code tries to upsert the document with a maximum of 10 attempts. 
@@ -221,7 +221,7 @@ In reactor, errors are terminating signals which move through up the operator ch
 
 [source,java]
 ----
-include::example$ErrorHandling.java[tag=reactivesub,indent=0]
+include::devguide:example$java/ErrorHandling.java[tag=reactivesub,indent=0]
 ----
 
 If `.block()` is called (instead of `.subscribe()`) at the end, the error will be thrown and can be caught with `try/catch`.
@@ -237,7 +237,7 @@ Note that because `get` and `upsert` have different return types, we unify the A
 
 [source,java]
 ----
-include::example$ErrorHandling.java[tag=reactivefallback,indent=0]
+include::devguide:example$java/ErrorHandling.java[tag=reactivefallback,indent=0]
 ----
 
 If you want to perform a retry action, the reactor API allows you to do this very elegantly through the `retryWhen(Retry retrySpec)` API. 
@@ -247,7 +247,7 @@ The following code retries (only) a `DocumentNotFoundException` for a maximum of
 
 [source,java]
 ----
-include::example$ErrorHandling.java[tag=reactiveretry,indent=0]
+include::devguide:example$java/ErrorHandling.java[tag=reactiveretry,indent=0]
 ----
 
 There are many more options available on the `Retry` builder, please consult the official reactor documentation for more information.
@@ -262,14 +262,14 @@ A custom `RetryStrategy` can be provided both at the environment (so it will tak
 
 [source,java]
 ----
-include::example$ErrorHandling.java[tag=customglobal,indent=0]
+include::devguide:example$java/ErrorHandling.java[tag=customglobal,indent=0]
 ----
 
 Or it can be applied on a per-request basis:
 
 [source,java]
 ----
-include::example$ErrorHandling.java[tag=customreq,indent=0]
+include::devguide:example$java/ErrorHandling.java[tag=customreq,indent=0]
 ----
 
 Both approaches are valid, although we recommend for most use cases to stick with the defaults and only to override it on a per requests basis.
@@ -282,7 +282,7 @@ In practice, it should look something like this:
 
 [source,java]
 ----
-include::example$ErrorHandling.java[tag=customclass,indent=0]
+include::devguide:example$java/ErrorHandling.java[tag=customclass,indent=0]
 ----
 
 Importantly, do not omit the `return super.shouldRetry(request, reason);` as a fallback so that all other cases are handled for you.
@@ -292,7 +292,7 @@ Implementing a concrete example, there is a chance that you are using a `Circuit
 
 [source,java]
 ----
-include::example$ErrorHandling.java[tag=failfastcircuit,indent=0]
+include::devguide:example$java/ErrorHandling.java[tag=failfastcircuit,indent=0]
 ----
 
 One important rule is that you should never block inside `shouldRetry`, since it is called on the hot code path and can considerably impact performance. 

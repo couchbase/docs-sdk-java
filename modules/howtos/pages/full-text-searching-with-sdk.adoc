@@ -27,7 +27,7 @@ We will perform an FTS query here - see the <<vector-search>> section for exampl
 
 [source,java]
 ----
-include::example$Search.java[tag=simple,indent=0]
+include::devguide:example$java/Search.java[tag=simple,indent=0]
 ----
 
 Let's break it down. 
@@ -80,7 +80,7 @@ Once the Search query is executed successfully, the server starts sending back t
 
 [source,java]
 ----
-include::example$Search.java[tag=squery,indent=0]
+include::devguide:example$java/Search.java[tag=squery,indent=0]
 ----
 
 The `SearchRow` contains the following methods:
@@ -119,7 +119,7 @@ As of Couchbase Server 7.6, the FTS service supports vector search in additional
 In this first example we are performing a single vector query:
 [source,java]
 ----
-include::example$Search.java[tag=vector1,indent=0]
+include::devguide:example$java/Search.java[tag=vector1,indent=0]
 ----
 
 Let's break this down.
@@ -144,7 +144,7 @@ You can run multiple vector queries together:
 
 [source,java]
 ----
-include::example$Search.java[tag=vector3,indent=0]
+include::devguide:example$java/Search.java[tag=vector3,indent=0]
 ----
 
 How the results are combined (ANDed or ORed) can be controlled with `vectorSearchOptions().vectorQueryCombination()`.
@@ -154,7 +154,7 @@ You can combine a traditional FTS query with vector queries:
 
 [source,java]
 ----
-include::example$Search.java[tag=vector2,indent=0]
+include::devguide:example$java/Search.java[tag=vector2,indent=0]
 ----
 
 How the results are combined (ANDed or ORed) can be controlled with `vectorSearchOptions().vectorQueryCombination()`.
@@ -164,7 +164,7 @@ And note that traditional FTS queries, without vector search, are also supported
 
 [source,java]
 ----
-include::example$Search.java[tag=vector4,indent=0]
+include::devguide:example$java/Search.java[tag=vector4,indent=0]
 ----
 
 The `SearchQuery` is created in the same way as detailed earlier.
@@ -198,7 +198,7 @@ If you want to skip the first N records it can be done with the `skip` option.
 
 [source,java]
 ----
-include::example$Search.java[tag=limit,indent=0]
+include::devguide:example$java/Search.java[tag=limit,indent=0]
 ----
 
 === ScanConsistency and ConsistentWith
@@ -212,7 +212,7 @@ The way to make sure that recently written documents show up in the rfc works as
 
 [source,java]
 ----
-include::example$Search.java[tag=ryow,indent=0]
+include::devguide:example$java/Search.java[tag=ryow,indent=0]
 ----
 
 === Highlight
@@ -223,7 +223,7 @@ The following snippet uses HTML formatting for two fields:
 
 [source,java]
 ----
-include::example$Search.java[tag=highlight,indent=0]
+include::devguide:example$java/Search.java[tag=highlight,indent=0]
 ----
 
 === Sort
@@ -233,7 +233,7 @@ This behavior can be modified by providing a different sorting order which can a
 
 [source,java]
 ----
-include::example$Search.java[tag=sort,indent=0]
+include::devguide:example$java/Search.java[tag=sort,indent=0]
 ----
 
 Facets are aggregate information collected on a result set and are useful when it comes to categorization of result data. 
@@ -244,7 +244,7 @@ Other possible facets include numeric and date ranges.
 
 [source,java]
 ----
-include::example$Search.java[tag=facets,indent=0]
+include::devguide:example$java/Search.java[tag=facets,indent=0]
 ----
 
 === Fields
@@ -253,7 +253,7 @@ You can tell the Search Engine to include the full content of a certain number o
 
 [source,java]
 ----
-include::example$Search.java[tag=fields,indent=0]
+include::devguide:example$java/Search.java[tag=fields,indent=0]
 ----
 
 === Collections
@@ -264,7 +264,7 @@ Note that this feature is only supported with Couchbase Server 7.0 or later.
 
 [source,java]
 ----
-include::example$Search.java[tag=collections,indent=0]
+include::devguide:example$java/Search.java[tag=collections,indent=0]
 ----
 
 === Custom JSON Serializer
@@ -295,7 +295,7 @@ A simple reactive query is similar to the blocking one:
 
 [source,java]
 ----
-include::example$Search.java[tag=simplereactive,indent=0]
+include::devguide:example$java/Search.java[tag=simplereactive,indent=0]
 ----
 
 This Search query will stream all rows as they become available form the server. 
@@ -303,7 +303,7 @@ If you want to manually control the data flow (which is important if you are str
 
 [source,java]
 ----
-include::example$Search.java[tag=backpressure,indent=0]
+include::devguide:example$java/Search.java[tag=backpressure,indent=0]
 ----
 
 In this example we initially request a batch size of 10 rows (so streaming can begin). 

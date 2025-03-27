@@ -186,7 +186,7 @@ If you want to set it to DEBUG (or the JUL equivalent: Fine) you can do it like 
 
 [source,java]
 ----
-include::example$CollectingInformationAndLogging.java[tag=collecting_information_and_logging_1,indent=0]
+include::devguide:example$java/CollectingInformationAndLogging.java[tag=collecting_information_and_logging_1,indent=0]
 ----
 
 TIP: We do not recommend using JUL in production.
@@ -215,7 +215,7 @@ The following code subscribes to the event bus and prints out all events that ar
 
 [source,java]
 ----
-include::example$CollectingInformationAndLogging.java[tag=collecting_information_and_logging_3,indent=0]
+include::devguide:example$java/CollectingInformationAndLogging.java[tag=collecting_information_and_logging_3,indent=0]
 ----
 
 This leads to output similar to this:
@@ -246,7 +246,7 @@ If you want to redact client logs (for example before handing them off to the Co
 
 [source,java]
 ----
-include::example$CollectingInformationAndLogging.java[tag=collecting_information_and_logging_4,indent=0]
+include::devguide:example$java/CollectingInformationAndLogging.java[tag=collecting_information_and_logging_4,indent=0]
 ----
 
 Different redaction levels are supported -- please see the `RedactionLevel` enum description for more information.
