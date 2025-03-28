@@ -10,7 +10,7 @@ Plus notes on Cloud, networks, and AWS Lambda.
 {description}
 
 
-The 3.7 SDK requires Java 8 or later to be installed, _Java 21 is recommended_.
+The {sdk_dot_minor} SDK requires Java 8 or later to be installed, _Java 21 is recommended_.
 
 
 
@@ -65,13 +65,13 @@ The {name-sdk} is tested and supported on the following OSs and platforms:
 === Mac OS X
 
 The current and previous two releases of OS X.
-At time of writing (June 2024): 14 (Sonoma), 13 (Ventura), and 12 (Monterey).
+At time of writing (March 2025): 15 (Sequoia), 14 (Sonoma), and 13 (Ventura).
 M1 ARM  architecture is fully supported in the {name-sdk}.
 
 [discrete]
 === ARM Processor Support
 
-AWS Amazon Graviton2, Apple M1 ARM processors, and ARMv8 on Ubuntu 20.04+ (from SDK 1.4).
+AWS Amazon Graviton2, Apple M1 ARM processors, and ARMv8 on Ubuntu 20.04+ (from SDK 3.4).
 ****
 
 The JVM SDKs should also be expected to run on other commonly-available GNU/Linux distributions which support an appropriate JDK, but not all combinations can be tested -- notable exceptions are listed below.
@@ -140,7 +140,7 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 .Recommended SDK per Server Version Matrix
 [#table_sdk_versions]
 |===
-| | 3.3 | 3.4, 3.5 | 3.6, 3.7
+| | 3.4, 3.5 | 3.6, 3.7 | 3.8
 
 | *Server 7.0 - 7.2*
 | *✔*
@@ -211,7 +211,7 @@ The following table provides an overview at the time of Java SDK {sdk_dot_minor}
 .Recommended Spring Data Couchbase per Server Version Matrix
 [#table_spring_versions]
 |===
-|  | SDC 4.3 - 4.4 | SDC 5.0 - 5.2
+|  | SDC 5.0 - 5.2 | SDC 5.3 - 5.5
 
 | _Status ->_
 | _Maintenance Support_
