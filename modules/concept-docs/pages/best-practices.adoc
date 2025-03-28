@@ -106,17 +106,8 @@ Advanced zone aware....
 
 // ....this paragraph different for each SDK.
 
-Choosing between the blocking, asynchronous, and reactive APIs for the Scala SDK is partly bound up with how (and where) you want to handle exceptions.
-
-* Synchronous operations are blocking, and return a Scala `Try` object.
-This contains either the result or a _Throwable_ exception,
-which can be pattern matched over (using `flatMap` in more complex cases).
-* The asynchronous API returns Scala `Future`, representing the execution of an asynchronous task and the promise of a future result.
-An `ExecutionContext` must be provided, to give a thread pool for handling whatever is returned.
-* The reactive API is a more natural fit for network-aware, fault tolerant programs, 
-and will provide full back pressure for streaming results from large {sqlpp} or Search queries.
-
-See the xref:howtos:concurrent-async-apis.adoc[Async & Reactive APIs page] for further discussion and practical examples.
+We recommend using the reactive API over the `CompletableFuture` counterpart.
+See the xref:howtos:concurrent-async-apis.adoc[Async & Reactive APIs page] for discussion and practical examples.
 
 
 
