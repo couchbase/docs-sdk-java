@@ -46,7 +46,13 @@ Data security depends in part on only giving access to the minimum amount of dat
 
 RBAC restrict resources on a Couchbase cluster to an identified user, allocated by role.
 
-*TODO* update and add Capella here
+==== Capella Security & Priveleges
+
+Capella, our managed service, likewise has a concept of roles.
+
+In addition to this, clusters within Capella are grouped into 
+xref:cloud:organizations:organization-projects-overview.adoc[organizations and projects],
+to maintain separation of concerns, as well as access priveleges.
 
 
 ==== Users, Resources, Roles, and Privileges
@@ -217,9 +223,10 @@ Read up on security and performance considerations relevant to your use case.
 
 === Role-Based Access Control
 
-*TODO* add Capella info
+For Capella, Roles, Cluster Access Credentials, and Authentication options are covered in the xref:cloud:security:security.adoc[Capella Security docs].
 
-All aspects of the Couchbase RBAC system are covered in the section xref:{version-server}@server:learn:security/authorization-overview.adoc[Authorization].
+
+For self-managed Couchbase Server, all aspects of the Couchbase RBAC system are covered in the section xref:{version-server}@server:learn:security/authorization-overview.adoc[Authorization].
 Specifically, for information on:
 
 * Adding _Users_ and assigning _roles_, by means of the Couchbase Web Console, see xref:{version-server}@server:manage:manage-security/manage-users-and-roles.adoc[Manage Users and Roles].
