@@ -21,7 +21,8 @@ include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 {description}
-Common use cases are outlined here, less common use cases are covered in the https://pkg.go.dev/github.com/couchbase/gocb/v2?tab=doc[API docs].
+Common use cases are outlined here, less common use cases are covered in the 
+https://docs.couchbase.com/sdk-api/couchbase-java-client[API docs].
 
 include::{version-common}@sdk:shared:partial$flush-info-pars.adoc[tag=management-intro]
 
