@@ -76,7 +76,7 @@ To see Collections in action, take a look at our xref:howtos:working-with-collec
 
 == User Management
 
-include::{version-common}@sdk:pages:partial$user-management.adoc[]
+// include::{version-common}@sdk:pages:partial$user-management.adoc[]
 
 
 The SDK lets you programmatically create _users_, assign them _roles_ and associated _privileges_, and remove them from the system.
