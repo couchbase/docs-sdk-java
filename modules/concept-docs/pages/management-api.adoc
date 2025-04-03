@@ -1,5 +1,5 @@
 = Managing Couchbase Clusters from the SDK
-:page-aliases: buckets-and-clusters.adoc
+// :page-aliases: buckets-and-clusters.adoc
 :page-toclevels: 2
 :description: Cluster management from the SDK.
 
