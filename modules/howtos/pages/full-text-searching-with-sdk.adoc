@@ -110,6 +110,8 @@ This is because FTS supports, as of Couchbase Server 7.6, a new form of "scoped 
 
 It's important to use the `Cluster.searchQuery()` or `Cluster.search()` for global indexes, and `Scope.search()` for scoped indexes.
 
+
+////
 == Vector Search
 As of Couchbase Server 7.6, the FTS service supports vector search in additional to traditional full text search queries.
 // todo link to the server docs when available
@@ -117,6 +119,7 @@ As of Couchbase Server 7.6, the FTS service supports vector search in additional
 === Examples
 ==== Single vector query
 In this first example we are performing a single vector query:
+
 [source,java]
 ----
 include::devguide:example$java/Search.java[tag=vector1,indent=0]
@@ -158,9 +161,10 @@ include::devguide:example$java/Search.java[tag=vector2,indent=0]
 ----
 
 How the results are combined (ANDed or ORed) can be controlled with `vectorSearchOptions().vectorQueryCombination()`.
+////
 
-==== FTS queries
-And note that traditional FTS queries, without vector search, are also supported with the new `cluster.search()` / `scope.search()` APIs:
+// ==== FTS queries
+// And note that traditional FTS queries, without vector search, are also supported with the new `cluster.search()` / `scope.search()` APIs:
 
 [source,java]
 ----
@@ -168,6 +172,7 @@ include::devguide:example$java/Search.java[tag=vector4,indent=0]
 ----
 
 The `SearchQuery` is created in the same way as detailed earlier.
+
 
 == Search Options
 
