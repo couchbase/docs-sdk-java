@@ -61,6 +61,7 @@ the SDK can work on just a specific _path_ of the document with xref:subdocument
 ====
 
 === Upsert
+
 Here is a simple upsert operation, which will insert the document if it does not exist, or replace it if it does.
 
 We'll use the built-in JSON types for simplicity, but you can use different types if you want.
@@ -127,7 +128,7 @@ Then we `get` it back into `doc` and pull out the document's content as a `JsonO
 Afterwards, we update a field in the `JsonObject` with `put`.  `JsonObject` is mutable, we don't need to store the result of the `put`. 
 Finally, we `replace` the document with the updated content, and a CAS value, storing the final result as `result`.
 
-So, what is CAS?
+==== What is CAS?
 
 CAS, or Compare And Swap, is a form of optimistic locking. Every document in Couchbase has a CAS value, and it's changed on every mutation. 
 When you `get` a document you also get the document's CAS, and then when it's time to write the document, you send the same CAS back. 
