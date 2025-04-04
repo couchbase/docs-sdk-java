@@ -21,7 +21,7 @@ include::{version-common}@sdk:shared:partial$clusters-buckets.adoc[tag=managemen
 // ...
 Management operations in the Java SDK may be performed through several interfaces depending on the object:
 
-== Creating and Removing Buckets
+=== Creating and Removing Buckets
 
 To create or delete a bucket, call the bucket manager with the `buckets()` call on the cluster:
 
