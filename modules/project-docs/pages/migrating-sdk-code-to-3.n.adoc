@@ -3,7 +3,7 @@
 Collections and Scopes are introduced.
 :page-toclevels: 2
 :nav-title: Migrating to Java SDK 3.x API
-:page-aliases: ROOT:migrate
+:page-aliases: ROOT:migrate.adoc
 
 
 [abstract]

@@ -2,7 +2,7 @@
 :reftext: Distributed ACID Transactions from the Java SDK
 :description: A practical guide on using Couchbase Distributed ACID transactions, via the Java SDK.
 :page-partial:
-:page-aliases: acid-transactions
+:page-aliases: acid-transactions.adoc
 :page-toclevels: 2
 :page-pagination: next
 

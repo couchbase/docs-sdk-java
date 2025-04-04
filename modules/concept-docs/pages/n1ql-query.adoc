@@ -1,7 +1,6 @@
 = Query
 :description: Parallel data management for complex queries over many records, using a familiar SQL-like syntax.
-:page-topic-type: concept
-:page-aliases: ROOT:n1ql-query,ROOT:prepared-statements,ROOT:querying
+:page-aliases: ROOT:n1ql-query.adoc,ROOT:prepared-statements.adoc,ROOT:querying.adoc
 
 include::project-docs:partial$attributes.adoc[]
 

@@ -1,10 +1,7 @@
 = Handling Errors
 :description: Errors are inevitable. That's why the SDK has very extensive error handling and retry capabilties
 :navtitle: Handling Errors
-:page-topic-type: howto
-:page-aliases: ROOT:handling-error-conditions,handling-error-conditions,errors,handling-errors
-:source-language: java
-:lang: java
+:page-aliases: ROOT:handling-error-conditions.adoc,handling-error-conditions.adoc,errors.adoc,handling-errors.adoc
 
 [abstract]
 {description} which are focussed on one goal:

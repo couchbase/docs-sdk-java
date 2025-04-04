@@ -1,6 +1,5 @@
 = Orphaned Requests Logging
 :description: In addition to request tracing and metrics reporting, logging orphaned requests provides additional insight into why an operation might have timed out (or got cancelled for a different reason).
-:page-topic-type: howto
 
 [abstract]
 {description}

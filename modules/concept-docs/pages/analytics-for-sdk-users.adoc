@@ -2,7 +2,7 @@
 :description: Parallel data management for complex queries over many records, using a familiar SQL-like syntax.
 :nav-title: Analytics for SDK Users
 :page-topic-type: concept
-:page-aliases: analytics,
+:page-aliases: analytics.adoc
 
 [abstract]
 {description}

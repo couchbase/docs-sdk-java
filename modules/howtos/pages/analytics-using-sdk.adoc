@@ -1,12 +1,7 @@
 = Analytics
 :description: Parallel data management for complex queries over many records, using a familiar SQL-like syntax.
-:page-topic-type: howto
-:page-aliases: analytics-query
+:page-aliases: analytics-query.adoc
 :page-edition: Enterprise Edition
-:lang: Java
-:version: 3.2.1
-:example-source: 3.2@java-sdk:howtos:example$Analytics.java
-:example-source-lang: java
 
 [abstract]
 {description}

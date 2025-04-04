@@ -1,9 +1,7 @@
 = Error Messages
 :description: The standardized error codes returned by the Couchbase Java SDK, from cloud connection to sub-document.
 :nav-title: Error Codes
-:page-topic-type: ref
 
-include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 {description}
