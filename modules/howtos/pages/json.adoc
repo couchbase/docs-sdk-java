@@ -27,14 +27,14 @@ Let's assume we have a very simple JSON structure we want to insert:
 
 [source,json]
 ----
-include::example$Json.java[tag=arthur,indent=0]
+include::devguide:example$java/Json.java[tag=arthur,indent=0]
 ----
 
 Once we've connected to a Couchbase server and the bucket, scope, and collection that we want to write to, we know that inserting is as simple as:
 
 [source,java]
 ----
-include::example$Json.java[tag=upsert,indent=0]
+include::devguide:example$java/Json.java[tag=upsert,indent=0]
 ----
 
 But how do we model that JSON object?
@@ -43,12 +43,12 @@ We mentioned the simple JSON library that we ship with the SDK, and let's look a
 
 [source,java]
 ----
-include::example$Json.java[tags=jsonobject-imports,indent=0]
+include::devguide:example$java/Json.java[tags=jsonobject-imports,indent=0]
 ----
 
 [source,java]
 ----
-include::example$Json.java[tags=jsonobject,indent=0]
+include::devguide:example$java/Json.java[tags=jsonobject,indent=0]
 ----
 
 === Retrieving
@@ -58,7 +58,7 @@ In this example, we print the JSON back, and access one of the fields:
 
 [source,java]
 ----
-include::example$Json.java[tags=retrieve-json,indent=0]
+include::devguide:example$java/Json.java[tags=retrieve-json,indent=0]
 ----
 
 === Using Java's `Map` data structure
@@ -68,7 +68,7 @@ So we can easily create an object from an existing Map:
 
 [source,java]
 ----
-include::example$Json.java[tags=map,indent=0]
+include::devguide:example$java/Json.java[tags=map,indent=0]
 ----
 
 The resulting `JsonObject` can be inserted as normal.
@@ -76,7 +76,7 @@ But most JSON serializers can handle simple objects like a Map already, and ours
 
 [source,java]
 ----
-include::example$Json.java[tags=map-insert,indent=0]
+include::devguide:example$java/Json.java[tags=map-insert,indent=0]
 ----
 
 Once the data is in Couchbase, it is stored in exactly the same way, that is to say, as the JSON representation we started this example with!
@@ -85,7 +85,7 @@ So whether we inserted a Map or a JsonObject, we could retrieve it as a JsonObje
 
 [source,java]
 ----
-include::example$Json.java[tags=retrieve-map,indent=0]
+include::devguide:example$java/Json.java[tags=retrieve-map,indent=0]
 ----
 
 While you are free to use Map, this is capable of storing any valid Java value, including ones that can't be represented as JSON. JsonObject offers validation to make sure that only the relevant xref:#datatypes[datatypes] are stored, which will give you greater diagnostics and robustness.
@@ -96,12 +96,12 @@ If we read the contents of a file to get a JSON string, we can also inflate a Js
 
 [source,java]
 ----
-include::example$Json.java[tags=file-imports,indent=0]
+include::devguide:example$java/Json.java[tags=file-imports,indent=0]
 ----
 
 [source,java]
 ----
-include::example$Json.java[tags=file,indent=0]
+include::devguide:example$java/Json.java[tags=file,indent=0]
 ----
 
 This might seem a little clumsy though:
@@ -111,12 +111,12 @@ We could instead simply pass it through with the Raw JSON Transcoder:
 
 [source,java]
 ----
-include::example$Json.java[tags=file-raw-imports,indent=0]
+include::devguide:example$java/Json.java[tags=file-raw-imports,indent=0]
 ----
 
 [source,java]
 ----
-include::example$Json.java[tags=file-raw,indent=0]
+include::devguide:example$java/Json.java[tags=file-raw,indent=0]
 ----
 
 This approach could also be used to handle JSON created by other libraries such as Gson.
@@ -130,21 +130,21 @@ Using this simple class:
 
 [source,java]
 ----
-include::example$Json.java[tags=person-class,indent=0]
+include::devguide:example$java/Json.java[tags=person-class,indent=0]
 ----
 
 We could insert the exact same JSON as before with:
 
 [source,java]
 ----
-include::example$Json.java[tags=insert-person,indent=0]
+include::devguide:example$java/Json.java[tags=insert-person,indent=0]
 ----
 
 It's now trivial to return the data either as a JsonObject, exactly as we've done before, or indeed as a Person object:
 
 [source,java]
 ----
-include::example$Json.java[tags=get-person,indent=0]
+include::devguide:example$java/Json.java[tags=get-person,indent=0]
 ----
 
 [#ObjectMapper]
@@ -155,12 +155,12 @@ Though the SDK automatically uses your version of Jackson when it finds the libr
 
 [source,java]
 ----
-include::example$Json.java[tags=object-mapper-imports,indent=0]
+include::devguide:example$java/Json.java[tags=object-mapper-imports,indent=0]
 ----
 
 [source,java]
 ----
-include::example$Json.java[tags=object-mapper;!object-mapper-dates,indent=0]
+include::devguide:example$java/Json.java[tags=object-mapper;!object-mapper-dates,indent=0]
 ----
 
 With this setup, we can then configure our classes as we wish.
@@ -169,7 +169,7 @@ But the generated JSON will have the same fields as before, for easy interoperab
 
 [source,java]
 ----
-include::example$Json.java[tags=persona-class;!exclude,indent=0]
+include::devguide:example$java/Json.java[tags=persona-class;!exclude,indent=0]
 ----
 
 [#datatypes]
@@ -193,7 +193,7 @@ This example shows a variety of data types, including a nested array ("possessio
 
 [source,java]
 ----
-include::example$Json.java[tags=nested,indent=0]
+include::devguide:example$java/Json.java[tags=nested,indent=0]
 ----
 
 === Top level values other than JsonObject
@@ -204,14 +204,14 @@ For example, to insert a string value, we could simply:
 
 [source,java]
 ----
-include::example$Json.java[tags=string,indent=0]
+include::devguide:example$java/Json.java[tags=string,indent=0]
 ----
 
 We can retrieve this value as usual, with the appropriate `.contentAs()`:
 
 [source,java]
 ----
-include::example$Json.java[tags=string-get,indent=0]
+include::devguide:example$java/Json.java[tags=string-get,indent=0]
 ----
 
 === Dates
@@ -221,37 +221,37 @@ JSON has no built-in representation of dates, so commonly they are represented a
 * a string-formatted https://www.w3.org/TR/NOTE-datetime[ISO-8601^] date 
 * an offset in seconds or milliseconds from the Unix epoch 1 January 1970 UTC
 
-While it doesn't matter which you choose (as long as you serialize and deserialize your Date object consistently!) it may make sense to store the dates in Couchbase in a format that can be easily manipulated using the xref:7.1@server:n1ql:n1ql-language-reference/datefun.adoc[date functions in {sqlpp}].
+While it doesn't matter which you choose (as long as you serialize and deserialize your Date object consistently!) it may make sense to store the dates in Couchbase in a format that can be easily manipulated using the xref:server:n1ql:n1ql-language-reference/datefun.adoc[date functions in {sqlpp}].
 
 Handily, as we can see on the same page, the
-xref:7.1@server:n1ql:n1ql-language-reference$datefun.adoc#date-formats[supported date formats] are the usual convention in JSON.
+xref:server:n1ql:n1ql-language-reference$datefun.adoc#date-formats[supported date formats] are the usual convention in JSON.
 
 Let's look at a brief example of how we might implement this, to serialize a new Event class:
 
 [source,java]
 ----
-include::example$Json.java[tags=event-class;!exclude,indent=0]
+include::devguide:example$java/Json.java[tags=event-class;!exclude,indent=0]
 ----
 
 We'll need a few extra imports:
 
 [source,java]
 ----
-include::example$Json.java[tags=time-imports,indent=0]
+include::devguide:example$java/Json.java[tags=time-imports,indent=0]
 ----
 
 As we are controlling the serialization carefully, we'll also want to register our own <<ObjectMapper,ObjectMapper>> as above, and additionally configure some of the date handling properties:
 
 [source,java]
 ----
-include::example$Json.java[tags=object-mapper-dates,indent=0]
+include::devguide:example$java/Json.java[tags=object-mapper-dates,indent=0]
 ----
 
 Now all this is set up we can simply serialize and deserialize our Event objects exactly as we've done before:
 
 [source,java]
 ----
-include::example$Json.java[tags=event,indent=0]
+include::devguide:example$java/Json.java[tags=event,indent=0]
 ----
 
 
@@ -262,24 +262,24 @@ So taking our original "Arthur" object above, we can insert a simple value:
 
 [source,java]
 ----
-include::example$Json.java[tags=subdoc-simple,indent=0]
+include::devguide:example$java/Json.java[tags=subdoc-simple,indent=0]
 ----
 
 [source,json]
 ----
-include::example$Json.java[tags=subdoc-simple-json,indent=0]
+include::devguide:example$java/Json.java[tags=subdoc-simple-json,indent=0]
 ----
 
 Or we could insert another nested object:
 
 [source,java]
 ----
-include::example$Json.java[tags=subdoc-object,indent=0]
+include::devguide:example$java/Json.java[tags=subdoc-object,indent=0]
 ----
 
 [source,json]
 ----
-include::example$Json.java[tags=subdoc-object-json,indent=0]
+include::devguide:example$java/Json.java[tags=subdoc-object-json,indent=0]
 ----
 
 NOTE: Currently, paths cannot exceed 1024 characters, and cannot be more than 32 levels deep.
@@ -296,15 +296,15 @@ We can now convert the result to Jackson's `JsonNode`, and use its rich set of m
 
 [source,java]
 ----
-include::example$Json.java[tags=identify-imports,indent=0]
+include::devguide:example$java/Json.java[tags=identify-imports,indent=0]
 ----
 
 [source,java]
 ----
-include::example$Json.java[tags=identify,indent=0]
+include::devguide:example$java/Json.java[tags=identify,indent=0]
 ----
 
 
 == Additional Resources
 
-* Read more about the xref:7.1@server:learn:data/data.adoc[Couchbase Data Model].
+* Read more about the xref:server:learn:data/data.adoc[Couchbase Data Model].
