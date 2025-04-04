@@ -1,7 +1,6 @@
 = Pre-release Archive Release Notes
 :description: Release notes for the 3.0 Alpha & Beta Releases
 :navtitle: α & β Release Notes
-:page-topic-type: project-doc
 :page-aliases: 3.0αλφα-sdk-release-notes
 
 [abstract] 

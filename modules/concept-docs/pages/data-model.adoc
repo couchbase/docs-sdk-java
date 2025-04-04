@@ -2,7 +2,7 @@
 :description: Couchbase's use of JSON as a storage format allows powerful search and query over documents.
 :nav-title: Data Model
 :page-toclevels: 2
-:page-aliases: ROOT:datastructures
+:page-aliases: ROOT:datastructures.adoc
 
 include::project-docs:partial$attributes.adoc[]
 

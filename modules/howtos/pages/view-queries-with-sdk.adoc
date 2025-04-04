@@ -1,10 +1,8 @@
 = MapReduce Views
 :description: Our legacy MapReduce Views Service is best replaced by the scalable Query Service.
 :navtitle: MapReduce Views
-:page-topic-type: howto
-:page-aliases: ROOT:view-queries-with-sdk,ROOT:geo-spatial-views
+:page-aliases: ROOT:view-queries-with-sdk.adoc,ROOT:geo-spatial-views.adoc
 
-include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 {description}

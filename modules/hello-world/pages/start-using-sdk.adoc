@@ -1,5 +1,5 @@
 = Hello World
-:page-aliases: ROOT:getting-started.adoc,ROOT:start-using.adoc,ROOT:hello-couchbase.adoc,ROOT:start-using-sdk.adoc,ROOT:java-intro,ROOT:tutorial
+:page-aliases: ROOT:getting-started.adoc,ROOT:start-using.adoc,ROOT:hello-couchbase.adoc,ROOT:start-using-sdk.adoc,ROOT:java-intro.adoc,ROOT:tutorial.adoc
 :page-toclevels: 3
 :description: Install, connect, try. A quick start guide to get you up and running with Couchbase and the {name-sdk}.
 :forum-link: https://www.couchbase.com/forums/c/java-sdk/5
@@ -29,7 +29,8 @@ but first let's look at those data operations, and installing the {name-sdk}.
 
 // remember to add a nomenclature note to the next version of this page for LCB.
 
-.Upsert with Replication set to Majority Durablity
+.Upsert with Replication set to xref:concept-docs:data-durability-acid-transactions.adoc#durable-writes[Majority Durablity]:
+
 [source,java]
 ----
 include::devguide:example$java/Overview.java[tag=overview,indent=0]

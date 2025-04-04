@@ -1,8 +1,6 @@
 = JSON Modelling
 :description: The Java SDK supports multiple options for working with JSON.
 :navtitle: JSON Modelling
-:page-topic-type: howto
-:lang: Java
 :page-toclevels: 2
 
 include::project-docs:partial$attributes.adoc[]

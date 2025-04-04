@@ -1,8 +1,7 @@
 = Managing Connections
 :description: This section describes how to connect the Java SDK to a Couchbase cluster.
 :navtitle: Managing Connections
-:page-topic-type: howto
-:page-aliases: ROOT:managing-connections,howtos:multi-network,ROOT:connecting,ROOT:connection-advanced
+:page-aliases: ROOT:managing-connections.adoc,howtos:multi-network.adoc,ROOT:connecting.adoc,ROOT:connection-advanced.adoc
 :page-toclevels: 2
 
 include::project-docs:partial$attributes.adoc[]

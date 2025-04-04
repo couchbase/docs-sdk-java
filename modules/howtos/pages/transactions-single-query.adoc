@@ -1,7 +1,6 @@
 = Single Query Transactions
 :description: Learn how to perform bulk-loading transactions with the SDK.
 :page-partial:
-:page-topic-type: howto
 :page-pagination: full
 
 include::project-docs:partial$attributes.adoc[]

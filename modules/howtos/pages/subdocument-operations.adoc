@@ -1,12 +1,7 @@
 = Sub-Document Operations
 :description: Sub-Document operations can be used to efficiently access and change parts of documents.
-:page-topic-type: howto
-include::project-docs:partial$attributes.adoc[]
-:lang: Java
-:version: 3.2.1
 :page-aliases: ROOT:sdk-xattr-example.adoc
 
-include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 {description}

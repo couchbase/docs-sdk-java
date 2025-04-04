@@ -1,7 +1,6 @@
 = Full Installation
 :description: Installation instructions for the Couchbase Java Client.
 :page-partial:
-:page-topic-type: project-doc
 
 [abstract]
 {description}

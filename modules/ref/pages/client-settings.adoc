@@ -1,8 +1,7 @@
 = Client Settings
 :description: pass:q[The `ClusterEnvironment` class enables you to configure Java SDK options for security, timeouts, reliability, and performance.]
 :nav-title: Client Settings
-:page-topic-type: reference
-:page-aliases: ROOT:client-settings, ROOT:env-config
+:page-aliases: ROOT:client-settings.adoc, ROOT:env-config.adoc
 :page-toclevels: 2
 
 include::project-docs:partial$attributes.adoc[]
