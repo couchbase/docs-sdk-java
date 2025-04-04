@@ -2,7 +2,7 @@
 :description: Data service offers the simplest way to retrieve or mutate data where the key is known.
 :page-aliases: ROOT:document-operations.adoc,ROOT:documents-creating.adoc,ROOT:documents-updating.adoc,ROOT:documents-retrieving.adoc,ROOT:documents-deleting.adoc
 // :example-source: 3.8@java-sdk:devguide:example$java/Queries.java
-:page-toclevels: 2
+:page-toclevels: 3
 :page-pagination: full
 
 
