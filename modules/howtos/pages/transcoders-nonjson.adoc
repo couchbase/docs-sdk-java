@@ -20,7 +20,9 @@ It may use a serializer for this.
 NOTE: Many applications will not need to be aware of transcoders and serializers, as the defaults support most standard JSON use cases.
 The information in this page is only needed if the application has an advanced use-case, likely involving either non-JSON data, or a requirement for a particular JSON serialization library.
 
+
 == Default Behaviour
+
 The `ClusterEnvironment` contains a global transcoder and serializer, which by default are  `JsonTranscoder` and `DefaultJsonSerializer`.
 
 `DefaultJsonSerializer` uses the high-performance JSON library https://github.com/FasterXML/jackson[Jackson] for serializing and deserializing byte arrays to and from concrete objects.
@@ -54,7 +56,9 @@ This table summarizes that information, and this more concise form will be used 
 |JSON
 |===
 
+
 == Using Custom Jackson
+
 As described above, the default serializer (`DefaultJsonSerializer`) uses Jackson for serializing objects.
 (This Jackson dependency is shaded into a different namespace, so that it does not clash with any Jackson used by your application.)
 
@@ -80,7 +84,9 @@ Cluster cluster = Cluster.connect(
 );
 ----
 
+
 == RawJsonTranscoder
+
 The RawJsonTranscoder provides the ability for the application to explicitly specify that the data they are storing or retrieving is JSON.
 This transcoder does not accept a serializer, and always performs straight pass through of the data to the server.
 This enables the application to avoid unnecessary parsing costs when they are certain they are using JSON data.
@@ -111,7 +117,7 @@ Here we want to use https://github.com/google/gson[Google Gson] for serializatio
 
 [source,java]
 ----
-include::example$Transcoding.java[tag=gson-encode,indent=0]
+include::devguide:example$java/Transcoding.java[tag=gson-encode,indent=0]
 ----
 
 Since Gson has already done the serialization work, we don't want to use the default `JsonTranscoder`, as this will run the provided String needlessly through `DefaultJsonSerializer` (Jackson).
@@ -122,10 +128,12 @@ Gson can then be used for the deserialization.
 
 [source,java]
 ----
-include::example$Transcoding.java[tag=gson-decode,indent=0]
+include::devguide:example$java/Transcoding.java[tag=gson-decode,indent=0]
 ----
 
+
 == Non-JSON Transcoders
+
 It is most common to store JSON with Couchbase.
 However, it is possible to store non-JSON documents, such as raw binary data, perhaps using an concise binary encoding like https://msgpack.org[MessagePack] or https://cbor.io/[CBOR], in the Key-Value store.
 
@@ -135,6 +143,7 @@ Also note that some simple data types can be stored directly as JSON, without re
 A valid JSON document can be a simple integer (`42`), string (`"hello"`), array (`[1,2,3]`), boolean (`true`, `false`) and the JSON `null` value.
 
 === RawStringTranscoder
+
 The RawStringTranscoder provides the ability for the user to explicitly store and retrieve raw string data with Couchbase.
 It can be used to avoid the overhead of storing the string as JSON, which requires two bytes for double quotes, plus potentially more for escaping characters.
 
@@ -163,10 +172,11 @@ Here’s an example of using the `RawStringTranscoder`:
 
 [source,java]
 ----
-include::example$Transcoding.java[tag=string,indent=0]
+include::devguide:example$java/Transcoding.java[tag=string,indent=0]
 ----
 
 === RawBinaryTranscoder
+
 The RawBinaryTranscoder provides the ability for the user to explicitly store and retrieve raw byte data to Couchbase.
 The transcoder does not perform any form of real transcoding, and does not take a serializer, but rather passes the data through and assigns the appropriate binary Common Flag.
 
@@ -193,20 +203,22 @@ Here’s an example of using the `RawBinaryTranscoder`:
 
 [source,java]
 ----
-include::example$Transcoding.java[tag=binary,indent=0]
+include::devguide:example$java/Transcoding.java[tag=binary,indent=0]
 ----
 
 == Custom Transcoders and Serializers
+
 More advanced transcoding needs can be accomplished if the application implements their own transcoders and serializers.
 
 === Creating a Custom Serializer
+
 We saw above one example of using Google Gson with the `RawJsonTranscoder`, but it requires the application to explicitly serialize and deserialize objects each time.  
 By creating a custom Gson serializer, we can avoid this.
 
 It’s easy to create a serializer.  Simply implement the `JsonSerializer` interface’s three methods:
 [source,java]
 ----
-include::example$Transcoding.java[tag=gson-serializer,indent=0]
+include::devguide:example$java/Transcoding.java[tag=gson-serializer,indent=0]
 ----
 
 NOTE: The `TypeRef` overload is optional, and is only used if the application explicitly uses it with for example `result.contentAs(new TypeRef<String> {})`, which is an uncommon requirement.  
@@ -218,28 +230,31 @@ All we need to do is change the serializer, as so:
 
 [source,java]
 ----
-include::example$Transcoding.java[tag=gson-custom-encode,indent=0]
+include::devguide:example$java/Transcoding.java[tag=gson-custom-encode,indent=0]
 ----
 
 And for decoding:
 
 [source,java]
 ----
-include::example$Transcoding.java[tag=gson-custom-decode,indent=0]
+include::devguide:example$java/Transcoding.java[tag=gson-custom-decode,indent=0]
 ----
 
 If you want to use Gson for all JSON serialization, you can register it as the global JSON serializer when creating a `ClusterEnvironment`:
 
 [source,java]
 ----
-include::example$Transcoding.java[tag=gson-register-1,indent=0]
+include::devguide:example$java/Transcoding.java[tag=gson-register-1,indent=0]
 ----
 
 The default global `JsonTranscoder` will be initialized with this serializer.
 Now our GsonSerializer will be automatically used by all operations, without needing to provide a transcoder each time.
 
+
 === Creating a Custom Transcoder
+
 Let’s look at a more complex example: encoding the JSON alternative, https://msgpack.org[MessagePack].
+
 MessagePack is a compact binary data representation, so it should be stored with the binary Common Flag.
 The Common Flag is chosen by the transcoder, and none of the existing transcoders matches our needs (`RawBinaryTranscoder` does set the binary flag, but it passes data through directly rather than using a serializer).  
 So we need to write one.
@@ -248,14 +263,14 @@ Start by creating a new serializer for MessagePack.  This is similar to the Gson
 
 [source,java]
 ----
-include::example$Transcoding.java[tag=msgpack-serializer,indent=0]
+include::devguide:example$java/Transcoding.java[tag=msgpack-serializer,indent=0]
 ----
 
 And now create a transcoder that uses the `MsgPackSerializer`, and sets the binary Common Flag when storing the data:
 
 [source,java]
 ----
-include::example$Transcoding.java[tag=msgpack-transcoder,indent=0]
+include::devguide:example$java/Transcoding.java[tag=msgpack-transcoder,indent=0]
 ----
 
 Note the use of `BINARY_COMPAT_FLAGS`.  The other Common Flags that can be used are `JSON_COMPAT_FLAGS` and `STRING_COMPAT_FLAGS`.  
@@ -265,8 +280,9 @@ Now we can use the new transcoder to seamlessly store MessagePack data in Couchb
 
 [source,java]
 ----
-include::example$Transcoding.java[tag=msgpack-encode,indent=0]
+include::devguide:example$java/Transcoding.java[tag=msgpack-encode,indent=0]
 ----
+
 
 == Further reading
 
