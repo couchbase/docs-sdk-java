@@ -16,5 +16,5 @@ include::{version-common}@sdk:shared:partial$sdk-xattr-overview.adoc[tag=virtual
 
 [source,java]
 ----
-include::example$XattrExample.java[tag=xattr_1,indent=0]
+include::devguide:example$java/XattrExample.java[tag=xattr_1,indent=0]
 ----
