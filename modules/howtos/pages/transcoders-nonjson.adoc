@@ -1,4 +1,5 @@
 = Transcoders and Non-JSON Documents
+:page-toclevels: 2
 :description: The Java SDK supports common JSON document requirements out-of-the-box.
 :nav-title: Using Transcoders
 
