@@ -1,11 +1,9 @@
 = Documents
 :description: Couchbase supports CRUD operations, various data structures, and binary documents.
 :nav-title: Documents & Doc Ops
-:page-topic-type: concept
 // :page-aliases: ROOT:documents.adoc,ROOT:documents-basics.adoc,ROOT:documents-atomic.adoc,ROOT:core-operations.adoc,7.6@server:developer-guide:expiry.adoc,7.6@server:developer-guide:creating-documents.adoc
 
 
-include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 {description}
@@ -55,7 +53,7 @@ If you wish to only modify certain parts of a document, you can use xref:subdocu
 
 [source,java,indent=0]
 ----
-include::example$DocumentsExample.java[tag=mutate-in]
+include::devguide:example$java/DocumentsExample.java[tag=mutate-in]
 ----
 
 or xref:7.1@server:n1ql:n1ql-language-reference/update.adoc[N1QL UPDATE] to update documents based on specific query criteria:
@@ -84,7 +82,7 @@ You can also retrieve _parts_ of documents using xref:subdocument-operations.ado
 
 [source,java,indent=0]
 ----
-include::example$DocumentsExample.java[tag=lookup-in]
+include::devguide:example$java/DocumentsExample.java[tag=lookup-in]
 ----
 
 // Counters
@@ -93,7 +91,7 @@ include::{version-common}@sdk:shared:partial$documents.adoc[tag=counters1]
 
 [source,java,indent=0]
 ----
-include::example$DocumentsExample.java[tag=counters]
+include::devguide:example$java/DocumentsExample.java[tag=counters]
 ----
 
 You can simplify by importing `decrementOptions()` statically:
@@ -107,7 +105,7 @@ include::{version-common}@sdk:shared:partial$documents.adoc[tag=counters2]
 
 [source,java,indent=0]
 ----
-include::example$DocumentsExample.java[tag=counter-increment]
+include::devguide:example$java/DocumentsExample.java[tag=counter-increment]
 ----
 
 include::{version-common}@sdk:shared:partial$documents.adoc[tag=counters3]
