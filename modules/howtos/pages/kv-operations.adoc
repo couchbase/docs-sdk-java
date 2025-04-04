@@ -1,6 +1,6 @@
 = Data Operations
 :description: Data service offers the simplest way to retrieve or mutate data where the key is known.
-:page-aliases: ROOT:document-operations.adoc,ROOT:documents-creating,ROOT:documents-updating,ROOT:documents-retrieving,ROOT:documents-deleting
+:page-aliases: ROOT:document-operations.adoc,ROOT:documents-creating.adoc,ROOT:documents-updating.adoc,ROOT:documents-retrieving.adoc,ROOT:documents-deleting.adoc
 // :example-source: 3.8@java-sdk:devguide:example$java/Queries.java
 :page-toclevels: 2
 :page-pagination: full
