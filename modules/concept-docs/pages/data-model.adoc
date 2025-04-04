@@ -68,7 +68,7 @@ You can create a CouchbaseMap like this:
 
 [source,java]
 ----
-include::example$DataModelExample.java[tag=data_model_1,indent=0]
+include::devguide:example$java/DataModelExample.java[tag=data_model_1,indent=0]
 ----
 
 === Limitations

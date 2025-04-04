@@ -18,7 +18,7 @@ The simplest way to create a `Cluster` object is to call `Cluster.connect()` wit
 
 [source,java]
 ----
-include::example$ManagingConnections.java[tag=simpleconnect,indent=0]
+include::devguide:example$java/ManagingConnections.java[tag=simpleconnect,indent=0]
 ----
 
 NOTE: If you are connecting to a version of Couchbase Server older than 6.5, it will be more efficient if the addresses are those of data (KV) nodes.
