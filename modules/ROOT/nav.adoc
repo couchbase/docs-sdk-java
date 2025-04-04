@@ -75,6 +75,7 @@
 * xref:ref:index.adoc[]
 ** https://docs.couchbase.com/sdk-api/couchbase-java-client[API Reference^]
 ** https://docs.couchbase.com/sdk-api/couchbase-core-io/[JVM Core IO API^]
+** https://github.com/couchbase/couchbase-jvm-clients[Java SDK source code^]
 ** xref:ref:client-settings.adoc[]
 ** xref:ref:error-codes.adoc[]
 ** xref:ref:glossary.adoc[Glossary]
