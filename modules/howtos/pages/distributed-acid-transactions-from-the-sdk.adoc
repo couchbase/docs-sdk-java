@@ -131,6 +131,7 @@ You could also log a successful transaction like so:
 include::devguide:example$java/TransactionsExample.java[tag=logging-success,indent=0]
 ----
 
+
 == Key-Value Operations
 
 You can perform transactional database operations using familiar key-value CRUD methods:
@@ -258,6 +259,7 @@ Generally, you will need to do `ctx.remove(...).then(...)` rather than `ctx.remo
 --
 ====
 
+
 == {sqlpp} Queries
 
 If you already use https://www.couchbase.com/products/n1ql[{sqlpp} (formerly N1QL)], then its use in transactions is very similar.
@@ -333,6 +335,7 @@ include::devguide:example$java/TransactionsExample.java[tag=queryOptions,indent=
 | `raw(String, Object)` | Escape hatch to add arguments that are not covered by these options.
 |===
 
+
 == Mixing Key-Value and {sqlpp}
 
 Key-Value and {sqlpp} query operations can be freely intermixed, and will interact with each other as you would expect.
@@ -347,6 +350,7 @@ include::devguide:example$java/TransactionsExample.java[tag=queryRyow,indent=0]
 <2> But the `SELECT` can view it, as the insert was in the same transaction.
 
 include::{version-common}@sdk:shared:partial$acid-transactions.adoc[tag=rbac]
+
 
 == Concurrent Operations
 
@@ -370,12 +374,13 @@ These events are raised when a non-transactional write has been detected and ove
 
 [source,java]
 ----
-include::howtos:example$TransactionsExample.java[tag=concurrency,indent=0]
+include::devguide:example$java/TransactionsExample.java[tag=concurrency,indent=0]
 ----
 
 The event contains the key of the document involved, to aid the application with debugging.
 
 See xref:concept-docs:transactions.adoc#concurrency-with-non-transactional-writes[Concurrency with Non-Transactional Writes] to learn more.
+
 
 == Configuration
 
@@ -396,6 +401,7 @@ include::devguide:example$java/TransactionsExample.java[tag=config-easy,indent=0
 ----
 
 include::{version-common}@sdk:shared:partial$acid-transactions.adoc[tag=config]
+
 
 == Additional Resources
 

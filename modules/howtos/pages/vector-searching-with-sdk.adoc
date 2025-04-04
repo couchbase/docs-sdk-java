@@ -127,6 +127,6 @@ include::devguide:example$java/Search.java[tag=vector4,indent=0]
 
 * xref:server:vector-search:vector-search.adoc[Vector Search for AI Apps docs (self-managed Couchbase Server)]
 * xref:cloud::vector-search:vector-search.adoc[Vector Search for AI Apps docs (Capella DBaaS)]
-* Vector Search in the https://docs.couchbase.com/sdk-api/couchbase-scala-client/com/couchbase/client/scala/search/vector/index.html[Scala API reference].
+* Vector Search in the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/search/vector/VectorSearch.html[Java API reference].
 
 // https://developer.couchbase.com/tutorial-python-langchain-pdf-chat
