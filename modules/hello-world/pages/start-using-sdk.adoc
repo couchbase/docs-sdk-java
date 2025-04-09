@@ -303,7 +303,7 @@ Here we will use the `airport` collection within the `inventory` scope from `tra
 
 [source,java]
 ----
-include::devguide:example$scala/Cloud.scala[tag=collection,indent=0]
+include::devguide:example$java/StartUsingCapella.java[tag=collection,indent=0]
 ----
 
 
@@ -318,9 +318,9 @@ We'll create a snippet of JSON to work with, using the client's own JSON library
 but you can read about the Scala SDK's support for other JSON libraries on the
 xref:howtos:json.adoc[] page.
 
-[source,scala]
+[source,java]
 ----
-include::devguide:example$scala/Cloud.scala[tag=json,indent=0]
+include::devguide:example$java/StartUsingCapella.java[tag=json,indent=0]
 ----
 
 === Insert (Create) and Upsert
@@ -333,9 +333,9 @@ while the `upsert` operation will succeed, replacing the content.
 We need to provide a unique ID as the key, and we'll use a UUID here:
 
 .Creating a new document
-[source,scala]
+[source,java]
 ----
-include::devguide:example$scala/Cloud.scala[tag=upsert,indent=0]
+include::devguide:example$java/StartUsingCapella.java[tag=upsert,indent=0]
 ----
 
 === Get (Read)
@@ -350,9 +350,9 @@ The easiest way to handle a single operation is with pattern matching, as shown 
 
 Now let's get the data back (this example will look a little messy due the nested handling of multiple `Try` results, but we'll see how to clean it up shortly):
 
-[source,scala]
+[source,java]
 ----
-include::devguide:example$scala/Cloud.scala[tag=get,indent=0]
+include::devguide:example$java/StartUsingCapella.java[tag=get,indent=0]
 ----
 
 Here we're fetching the value for the key `docId`,
@@ -366,16 +366,16 @@ and then accessing the value of the *status* key as a String.
 All three of these operations could fail, so there's quite a lot of error handling code here to do something quite simple.
 One way to improve on this is by using `flatMap`, like this:
 
-[source,scala]
+[source,java]
 ----
-include::devguide:example$scala/Cloud.scala[tag=get-map,indent=0]
+include::devguide:example$java/StartUsingCapella.java[tag=get-map,indent=0]
 ----
 
 Alternatively, you can use a for-comprehension, like so:
 
-[source,scala]
+[source,java]
 ----
-include::devguide:example$scala/Cloud.scala[tag=get-for,indent=0]
+include::devguide:example$java/StartUsingCapella.java[tag=get-for,indent=0]
 ----
 
 Either of these methods will stop on the first failed operation.  So the final returned `Try` contains either 
@@ -389,9 +389,9 @@ One will take an Options builder, which provides all possible options that opera
 For instance:
 
 .The replace method updates the value of an existing document
-[source,scala]
+[source,java]
 ----
-include::devguide:example$scala/Cloud.scala[tag=replace-options,indent=0]
+include::devguide:example$java/StartUsingCapella.java[tag=replace-options,indent=0]
 ----
 
 These options blocks are implemented as Scala case classes:
@@ -400,9 +400,9 @@ they are immutable data objects that return a copy of themselves on each change.
 The other overload is provided purely for convenience.
 It takes named arguments instead of an Options object, and provides only the most commonly used options:
 
-[source,scala]
+[source,java]
 ----
-include::devguide:example$scala/Cloud.scala[tag=replace-named,indent=0]
+include::devguide:example$java/StartUsingCapella.java[tag=replace-named,indent=0]
 ----
 
 CAUTION: When you replace a document, it's usually good practice to use xref:howtos:kv-operations.adoc#optimistic-locking[optimistic locking].
@@ -412,9 +412,9 @@ Otherwise, changes might get lost if two people change the same document at the 
 
 The remove method deletes a document from a collection:
 
-[source,scala]
+[source,java]
 ----
-include::devguide:example$scala/KvOperations.scala[indent=0,tag=remove]
+include::devguide:example$java/StartUsingCapella.java[indent=0,tag=remove]
 ----
 
 
