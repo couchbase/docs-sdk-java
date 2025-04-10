@@ -206,8 +206,18 @@ Implicit in the rules for durability, and the process of setting up Server Group
 xref:concept-docs:transactions.adoc[multi-document ACID transactions].
 ====
 
-
-
+.getReplicaFromPreferredServerGroup example, using Transactions
+[source,java]
+----
+    cluster.transactions().run((ctx) -> {
+      TransactionGetResult getResult;
+      try {
+        getResult = ctx.getReplicaFromPreferredServerGroup(collection, id);
+      } catch (DocumentUnretrievableException err) {
+        getResult = ctx.get(collection, id);
+      }      
+    });
+----
 
 
 == Concurrent Document Mutations
