@@ -33,7 +33,8 @@ but first let's look at those data operations, and installing the {name-sdk}.
 
 [source,java]
 ----
-include::devguide:example$java/Overview.java[tag=overview,indent=0]
+collection.upsert("my-document", JsonObject.create().put("doc", true),
+    upsertOptions().durability(DurabilityLevel.MAJORITY));
 ----
 
 `upsert` inserts (creates) the document if it does not exist, or replaces it if it does.
