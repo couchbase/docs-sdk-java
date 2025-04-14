@@ -27,6 +27,10 @@ We always recommend using the latest version of the SDK -- it contains all of th
 All patch releases for each dot minor release should be API compatible, and safe to upgrade;
 any changes to expected behavior are noted in the release notes that follow.
 
+Version 3.8 of the Java SDK implements the 3.7 xref:compatibility.adoc#api-version[SDK API].
+See the xref:compatibility.adoc#couchbase-feature-availability-matrix[compatibility pages] for more information on feature compatibility with different versions of Couchbase Server.
+
+
 ////
 # get version numbers like this
 src=../couchbase-jvm-clients
@@ -64,23 +68,34 @@ Optional artifacts on top of this SDK version are tested for the following compa
 |=======================
 
 
-### Bug
+==== Bugfixes
 
-[JVMCBC-1628](https://couchbasecloud.atlassian.net/browse/JVMCBC-1628) Specifying DISABLE\_READ\_SKEW\_DETECTION causes transactional getMulti to fail
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1628[JVMCBC-1628]:
+Specifying `DISABLE_READ_SKEW_DETECTION` was causing transactional `getMulti` to fail.
+This has now been fixed.
 
-### New Feature
+==== New Features
 
-[JVMCBC-1602](https://couchbasecloud.atlassian.net/browse/JVMCBC-1602) Application Telemetry \(Phase 2\)
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1602:[JVMCBC-1602]:
+Application Telemetry improvements.
 
-### Improvement
+==== Improvements
 
-[JCBC-2183](https://couchbasecloud.atlassian.net/browse/JCBC-2183) Implement ExtGetMulti (aka Enhanced Read Committed Isolation)
+https://couchbasecloud.atlassian.net/browse/JCBC-2183[JCBC-2183]:
+Implemented `ExtGetMulti` (aka Enhanced Read Committed Isolation).
 
-[JCBC-2186](https://couchbasecloud.atlassian.net/browse/JCBC-2186) Update Bucket & Storage Support in SDKs
+https://couchbasecloud.atlassian.net/browse/JCBC-2186[JCBC-2186]:
+Updated Bucket & Storage Support in SDKs.
 
-[JCBC-2147](https://couchbasecloud.atlassian.net/browse/JCBC-2186) Add PREFERRED_SERVER_GROUP_OR_ALL_AVAILABLE support
+https://couchbasecloud.atlassian.net/browse/JCBC-2186[JCBC-2147]:
+Added `PREFERRED_SERVER_GROUP_OR_ALL_AVAILABLE` support.
+
+
 
 == Java SDK 3.7 Releases
+
+Version 3.7 of the Java SDK implements the 3.6 xref:compatibility.adoc#api-version[SDK API].
+See the xref:compatibility.adoc#couchbase-feature-availability-matrix[compatibility pages] for more information on feature compatibility with different versions of Couchbase Server.
 
 
 === Version 3.7.9 (11 March 2025)
@@ -186,12 +201,14 @@ Optional artifacts on top of this SDK version are tested for the following compa
 |=======================
 
 ==== Bug Fixes
+
 * https://jira.issues.couchbase.com/browse/JVMCBC-1592[JVMCBC-1592]:
 When fetching fresh cluster topology information for a bucket, the SDK now dispatches the request to a random eligible node instead of using a round-robin algorithm. Randomizing the node selection avoids a pathological condition where if the number of open buckets is equal to the number of nodes, and one of the nodes is degraded, the config refresh attempt for a particular bucket would fail repeatedly because it was always sent to the degraded node.
 * https://jira.issues.couchbase.com/browse/JCBC-2152[JCBC-2152]:
 Return the inserted document in the form of a TransactionGetResult instead of the old content from the Get operation.
 
 ==== Improvements
+
 * https://jira.issues.couchbase.com/browse/JVMCBC-1585[JVMCBC-1585]:
 When a thread executing clusterOrScope.queryStreaming() is interrupted, the thrown CancellationException now has the original InterruptedException as its cause.
 * https://jira.issues.couchbase.com/browse/JCBC-2174[JCBC-2174]:
