@@ -40,6 +40,47 @@ echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/pom.xml 
 ////
 
+=== Version 3.8.0 (9 April 2025)
+
+This is the initial release of the 3.8 series.
+
+https://packages.couchbase.com/clients/java/3.8.0/Couchbase-Java-Client-3.8.0.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.8.0/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-3.8.0/[Core API Reference]
+
+The supported and tested dependencies for this release are: 
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.6.0             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.6.0             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.8.0             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.8.0             | Micrometer 1.12.9          | Volatile
+|=======================
+
+
+### Bug
+
+[JVMCBC-1628](https://couchbasecloud.atlassian.net/browse/JVMCBC-1628) Specifying DISABLE\_READ\_SKEW\_DETECTION causes transactional getMulti to fail
+
+### New Feature
+
+[JVMCBC-1602](https://couchbasecloud.atlassian.net/browse/JVMCBC-1602) Application Telemetry \(Phase 2\)
+
+### Improvement
+
+[JCBC-2183](https://couchbasecloud.atlassian.net/browse/JCBC-2183) Implement ExtGetMulti (aka Enhanced Read Committed Isolation)
+
+[JCBC-2186](https://couchbasecloud.atlassian.net/browse/JCBC-2186) Update Bucket & Storage Support in SDKs
+
+[JCBC-2147](https://couchbasecloud.atlassian.net/browse/JCBC-2186) Add PREFERRED_SERVER_GROUP_OR_ALL_AVAILABLE support
 
 
 === Version 3.7.9 (11 March 2025)
