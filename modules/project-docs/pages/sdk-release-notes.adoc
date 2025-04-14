@@ -81,13 +81,13 @@ Application Telemetry improvements.
 
 ==== Improvements
 
-https://couchbasecloud.atlassian.net/browse/JCBC-2183[JCBC-2183]:
+* https://couchbasecloud.atlassian.net/browse/JCBC-2183[JCBC-2183]:
 Implemented `ExtGetMulti` (aka Enhanced Read Committed Isolation).
 
-https://couchbasecloud.atlassian.net/browse/JCBC-2186[JCBC-2186]:
+* https://couchbasecloud.atlassian.net/browse/JCBC-2186[JCBC-2186]:
 Updated Bucket & Storage Support in SDKs.
 
-https://couchbasecloud.atlassian.net/browse/JCBC-2186[JCBC-2147]:
+* https://couchbasecloud.atlassian.net/browse/JCBC-2186[JCBC-2147]:
 Added `PREFERRED_SERVER_GROUP_OR_ALL_AVAILABLE` support.
 
 
