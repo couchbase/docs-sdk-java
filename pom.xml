@@ -54,12 +54,12 @@
         <dependency>
             <groupId>com.couchbase.client</groupId>
             <artifactId>metrics-opentelemetry</artifactId>
-            <version>0.7.7</version>
+            <version>0.8.0</version>
         </dependency>
         <dependency>
             <groupId>com.couchbase.client</groupId>
             <artifactId>tracing-opentelemetry</artifactId>
-            <version>1.5.7</version>
+            <version>1.6.0</version>
         </dependency>
         <dependency>
             <groupId>io.opentelemetry</groupId>
@@ -132,7 +132,7 @@
         <dependency>
             <groupId>com.couchbase.client</groupId>
             <artifactId>metrics-micrometer</artifactId>
-            <version>0.4.4</version>
+            <version>0.8.0</version>
         </dependency>
         <dependency>
             <groupId>io.prometheus</groupId>
