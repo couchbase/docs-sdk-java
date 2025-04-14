@@ -24,7 +24,7 @@ Capella or self-managed.
 xref:hello-world:start-using-sdk.adoc[Quickstart Guide] |
 xref:project-docs:sdk-release-notes.adoc[] |
 {sdk-api-link}[{name-sdk} API Reference] |
-{sdk-gh-link} [{name-sdk} SDK source code]
+{sdk-gh-link}[{name-sdk} SDK source code]
 
 
 What's the point of a fast and scalable database if it's not easy to develop for?
