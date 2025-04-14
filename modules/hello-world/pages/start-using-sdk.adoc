@@ -11,10 +11,10 @@
 // https://github.com/couchbase/docs-sdk-common/blob/release/7.6/modules/shared/partials/start-using-sdk.adoc
 //
 // and code samples from
-// https://github.com/couchbase/docs-sdk-java/tree/release/3.7/modules/devguide/examples/java
+// https://github.com/couchbase/docs-sdk-java/tree/release/3.8/modules/devguide/examples/java
 // 
 // It can be seen built at
-// https://docs.couchbase.com/java-sdk/3.7/hello-world/start-using-sdk.html
+// https://docs.couchbase.com/java-sdk/3.8/hello-world/start-using-sdk.html
 
 
 [abstract]
@@ -636,7 +636,7 @@ Maven::
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.7.6</version>
+        <version>3.8.0</version>
     </dependency>
 </dependencies>
 ----
@@ -647,7 +647,7 @@ Gradle::
 --
 [source,groovy]
 ----
-implementation 'com.couchbase.client:java-client:3.7.6'
+implementation 'com.couchbase.client:java-client:3.8.0'
 ----
 --
 ====
