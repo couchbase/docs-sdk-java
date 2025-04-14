@@ -67,7 +67,7 @@ public class Cloud {
         String docId = UUID.randomUUID().toString();
         try {
             collection.upsert(docId, json);
-        } catch (Exception e) {
+        } catch (CouchbaseException e) {
             System.err.println("Error: " + e.getMessage());
         }
         // end::upsert[]
