@@ -77,14 +77,10 @@ Application Telemetry improvements.
 ==== Improvements
 
 * https://couchbasecloud.atlassian.net/browse/JCBC-2183[JCBC-2183]:
-Implemented `ExtGetMulti` (aka Enhanced Read Committed Isolation).
+Added `TransactionAttemptContext.getMulti()`, a new transaction method for fetching multiple documents with minimal read skew.
 
 * https://couchbasecloud.atlassian.net/browse/JCBC-2186[JCBC-2186]:
-Updated Bucket & Storage Support in SDKs.
-
-* https://couchbasecloud.atlassian.net/browse/JCBC-2186[JCBC-2147]:
-Added `PREFERRED_SERVER_GROUP_OR_ALL_AVAILABLE` support.
-
+The bucket management API now supports specifying the number of VBuckets for a Magma bucket (requires Couchbase Server 8.0 or later).
 
 
 == Java SDK 3.7 Releases
