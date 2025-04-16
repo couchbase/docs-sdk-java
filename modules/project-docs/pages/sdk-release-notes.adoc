@@ -20,4 +20,4 @@ See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide fo
 
 
 
-include::3.7@java-sdk:project-docs:page$sdk-release-notes.adoc[tag=all]
+include::3.8@java-sdk:project-docs:page$sdk-release-notes.adoc[tag=all]
