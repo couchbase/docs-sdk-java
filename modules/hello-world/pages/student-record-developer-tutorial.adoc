@@ -221,7 +221,8 @@ The easiest way to install and manage Java SDKs and Maven on your machine is thr
 After following the instructions to install SDKMan, open a terminal window and run the commands `sdk install java` and `sdk install maven` to install the latest versions of Java and Maven. 
 ====
 
-For more information about the Java SDK installation, see the xref:java-sdk:project-docs:sdk-full-installation.adoc[full installation page].
+For more information about the Java SDK installation, see the xref:project-docs:sdk-full-installation.adoc[full installation page], or review the xref:start-using-sdk.adoc[Getting Started page].
+
 
 === Configure the Cluster Connection
 
@@ -665,8 +666,7 @@ If the retrieval is successful, the course information with your parameters outp
 +
 image::record-retrieval-parameters-console-output.png[alt="Console showing successful course retrieval using parameters using the SDK"]
 
-If you come across errors in your console, see the xref:java-tutorial/tutorial-troubleshooting.adoc[troubleshooting page].
-
+If you come across errors in your console, see the <<#roubleshooting,troubleshooting section>>.
 
 
 == Add Course Enrollments
@@ -717,7 +717,7 @@ or xref:concept-docs:querying-your-data.adoc[{sqlpp} Queries] from the SDK.
 
 == Troubleshooting
 
-Below are some tutprial-specific tips for troubleshooting --
+Below are some tutorial-specific tips for troubleshooting --
 you can find more detailed troubleshooting in our xref:howtos:troubleshooting-cloud-connections.adoc[Troubleshooting Cloud Connections] page.
 
 
