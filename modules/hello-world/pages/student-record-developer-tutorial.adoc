@@ -19,10 +19,17 @@ If you wish to use a standalone or Docker installation of Couchbase, see the xre
 
 * Before starting this tutorial, you must have a Couchbase Capella account. 
 If you do not have one already, xref:cloud:get-started:create-account.adoc[Create an Account]. 
-* Install the Java Software Development Kit (JDK) -- version 8, 11, 17, or 21.
+* Install the Java Software Development Kit (JDK) -- Couchbase JVM SDKs are compatible with version 8, 11, 17, or 21.
 ** The recommended version is the latest Java LTS release, which is currently https://adoptium.net/en-GB/[JDK 21].
-** Ensure to install the highest available patch for the LTS version. 
+Ensure you install the highest available patch for the LTS version. 
 * Install Apache Maven (version 3+)
+
+[TIP]
+====
+The easiest way to install and manage Java SDKs and Maven on your machine is through https://sdkman.io/install[SDKMan^].
+
+After following the instructions to install SDKMan, open a terminal window and run the commands `sdk install java` and `sdk install maven` to install the latest versions of Java and Maven. 
+====
 
 
 [#database-design]
@@ -211,16 +218,6 @@ This allows you to retrieve other details like the full title of the course or t
 == Connecting the Java SDK
 
 After implementing the data model, you can set up a Couchbase SDK and connect it to your cluster to write your first application.
-
-
-[TIP]
-====
-The easiest way to install and manage Java SDKs and Maven on your machine is through https://sdkman.io/install[SDKMan^].
-
-After following the instructions to install SDKMan, open a terminal window and run the commands `sdk install java` and `sdk install maven` to install the latest versions of Java and Maven. 
-====
-
-
 We will be using Maven here --
 for more information about the Java SDK installation, see the xref:project-docs:sdk-full-installation.adoc[full installation page],
 or review the xref:start-using-sdk.adoc[Getting Started page].
@@ -297,7 +294,7 @@ To set up the Java SDK:
 +
 . Paste the following code block into your `pom.xml` file:
 +
-[source, xml]
+[source,xml,subs="+attributes"]
 ----
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -324,7 +321,7 @@ To set up the Java SDK:
         <dependency>
             <groupId>com.couchbase.client</groupId>
             <artifactId>java-client</artifactId>
-            <version>3.8.0</version>
+            <version>{sdk_current_version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -348,7 +345,7 @@ Next, connect your Java SDK to your cluster.
 
 
 [#connect-to-the-cluster]
-== Connect the SDK to Your Cluster
+=== Connect the SDK to Your Cluster
 
 To connect to the cluster:
 
