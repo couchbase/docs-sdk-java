@@ -6,8 +6,6 @@
 {description}
 
 
-== Introduction
-
 Couchbase is a schema-less JSON document database designed for high performance, scalability, and fast development. 
 This tutorial teaches you about the key concepts behind Couchbase and how they differ from traditional SQL database systems like MySQL and Oracle.
 
