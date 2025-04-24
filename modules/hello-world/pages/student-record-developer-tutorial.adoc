@@ -210,8 +210,7 @@ This allows you to retrieve other details like the full title of the course or t
 
 == Connecting the Java SDK
 
-After implementing the data model, you can xref:java-tutorial/install-couchbase-java-sdk.adoc[set up a Couchbase SDK and connect it to your cluster to write your first application].
-
+After implementing the data model, you can set up a Couchbase SDK and connect it to your cluster to write your first application.
 
 
 [TIP]
@@ -221,7 +220,10 @@ The easiest way to install and manage Java SDKs and Maven on your machine is thr
 After following the instructions to install SDKMan, open a terminal window and run the commands `sdk install java` and `sdk install maven` to install the latest versions of Java and Maven. 
 ====
 
-For more information about the Java SDK installation, see the xref:project-docs:sdk-full-installation.adoc[full installation page], or review the xref:start-using-sdk.adoc[Getting Started page].
+
+We will be using Maven here --
+for more information about the Java SDK installation, see the xref:project-docs:sdk-full-installation.adoc[full installation page],
+or review the xref:start-using-sdk.adoc[Getting Started page].
 
 
 === Configure the Cluster Connection
