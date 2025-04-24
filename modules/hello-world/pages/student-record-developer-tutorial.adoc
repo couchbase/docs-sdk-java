@@ -26,7 +26,7 @@ Ensure you install the highest available patch for the LTS version.
 
 [TIP]
 ====
-The easiest way to install and manage Java SDKs and Maven on your machine is through https://sdkman.io/install[SDKMan^].
+The easiest way to install and manage Java JDKs and Maven on your machine is through https://sdkman.io/install[SDKMan^].
 
 After following the instructions to install SDKMan, open a terminal window and run the commands `sdk install java` and `sdk install maven` to install the latest versions of Java and Maven. 
 ====
