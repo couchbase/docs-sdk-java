@@ -114,8 +114,8 @@ How-to guides to help you start your development journey with Couchbase and the 
 .Easy to Connect & Get Started
 * xref:hello-world:start-using-sdk.adoc[Quickstart Guide]
 * xref:hello-world:sample-application.adoc[]
+* xref:hello-world:student-record-developer-tutorial.adoc[Beginners' Couchbase Tutorial]
 * xref:howtos:managing-connections.adoc[]
-// * xref:hello-world:student-record-developer-tutorial.adoc[Beginners' Couchbase Tutorial]
 
 [.column]
 .Search, Query, Analyze
