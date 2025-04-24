@@ -33,7 +33,7 @@ After following the instructions to install SDKMan, open a terminal window and r
 
 
 [#database-design]
-=== Data Model
+== Data Model
 
 The model consists of three record types:
 
@@ -46,7 +46,7 @@ Students can take more than one course at a time.
 *enrollment*:: Information related to courses the students are taking. 
 In a relational database, this is usually a link record that creates a relationship between a student and a course.
 
-==== Relational Model
+=== Relational Model
 
 In a relational model, the database contains a list of students and a list of courses. 
 Each student can enroll in multiple courses.
@@ -60,7 +60,7 @@ include::partial$diagrams/student-record-erd.puml[]
 
 The `enrollment` table highlights a challenge with the relational model, each table is based on a fixed schema that only supports a single data object type, which means you cannot store a student in the same table as their enrollment record.
 
-==== Document Model
+=== Document Model
 
 Couchbase uses a document model that stores each record as a JSON document. 
 The document model:
@@ -185,7 +185,7 @@ collection:: Contains a set of documents. Couchbase provides you with a default 
 For more information, see xref:cloud:clusters:data-service/about-buckets-scopes-collections.adoc[Buckets, Scopes, and Collections].
 
 
-== Create a Bucket, Scope, and Collection
+=== Create a Bucket, Scope, and Collection
 
 To continue this tutorial, you must create a bucket to hold all student data, a scope to narrow down the data into only data related to an art school, and two collections to narrow it down further into art school students and art school courses.
 
@@ -461,7 +461,7 @@ If you come across errors in your console, see the <<#roubleshooting,troubleshoo
 You can retrieve your records using the <<#retrieve-with-query-editor,query editor>> or the <<#retrieve-with-sdk,SDK>>.
 
 [#retrieve-with-query-editor]
-=== With the Query Editor
+=== Retrieving Records with the Query Editor
 
 To retrieve the records with the Query Editor, you must first define an index.
 
@@ -597,7 +597,7 @@ The `META()` function call returns any property contained inside the document's 
 
 
 [#retrieve-with-sdk]
-=== With the SDK
+=== Retrieving Records with the SDK
 
 You can also use {sqlpp} queries to retrieve your records with the SDK.
 Unlike the query editor, you must include the name of the bucket and the scope to fully qualify the name of the collection in the {sqlpp} statement in your application. 
