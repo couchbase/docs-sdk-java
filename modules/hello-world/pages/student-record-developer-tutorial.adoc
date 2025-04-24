@@ -703,7 +703,7 @@ mvn exec:java -Dexec.mainClass="AddEnrollments" -Dexec.cleanupDaemonThreads=fals
 +
 image::updated-student-record.png[alt="Updated student record with course enrollment" width="600" height="800"]
 
-If you come across errors in your console, see the xref:java-tutorial/tutorial-troubleshooting.adoc[troubleshooting page].
+If you come across errors in your console, see the <<#roubleshooting,troubleshooting section>>.
 
 === Next Steps
 
@@ -717,7 +717,7 @@ or xref:concept-docs:querying-your-data.adoc[{sqlpp} Queries] from the SDK.
 == Troubleshooting
 
 Below are some tutorial-specific tips for troubleshooting --
-you can find more detailed troubleshooting in our xref:howtos:troubleshooting-cloud-connections.adoc[Troubleshooting Cloud Connections] page.
+you can find more detailed troubleshooting for connecting to Capella in our xref:howtos:troubleshooting-cloud-connections.adoc[Troubleshooting Cloud Connections] page.
 
 
 === Authentication Error
