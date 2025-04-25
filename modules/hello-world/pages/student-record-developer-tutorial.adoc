@@ -213,6 +213,15 @@ Unlike the standard relational model decomposition where a link table is created
 The `course-record-collection`, on the other hand, uses the relational model to link the enrollment records to the course records they apply to. 
 This allows you to retrieve other details like the full title of the course or the number of credits students receive upon completing the course.
 
+[TIP]
+.Scopes and Schools
+====
+For this tutorial we have a single scope, `art-school-scope`.
+In a larger application, you may have other faculties, such as `engineering-school-scope` --
+or possibly have a scope for each art school across a district, repeating the course collections within each one, as appropriate.
+====
+
+
 == Connecting the Java SDK
 
 After implementing the data model, you can set up a Couchbase SDK and connect it to your cluster to write your first application.
