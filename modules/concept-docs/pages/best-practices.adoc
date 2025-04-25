@@ -94,6 +94,18 @@ xref:ref:client-settings.adoc#constrained-network-environments[best timeout opti
 or at least set a xref:ref:client-settings.adoc#wan-development[WAN development Configuration Profile].
 
 
+// Something on longer timeouts and fewer retries?
+// ... reading the logs to find the pattern?
+
+
+// &  Something on polling rate the SDK uses to fetch an updated cluster map whenever a topology change occurs.
+////
+By default the Java SDK polls every 2.5 seconds, regardless of server version or SDK version.
+This interval is configurable via the  io.configPollInterval client setting.
+https://docs.couchbase.com/java-sdk/current/ref/client-settings.html#io.configPollInterval
+When Java SDK 3.5.0 or later is used with Couchbase Server 7.6 or later, the SDK also listens for config change notifications from the server. In this case the polling acts as a failsafe, so it's probably okay to set it significantly higher than 2.5 seconds.
+////
+
 // write after more LZA added
 ////
 === Read From Replica
