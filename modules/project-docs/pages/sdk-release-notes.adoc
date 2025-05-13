@@ -42,6 +42,7 @@ echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/pom.xml 
 ////
 
+
 === Version 3.8.1 (9 May 2025)
 
 This is the first maintenance release of the 3.8.1 series.
@@ -69,7 +70,9 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 ==== Improvements
 
-* [JVMCBC-1631](https://couchbasecloud.atlassian.net/browse/JVMCBC-1631) Update Netty to 4.1.119
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1631[JVMCBC-1631]:
+Updated `Netty` to `4.1.119`.
+
 
 === Version 3.8.0 (9 April 2025)
 
