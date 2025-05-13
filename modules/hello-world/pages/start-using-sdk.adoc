@@ -640,7 +640,7 @@ Maven::
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.8.0</version>
+        <version>3.8.1</version>
     </dependency>
 </dependencies>
 ----
@@ -651,7 +651,7 @@ Gradle::
 --
 [source,groovy]
 ----
-implementation 'com.couchbase.client:java-client:3.8.0'
+implementation 'com.couchbase.client:java-client:3.8.1'
 ----
 --
 ====
