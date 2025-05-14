@@ -17,29 +17,19 @@
  // NB: This example requires the `travel-sample` bucket to be installed.
 
 // tag::imports[]
-import static com.couchbase.client.java.query.QueryOptions.queryOptions;
-
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.json.JsonObject;
-import com.couchbase.client.java.kv.MutationResult;
-import com.couchbase.client.java.kv.MutationState;
-import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryResult;
 import com.couchbase.client.java.query.QueryScanConsistency;
 import com.couchbase.client.java.query.ReactiveQueryResult;
-
-import org.reactivestreams.Subscription;
-
-import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.Mono;
+
+import java.util.UUID;
+
+import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 // end::imports[]
 
 public class Queries {
@@ -139,32 +129,6 @@ public class Queries {
     }
 
     {
-      System.out.println("\nExample: [backpressure]");
-      // tag::backpressure[]
-      Mono<ReactiveQueryResult> result = cluster.reactive().query("select * from `travel-sample`.inventory.route");
-
-      result.flatMapMany(ReactiveQueryResult::rowsAsObject).subscribe(new BaseSubscriber<JsonObject>() {
-        // Number of outstanding requests
-        final AtomicInteger oustanding = new AtomicInteger(0);
-
-        @Override
-        protected void hookOnSubscribe(Subscription subscription) {
-          request(10); // initially request to rows
-          oustanding.set(10);
-        }
-
-        @Override
-        protected void hookOnNext(JsonObject value) {
-          process(value);
-          if (oustanding.decrementAndGet() == 0) {
-            request(10);
-          }
-        }
-      });
-      // end::backpressure[]
-    }
-
-    {
       System.out.println("\nExample: [scope-level-query]");
       // tag::scope-level-query[]
       QueryResult result = scope.query("select * from `airline` where country = $country LIMIT 10",
@@ -175,10 +139,6 @@ public class Queries {
       }
       // end::scope-level-query[]
     }
-
-  }
-
-  static void process(JsonObject value) {
 
   }
 
