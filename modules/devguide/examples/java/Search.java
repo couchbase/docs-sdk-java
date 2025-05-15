@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-import static com.couchbase.client.java.search.SearchOptions.searchOptions;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
@@ -37,9 +32,13 @@ import com.couchbase.client.java.search.result.SearchRow;
 import com.couchbase.client.java.search.sort.SearchSort;
 import com.couchbase.client.java.search.vector.VectorQuery;
 import com.couchbase.client.java.search.vector.VectorSearch;
-import org.reactivestreams.Subscription;
-import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.Mono;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.couchbase.client.java.search.SearchOptions.searchOptions;
 
 // This example assumes an index called `travel-sample-index` exists.
 // Please refer to file `modules/test/scripts/init-couchbase/init-buckets.sh` (line 66)
@@ -149,32 +148,6 @@ public class Search {
       // end::simplereactive[]
     }
 
-    {
-      // tag::backpressure[]
-      Mono<ReactiveSearchResult> result = cluster.reactive().searchQuery("travel-sample-index",
-          SearchQuery.queryString("swanky"));
-
-      result.flatMapMany(ReactiveSearchResult::rows).subscribe(new BaseSubscriber<SearchRow>() {
-        // Number of outstanding requests
-        final AtomicInteger oustanding = new AtomicInteger(0);
-
-        @Override
-        protected void hookOnSubscribe(Subscription subscription) {
-          request(10); // initially request to rows
-          oustanding.set(10);
-        }
-
-        @Override
-        protected void hookOnNext(SearchRow row) {
-          process(row);
-          if (oustanding.decrementAndGet() == 0) {
-            request(10);
-          }
-        }
-      });
-      // end::backpressure[]
-    }
-
     // This will come from an external source, such as an embeddings API.
     float[] vectorQuery = null;
     float[] anotherVectorQuery = null;
@@ -215,10 +188,6 @@ public class Search {
       SearchResult result = scope.search("travel-sample-index", request);
       // end::vector4[]
     }
-
-  }
-
-  static void process(SearchRow value) {
 
   }
 
