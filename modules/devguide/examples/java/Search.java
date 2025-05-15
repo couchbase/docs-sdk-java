@@ -175,7 +175,7 @@ public class Search {
       SearchRequest request = SearchRequest
               .create(VectorSearch.create(List.of(
                               VectorQuery.create("vector_field", vectorQuery).numCandidates(2).boost(0.3),
-                              VectorQuery.create("vector_field", anotherVectorQuery).numCandidates(5).boost(0.7)));
+                              VectorQuery.create("vector_field", anotherVectorQuery).numCandidates(5).boost(0.7))));
 
       SearchResult result = scope.search("vector-and-fts-index", request);
       // end::vector3[]

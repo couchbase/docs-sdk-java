@@ -42,6 +42,10 @@ We'll explore creating and retrieving data records in more detail <<create-read-
 (and touch lightly upon a little of Java's functional programming approach as we go), 
 after walking through a quick installation.
 
+TIP: This page walks you through a quick installation, and CRUD examples against the Data Service.
+Elsewhere in this section you can find a fully worked-through xref:hello-world:sample-application.adoc[] and,
+for those new to document (NoSQL) databases, our xref:hello-world:student-record-developer-tutorial.adoc[Student Record Tutorial].
+
 
 == Before You Start
 
@@ -636,7 +640,7 @@ Maven::
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.8.0</version>
+        <version>3.8.1</version>
     </dependency>
 </dependencies>
 ----
@@ -647,7 +651,7 @@ Gradle::
 --
 [source,groovy]
 ----
-implementation 'com.couchbase.client:java-client:3.8.0'
+implementation 'com.couchbase.client:java-client:3.8.1'
 ----
 --
 ====
