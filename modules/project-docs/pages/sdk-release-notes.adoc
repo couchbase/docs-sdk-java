@@ -47,7 +47,7 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 
 This is the first maintenance release of the 3.8.1 series.
 
-https://packages.couchbase.com/clients/java/3.8.1/Couchbase-Java-Client-3.1.0.zip[Download] |
+https://packages.couchbase.com/clients/java/3.8.1/Couchbase-Java-Client-3.8.1.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.8.1/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-3.8.1/[Core API Reference]
 
