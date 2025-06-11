@@ -70,7 +70,10 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 ==== Improvements
 
-[JVMCBC-1647](https://couchbasecloud.atlassian.net/browse/JVMCBC-1647) Upgrade Jackson from 2.17.2 to 2.17.3
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1647[JVMCBC-1647]:
+Upgraded `Jackson` from `2.17.2` to `2.17.3`.
+
+
 
 === Version 3.8.1 (9 May 2025)
 
