@@ -19,6 +19,7 @@ public class StartUsing {
 
   public static void main(String... args) {
     // tag::connect-env[]
+    // Use the following code to connect to your cluster.
     Cluster cluster = Cluster.connect(
         connectionString,
         ClusterOptions.clusterOptions(username, password).environment(env -> {
