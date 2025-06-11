@@ -634,13 +634,13 @@ You can use your favorite dependency management tool to install the SDK.
 Maven::
 +
 --
-[source,xml]
+[source,xml,subs="+attributes"]
 ----
 <dependencies>
     <dependency>
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
-        <version>3.8.2</version>
+        <version>{sdk_current_version}</version>
     </dependency>
 </dependencies>
 ----
@@ -649,9 +649,9 @@ Maven::
 Gradle::
 +
 --
-[source,groovy]
+[source,groovy,subs="+attributes"]
 ----
-implementation 'com.couchbase.client:java-client:3.8.2'
+implementation 'com.couchbase.client:java-client:{sdk_current_version}'
 ----
 --
 ====
