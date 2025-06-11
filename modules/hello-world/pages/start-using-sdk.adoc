@@ -219,7 +219,11 @@ Self-Managed Couchbase Server::
 
 [source,java]
 ----
-include::devguide:example$java/StartUsing.java[tags=connect-info,indent=0]
+include::devguide:example$java/StartUsing.java[tags="connect-info",indent=0]
+----
+[source,java]
+----
+include::devguide:example$java/StartUsing.java[tags="connect-env",indent=0]
 ----
 --
 
