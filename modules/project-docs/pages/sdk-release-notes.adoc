@@ -16,7 +16,7 @@ For release notes, download links, and installation methods for 2.7 and earlier 
 See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide for details.
 
 
-include::{version-common}@sdk:page:partial$signed.adoc[tag=signed]
+include::{version-common}@sdk:pages:partial$signed.adoc[tag=signed]
 
 
 // tag::all[]
