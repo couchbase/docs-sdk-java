@@ -97,8 +97,7 @@ But if you don't know exactly where you need to go, try one of the following:
 * Our xref:hello-world:start-using-sdk.adoc[Quickstart Guide] introduces the SDK with a quick install, and CRUD examples against the Data Service.
 * Couchbase's familiar SQL-family query language and fuzzy search options (including vector search) are introduced on the xref:concept-docs:querying-your-data.adoc[] page.
 * The {name-sdk} docs are, necessarily, just a sub-set {sdk-api-link}[{name-sdk} API Reference] -- and a complete listing of all APIs can be found in the reference.
-* For a fuller orientation, there is a xref:project-docs:metadoc-about-these-sdk-docs.adoc[guide to the {name-sdk} docs]
-
+* For a fuller orientation, there is a xref:project-docs:metadoc-about-these-sdk-docs.adoc[guide to the {name-sdk} docs].
 
 {empty} +
 
