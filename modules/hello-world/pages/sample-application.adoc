@@ -51,21 +51,21 @@ The application is tested with Java 17 and 21. If you are using a different vers
 
 We will walk through the different steps required to get the application running:
 
-. Cloning Repo
+. Cloning Repo.
 +
 [source,console]
 ----
 $ git clone https://github.com/couchbase-examples/java-springboot-quickstart.git
 ----
 
-. Navigate to the Project Directory
+. Navigate to the Project Directory.
 +
 [source,console]
 ----
 $ cd java-springboot-quickstart
 ----
 
-. Install Dependencies
+. Install Dependencies.
 +
 The dependencies for the application are specified in the `pom.xml` file in the root folder.
 Dependencies can be installed through `mvn` the default package manager for Java.
@@ -75,8 +75,11 @@ Dependencies can be installed through `mvn` the default package manager for Java
 $ mvn clean install -DskipTests=true
 ----
 +
-Note, the `-DskipTests=true` option is used to skip the tests.
+[NOTE]
+====
+The `-DskipTests=true` option is used to skip the tests.
 The tests require the application to be running.
+====
 
 === Setup Database Configuration
 
@@ -131,14 +134,14 @@ $ mvn spring-boot:run
 
 === Using Docker
 
-Build the Docker image
+Build the Docker image.
 
 [source,console]
 ----
 $ docker build -t java-springboot-quickstart .
 ----
 
-Run the Docker image
+Run the Docker image.
 
 [source,console]
 ----
@@ -156,6 +159,7 @@ If you choose not to pass the environment variables, you can update the `applica
 === Verifying the Application
 
 Once the application starts, you can see the details of the application on the logs.
+
 image::app-startup-spring-boot.png[]
 
 The application will run on port 8080 of your local machine -- `http://localhost:8080`.
