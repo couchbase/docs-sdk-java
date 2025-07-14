@@ -59,10 +59,9 @@ there are several self-managed options available:
 Couchbase Capella::
 +
 --
-If you haven't already got a cluster set up, the easiest route is to https://cloud.couchbase.com/sign-up[sign up to Couchbase Capella and deploy a free tier cluster^], 
-then come back to this page.
-Make a note of the xref:cloud:get-started:connect.adoc[endpoint] to connect to, 
-and remember the credentials for the user that you set up.
+If you haven't already got a cluster set up, the easiest route is to https://cloud.couchbase.com/sign-up[sign up to Couchbase Capella and deploy a free tier cluster^]. 
+Once the set up is complete, come back to this page.
+Make a note of the xref:cloud:get-started:connect.adoc[endpoint] to connect to, and remember the credentials for the user that you set up.
 --
 
 Self-Managed Couchbase Server::
@@ -80,7 +79,7 @@ Install Couchbase Server locally, or in your private Cloud:
 ** xref:{version-server}@server:cloud:couchbase-azure-marketplace.adoc[Azure Marketplace]
 ** xref:{version-server}@server:cloud:couchbase-gcp-cloud-launcher.adoc[GCP Marketplace]
 
-For the example code below to run, you'll need the username and password of the Administrator user that you create, and the IP address of at least one of the nodes of the cluster.
+To run the example code below, you will need the username and password of the Administrator user that you create, and the IP address of a minimum of one node in the cluster.
 --
 ====
 
@@ -90,12 +89,12 @@ For the example code below to run, you'll need the username and password of the 
 
 === Prerequisites
 
-* The Java SDK is tested against LTS versions of Oracle JDK and OpenJDK -- 
+* The Java SDK is tested against the LTS versions of Oracle JDK and OpenJDK -- 
 see the xref:project-docs:compatibility.adoc#jdk-compat[compatibility docs].
 +
 https://adoptium.net/[OpenJDK 21 with HotSpot JVM] is recommended.
 
-The code examples also assume:
+It is also assumed that:
 
 [tabs]
 ====
@@ -105,14 +104,15 @@ Couchbase Capella::
 * You have signed up to https://cloud.couchbase.com/sign-up[Couchbase Capella].
 
 * You have created your own bucket, or loaded the Travel Sample dataset.
-Note, the Travel Sample dataset is installed automatically when deploying a Capella free tier cluster.
+
+Note: The Travel Sample dataset is installed automatically when deploying a Capella free tier cluster.
 
 * A user is created with permissions to access the cluster (at least Application Access permissions).
 See the xref:cloud:get-started:cluster-and-data.adoc#credentials[Capella connection page] for more details.
 
 IMPORTANT: Couchbase Capella uses xref:cloud:organizations:organization-projects-overview.adoc[Roles] to control user access to cluster resources.
-For the purposes of this guide, you can use the *Organization Owner* role automatically assigned to your account during installation of the Capella cluster.
-In production, Couchbase strongly recommends setting up users with more granular access roles as a best practice for data security.
+Use the *Organization Owner* role automatically that is assigned to your account during installation of the Capella cluster.
+In production, as a best practice and also for data security, it is strongly recommended to set up the users with more granular access roles.
 --
 
 Self-Managed Couchbase Server::
@@ -122,20 +122,20 @@ Self-Managed Couchbase Server::
 
 * You have created your own bucket, or loaded the Travel Sample dataset using the xref:{version-server}@server:manage:manage-settings/install-sample-buckets.adoc#install-sample-buckets-with-the-ui[Web interface].
 
-* A user is created with permissions to access your cluster (at least Application Access permissions).
+* A user is created with permissions to access your cluster (with the required Application Access permissions).
 See xref:{version-server}@server:manage:manage-security/manage-users-and-roles.adoc[Manage Users, Groups and Roles] for more details.
 
 IMPORTANT: Couchbase Server uses xref:{version-server}@server:learn:security/roles.adoc[Role-Based Access Control (RBAC)] to control access to cluster resources.
 In this guide we suggest using the *Full Admin* role created during setup of your local Couchbase Server cluster.
-In production, Couchbase strongly recommends setting up users with more granular access roles as a best practice for data security.
+In production, as a best practice and also for data security, it is strongly recommended to set up the users with more granular access roles.
 --
 ====
 
 
 == Installation
 
-We recommend running the latest Java LTS version (i.e. at the time of writing JDK 21) with the highest patch version available.
-// Other supported Java versions will work, too.
+At the time of writing JDK 21, it is recommended to run the latest Java LTS version with the highest patch version available.
+// Other supported Java versions will also work.
 Couchbase publishes all stable artifacts to https://central.sonatype.com/namespace/com.couchbase.client[Maven Central].
 
 The latest version of {sdk_dot_minor}.x is https://central.sonatype.com/artifact/com.couchbase.client/java-client/{sdk_current_version}/jar[{sdk_current_version}].
@@ -175,14 +175,14 @@ implementation 'com.couchbase.client:java-client:{sdk_current_version}'
 
 === IDE Plugins
 
-To make development easier, Couchbase plugins are available for VSCode and the IntelliJ family of IDEs and editors.
+To make the development easier, Couchbase plugins are available for VSCode and the IntelliJ family of IDEs and editors.
 For links and more information on these and other integrations across the {name_platform} ecosystem, 
 check out the xref:project-docs:third-party-integrations.adoc[] page.
 
 
 === Grab the Code
 
-If you're all set up and in a real hurry, just grab this code sample and add in your Capella details.
+If you're all set up and are in real hurry, take the below code sample and add in your Capella details.
 
 .Complete Hello World code sample [*Click to open or collapse the listing*]
 [%collapsible]
@@ -194,8 +194,7 @@ include::devguide:example$java/StartUsingCapella.java[]
 
 Otherwise, read on as we introduce the CRUD API and connection to Capella or self-managed Couchbase Server.
 
-TIP: There's a *View* link to the complete sample code on GitHub above each of the snippets on these SDK pages, and a *Copy* icon to grab just the snippet shown.
-
+TIP: There is a *View* link to the complete sample code on GitHub above each of the snippets on these SDK pages. A *Copy* icon is also available that allows you to grab just the displayed snippet.
 
 == Connect to your Database
 
@@ -230,8 +229,8 @@ include::devguide:example$java/StartUsing.java[tags="connect-env",indent=0]
 Cloud Native Gateway (CNG)::
 +
 --
-Couchbase's large number of ports across the URLs of many services can be proxied by using a `couchbase2://` endpoint as the connection string --
-currently only compatible with recent versions of xref:operator:ROOT:concept-cloud-native-gateway.adoc[Couchbase Autonomous Operator]:
+Couchbase's large number of ports, across the URLs of many services, can be proxied by using a `couchbase2://` endpoint as the connection string. 
+Currently only compatible with recent versions of xref:operator:ROOT:concept-cloud-native-gateway.adoc[Couchbase Autonomous Operator]:
 
 [source,scala]
 ----
@@ -250,8 +249,8 @@ Quarkus::
 +
 --
 Our  xref:quarkus-extension:ROOT:overview.adoc[Couchbase Quarkus Java Extension docs] cover installing and connecting with the Quarkus extension in detail,
-but if you already have Quarkus installed and a project ready (with `quarkus-couchbase` in your `pom.xml` or `build.gradle`),
-then your `src/main/resources/application.properties` file needs to contain:
+but if you already installed Quarkus and have a project ready (with `quarkus-couchbase` in your `pom.xml` or `build.gradle`),
+then your `src/main/resources/application.properties` file must contain:
 
 [source,properties]
 ----
@@ -335,11 +334,10 @@ include::devguide:example$java/StartUsingCapella.java[tag=json,indent=0]
 === Insert (Create) and Upsert
 
 `insert` and `upsert` will both create a new document.
-The difference between the two is that if a document with that key already exists, the `insert` operation will fail,
-// throwing `DocumentExistsException` --
-while the `upsert` operation will succeed, replacing the content.
+The difference between the two is that if the document key already exists, the `insert` operation fails,
+// throwing the `DocumentExistsException` error. However, the `upsert` operation succeeds, replacing the content.
 
-We need to provide a unique ID as the key, and we'll use a UUID here:
+Always provide a unique ID as the key, and use a UUID here:
 
 .Creating a new document
 [source,java]
@@ -371,7 +369,7 @@ and then accessing the value of the *status* key as a String.
 ==== Better Error Handling
 
 All three of these operations could fail, so there's quite a lot of error handling code here to do something quite simple.
-One way to improve on this is by using `flatMap`, like this:
+One way to improve on this is by using `flatMap`, as below:
 
 [source,java]
 ----
@@ -417,8 +415,8 @@ include::devguide:example$java/StartUsingCapella.java[tag=replace-named,indent=0
 ----
 ////
 
-CAUTION: When you replace a document, it's usually good practice to use xref:howtos:kv-operations.adoc#optimistic-locking[optimistic locking].
-Otherwise, changes might get lost if two people change the same document at the same time.
+CAUTION: While replacing a document, it is a good practice to use xref:howtos:kv-operations.adoc#optimistic-locking[optimistic locking].
+Otherwise, changes could be lost if two people change the same document at the same time.
 
 === Remove (Delete)
 
@@ -442,13 +440,13 @@ Documents are organized into collections -- collections of documents that belong
 You get to decide what it means to "belong." 
 Developers usually put documents of the same type in the same collection.
 
-For example, imagine you have two types of documents: customers and invoices. 
+For example, consider you have two types of documents: customers and invoices. 
 You could put the customer documents in a collection called `customers`, and the invoice documents in a collection called `invoices`.
 
-Each document belongs to exactly one collection. 
+Each document belongs to one collection. 
 A document's ID is unique _within_ the collection.
 
-Different scopes can hold collections with different names. 
+Different scopes hold collections with different names. 
 There is no relationship between collections in different scopes.
 Each collection belongs to just one scope and
 a collection's name is unique within the scope.
@@ -489,22 +487,22 @@ both
 
 Now you're up and running, try one of the following:
 
-* Our xref:hello-world:sample-application.adoc[Travel Sample Application] demonstrates all the basics you need to know;
-* Explore xref:howtos:kv-operations.adoc[Key Value Operations] (CRUD) against a document database;
-* Or xref:howtos:sqlpp-queries-with-sdk.adoc[Query] with our SQL-based {sqlpp} query language;
-* Try longer-running queries with our xref:howtos:analytics-using-sdk.adoc[Analytics Service];
-* A xref:howtos:full-text-searching-with-sdk.adoc[Full Text Search];
-* Or read up on xref:concept-docs:data-services.adoc[which service fits your use case].
+* Our xref:hello-world:sample-application.adoc[Travel Sample Application] demonstrates all the basics you need to know.
+* Explore xref:howtos:kv-operations.adoc[Key Value Operations] (CRUD) against a document database.
+* xref:howtos:sqlpp-queries-with-sdk.adoc[Query] with our SQL-based {sqlpp} query language.
+* Try longer-running queries with our xref:howtos:analytics-using-sdk.adoc[Analytics Service].
+* A xref:howtos:full-text-searching-with-sdk.adoc[Full Text Search].
+* Read about xref:concept-docs:data-services.adoc[which service fits your use case].
 
 === Additional Resources
 
 ////
 The Scala SDK includes three APIs.  
-The examples above show the simple blocking API, for simplicity, but you can also perform all operations in an async style using Scala `Future`, and a reactive style using Project Reactor `SMono` and `SFlux`.
-Please see xref:howtos:concurrent-async-apis.adoc[Choosing an API] for more details.
+The examples above show the simple blocking API, for simplicity. However, you can also perform all operations in an async style using Scala `Future`, and a reactive style using Project Reactor `SMono` and `SFlux`.
+For more information, see xref:howtos:concurrent-async-apis.adoc[Choosing an API].
 ////
 
-The API reference is generated for each release and the latest can be found https://docs.couchbase.com/sdk-api/couchbase-scala-client/com/couchbase/client/scala/index.html[here].
+The API reference is generated for every release. The latest can be found https://docs.couchbase.com/sdk-api/couchbase-scala-client/com/couchbase/client/scala/index.html[here].
 
 Couchbase welcomes community contributions to the Java SDK.
 The SDK source code is available on https://github.com/couchbase/couchbase-jvm-clients[GitHub].
@@ -512,42 +510,12 @@ The SDK source code is available on https://github.com/couchbase/couchbase-jvm-c
 === Troubleshooting
 
 * Couchbase Server is designed to work in the same WAN or availability zone as the client application.
-If you're running the SDK on your laptop against a Capella cluster, see further information on:
+If you are running the SDK on your laptop against a Capella cluster, see further information on:
 ** Notes on xref:ref:client-settings.adoc#constrained-network-environments[Constrained Network Environments].
 ** xref:project-docs:compatibility.adoc#network-requirements[Network Requirements].
-** If you have a consumer-grade router which has problems with DNS-SRV records review our xref:howtos:troubleshooting-cloud-connections.adoc#troubleshooting-host-not-found[Troubleshooting Guide].
-* Our https://www.couchbase.com/forums/c/java-sdk/5[community forum] is a great source of help.
+** If you have a consumer-grade router which has problems with the DNS-SRV records, review the xref:howtos:troubleshooting-cloud-connections.adoc#troubleshooting-host-not-found[Troubleshooting Guide].
+* The https://www.couchbase.com/forums/c/java-sdk/5[community forum] is a great source of help.
 ////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
