@@ -2,8 +2,8 @@
 
 This repository hosts the documentation source for the https://docs.couchbase.com/java-sdk/3.8/hello-world/overview.html[Couchbase Java SDK].
 
-This branch documents the 3.8 release of the SDK.
-It follows the https://docs.couchbase.com/java-sdk/3.8/project-docs/compatibility.html#api-version[SDK 3.7 API].
+This branch documents the 3.9 release of the SDK.
+It follows the https://docs.couchbase.com/java-sdk/3.9/project-docs/compatibility.html#api-version[SDK 3.8 API].
 
 This branch reflects the new Information Architecture for the SDK docs -- this release was previously documented with the old structure (those old docs can be found under the `temp/3.7` branch), and docs with this structure can be seen on the Couchbase docs site for releases 3.7 and earlier.
 
