@@ -71,9 +71,12 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 0.8.3             | Micrometer 1.12.9          | Volatile
 |=======================
 
-### Bug
+==== Bug Fixes
 
-[JVMCBC-1654](https://couchbasecloud.atlassian.net/browse/JVMCBC-1654) Replica reads and KV range scan fail to time out if bucket does not exist, and can lead to OOM
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1654[JVMCBC-1654]:
+FIxed a bug that prevented `Collection.getAnyReplica()`, `getAllReplicas()`, `lookupInAnyReplica()`, `lookupInAllReplicas()`, `scan()`, `[Reactive]BatchHelper.exists()`, and `getIfExists()` from timing out if the bucket does not exist or is not accessible.
+
+
 
 === Version 3.8.2 (3 June 2025)
 
