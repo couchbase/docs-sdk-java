@@ -73,7 +73,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 ==== Bug Fixes
 
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1654[JVMCBC-1654]:
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1654[JVMCBC-1654]:
 FIxed a bug that prevented `Collection.getAnyReplica()`, `getAllReplicas()`, `lookupInAnyReplica()`, `lookupInAllReplicas()`, `scan()`, `[Reactive]BatchHelper.exists()`, and `getIfExists()` from timing out if the bucket does not exist or is not accessible.
 
 
