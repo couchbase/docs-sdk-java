@@ -333,11 +333,11 @@ include::devguide:example$java/StartUsingCapella.java[tag=json,indent=0]
 
 === Insert (Create) and Upsert
 
-`insert` and `upsert` both creates a new document.
-The difference between the two is that if the document key already exists, the `insert` operation fails and displays the `DocumentExistsException` error. 
+`insert` and `upsert` both create a new document.
+The difference is that if the document key already exists, the `insert` operation fails and displays the `DocumentExistsException` error. 
 However, the `upsert` operation succeeds and replaces the content.
 
-Always provide a unique ID as the key, and use a UUID here:
+Always provide a unique ID as the key, and use a UUID as shown below.
 
 .Creating a new document
 [source,java]
@@ -350,7 +350,7 @@ include::devguide:example$java/StartUsingCapella.java[tag=upsert,indent=0]
 The `get` method reads a document from a collection.
 // If the collection does not have a document with this ID, the `get` method also throws `DocumentNotFoundException`.
 
-Wrapping the method in a `Try` / `Catch` is a good way to handle exceptions:
+Wrapping the method in a `Try` / `Catch` is a good way to handle exceptions.
 
 [source,java]
 ----
@@ -437,11 +437,11 @@ Like `replace`, `remove` also optionally takes the CAS value if you want to make
 == Data Modeling
 
 Documents are organized into collections -- collections of documents that belong together.
-You get to decide what it means to "belong." 
+You get to decide what it means to "belong". 
 Developers usually put documents of the same type in the same collection.
 
 For example, consider you have two types of documents: customers and invoices. 
-You could put the customer documents in a collection called `customers`, and the invoice documents in a collection called `invoices`.
+You can put the customer documents in a collection named `customers`, and the invoice documents in a collection named `invoices`.
 
 Each document belongs to one collection. 
 A document's ID is unique _within_ the collection.
@@ -449,7 +449,7 @@ A document's ID is unique _within_ the collection.
 Different scopes hold collections with different names. 
 There is no relationship between collections in different scopes.
 Each collection belongs to just one scope and
-a collection's name is unique within the scope.
+the collection name is unique within the scope.
 
 
 More details can be found on the xref:concept-docs:data-model.adoc[Data Model page].
@@ -485,7 +485,7 @@ both
 
 == Next Steps
 
-Now you're up and running, try one of the following:
+Now that your setup is up and running, try one of the following:
 
 * Our xref:hello-world:sample-application.adoc[Travel Sample Application] demonstrates all the basics you need to know.
 * Explore xref:howtos:kv-operations.adoc[Key Value Operations] (CRUD) against a document database.
@@ -498,7 +498,7 @@ Now you're up and running, try one of the following:
 
 ////
 The Scala SDK includes three APIs.  
-The examples above show the simple blocking API, for simplicity. However, you can also perform all operations in an async style using Scala `Future`, and a reactive style using Project Reactor `SMono` and `SFlux`.
+The examples above show the simple blocking API, for simplicity. However, you can also perform all the operations in an async style using Scala `Future`, and a reactive style using Project Reactor `SMono` and `SFlux`.
 For more information, see xref:howtos:concurrent-async-apis.adoc[Choosing an API].
 ////
 
