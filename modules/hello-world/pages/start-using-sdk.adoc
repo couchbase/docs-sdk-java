@@ -333,9 +333,9 @@ include::devguide:example$java/StartUsingCapella.java[tag=json,indent=0]
 
 === Insert (Create) and Upsert
 
-`insert` and `upsert` will both create a new document.
-The difference between the two is that if the document key already exists, the `insert` operation fails,
-// throwing the `DocumentExistsException` error. However, the `upsert` operation succeeds, replacing the content.
+`insert` and `upsert` both creates a new document.
+The difference between the two is that if the document key already exists, the `insert` operation fails and displays the `DocumentExistsException` error. 
+However, the `upsert` operation succeeds and replaces the content.
 
 Always provide a unique ID as the key, and use a UUID here:
 
