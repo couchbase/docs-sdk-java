@@ -111,7 +111,7 @@ Note: The Travel Sample dataset is installed automatically when deploying a Cape
 See the xref:cloud:get-started:cluster-and-data.adoc#credentials[Capella connection page] for more details.
 
 IMPORTANT: Couchbase Capella uses xref:cloud:organizations:organization-projects-overview.adoc[Roles] to control user access to cluster resources.
-Use the *Organization Owner* role automatically that is assigned to your account during installation of the Capella cluster.
+Use the *Organization Owner* role that is automatically assigned to your account during installation of the Capella cluster.
 In production, as a best practice and also for data security, it is strongly recommended to set up the users with more granular access roles.
 --
 
