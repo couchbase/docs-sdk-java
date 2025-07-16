@@ -194,7 +194,8 @@ include::devguide:example$java/StartUsingCapella.java[]
 
 Otherwise, read on as we introduce the CRUD API and connection to Capella or self-managed Couchbase Server.
 
-TIP: There is a *View* link to the complete sample code on GitHub above each of the snippets on these SDK pages. A *Copy* icon is also available that allows you to grab just the displayed snippet.
+TIP: There's a *View* link to the complete sample code on GitHub above each of the snippets on these SDK pages.
+A *Copy* icon is also available that allows you to grab just the displayed snippet.
 
 == Connect to your Database
 
