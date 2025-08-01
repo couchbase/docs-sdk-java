@@ -24,13 +24,13 @@ include::{version-common}@sdk:pages:partial$signed.adoc[tag=signed]
 
 [#latest-release]
 
-== Java SDK 3.8 Releases
+== Java SDK 3.9 Releases
 
 We always recommend using the latest version of the SDK -- it contains all of the latest security patches and support for new and upcoming features.
 All patch releases for each dot minor release should be API compatible, and safe to upgrade;
 any changes to expected behavior are noted in the release notes that follow.
 
-Version 3.8 of the Java SDK implements the 3.7 xref:compatibility.adoc#api-version[SDK API].
+Version 3.9 of the Java SDK implements the 3.8 xref:compatibility.adoc#api-version[SDK API].
 See the xref:compatibility.adoc#couchbase-feature-availability-matrix[compatibility pages] for more information on feature compatibility with different versions of Couchbase Server.
 
 
@@ -44,6 +44,18 @@ echo tracing-opentracing ; grep '<version>' $src/tracing-opentracing/pom.xml | h
 echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml | head -2 | tail -1 ; grep '<opentelemetry.version>' $src/pom.xml 
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/pom.xml 
 ////
+
+
+=== Version 3.9.0 (?? August 2025)
+
+This is the first release of the 3.9 series.
+
+
+
+
+
+== Java SDK 3.8 Releases
+
 
 
 === Version 3.8.3 (11 July 2025)
