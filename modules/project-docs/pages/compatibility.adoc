@@ -140,14 +140,16 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 .Recommended SDK per Server Version Matrix
 [#table_sdk_versions]
 |===
-| | 3.4, 3.5 | 3.6, 3.7 | 3.8
+| | 3.4, 3.5 | 3.6, 3.7 | 3.8 | 3.9
 
 | *Server 7.0 - 7.2*
 | *✔*
 | *✔*
 | *✔*
+| *✔*
 
 | *Server 7.6*
+| *✔*
 | *✔*
 | *✔*
 | *✔*
