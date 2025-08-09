@@ -15,19 +15,24 @@
  */
 
 // tag::imports[]
+import com.couchbase.client.core.env.WanDevelopmentProfile;
+import com.couchbase.client.core.error.CouchbaseException;
+import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
+import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.env.ClusterEnvironment;
-import com.couchbase.client.java.env.SecurityConfig;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.client.java.kv.ReplaceOptions;
 
 import java.time.Duration;
 import java.util.UUID;
+
+import static com.couchbase.client.core.msg.kv.DurabilityLevel.MAJORITY;
 // end::imports[]
 
-public class Cloud {
+public class StartUsingCapella {
     public static void main(String[] args) {
         // tag::connect[]
         // Update this to your cluster
@@ -37,11 +42,11 @@ public class Cloud {
         String bucketName = "travel-sample";
 
         ClusterEnvironment env = ClusterEnvironment.builder()
-            .securityConfig(SecurityConfig.enableTls(true))
+            .securityConfig(sc -> sc.enableTls(true))
             // Sets a pre-configured profile called "wan-development" to help avoid latency issues
             // when accessing Capella from a different Wide Area Network
             // or Availability Zone (e.g. your laptop).
-            .applyProfile(ClusterEnvironment.WanDevelopmentProfile.INSTANCE)
+            .applyProfile(new WanDevelopmentProfile().name())
             .build();
 
         Cluster cluster = Cluster.connect(
@@ -51,12 +56,12 @@ public class Cloud {
         // end::connect[]
 
         // tag::bucket[]
-        var bucket = cluster.bucket(bucketName);
+        Bucket bucket = cluster.bucket(bucketName);
         bucket.waitUntilReady(Duration.ofSeconds(30));
         // end::bucket[]
 
         // tag::collection[]
-        var collection = bucket.scope("inventory").collection("airport");
+        Collection collection = bucket.scope("inventory").collection("airport");
         // end::collection[]
 
         // tag::json[]
@@ -102,7 +107,7 @@ public class Cloud {
                 json,
                 ReplaceOptions.replaceOptions()
                     .expiry(Duration.ofSeconds(10))
-                    .durability(com.couchbase.client.java.kv.Durability.MAJORITY)
+                    .durability(MAJORITY)
             );
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
@@ -115,7 +120,7 @@ public class Cloud {
                 docId,
                 json,
                 ReplaceOptions.replaceOptions()
-                    .durability(com.couchbase.client.java.kv.Durability.MAJORITY)
+                    .durability(MAJORITY)
             );
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
