@@ -23,7 +23,6 @@ include::{version-common}@sdk:pages:partial$signed.adoc[tag=signed]
 
 
 [#latest-release]
-
 == Java SDK 3.9 Releases
 
 We always recommend using the latest version of the SDK -- it contains all of the latest security patches and support for new and upcoming features.
@@ -46,9 +45,110 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 ////
 
 
-=== Version 3.9.0 (?? August 2025)
+=== Version 3.9.0 (5 August 2025)
 
 This is the first release of the 3.9 series.
+
+https://packages.couchbase.com/clients/java/3.9.0/Couchbase-Java-Client-3.9.0.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.9.0/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-3.9.0/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 3.9.0             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 3.9.0             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 3.9.0             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 3.9.0             | Micrometer 1.12.9          | Volatile
+|=======================
+
+
+# Release notes - Couchbase Java Client - 3.9.0
+
+==== New Feature
+
+https://couchbasecloud.atlassian.net/browse/JCBC-2193[JCBC-2193]:
+Support FTS like Pre-Filters while doing Vector Search.
+
+https://couchbasecloud.atlassian.net/browse/JCBC-2198[JCBC-2198]:
+Operational SDK prevented from connecting to Enterprise Analytics Cluster.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1637[JVMCBC-1637]:
+Publish a BOM.
+
+
+==== Bug Fixes
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1644[JVMCBC-1644]:
+`Query\_context` namespace should not be surrounded by backticks.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1656[JVMCBC-1656]:
+Java SDK Seed Nodes Don't Always Get Correctly Updated.
+
+(https://couchbasecloud.atlassian.net/browse/JVMCBC-1660[JVMCBC-1660]:
+Change Network Heuristic for JVM SDKs.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1662[JVMCBC-1662]:
+Preferred server group not honored in transactions.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1664[JVMCBC-1664]:
+`ArrayIndexOutOfBoundsException` when request takes more than 1 hour.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1671[JVMCBC-1671]:
+Transactions metrics not reporting all required attributes.
+
+
+==== Improvements
+
+https://couchbasecloud.atlassian.net/browse/JCBC-2189[JCBC-2189]:
+Promoted App Telemetry config options from Volatile to Committed.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1639[JVMCBC-1639]:
+Migrated to mono-versioning.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1659[JVMCBC-1659]:
+GHA: Automate publishing API reference documentation.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1668[JVMCBC-1668]:
+Remove Project Reactor links from API reference documentation.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1607[JVMCBC-1607]:
+Improve how trusted certificates are logged
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1612[JVMCBC-1612]:
+Use `IdleStateHandler` to detect dead or half-open KV connections.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1634[JVMCBC-1634]: 
+Flatten published POMs.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1648[JVMCBC-1648]:
+Upgrade Jackson from 2.17.3 to 2.19.2.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1651[JVMCBC-1651]:
+Support accessDeleted reads for subdoc replica reads.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1652[JVMCBC-1652]:
+Read library version from a new `\`version.properties\`` resource instead of JAR manifest.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1657[JVMCBC-1657]:
+Improve backpressure implementation for row-based HTTP services.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1658[JVMCBC-1658]:
+Better filtering of suppressed exception stack traces.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1661[JVMCBC-1661]:
+Upgrade Gson from 2.11.0 to 2.13.1.
+
+https://couchbasecloud.atlassian.net/browse/JVMCBC-1665[JVMCBC-1665]:
+Let internal Couchbase products bypass cluster type check.
 
 
 
