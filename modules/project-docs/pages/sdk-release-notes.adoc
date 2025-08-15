@@ -142,7 +142,7 @@ A Bill of Materials (BOM) for Couchbase JVM clients is now available.
 It specifies compatible versions of the Java, Scala, and Kotlin clients, as well as the optional metrics and tracing components. 
 https://central.sonatype.com/artifact/com.couchbase.client/couchbase-client-bom[https://central.sonatype.com/artifact/com.couchbase.client/couchbase-client-bom].
 
-* https://couchbasecloud.atlassian.net/browse/JCBC-2193[JCVC-2193]:
+* https://couchbasecloud.atlassian.net/browse/JCBC-2193[JCBC-2193]:
 A Full-Text Search vector query now has an optional "prefilter" parameter. 
 This is a non-vector query that the server executes first to get an intermediate result. 
 Then it executes the vector query on the intermediate result to get the final result.
