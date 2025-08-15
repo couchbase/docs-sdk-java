@@ -71,85 +71,81 @@ Optional artifacts on top of this SDK version are tested for the following compa
 |=======================
 
 
-# Release notes - Couchbase Java Client - 3.9.0
 
-==== New Feature
+==== Behavioral Changes
 
-https://couchbasecloud.atlassian.net/browse/JCBC-2193[JCBC-2193]:
-Support FTS like Pre-Filters while doing Vector Search.
-
-https://couchbasecloud.atlassian.net/browse/JCBC-2198[JCBC-2198]:
-Operational SDK prevented from connecting to Enterprise Analytics Cluster.
-
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1637[JVMCBC-1637]:
-Publish a BOM.
-
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1660[JVMCBC-1660]:
+The "auto" network selection heuristic has been changed to fall back to the "external" network if the "external" network is present.
+Previously, if there was no exact match between an address in the connection string and an address in the cluster topology reported by the server, the SDK would select the "default" network.
+Now, if there is no match and an "external" network is present, the SDK selects the "external" network.  
++
+If this change causes the SDK to select the incorrect network for your deployment, use the xref:ref:client-settings.adoc#io.networkResolution[io.networkResolution] client setting to configure the SDK to use the "default" network.
 
 ==== Bug Fixes
 
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1644[JVMCBC-1644]:
-`Query\_context` namespace should not be surrounded by backticks.
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1656[JVMCBC-1656]:
+Fixed an issue that could prevent the SDK from periodically updating its list of KV node addresses. 
+This could occur if the addresses in the connection string (or DNS SRV record) differ from the server’s self-reported address as they appear in the admin UI.
+This issue can lead to `UnknownHostException` messages in the SDK logs. 
+To resolve the issue, the SDK now feeds both “global” and “bucket” topology info into the same funnel, so the SDK can update its list of node addresses from either source.
 
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1656[JVMCBC-1656]:
-Java SDK Seed Nodes Don't Always Get Correctly Updated.
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1662[JVMCBC-1662]:
+Fixed an issue that prevented the SDK from honoring the "preferred server group" option inside transactions.
 
-(https://couchbasecloud.atlassian.net/browse/JVMCBC-1660[JVMCBC-1660]:
-Change Network Heuristic for JVM SDKs.
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1664[JVMCBC-1664]:
+Exceptionally long-running analytics queries no longer throw `ArrayIndexOutOfBoundsException`.
 
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1662[JVMCBC-1662]:
-Preferred server group not honored in transactions.
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1671[JVMCBC-1671]:
+All expected attributes are now included in transactions metrics exported by the SDK.
 
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1664[JVMCBC-1664]:
-`ArrayIndexOutOfBoundsException` when request takes more than 1 hour.
+==== Improvement
 
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1671[JVMCBC-1671]:
-Transactions metrics not reporting all required attributes.
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1639[JVMCBC-1639]:
+We’ve adopted a mono-versioning strategy for the Couchbase JVM client libraries.
+The Scala and Kotlin SDKs, along with the core library and optional modules, are now aligned with the Java SDK at version 3.9.0. 
++
+Although this is a technically a major version bump for some components, in this exceptional case it does not indicate a breaking change.
+The goal of this alignment is twofold: to minimize confusion about which versions are compatible with each other, 
+and to enable a more disciplined branch management strategy where patch releases contain only low-risk bug fixes.
 
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1607[JVMCBC-1607]:
+Improved how the SDK logs information about trusted TLS certificates on startup.
+It now logs up to 5 certificates at `INFO` level, and the full list at `DEBUG` level. 
+Previously, the SDK logged the full list at `INFO` level, which could prevent other interesting configuration info from being included in the log, depending on how logging was configured.
 
-==== Improvements
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1612[JVMCBC-1612]:
+The SDK is now more aggressive about detecting dead or half-open KV connections. 
+It closes a connection if there is no incoming traffic for the duration specified by `io.configIdleRedialTimeout` (default value: 5 minutes), 
+and sends a `NOOP` request if there is no incoming traffic for hallf that duration.
 
-https://couchbasecloud.atlassian.net/browse/JCBC-2189[JCBC-2189]:
-Promoted App Telemetry config options from Volatile to Committed.
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1648[JVMCBC-1648]:
+Upgraded `Jackson` from `2.17.3` to `2.19.2`.
 
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1639[JVMCBC-1639]:
-Migrated to mono-versioning.
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1651[JVMCBC-1651]:
+Improved internal support for sub-document replica reads against upcoming server versions.
 
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1659[JVMCBC-1659]:
-GHA: Automate publishing API reference documentation.
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1652[JVMCBC-1652]:
+Shading the Couchbase SDK no longer causes it report a version number of `0.0.0`.
 
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1668[JVMCBC-1668]:
-Remove Project Reactor links from API reference documentation.
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1657[JVMCBC-1657]:
+Improved the backpressure implementation for reactive SQL++, Analytics, and Full-Text Search queries. 
+The SDK now requires less memory to buffer results if the consumer cannot keep up with the producer.
 
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1607[JVMCBC-1607]:
-Improve how trusted certificates are logged
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1658[JVMCBC-1658]:
+When the SDK removes uninteresting Netty stack frames from stack traces, it now also applies the filtering to suppressed exceptions.
+This improves stack trace readability in some cases when Project Reactor debugging is enabled.
 
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1612[JVMCBC-1612]:
-Use `IdleStateHandler` to detect dead or half-open KV connections.
+==== New Features
 
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1634[JVMCBC-1634]: 
-Flatten published POMs.
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1637[JVMCBC-1637]:
+A Bill of Materials (BOM) for Couchbase JVM clients is now available. 
+It specifies compatible versions of the Java, Scala, and Kotlin clients, as well as the optional metrics and tracing components. 
+https://central.sonatype.com/artifact/com.couchbase.client/couchbase-client-bom[https://central.sonatype.com/artifact/com.couchbase.client/couchbase-client-bom].
 
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1648[JVMCBC-1648]:
-Upgrade Jackson from 2.17.3 to 2.19.2.
-
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1651[JVMCBC-1651]:
-Support accessDeleted reads for subdoc replica reads.
-
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1652[JVMCBC-1652]:
-Read library version from a new `\`version.properties\`` resource instead of JAR manifest.
-
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1657[JVMCBC-1657]:
-Improve backpressure implementation for row-based HTTP services.
-
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1658[JVMCBC-1658]:
-Better filtering of suppressed exception stack traces.
-
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1661[JVMCBC-1661]:
-Upgrade Gson from 2.11.0 to 2.13.1.
-
-https://couchbasecloud.atlassian.net/browse/JVMCBC-1665[JVMCBC-1665]:
-Let internal Couchbase products bypass cluster type check.
-
+* https://couchbasecloud.atlassian.net/browse/JCBC-2193[JCVC-2193]:
+A Full-Text Search vector query now has an optional "prefilter" parameter. 
+This is a non-vector query that the server executes first to get an intermediate result. 
+Then it executes the vector query on the intermediate result to get the final result.
 
 
 
