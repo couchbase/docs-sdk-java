@@ -72,14 +72,16 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 ==== Improvements
 
-* https://couchbasecloud.atlassian.net/browse/JVMCBC-1677[JVMCBC-1677]:
-The BOM \(\`couchbase-client-bom\`\) now includes the \`scala-client\_3\` artifact.
+// * https://couchbasecloud.atlassian.net/browse/JVMCBC-1677[JVMCBC-1677]:
+// The BOM (`couchbase-client-bom`) now includes the `scala-client_3` artifact.
 
 * https://couchbasecloud.atlassian.net/browse/JVMCBC-1678[JVMCBC-1678]:
- Upgrade Netty to 4.1.124
+Upgraded `Netty` to `4.1.124`.
 
 * https://couchbasecloud.atlassian.net/browse/JVMCBC-1680[JVMCBC-1680]:
-Retain raw JSON when parsing cluster topology
+When parsing cluster topology into a `ClusterTopology` object, the original JSON is now retained, so it can be re-parsed with different parameters later.
+
+
 
 === Version 3.9.0 (5 August 2025)
 
