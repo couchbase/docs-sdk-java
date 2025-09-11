@@ -14,7 +14,7 @@ as well as KV Range scan, for querying without an index.
 
 
 
-The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/blob/release/3.8/modules/devguide/examples/java/KvOperations.java[here].
+The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/blob/release/3.9/modules/devguide/examples/java/KvOperations.java[here].
 
 At its heart Couchbase Server is a high-performance key-value store, and the key-value interface outlined below is the fastest and best method to perform operations involving single documents.
 
