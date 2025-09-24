@@ -48,8 +48,7 @@ Server version 8.0 introduces vector query using Global Secondary Indexes (GSI),
 using either a fast Hyperscale index, or a composite index to combine scalar queries with semantic search.
 
 For fast and scalable vector query, use one of the GSI choices -- detailed in the next section.
-If you don't require the scale of vector query with GSI, or need combined searches, then consider {#vector-search-with-the-search-service}.
-
+If you don't require the scale of vector query with GSI, or need combined searches, then consider <<#vector-search-with-the-search-service>>.
 
 
 == Vector Search With the Query Service and GSI
