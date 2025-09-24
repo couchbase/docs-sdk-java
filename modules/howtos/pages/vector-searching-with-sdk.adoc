@@ -43,7 +43,7 @@ Hybrid searches can combine Vector, geo-spatial search, range search, and tradit
 ////
 
 
-Vector Search has been available in Couchbase Capella Operational and self-managed Server since version 7.6, using the COuchbase Server Search Service.
+Vector Search has been available in Couchbase Capella Operational and self-managed Server since version 7.6, using the Couchbase Server Search Service.
 Version 8.0 introduces vector query using Global Secondary Indexes (GSI), the query index --
 using either a fast Hyperscale index, or a composite index to combine scala queries with semantic search.
 
@@ -79,6 +79,12 @@ wrapped inside the {name-sdk} Query API.
 .With Composite Vector Index
 [source,java]
 ----
+// In process of fixing code samples
+----
+
+
+
+////
 package com.couchbase.client.java.examples.query;
 
 import com.couchbase.client.java.Bucket;
@@ -97,7 +103,7 @@ public class SimpleQueryExample {
 
 }
 ----
-
+////
 
 
 
@@ -105,6 +111,12 @@ public class SimpleQueryExample {
 .Hyperscale Index Example
 [source,java]
 ----
+// In process of fixing code samples
+----
+
+
+
+////
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 
 import com.couchbase.client.core.error.CouchbaseException;
@@ -146,7 +158,7 @@ public class SimpleQueryCloud {
 }
 // end::vector-hyperscale[]
 ----
-
+////
 
 
 == Vector Search With the Search Service
@@ -186,6 +198,42 @@ This happens to be a scoped index so we are using `scope.search()`.
 If it was a global index we would use `cluster.search()` instead - see <<Scoped vs Global Indexes>>.
 
 It returns the same `SearchResult` detailed earlier.
+
+
+===== Pre-Filters
+
+From Couchbase Server 7.6.4 -- and in Capella Operational clusters -- you can apply xref:server:vector-search:pre-filtering-vector-search.adoc#about-pre-filtering[pre-filtering with similarity search].
+The current version of the {name-sdk} supports this.
+
+This is applied to the search query sub-object within the knn array items for that vector query:
+
+[source,json]
+----
+{
+  "fields": ["artist", "song"],
+  "knn": [{
+    "filter": {
+      "conjuncts": [{
+        "match": "English",
+        "filed": "language"
+      }, {
+        "min": 1990,
+        "max": 2000,
+        "inclusive_min": false,
+        "inclusive_max": true,
+        "field": "year"
+      }]
+    },
+    "k": 5,
+    "field": "music_vector",
+    "vector": [0.024901132253900747, 1535 vectors removed]
+  }],
+  "explain": true,
+  "size": 5,
+  "from": 0
+}
+----
+
 
 ==== Multiple vector queries
 You can run multiple vector queries together:
