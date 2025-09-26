@@ -21,7 +21,7 @@ public class SimpleVectorQuery {
   static String username = "Administrator";
   static String password = "password";
 
- public static void main(String[] args) throws Exception {
+  public static void main(String[] args) throws Exception {
     Cluster cluster = Cluster.connect(
     connectionString,
     ClusterOptions.clusterOptions(username, password).environment(env -> {
@@ -32,7 +32,7 @@ public class SimpleVectorQuery {
     { 
       try {
 // tag::hyperscale[]
-        final QueryResult result = cluster.query(
+        QueryResult result = cluster.query(
         "SELECT d.id, d.question, d.wanted_similar_color_from_search, " +
         "  ARRAY_CONCAT( " +
           "d.couchbase_search_query.knn[0].vector[0:4], " +
@@ -44,8 +44,8 @@ public class SimpleVectorQuery {
 
         for (JsonObject row : result.rowsAsObject()) {
           System.out.println(row);
+        }
 // end::hyperscale[]
-          }
       } catch (CouchbaseException ex) {
         ex.printStackTrace();
       }
