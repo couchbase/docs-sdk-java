@@ -52,7 +52,7 @@ However, you will need to build one or more indexes.
 
 === Prerequisites
 
- *Couchbase Server 8.0.0 or newer -- or a recent Capella instance.
+* Couchbase Server 8.0.0 or newer -- or a recent Capella instance.
 
 * Your chosen xref:server:vector-index:use-vector-indexes.adoc[vector index] -- 
 hyperscale or composite.
