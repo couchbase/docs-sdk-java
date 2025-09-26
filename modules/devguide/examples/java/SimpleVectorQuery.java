@@ -17,9 +17,9 @@ import java.util.UUID;
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 
 public class SimpleVectorQuery {
-  static String connectionString = "couchbase://127.0.0.1";
+  static String connectionString = "couchbases://cb.<your-endpoint-here>.cloud.couchbase.com";
   static String username = "Administrator";
-  static String password = "fred123!";
+  static String password = "password";
 
  public static void main(String[] args) throws Exception {
     Cluster cluster = Cluster.connect(
