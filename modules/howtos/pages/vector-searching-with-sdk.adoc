@@ -1,14 +1,15 @@
 = Vector Search
 :page-toclevels: 2
-:description: Vector Search from the SDK, to enable AI integration, semantic search, and the RAG framework.
+:description: Vector Search from the SDK, to enable AI integration, semantic search, and use of RAG frameworks.
 
 
 // Note to editors
 // 
-// This page pulls in content from -sdk-common-
-// and code samples from -example-dir-
+// This page pulls in content from -sdk-common-??
+// and code samples https://github.com/couchbase/docs-sdk-java/tree/release/3.9/modules/devguide/examples/java/SimpleVectorQuery.java
+// and https://github.com/couchbase/docs-sdk-java/tree/release/3.9/modules/devguide/examples/java/Search.java
 // 
-// It can be seen built at wwww.
+// It can be seen built at https://docs.couchbase.com/java-sdk/3.9/howtos/vector-searching-with-sdk.html
 
 
 [abstract]
@@ -36,19 +37,12 @@ A Vector Search database includes:
 
 
 
-////
-Vector queries with GSI are fast and scale up, but sometimes you may wish to use Vector with the Search Service instead.
+Vector Search has been available in Couchbase Capella Operational and self-managed Server since version 7.6, using the Couchbase Search Service.
+Version 8.0 introduces vector query using Global Secondary Indexes (GSI), the Query Service index --
+using either a fast Hyperscale index, or a composite index to combine scalar queries with semantic search.
 
-Hybrid searches can combine Vector, geo-spatial search, range search, and traditional fuzzy text search for apps that...........
-////
-
-
-Vector Search has been available in Couchbase Capella Operational and self-managed Server since version 7.6, using the Couchbase Server Search Service.
-Version 8.0 introduces vector query using Global Secondary Indexes (GSI), the query index --
-using either a fast Hyperscale index, or a composite index to combine scala queries with semantic search.
-
-For fast and scalable vector query, use one of the GSI choices -- detailed in the next section.
-If you don't require the scale of vector query with GSI, or need combined searches, then consider {#vector-search-with-the-search-service}.
+For fast and scalable vector queries, use one of the above two GSI choices -- detailed in the next section.
+If you don't require the speed and scale of vector query with GSI, or need to combine vector, geo-spatial search, range search, and traditional fuzzy text searches, then consider {#vector-search-with-the-search-service}.
 
 
 
@@ -59,106 +53,34 @@ However, you will need to build one or more indexes.
 
 === Prerequisites
 
-Couchbase Server 8.0.0 or newer -- or a recent Capella instance.
+ *Couchbase Server 8.0.0 or newer -- or a recent Capella instance.
 
-Your chosen xref:server:vector-index:use-vector-indexes.adoc[vector index] -- 
+* Your chosen xref:server:vector-index:use-vector-indexes.adoc[vector index] -- 
 hyperscale or composite.
+
+
+You will need to refer to the xref:server/current/vector-index/vectors-and-indexes-overview.adoc[] pages for a full discussion of using Vector Indexes with Vector Queries.
+In particular, you will need to xref:server:vector-index:hyperscale-filter.adoc#creating-a-hyperscale-vector-index-with-included-scalar-values[create a Vector Index].
+
 
 
 === Examples
 
-These examples simply take the {sqlpp} queries shown in the
-xref:server:vector-index:composite-vector-index.html#examples[Composite Index] and
-xref:server:vector-index:hyperscale-vector-index.html#query-example[Hyperscale Index] example pages,
+The xref:server/current/vector-index/vectors-and-indexes-overview.adoc[] pages contain examples using both hyperscale and compound indexes.
+
+Here is the xref:server:vector-index:hyperscale-vector-index.adoc#query-example[Hyperscale Index] example,
 wrapped inside the {name-sdk} Query API.
-
-
-
-
-
-.With Composite Vector Index
-[source,java]
-----
-// In process of fixing code samples
-----
-
-
-
-////
-package com.couchbase.client.java.examples.query;
-
-import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.query.QueryResult;
-
-public class SimpleQueryExample {
-
-  public static void main(String... args) {
-    Cluster cluster = Cluster.connect("127.0.0.1", "Administrator", "password");
-    Bucket bucket = cluster.bucket("travel-sample");
-
-    QueryResult result = cluster.query(SELECT RAW OBJECT_PUT(d, "embedding_vector_dot",ARRAY_CONCAT(d.embedding_vector_dot[0:4], ["..."])) FROM `vector-sample`.`color`.`rgb` AS d USE KEYS ["#FFEFD5"]);
-    System.out.println(result.rowsAsObject());
-  }
-
-}
-----
-////
-
-
-
 
 .Hyperscale Index Example
 [source,java]
 ----
-// In process of fixing code samples
+include::devguide:example$java/SimpleVectorQuery.java[tag=hyperscale,indent=0]
 ----
 
 
 
-////
-import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 
-import com.couchbase.client.core.error.CouchbaseException;
-import com.couchbase.client.java.*;
-import com.couchbase.client.java.json.*;
-import com.couchbase.client.java.query.*;
 
-// tag::vector-hyperscale[]
-public class SimpleQueryCloud {
-  // Update these variables to point to your Couchbase Capella instance and credentials.
-  static String connectionString = "couchbases://cb.<your-endpoint-here>.cloud.couchbase.com";
-  static String username = "Administrator";
-  static String password = "password";
-
-  public static void main(String[] args) throws Exception {
-    Cluster cluster = Cluster.connect(
-    connectionString,
-    ClusterOptions.clusterOptions(username, password).environment(env -> {
-    env.applyProfile("wan-development");
-    })
-    );
-
-    { 
-      try {
-        final QueryResult result = cluster.query("SELECT d.id, d.question, d.wanted_similar_color_from_search, ARRAY_CONCAT(d.couchbase_search_query.knn[0].vector[0:4], ["..."]) AS vector FROM `vector-sample`.`color`.`rgb-questions` AS d WHERE d.id = "#87CEEB",
-        queryOptions().metrics(true));
-
-        for (JsonObject row : result.rowsAsObject()) {
-          System.out.println(row);
-      }
-
-      System.out.println("Reported execution time: " + result.metaData().metrics().get().executionTime());
-
-      } catch (CouchbaseException ex) {
-        ex.printStackTrace();
-      }
-    }
-  }
-}
-// end::vector-hyperscale[]
-----
-////
 
 
 == Vector Search With the Search Service
