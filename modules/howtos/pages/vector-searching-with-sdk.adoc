@@ -45,7 +45,6 @@ For fast and scalable vector queries, use one of the above two GSI choices -- de
 If you don't require the speed and scale of vector query with GSI, or need to combine vector, geo-spatial search, range search, and traditional fuzzy text searches, then consider {#vector-search-with-the-search-service}.
 
 
-
 == Vector Search With the Query Service and GSI
 
 From the SDK, a vector query using GSI is the same as any other query.
