@@ -17,8 +17,8 @@ If you wish to use a standalone or Docker installation of Couchbase, see the xre
 
 * Before starting this tutorial, you must have a Couchbase Capella account. 
 If you do not have one already, xref:cloud:get-started:create-account.adoc[Create an Account]. 
-* Install the Java Software Development Kit (JDK) -- Couchbase JVM SDKs are compatible with version 8, 11, 17, or 21.
-** The recommended version is the latest Java LTS release, which is currently https://adoptium.net/en-GB/[JDK 21].
+* Install the Java Software Development Kit (JDK) -- Couchbase JVM SDKs are compatible with LTS versions of Java.
+** The recommended version is the latest Java LTS release, which is currently https://adoptium.net/[JDK {java_latest_lts_version}].
 Ensure you install the highest available patch for the LTS version. 
 * Install Apache Maven (version 3+)
 

@@ -19,6 +19,7 @@ asciidoc:
     sdk_dot_major: '3.x'
     version-server: '7.6'
     version-common: '8.0'
+    java_latest_lts_version: '25'
     name_platform: 'Java'
     name-sdk: Java SDK
     sdk_api: '3.8'
