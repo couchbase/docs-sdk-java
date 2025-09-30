@@ -58,7 +58,7 @@ However, you will need to build one or more indexes.
 hyperscale or composite.
 
 
-You will need to refer to the xref:server/current/vector-index/vectors-and-indexes-overview.adoc[] pages for a full discussion of using Vector Indexes with Vector Queries.
+You will need to refer to the xref:server:vector-index:vectors-and-indexes-overview.adoc[] pages for a full discussion of using Vector Indexes with Vector Queries.
 In particular, you will need to xref:server:vector-index:hyperscale-filter.adoc#creating-a-hyperscale-vector-index-with-included-scalar-values[create a Vector Index].
 
 
@@ -73,7 +73,7 @@ wrapped inside the {name-sdk} Query API.
 .Hyperscale Index Example
 [source,java]
 ----
-include::devguide:example$java/SimpleVectorQuery.java[tag=hyperscale,indent=0]
+include::devguide:example$java/SimpleVectorQuery.java[tag=hyperscale,indent=2]
 ----
 
 
