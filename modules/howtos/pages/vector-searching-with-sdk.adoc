@@ -42,7 +42,7 @@ Version 8.0 introduces vector query using Global Secondary Indexes (GSI), the Qu
 using either a fast Hyperscale index, or a composite index to combine scalar queries with semantic search.
 
 For fast and scalable vector queries, use one of the above two GSI choices -- detailed in the next section.
-If you don't require the speed and scale of vector query with GSI, or need to combine vector, geo-spatial search, range search, and traditional fuzzy text searches, then consider {#vector-search-with-the-search-service}.
+If you don't require the speed and scale of vector query with GSI, or need to combine vector, geo-spatial search, range search, and traditional fuzzy text searches, then consider <<#vector-search-with-the-search-service>>.
 
 
 == Vector Search With the Query Service and GSI
