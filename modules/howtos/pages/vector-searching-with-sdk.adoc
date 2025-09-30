@@ -76,10 +76,14 @@ wrapped inside the {name-sdk} Query API.
 include::devguide:example$java/SimpleVectorQuery.java[tag=hyperscale,indent=2]
 ----
 
+Parameterizing the query, as with xref:sqlpp-queries-with-sdk.adoc#parameterized-queries[regular queries], will allow the reuse of the xref:server:n1ql:n1ql-intro/queriesandresults.adoc#prepare-stmts[Query Plan].
+This can be more efficient, unless you are doing a lot of optimization to your query.
 
-
-
-
+.Parameterized Vector Query
+[source,java]
+----
+include::devguide:example$java/ParameterizedVectorQuery.java[tag=parameterized,indent=2]
+----
 
 
 == Vector Search With the Search Service
