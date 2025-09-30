@@ -22,11 +22,14 @@ public class ParameterizedVectorQuery {
       try {
 // tag::parameterized[]
 	final QueryResult result = cluster.query(
-	"SELECT d.id, d.question, d.wanted_similar_color_from_search, " + "  ARRAY_CONCAT( "
-        + "d.couchbase_search_query.knn[0].vector[0:4], " + "['...'] " + ") AS vector "
-	    + "FROM `vector-sample`.`color`.`rgb-questions` AS d " + "WHERE d.id = $id;",
+        "SELECT d.id, d.question, d.wanted_similar_color_from_search, " +
+        "  ARRAY_CONCAT( " +
+          "d.couchbase_search_query.knn[0].vector[0:4], " +
+          "['...'] " +
+        ") AS vector " +
+	    "FROM `vector-sample`.`color`.`rgb-questions` AS d " +
+		"WHERE d.id = $id;",
 	queryOptions()
-		.metrics(true)
 		.parameters(JsonObject.create().put("id", "#87CEEB")));
 
         for (JsonObject row : result.rowsAsObject()) {
