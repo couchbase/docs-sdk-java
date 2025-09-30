@@ -65,7 +65,7 @@ In particular, you will need to xref:server:vector-index:hyperscale-filter.adoc#
 
 === Examples
 
-The xref:server/current/vector-index/vectors-and-indexes-overview.adoc[] pages contain examples using both hyperscale and compound indexes.
+The xref:server:vector-index:vectors-and-indexes-overview.adoc[] pages contain examples using both hyperscale and compound indexes.
 
 Here is the xref:server:vector-index:hyperscale-vector-index.adoc#query-example[Hyperscale Index] example,
 wrapped inside the {name-sdk} Query API.
