@@ -69,7 +69,7 @@ Fuzzy search with text or a variety of other data:
 * CIDR notation
 * Geospatial data 
 
-Searches use indexes created against data at the Scope or the budket level.
+Searches use indexes created against data at the Scope or the bucket level.
 
 
 === Vector Search
