@@ -145,7 +145,7 @@ For low latency range queries, it is recommended that you use SQL++ with the nec
 
 From Couchbase Server 7.6 onwards,
 CRUD operations (such as `CREATE`, `INSERT`, and `SELECT`) and `JOIN` can be performed against the Query Service without an index (primary or secondary).
-This uses a xref:server:learn:services-and-indexes:indexes/query-without-index.adoc#sequential-scans[sequential scan], relying on a KV range scan to deliver the keys.
+This uses a xref:server:learn:services-and-indexes/indexes/query-without-index.adoc#sequential-scans[sequential scan], relying on a KV range scan to deliver the keys.
 
 Sequential scans are best suited to small collections where key order is unimportant, or where the overhead of maintaining an index can't be justified.
 For larger collections and greater performance, define the appropriate indexes to speed up your queries.
