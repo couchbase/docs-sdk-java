@@ -163,7 +163,7 @@ Read on to learn more about the Query and Index services.
 // e N1QL (Non-First Normal Form Query Language)
 // and link book?
 
-If you are familiar with SQL, Couhbase's {sqlpp} dialect will hold few surprises.
+If you are familiar with SQL, Couchbase's {sqlpp} dialect will hold few surprises.
 Combining semi-flexible schema with SQL works well in a lot of use cases, but do remember that our Data Service is even faster if you do already know the keys.
 
 
