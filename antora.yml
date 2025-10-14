@@ -14,7 +14,7 @@ asciidoc:
   attributes:
     page-nav-header-levels: 1
     server_version: '8.0.0'
-    sdk_current_version: '3.9.1'
+    sdk_current_version: '3.9.2'
     sdk_dot_minor: '3.9'
     sdk_dot_major: '3.x'
     version-server: '7.6'
