@@ -73,10 +73,12 @@ Optional artifacts on top of this SDK version are tested for the following compa
 ==== Improvements
 
 * https://couchbasecloud.atlassian.net/browse/JVMCBC-1694[JVMCBC-1694]:
-Updated Netty to 4.1.127
+Updated `Netty` to `4.1.127`.
 
 * https://couchbasecloud.atlassian.net/browse/JCBC-2204[JCBC-2204]:
-Added an `io.configNotifications` client setting. If advised by Couchbase Technical Support, set this to false to disable server-initiated cluster topology change notifications.
+Added an `io.configNotifications` client setting. 
+If advised by Couchbase Technical Support, set this to false to disable server-initiated cluster topology change notifications.
+
 
 === Version 3.9.1 (5 September 2025)
 
