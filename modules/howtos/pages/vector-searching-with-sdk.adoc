@@ -1,5 +1,5 @@
 = Vector Search
-:page-toclevels: 2
+:page-toclevels: 3
 :description: Vector Search from the SDK, to enable AI integration, semantic search, and use of RAG frameworks.
 
 
@@ -125,39 +125,40 @@ If it was a global index we would use `cluster.search()` instead - see <<Scoped 
 It returns the same `SearchResult` detailed earlier.
 
 
-===== Pre-Filters
+==== Pre-Filters
 
-From Couchbase Server 7.6.4 -- and in Capella Operational clusters -- you can apply xref:server:vector-search:pre-filtering-vector-search.adoc#about-pre-filtering[pre-filtering with similarity search].
-The current version of the {name-sdk} supports this.
+From Couchbase Server 7.6.4 -- and in Capella Operational clusters -- 
+xref:server:vector-search:pre-filtering-vector-search.adoc#about-pre-filtering[pre-filtering with similarity search] is available.
+This is a non-vector query that the server executes first to get an intermediate result.
+Then it executes the vector query on the intermediate result to get the final result.
 
-This is applied to the search query sub-object within the knn array items for that vector query:
-
-[source,json]
+[source,java]
 ----
-{
-  "fields": ["artist", "song"],
-  "knn": [{
-    "filter": {
-      "conjuncts": [{
-        "match": "English",
-        "filed": "language"
-      }, {
-        "min": 1990,
-        "max": 2000,
-        "inclusive_min": false,
-        "inclusive_max": true,
-        "field": "year"
-      }]
-    },
-    "k": 5,
-    "field": "music_vector",
-    "vector": [0.024901132253900747, 1535 vectors removed]
-  }],
-  "explain": true,
-  "size": 5,
-  "from": 0
-}
+`public VectorQuery prefilter(SearchQuery prefilter)`
 ----
+
+If no prefilter is specified, the server executes the vector query on all indexed documents.
+
+[source,java]
+----
+  .setOptions(VectorQueryOptions.newBuilder()
+                    .setNumCandidates(numCandidates)
+                        .setPrefilter(SearchQuery.newBuilder()
+                                .setMatch(MatchQuery.newBuilder()
+                                        .setMatch("primary").setField("color_wheel_pos"))))
+----
+
+The prefilter can be any Search Query --
+from a simple match, as above, to a string query:
+
+[source,java]
+----
+  .setPrefilter(SearchQuery.newBuilder()
+                        .setQueryString(QueryStringQuery.newBuilder()
+                                .setQuery("+description:sea -color_hex:fff5ee")))
+----
+
+See the link:++https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/search/vector/VectorQuery.html#prefilter(com.couchbase.client.java.search.SearchQuery)++[API reference].
 
 
 ==== Multiple vector queries
