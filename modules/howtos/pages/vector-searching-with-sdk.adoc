@@ -134,7 +134,7 @@ Then it executes the vector query on the intermediate result to get the final re
 
 [source,java]
 ----
-`public VectorQuery prefilter(SearchQuery prefilter)`
+public VectorQuery prefilter(SearchQuery prefilter)
 ----
 
 If no prefilter is specified, the server executes the vector query on all indexed documents.
