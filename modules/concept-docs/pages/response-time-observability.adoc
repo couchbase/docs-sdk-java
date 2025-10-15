@@ -11,8 +11,8 @@
 
 [TIP] 
 ====
-In addition to Tracing and other metrics, and client logging, SDK is telemetry is also sent to the Server -- available from 8.0, and in new Capella Operational clusters -- 
-available from the *TODO add telemetry websocket / REST link* xref:[here].
+In addition to Tracing and other metrics, and client logging, SDK is telemetry is also sent to the Server -- available from 8.0, and in new Capella Operational clusters -- for ingestion with other Prometheus metrics.
+Capella Operatioal exposes these metrics through the UI.
 ====
 
 
