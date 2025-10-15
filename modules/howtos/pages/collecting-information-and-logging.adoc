@@ -255,3 +255,29 @@ Note that you need to run this command before any of the SDK code is initialized
 Once the SDK writes the logs with the tags to a file, you can then use the xref:7.2@server:cli:cbcli/cblogredaction.adoc[`cblogredaction` tool] to obfuscate the log.
 
 * You may wish to read more on Log Redaction xref:7.2@server:manage:manage-logging/manage-logging.adoc#understanding_redaction[in the Server docs].
+
+== SDK Telemetry from the Server
+
+In addition to Tracing and other metrics, and client logging, SDK is telemetry is also sent to the Server -- available from 8.0, and in new Capella Operational clusters -- for ingestion with other Prometheus metrics.
+Capella Operatioal exposes these metrics through the UI.
+
+For self-managed Server, collection can be disabled and enabled through the REST API:
+
+[source,console]
+----
+curl --user Administrator:password http://172.17.0.2:8091/settings/appTelemetry -d enabled=true
+----
+
+And the Prometheus-format metrics fetched with:
+
+[source,console]
+----
+curl --user Administrator:password http://172.17.0.2:8091/metrics
+----
+
+There may be advantages to collecting information this way,
+but note that metrics are collected per node,
+and a central Prometheus instance should be set to collect all metrics so that information is not lost in case of a sudden failover.
+
+Also note that if the cluster is behind a load balancer, the collected metrics may not accurately record the actual correct node with which the SDK interacts.
+
