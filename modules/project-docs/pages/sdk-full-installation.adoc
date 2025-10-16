@@ -52,7 +52,7 @@ For https://maven.apache.org[Maven], you can insert the following into the depen
         <version>{sdk_current_version}</version>
     </dependency>
 ----
-Refer to the https://maven.apache.org/guides/introduction/introduction-to-the-pom.html/[Maven Documentation] for more information regarding the structure of the `pom.xml` file.
+Refer to the https://maven.apache.org/guides/introduction/introduction-to-the-pom.html[Maven Documentation] for more information regarding the structure of the `pom.xml` file.
 --
 Gradle::
 +
