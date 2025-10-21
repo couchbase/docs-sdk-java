@@ -69,7 +69,7 @@ Fuzzy search with text or a variety of other data:
 * CIDR notation
 * Geospatial data 
 
-Searches use indexes created against data at the Scope or the budket level.
+Searches use indexes created against data at the Scope or the bucket level.
 
 
 === Vector Search
@@ -145,7 +145,7 @@ For low latency range queries, it is recommended that you use SQL++ with the nec
 
 From Couchbase Server 7.6 onwards,
 CRUD operations (such as `CREATE`, `INSERT`, and `SELECT`) and `JOIN` can be performed against the Query Service without an index (primary or secondary).
-This uses a xref:server:learn:services-and-indexes:indexes/query-without-index.adoc#sequential-scans[sequential scan], relying on a KV range scan to deliver the keys.
+This uses a xref:server:learn:services-and-indexes/indexes/query-without-index.adoc#sequential-scans[sequential scan], relying on a KV range scan to deliver the keys.
 
 Sequential scans are best suited to small collections where key order is unimportant, or where the overhead of maintaining an index can't be justified.
 For larger collections and greater performance, define the appropriate indexes to speed up your queries.
@@ -163,7 +163,7 @@ Read on to learn more about the Query and Index services.
 // e N1QL (Non-First Normal Form Query Language)
 // and link book?
 
-If you are familiar with SQL, Couhbase's {sqlpp} dialect will hold few surprises.
+If you are familiar with SQL, Couchbase's {sqlpp} dialect will hold few surprises.
 Combining semi-flexible schema with SQL works well in a lot of use cases, but do remember that our Data Service is even faster if you do already know the keys.
 
 

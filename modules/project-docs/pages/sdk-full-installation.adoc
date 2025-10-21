@@ -28,7 +28,7 @@ The underlying OS normally makes no difference, but library incompatibilities in
 
 At least Java 8 is required for current releases;
 see the xref:project-docs:compatibility.adoc#jdk-compat[Compatibility] section for details.
-We recommend running the latest Java LTS version (i.e. at the time of writing JDK 21) with the highest patch version available.
+We recommend running the latest Java LTS version (i.e. at the time of writing JDK {java_latest_lts_version}) with the highest patch version available.
 
 Couchbase publishes all stable artifacts to https://central.sonatype.com/namespace/com.couchbase.client[Maven Central].
 The latest version of the {sdk_dot_minor} SDK is https://central.sonatype.com/artifact/com.couchbase.client/java-client/{sdk_current_version}/jar[{sdk_current_version}].
@@ -51,7 +51,7 @@ For https://maven.apache.org[Maven], you can insert the following into the depen
         <version>{sdk_current_version}</version>
     </dependency>
 ----
-Refer to the https://maven.apache.org/guides/introduction/introduction-to-the-pom.html/[Maven Documentation] for more information regarding the structure of the `pom.xml` file.
+Refer to the https://maven.apache.org/guides/introduction/introduction-to-the-pom.html[Maven Documentation] for more information regarding the structure of the `pom.xml` file.
 --
 Gradle::
 +
