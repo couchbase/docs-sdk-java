@@ -19,6 +19,7 @@ This page covers the durability options offered by Couchbase Server,
 with the rest of this section covering logging, health check, and observability --
 all key to understanding the health of a complex, distributed environment.
 
+TIP: From Couchbase Server version 8.0 (including in Capella Operational), statistics from the SDK are collected automatically by the Cluster.
 
 
 include::{version-common}@sdk:shared:partial$durability-replication-failure-considerations.adoc[tag=intro]
