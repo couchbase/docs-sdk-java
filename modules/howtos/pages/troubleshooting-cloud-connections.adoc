@@ -1,1 +1,0 @@
-include::7.0@sdk:pages:partial$troubleshooting-cloud-connections.adoc[]
