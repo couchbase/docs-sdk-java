@@ -83,7 +83,7 @@ The tests require the application to be running.
 To learn more about connecting to your Capella cluster, please follow the https://docs.couchbase.com/cloud/get-started/connect.html[instructions].
 Specifically, you need to do the following:
 
-. Create the [database credentials](https://docs.couchbase.com/cloud/clusters/manage-database-users.html) to access the travel-sample bucket (Read and Write) used in the application.
+. Create the xref:cloud:clusters:manage-database-users.adoc[database credentials] to access the travel-sample bucket (Read and Write) used in the application.
 . https://docs.couchbase.com/cloud/clusters/allow-ip-address.html[Allow access] to the Cluster from the IP on which the application is running.
 
 All configuration for communication with the database is read from the application properties.
