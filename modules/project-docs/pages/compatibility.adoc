@@ -142,7 +142,7 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 .Recommended SDK per Server Version Matrix
 [#table_sdk_versions]
 |===
-| | 3.4, 3.5 | 3.6, 3.7 | 3.8 | 3.9
+| | 3.4, 3.5 | 3.6, 3.7 | 3.8 | 3.9, 3.10
 
 | *Server 7.0 - 7.2*
 | *✔*
@@ -227,7 +227,7 @@ The following table provides an overview at the time of Java SDK {sdk_dot_minor}
 | _Maintenance Support_
 | _New Features, Active Development_
 
-| *Server 7.0 - 7.6*
+| *Server 7.0 - 8.0*
 | *Compatible*
 | *Recommended*
 |===
