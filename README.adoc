@@ -5,7 +5,7 @@ This repository hosts the documentation source for the https://docs.couchbase.co
 This branch documents the 3.10 release of the SDK.
 It follows the https://docs.couchbase.com/java-sdk/3.10/project-docs/compatibility.html#api-version[SDK 3.8 API].
 
-This branch reflects the new Information Architecture for the SDK docs -- this release was previously documented with the old structure (those old docs can be found under the `temp/3.7` branch), and docs with this structure can be seen on the Couchbase docs site for releases 3.7 and earlier.
+This branch reflects the new Information Architecture for the SDK docs, helping to guide new-to-Couchbase users through the pitfalls of a complex distributed system.
 
 
 == Contributing
