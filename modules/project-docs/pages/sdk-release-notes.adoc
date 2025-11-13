@@ -29,7 +29,7 @@ We always recommend using the latest version of the SDK -- it contains all of th
 All patch releases for each dot minor release should be API compatible, and safe to upgrade;
 any changes to expected behavior are noted in the release notes that follow.
 
-Version 3.9 of the Java SDK implements the 3.8 xref:compatibility.adoc#api-version[SDK API].
+Version 3.10 of the Java SDK implements the 3.8 xref:compatibility.adoc#api-version[SDK API].
 See the xref:compatibility.adoc#couchbase-feature-availability-matrix[compatibility pages] for more information on feature compatibility with different versions of Couchbase Server.
 
 
@@ -69,16 +69,16 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `metrics-micrometer`      | 3.10.0             | Micrometer 1.12.9          | Volatile
 |=======================
 
-==== Behavioral Changes
 
-===== Bugs
+
+===== Bug Fixes
 
 * https://couchbasecloud.atlassian.net/browse/JVMCBC-1687[JVMCBC-1687]:
-Fixed DelegatingAuthenticator to work with Protostellar
+Fixed `DelegatingAuthenticator` to work with Protostellar.
 * https://couchbasecloud.atlassian.net/browse/JVMCBC-1696[JVMCBC-1696]:
-Do not make bucketful KV connections to nodes that aren't hosting the bucket
+The client no longer makes bucketful KV connections to nodes that aren't hosting the bucket, ensuring that unconnected endpoints don't cause SDC health check to fail.
 * https://couchbasecloud.atlassian.net/browse/JVMCBC-1697[JVMCBC-1697]:
-Fixed a problem that caused the SDK to use more bandwidth than necessary when polling Couchbase Server 7.6 and later for cluster topology updates when the topology is in a steady state.
+Fixed a problem that caused the SDK to use more bandwidth than necessary when polling Couchbase Server 7.6 and later, for cluster topology updates when the topology is in a steady state.
 
 ===== Improvements
 
@@ -87,19 +87,26 @@ The SDK now tracks server cluster topology changes more efficiently, and no long
 * https://couchbasecloud.atlassian.net/browse/JVMCBC-1699[JVMCBC-1699]:
 If the bootstrap address resolution task does not complete before the cluster is disconnected, the task now terminates gracefully instead of logging a scary warning.
 * https://couchbasecloud.atlassian.net/browse/JVMCBC-1700[JVMCBC-1700]:
-Upgrade to Jackson 2.20.1
+Upgraded to `Jackson` `2.20.1`.
 * https://couchbasecloud.atlassian.net/browse/JVMCBC-1704[JVMCBC-1704]:
-Upgrade Netty from 4.1.127 to 4.1.128
+Upgraded `Netty` from `4.1.127` to `4.1.128`.
 
 ===== New Features
 
 * https://couchbasecloud.atlassian.net/browse/JVMCBC-1679[JVMCBC-1679]:
-Support short lived mTLS certs refresh without application restart Added new `cluster.authenticator(Authenticator)` method for updating the authenticator used by a cluster. Useful for scenarios where you want to refresh credentials without restarting your app.
+Support for short lived mTLS certs refresh without application restart.
+Added new `cluster.authenticator(Authenticator)` method for updating the authenticator used by a cluster.
+Useful for scenarios where you want to refresh credentials without restarting your app.
 * https://couchbasecloud.atlassian.net/browse/JVMCBC-1689[JVMCBC-1689]:
-Add JwtAuthenticator
+Added `JwtAuthenticator`.
+
 
 
 == Java SDK 3.9 Releases
+
+
+Version 3.9 of the Java SDK implements the 3.8 xref:compatibility.adoc#api-version[SDK API].
+See the xref:compatibility.adoc#couchbase-feature-availability-matrix[compatibility pages] for more information on feature compatibility with different versions of Couchbase Server.
 
 === Version 3.9.2 (10 October 2025)
 
