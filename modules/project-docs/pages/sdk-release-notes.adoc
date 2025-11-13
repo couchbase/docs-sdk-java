@@ -44,11 +44,11 @@ echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/pom.xml 
 ////
 
-=== Version 3.10.0 (?? November 2025)
+=== Version 3.10.0 (11 November 2025)
 
 This is the first release of the 3.10 series.
 
-https://packages.couchbase.com/clients/java/3.9.0/Couchbase-Java-Client-3.10.0.zip[Download] |
+https://packages.couchbase.com/clients/java/3.10.0/Couchbase-Java-Client-3.10.0.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.10.0/index.html[API Reference] |
 http://docs.couchbase.com/sdk-api/couchbase-core-io-3.10.0/[Core API Reference]
 
@@ -62,25 +62,41 @@ Optional artifacts on top of this SDK version are tested for the following compa
 .Optional Artifact Version Compatibility
 [options="header"]
 |=======================
-| Artifact                  | Couchbase Version | Built Against              | API Stability
+| Artifact                  | Couchbase Version  | Built Against              | API Stability
 | `tracing-opentelemetry`   | 3.10.0             | OpenTelemetry 1.31.0       | Committed
 | `tracing-opentracing`     | 3.10.0             | OpenTracing 0.33.0         | Committed
 | `metrics-opentelemetry`   | 3.10.0             | OpenTelemetry 1.31.0       | Volatile
 | `metrics-micrometer`      | 3.10.0             | Micrometer 1.12.9          | Volatile
 |=======================
 
-
-
 ==== Behavioral Changes
 
+===== Bugs
 
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1687[JVMCBC-1687]:
+Fixed DelegatingAuthenticator to work with Protostellar
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1696[JVMCBC-1696]:
+Do not make bucketful KV connections to nodes that aren't hosting the bucket
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1697[JVMCBC-1697]:
+Fixed a problem that caused the SDK to use more bandwidth than necessary when polling Couchbase Server 7.6 and later for cluster topology updates when the topology is in a steady state.
 
+===== Improvements
 
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1693[JVMCBC-1693]:
+The SDK now tracks server cluster topology changes more efficiently, and no longer sends redundant “get topology” requests during failover and rebalance.
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1699[JVMCBC-1699]:
+If the bootstrap address resolution task does not complete before the cluster is disconnected, the task now terminates gracefully instead of logging a scary warning.
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1700[JVMCBC-1700]:
+Upgrade to Jackson 2.20.1
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1704[JVMCBC-1704]:
+Upgrade Netty from 4.1.127 to 4.1.128
 
+===== New Features
 
-
-
-
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1679[JVMCBC-1679]:
+Support short lived mTLS certs refresh without application restart Added new `cluster.authenticator(Authenticator)` method for updating the authenticator used by a cluster. Useful for scenarios where you want to refresh credentials without restarting your app.
+* https://couchbasecloud.atlassian.net/browse/JVMCBC-1689[JVMCBC-1689]:
+Add JwtAuthenticator
 
 
 == Java SDK 3.9 Releases
