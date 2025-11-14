@@ -73,8 +73,6 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 ===== Bug Fixes
 
-* https://couchbasecloud.atlassian.net/browse/JVMCBC-1687[JVMCBC-1687]:
-Fixed `DelegatingAuthenticator` to work with Protostellar.
 * https://couchbasecloud.atlassian.net/browse/JVMCBC-1696[JVMCBC-1696]:
 The client no longer makes bucketful KV connections to nodes that aren't hosting the bucket, ensuring that unconnected endpoints don't cause SDC health check to fail.
 * https://couchbasecloud.atlassian.net/browse/JVMCBC-1697[JVMCBC-1697]:
