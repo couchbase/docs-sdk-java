@@ -17,7 +17,7 @@ asciidoc:
     sdk_current_version: '3.9.2'
     sdk_dot_minor: '3.9'
     sdk_dot_major: '3.x'
-    version-server: '7.6'
+    version-server: '8.0'
     version-common: '8.0'
     java_latest_lts_version: '25'
     name_platform: 'Java'
