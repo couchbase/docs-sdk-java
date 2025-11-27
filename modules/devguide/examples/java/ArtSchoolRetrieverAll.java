@@ -4,7 +4,7 @@ import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.query.QueryResult;
 import com.couchbase.client.java.ClusterOptions;
 
-public class ArtSchoolRetriever {
+public class ArtSchoolRetrieverAll {
 
     public static void main(String[] args) {
         
