@@ -17,7 +17,6 @@
 :upsertDesignDocument: pass:q[`upsertDesignDocument` method]
 :getDesignDocument: pass:q[`getDesignDocument`]
 
-include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 {description}
