@@ -1,8 +1,8 @@
 = Query
+:page-toclevels: 2
 :description: Parallel data management for complex queries over many records, using a familiar SQL-like syntax.
 :page-aliases: ROOT:n1ql-query.adoc,ROOT:prepared-statements.adoc,ROOT:querying.adoc
 
-include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 {description}
@@ -23,13 +23,26 @@ include::devguide:example$java/N1qlQueryExample.java[tag=n1ql_query_1,indent=0]
 
 == Indexes
 
-The Couchbase Query Service makes use of xref:7.1@server:learn:services-and-indexes/indexes/indexes.adoc[_indexes_] in order to do its work.
+The Couchbase Query Service makes use of xref:{version-server}@server:learn:services-and-indexes/indexes/indexes.adoc[_indexes_] in order to do its work.
 Indexes replicate subsets of documents from data nodes over to index nodes,
 allowing specific data (for example, specific document properties) to be retrieved quickly,
-and to distribute load away from data nodes in xref:7.1@server:learn:services-and-indexes/services/services.adoc[MDS] topologies.
+and to distribute load away from data nodes in xref:{version-server}@server:learn:services-and-indexes/services/services.adoc[MDS] topologies.
 
-[IMPORTANT]
-In order to make a bucket queryable, it must have at least one index defined.
+=== Query without Index
+
+From Couchbase Server 7.6 onwards,
+CRUD operations (such as `CREATE`, `INSERT`, and `SELECT`) and `JOIN` can be performed against the Query Service without an index (primary or secondary).
+This uses a xref:server:learn:services-and-indexes/indexes/query-without-index.adoc#sequential-scans[sequential scan], relying on a KV range scan to deliver the keys.
+
+Sequential scans are best suited to small collections where key order is unimportant, or where the overhead of maintaining an index can't be justified.
+For larger collections and greater performance, define the appropriate indexes to speed up your queries.
+For ordered document key operations, a primary index provides the same functionality, and will outperform a sequential scan.
+
+Creating the right index, with the right keys, right order, and right expression is critical to query performance in any database system.
+A Primary Index on the document keys will give you better search performance than trying to query without index,
+but well-chosen secondary indexes will make all the difference to query performance.
+
+=== Defining an Index
 
 You can define a _primary index_ on a bucket.
 When a _primary_ index is defined you can issue non-covered (see below) queries on the bucket as well.
@@ -59,7 +72,7 @@ Indexes help improve the performance of a query.
 When an index includes the actual values of all the fields specified in the query,
 the index _covers_ the query, and eliminates the need to fetch the actual values from the Data Service.
 An index, in this case, is called a _covering index_, and the query is called a _covered_ query.
-For more information, see xref:7.1@server:n1ql:n1ql-language-reference/covering-indexes.adoc[Covering Indexes].
+For more information, see xref:{version-server}@server:n1ql:n1ql-language-reference/covering-indexes.adoc[Covering Indexes].
 
 You can also create and define indexes in the SDK using:
 
@@ -125,7 +138,7 @@ and allows optimization on a case-by-case basis.
 
 == Collections and Scopes, and the Query Context
 
-From Couchbase Server release 7.0 the xref:7.1@server:learn:data/scopes-and-collections.adoc[Collections] feature lets you logically group similar documents into Collections.
+From Couchbase Server release 7.0 the xref:{version-server}@server:learn:data/scopes-and-collections.adoc[Collections] feature lets you logically group similar documents into Collections.
 
 You can query collections in {sqlpp}, by referring to a fully qualified keyspace.
 For example, to list the documents in the `airline` collection in the `inventory` scope:
@@ -135,7 +148,7 @@ For example, to list the documents in the `airline` collection in the `inventory
 SELECT * FROM `travel-sample`.inventory.airline;
 ----
 
-As a convenience, you can also query a partial keyspace from the xref:7.1@server:n1ql:n1ql-intro:sysinfo.adoc#query-context[Query Context] of a specific Scope. 
+As a convenience, you can also query a partial keyspace from the xref:{version-server}@server:n1ql:n1ql-intro:sysinfo.adoc#query-context[Query Context] of a specific Scope. 
 For example, from the context of `{backtick}travel-sample{backtick}.inventory`, you could abbreviate the previous query to:
 
 [source,sqlpp]
