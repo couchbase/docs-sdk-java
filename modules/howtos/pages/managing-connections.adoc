@@ -237,6 +237,35 @@ E.....@.@.............+....Z.'yZ..#........
 ====
 
 
+=== Choosing your Cipher Suite
+
+If your organization's security policy requires using specific TLS cipher suites,
+you can specify which ciphers to use with 
+link:++https://docs.couchbase.com/sdk-api/couchbase-core-io/com/couchbase/client/core/env/SecurityConfig.Builder.html#ciphers(java.util.List)++[the `security.ciphers` client setting].
+
+For example:
+
+[source,java]
+----
+Cluster cluster = Cluster.connect(
+  connectionString,
+  ClusterOptions.clusterOptions(username, password)
+    .environment(env -> env
+      .securityConfig(sec -> sec
+        .ciphers(List.of(
+          // TLS 1.3 cipher suites supported by
+          // Java and Couchbase Server.
+          "TLS_AES_128_GCM_SHA256",
+          "TLS_AES_256_GCM_SHA384"
+        )))));
+----
+
+To check which ciphers are available on a self-managed Couchbase Server installation, run:
+
+[source,console]
+----
+/opt/couchbase/bin/couchbase-cli setting-security -c localhost -u Administrator -p password --get
+----
 
 
 == Quarkus Java Extension
