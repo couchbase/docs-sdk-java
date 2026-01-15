@@ -70,17 +70,17 @@ Optional artifacts on top of this SDK version are tested for the following compa
 
 ==== Bug Fixes
 
-* https://jira.issues.couchbase.com/browse/JVMCBC-1709[JVMCBC-1709]: Enabling TLS inside an OSGi container no longer causes `java.lang.ClassNotFoundException: javax.net.ssl.TrustManagerFactory not found by core-io`
+* https://jira.issues.couchbase.com/browse/JVMCBC-1709[JVMCBC-1709]: Enabling TLS inside an OSGi container no longer causes `java.lang.ClassNotFoundException: javax.net.ssl.TrustManagerFactory not found by core-io`.
 
 
 ==== Improvements
 
-* https://jira.issues.couchbase.com/browse/JVMCBC-1707[JVMCBC-1707]: Upgraded Netty from 4.1.128 to 4.1.130.
+* https://jira.issues.couchbase.com/browse/JVMCBC-1707[JVMCBC-1707]:
+Upgraded `Netty` from `4.1.128` to `4.1.130`.
 
 * https://jira.issues.couchbase.com/browse/JCBC-2206[JCBC-2206]: Deprecated the Views API.
 +
-[NOTE]
-Server-side support for Views has been deprecated since Couchbase Server 7.0, and will be removed in a future server release.
+NOTE: Server-side support for Views has been deprecated since Couchbase Server 7.0, and will be removed in a future server release.
 
 
 === Version 3.10.0 (11 November 2025)
