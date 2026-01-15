@@ -44,7 +44,6 @@ echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/pom.xml 
 ////
 
-[[v3.10.1]]
 === Version 3.10.1 (14 January 2026)
 
 https://packages.couchbase.com/clients/java/3.10.1/Couchbase-Java-Client-3.10.1.zip[Download] |
