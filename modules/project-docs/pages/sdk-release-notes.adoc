@@ -44,6 +44,45 @@ echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/pom.xml 
 ////
 
+[[v3.10.1]]
+=== Version 3.10.1 (14 January 2026)
+
+https://packages.couchbase.com/clients/java/3.10.1/Couchbase-Java-Client-3.10.1.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.10.1/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-3.10.1/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Bug Fixes
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1709[JVMCBC-1709]: Enabling TLS inside an OSGi container no longer causes `java.lang.ClassNotFoundException: javax.net.ssl.TrustManagerFactory not found by core-io`.
+
+
+==== Improvements
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1707[JVMCBC-1707]:
+Upgraded `Netty` from `4.1.128` to `4.1.130`.
+
+* https://jira.issues.couchbase.com/browse/JCBC-2206[JCBC-2206]: Deprecated the Views API.
++
+NOTE: Server-side support for Views has been deprecated since Couchbase Server 7.0, and will be removed in a future server release.
+
+
 === Version 3.10.0 (11 November 2025)
 
 This is the first release of the 3.10 series.
