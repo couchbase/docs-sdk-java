@@ -258,7 +258,7 @@ xref:howtos:concurrent-document-mutations.adoc#pessimistic-locking[Pessimistic L
 
 == Expiration
 
-The expiration setting for a document determines if and when it expires.
+The expiration setting for a document determines if and when it expires -- see the xref:howtos:kv-operations.adoc#document-expiration[data operations page] for how to set this.
 When a document expires, Couchbase Server removes it.
 You can set a maximum time to live (`maxExpiry`) value on buckets and collections that imposes a default expiration on their documents.
 It also imposes an upper limit on explicitly-set expiration times.
