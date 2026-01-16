@@ -3,6 +3,8 @@
 :nav-title: Documents & Doc Ops
 :page-topic-type: concept
 :page-aliases: ROOT:documents.adoc,ROOT:documents-basics.adoc,ROOT:documents-atomic.adoc,ROOT:core-operations.adoc,7.6@server:developer-guide:expiry.adoc,7.6@server:developer-guide:creating-documents.adoc
+:page-toclevels: 2
+
 
 include::project-docs:partial$attributes.adoc[]
 
