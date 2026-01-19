@@ -262,7 +262,7 @@ NOTE: {sqlpp} is not the only query option in Couchbase.
 Be sure to check that xref:concept-docs:data-services.adoc[your use case fits your selection of query service].
 
 * For a deeper dive into {sqlpp} from the SDK, refer to our xref:concept-docs:n1ql-query.adoc[{sqlpp} SDK concept doc].
-* The xref:7.1@server:n1ql:n1ql-language-reference/index.adoc[Server doc {sqlpp} intro] introduces a complete guide to the {sqlpp} language, including all of the latest additions.
+* The xref:{version-server}@server:n1ql:n1ql-language-reference/index.adoc[Server doc {sqlpp} intro] introduces a complete guide to the {sqlpp} language, including all of the latest additions.
 * The http://query.pub.couchbase.com/tutorial/#1[{sqlpp} interactive tutorial] is a good introduction to the basics of {sqlpp} use.
-* For scaling up queries, be sure to xref:7.1@server:learn:services-and-indexes/indexes/index-replication.adoc[read up on Indexes].
+* For scaling up queries, be sure to xref:{version-server}@server:learn:services-and-indexes/indexes/index-replication.adoc[read up on Indexes].
 * Read more on xref:concept-docs:http-services.adoc#long-running-queries-big-data[when to choose the Analytics service].
