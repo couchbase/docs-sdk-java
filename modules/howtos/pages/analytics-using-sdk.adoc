@@ -19,7 +19,7 @@ or the Enterprise Edition of self-managed Couchbase Server.
 
 == Getting Started
 
-After familiarizing yourself with our xref:7.1@server:analytics:primer-beer.adoc[introductory primer],
+After familiarizing yourself with our xref:{version-server}@server:analytics:primer-beer.adoc[introductory primer],
 in particular creating a dataset and linking it to a bucket, try Couchbase Analytics using the Java SDK.
 Intentionally, the API for analytics is nearly identical to that of the query service.
 

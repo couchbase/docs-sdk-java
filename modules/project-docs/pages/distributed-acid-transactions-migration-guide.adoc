@@ -12,7 +12,7 @@ We subsequently chose to integrate transactions directly into the SDKs with the 
 
 This document details the small changes that existing users of the legacy transactions library need to make, to migrate to the SDK-integrated version.
 
-The xref:3.2@java-sdk:project-docs:distributed-transactions-java-release-notes.adoc[legacy transactions library] will continue to be supported with bugfixes for some time, but new transaction features will only be added to the SDK and it is recommended that all users migrate.
+The https://docs-archive.couchbase.com/java-sdk/3.2/project-docs/distributed-transactions-java-release-notes.html[legacy transactions library] will continue to be supported with bugfixes for some time, but new transaction features will only be added to the SDK and it is recommended that all users migrate.
 
 == Accessing transactions
 
@@ -184,5 +184,5 @@ include::devguide:example$java/TransactionsMigration.java[tag=log,indent=0]
 
 == Further Reading
 
-* There's plenty of explanation about how Transactions work in Couchbase in our xref:7.1@server:learn:data/transactions.adoc[Transactions documentation].
+* There's plenty of explanation about how Transactions work in Couchbase in our xref:{version-server}@server:learn:data/transactions.adoc[Transactions documentation].
 * The xref:howtos:distributed-acid-transactions-from-the-sdk.adoc[Java SDK transactions documentation].
