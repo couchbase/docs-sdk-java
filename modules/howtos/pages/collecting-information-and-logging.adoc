@@ -258,7 +258,7 @@ Once the SDK writes the logs with the tags to a file, you can then use the xref:
 
 == SDK Telemetry from the Server
 
-In addition to Tracing and other metrics, and client logging, SDK is telemetry is also sent to the Server -- available from 8.0, and in new Capella Operational clusters -- for ingestion with other Prometheus metrics.
+In addition to Tracing and other metrics, and client logging, SDK telemetry is also sent to the Server -- available from 8.0, and in new Capella Operational clusters -- for ingestion with other Prometheus metrics.
 Capella Operational exposes these metrics through the UI.
 
 For self-managed Server, collection can be disabled and enabled through the REST API:
