@@ -3,7 +3,7 @@
 :navtitle: Release Notes
 :page-toclevels: 2
 :page-partial:
-:page-aliases: relnotes-java-sdk.adoc,ROOT:sdk-release-notes.adoc,ROOT:relnotes-java-sdk.adoc,ROOT:release-notes.adoc,ROOT:download-links.adoc,server:sdks:java-2.2/download-links.adoc
+:page-aliases: relnotes-java-sdk.adoc,ROOT:sdk-release-notes.adoc,ROOT:relnotes-java-sdk.adoc,ROOT:release-notes.adoc,ROOT:download-links.adoc
 
 [abstract]
 {description}
