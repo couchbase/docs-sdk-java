@@ -1,27 +1,21 @@
 name: java-sdk
-version: '3.10'
+version: '3.11'
 title: Java SDK
 start_page: hello-world:overview.adoc
 nav:
 - modules/ROOT/nav.adoc
-ext:
-  preview:
-    HEAD:
-      sources:
-        docs-sdk-common:
-          branches: release/8.0
 asciidoc:
   attributes:
-    page-nav-header-levels: 1
+    page-nav-header-levels: 2
     server_version: '8.0.0'
-    sdk_current_version: '3.10.1'
-    sdk_dot_minor: '3.10'
+    sdk_current_version: '3.11.0'
+    sdk_dot_minor: '3.11'
     sdk_dot_major: '3.x'
     version-server: '8.0'
-    version-common: '8.0'
+    version-common: '8.0.1'
     java_latest_lts_version: '25'
     name_platform: 'Java'
     name-sdk: Java SDK
-    sdk_api: '3.8'
+    sdk_api: '3.9'
     sdk-api-link: https://docs.couchbase.com/sdk-api/couchbase-java-client/
     sdk-gh-link: https://github.com/couchbase/couchbase-jvm-clients/

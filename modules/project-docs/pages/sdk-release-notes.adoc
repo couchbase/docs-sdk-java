@@ -23,13 +23,13 @@ include::{version-common}@sdk:pages:partial$signed.adoc[tag=signed]
 
 
 [#latest-release]
-== Java SDK 3.10 Releases
+== Java SDK 3.11 Releases
 
 We always recommend using the latest version of the SDK -- it contains all of the latest security patches and support for new and upcoming features.
 All patch releases for each dot minor release should be API compatible, and safe to upgrade;
 any changes to expected behavior are noted in the release notes that follow.
 
-Version 3.10 of the Java SDK implements the 3.8 xref:compatibility.adoc#api-version[SDK API].
+Version 3.11 of the Java SDK implements the 3.9 xref:compatibility.adoc#api-version[SDK API].
 See the xref:compatibility.adoc#couchbase-feature-availability-matrix[compatibility pages] for more information on feature compatibility with different versions of Couchbase Server.
 
 
@@ -43,6 +43,29 @@ echo tracing-opentracing ; grep '<version>' $src/tracing-opentracing/pom.xml | h
 echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml | head -2 | tail -1 ; grep '<opentelemetry.version>' $src/pom.xml 
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/pom.xml 
 ////
+
+
+
+=== Version 3.11.0 (???? February 2026)
+
+This is the first release of the 3.11 series.
+
+https://packages.couchbase.com/clients/java/3.11.0/Couchbase-Java-Client-3.11.0.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.11.0/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-3.11.0/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+
+
+
+
+
+
+
+
+== Java SDK 3.10 Releases
+
 
 === Version 3.10.1 (14 January 2026)
 
