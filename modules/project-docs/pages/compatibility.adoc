@@ -112,6 +112,13 @@ The downside of these workarounds is potentially reduced performance, which can 
 
 
 
+// Platforms, Chipsets, and Virtual Environments.
+include::{version-common}@sdk:shared:partial$platform.adoc[tag=virtual]
+
+
+
+
+
 // Network Requirements
 include::{version-common}@sdk:shared:partial$network-requirements.adoc[]
 
