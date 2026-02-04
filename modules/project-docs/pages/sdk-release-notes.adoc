@@ -45,23 +45,65 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 ////
 
 
-
-=== Version 3.11.0 (???? February 2026)
-
-This is the first release of the 3.11 series.
+[[v3.11.0]]
+=== Version 3.11.0 (04 February 2026)
 
 https://packages.couchbase.com/clients/java/3.11.0/Couchbase-Java-Client-3.11.0.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.11.0/index.html[API Reference] |
-http://docs.couchbase.com/sdk-api/couchbase-core-io-3.11.0/[Core API Reference]
+https://docs.couchbase.com/sdk-api/couchbase-core-io-3.11.0/[Core API Reference]
 
 The supported and tested dependencies for this release are:
 
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
 
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
 
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.57.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.57.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
 
+==== Bug Fixes
 
+* https://jira.issues.couchbase.com/browse/JVMCBC-1705[JVMCBC-1705]:
+Fixed an issue that could cause the transaction cleanup task to terminate unexpectedly, leaving the SDK unable to clean up incomplete transactions.
 
+==== Improvements
 
+* https://jira.issues.couchbase.com/browse/JCBC-1739[JCBC-1739]:
+When inserting or replacing a document inside a transaction, it is now possible to specify an expiration time for the document.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1708[JVMCBC-1708]:
+Upgraded OpenTelemetry from `1.31.0` to `1.57.0`.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1692[JVMCBC-1692]:
+SQL++ statements are now excluded from tracing spans unless the query has parameters.
+
+* https://jira.issues.couchbase.com/browse/SCBC-501[SCBC-501]
+/ https://jira.issues.couchbase.com/browse/JCBC-2207[JCBC-2207]:
+Developers who want to use the latest https://opentelemetry.io/docs/specs/semconv/db/database-spans/[OpenTelemetry semantic conventions for database client spans] can now opt in by setting the `OTEL_SEMCONV_STABILITY_OPT_IN` environment variable to `database` (or `database/dup` to create duplicate spans using both old and new conventions).
+Java and Scala developers can also opt in via the `observabilitySemanticConventions` client setting, which has a higher precedence than the environment variable.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1635[JVMCBC-1635]:
+Upgraded Netty from `4.1.130` to `4.2.9`.
+[TIP]
+Netty 4.2 introduces a new memory allocator called `AdaptiveByteBufAllocator`.
+By default, this version of the Couchbase SDK continues using the tried and true `PooledByteBufAllocator`.
+However, the default may change in a future minor version.
+If you want to use the new allocator now, set the Java system property `com.couchbase.client.core.deps.io.netty.allocator.type` to `adaptive`.
+On the other hand, if you want to insulate your project from possible future changes to the default allocator, set that property to `pooled`.
+
+* https://jira.issues.couchbase.com/browse/JCBC-2211[JCBC-2211]:
+Added an optional `Jackson3JsonSerializer` which uses Jackson 3 for data binding.
+[CAUTION]
+The new `Jackson3JsonSerializer` does not support the `@Encrypted` annotation for automatic Field-Level Encryption.
+If your application relies on this feature, please continue using Jackson 2 for now.
 
 
 == Java SDK 3.10 Releases
