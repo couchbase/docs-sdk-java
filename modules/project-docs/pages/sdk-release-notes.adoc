@@ -45,7 +45,6 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 ////
 
 
-[[v3.11.0]]
 === Version 3.11.0 (04 February 2026)
 
 https://packages.couchbase.com/clients/java/3.11.0/Couchbase-Java-Client-3.11.0.zip[Download] |
@@ -80,14 +79,14 @@ Fixed an issue that could cause the transaction cleanup task to terminate unexpe
 When inserting or replacing a document inside a transaction, it is now possible to specify an expiration time for the document.
 
 * https://jira.issues.couchbase.com/browse/JVMCBC-1708[JVMCBC-1708]:
-Upgraded OpenTelemetry from `1.31.0` to `1.57.0`.
+Upgraded `OpenTelemetry` from `1.31.0` to `1.57.0`.
 
 * https://jira.issues.couchbase.com/browse/JVMCBC-1692[JVMCBC-1692]:
-SQL++ statements are now excluded from tracing spans unless the query has parameters.
+{sqlpp} statements are now excluded from tracing spans unless the query has parameters.
 
-* https://jira.issues.couchbase.com/browse/SCBC-501[SCBC-501]
-/ https://jira.issues.couchbase.com/browse/JCBC-2207[JCBC-2207]:
-Developers who want to use the latest https://opentelemetry.io/docs/specs/semconv/db/database-spans/[OpenTelemetry semantic conventions for database client spans] can now opt in by setting the `OTEL_SEMCONV_STABILITY_OPT_IN` environment variable to `database` (or `database/dup` to create duplicate spans using both old and new conventions).
+* https://jira.issues.couchbase.com/browse/JCBC-2207[JCBC-2207]:
+Developers who want to use the latest https://opentelemetry.io/docs/specs/semconv/db/database-spans/[OpenTelemetry semantic conventions for database client spans]
+can now opt in by setting the `OTEL_SEMCONV_STABILITY_OPT_IN` environment variable to `database` (or `database/dup` to create duplicate spans using both old and new conventions).
 Java and Scala developers can also opt in via the `observabilitySemanticConventions` client setting, which has a higher precedence than the environment variable.
 
 * https://jira.issues.couchbase.com/browse/JVMCBC-1635[JVMCBC-1635]:
