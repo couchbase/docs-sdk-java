@@ -51,6 +51,10 @@ https://packages.couchbase.com/clients/java/3.11.0/Couchbase-Java-Client-3.11.0.
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.11.0/index.html[API Reference] |
 https://docs.couchbase.com/sdk-api/couchbase-core-io-3.11.0/[Core API Reference]
 
+[CAUTION]
+This version has a serious bug that causes a document inserted in a transaction to expire immediately.
+If your project uses transactions, we recommend staying on 3.10.1 until 3.11.1 is available.
+
 The supported and tested dependencies for this release are:
 
 * io.projectreactor:**reactor-core:3.6.9**
