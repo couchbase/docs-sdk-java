@@ -45,6 +45,38 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 ////
 
 
+=== Version 3.11.1 (16 February 2026)
+
+https://packages.couchbase.com/clients/java/3.11.1/Couchbase-Java-Client-3.11.1.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.11.1/index.html[API Reference] |
+https://docs.couchbase.com/sdk-api/couchbase-core-io-3.11.1/[Core API Reference]
+
+This critical release fixes a regression in `3.11.0` that caused documents inserted in transactions to expire immediately.
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.57.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.57.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Bug Fixes
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1712[JVMCBC-1712]:
+Document inserted in transactions no longer expire immediately.
+This fixes a regression in `3.11.0`.
+
+
 === Version 3.11.0 (04 February 2026)
 
 https://packages.couchbase.com/clients/java/3.11.0/Couchbase-Java-Client-3.11.0.zip[Download] |
@@ -52,8 +84,8 @@ https://docs.couchbase.com/sdk-api/couchbase-java-client-3.11.0/index.html[API R
 https://docs.couchbase.com/sdk-api/couchbase-core-io-3.11.0/[Core API Reference]
 
 [CAUTION]
-This version has a serious bug that causes a document inserted in a transaction to expire immediately.
-If your project uses transactions, we recommend staying on 3.10.1 until 3.11.1 is available.
+This version has https://jira.issues.couchbase.com/browse/JVMCBC-1712[a serious bug that causes documents inserted in transactions to expire immediately].
+We recommend upgrading directly to `3.11.1`.
 
 The supported and tested dependencies for this release are:
 
@@ -79,8 +111,9 @@ Fixed an issue that could cause the transaction cleanup task to terminate unexpe
 
 ==== Improvements
 
-* https://jira.issues.couchbase.com/browse/JCBC-1739[JCBC-1739]:
-When inserting or replacing a document inside a transaction, it is now possible to specify an expiration time for the document.
+* [.line-through]#https://jira.issues.couchbase.com/browse/JCBC-1739[JCBC-1739]:
+When inserting or replacing a document inside a transaction, it is now possible to specify an expiration time for the document.#
+This feature was removed in `3.11.1` due to https://jira.issues.couchbase.com/browse/JVMCBC-1712[a serious bug] in `3.11.0`.
 
 * https://jira.issues.couchbase.com/browse/JVMCBC-1708[JVMCBC-1708]:
 Upgraded `OpenTelemetry` from `1.31.0` to `1.57.0`.
