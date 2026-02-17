@@ -15,13 +15,13 @@ The Full Text Search service also supports vector search from Couchbase Server 7
 
 == Getting Started
 
-NOTE: By default, FTS limits to 10 results per query. 
-If you do not provide a from, size, or other pagination settings in your query, the Search Service defaults to a size value of 10 and a from value of 0. 
+NOTE: By default, the Search Service limits to 10 results per query. 
+If you do not provide a `from`, xref:search:search-request-params.adoc#size-limit[`size`], or other pagination settings in your query, the Search Service defaults to a `size` value of 10 and a `from` value of 0. 
 This means the Search Service returns the first 10 matches to your query.
 
-For information about FTS limits, see xref:server:search:search-request-params.adoc[].
+For information about formatting your Search query and specifying limits, see xref:server:search:search-request-params.adoc[].
 
-For information about pagination, see the xref:server:fts:fts-search-response#pagination.adoc[Pagination].
+For information about pagination in Search responses, see xref:server:fts:fts-search-response#pagination.adoc[Pagination].
 
 After familiarizing yourself with how to create and query a Search index in the UI you can query it from the SDK. 
 
