@@ -111,8 +111,8 @@ Fixed an issue that could cause the transaction cleanup task to terminate unexpe
 
 ==== Improvements
 
-* [.line-through]#https://jira.issues.couchbase.com/browse/JCBC-1739[JCBC-1739]:
-When inserting or replacing a document inside a transaction, it is now possible to specify an expiration time for the document.#
+* [.line-through]##https://jira.issues.couchbase.com/browse/JCBC-1739[JCBC-1739]:
+When inserting or replacing a document inside a transaction, it is now possible to specify an expiration time for the document.##
 This feature was removed in `3.11.1` due to https://jira.issues.couchbase.com/browse/JVMCBC-1712[a serious bug] in `3.11.0`.
 
 * https://jira.issues.couchbase.com/browse/JVMCBC-1708[JVMCBC-1708]:
