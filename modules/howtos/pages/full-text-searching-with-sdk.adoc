@@ -46,7 +46,7 @@ Exception in thread "main" com.couchbase.client.core.error.IndexNotFoundExceptio
 .Search Results Limit
 ====
 By default, the Search Service returns only the first 10 matches (`size: 10`, `from: 0`).
-To retrieve more results, you must explicitly define pagination settings such as size or from in your query.
+To retrieve more results, you must explicitly define pagination settings such as `size` or `from` in your query.
 
 For information about formatting your Search query and specifying limits, see xref:server:search:search-request-params.adoc[].
 
