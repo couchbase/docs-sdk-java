@@ -1,17 +1,17 @@
 = Search
-:description: You can use the Full Text Search service (FTS) to create queryable full-text indexes in Couchbase Server.
+:description: You can use the Search Service to create queryable full-text indexes in Couchbase Server.
 :page-toclevels: 2
 :page-aliases: ROOT:search-query.adoc, ROOT:full-text-searching-with-sdk.adoc
 
 [abstract]
 {description}
 
-Full Text Search or FTS allows you to create, manage and query full text indexes on JSON documents stored in Couchbase buckets.
+Search Service or Search allows you to create, manage and query full-text indexes on JSON documents stored in Couchbase buckets.
 It uses natural language processing for indexing and querying documents, provides relevance scoring on the results of your queries and has fast indexes for querying a wide range of possible text searches.
 
 Some of the supported query-types include simple queries like Match and Term queries, range queries like Date Range and Numeric Range and compound queries for conjunctions, disjunctions and/or boolean queries.
 
-The Full Text Search service also supports vector search from Couchbase Server 7.6 onwards.
+The Search Service also supports vector search from Couchbase Server 7.6 onwards.
 
 == Getting Started
 
@@ -50,7 +50,7 @@ To retrieve more results, you must explicitly define pagination settings such as
 
 For information about formatting your Search query and specifying limits, see xref:server:search:search-request-params.adoc[].
 
-For information about pagination in Search responses, see xref:server:fts:fts-search-response#pagination.adoc[Pagination].
+For information about pagination in Search responses, see xref:server:fts:fts-search-response.adoc#pagination[Pagination].
 ====
 
 == Search Queries
