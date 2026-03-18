@@ -119,7 +119,7 @@ If you have problems, refer to the xref:ref:client-settings.adoc#constrained-net
 ====
 
 
-=== Directly on Machine
+=== Directly on Your Local Machine
 
 At this point, we have installed the dependencies, loaded the travel-sample data and configured the application with the credentials.
 The application is now ready and you can run it.
@@ -156,7 +156,8 @@ If you choose not to pass the environment variables, you can update the `applica
 === Verifying the Application
 
 Once the application starts, you can see the details of the application on the logs.
-image::app-startup-spring-boot.png[]
+
+image::app-startup-spring-boot.png[Startup Logs]
 
 The application will run on port 8080 of your local machine -- `http://localhost:8080`.
 You will find the interactive Swagger documentation of the API if you go to the URL in your browser.
