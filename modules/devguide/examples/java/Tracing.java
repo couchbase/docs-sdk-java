@@ -26,10 +26,11 @@ public class Tracing {
     {
       {
         // tag::tracing-configure[]
-        ThresholdLoggingTracerConfig.Builder config = ThresholdLoggingTracerConfig.builder()
-            .emitInterval(Duration.ofMinutes(1)).kvThreshold(Duration.ofSeconds(2));
-
-        CoreEnvironment environment = CoreEnvironment.builder().thresholdLoggingTracerConfig(config).build();
+        
+        Consumer<ThresholdLoggingTracerConfig.Builder> loggingConsumer = new Consumer<ThresholdLoggingTracerConfig.Builder>() {
+            @Override public void accept(ThresholdLoggingTracerConfig.Builder builder) {
+            builder.enabled(true).emitInterval(Duration.ofMinutes(1)).kvThreshold(Duration.ofSeconds(2)).build(); 
+              
         // end::tracing-configure[]
       }
     }
