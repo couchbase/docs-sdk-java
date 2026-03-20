@@ -29,8 +29,10 @@ public class Tracing {
         
         Consumer<ThresholdLoggingTracerConfig.Builder> loggingConsumer = new Consumer<ThresholdLoggingTracerConfig.Builder>() {
             @Override public void accept(ThresholdLoggingTracerConfig.Builder builder) {
-            builder.enabled(true).emitInterval(Duration.ofMinutes(1)).kvThreshold(Duration.ofSeconds(2)).build(); 
-              
+            builder.enabled(true).emitInterval(Duration.ofMinutes(1)).kvThreshold(Duration.ofSeconds(2)).build();
+        }
+      };        
+      ClusterEnvironment env = ClusterEnvironment.builder().thresholdLoggingTracerConfig(config).build();
         // end::tracing-configure[]
       }
     }
