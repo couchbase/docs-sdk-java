@@ -119,7 +119,7 @@ In addition, you'll need to get the metrics data into your metrics backend.
 This is often done by having the metrics backend (such as Prometheus) regularly gather, or 'scrape', the metrics data.
 
 There are multiple approaches here.
-The `opentelemetry-exporter-prometheus` library makes it possible to open an HTTP server in the application that Prometheus can then scape.
+The `opentelemetry-exporter-prometheus` library makes it possible to open an HTTP server in the application that Prometheus can then scrape.
 
 As that library is in alpha, here we will instead show how to send OpenTelemetry metrics into `opentelemetry-collector`, where it can be scraped by Prometheus or another metrics backend.
 
