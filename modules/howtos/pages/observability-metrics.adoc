@@ -18,7 +18,8 @@ Or, sent into the OpenTelemetry or Micrometer libraries, where they can be sent 
 
 The default implementation aggregates and logs request and response metrics.
 
-By default the metrics will be emitted every 10 minutes, but you can customize the emit interval as well:
+By default the metrics will be emitted every 10 minutes, but you can customize the emit interval as well.
+Here is an example with `emitInterval` set at 30 seconds:
 
 [source,java]
 ----
@@ -26,7 +27,7 @@ include::devguide:example$java/Metrics.java[tag=metrics-enable-custom,indent=0]
 ----
 
 Once enabled, there is no further configuration needed. The `LoggingMeter` will emit the collected request statistics every interval.
-A possible report looks like this (prettified for better readability):
+A possible report -- in this case for an `emitInterval` of 10 seconds -- looks like this (prettified for better readability):
 
 [source,json]
 ----
