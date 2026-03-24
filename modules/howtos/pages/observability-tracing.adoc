@@ -14,14 +14,33 @@ To give insight into a request/response flow, the SDK provides a `RequestTracer`
 By default, the SDK will emit information about requests that are over a configurable threshold every 10 seconds. 
 Note that if no requests are over the threshold no event / log will be emitted.
 
-It is possible to customize this behavior by modifying the configuration:
+It is possible to customize this behavior by modifying the configuration.
+The recommended way to configure the environment is via a callback when connecting to the cluster:
 
 [source,java]
 ----
-include::devguide:example$java/Tracing.java[tag=tracing-configure,indent=0]
+var cluster = Cluster.connect(
+  connectionString,
+  clusterOptions(username, password)
+    .environment(env -> env
+      .thresholdLoggingTracerConfig(config -> config
+        .enabled(true)  // it's enabled by default, so this line is not strictly necessary
+        .emitInterval(Duration.ofMinutes(1))
+        .kvThreshold(Duration.ofSeconds(2))
+      )
+    )
+);
 ----
 
 In this case the emit interval is one minute and Key/Value requests will only be considered if their latency is greater or equal than two seconds.
+
+// Don't think we'll need to call this out explicitly, but it's here if we need to uncomment it:
+//
+// TIP:
+// Using the `ClusterOptions.environment()`, as in the above snippet, ensures that the SDK manages the environment --
+// shutting down after disconnecting from the cluster.
+// If you create your own `own ClusterEnvironent` or `ClusterEnvironment.Builder` then you will need to manage the environment yourself.
+
 
 The JSON blob emitted looks similar to the following (prettified here for readability):
 
