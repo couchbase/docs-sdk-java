@@ -167,4 +167,4 @@ The following snippet takes a `Mono<GetResult>` from the SDK and converts it int
 include::devguide:example$java/AsyncOperations.java[tag=rs-conversion]
 ----
 
-The same strategy can be used to convert to https://akka.io/[Akka^], but if you are working in the scala world we recommend using our first-class Scala SDK directly instead!
+The same strategy can be used to convert to https://akka.io/[Akka^], but if you are working in the Scala world we recommend using our first-class Scala SDK directly instead!
