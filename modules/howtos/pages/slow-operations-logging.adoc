@@ -16,7 +16,7 @@ Threshold logging is the recording of slow operations -- useful for diagnosing w
 
 === Configuring Threshold Logging
 
-To configure threshold logging, adjust the xref:ref:client-settings.adoc#general-options[ThresholdRequestTracer].
+To configure threshold logging, adjust the xref:observability-tracing.adoc#the-default-thresholdloggingtracer[ThresholdRequestTracer].
 You should expect to see output in JSON format in the logs for the services encountering problems:
 
 [source,json]
