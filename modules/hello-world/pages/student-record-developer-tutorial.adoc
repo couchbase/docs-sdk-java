@@ -49,7 +49,7 @@ In a relational database, this is usually a link record that creates a relations
 In a relational model, the database contains a list of students and a list of courses. 
 Each student can enroll in multiple courses.
 
-A student’s enrollment record is stored in a separate table called `enrollment`, which links that record to the courses they are enrolling in.
+A student's enrollment record is stored in a separate table called `enrollment`, which links that record to the courses they are enrolling in.
 
 [plantuml,student-record-erd,svg]
 ....
@@ -78,7 +78,7 @@ include::partial$diagrams/student-document-database-design.puml[]
 With JSON, you can change the structure of the document without having to rebuild schemas. 
 For example, you can add a new field to store students' email addresses without migrating existing data to a new schema.
 
-In a document database, a student’s record and their course records can look similar to this:
+In a document database, a student's record and their course records can look similar to this:
 
 .Student record
 [source, json]
@@ -122,8 +122,8 @@ In a document database, a student’s record and their course records can look s
 }
 ----
 
-Hilary’s enrollment is stored in the same document as her student details, which means child information is stored with its parent. 
-This structure lets you access and retrieve all of Hilary’s details with one search and without the need for complex table joins.
+Hilary's enrollment is stored in the same document as her student details, which means child information is stored with its parent. 
+This structure lets you access and retrieve all of Hilary's details with one search and without the need for complex table joins.
 
 NOTE: You should not store a student with their course record as it can lead to data duplication and make it difficult to maintain your data. 
 For example, you would need to access every single student record in your cluster to change the `credit-points`.
@@ -207,7 +207,7 @@ To create the second collection, follow the above steps but use the existing `st
 
 The two collections allow you to use the relational model and the document model at the same time to achieve the best design and performance possible.
 
-The `student-record-collection` contains student records, and each student record contains a list of that student’s enrollments. 
+The `student-record-collection` contains student records, and each student record contains a list of that student's enrollments. 
 Unlike the standard relational model decomposition where a link table is created between students and courses, a document model stores the enrollments as part of the student records.
 
 The `course-record-collection`, on the other hand, uses the relational model to link the enrollment records to the course records they apply to. 
@@ -395,7 +395,7 @@ If the connection is successful, the collection name outputs in the console log.
 +
 image::student-record-collection-console-output.png[alt="Console showing successful connection to server"]
 
-If you come across errors in your console, see the <<#roubleshooting,troubleshooting section>>.
+If you come across errors in your console, see the <<#troubleshooting,troubleshooting section>>.
 
 
 
@@ -418,7 +418,7 @@ include::devguide:example$java/InsertStudent.java[]
 . Run the command `mvn install` to pull in all the dependencies and rebuild your application.
 . Run the following command to insert the student record into the collection:
 +
-[source, sh]
+[source, console]
 ----
 mvn exec:java -Dexec.mainClass="InsertStudent" -Dexec.cleanupDaemonThreads=false
 ----
@@ -449,7 +449,7 @@ include::devguide:example$java/InsertCourses.java[]
 . Run the command `mvn install` to pull in all the dependencies and rebuild your application.
 . Run the following command to insert the student record into the collection:
 +
-[source, sh]
+[source, console]
 ----
 mvn exec:java -Dexec.mainClass="InsertCourses" -Dexec.cleanupDaemonThreads=false
 ----
@@ -458,7 +458,7 @@ mvn exec:java -Dexec.mainClass="InsertCourses" -Dexec.cleanupDaemonThreads=false
 +
 image::new-course-records.png[alt="Courses added to the course-record-collection in the cluster"]
 
-If you come across errors in your console, see the <<#roubleshooting,troubleshooting section>>.
+If you come across errors in your console, see the <<#troubleshooting,troubleshooting section>>.
 
 
 
@@ -636,7 +636,7 @@ include::devguide:example$java/ArtSchoolRetrieverAll.java[]
 . Run the command `mvn install` to pull in all the dependencies and rebuild your application.
 . Run the following command to retrieve all course records:
 +
-[source, sh]
+[source, console]
 ----
 mvn exec:java -Dexec.mainClass="ArtSchoolRetriever" -Dexec.cleanupDaemonThreads=false
 ----
@@ -663,7 +663,7 @@ include::devguide:example$java/ArtSchoolRetriever.java[]
 . Run the command `mvn install` to pull in all the dependencies and rebuild your application.
 . Run the following command to retrieve all course records:
 +
-[source, sh]
+[source, console]
 ----
 mvn exec:java -Dexec.mainClass="ArtSchoolRetrieverParameters" -Dexec.cleanupDaemonThreads=false
 ----
@@ -710,7 +710,7 @@ mvn exec:java -Dexec.mainClass="AddEnrollments" -Dexec.cleanupDaemonThreads=fals
 +
 image::updated-student-record.png[alt="Updated student record with course enrollment" width="600" height="800"]
 
-If you come across errors in your console, see the <<#roubleshooting,troubleshooting section>>.
+If you come across errors in your console, see the <<#troubleshooting,troubleshooting section>>.
 
 === Next Steps
 
