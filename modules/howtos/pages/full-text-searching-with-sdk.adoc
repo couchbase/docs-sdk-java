@@ -1,12 +1,12 @@
 = Search
-:description: You can use the Search Service to create queryable full-text indexes in Couchbase Server.
+:description: You can use the Search Service to create queryable Search indexes in Couchbase Server.
 :page-toclevels: 2
 :page-aliases: ROOT:search-query.adoc, ROOT:full-text-searching-with-sdk.adoc
 
 [abstract]
 {description}
 
-The Search Service allows you to create, manage and query full-text indexes on JSON documents stored in Couchbase buckets.
+The Search Service allows you to create, manage and query Search indexes on JSON documents stored in Couchbase buckets.
 It uses natural language processing for indexing and querying documents, provides relevance scoring on the results of your queries and has fast indexes for querying a wide range of possible text searches.
 
 Some of the supported query-types include simple queries like Match and Term queries, range queries like Date Range and Numeric Range and compound queries for conjunctions, disjunctions and/or boolean queries.
@@ -20,10 +20,10 @@ After familiarizing yourself with how to create and query a Search index in the 
 There are two APIs for querying search: `cluster.searchQuery()`, and `cluster.search()`.
 Both are also available at the Scope level.
 
-The former API supports FTS queries (`SearchQuery`), while the latter additionally supports the `VectorSearch` added in 7.6.
+The former API supports Search queries (`SearchQuery`), while the latter additionally supports the `VectorSearch` added in 7.6.
 Most of this documentation will focus on the former API, as the latter is in @Stability.Volatile status.
 
-We will perform an FTS query here - see the xref:vector-searching-with-sdk.adoc[Vector Search] docs for examples of Vector and xref:vector-searching-with-sdk.adoc#combining-fts-and-vector-queries[combining Vector and FTS].
+We will perform a Search query here -- see the xref:vector-searching-with-sdk.adoc[Vector Search] docs for examples of Vector and xref:vector-searching-with-sdk.adoc#combining-fts-and-vector-queries[combining Vector and Search queries].
 
 [source,java]
 ----
@@ -99,7 +99,7 @@ The `SearchRow` contains the following methods:
 .SearchRow
 [options="header"]
 |====
-| `index()` | The name of the FTS index that gave this result.
+| `index()` | The name of the Search index that gave this result.
 | `id()` | The id of the matching document.
 | `score()` | The score of this hit.
 | `explanation()` | If enabled provides an explanation in JSON form.
@@ -115,20 +115,20 @@ so if you absolutely need to check if all partitions are present in the result d
 (and not only catch an exception on the query itself).
 
 == Scoped vs Global Indexes
-The FTS APIs exist at both the `Cluster` and `Scope` levels.
+The Search APIs exist at both the `Cluster` and `Scope` levels.
 
-This is because FTS supports, as of Couchbase Server 7.6, a new form of "scoped index" in addition to the traditional "global index".
+This is because the Search Service supports, as of Couchbase Server 7.6, a new form of "scoped index" in addition to the traditional "global index".
 
 It's important to use the `Cluster.searchQuery()` or `Cluster.search()` for global indexes, and `Scope.search()` for scoped indexes.
 
 
 ////
 == Vector Search
-As of Couchbase Server 7.6, the FTS service supports vector search in additional to traditional full text search queries.
+As of Couchbase Server 7.6, the Search Service supports vector search in additional to traditional search queries.
 // todo link to the server docs when available
 
 === Examples
-==== Single vector query
+==== Single Vector Query
 In this first example we are performing a single vector query:
 
 [source,java]
@@ -137,7 +137,7 @@ include::devguide:example$java/Search.java[tag=vector1,indent=0]
 ----
 
 Let's break this down.
-We create a `SearchRequest`, which can contain a traditional FTS query `SearchQuery` and/or the new `VectorSearch`.
+We create a `SearchRequest`, which can contain a traditional Search query `SearchQuery` and/or the new `VectorSearch`.
 Here we are just using the latter.
 
 The `VectorSearch` allows us to perform one or more `VectorQuery` s.
@@ -146,14 +146,14 @@ The `VectorQuery` itself takes the name of the document field that contains embe
 
 (Note that Couchbase itself is not involved in generating the vectors, and these will come from an external source such as an embeddings API.)
 
-Finally we execute the `SearchRequest` against the FTS index "travel-sample-index", which has previously been setup to vector index the "vector_field" field.
+Finally we execute the `SearchRequest` against the Search index "travel-sample-index", which has previously been setup to vector index the "vector_field" field.
 
 This happens to be a scoped index so we are using `scope.search()`.
 If it was a global index we would use `cluster.search()` instead - see <<Scoped vs Global Indexes>>.
 
 It returns the same `SearchResult` detailed earlier.
 
-==== Multiple vector queries
+==== Multiple Vector Queries
 You can run multiple vector queries together:
 
 [source,java]
@@ -163,8 +163,9 @@ include::devguide:example$java/Search.java[tag=vector3,indent=0]
 
 How the results are combined (ANDed or ORed) can be controlled with `vectorSearchOptions().vectorQueryCombination()`.
 
-==== Combining FTS and vector queries
-You can combine a traditional FTS query with vector queries:
+==== Combining Search and Vector Queries
+
+You can combine a traditional Search query with vector queries:
 
 [source,java]
 ----
@@ -174,8 +175,8 @@ include::devguide:example$java/Search.java[tag=vector2,indent=0]
 How the results are combined (ANDed or ORed) can be controlled with `vectorSearchOptions().vectorQueryCombination()`.
 ////
 
-// ==== FTS queries
-// And note that traditional FTS queries, without vector search, are also supported with the new `cluster.search()` / `scope.search()` APIs:
+// ==== Search queries
+// And note that traditional Search queries, without Vector Search, are also supported with the new `cluster.search()` / `scope.search()` APIs:
 
 [source,java]
 ----
