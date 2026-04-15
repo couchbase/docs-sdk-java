@@ -44,6 +44,39 @@ echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/pom.xml 
 ////
 
+=== Version 3.11.2 (13 April 2026)
+
+https://packages.couchbase.com/clients/java/3.11.2/Couchbase-Java-Client-3.11.2.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.11.2/index.html[API Reference] |
+https://docs.couchbase.com/sdk-api/couchbase-core-io-3.11.2/[Core API Reference]
+
+This maintenance release upgrades Netty and Jackson to the latest versions.
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.57.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.57.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1726[JVMCBC-1726]:
+Upgraded Netty from to `4.2.9` to `4.2.12`.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1723[JVMCBC-1723]:
+Upgraded Jackson from `2.20.1` to `2.21.2`.
+
 
 === Version 3.11.1 (16 February 2026)
 
