@@ -1,9 +1,9 @@
 = Couchbase Java SDK Documentation
 
-This repository hosts the documentation source for the https://docs.couchbase.com/java-sdk/3.11/hello-world/overview.html[Couchbase Java SDK].
+This repository hosts the documentation source for the https://docs.couchbase.com/java-sdk/3.12/hello-world/overview.html[Couchbase Java SDK].
 
-This branch documents the 3.11 release of the SDK.
-It follows the https://docs.couchbase.com/java-sdk/3.11/project-docs/compatibility.html#api-version[SDK 3.9 API].
+This branch documents the 3.12 release of the SDK.
+It follows the https://docs.couchbase.com/java-sdk/3.11/project-docs/compatibility.html#api-version[SDK 3.10 API].
 
 This branch reflects the new Information Architecture for the SDK docs, helping to guide new-to-Couchbase users through the pitfalls of a complex distributed system.
 
@@ -121,7 +121,7 @@ Update the following files:
 
 === New Branches
 
-Production branches use the *release/x.y* naming pattern (e.g. `release/3.10`, `release/3.11`).
+Production branches use the *release/x.y* naming pattern (e.g. `release/3.12`, `release/3.11`).
 Antora uses the branch names in the playbook, but also uses the `version` given in the antor.yml file, to create the version navigation -- so this version number must be unique within the repo for any branches included in the playbook.
 When creating a new branch for a new release, remember to update the antora.yml file before trying to build.
 
