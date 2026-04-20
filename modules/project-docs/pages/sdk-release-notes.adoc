@@ -3,7 +3,7 @@
 :navtitle: Release Notes
 :page-toclevels: 2
 :page-partial:
-:page-aliases: relnotes-java-sdk.adoc,ROOT:sdk-release-notes.adoc,ROOT:relnotes-java-sdk.adoc,ROOT:release-notes.adoc,ROOT:download-links.adoc,server:sdks:java-2.2/download-links.adoc
+// :page-aliases: relnotes-java-sdk.adoc,ROOT:sdk-release-notes.adoc,ROOT:relnotes-java-sdk.adoc,ROOT:release-notes.adoc,ROOT:download-links.adoc,server:sdks:java-2.2/download-links.adoc
 
 [abstract]
 {description}
@@ -43,6 +43,12 @@ echo tracing-opentracing ; grep '<version>' $src/tracing-opentracing/pom.xml | h
 echo metrics-opentelemetry ; grep '<version>' $src/metrics-opentelemetry/pom.xml | head -2 | tail -1 ; grep '<opentelemetry.version>' $src/pom.xml 
 echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | head -2 | tail -1 ; grep '<micrometer.version>' $src/pom.xml 
 ////
+
+
+
+// before GA
+// uncomment aliases
+// and comment out in 3.11
 
 
 === Version 3.12.0 (??????? 2026)
