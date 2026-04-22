@@ -51,7 +51,7 @@ include::{version-common}@sdk:shared:partial$start-using-sdk.adoc[tag=other-tuto
 include::{version-common}@sdk:shared:partial$start-using-sdk.adoc[tag=before]
 
 
-w
+
 // Script the docs!
 // Can any of the SDK installations be scripted?
 
