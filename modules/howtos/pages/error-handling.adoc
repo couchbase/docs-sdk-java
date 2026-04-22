@@ -35,7 +35,7 @@ All the specifics are discussed below, but a broad categorization of exceptions 
  For example, if you perform an `insert` operation and the document already exists, the SDK will fail the operation with a `DocumentExistsException`.
  2. Failures in all other cases, especially during pre-dispatch and dispatch, will result in either a `TimeoutException` or a `RequestCanceledException`.
 
-=== The Ubiquitous TimeoutException
+=== TimeoutException -- Ambiguous or Unambiguous
 
 The one exception that you are inevitably going to hit is the `TimeoutException`, 
 or more specifically its child implementations the `UnambiguousTimeoutException` and the `AmbiguousTimeoutException`.
