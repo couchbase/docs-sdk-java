@@ -1071,8 +1071,10 @@ This release allows configuration of a socket option, `TCP_USER_TIMEOUT`, which 
 The default for this option is 20 seconds.
 The default may be overridden to a value between 1 and 120 seconds using the `io.tcpUserTimeout` setting in `ClusterEnvironment`.
 For example, on the ClusterEnvironment.Builder, you would call `.ioConfig(io -> io.tcpUserTimeout(Duration.ofSeconds(30))` to set the timeout to 30 seconds.
++
 Please note that this setting only propagates to the OS on Linux when the default epoll transport is used.
 On all other platforms, the OS-configured time is used (and you need to tune it there if you want to customize the default behavior).
++
 This change is a backport of a change originally targeted to the 3.12 release.
 
 === Version 3.6.3 (19 August 2024)
