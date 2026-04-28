@@ -1058,24 +1058,29 @@ Optional artifacts on top of this SDK version are tested for the following compa
 [options="header"]
 |=======================
 | Artifact                  | Couchbase Version | Built Against              | API Stability
-| `tracing-opentelemetry`   | 1.4.2             | OpenTelemetry 1.31.0       | Committed
-| `tracing-opentracing`     | 1.4.2             | OpenTracing 0.33.0         | Committed
-| `metrics-opentelemetry`   | 0.6.2             | OpenTelemetry 1.31.0       | Volatile
-| `metrics-micrometer`      | 0.6.2             | Micrometer 1.10.9          | Volatile
+| `tracing-opentelemetry`   | 1.4.4             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.4.4             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.6.4             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.6.4             | Micrometer 1.10.10         | Volatile
 |=======================
 
 ==== Improvements
 
 * https://issues.couchbase.com/browse/JVMCBC-1729[JVMCBC-1729]:
-This release allows configuration of a socket option, `TCP_USER_TIMEOUT`, which configures the OS to detect dead TCP connections more quickly than waiting for a global OS-level TCP timeout.
-The default for this option is 20 seconds.
-The default may be overridden to a value between 1 and 120 seconds using the `io.tcpUserTimeout` setting in `ClusterEnvironment`.
-For example, on the `ClusterEnvironment.Builder`, you would call `.ioConfig(io -> io.tcpUserTimeout(Duration.ofSeconds(30))` to set the timeout to 30 seconds.
+When running on Linux, the SDK now sets the `TCP_USER_TIMEOUT` socket option so it can detect dead connections more quickly.
+By default, the SDK sets the timeout to 20 seconds.
+You can override the default by configuring the new `io.tcpUserTimeout` client setting.
+For example, to set the timeout to 30 seconds you would configure the `ClusterEnvironment.Builder` like this:
 +
-Please note that this setting only propagates to the OS on Linux when the default epoll transport is used.
-On all other platforms, the OS-configured time is used (and you need to tune it there if you want to customize the default behavior).
+[source,java]
+----
+env.ioConfig(io -> io.tcpUserTimeout(Duration.ofSeconds(30)))
+----
 +
-This change is a backport of a change originally targeted to the 3.12 release.
+Thank you to community member Omer Cilingir <omer.cilingir@bkm.com.tr> for this contribution.
++
+NOTE: This is a backport of a feature from version 3.12.0.
+It is not present in SDK versions before 3.12.0 unless mentioned in the release notes.
 
 === Version 3.6.3 (19 August 2024)
 
@@ -1265,6 +1270,49 @@ Previously, the SDK assumed `1` was the default value, and omitted the parameter
 
 
 == Java SDK 3.5 Releases
+
+=== Version 3.5.4 (27 April 2026)
+
+This is a maintenance release.
+
+https://packages.couchbase.com/clients/java/3.5.4/Couchbase-Java-Client-3.5.4.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.5.4/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-2.5.4/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.5.8**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Couchbase Version | Built Against              | API Stability
+| `tracing-opentelemetry`   | 1.3.4             | OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     | 1.3.4             | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | 0.5.4             | OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      | 0.5.4             | Micrometer 1.10.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://issues.couchbase.com/browse/JVMCBC-1729[JVMCBC-1729]:
+When running on Linux, the SDK now sets the `TCP_USER_TIMEOUT` socket option so it can detect dead connections more quickly.
+By default, the SDK sets the timeout to 20 seconds.
+You can override the default by configuring the new `io.tcpUserTimeout` client setting.
+For example, to set the timeout to 30 seconds you would configure the `ClusterEnvironment.Builder` like this:
++
+[source,java]
+----
+env.ioConfig(io -> io.tcpUserTimeout(Duration.ofSeconds(30)))
+----
++
+Thank you to community member Omer Cilingir <omer.cilingir@bkm.com.tr> for this contribution.
++
+NOTE: This is a backport of a feature from version 3.12.0.
+It is not present in SDK versions before 3.12.0 unless mentioned in the release notes.
 
 === Version 3.5.3 (6 February 2024)
 
