@@ -8,15 +8,15 @@
 [abstract]
 {description}
 
-These pages cover the 3._x_ versions of the Couchbase Java SDK. 
-For release notes, download links, and installation methods for 2.7 and earlier releases of the Couchbase Java Client, please see the https://docs-archive.couchbase.com/java-sdk/2.7/sdk-release-notes.html[2.x Java Release Notes & Download Archive].
+include::{version-common}@sdk:shared:partial$relnotes.adoc[tag=intro]
+
 
 === Installation
 
-See the xref:project-docs:sdk-full-installation.adoc[Full Installation] guide for details.
+include::{version-common}@sdk:shared:partial$relnotes.adoc[tag=installation-moved]
 
-
-include::{version-common}@sdk:pages:partial$signed.adoc[tag=signed]
+// JVM signed
+include::{version-common}@sdk:shared:partial$relnotes.adoc[tag=signed]
 
 
 // tag::all[]
@@ -3756,5 +3756,5 @@ Numerous _Alpha_ and _Beta_ releases were made in the run-up to the 3.0 release,
 
 == Older Releases
 
-Although https://www.couchbase.com/support-policy/EOL/[no longer supported], documentation for older releases continues to be available in our https://docs-archive.couchbase.com/home/index.html[docs archive].
+include::{version-common}@sdk:shared:partial$relnotes.adoc[tag=older]
 // end::all[]
