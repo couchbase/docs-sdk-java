@@ -23,13 +23,13 @@ include::{version-common}@sdk:shared:partial$relnotes.adoc[tag=signed]
 
 
 [#latest-release]
-== Java SDK 3.12 Releases
+== Java SDK 3.13 Releases
 
 We always recommend using the latest version of the SDK -- it contains all of the latest security patches and support for new and upcoming features.
 All patch releases for each dot minor release should be API compatible, and safe to upgrade;
 any changes to expected behavior are noted in the release notes that follow.
 
-Version 3.11 of the Java SDK implements the 3.9 xref:compatibility.adoc#api-version[SDK API].
+Version {sdk_dot_minor} of the Java SDK implements the {sdk-api} xref:compatibility.adoc#api-version[SDK API].
 See the xref:compatibility.adoc#couchbase-feature-availability-matrix[compatibility pages] for more information on feature compatibility with different versions of Couchbase Server.
 
 
@@ -49,6 +49,13 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 // before GA
 // uncomment aliases
 // and comment out in 3.11
+
+
+
+
+
+
+== Java SDK 3.12 Releases
 
 
 === Version 3.12.0 (??????? 2026)
