@@ -69,7 +69,7 @@ The SDK has been tested on a representative subset of the platforms listed below
 === Mac OS X
 
 The current and previous two releases of OS X.
-At time of writing (February 2026): 26 (Tahoe), 15 (Sequoia), and 14 (Sonoma).
+At time of writing (June 2026): 26 (Tahoe), 15 (Sequoia), and 14 (Sonoma).
 ****
 
 The JVM SDKs should also be expected to run on other commonly-available GNU/Linux distributions which support an appropriate JDK, but not all combinations can be tested -- notable exceptions are listed below.
@@ -145,7 +145,7 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 .Recommended SDK per Server Version Matrix
 [#table_sdk_versions]
 |===
-| | 3.4, 3.5 | 3.6, 3.7 | 3.8 | 3.9-3.11
+| | 3.4, 3.5 | 3.6, 3.7 | 3.8 | 3.9-3.12
 
 | *Server 8.0* ①
 | *✔*
