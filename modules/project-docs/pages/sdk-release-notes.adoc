@@ -96,20 +96,20 @@ Thank you to community member Omer Cilingir <omer.cilingir@bkm.com.tr> for this 
 Improved the error message when a Full-Text Search request fails due to insufficient user permissions. The message now indicates the cause of the failure, instead of "Request failed, but no more information available".
 
 * https://jira.issues.couchbase.com/browse/JVMCBC-1725[JVMCBC-1725]:
-Added the `db.system.name` attribute to OpenTelemetry spans.
+Added the `db.system.name` attribute to `OpenTelemetry` spans.
 
-* https://jira.issues.couchbase.com/browse/JVMCBC-1735[JVMCBC-1735] & https://jira.issues.couchbase.com/browse/JVMCBC-1736[JVMCBC-1736]:
+* https://jira.issues.couchbase.com/browse/JVMCBC-1735[JVMCBC-1735], https://jira.issues.couchbase.com/browse/JVMCBC-1736[JVMCBC-1736]:
 Hardened the code that handles cluster topology changes.
-Improved the diagnostics in this critical area by adding a limited number of new INFO log messages that describe topology changes.
+Improved the diagnostics in this critical area by adding a limited number of new `INFO` log messages that describe topology changes.
 
 * https://jira.issues.couchbase.com/browse/JVMCBC-1731[JVMCBC-1731]:
-Added a new DEBUG log message that shows the options used for socket connections.
+Added a new `DEBUG` log message that shows the options used for socket connections.
 
 * https://jira.issues.couchbase.com/browse/JVMCBC-1733[JVMCBC-1733]:
-Upgraded to Netty 4.2.14.
+Upgraded to `Netty` `4.2.14`.
 
 * https://jira.issues.couchbase.com/browse/JVMCBC-1734[JVMCBC-1734]:
-Upgraded to Jackson 2.21.4.
+Upgraded to `Jackson `2.21.4`.
 
 ==== Bug Fixes
 
