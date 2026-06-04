@@ -58,20 +58,84 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 == Java SDK 3.12 Releases
 
 
-=== Version 3.12.0 (??????? 2026)
+
+=== Version 3.12.0 (02 June 2026)
 
 https://packages.couchbase.com/clients/java/3.12.0/Couchbase-Java-Client-3.12.0.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.12.0/index.html[API Reference] |
 https://docs.couchbase.com/sdk-api/couchbase-core-io-3.12.0/[Core API Reference]
 
+The supported and tested dependencies for this release are:
 
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
 
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
 
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.57.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.57.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
 
+==== Improvements
 
+* https://jira.issues.couchbase.com/browse/JVMCBC-1722[JVMCBC-1722]:
+Simplified the transaction protocol implementation, and changed the threading model to make it easier to reason about thread safety. As a happy side effect, internal performance testing shows improved transaction throughput and latency for some workloads.
++
+TIP: Developers using the SDK's reactive transaction API may see an increase in the number of threads spawned by the SDK, because each operation is now executed on its own dedicated thread. For high-concurrency transactions running on Java 21 and later, we recommend using the blocking API and virtual threads.
 
+* https://jira.issues.couchbase.com/browse/JCBC-1739[JCBC-1739]:
+When inserting or replacing a document inside a transaction, it is now possible to specify an expiration time for the document.
 
+* https://jira.issues.couchbase.com/browse/JVMCBC-1729[JVMCBC-1729]:
+When running on Linux, the SDK now sets the `TCP_USER_TIMEOUT` socket option so it can detect dead connections more quickly.
+By default, the SDK sets the timeout to 20 seconds.
+You can override the default by configuring the new `io.tcpUserTimeout` client setting.
+For example, to set the timeout to 30 seconds you would configure the `ClusterEnvironment.Builder` like this:
++
+[source,java]
+----
+env.ioConfig(io -> io.tcpUserTimeout(Duration.ofSeconds(30)))
+----
++
+Thank you to community member Omer Cilingir <omer.cilingir@bkm.com.tr> for this contribution.
 
+* https://jira.issues.couchbase.com/browse/JVMCBC-1732[JVMCBC-1732]:
+Improved the error message when a Full-Text Search request fails due to insufficient user permissions. The message now indicates the cause of the failure, instead of "Request failed, but no more information available".
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1725[JVMCBC-1725]:
+Added the `db.system.name` attribute to `OpenTelemetry` spans.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1735[JVMCBC-1735], https://jira.issues.couchbase.com/browse/JVMCBC-1736[JVMCBC-1736]:
+Hardened the code that handles cluster topology changes.
+Improved the diagnostics in this critical area by adding a limited number of new `INFO` log messages that describe topology changes.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1731[JVMCBC-1731]:
+Added a new `DEBUG` log message that shows the options used for socket connections.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1733[JVMCBC-1733]:
+Upgraded to `Netty` `4.2.14`.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1734[JVMCBC-1734]:
+Upgraded to `Jackson `2.21.4`.
+
+==== Bug Fixes
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1738[JVMCBC-1738]:
+Ignoring the result rows of a reactive query no longer causes future queries to time out.
+
+* https://jira.issues.couchbase.com/browse/JCBC-2216[JCBC-2216]:
+`EventingFunctionManager.functionsStatus()` no longer throws an exception if a function is in the `"resuming"` state.
+The `EventingFunctionStatus` enum has two new values: `RESUMING` and `UNKNOWN` (a special value indicating the SDK did not recognize the status code returned by the server).
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1728[JVMCBC-1728]:
+The durations reported by some transaction diagnostic messages are no longer inflated by a factor of 1,000,000.
+This bug had no effect on the SDK’s behavior, but could mislead developers reading the logs.
 
 
 
