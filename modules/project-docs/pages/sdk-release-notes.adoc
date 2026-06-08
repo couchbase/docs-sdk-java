@@ -72,8 +72,10 @@ Optional artifacts on top of this SDK version are tested for the following compa
 ==== New features
 
 * https://jira.issues.couchbase.com/browse/JCBC-2214[JCBC-2214]:
-Adds a new API to `Collection`, `getOrNull`.  This behaves identically to the regular Key-Value get call except that if the document does not exist then null is returned rather than an exception being raised, avoiding the slight overhead of exception creation on JVM platforms.
-In addition, when OpenTelemetry is being used an exception is not attached to the span in that case.
+Adds a new API to `Collection`, `getOrNull`.
+This behaves identically to the regular Key-Value get call except that if the document does not exist then null is returned rather than an exception being raised,
+avoiding the slight overhead of exception creation on JVM platforms.
+In addition, when `OpenTelemetry` is being used an exception is not attached to the span in that case.
 
 ==== Improvements
 
