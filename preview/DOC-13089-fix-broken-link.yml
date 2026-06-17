@@ -1,0 +1,5 @@
+sources:
+  docs-sdk-common:
+    branches: release/7.7
+  docs-server:
+    branches: release/7.6
