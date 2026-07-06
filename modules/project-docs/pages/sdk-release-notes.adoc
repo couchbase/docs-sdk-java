@@ -4,7 +4,7 @@
 :description: Release notes, installation instructions, and download archive for the Couchbase Java Client.
 :page-partial:
 :page-aliases: relnotes-java-sdk,ROOT:sdk-release-notes,ROOT:relnotes-java-sdk,ROOT:release-notes,ROOT:download-links
-:name_platform_lc: 'java'
+:name_platform_lc: java
 
 
 [abstract]
