@@ -46,6 +46,55 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 
 
 
+=== Version 3.12.1 (08 July 2026)
+
+https://packages.couchbase.com/clients/java/3.12.1/Couchbase-Java-Client-3.12.1.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.12.1/index.html[API Reference] |
+https://docs.couchbase.com/sdk-api/couchbase-core-io-3.12.1/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.57.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.57.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1739[JVMCBC-1739]:
+Low-information topology changes are now logged at DEBUG level instead of INFO.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1746[JVMCBC-1746]:
+Upgraded to Netty `4.2.16`.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1750[JVMCBC-1750]:
+Upgraded to Jackson `2.21.5`.
+
+==== Bug Fixes
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1740[JVMCBC-1740]:
+Fixed a regression in `3.11.0` that could cause an uneven distribution of network channels to event loops.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1749[JVMCBC-1749]:
+Fixed a regression in `3.12.0` that prevented Spring Data Couchbase from executing transactions.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1744[JVMCBC-1744]:
+Fixed a bug in the `couchbase2` protocol that caused the SDK to throw a generic `CouchbaseException` instead of `DocumentNotLockedException`.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1748[JVMCBC-1748]:
+Fixed an issue where in some cases the SDK would continue trying to connect to a node that was removed from the cluster.
+
+
 === Version 3.12.0 (02 June 2026)
 
 https://packages.couchbase.com/clients/java/3.12.0/Couchbase-Java-Client-3.12.0.zip[Download] |
