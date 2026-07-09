@@ -72,7 +72,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 ==== Improvements
 
 * https://jira.issues.couchbase.com/browse/JVMCBC-1739[JVMCBC-1739]:
-Low-information topology changes are now logged at DEBUG level instead of INFO.
+Low-information topology changes are now logged at `DEBUG` level instead of `INFO`.
 
 * https://jira.issues.couchbase.com/browse/JVMCBC-1746[JVMCBC-1746]:
 Upgraded to Netty `4.2.16`.
