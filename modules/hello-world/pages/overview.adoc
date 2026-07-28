@@ -17,7 +17,7 @@
 
 = Couchbase {name-sdk} {sdk_dot_minor}
 
-The Couchbase {name-sdk} allows {name_platform} applications to access a Couchbase cluster --
+The Couchbase {name-sdk} allows {name_platform} applications to access a Couchbase operational cluster --
 Capella or self-managed.
 // -- other SDKs are available for Couchbase Lite (edge or mobile devices) and Capella Columnar (real-time analytics)
 
