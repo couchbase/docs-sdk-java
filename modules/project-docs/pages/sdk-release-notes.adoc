@@ -46,7 +46,7 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 
 
 
-=== Version 3.12.2 (04 August 2026)
+=== Version 3.12.2 (28 July 2026)
 
 https://packages.couchbase.com/clients/java/3.12.2/Couchbase-Java-Client-3.12.2.zip[Download] |
 https://docs.couchbase.com/sdk-api/couchbase-java-client-3.12.2/index.html[API Reference] |
