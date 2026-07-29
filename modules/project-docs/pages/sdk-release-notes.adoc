@@ -46,6 +46,39 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 
 
 
+=== Version 3.12.2 (04 August 2026)
+
+https://packages.couchbase.com/clients/java/3.12.2/Couchbase-Java-Client-3.12.2.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.12.2/index.html[API Reference] |
+https://docs.couchbase.com/sdk-api/couchbase-core-io-3.12.2/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.57.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.57.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Bug Fixes
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1755[JVMCBC-1755]:
+`bucket.waitUntilReady()` no longer times out during rebalance when some nodes are not yet hosting the bucket.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1752[JVMCBC-1752]:
+The `couchbase2://` protocol was returning incorrect mutation tokens, with `partitionUUID` erroneously set to the same value as `partitionID`.
+This is low-impact, and only affects developers who use the `couchbase2://` protocol and specify the "consistent with" option when querying or searching.
+
+
 === Version 3.12.1 (08 July 2026)
 
 https://packages.couchbase.com/clients/java/3.12.1/Couchbase-Java-Client-3.12.1.zip[Download] |
