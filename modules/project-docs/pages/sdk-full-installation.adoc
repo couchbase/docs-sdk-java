@@ -19,7 +19,7 @@ If you're upgrading your application from Java SDK 2.x, please read our xref:pro
 
 == Prerequisites
 
-The Java SDK is tested against LTS versions of Oracle JDK and OpenJDK -- see our xref:project-docs:compatibility.adoc#jdk-compat[compatibility docs].
+The Java SDK is tested against LTS versions OpenJDK -- see our xref:project-docs:compatibility.adoc#jdk-compat[compatibility docs].
 The underlying OS normally makes no difference, but library incompatibilities in Alpine Linux makes a xref:project-docs:compatibility.adoc#alpine-linux-compatibility[workaround] necessary for this OS.
 
 
