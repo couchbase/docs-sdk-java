@@ -756,8 +756,9 @@ Note that some options have been removed, and others have different ways to conf
 |`sslKeystoreFile`             | on `CertificateAuthenticator`
 |`sslKeystorePassword`         | on `CertificateAuthenticator`
 |`sslKeystore`                 | on `CertificateAuthenticator`
-|`sslTruststoreFile`           | `SecurityConfig.trustCertificate`
-|`sslTruststorePassword`       | `SecurityConfig.trustCertificate`
+a|`sslTruststoreFile` 
+
+`sslTruststorePassword`        .^| `SecurityConfig.trustStore`
 |`sslTruststore`               | `SecurityConfig.trustManagerFactory`
 |`bootstrapCarrierEnabled`     | removed
 |`bootstrapHttpDirectPort`     | via custom `SeedNode`
