@@ -30,7 +30,7 @@ The following OpenJDK releases are supported:
 * https://adoptium.net/[OpenJDK 11 with HotSpot JVM]
 * https://adoptium.net/[OpenJDK 8 with HotSpot JVM]
 
-The following Oracle JDK releases are supported but do not receive the same level of testing due to Oracle license issues:
+The following Oracle JDK releases are also supported but we do not do any testing with them owing to Oracle license issues:
 
 * https://www.oracle.com/java/technologies/downloads/#java17[Oracle JDK 17]
 * https://www.oracle.com/java/technologies/downloads/#java11[Oracle JDK 11]
