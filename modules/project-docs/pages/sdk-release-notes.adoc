@@ -482,6 +482,40 @@ Added `JwtAuthenticator`.
 Version 3.9 of the Java SDK implements the 3.8 xref:compatibility.adoc#api-version[SDK API].
 See the xref:compatibility.adoc#couchbase-feature-availability-matrix[compatibility pages] for more information on feature compatibility with different versions of Couchbase Server.
 
+=== Version 3.9.3 (12 August 2026)
+
+This release backports the Netty and Jackson version updates from SDK 3.12.1 to the 3.9.x line.
+
+https://packages.couchbase.com/clients/java/3.9.3/Couchbase-Java-Client-3.9.3.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.9.3/index.html[API Reference] |
+http://docs.couchbase.com/sdk-api/couchbase-core-io-3.9.3/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  |  Built Against              | API Stability
+| `tracing-opentelemetry`   |  OpenTelemetry 1.31.0       | Committed
+| `tracing-opentracing`     |  OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   |  OpenTelemetry 1.31.0       | Volatile
+| `metrics-micrometer`      |  Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1757[JVMCBC-1757]:
+Upgrade Netty from 4.1.127 to 4.1.136
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1758[JVMCBC-1758]:
+Upgrade Jackson from 2.19.2 to 2.21.5
+
+
 === Version 3.9.2 (10 October 2025)
 
 This is the second maintenance release of the 3.9 series.
