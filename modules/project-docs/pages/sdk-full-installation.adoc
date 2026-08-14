@@ -14,12 +14,12 @@ It offers synchronous APIs as well as reactive and asynchronous equivalents to m
 
 The Couchbase Java SDK 3._x_ is a complete rewrite of the 2.x API, providing a simpler surface area and adding support for Couchbase Server features like xref:concept-docs:collections.adoc[Collections and Scopes] (available in Couchbase Server 7.0+).
 The (reactive) API also migrated from `RxJava` to `Reactor`, along with other improvements to performance, logging, debugging and timeout troubleshooting.
-If you're upgrading your application from Java SDK 2.x, please read our xref:project-docs:migrating-sdk-code-to-3.n.adoc[Migrating 2.x code to SDK 3.0 Guide].
+If you're upgrading your application from Java SDK 2.x, please read our xref:project-docs:migrating-sdk-code-to-3.n.adoc[Migrating 2.x code to SDK 3.x Guide].
 
 
 == Prerequisites
 
-The Java SDK is tested against LTS versions of Oracle JDK and OpenJDK -- see our xref:project-docs:compatibility.adoc#jdk-compat[compatibility docs].
+The Java SDK is tested against LTS versions of OpenJDK -- see our xref:project-docs:compatibility.adoc#jdk-compat[compatibility docs].
 The underlying OS normally makes no difference, but library incompatibilities in Alpine Linux makes a xref:project-docs:compatibility.adoc#alpine-linux-compatibility[workaround] necessary for this OS.
 
 

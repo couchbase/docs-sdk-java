@@ -59,7 +59,7 @@ include::{version-common}@sdk:shared:partial$start-using-sdk.adoc[tag=before]
 
 === Prerequisites
 
-* The Java SDK is tested against LTS versions of Oracle JDK and OpenJDK -- 
+* The Java SDK is tested against LTS versions of OpenJDK --
 see the xref:project-docs:compatibility.adoc#jdk-compat[compatibility docs].
 +
 https://adoptium.net/[OpenJDK {java_latest_lts_version} with HotSpot JVM] is recommended.

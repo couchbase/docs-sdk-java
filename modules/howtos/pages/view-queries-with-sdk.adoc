@@ -31,7 +31,7 @@ CAUTION: If you are provisioning Views on Couchbase Server for a legacy applicat
 xref:{version-server}@server:learn:buckets-memory-and-storage/storage-engines.adoc#couchstore[couchstore] bucket_.
 
 
-We will maintain support for Views in the SDKs for so long as it can be used with a supported version of Couchbase Server.
+Use of Views in the {name-sdk} is now deprecated.
 
 Information on using MapReduce Views with the SDK can still be accessed in our https://docs-archive.couchbase.com/java-sdk/3.1/howtos/view-queries-with-sdk.html[documentation archive].
 

@@ -2,10 +2,12 @@
 :description: Errors are inevitable. That's why the SDK has very extensive error handling and retry capabilties
 :navtitle: Handling Errors
 :page-aliases: ROOT:handling-error-conditions.adoc,handling-error-conditions.adoc,errors.adoc,handling-errors.adoc
+:page-toclevels: 2
 
 [abstract]
 {description} which are focussed on one goal:
 keeping your application available as best as possible even in the face of (transient) failures.
+
 
 Unfortunately, the SDK alone can't make all the decisions needed since it lacks the understanding of your application domain. 
 In most cases transparent retry is the best choice, but maybe sometimes you need to fail quickly and switch over to an alternate data source. 
