@@ -7,11 +7,12 @@
 
 // Note to editors
 // 
-// This page pulls in content from -sdk-common-
+// This page pulls in content from 
+// https://github.com/couchbase/docs-sdk-common/blob/api/3.10/modules/shared/partials/best-practices-sdk.adoc
 // and code samples from -example-dir-
 // 
-// It can be seen built at wwww.
-
+// It can be seen built at 
+// https://docs.couchbase.com/java-sdk/3.13/concept-docs/best-practices.html
 
 [abstract]
 {description}
@@ -27,91 +28,30 @@ There's plenty that can be done to remove bottlenecks in development and in perf
 
 == Security
 
-But before worrying about bottlenecks, let's put security concerns first.
+include::{version-common}@sdk:shared:partial$best-practices.adoc[tag=security]
 
-Security is a process, and not just a set of checkboxes -- but there are key areas you must check off as you move from development, through testing, to deploying in production.
-//
 
 === Roles and RBAC
+ 
+include::{version-common}@sdk:shared:partial$best-practices.adoc[tag=rbac]
 
-Self-managed Couchbase Server uses Role-Based Access Control (RBAC), which is reflected in our managed service (Capella) as a nuanced set of Roles.
-Data security depends in part on only giving access to the minimum amount of data and permissions required to do the job.
-// 
-
-
-
-// concept snippet
-
-// include::{version-common}@sdk:pages:partial$rbac.adoc[]
-
-RBAC restrict resources on a Couchbase cluster to an identified user, allocated by role.
-
-==== Capella Security & Priveleges
-
-Capella, our managed service, likewise has a concept of roles.
-
-In addition to this, clusters within Capella are grouped into 
-xref:cloud:organizations:organization-projects-overview.adoc[organizations and projects],
-to maintain separation of concerns, as well as access priveleges.
-
-
-==== Users, Resources, Roles, and Privileges
-
-Couchbase Server Enterprise Edition uses _Role-Based Access Control_ for applications to restrict _resources_ on a Couchbase cluster to an identified _user_.
-
-Each user who attempts resource-access is identified by means of the _credentials_ they pass to Couchbase Server, for purposes of _authentication_: these consist of a _username_ and (typically) a _password_.
-Once the user is authenticated, an _authorization_ process checks the _roles_ with which the user is associated.
-If one or more of these roles correspond to _privileges_ that permit the user-requested level of resource-access, access is duly granted; otherwise, it is denied.
-
-Users who have been assigned the *Admin* role for the cluster are able to create, edit, and remove users.
-The SDK provides APIs to support these activities.
-
-NOTE: Introductory examples in the SDK documentation use the _Administrator_ user to ensure that developers can quickly get up and running; this _should not be used in production_.
-Elsewhere we use a general "user" which represents whichever permission levels are appropriate to your application.
 
 
 == Performance
 
-Couchbase's Data Service uses a fast binary protocol, which will always outperform JSON streamed over HTTP from {sqlpp} queries.
-If you know the key (ID) of a document, then use the xref:howtos:kv-operations.adoc[Data Service].
-
-If you need pessimistic logging, in particular if you need to lock documents for multi-document ACID transactions, then anything you can do at the schema level to reduce the number of documents locked simultaneously wil remvoe a bottleneck to updating the affected documents.  
+include::{version-common}@sdk:shared:partial$best-practices.adoc[tag=performance]
 
 
 
 === Dealing with Timeout Errors
 
+include::{version-common}@sdk:shared:partial$best-practices.adoc[tag=timeout-debug]
 
-// see also
-// https://couchbasecloud.atlassian.net/wiki/spaces/CST/pages/1993769712/Java+-+Debugging+KV+Timeouts
-// in Support wiki
+include::{version-common}@sdk:shared:partial$best-practices.adoc[tag=timeout-wait]
 
-
-* `waitUntilReady` should be the default setting for `Cluster.connect` and `Cluster.bucket` in most cases, so that resources are fully loaded before the client proceeds with CRUD calls to the cluster.
-* LAN-type connection of client and server is recommended in production, but WAN development is a reality pre-production.
-Ensure that you're familiar with the 
-xref:ref:client-settings.adoc#constrained-network-environments[best timeout options for WAN environments],
-or at least set a xref:ref:client-settings.adoc#wan-development[WAN development Configuration Profile].
+include::{version-common}@sdk:shared:partial$best-practices.adoc[tag=timeout-more]
 
 
-// Something on longer timeouts and fewer retries?
-// ... reading the logs to find the pattern?
-
-
-// &  Something on polling rate the SDK uses to fetch an updated cluster map whenever a topology change occurs.
-////
-By default the Java SDK polls every 2.5 seconds, regardless of server version or SDK version.
-This interval is configurable via the  io.configPollInterval client setting.
-https://docs.couchbase.com/java-sdk/current/ref/client-settings.html#io.configPollInterval
-When Java SDK 3.5.0 or later is used with Couchbase Server 7.6 or later, the SDK also listens for config change notifications from the server. In this case the polling acts as a failsafe, so it's probably okay to set it significantly higher than 2.5 seconds.
-////
-
-// write after more LZA added
-////
-=== Read From Replica
-
-Advanced zone aware....
-////
 
 
 === Concurrency and Async APIs
@@ -123,6 +63,28 @@ See the xref:howtos:concurrent-async-apis.adoc[Async & Reactive APIs page] for d
 
 
 
+
+=== Bulk Get, Multi-Get, and Network Latency
+
+include::{version-common}@sdk:shared:partial$best-practices.adoc[tag=bulk-get]
+
+
+==== When to Use Bulk Get
+
+include::{version-common}@sdk:shared:partial$best-practices.adoc[tag=bulk-get-async-platform]
+
+
+
+
+// write after more LZA added
+////
+=== Read From Replica
+
+Advanced zone aware....
+////
+
+
+
 == Error Handling
 
 Best practices for error handling in Java depend somewhat upon your choice of API: 
@@ -130,12 +92,6 @@ blocking, asynchronous, or reactive, as covered in the xref:howtos:concurrent-as
 // That guide also covers how errors are actually returned (e.g. via `Try`, `Future`, or `Mono`) and handled.
 See also the xref:howtos:error-handling.adoc[error handling guide],
 which covers specific errors, along with a broader look at error handling strategies.
-
-
-== Testing
-
-Integrate developing with the {name-sdk} into your accustomed test framework.
-
 
 
 
@@ -156,11 +112,21 @@ include::{version-common}@sdk:shared:partial$errors.adoc[tag=diag]
 
 
 
+
+
 // Slow Operations Logging
 include::{version-common}@sdk:shared:partial$errors.adoc[tag=observability]
 
 // until opentelemetry release for link below, could add note on API to expose own tracing features?
 // include::{version-common}@sdk:shared:partial$errors.adoc[tag=rto]
+
+
+
+
+
+== Testing
+
+Integrate developing with the {name-sdk} into your accustomed test framework.
 
 
 

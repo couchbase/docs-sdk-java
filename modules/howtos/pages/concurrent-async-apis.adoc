@@ -85,6 +85,9 @@ In all other cases, the blocking API (for simplicity) or the reactive API (for r
 
 == Batching
 
+include::{version-common}@sdk:shared:partial$best-practices.adoc[tag=bulk-get-sidebar]
+
+
 The SDK itself does not provide explicit APIs for batching, because using the reactive mechanisms it allows you to build batching code applied to your use case much better than a generic implementation could in the first place.
 
 While it can be done with the async API as well, we recommend using the reactive API so you can use async retry and fallback mechanisms that are supplied out of the box.
