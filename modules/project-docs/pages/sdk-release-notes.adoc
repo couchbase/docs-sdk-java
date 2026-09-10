@@ -46,6 +46,48 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 
 
 
+=== Version 3.12.3 (10 September 2026)
+
+https://packages.couchbase.com/clients/java/3.12.3/Couchbase-Java-Client-3.12.3.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.12.3/index.html[API Reference] |
+https://docs.couchbase.com/sdk-api/couchbase-core-io-3.12.3/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.57.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.57.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1762[JVMCBC-1762]:
+Returning a failed future from `RetryStrategy.shouldRetry()` now causes the request to fail immediately instead of timing out, and propagates the exception from the failed future.
++
+Thank you to community member https://github.com/1fanwang[Stefan Wang].
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1760[JVMCBC-1760]:
+Upgraded to Netty `4.2.18`.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1761[JVMCBC-1761]:
+Upgraded to Jackson `2.21.6`.
+
+==== Bug Fixes
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1759[JVMCBC-1759]:
+The `couchbase2://` protocol now correctly throws `NumberTooBigException` when a subdocument operation fails for that reason.
+
+
 === Version 3.12.2 (28 July 2026)
 
 https://packages.couchbase.com/clients/java/3.12.2/Couchbase-Java-Client-3.12.2.zip[Download] |
