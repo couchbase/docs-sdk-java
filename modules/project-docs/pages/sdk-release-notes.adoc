@@ -54,10 +54,93 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 
 
 
+[v3.13.0]
+=== Version 3.13.0 (08 October 2026)
+
 
 == Java SDK 3.12 Releases
 
 
+[v3.12.3]
+=== Version 3.12.3 (10 September 2026)
+
+https://packages.couchbase.com/clients/java/3.12.3/Couchbase-Java-Client-3.12.3.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.12.3/index.html[API Reference] |
+https://docs.couchbase.com/sdk-api/couchbase-core-io-3.12.3/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.57.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.57.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1762[JVMCBC-1762]:
+Returning a failed future from `RetryStrategy.shouldRetry()` now causes the request to fail immediately instead of timing out, and propagates the exception from the failed future.
++
+Thank you to community member https://github.com/1fanwang[Stefan Wang].
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1760[JVMCBC-1760]:
+Upgraded to Netty `4.2.18`.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1761[JVMCBC-1761]:
+Upgraded to Jackson `2.21.6`.
+
+==== Bug Fixes
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1759[JVMCBC-1759]:
+The `couchbase2://` protocol now correctly throws `NumberTooBigException` when a subdocument operation fails for that reason.
+
+
+[v3.12.2]
+=== Version 3.12.2 (28 July 2026)
+
+https://packages.couchbase.com/clients/java/3.12.2/Couchbase-Java-Client-3.12.2.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.12.2/index.html[API Reference] |
+https://docs.couchbase.com/sdk-api/couchbase-core-io-3.12.2/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.57.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.57.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Bug Fixes
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1755[JVMCBC-1755]:
+`bucket.waitUntilReady()` no longer times out during rebalance when some nodes are not yet hosting the bucket.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1752[JVMCBC-1752]:
+The `couchbase2://` protocol was returning incorrect mutation tokens, with `partitionUUID` erroneously set to the same value as `partitionID`.
+This is low-impact, and only affects developers who use the `couchbase2://` protocol and specify the "consistent with" option when querying or searching.
+
+
+
+
+[v3.12.1]
 === Version 3.12.1 (08 July 2026)
 
 https://packages.couchbase.com/clients/java/3.12.1/Couchbase-Java-Client-3.12.1.zip[Download] |
@@ -108,6 +191,7 @@ Fixed an issue where in some cases the SDK would continue trying to connect to a
 
 
 
+[v3.12.0]
 === Version 3.12.0 (02 June 2026)
 
 https://packages.couchbase.com/clients/java/3.12.0/Couchbase-Java-Client-3.12.0.zip[Download] |
