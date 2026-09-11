@@ -7,11 +7,11 @@ nav:
 asciidoc:
   attributes:
     page-nav-header-levels: 2
-    server_version: '8.1'
+    server_version: '8.0.3'
     sdk_current_version: '3.13.0'
     sdk_dot_minor: '3.13'
     sdk_dot_major: '3.x'
-    version-server: '8.1'
+    version-server: '8.0'
     version-common: '3.10'
     java_latest_lts_version: '25'
     name_platform: 'Java'

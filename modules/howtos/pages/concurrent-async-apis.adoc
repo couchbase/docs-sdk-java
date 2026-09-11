@@ -137,7 +137,7 @@ include::devguide:example$java/AsyncOperations.java[tag=retry-bulk]
 
 It is recommended to check out the `retry` and `retryBackoff` methods for their configuration options and overloads.
 Of course, all the operators shown here can be combined to achieve exactly the semantics you need.
-Finally, for even advanced retry policies you can utilize the retry functionality in the https://projectreactor.io/docs/extra/release/api/reactor/retry/Retry.html[reactor-extra^] package.
+Finally, for even more advanced retry policies you can utilize the retry functionality in the https://projectreactor.io/docs/extra/release/api/reactor/retry/Retry.html[reactor-extra^] package.
 
 
 == Reactive Streams Integration

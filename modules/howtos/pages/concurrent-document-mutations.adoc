@@ -1,8 +1,8 @@
 = Concurrent Document Mutations
 :page-topic-type: howto
-include::project-docs:partial$attributes.adoc[]
+:description: You can use the CAS value to control how concurrent document modifications are handled
 :page-aliases: ROOT:concurrent-document-mutations.adoc
-// ,7.6@server:developer-guide:cas-concurrency.adoc
+// ,8.0@server:developer-guide:cas-concurrency.adoc
 
 include::{version-common}@sdk:shared:partial$cas.adoc[tag=intro]
 
