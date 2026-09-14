@@ -48,8 +48,7 @@ public class ManagingConnections {
       // You can access multiple buckets using the same Cluster object.
       Bucket anotherBucket = cluster.bucket("beer-sample");
 
-      // You can access collections other than the default
-      // if your version of Couchbase Server supports this feature.
+      // You can access multiple collections, too
       Scope customerA = bucket.scope("customer-a");
       Collection widgets = customerA.collection("widgets");
 

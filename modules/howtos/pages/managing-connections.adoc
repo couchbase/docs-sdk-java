@@ -4,7 +4,7 @@
 :page-aliases: ROOT:managing-connections.adoc,howtos:multi-network.adoc,ROOT:connecting.adoc,ROOT:connection-advanced.adoc
 :page-toclevels: 2
 
-include::project-docs:partial$attributes.adoc[]
+
 
 [abstract]
 {description}
@@ -21,8 +21,6 @@ The simplest way to create a `Cluster` object is to call `Cluster.connect()` wit
 include::devguide:example$java/ManagingConnections.java[tag=simpleconnect,indent=0]
 ----
 
-NOTE: If you are connecting to a version of Couchbase Server older than 6.5, it will be more efficient if the addresses are those of data (KV) nodes.
-You will in any case, with 7.0 and earlier, need to open a `Bucket` instance before connecting to any other HTTP services (such as _Query_ or _Search_).
 
 In a production environment, your connection string should include the addresses of multiple server nodes in case some are currently unavailable.
 Multiple addresses may be specified in a connection string by delimiting them with commas:
@@ -121,9 +119,9 @@ If your Couchbase Server cluster is running in a containerized, port mapped, or 
 Both the client and server require special configuration in this case.
 
 On the server side, each server node must be configured to advertise its external address as well as any custom port mapping.
-This is done with the `setting-alternate-address` CLI command introduced in Couchbase Server 6.5.
+This is done with the `setting-alternate-address` CLI command --
+see the xref:server:cli:cbcli/couchbase-cli-setting-alternate-address.adoc[reference] for further information.
 A node configured in this way will advertise two addresses: one for connecting from the same network, and another for connecting from an external network.
-// todo link to https://docs.couchbase.com/server/7.0/cli/cbcli/couchbase-cli-setting-alternate-address.html
 
 On the client side, the externally visible ports must be used when connecting.
 If the external ports are not the default, you can specify custom ports in the connection string when calling `Cluster.connect()`.
@@ -286,9 +284,11 @@ quarkus.couchbase.password=password
 
 == Cloud Native Gateway
 
-Couchbase's next generation connection protocol, introduced in Java SDK 3.5 and xref:operator::concept-cloud-native-gateway.adoc[Couchbase Autonomous Operator 2.6.1], can be enabled simply by changing the connection string to `couchbase2://` but there are a few differences to be aware of, described <<#limitations,below>>.
+Couchbase's next generation connection protocol, introduced in Java SDK 3.5 and xref:operator::concept-cloud-native-gateway.adoc[Couchbase Autonomous Operator 2.6.1] --
+and available as a xref:cloud-native-gateway:intro:about-cng.adoc[standalone product] for use with self-managed Couchbase Server from 8.0 onwards --
+can be enabled simply by changing the connection string to `couchbase2://` but there are a few differences to be aware of, described <<#limitations,below>>.
 
-The protocol implements a gRPC-style interface between the SDK and Couchbase Server (in this case, only available in the Server running on Kubernetes or OpenShift, with a recent version of xref:operator::overview.adoc[Couchbase Autonomous Operator]).
+The protocol implements a gRPC-style interface between the SDK and Couchbase Server.
 
 
 === Limitations
@@ -373,7 +373,15 @@ _plus_ it waits for the K-V (data) sockets to be ready.
 Other timeout issues may occur when using the SDK located geographically separately from the Couchbase Server cluster -- this is xref:project-docs:compatibility#network-requirements[not recommended].
 See the xref:#working-in-the-cloud[Cloud section] below for some suggestions of settings adjustments.
 
+
+
+
+
+== Working in the Cloud
+
 include::{version-common}@sdk:shared:partial$managing-connections.adoc[tag=cloud]
+
+
 
 
 == Async and Reactive APIs
@@ -415,5 +423,4 @@ Here's the same example, but using the Reactive API instead of the Async API:
 include::devguide:example$java/ManagingConnections.java[tag=reactivecluster,indent=0]
 ----
 
-
-// == Working in the Cloud
+See the xref:concurrent-async-apis.adoc[] page for more information.

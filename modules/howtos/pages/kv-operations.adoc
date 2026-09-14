@@ -1,7 +1,7 @@
 = Data Operations
-:description: Data service offers the simplest way to retrieve or mutate data where the key is known.
+:description: The Data Service offers the simplest way to retrieve or mutate data where the key is known.
 :page-aliases: ROOT:document-operations.adoc,ROOT:documents-creating.adoc,ROOT:documents-updating.adoc,ROOT:documents-retrieving.adoc,ROOT:documents-deleting.adoc
-// :example-source: 3.8@java-sdk:devguide:example$java/Queries.java
+// :example-source: 3.13@java-sdk:devguide:example$java/Queries.java
 :page-toclevels: 3
 
 
@@ -15,27 +15,23 @@ as well as KV Range scan, for querying without an index.
 
 The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/blob/release/{sdk_dot_minor}/modules/devguide/examples/java/KvOperations.java[here].
 
-At its heart Couchbase Server is a high-performance key-value store, and the key-value interface outlined below is the fastest and best method to perform operations involving single documents.
 
-A _document_ refers to an entry in the database (other databases may refer to the same concept as a _row_).
-A document has an ID (_primary key_ in other databases), which is unique to the document and by which it can be located.
-The document also has a value which contains the actual application data.
-See xref:concept-docs:documents.adoc[the concept guide to _Documents_] for a deeper dive into documents in the Couchbase Data Platform.
+// intro
+include::{version-common}@sdk:shared:partial$data-service.adoc[tag=intro]
 
-Before proceeding, make sure you're familiar with the basics of authorization and connecting to a Cluster from the xref:hello-world:start-using-sdk.adoc[Start Using the SDK] section.
 
+////
 The code samples below will use these imports:
 
 [source,java]
 ----
 include::devguide:example$java/KvOperations.java[tag=imports]
 ----
+////
 
-[TIP]
-.{sqlpp} vs. Key-Value
-====
-{sqlpp_url}[{sqlpp} (formerly N1QL)] can also be used to perform many single-document operations but we very strongly recommend using the key-value API for this instead, as it can be much more efficient. The request can go directly to the correct node, there's no query parsing overhead, and it's over the highly optimized memcached binary protocol.
-====
+
+//{sqlpp} vs. Key-Value
+include::{version-common}@sdk:shared:partial$data-service.adoc[tag=sql-vs-kv]
 
 
 == JSON
@@ -51,13 +47,10 @@ The SDK also supports custom transcoders and serializers which are covered separ
 
 == CRUD
 
-[TIP]
-.Sub-Document Operations
-====
-All of these operations involve fetching the complete document from the Cluster.
-Where the number of operations or other circumstances make bandwidth a significant issue, 
-the SDK can work on just a specific _path_ of the document with xref:subdocument-operations.adoc[Sub-Document Operations].
-====
+// Sub-Document Operations
+include::{version-common}@sdk:shared:partial$data-service.adoc[tag=subdoc]
+
+
 
 === Upsert
 
@@ -127,15 +120,13 @@ Then we `get` it back into `doc` and pull out the document's content as a `JsonO
 Afterwards, we update a field in the `JsonObject` with `put`.  `JsonObject` is mutable, we don't need to store the result of the `put`. 
 Finally, we `replace` the document with the updated content, and a CAS value, storing the final result as `result`.
 
+
+
 ==== What is CAS?
 
-CAS, or Compare And Swap, is a form of optimistic locking. Every document in Couchbase has a CAS value, and it's changed on every mutation. 
-When you `get` a document you also get the document's CAS, and then when it's time to write the document, you send the same CAS back. 
-If another thread or program has modified that document in the meantime, the Couchbase Server can detect you've provided a now-outdated CAS, and return an error. 
-This provides cheap, safe concurrency. 
-See xref:concurrent-document-mutations.adoc[this detailed description of CAS] for further details.
+include::{version-common}@sdk:shared:partial$data-service.adoc[tag=cas]
 
-In general, you'll want to provide a CAS value whenever you `replace` a document, to prevent overwriting another agent's mutations.
+
 
 === Retrying on CAS failures
 
@@ -167,6 +158,7 @@ include::devguide:example$java/KvOperations.java[tag=remove,indent=0]
 Like `replace`, `remove` also optionally takes the CAS value if you want to make sure you are only removing the document if it hasn't changed since you last fetched it.
 
 
+
 == Durability
 
 Writes in Couchbase are written to a single node, and from there the Couchbase Server will take care of sending that mutation to any configured replicas.
@@ -184,9 +176,9 @@ If no argument is provided the application will report success back as soon as t
 However, we recognize that there are times when the application needs that extra certainty that especially vital mutations have been successfully replicated, 
 and the other durability options provide the means to achieve this.
 
-The options differ depend on what Couchbase Server version is in use. 
-If 6.5 or above is being used, you can take advantage of the xref:concept-docs:durability-replication-failure-considerations.adoc#durable-writes[Durable Write] feature, 
-in which Couchbase Server will only return success to the SDK after the requested replication level has been achieved. 
+If you need stronger durability guarantees,
+you can take advantage of the xref:concept-docs:durability-replication-failure-considerations.adoc#durable-writes[Durable Write] feature, 
+in which Couchbase Server (self-managed or Capella) will only return success to the SDK after the requested replication level has been achieved. 
 The three replication levels are:
 
  * `Majority` -- The server will ensure that the change is available in memory on the majority of configured replicas.
@@ -197,16 +189,16 @@ The options are in increasing levels of safety.
 Note that nothing comes for free -- for a given node, waiting for writes to storage is considerably slower than waiting for it to be available in-memory.
 These tradeoffs, as well as which settings may be tuned, are discussed in the xref:concept-docs:durability-replication-failure-considerations.adoc#durable-writes[durability page].
 
-// remove 6.5 stuff once 8.0 is released?
 
-If a version of Couchbase Server lower than 6.5 is being used then the application can fall-back to xref:concept-docs:durability-replication-failure-considerations.adoc#older-server-versions['client verified' durability]. 
-Here the SDK will do a simple poll of the replicas and only return once the requested durability level is achieved. 
-This can be achieved like this:
 
-[source,java]
-----
-include::devguide:example$java/KvOperations.java[tag=durability-observed,indent=0]
-----
+
+This durability is enforced by the cluster.
+A client verified durability API was necessary with older, no longer supported version of Couchbase Server.
+This API is still avaialable, but there are few cases where you would want to use this less performant option.
+Details can be found 
+https://docs-archive.couchbase.com/java-sdk/3.3/concept-docs/durability-replication-failure-considerations.html#older-server-versions[in our archived docs].
+
+
 
 To stress, durability is a useful feature but should not be the default for most applications, as there is a performance consideration, 
 and the default level of safety provided by Couchbase will be reasonable for the majority of situations.
@@ -268,6 +260,7 @@ include::devguide:example$java/KvOperations.java[tag=expiry-touch,indent=0]
 == Atomic Counters
 
 The value of a document can be increased or decreased atomically using `collecion.binary().increment()` and `collection.binary().decrement()`.
+
 ////
 .Increment
 [source,csharp]
@@ -293,7 +286,8 @@ include::example$KvOperations.cs[tag=binarydecrement,indent=0]
 include::example$KvOperations.cs[tag=binarydecrementwithoptions,indent=0]
 ----
 ////
-NOTE: Increment & Decrement are considered part of the ‘binary’ API and as such may still be subject to change
+
+NOTE: Increment & Decrement are considered part of the "binary" API and as such may still be subject to change
 
 See the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/kv/Increment.html[API Reference] for full details.
 
@@ -308,7 +302,7 @@ include::{version-common}@sdk:shared:partial$atomic.adoc[tag=xdcr]
 
 == Scoped KV Operations
 
-It is possible to perform scoped key-value operations on named xref:{version-server}@server:learn:data/scopes-and-collections.adoc[`Collections`] _with Couchbase Server release 7.x_.
+It is possible to perform scoped key-value operations on named xref:{version-server}@server:learn:data/scopes-and-collections.adoc[`Collections`].
 See the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Collection.html[API docs] for more information.
 
 Here is an example showing an upsert in the `users` collection, which lives in the `travel-sample.tenant_agent_00` keyspace:
@@ -391,12 +385,4 @@ Setting `idsOnly` to true also works with the other scan types described above.
 
 == Additional resources
 
-Working on just a specific path within a JSON document will reduce network bandwidth requirements -- see the xref:subdocument-operations.adoc[Sub-Document] pages.
-
-For a significant performance speed up with large volumes of data, reference our xref:concurrent-async-apis.adoc[asynchronous programming options].
-
-Another way of increasing network performance is to _pipeline_ operations with xref:concurrent-async-apis.adoc#batching[Batching Operations].
-
-As well as various xref:concept-docs:data-model.adoc[Formats] of JSON, Couchbase can work directly with xref:concept-docs:nonjson.adoc[arbitrary bytes, or binary format].
-
-Our xref:sqlpp-queries-with-sdk.adoc[Query Engine] enables retrieval of information using the SQL-like syntax of {sqlpp}.
+include::{version-common}@sdk:shared:partial$data-service.adoc[tag=resources]
