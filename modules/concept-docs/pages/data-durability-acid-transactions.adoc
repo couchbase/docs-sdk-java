@@ -1,5 +1,6 @@
 = Data Modelling, Durability, and Consistency
 // :page-aliases: durability-replication-failure-considerations.adoc
+:page-aliases: concept-docs:collections.adoc
 :description: Performance, availability, consistency -- balance your priorities, and model your data to achieve these goals.
 :page-toclevels: 2
 :anyreplica-api: pass:q[https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/AsyncCollection.html#getAnyReplica(java.lang.String,com.couchbase.client.java.kv.GetAnyReplicaOptions)]
