@@ -1,7 +1,7 @@
 = Provisioning Cluster Resources
 :description: Provisioning cluster resources is managed at the collection or bucket level, depending upon the service affected.
 :navtitle: Provisioning Cluster Resources
-:page-aliases: ROOT:managing-clusters.adoc
+:page-aliases: ROOT:managing-clusters.adoc,concept-docs:buckets-and-clusters.adoc
 :page-toclevels: 2
 
 // API refs
