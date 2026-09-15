@@ -1,6 +1,6 @@
 = Analytics
 :description: Parallel data management for complex queries over many records, using a familiar SQL-like syntax.
-:page-aliases: analytics-query.adoc
+:page-aliases: analytics-query.adoc,concept-docs:analytics-for-sdk-users.adoc
 :page-edition: Enterprise Edition
 
 [abstract]
