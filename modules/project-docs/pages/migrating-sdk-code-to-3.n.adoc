@@ -834,4 +834,4 @@ a|`sslTruststoreFile`
 |`propagateParentSpan`         | removed
 |====
 
-include::{version-common}@sdk:shared:partial$archive.adoc[tag=migration]
+include::{version-common}@sdk:shared:partial$compat.adoc[tag=migration]

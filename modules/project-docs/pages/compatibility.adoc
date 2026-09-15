@@ -20,27 +20,7 @@ _Java {java_latest_lts_version} is recommended_.
 
 === JDK Version Compatibility
 
-We test the {name-sdk} with https://adoptium.net/[Eclipse Temurin] versions 8, 17, 21, and 25.
-
-The following OpenJDK releases are supported:
-
-* https://adoptium.net/[OpenJDK 25 with HotSpot JVM] (recommended)
-* https://adoptium.net/[OpenJDK 21 with HotSpot JVM]
-* https://adoptium.net/[OpenJDK 17 with HotSpot JVM]
-* https://adoptium.net/[OpenJDK 11 with HotSpot JVM]
-* https://adoptium.net/[OpenJDK 8 with HotSpot JVM]
-
-The following Oracle JDK releases are also supported but we do not do any testing with them owing to Oracle license issues:
-
-* https://www.oracle.com/java/technologies/downloads/#java17[Oracle JDK 17]
-* https://www.oracle.com/java/technologies/downloads/#java11[Oracle JDK 11]
-* https://www.oracle.com/java/technologies/downloads/#java8[Oracle JDK 8]
-
-Other JDK implementations might work but are untested and unsupported.
-
-[TIP]
-Make sure to stay up to date with JDK patch releases because they provide stability improvements and security fixes.
-
+include::{version-common}@sdk:shared:partial$compat.adoc[tag=jdk-compat]
 
 
 === OS Compatibility
@@ -49,33 +29,8 @@ In general, the JVM eliminates concerns about underlying OS compatibility,
 and Couchbase JVM SDKs can be expected to run on all of the Operating Systems supported by xref:{version-server}@server:install:install-platforms.adoc[Couchbase Server].
 
 
-The {name-sdk} will run on, and is supported on, the following OSs and platforms.
-The SDK has been tested on a representative subset of the platforms listed below.
+include::{version-common}@sdk:shared:partial$compat.adoc[tag=os-compat]
 
-****
-[discrete]
-=== GNU/Linux
-
-* Amazon Linux 2 & AL2023.
-* Red Hat Enterprise Linux 8, 9, & 10.
-* Oracle Linux 8, 9, & 10.
-* Ubuntu (LTS) 22.04 (_Jammy_) & 24.04 (_Noble_).
-* Debian 11 (_Bullseye_), Debian 12 (_Bookworm_), & Debian 13 (_Trixie_).
-* SUSE Enterprise Linux 12 & 15.
-* Alpine Linux 3.21 - 3.23.
-
-[discrete]
-=== Microsoft Windows
-
-* Microsoft Windows 10 & 11;
-* Windows Server 2019, 2022, & 2025.
-
-[discrete]
-=== Mac OS X
-
-The current and previous two releases of OS X.
-At time of writing (???? 2026): 26 (Tahoe), 15 (Sequoia), and 14 (Sonoma).
-****
 
 The JVM SDKs should also be expected to run on other commonly-available GNU/Linux distributions which support an appropriate JDK, but not all combinations can be tested -- notable exceptions are listed below.
 
@@ -118,14 +73,19 @@ The downside of these workarounds is potentially reduced performance, which can 
 
 
 // Platforms, Chipsets, and Virtual Environments.
-include::{version-common}@sdk:shared:partial$platform.adoc[tag=virtual]
+include::{version-common}@sdk:shared:partial$compat.adoc[tag=virtual]
 
 
 
 
 
 // Network Requirements
-include::{version-common}@sdk:shared:partial$network-requirements.adoc[]
+include::{version-common}@sdk:shared:partial$compat[tag=network-requirements]
+
+
+
+// Serverless Environments
+include::{version-common}@sdk:shared:partial$compat[tag=serverless]
 
 
 
@@ -139,13 +99,10 @@ Couchbase SDKs are tested against a variety of different environments to ensure 
 
 === Couchbase Version/SDK Version Matrix
 
-The matrix below denotes the version of Couchbase Server, the version of the {name-sdk} and whether the SDK is:
 
-* ✖ *Unsupported*: This combination is not tested, and is not within the scope of technical support if you have purchased a support agreement.
-* ◎ *Compatible*: This combination has been tested previously, and should be compatible.
-evertheless, this combination is not recommended by our technical support organization, as not all of the latest features are supported by it.
-It is best to upgrade either the SDK or the Couchbase version you are using.
-* ✔ *Supported*: This combination is subject to ongoing quality assurance, and is fully supported by our technical support organization.
+include::{version-common}@sdk:shared:partial$compat[tag=matrix-notes1]
+
+
 
 .Recommended SDK per Server Version Matrix
 [#table_sdk_versions]
@@ -172,18 +129,16 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 |===
 
 
-① Server 7.6 & 8.0 are compatible with all supported (not yet End-of-Life) versions of the {name-sdk}, but for full support of the latest features you need to upgrade to a recent version of the SDK.
-See the <<#couchbase-new-feature-availability-matrix,Feature Availablity matrix below>> and the xref:sdk-release-notes.adoc[Release Notes page].
 
-Note the https://www.couchbase.com/support-policy/EOL/[End of Life dates^] for Couchbase Server and SDK versions.
-See the notes there for Support details.
+include::{version-common}@sdk:shared:partial$compat[tag=matrix-notes2]
+
+
+
 
 === Capella Compatibility
 
-The Couchbase {name-sdk} is fully compatible with Couchbase Capella, our fully-hosted database-as-a-service.
-To make development easier, the SDK includes the Capella client certificate ready installed.
 
-include::{version-common}@sdk:shared:partial$capella.adoc[tag=cloud]
+include::{version-common}@sdk:shared:partial$compat.adoc[tag=cloud]
 
 
 === Couchbase New Feature Availability Matrix
@@ -211,11 +166,9 @@ include::{version-common}@sdk:shared:partial$capella.adoc[tag=cloud]
 | From SDK 3.9.0 ①
 |===
 
-① As part of the standard SDK {sqlpp} API, it should be compatible with all earlier versions of the SDK -- but it has not been tested.
 
-This table is not an exhaustive list -- just a few highlights -- provided to help assess compatibility of older versions in particular.
-For a slightly fuller table, see the xref:deployment.adoc#couchbase-operational-cluster-feature-compatibility[Deployment page].
-For alignment of SDKs and new Server features, scroll down to the information below the <<api-version,API Version table>>.
+include::{version-common}@sdk:shared:partial$compat[tag=feature-notes]
+
 
 
 === Spring Data Couchbase Compatibility
@@ -226,7 +179,7 @@ The following table provides an overview at the time of Java SDK {sdk_dot_minor}
 .Recommended Spring Data Couchbase per Server Version Matrix
 [#table_spring_versions]
 |===
-|  | SDC 5.4 - 5.5 | SDC 6.0
+|  | SDC 5.4 - 5.5 | SDC 6.0 - 6.1
 
 | _Status ->_
 | _Maintenance Support_
@@ -244,14 +197,14 @@ Using the latest Spring Data Couchbase should ensure that this is so.
 
 === Quarkus Java Compatibility
 
-Couchbase Quarkus requires Java SDK 3.7.7 or newer.
+include::1.4@quarkus-extension::compatibility.adoc[tag=compat-table]
 
 See the xref:quarkus-extension:ROOT:overview.adoc[Couchbase Quarkus Java Extension docs] for details of using Quarkus, and the compatibility with Quarkus, GraalVM, and the Couchbase Java SDK.
 
 
 === API Version
 
-include::{version-common}@sdk:shared:partial$api-version.adoc[tag=api-version]
+include::{version-common}@sdk:shared:partial$compat.adoc[tag=api-version]
 
 
 
@@ -261,9 +214,11 @@ include::{version-common}@sdk:shared:partial$api-version.adoc[tag=api-version]
 
 === Interface Stability
 
-include::{version-common}@sdk:shared:partial$interface-stability-pars.adoc[tag=interface-stability-section]
+include::{version-common}@sdk:shared:partial$compat.adoc[tag=interface-stability-section]
 
 
 === Older SDK Versions
 
-include::{version-common}@sdk:shared:partial$archive.adoc[tag=link]
+
+include::{version-common}@sdk:shared:partial$compat.adoc[tag=archive-link]
+
