@@ -29,7 +29,7 @@ We always recommend using the latest version of the SDK -- it contains all of th
 All patch releases for each dot minor release should be API compatible, and safe to upgrade;
 any changes to expected behavior are noted in the release notes that follow.
 
-Version {sdk_dot_minor} of the Java SDK implements the {sdk-api} xref:compatibility.adoc#api-version[SDK API].
+Version {sdk_dot_minor} of the Java SDK implements the {sdk_api} xref:compatibility.adoc#api-version[SDK API].
 See the xref:compatibility.adoc#couchbase-feature-availability-matrix[compatibility pages] for more information on feature compatibility with different versions of Couchbase Server.
 
 
@@ -55,7 +55,10 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 
 
 [v3.13.0]
-=== Version 3.13.0 (08 October 2026)
+=== Version 3.13.0 (13 October 2026)
+
+
+
 
 
 == Java SDK 3.12 Releases
@@ -1269,6 +1272,7 @@ Optional artifacts on top of this SDK version are tested for the following compa
 | `tracing-opentracing`     | 1.4.4             | OpenTracing 0.33.0         | Committed
 | `metrics-opentelemetry`   | 0.6.4             | OpenTelemetry 1.31.0       | Volatile
 | `metrics-micrometer`      | 0.6.4             | Micrometer 1.10.10         | Volatile
+|=======================
 
 
 ==== Improvements
