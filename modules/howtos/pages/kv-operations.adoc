@@ -234,18 +234,11 @@ include::devguide:example$java/KvOperations.java[tag=expiry-get,indent=0]
 ----
 
 Note that when updating the document, special care must be taken to avoid resetting the expiry to zero. 
-If you are using Couchbase Server 7.0 or later, set the `preserveExpiry` option when updating the document:
+Set the `preserveExpiry` option when updating the document:
 
 [source,java]
 ----
 include::devguide:example$java/KvOperations.java[tag=preserve-expiry,indent=0]
-----
-
-Prior to Couchbase 7.0, it's necessary to fetch the previous expiry and set it again:
-
-[source,java]
-----
-include::devguide:example$java/KvOperations.java[tag=expiry-replace,indent=0]
 ----
 
 Some applications may find `getAndTouch` useful, which fetches a document while updating its expiry field. 

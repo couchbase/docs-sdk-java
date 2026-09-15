@@ -217,17 +217,6 @@ public class KvOperations {
       System.out.println("cas value: " + result.cas());
     }
 
-    {
-      System.out.println("\nExample: [expiry-replace]");
-      // tag::expiry-replace[]
-      GetResult found = collection.get("my-document3", getOptions().withExpiry(true));
-
-      MutationResult result = collection.replace("my-document3", json,
-          replaceOptions().expiry(found.expiryTime().get()));
-      // end::expiry-replace[]
-
-    }
-
     try {
       System.out.println("\nExample: [preserve-expiry]");
 
