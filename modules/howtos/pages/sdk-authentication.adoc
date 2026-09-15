@@ -12,7 +12,7 @@ include::project-docs:partial$attributes.adoc[]
 Our xref:hello-world:start-using-sdk.adoc[Getting Started] guide covered the basics for authorizing against a Couchbase cluster, but you may need to use alternative authentication methods such as Certification.
 
 
-== RBAC
+== Basic Authentication
 
 Our xref:hello-world:start-using-sdk.adoc[Getting Started] guide introduced basic authentication against a Couchbase cluster:
 
@@ -36,6 +36,9 @@ include::devguide:example$java/Auth.java[tag=rbac-pwd,indent=0]
 ----
 
 In this example, the `PLAIN` authentication mechanism is enabled as well, which is needed if LDAP is enabled on the server side and no TLS encrypted connection is used.
+
+
+== RBAC
 
 include::{version-common}@sdk:shared:partial$auth-overview.adoc[tag=rbac]
 
