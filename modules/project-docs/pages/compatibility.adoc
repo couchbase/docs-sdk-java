@@ -80,12 +80,12 @@ include::{version-common}@sdk:shared:partial$compat.adoc[tag=virtual]
 
 
 // Network Requirements
-include::{version-common}@sdk:shared:partial$compat[tag=network-requirements]
+include::{version-common}@sdk:shared:partial$compat.adoc[tag=network-requirements]
 
 
 
 // Serverless Environments
-include::{version-common}@sdk:shared:partial$compat[tag=serverless]
+include::{version-common}@sdk:shared:partial$compat.adoc[tag=serverless]
 
 
 
@@ -100,7 +100,7 @@ Couchbase SDKs are tested against a variety of different environments to ensure 
 === Couchbase Version/SDK Version Matrix
 
 
-include::{version-common}@sdk:shared:partial$compat[tag=matrix-notes1]
+include::{version-common}@sdk:shared:partial$compat.adoc[tag=matrix-notes1]
 
 
 
@@ -130,7 +130,7 @@ include::{version-common}@sdk:shared:partial$compat[tag=matrix-notes1]
 
 
 
-include::{version-common}@sdk:shared:partial$compat[tag=matrix-notes2]
+include::{version-common}@sdk:shared:partial$compat.adoc[tag=matrix-notes2]
 
 
 
