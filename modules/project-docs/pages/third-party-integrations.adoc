@@ -35,3 +35,7 @@ The philosophy of the project claims to "strongly favor simplicity and conventio
 
 In CouchMove you write your migrations in {sqlpp_url}[{sqlpp} (formerly N1QL)], while in https://github.com/couchbaselabs/CouchVersion[CouchVersion] you can write them using the Java SDK, which essentially allow you to create more complex migrations.
 CouchVersion provides a new approach for adding changes (change sets) based on Java classes and methods with appropriate annotations.
+
+Liquibase manages schema changes, storing changes in text files as XML, YAML, JSON, or SQL. 
+It is often used as a migration tool, 
+and Liquibase have made available a https://github.com/liquibase/liquibase-couchbase[Couchbase extension for Liquibase] for Couchbase Server 7.x.
