@@ -167,7 +167,7 @@ include::{version-common}@sdk:shared:partial$compat.adoc[tag=cloud]
 |===
 
 
-include::{version-common}@sdk:shared:partial$compat[tag=feature-notes]
+include::{version-common}@sdk:shared:partial$compat.adoc[tag=feature-notes]
 
 
 
