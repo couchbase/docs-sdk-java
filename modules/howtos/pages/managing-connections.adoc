@@ -266,7 +266,7 @@ The protocol implements a gRPC-style interface between the SDK and Couchbase Ser
 
 The underlying protocol will not work with certain legacy features: MapReduce Views (a deprecated Service -- 
 use xref:howtos:n1ql-queries-with-sdk.adoc[Query] instead) and 
-Memcached buckets (superseded by the improved xref:{server_version}@server:learn:buckets-memory-and-storage/buckets.adoc#bucket-types[Ephemeral Buckets]).
+Memcached buckets (superseded by the improved xref:{version-server}@server:learn:buckets-memory-and-storage/buckets.adoc#bucket-types[Ephemeral Buckets]).
 
 The following are not currently implemented over the `couchbase2://` protocol:
 

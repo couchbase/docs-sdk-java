@@ -44,7 +44,7 @@ include::{version-common}@sdk:shared:partial$auth-overview.adoc[tag=cert-auth]
 
 == Authenticating the Java Client by Certificate
 
-To learn how to generate and deploy certificates, see xref:{server_version}@server:manage:manage-security/manage-certificates.adoc[Manage Certificates].
+To learn how to generate and deploy certificates, see xref:{version-server}@server:manage:manage-security/manage-certificates.adoc[Manage Certificates].
 The rest of this section assumes you followed those processes, or did something similar.
 
 For the following example, you will need a client certificate and the associated private key.
