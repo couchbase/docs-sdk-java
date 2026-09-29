@@ -121,7 +121,7 @@ include::{version-common}@sdk:shared:partial$compat.adoc[tag=matrix-notes1]
 | *✔*
 | *✔*
 
-| *Server 7.2*
+| *Server 7.2* ②
 | *◎*
 | *◎*
 | *✔*
