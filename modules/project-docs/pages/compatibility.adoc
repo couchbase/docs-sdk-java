@@ -159,7 +159,7 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 | *✔*
 | *✔*
 
-| *Server 7.2*
+| *Server 7.2* ②
 | *◎*
 | *◎*
 | *✔*
@@ -169,6 +169,8 @@ It is best to upgrade either the SDK or the Couchbase version you are using.
 
 ① Server 7.6 & 8.0 are compatible with all supported (not yet End-of-Life) versions of the {name-sdk}, but for full support of the latest features you need to upgrade to a recent version of the SDK.
 See the <<#couchbase-new-feature-availability-matrix,Feature Availablity matrix below>> and the xref:sdk-release-notes.adoc[Release Notes page].
+
+② Earlier versions of Server, back to 7.0, should be compatible with newer releases of the SDK (unless the release notes mention specific deprecations), but these older Server versions are EOL and no longer supported.
 
 Note the https://www.couchbase.com/support-policy/EOL/[End of Life dates^] for Couchbase Server and SDK versions.
 See the notes there for Support details.
