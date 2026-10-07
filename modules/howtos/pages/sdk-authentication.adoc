@@ -3,7 +3,6 @@
 :page-edition: Enterprise Edition
 :page-aliases: ROOT:sdk-authentication-overview.adoc
 
-include::project-docs:partial$attributes.adoc[]
 
 [abstract]
 {description}
