@@ -284,12 +284,7 @@ quarkus.couchbase.password=password
 
 == Cloud Native Gateway
 
-Couchbase's next generation connection protocol, introduced in Java SDK 3.5 and xref:operator::concept-cloud-native-gateway.adoc[Couchbase Autonomous Operator 2.6.1] --
-and available as a xref:cloud-native-gateway:intro:about-cng.adoc[standalone product] for use with self-managed Couchbase Server from 8.0 onwards --
-can be enabled simply by changing the connection string to `couchbase2://` but there are a few differences to be aware of, described <<#limitations,below>>.
-
-The protocol implements a gRPC-style interface between the SDK and Couchbase Server.
-
+include::{version-common}@sdk:shared:partial$managing-connections.adoc[tag=cng]
 
 === Limitations
 
