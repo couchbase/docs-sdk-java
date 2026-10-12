@@ -1,9 +1,9 @@
 = Couchbase Java SDK Documentation
 
-This repository hosts the documentation source for the https://docs.couchbase.com/java-sdk/3.12/hello-world/overview.html[Couchbase Java SDK].
+This repository hosts the documentation source for the https://docs.couchbase.com/java-sdk/3.13/hello-world/overview.html[Couchbase Java SDK].
 
-This branch documents the 3.12 release of the SDK.
-It follows the https://docs.couchbase.com/java-sdk/3.11/project-docs/compatibility.html#api-version[SDK 3.10 API].
+This branch documents the 3.13 release of the SDK.
+It follows the https://docs.couchbase.com/java-sdk/3.13/project-docs/compatibility.html#api-version[SDK 3.10 API].
 
 This branch reflects the new Information Architecture for the SDK docs, helping to guide new-to-Couchbase users through the pitfalls of a complex distributed system.
 
