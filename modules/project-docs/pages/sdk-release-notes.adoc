@@ -81,12 +81,13 @@ Optional artifacts on top of this SDK version are tested for the following compa
 ==== New Features
 
 * https://jira.issues.couchbase.com/browse/JCBC-2224[JCBC-2224]:
-Added an option for Hybrid Search Score Fusion when using Couchbase Server 8.5 or later.
+Added an option for Hybrid Search Score Fusion, for future releasese of Couchbase Server.
+// Added an option for Hybrid Search Score Fusion when using Couchbase Server 8.5 or later.
 
 * https://jira.issues.couchbase.com/browse/JCBC-2226[JCBC-2226]:
 Added `collection.getReplica()`, which allows reading from a specific replica.
 
-* https://jira.issues.couchbase.com/browse/JVMCBC-1767[JVMCBC-1767] & https://jira.issues.couchbase.com/browse/JVMCBC-1768[JVMCBC-1768]:
+* https://jira.issues.couchbase.com/browse/JVMCBC-1767[JVMCBC-1767], https://jira.issues.couchbase.com/browse/JVMCBC-1768[JVMCBC-1768]:
 Added versions of `EncryptionModule` and `JsonValueModule` that are compatible with Jackson 3.
 
 ==== Improvements
@@ -99,10 +100,10 @@ The executor for blocking transaction operations is now backed by virtual thread
 This change only affects the reactive Java and Scala transaction APIs, as well as all transactions in Kotlin.
 
 * https://jira.issues.couchbase.com/browse/JVMCBC-1765[JVMCBC-1765]:
-Upgraded Netty to 4.2.19.
+Upgraded Netty to `4.2.19`.
 
 * https://jira.issues.couchbase.com/browse/JVMCBC-1766[JVMCBC-1766]:
-Upgraded Jackson to 2.21.7 / 3.1.7.
+Upgraded Jackson to `2.21.7` / `3.1.7`.
 
 ==== Deprecations
 
@@ -139,7 +140,7 @@ Fixed a bug that caused the SDK to ignore the "field" parameter of a regexp sear
 * https://jira.issues.couchbase.com/browse/JVMCBC-1446[JVMCBC-1446]:
 Fixed an otherwise harmless race condition that caused "Could not locate a single global configuration" warnings in the log.
 
-* https://jira.issues.couchbase.com/browse/JVMCBC-1745[JVMCBC-1745] & https://jira.issues.couchbase.com/browse/JVMCBC-1747[JVMCBC-1747]:
+* https://jira.issues.couchbase.com/browse/JVMCBC-1745[JVMCBC-1745], https://jira.issues.couchbase.com/browse/JVMCBC-1747[JVMCBC-1747]:
 The `META-INF/io.netty.versions.properties` and `META-INF/native-image` resources from the SDK's repackaged version of Netty are now relocated to avoid conflicts with vanilla Netty.
 
 
