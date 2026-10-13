@@ -57,8 +57,91 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 [v3.13.0]
 === Version 3.13.0 (13 October 2026)
 
+https://packages.couchbase.com/clients/java/3.13.0/Couchbase-Java-Client-3.13.0.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.13.0/index.html[API Reference] |
+https://docs.couchbase.com/sdk-api/couchbase-core-io-3.13.0/[Core API Reference]
 
+The supported and tested dependencies for this release are:
 
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.57.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.57.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== New Features
+
+* https://jira.issues.couchbase.com/browse/JCBC-2224[JCBC-2224]:
+Added an option for Hybrid Search Score Fusion, for future releasese of Couchbase Server.
+// Added an option for Hybrid Search Score Fusion when using Couchbase Server 8.5 or later.
+
+* https://jira.issues.couchbase.com/browse/JCBC-2226[JCBC-2226]:
+Added `collection.getReplica()`, which allows reading from a specific replica.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1767[JVMCBC-1767], https://jira.issues.couchbase.com/browse/JVMCBC-1768[JVMCBC-1768]:
+Added versions of `EncryptionModule` and `JsonValueModule` that are compatible with Jackson 3.
+
+==== Improvements
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1773[JVMCBC-1773]:
+Added handling for a new query error code introduced in Couchbase Server 7.6, mapped to `AuthenticationFailureException`.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1756[JVMCBC-1756]:
+The executor for blocking transaction operations is now backed by virtual threads for improved scalability when running on Java 21 or later.
+This change only affects the reactive Java and Scala transaction APIs, as well as all transactions in Kotlin.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1765[JVMCBC-1765]:
+Upgraded Netty to `4.2.19`.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1766[JVMCBC-1766]:
+Upgraded Jackson to `2.21.7` / `3.1.7`.
+
+==== Deprecations
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1741[JVMCBC-1741]:
+`SaslMechanism.SCRAM_SHA1` is now deprecated, and is no longer used unless your application builds a custom `PasswordAuthenticator` that explicitly allows it.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1751[JVMCBC-1751]:
+The overload of `Cluster.connect()` that takes a `SeedNode` set is now deprecated in favor of the overload that takes a connection string, which is more versatile.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1772[JVMCBC-1772]:
+Deprecated the `IoEnvironment` methods that accept a Netty `EventLoopGroup`, since a future SDK version might not use Netty.
+Users who need to tune I/O threading should use `eventLoopThreadCount` instead.
+
+==== Bug Fixes
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1771[JVMCBC-1771]:
+Fixed a rare deadlock during bucket bootstrap that could cause the SDK to hang while fetching the bucket topology.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1769[JVMCBC-1769]:
+Fixed a rare race condition that could cause problems with topology updates.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1764[JVMCBC-1764]:
+Fixed a `NullPointerException` related to executing a prepared statement (a query with `adhoc=false`) in a transaction.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1754[JVMCBC-1754]:
+Reduced the occurrence of false positive `WatchdogInvalidStateIdentifiedEvent` log messages in deployments using private endpoints, and other environments where node hostnames are not unique.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1763[JVMCBC-1763]:
+Tracing spans for KV range scan are now completed correctly.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1743[JVMCBC-1743]:
+Fixed a bug that caused the SDK to ignore the "field" parameter of a regexp search query when using the `couchbase2://` protocol.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1446[JVMCBC-1446]:
+Fixed an otherwise harmless race condition that caused "Could not locate a single global configuration" warnings in the log.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1745[JVMCBC-1745], https://jira.issues.couchbase.com/browse/JVMCBC-1747[JVMCBC-1747]:
+The `META-INF/io.netty.versions.properties` and `META-INF/native-image` resources from the SDK's repackaged version of Netty are now relocated to avoid conflicts with vanilla Netty.
 
 
 == Java SDK 3.12 Releases
