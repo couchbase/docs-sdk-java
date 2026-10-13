@@ -54,7 +54,7 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 
 
 
-[v3.13.0]
+[[v3.13.0]]
 === Version 3.13.0 (13 October 2026)
 
 https://packages.couchbase.com/clients/java/3.13.0/Couchbase-Java-Client-3.13.0.zip[Download] |
@@ -147,7 +147,7 @@ The `META-INF/io.netty.versions.properties` and `META-INF/native-image` resource
 == Java SDK 3.12 Releases
 
 
-[v3.12.3]
+[[v3.12.3]]
 === Version 3.12.3 (10 September 2026)
 
 https://packages.couchbase.com/clients/java/3.12.3/Couchbase-Java-Client-3.12.3.zip[Download] |
@@ -190,7 +190,7 @@ Upgraded to Jackson `2.21.6`.
 The `couchbase2://` protocol now correctly throws `NumberTooBigException` when a subdocument operation fails for that reason.
 
 
-[v3.12.2]
+[[v3.12.2]]
 === Version 3.12.2 (28 July 2026)
 
 https://packages.couchbase.com/clients/java/3.12.2/Couchbase-Java-Client-3.12.2.zip[Download] |
@@ -226,7 +226,7 @@ This is low-impact, and only affects developers who use the `couchbase2://` prot
 
 
 
-[v3.12.1]
+[[v3.12.1]]
 === Version 3.12.1 (08 July 2026)
 
 https://packages.couchbase.com/clients/java/3.12.1/Couchbase-Java-Client-3.12.1.zip[Download] |
@@ -277,7 +277,7 @@ Fixed an issue where in some cases the SDK would continue trying to connect to a
 
 
 
-[v3.12.0]
+[[v3.12.0]]
 === Version 3.12.0 (02 June 2026)
 
 https://packages.couchbase.com/clients/java/3.12.0/Couchbase-Java-Client-3.12.0.zip[Download] |
