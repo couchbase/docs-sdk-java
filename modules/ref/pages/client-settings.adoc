@@ -311,6 +311,8 @@ On all other platforms, the OS-configured time is used (and you need to tune it 
 |===
 
 The number of actual endpoints (sockets) to open per node in the cluster against the Key/Value service.
+The SDK opens this many sockets to each node for each bucket your application opens, and one further set per node for cluster-level operations.
+The total number of Key/Value sockets is therefore this value multiplied by the number of open buckets plus one, multiplied by the number of nodes.
 By default, for every node in the cluster one socket is opened where all traffic is pushed through.
 That way the SDK implicitly benefits from network batching characteristics when the workload increases.
 If you suspect based on profiling and benchmarking that the socket is saturated you can think about slightly increasing it to have more "parallel pipelines".
