@@ -54,6 +54,85 @@ echo metrics-micrometer ; grep '<version>' $src/metrics-micrometer/pom.xml | hea
 
 
 
+[[v3.13.1]]
+=== Version 3.13.1 (10 November 2026)
+
+
+https://packages.couchbase.com/clients/java/3.13.1/Couchbase-Java-Client-3.13.1.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.13.1/index.html[API Reference] |
+https://docs.couchbase.com/sdk-api/couchbase-core-io-3.13.1/[Core API Reference]
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.57.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.57.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1798[JVMCBC-1798]:
+When managing eventing functions, the `ERR_APP_NOT_FOUND` error code added in Couchbase Server 8.0.1 is now recognized and mapped to `EventingFunctionNotFoundException`.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1802[JVMCBC-1802]:
+Upgraded Netty to 4.2.20.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1801[JVMCBC-1801]:
+Upgraded Jackson to 2.21.8.
+
+==== Bug Fixes
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1817[JVMCBC-1817]:
+Fixed an issue where `bucket.waitUntilReady()` could time out during a rebalance while a data node hosted the bucket but held none of its active vBuckets.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1795[JVMCBC-1795]:
+Fixed a bug that could cause a query, analytics, search or view request to hang if the connection to a node closed while the results were arriving.
+Instead of hanging, these requests now fail with a `RequestCanceledException`, the same error a request gets when its connection closes before it can be retried.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1786[JVMCBC-1786]:
+Fixed a bug where `Cluster.disconnect()` could leave requests unfinished if they were waiting to retry, for example after a “document locked” or “temporary failure” response.
+Blocking calls could hang forever, and async and reactive calls never completed.
+These requests now fail with `RequestCanceledException` (reason: `SHUTDOWN`).
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1789[JVMCBC-1789]:
+Fixed a resource leak when `Cluster.connect()` fails.
+The leak could also cause later calls to `Cluster.connect()` to throw `TooManyInstancesException` or log a `TooManyInstancesDetectedEvent` warning.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1799[JVMCBC-1799]:
+Fixed an issue where the SDK did not use enhanced prepared statements unless at least one bucket was open.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1805[JVMCBC-1805]:
+Fixed a regression in 3.12.3 that caused the SDK to hang when the `security.enableNativeTls` client setting was true on x86_64 Alpine Linux and other x86_64 Linux distributions that use musl libc.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1792[JVMCBC-1792]:
+The POM files embedded in the SDK JARs no longer contain `+${revision}+` or other unresolvable placeholders that could confuse certain vulnerability scanners.
+Also, POM files for internal shaded artifacts that only exist during the build process are no longer included in the JAR.
+
+* https://jira.issues.couchbase.com/browse/JCBC-2237[JCBC-2237]:
+Fixed an issue where the eventing function manager failed to read functions whose `app_log_dir` or `user_prefix` setting is empty.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1806[JVMCBC-1806]:
+The SDK now honors the `security.enableNativeTls` client setting for `couchbase2://` connections; previously it would always assume true.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1809[JVMCBC-1809]:
+Fixed an issue where, with a `couchbase2://` connection string, requests were retried with no delay between attempts (for example, while the client couldn't connect to the server), using excessive CPU until they timed out.
+Retries now back off, as they do with `couchbase://` connection strings.
+Custom retry strategies now see the actual retry attempt count for `couchbase2://` requests, instead of zero.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1811[JVMCBC-1811]:
+The `couchbase2://` protocol no longer includes sensitive HTTP2 headers in DEBUG logs.
+
+
 [[v3.13.0]]
 === Version 3.13.0 (13 October 2026)
 
@@ -369,6 +448,106 @@ This bug had no effect on the SDK’s behavior, but could mislead developers rea
 
 
 == Java SDK 3.11 Releases
+
+
+[[v3.11.4]]
+=== Version 3.11.4 (10 November 2026)
+
+https://packages.couchbase.com/clients/java/3.11.4/Couchbase-Java-Client-3.11.4.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.11.4/index.html[API Reference] |
+https://docs.couchbase.com/sdk-api/couchbase-core-io-3.11.4/[Core API Reference]
+
+This maintenance release upgrades Netty and Jackson to the latest versions.
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.57.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.57.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1802[JVMCBC-1802]:
+Upgraded Netty to 4.2.20.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1801[JVMCBC-1801]:
+Upgraded Jackson to 2.21.8.
+
+
+=== Version 3.11.3 (21 May 2026)
+
+https://packages.couchbase.com/clients/java/3.11.3/Couchbase-Java-Client-3.11.3.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.11.3/index.html[API Reference] |
+https://docs.couchbase.com/sdk-api/couchbase-core-io-3.11.3/[Core API Reference]
+
+This maintenance release improves the exception message when the SDK cannot parse the file containing trusted server certificates.
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.57.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.57.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1737[JVMCBC-1737]:
+When `SecurityConfig.trustCertificate(Path)` fails to parse the specified file, the exception message no longer includes the file contents.
+
+
+=== Version 3.11.2 (13 April 2026)
+
+https://packages.couchbase.com/clients/java/3.11.2/Couchbase-Java-Client-3.11.2.zip[Download] |
+https://docs.couchbase.com/sdk-api/couchbase-java-client-3.11.2/index.html[API Reference] |
+https://docs.couchbase.com/sdk-api/couchbase-core-io-3.11.2/[Core API Reference]
+
+This maintenance release upgrades Netty and Jackson to the latest versions.
+
+The supported and tested dependencies for this release are:
+
+* io.projectreactor:**reactor-core:3.6.9**
+* org.reactivestreams:**reactive-streams:1.0.4**
+
+Optional artifacts on top of this SDK version are tested for the following compatibilities:
+
+.Optional Artifact Version Compatibility
+[options="header"]
+|=======================
+| Artifact                  | Built Against              | API Stability
+| `tracing-opentelemetry`   | OpenTelemetry 1.57.0       | Committed
+| `tracing-opentracing`     | OpenTracing 0.33.0         | Committed
+| `metrics-opentelemetry`   | OpenTelemetry 1.57.0       | Volatile
+| `metrics-micrometer`      | Micrometer 1.12.9          | Volatile
+|=======================
+
+==== Improvements
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1726[JVMCBC-1726]:
+Upgraded Netty from to `4.2.9` to `4.2.12`.
+
+* https://jira.issues.couchbase.com/browse/JVMCBC-1723[JVMCBC-1723]:
+Upgraded Jackson from `2.20.1` to `2.21.2`.
 
 
 === Version 3.11.1 (16 February 2026)
